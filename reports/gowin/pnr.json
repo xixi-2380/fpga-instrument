@@ -1,0 +1,10 @@
+{
+  "returncode": 0,
+  "errors": [],
+  "warnings": [
+    "WARN  (CK3000) : Can't calculate clocks' relationship between: \"clk\" and \"clocks/pll2/CLKOUT0.default_gen_clk\""
+  ],
+  "seconds": 24.84,
+  "hardware_pin_constraints_signed": false,
+  "download_qualified": false
+}

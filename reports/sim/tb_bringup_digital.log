@@ -1,0 +1,2 @@
+PASS tb_bringup_digital checks=36666 mirror_checks=1409
+E:\gowin\fpga-instrument-mega138k-pro\sim\tb_bringup_digital.sv:35: $finish called at 662876909 (1ps)

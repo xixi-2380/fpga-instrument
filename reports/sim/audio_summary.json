@@ -1,0 +1,8 @@
+{
+  "frames": 48000,
+  "peak_min": -1024,
+  "peak_max": 1023,
+  "sample_rate_hz": 48000,
+  "fcw": 39370534,
+  "quantized_frequency_hz": 440.0000050663948
+}

@@ -1,0 +1,98 @@
+*** GOWIN Tcl Command Line Console  *** 
+current working directory: C:/Users/x1767/.codex/.chatgpt-projects/g-p-6acdd395b98c81918f7d9eef2569a2e6/stage1/build/tone_feasibility
+current device: GW5AST-138C  GW5AST-LV138FPG676AC1/I0
+add new file: "rtl/audio_timing.sv"
+add new file: "rtl/dds_sine.sv"
+add new file: "rtl/frame_buffer.sv"
+add new file: "rtl/lock_guard.sv"
+add new file: "rtl/pt8211_tx.sv"
+add new file: "rtl/reset_sync.sv"
+add new file: "rtl/sine_rom.sv"
+add new file: "rtl/startup_envelope.sv"
+add new file: "rtl/tone_core.sv"
+add new file: "rtl/tone_gain.sv"
+add new file: "boards/mega138k_pro/clock_reset.sv"
+add new file: "boards/mega138k_pro/pll_pair.sv"
+add new file: "boards/mega138k_pro/tone_top.sv"
+add new file: "boards/mega138k_pro/tone.sdc"
+GowinSynthesis start
+Running parser ...
+Analyzing Verilog file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\audio_timing.sv'
+Analyzing included file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\config\synth_config.svh'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\audio_timing.sv":2)
+Back to file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\audio_timing.sv'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\audio_timing.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\dds_sine.sv'
+Analyzing included file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\config\synth_config.svh'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\dds_sine.sv":2)
+Back to file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\dds_sine.sv'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\dds_sine.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\frame_buffer.sv'
+Analyzing Verilog file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\lock_guard.sv'
+Analyzing included file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\config\synth_config.svh'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\lock_guard.sv":2)
+Back to file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\lock_guard.sv'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\lock_guard.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\pt8211_tx.sv'
+Analyzing Verilog file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\reset_sync.sv'
+Analyzing Verilog file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\sine_rom.sv'
+Analyzing included file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\config\synth_config.svh'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\sine_rom.sv":2)
+Back to file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\sine_rom.sv'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\sine_rom.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\startup_envelope.sv'
+Analyzing included file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\config\synth_config.svh'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\startup_envelope.sv":2)
+Back to file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\startup_envelope.sv'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\startup_envelope.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\tone_core.sv'
+Analyzing included file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\config\synth_config.svh'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\tone_core.sv":2)
+Back to file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\tone_core.sv'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\tone_core.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\tone_gain.sv'
+Analyzing included file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\config\synth_config.svh'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\tone_gain.sv":2)
+Back to file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\tone_gain.sv'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\tone_gain.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\boards\mega138k_pro\clock_reset.sv'
+Analyzing included file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\config\synth_config.svh'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\boards\mega138k_pro\clock_reset.sv":2)
+Back to file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\boards\mega138k_pro\clock_reset.sv'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\boards\mega138k_pro\clock_reset.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\boards\mega138k_pro\pll_pair.sv'
+Analyzing Verilog file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\boards\mega138k_pro\tone_top.sv'
+Analyzing included file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\config\synth_config.svh'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\boards\mega138k_pro\tone_top.sv":2)
+Back to file 'C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\boards\mega138k_pro\tone_top.sv'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\boards\mega138k_pro\tone_top.sv":2)
+Compiling module 'tone_top'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\boards\mega138k_pro\tone_top.sv":3)
+WARN  (EX3073) : Port 'CLKOUT2' remains unconnected for this instance("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\boards\mega138k_pro\pll_pair.sv":18)
+WARN  (EX3073) : Port 'CLKOUT2' remains unconnected for this instance("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\boards\mega138k_pro\pll_pair.sv":31)
+Compiling module 'pll_pair'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\boards\mega138k_pro\pll_pair.sv":4)
+Compiling module 'clock_reset'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\boards\mega138k_pro\clock_reset.sv":3)
+Compiling module 'reset_sync'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\reset_sync.sv":2)
+Compiling module 'lock_guard'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\lock_guard.sv":3)
+Compiling module 'tone_core'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\tone_core.sv":3)
+Compiling module 'audio_timing'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\audio_timing.sv":3)
+Compiling module 'dds_sine'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\dds_sine.sv":3)
+Compiling module 'sine_rom'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\sine_rom.sv":3)
+Extracting RAM for identifier 'mem'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\sine_rom.sv":6)
+Compiling module 'startup_envelope'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\startup_envelope.sv":3)
+Compiling module 'tone_gain'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\tone_gain.sv":3)
+Compiling module 'frame_buffer'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\frame_buffer.sv":2)
+Compiling module 'pt8211_tx'("C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\rtl\pt8211_tx.sv":2)
+NOTE  (EX0101) : Current top module is "tone_top"
+[5%] Running netlist conversion ...
+Running device independent optimization ...
+[10%] Optimizing Phase 0 completed
+[15%] Optimizing Phase 1 completed
+[25%] Optimizing Phase 2 completed
+Running inference ...
+[30%] Inferring Phase 0 completed
+[40%] Inferring Phase 1 completed
+[50%] Inferring Phase 2 completed
+[55%] Inferring Phase 3 completed
+Running technical mapping ...
+[60%] Tech-Mapping Phase 0 completed
+[65%] Tech-Mapping Phase 1 completed
+[75%] Tech-Mapping Phase 2 completed
+[80%] Tech-Mapping Phase 3 completed
+[90%] Tech-Mapping Phase 4 completed
+[95%] Generate netlist file "C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\impl\gwsynthesis\tone_UNVERIFIED.vg" completed
+WARN  (CK3000) : Can't calculate clocks' relationship between: "clk" and "clocks/pll2/CLKOUT0.default_gen_clk"
+[100%] Generate report file "C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\impl\gwsynthesis\tone_UNVERIFIED_syn.rpt.html" completed
+GowinSynthesis finish
+Reading netlist file: "C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\impl\gwsynthesis\tone_UNVERIFIED.vg"
+Parsing netlist file "C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\impl\gwsynthesis\tone_UNVERIFIED.vg" completed
+ERROR  (PA2078) : Invalid PFD frequency 'FCLKIN/IDIV_SEL' to 'pll1'(PLL) set by module 'pll_pair', suitable range is from 19MHz to 81.25MHz
+ERROR  (PA2078) : Invalid PFD frequency 'FCLKIN/IDIV_SEL' to 'pll2'(PLL) set by module 'pll_pair', suitable range is from 19MHz to 81.25MHz
+NOTE  (PA0005) : Processing netlist completed with errors
+
+    while executing
+"run pnr "
+    invoked from within
+"if {[info exists env(RUN_PNR)] && $env(RUN_PNR) eq "1"} { run pnr }"
+    (file "C:\Users\x1767\.codex\.chatgpt-projects\g-p-6acdd395b98c81918f7d9eef2569a2e6\stage1\scripts\build.tcl" line 13)

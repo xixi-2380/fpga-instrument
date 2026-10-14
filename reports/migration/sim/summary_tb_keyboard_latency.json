@@ -1,0 +1,7 @@
+[
+  {
+    "test": "tb_keyboard_latency",
+    "passed": true,
+    "seconds": 1.388
+  }
+]

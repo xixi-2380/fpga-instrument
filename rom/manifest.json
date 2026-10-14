@@ -1,0 +1,7 @@
+{
+  "depth": 4096,
+  "width": 16,
+  "format": "signed Q1.15",
+  "rounding": "nearest, ties away from zero",
+  "sha256": "d62e7528ad6c0400fab616087abbdaa7b7977fcd9adbce1b347e3a5743ea3d6e"
+}

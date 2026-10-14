@@ -1,0 +1,100 @@
+{
+  "date": "2026-10-14",
+  "root": "E:\\gowin\\fpga-instrument",
+  "all_passed": true,
+  "files_copied": 444,
+  "source_files_unchanged": true,
+  "legacy_reference_unchanged": true,
+  "functional_files_byte_identical": true,
+  "historical_evidence_byte_identical": true,
+  "project_dependencies_passed": [
+    {
+      "project": "bringup_digital.gprj",
+      "enabled_dependencies": 16,
+      "top": "bringup_digital",
+      "output": "bringup_D0_muted"
+    },
+    {
+      "project": "keyboard_adsr.gprj",
+      "enabled_dependencies": 21,
+      "top": "keyboard_top",
+      "output": "D2_keyboard_leds"
+    },
+    {
+      "project": "tone_feasibility.gprj",
+      "enabled_dependencies": 14,
+      "top": "tone_top",
+      "output": "tone_UNVERIFIED"
+    },
+    {
+      "project": "tone_play_left.gprj",
+      "enabled_dependencies": 16,
+      "top": "tone_play_left",
+      "output": "D1_left_440"
+    },
+    {
+      "project": "tone_play_right.gprj",
+      "enabled_dependencies": 16,
+      "top": "tone_play_right",
+      "output": "D1_right_440"
+    },
+    {
+      "project": "tone_play_stereo.gprj",
+      "enabled_dependencies": 16,
+      "top": "tone_play_stereo",
+      "output": "D1_stereo_440"
+    }
+  ],
+  "pin_count": 24,
+  "pin_locations_unique_and_match_validation": true,
+  "tests": [
+    {
+      "test": "tb_run_leds",
+      "checks": 111,
+      "passed": true,
+      "log": "sim/tb_run_leds.log"
+    },
+    {
+      "test": "tb_keyboard_top",
+      "checks": 329180,
+      "passed": true,
+      "log": "sim/tb_keyboard_top.log"
+    },
+    {
+      "test": "tb_keyboard_latency",
+      "checks": 5,
+      "passed": true,
+      "log": "sim/tb_keyboard_latency.log"
+    },
+    {
+      "test": "tb_keyboard_pinmap",
+      "variant": "corrected",
+      "checks": 34,
+      "passed": true,
+      "log": "pinmap/corrected/result.log"
+    },
+    {
+      "test": "tb_keyboard_pinmap",
+      "variant": "previous",
+      "checks": 34,
+      "passed": true,
+      "log": "pinmap/previous/result.log"
+    }
+  ],
+  "total_checks": 329364,
+  "first_nonzero_serial_code_us": 3135.306,
+  "latency_is_simulation_not_hardware": true,
+  "git": {
+    "branch": "codex/fpga-migration",
+    "initialized": true,
+    "staged": false,
+    "committed": false,
+    "pushed": false
+  },
+  "synthesis_run": false,
+  "pnr_run": false,
+  "programmer_or_jtag_accessed": false,
+  "new_bitstream_generated": false,
+  "hardware_verified": false,
+  "D2_silence_resolved": false
+}

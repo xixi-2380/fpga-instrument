@@ -1,0 +1,15 @@
+{
+  "returncode": 1,
+  "errors": [
+    "ERROR  (PA2078) : Invalid PFD frequency 'FCLKIN/IDIV_SEL' to 'pll1'(PLL) set by module 'pll_pair', suitable range is from 19MHz to 81.25MHz",
+    "ERROR  (PA2078) : Invalid PFD frequency 'FCLKIN/IDIV_SEL' to 'pll2'(PLL) set by module 'pll_pair', suitable range is from 19MHz to 81.25MHz"
+  ],
+  "warnings": [
+    "WARN  (EX3073) : Port 'CLKOUT2' remains unconnected for this instance(\"C:\\Users\\x1767\\.codex\\.chatgpt-projects\\g-p-6acdd395b98c81918f7d9eef2569a2e6\\stage1\\boards\\mega138k_pro\\pll_pair.sv\":18)",
+    "WARN  (EX3073) : Port 'CLKOUT2' remains unconnected for this instance(\"C:\\Users\\x1767\\.codex\\.chatgpt-projects\\g-p-6acdd395b98c81918f7d9eef2569a2e6\\stage1\\boards\\mega138k_pro\\pll_pair.sv\":31)",
+    "WARN  (CK3000) : Can't calculate clocks' relationship between: \"clk\" and \"clocks/pll2/CLKOUT0.default_gen_clk\""
+  ],
+  "seconds": 4.36,
+  "hardware_pin_constraints_signed": false,
+  "download_qualified": false
+}

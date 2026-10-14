@@ -1,0 +1,47 @@
+[
+  {
+    "name": "mingw-w64-x86_64-iverilog-1~13.0-2-any.pkg.tar.zst",
+    "url": "https://repo.msys2.org/mingw/mingw64/mingw-w64-x86_64-iverilog-1~13.0-2-any.pkg.tar.zst",
+    "sha256": "e22c86dad1a0658d5f769362bfbec6533028c0d0bb63059b4fda0cc1084d1406"
+  },
+  {
+    "name": "mingw-w64-x86_64-gcc-libs-16.2.0-5-any.pkg.tar.zst",
+    "url": "https://repo.msys2.org/mingw/mingw64/mingw-w64-x86_64-gcc-libs-16.2.0-5-any.pkg.tar.zst",
+    "sha256": "8b21408d59a0b92421eebdd681d052c6ee94124efb30ede65e838cca54967981"
+  },
+  {
+    "name": "mingw-w64-x86_64-libgcc-16.2.0-5-any.pkg.tar.zst",
+    "url": "https://repo.msys2.org/mingw/mingw64/mingw-w64-x86_64-libgcc-16.2.0-5-any.pkg.tar.zst",
+    "sha256": "6cc48c5efe5ebab70a1ee1f6806c422205d5515c0f50d7a0e6a67336268c2afe"
+  },
+  {
+    "name": "mingw-w64-x86_64-libstdc++-16.2.0-5-any.pkg.tar.zst",
+    "url": "https://repo.msys2.org/mingw/mingw64/mingw-w64-x86_64-libstdc++-16.2.0-5-any.pkg.tar.zst",
+    "sha256": "2ec9a91ce896249b1a440a44e1bc0126f82efb540955827adec30e83a9bfb1f6"
+  },
+  {
+    "name": "mingw-w64-x86_64-libwinpthread-14.0.0.r98.g19f5121a2-1-any.pkg.tar.zst",
+    "url": "https://repo.msys2.org/mingw/mingw64/mingw-w64-x86_64-libwinpthread-14.0.0.r98.g19f5121a2-1-any.pkg.tar.zst",
+    "sha256": "565a7ac155098633ce66096c02c98f274127111758fd25d3f0e5451c4cd21120"
+  },
+  {
+    "name": "mingw-w64-x86_64-zlib-1.3.2-2-any.pkg.tar.zst",
+    "url": "https://repo.msys2.org/mingw/mingw64/mingw-w64-x86_64-zlib-1.3.2-2-any.pkg.tar.zst",
+    "sha256": "9e75842a070ba648e986e12424e1c92c9d7d77200e85f6a34eeb600819f2e694"
+  },
+  {
+    "name": "mingw-w64-x86_64-bzip2-1.0.8-4-any.pkg.tar.zst",
+    "url": "https://repo.msys2.org/mingw/mingw64/mingw-w64-x86_64-bzip2-1.0.8-4-any.pkg.tar.zst",
+    "sha256": "123768f30ae14ba654a6feb70f8526146a331bc85f831a91a549ffb3f6cbffc7"
+  },
+  {
+    "name": "mingw-w64-x86_64-readline-8.3.003-1-any.pkg.tar.zst",
+    "url": "https://repo.msys2.org/mingw/mingw64/mingw-w64-x86_64-readline-8.3.003-1-any.pkg.tar.zst",
+    "sha256": "b943d7e2a61ac6e0304eac11cdcee15370a8c2ccee5b84487f8ad6c1e103d66c"
+  },
+  {
+    "name": "mingw-w64-x86_64-termcap-1.3.1-8-any.pkg.tar.zst",
+    "url": "https://repo.msys2.org/mingw/mingw64/mingw-w64-x86_64-termcap-1.3.1-8-any.pkg.tar.zst",
+    "sha256": "205ece965d693274f200ff6c15bca8d29a093860951aeb4dbb9660817c255cc0"
+  }
+]

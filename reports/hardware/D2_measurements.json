@@ -1,0 +1,14 @@
+{
+  "hardware_verified": false,
+  "compilation_owner": "user",
+  "programming_owner": "user",
+  "build_log": null,
+  "program_verify_log": null,
+  "measured_bck_hz": null,
+  "measured_ws_hz": null,
+  "key_positions_verified": false,
+  "adsr_verified": false,
+  "multikey_ghost_policy_verified": false,
+  "measured_input_audio_latency_ms": null,
+  "continuous_play_minutes": null
+}

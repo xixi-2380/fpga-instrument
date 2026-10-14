@@ -1,0 +1,350 @@
+{
+  "date": "2026-10-13",
+  "tests": [
+    {
+      "test": "tb_adsr_envelope",
+      "passed": true,
+      "checks": 59
+    },
+    {
+      "test": "tb_adsr_production",
+      "passed": true,
+      "checks": 14881
+    },
+    {
+      "test": "tb_audio_timing",
+      "passed": true,
+      "checks": 9996
+    },
+    {
+      "test": "tb_bringup_digital",
+      "passed": true,
+      "checks": 36666
+    },
+    {
+      "test": "tb_clock_reset",
+      "passed": true,
+      "checks": 6
+    },
+    {
+      "test": "tb_dds_sine",
+      "passed": true,
+      "checks": 10001
+    },
+    {
+      "test": "tb_frame_buffer",
+      "passed": true,
+      "checks": 9
+    },
+    {
+      "test": "tb_keyboard_core",
+      "passed": true,
+      "checks": 2342532
+    },
+    {
+      "test": "tb_keyboard_latency",
+      "passed": true,
+      "checks": 5
+    },
+    {
+      "test": "tb_keyboard_top",
+      "passed": true,
+      "checks": 329180
+    },
+    {
+      "test": "tb_lock_guard",
+      "passed": true,
+      "checks": 5
+    },
+    {
+      "test": "tb_matrix_keypad",
+      "passed": true,
+      "checks": 7183
+    },
+    {
+      "test": "tb_mono_note_control",
+      "passed": true,
+      "checks": 163
+    },
+    {
+      "test": "tb_pll_pair",
+      "passed": true,
+      "checks": 101
+    },
+    {
+      "test": "tb_pt8211_tx",
+      "passed": true,
+      "checks": 646
+    },
+    {
+      "test": "tb_reset_sync",
+      "passed": true,
+      "checks": 5
+    },
+    {
+      "test": "tb_run_leds",
+      "passed": true,
+      "checks": 111
+    },
+    {
+      "test": "tb_sine_rom",
+      "passed": true,
+      "checks": 4097
+    },
+    {
+      "test": "tb_startup_envelope",
+      "passed": true,
+      "checks": 726
+    },
+    {
+      "test": "tb_tone_core",
+      "passed": true,
+      "checks": 129700002
+    },
+    {
+      "test": "tb_tone_gain",
+      "passed": true,
+      "checks": 2001
+    },
+    {
+      "test": "tb_tone_play",
+      "passed": true,
+      "checks": 375334
+    },
+    {
+      "test": "tb_tone_top",
+      "passed": true,
+      "checks": 3963
+    }
+  ],
+  "all_simulations_passed": true,
+  "pnr_internal_feasibility_passed": true,
+  "internal_setup_hold_violations": {
+    "Setup": 0,
+    "Hold": 0
+  },
+  "resources": {
+    "Logic": {
+      "used": 213,
+      "available": 138240
+    },
+    "Register": {
+      "used": 141,
+      "available": 139140
+    },
+    "BSRAM": {
+      "used": 4,
+      "available": 340
+    },
+    "DSP": {
+      "used": 1,
+      "available": 298
+    },
+    "PLL": {
+      "used": 2,
+      "available": 12
+    }
+  },
+  "clock_scheme": "50 MHz -> 32 MHz -> 61.44 MHz; PLL2 ODIV0=12.5",
+  "original_clock_scheme_rejected": "PA2078: PFD must be 19..81.25 MHz",
+  "physical_pin_constraints_signed": false,
+  "external_audio_timing_signed": false,
+  "full_sta_signed": false,
+  "hardware_programmed": false,
+  "programmed_profile": null,
+  "hardware_audio_measured": false,
+  "programming_owner": "user",
+  "automatic_programming_authorized": false,
+  "first_sram_configuration_loaded": true,
+  "sram_program_verified": false,
+  "latency_5ms_verified": false,
+  "download_qualified": false,
+  "fpga_model": "GW5AST-LV138FPG676A",
+  "fpga_model_evidence": "user confirmation",
+  "device_version": "C",
+  "speed_grade_verified": false,
+  "dock_pcb_revision": "4071f3",
+  "dock_revision_evidence": "user photo version sticker",
+  "remaining": [
+    "Core revision/speed marking and actual voltages",
+    "DAC-pad electrical timing and unconstrained-path audit",
+    "User SRAM program/verify",
+    "440Hz listening, channel and reset measurements",
+    "30-minute hardware stability"
+  ],
+  "latest_diagnostic": {
+    "profile": "D0_header_mirror",
+    "bitstream": "bringup/D0_header_mirror.fs",
+    "sha256": "0a03b95728c83c7b0e5179e121d66c8b618244a5771e1d5659383b8601939355",
+    "setup_hold_violations": {
+      "Setup": 0,
+      "Hold": 0
+    },
+    "pnr_passed": true,
+    "pins": {
+      "clk": "P16",
+      "rst": "U4",
+      "HP_BCK": "E22",
+      "HP_WS": "F24",
+      "HP_DIN": "G24",
+      "PA_EN": "H17",
+      "DBG_BCK": "U22",
+      "DBG_WS": "V19",
+      "DBG_DIN": "W20",
+      "DBG_PA_EN": "U26"
+    },
+    "simulation_passed": true,
+    "programmed_by_assistant": false,
+    "hardware_measurements_passed": false
+  },
+  "latest_tone_profiles": [
+    {
+      "profile": "D1_stereo_440",
+      "bitstream": "bringup\\D1_stereo_440.fs",
+      "sha256": "e4066fb37bc02216a28d54860329be0d5d526213a20853b4d547c125263ffdb2",
+      "pnr_passed": true,
+      "setup_hold_violations": {
+        "Setup": 0,
+        "Hold": 0
+      },
+      "resources": {
+        "Logic": {
+          "used": 212,
+          "available": 138240
+        },
+        "Register": {
+          "used": 141,
+          "available": 139140
+        },
+        "BSRAM": {
+          "used": 4,
+          "available": 340
+        },
+        "DSP": {
+          "used": 1,
+          "available": 298
+        },
+        "PLL": {
+          "used": 2,
+          "available": 12
+        }
+      },
+      "simulation_passed": true,
+      "programmed_by_assistant": false,
+      "hardware_measured": false
+    },
+    {
+      "profile": "D1_left_440",
+      "bitstream": "bringup\\D1_left_440.fs",
+      "sha256": "6b0f593229b1f1c6eb556a52fac86bf42d809ba8d1351975b4ec99efc14398ba",
+      "pnr_passed": true,
+      "setup_hold_violations": {
+        "Setup": 0,
+        "Hold": 0
+      },
+      "resources": {
+        "Logic": {
+          "used": 213,
+          "available": 138240
+        },
+        "Register": {
+          "used": 141,
+          "available": 139140
+        },
+        "BSRAM": {
+          "used": 4,
+          "available": 340
+        },
+        "DSP": {
+          "used": 1,
+          "available": 298
+        },
+        "PLL": {
+          "used": 2,
+          "available": 12
+        }
+      },
+      "simulation_passed": true,
+      "programmed_by_assistant": false,
+      "hardware_measured": false
+    },
+    {
+      "profile": "D1_right_440",
+      "bitstream": "bringup\\D1_right_440.fs",
+      "sha256": "07eb1a6515c25bfc850a408275954365d58c978c169e5ea5bd39da51cba650a8",
+      "pnr_passed": true,
+      "setup_hold_violations": {
+        "Setup": 0,
+        "Hold": 0
+      },
+      "resources": {
+        "Logic": {
+          "used": 215,
+          "available": 138240
+        },
+        "Register": {
+          "used": 141,
+          "available": 139140
+        },
+        "BSRAM": {
+          "used": 4,
+          "available": 340
+        },
+        "DSP": {
+          "used": 1,
+          "available": 298
+        },
+        "PLL": {
+          "used": 2,
+          "available": 12
+        }
+      },
+      "simulation_passed": true,
+      "programmed_by_assistant": false,
+      "hardware_measured": false
+    }
+  ],
+  "latest_keyboard": {
+    "profile": "D2_keyboard_adsr",
+    "project": "keyboard_adsr.gprj",
+    "simulation_passed": true,
+    "resources": {
+      "Logic": {
+        "used": 916,
+        "available": 138240
+      },
+      "Register": {
+        "used": 384,
+        "available": 139140
+      },
+      "BSRAM": {
+        "used": 4,
+        "available": 340
+      },
+      "DSP": {
+        "used": 2,
+        "available": 298
+      },
+      "PLL": {
+        "used": 2,
+        "available": 12
+      }
+    },
+    "historical_setup_hold_violations": {
+      "Setup": 0,
+      "Hold": 0
+    },
+    "hardware_verified": false,
+    "source_requires_user_rebuild": true,
+    "current_source_pnr_validated": false
+  },
+  "compilation_owner": "user",
+  "automatic_compilation_authorized": false,
+  "latest_source_variant": "D2_keyboard_leds",
+  "latest_run_leds": {
+    "simulation_passed": true,
+    "source_requires_user_rebuild": true,
+    "expected_user_output": "impl/pnr/D2_keyboard_leds.fs",
+    "hardware_verified": false
+  }
+}

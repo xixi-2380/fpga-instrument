@@ -1,0 +1,22 @@
+{
+  "returncode": 0,
+  "sram_program_verified": false,
+  "profile": "D0_muted",
+  "bitstream_sha256": "2c11f5eae7aebc326c9fd9ae9ef94b0fdfff7d1905769c2fd9629d7b6375a3e8",
+  "command": [
+    "C:/Gowin/Gowin_V1.9.12.04_x64/Programmer/bin/programmer_cli.exe",
+    "--device",
+    "GW5AST-138C",
+    "--cable-index",
+    "1",
+    "--frequency",
+    "2.5MHz",
+    "--operation_index",
+    "4",
+    "--fsFile",
+    "E:\\gowin\\fpga-instrument-mega138k-pro\\bringup\\D0_muted.fs"
+  ],
+  "operation": "SRAM Program and Verify",
+  "flash_written": false,
+  "measurement_status": "pending"
+}

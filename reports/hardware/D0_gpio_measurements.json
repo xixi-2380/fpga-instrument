@@ -1,0 +1,36 @@
+{
+  "profile": "D0_gpio_mirror",
+  "programming_owner": "user",
+  "programmed_by_assistant": false,
+  "hardware_measurements_passed": false,
+  "measurements": {
+    "BCK": {
+      "ball": "C24",
+      "j24_pin": 11,
+      "measured_hz": null,
+      "measured_voltage": null,
+      "passed": false
+    },
+    "WS": {
+      "ball": "B24",
+      "j24_pin": 12,
+      "measured_hz": null,
+      "measured_voltage": null,
+      "passed": false
+    },
+    "DIN": {
+      "ball": "E25",
+      "j24_pin": 9,
+      "measured_hz": null,
+      "measured_voltage": null,
+      "passed": false
+    },
+    "PA_EN": {
+      "ball": "D25",
+      "j24_pin": 10,
+      "measured_hz": null,
+      "measured_voltage": null,
+      "passed": false
+    }
+  }
+}

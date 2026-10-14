@@ -1,0 +1,36 @@
+{
+  "profile": "D0_header_mirror",
+  "programming_owner": "user",
+  "programmed_by_assistant": false,
+  "hardware_measurements_passed": false,
+  "measurements": {
+    "BCK": {
+      "ball": "U22",
+      "j23_pin": 39,
+      "measured_hz": null,
+      "measured_voltage": null,
+      "passed": false
+    },
+    "WS": {
+      "ball": "V19",
+      "j23_pin": 37,
+      "measured_hz": null,
+      "measured_voltage": null,
+      "passed": false
+    },
+    "DIN": {
+      "ball": "W20",
+      "j23_pin": 35,
+      "measured_hz": null,
+      "measured_voltage": null,
+      "passed": false
+    },
+    "PA_EN": {
+      "ball": "U26",
+      "j23_pin": 33,
+      "measured_hz": null,
+      "measured_voltage": null,
+      "passed": false
+    }
+  }
+}

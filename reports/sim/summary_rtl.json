@@ -1,0 +1,57 @@
+[
+  {
+    "test": "tb_audio_timing",
+    "passed": true,
+    "seconds": 0.311
+  },
+  {
+    "test": "tb_clock_reset",
+    "passed": true,
+    "seconds": 0.121
+  },
+  {
+    "test": "tb_dds_sine",
+    "passed": true,
+    "seconds": 0.162
+  },
+  {
+    "test": "tb_frame_buffer",
+    "passed": true,
+    "seconds": 0.127
+  },
+  {
+    "test": "tb_lock_guard",
+    "passed": true,
+    "seconds": 0.144
+  },
+  {
+    "test": "tb_pt8211_tx",
+    "passed": true,
+    "seconds": 0.17
+  },
+  {
+    "test": "tb_reset_sync",
+    "passed": true,
+    "seconds": 0.164
+  },
+  {
+    "test": "tb_sine_rom",
+    "passed": true,
+    "seconds": 0.166
+  },
+  {
+    "test": "tb_startup_envelope",
+    "passed": true,
+    "seconds": 0.173
+  },
+  {
+    "test": "tb_tone_core",
+    "passed": true,
+    "seconds": 130.169
+  },
+  {
+    "test": "tb_tone_gain",
+    "passed": true,
+    "seconds": 0.126
+  }
+]

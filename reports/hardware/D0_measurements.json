@@ -1,0 +1,12 @@
+{
+  "profile": "D0_muted",
+  "source": "user oscilloscope report pending",
+  "bck_hz": null,
+  "ws_hz": null,
+  "bck_vpp": null,
+  "ws_vpp": null,
+  "din_low": null,
+  "pa_en_low": null,
+  "reset_recovery": null,
+  "passed": false
+}

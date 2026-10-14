@@ -1,0 +1,90 @@
+{
+  "tests": [
+    {
+      "test": "tb_matrix_keypad",
+      "passed": true,
+      "checks": 7183
+    },
+    {
+      "test": "tb_mono_note_control",
+      "passed": true,
+      "checks": 163
+    },
+    {
+      "test": "tb_adsr_envelope",
+      "passed": true,
+      "checks": 59
+    },
+    {
+      "test": "tb_adsr_production",
+      "passed": true,
+      "checks": 14881
+    },
+    {
+      "test": "tb_keyboard_core",
+      "passed": true,
+      "checks": 2342532
+    },
+    {
+      "test": "tb_keyboard_top",
+      "passed": true,
+      "checks": 266868
+    },
+    {
+      "test": "tb_keyboard_latency",
+      "passed": true,
+      "checks": 5
+    }
+  ],
+  "total_checks": 2631691,
+  "all_passed": true,
+  "latency_simulation": {
+    "note_on": 3083.548,
+    "first_nonzero_code": 3135.306,
+    "note_off": 2948.164,
+    "units": "us",
+    "evidence": "one RTL simulation stimulus at production scan/debounce settings, not hardware worst case"
+  },
+  "resources": {
+    "Logic": {
+      "used": 916,
+      "available": 138240
+    },
+    "Register": {
+      "used": 384,
+      "available": 139140
+    },
+    "BSRAM": {
+      "used": 4,
+      "available": 340
+    },
+    "DSP": {
+      "used": 2,
+      "available": 298
+    },
+    "PLL": {
+      "used": 2,
+      "available": 12
+    }
+  },
+  "setup_hold_violations": {
+    "Setup": 0,
+    "Hold": 0
+  },
+  "historical_build_performed_by_assistant": true,
+  "future_compilation_owner": "user",
+  "programming_owner": "user",
+  "automatic_compilation_authorized": false,
+  "automatic_programming_authorized": false,
+  "hardware_verified": false,
+  "source_requires_user_rebuild": true,
+  "current_source_pnr_validated": false,
+  "axis_fix_simulation": {
+    "corrected_checks": 34,
+    "previous_checks": 34,
+    "all_16_positions_passed": true,
+    "previous_mapping_was_transposed": true,
+    "PLL_bypassed": true
+  },
+  "failure_resolved": false
+}

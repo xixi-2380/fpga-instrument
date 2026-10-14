@@ -1,0 +1,111 @@
+*** GOWIN Tcl Command Line Console  *** 
+Open project E:/gowin/fpga-instrument-mega138k-pro/bringup_digital.gprj finished
+current device: GW5AST-138C  GW5AST-LV138FPG676AC1/I0
+GowinSynthesis start
+Running parser ...
+Analyzing Verilog file 'E:\gowin\fpga-instrument-mega138k-pro\boards\mega138k_pro\clock_reset.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-mega138k-pro\config\synth_config.svh'("E:\gowin\fpga-instrument-mega138k-pro\boards\mega138k_pro\clock_reset.sv":2)
+Back to file 'E:\gowin\fpga-instrument-mega138k-pro\boards\mega138k_pro\clock_reset.sv'("E:\gowin\fpga-instrument-mega138k-pro\boards\mega138k_pro\clock_reset.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-mega138k-pro\boards\mega138k_pro\pll_pair.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-mega138k-pro\config\synth_config.svh'("E:\gowin\fpga-instrument-mega138k-pro\boards\mega138k_pro\pll_pair.sv":2)
+Back to file 'E:\gowin\fpga-instrument-mega138k-pro\boards\mega138k_pro\pll_pair.sv'("E:\gowin\fpga-instrument-mega138k-pro\boards\mega138k_pro\pll_pair.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-mega138k-pro\boards\mega138k_pro\tone_top.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-mega138k-pro\config\synth_config.svh'("E:\gowin\fpga-instrument-mega138k-pro\boards\mega138k_pro\tone_top.sv":2)
+Back to file 'E:\gowin\fpga-instrument-mega138k-pro\boards\mega138k_pro\tone_top.sv'("E:\gowin\fpga-instrument-mega138k-pro\boards\mega138k_pro\tone_top.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-mega138k-pro\rtl\audio_timing.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-mega138k-pro\config\synth_config.svh'("E:\gowin\fpga-instrument-mega138k-pro\rtl\audio_timing.sv":2)
+Back to file 'E:\gowin\fpga-instrument-mega138k-pro\rtl\audio_timing.sv'("E:\gowin\fpga-instrument-mega138k-pro\rtl\audio_timing.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-mega138k-pro\rtl\dds_sine.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-mega138k-pro\config\synth_config.svh'("E:\gowin\fpga-instrument-mega138k-pro\rtl\dds_sine.sv":2)
+Back to file 'E:\gowin\fpga-instrument-mega138k-pro\rtl\dds_sine.sv'("E:\gowin\fpga-instrument-mega138k-pro\rtl\dds_sine.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-mega138k-pro\rtl\frame_buffer.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-mega138k-pro\rtl\lock_guard.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-mega138k-pro\config\synth_config.svh'("E:\gowin\fpga-instrument-mega138k-pro\rtl\lock_guard.sv":2)
+Back to file 'E:\gowin\fpga-instrument-mega138k-pro\rtl\lock_guard.sv'("E:\gowin\fpga-instrument-mega138k-pro\rtl\lock_guard.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-mega138k-pro\rtl\pt8211_tx.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-mega138k-pro\rtl\reset_sync.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-mega138k-pro\rtl\sine_rom.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-mega138k-pro\config\synth_config.svh'("E:\gowin\fpga-instrument-mega138k-pro\rtl\sine_rom.sv":2)
+Back to file 'E:\gowin\fpga-instrument-mega138k-pro\rtl\sine_rom.sv'("E:\gowin\fpga-instrument-mega138k-pro\rtl\sine_rom.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-mega138k-pro\rtl\startup_envelope.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-mega138k-pro\config\synth_config.svh'("E:\gowin\fpga-instrument-mega138k-pro\rtl\startup_envelope.sv":2)
+Back to file 'E:\gowin\fpga-instrument-mega138k-pro\rtl\startup_envelope.sv'("E:\gowin\fpga-instrument-mega138k-pro\rtl\startup_envelope.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-mega138k-pro\rtl\tone_core.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-mega138k-pro\config\synth_config.svh'("E:\gowin\fpga-instrument-mega138k-pro\rtl\tone_core.sv":2)
+Back to file 'E:\gowin\fpga-instrument-mega138k-pro\rtl\tone_core.sv'("E:\gowin\fpga-instrument-mega138k-pro\rtl\tone_core.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-mega138k-pro\rtl\tone_gain.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-mega138k-pro\config\synth_config.svh'("E:\gowin\fpga-instrument-mega138k-pro\rtl\tone_gain.sv":2)
+Back to file 'E:\gowin\fpga-instrument-mega138k-pro\rtl\tone_gain.sv'("E:\gowin\fpga-instrument-mega138k-pro\rtl\tone_gain.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-mega138k-pro\boards\mega138k_pro\bringup_digital.sv'
+Compiling module 'bringup_digital'("E:\gowin\fpga-instrument-mega138k-pro\boards\mega138k_pro\bringup_digital.sv":4)
+Compiling module 'tone_top(LOCK_N=100000)'("E:\gowin\fpga-instrument-mega138k-pro\boards\mega138k_pro\tone_top.sv":3)
+Compiling module 'pll_pair'("E:\gowin\fpga-instrument-mega138k-pro\boards\mega138k_pro\pll_pair.sv":5)
+Compiling module 'clock_reset(LOCK_N=100000)'("E:\gowin\fpga-instrument-mega138k-pro\boards\mega138k_pro\clock_reset.sv":3)
+Compiling module 'reset_sync'("E:\gowin\fpga-instrument-mega138k-pro\rtl\reset_sync.sv":2)
+Compiling module 'lock_guard(STABLE_CYCLES=100000)'("E:\gowin\fpga-instrument-mega138k-pro\rtl\lock_guard.sv":3)
+Compiling module 'tone_core'("E:\gowin\fpga-instrument-mega138k-pro\rtl\tone_core.sv":3)
+Compiling module 'audio_timing'("E:\gowin\fpga-instrument-mega138k-pro\rtl\audio_timing.sv":3)
+Compiling module 'dds_sine'("E:\gowin\fpga-instrument-mega138k-pro\rtl\dds_sine.sv":3)
+Compiling module 'sine_rom'("E:\gowin\fpga-instrument-mega138k-pro\rtl\sine_rom.sv":3)
+Extracting RAM for identifier 'mem'("E:\gowin\fpga-instrument-mega138k-pro\rtl\sine_rom.sv":6)
+Compiling module 'startup_envelope'("E:\gowin\fpga-instrument-mega138k-pro\rtl\startup_envelope.sv":3)
+Compiling module 'tone_gain'("E:\gowin\fpga-instrument-mega138k-pro\rtl\tone_gain.sv":3)
+Compiling module 'frame_buffer'("E:\gowin\fpga-instrument-mega138k-pro\rtl\frame_buffer.sv":2)
+Compiling module 'pt8211_tx'("E:\gowin\fpga-instrument-mega138k-pro\rtl\pt8211_tx.sv":2)
+NOTE  (EX0101) : Current top module is "bringup_digital"
+[5%] Running netlist conversion ...
+Running device independent optimization ...
+[10%] Optimizing Phase 0 completed
+[15%] Optimizing Phase 1 completed
+[25%] Optimizing Phase 2 completed
+Running inference ...
+[30%] Inferring Phase 0 completed
+[40%] Inferring Phase 1 completed
+[50%] Inferring Phase 2 completed
+[55%] Inferring Phase 3 completed
+Running technical mapping ...
+[60%] Tech-Mapping Phase 0 completed
+[65%] Tech-Mapping Phase 1 completed
+[75%] Tech-Mapping Phase 2 completed
+[80%] Tech-Mapping Phase 3 completed
+[90%] Tech-Mapping Phase 4 completed
+WARN  (NL0002) : The module "frame_buffer" instantiated to "buffer" is swept in optimizing("E:\gowin\fpga-instrument-mega138k-pro\rtl\tone_core.sv":19)
+WARN  (NL0002) : The module "dds_sine" instantiated to "dds" is swept in optimizing("E:\gowin\fpga-instrument-mega138k-pro\rtl\tone_core.sv":14)
+WARN  (NL0002) : The module "sine_rom" instantiated to "rom" is swept in optimizing("E:\gowin\fpga-instrument-mega138k-pro\rtl\dds_sine.sv":8)
+WARN  (NL0002) : The module "tone_gain" instantiated to "gain" is swept in optimizing("E:\gowin\fpga-instrument-mega138k-pro\rtl\tone_core.sv":16)
+WARN  (NL0002) : The module "startup_envelope" instantiated to "startup" is swept in optimizing("E:\gowin\fpga-instrument-mega138k-pro\rtl\tone_core.sv":15)
+[95%] Generate netlist file "E:\gowin\fpga-instrument-mega138k-pro\impl\gwsynthesis\bringup_D0_gpio_mirror.vg" completed
+WARN  (CK3000) : Can't calculate clocks' relationship between: "clk" and "engine/clocks/pll2/CLKOUT0.default_gen_clk"
+[100%] Generate report file "E:\gowin\fpga-instrument-mega138k-pro\impl\gwsynthesis\bringup_D0_gpio_mirror_syn.rpt.html" completed
+GowinSynthesis finish
+Reading netlist file: "E:\gowin\fpga-instrument-mega138k-pro\impl\gwsynthesis\bringup_D0_gpio_mirror.vg"
+Parsing netlist file "E:\gowin\fpga-instrument-mega138k-pro\impl\gwsynthesis\bringup_D0_gpio_mirror.vg" completed
+Processing netlist completed
+Reading constraint file: "E:\gowin\fpga-instrument-mega138k-pro\boards\mega138k_pro\bringup.cst"
+Physical Constraint parsed completed
+Running placement......
+[10%] Placement Phase 0 completed
+[20%] Placement Phase 1 completed
+[30%] Placement Phase 2 completed
+[50%] Placement Phase 3 completed
+Running routing......
+[60%] Routing Phase 0 completed
+[70%] Routing Phase 1 completed
+[80%] Routing Phase 2 completed
+WARN  (PR1014) : Generic routing resource will be used to clock signal 'clk_d' by the specified constraint. And then it may lead to the excessive delay or skew
+[90%] Routing Phase 3 completed
+Running timing analysis......
+[95%] Timing analysis completed
+Placement and routing completed
+Bitstream generation in progress......
+Bitstream generation completed
+Running power analysis......
+[100%] Power analysis completed
+Generate file "E:\gowin\fpga-instrument-mega138k-pro\impl\pnr\bringup_D0_gpio_mirror.power.html" completed
+Generate file "E:\gowin\fpga-instrument-mega138k-pro\impl\pnr\bringup_D0_gpio_mirror.pin.html" completed
+Generate file "E:\gowin\fpga-instrument-mega138k-pro\impl\pnr\bringup_D0_gpio_mirror.rpt.html" completed
+Generate file "E:\gowin\fpga-instrument-mega138k-pro\impl\pnr\bringup_D0_gpio_mirror.rpt.txt" completed
+Generate file "E:\gowin\fpga-instrument-mega138k-pro\impl\pnr\bringup_D0_gpio_mirror.tr.html" completed
+Generate file "E:\gowin\fpga-instrument-mega138k-pro\impl\pnr\bringup_D0_gpio_mirror.tr" completed
+Tue Oct 13 18:15:19 2026
+

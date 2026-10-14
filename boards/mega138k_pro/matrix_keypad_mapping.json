@@ -1,0 +1,82 @@
+{
+  "rows": 4,
+  "columns": 4,
+  "reported_connected_by_user": true,
+  "source": "2026-10-14 user correction: W26 is physical top row, W25 is physical left column",
+  "column_order": "left to right",
+  "row_order": "top to bottom",
+  "column_pins": [
+    {
+      "index": 0,
+      "ball": "W25",
+      "header_index": 29,
+      "j23_pin": 32
+    },
+    {
+      "index": 1,
+      "ball": "M24",
+      "header_index": 27,
+      "j23_pin": 30
+    },
+    {
+      "index": 2,
+      "ball": "Y25",
+      "header_index": 25,
+      "j23_pin": 28
+    },
+    {
+      "index": 3,
+      "ball": "AA24",
+      "header_index": 23,
+      "j23_pin": 26
+    }
+  ],
+  "row_pins": [
+    {
+      "index": 0,
+      "ball": "W26",
+      "header_index": 28,
+      "j23_pin": 31
+    },
+    {
+      "index": 1,
+      "ball": "L22",
+      "header_index": 26,
+      "j23_pin": 29
+    },
+    {
+      "index": 2,
+      "ball": "Y26",
+      "header_index": 24,
+      "j23_pin": 27
+    },
+    {
+      "index": 3,
+      "ball": "AA25",
+      "header_index": 22,
+      "j23_pin": 25
+    }
+  ],
+  "planned_column_port": "key_col[3:0]",
+  "planned_row_port": "key_row[3:0]",
+  "indexing_rule": "bit 4*row+column; top-left=0; bottom-right=15",
+  "electrical_standard": "LVCMOS33; 3.3V from official Header CST, actual voltage not measured",
+  "proposed_scan": {
+    "driven_axis": "columns",
+    "selected_column": "drive low",
+    "unselected_columns": "high impedance",
+    "sense_axis": "rows with pull-up and synchronizers",
+    "pressed_level": 0
+  },
+  "independent_per_key_diodes": false,
+  "diode_direction": null,
+  "arbitrary_multikey_rollover_verified": false,
+  "scanner_rtl_implemented": true,
+  "audio_pin_conflicts": false,
+  "reference_cst_sha256": "f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba",
+  "programming_owner": "user",
+  "automatic_programming_authorized": false,
+  "diode_evidence": "user says 没有 and supplies keypad photograph",
+  "row_column_group_order_basis": "Preserve prior within-group order; swap physical row/column interpretation",
+  "source_requires_user_rebuild": true
+}

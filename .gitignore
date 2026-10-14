@@ -1,0 +1,18 @@
+# Existing legacy reference project
+/fpga-instrument/
+# Gowin outputs; retain the process configurations needed by the IDE
+/impl/*
+!/impl/*_process_config.json
+/build/
+*.gprj.user
+# Local simulator distribution, reproducible from its manifest
+/tools/*
+!/tools/manifest.json
+# Historical/manual bitstreams and generated simulation executables
+*.fs
+*.vvp
+# Fresh simulation products; evidence under reports/migration remains reviewable
+/reports/sim/current/
+/reports/keyboard/pinmap_current/
+__pycache__/
+*.pyc

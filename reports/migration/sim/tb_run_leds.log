@@ -1,0 +1,2 @@
+PASS tb_run_leds checks=111
+E:\gowin\fpga-instrument\sim\tb_run_leds.sv:25: $finish called at 530000 (1ps)

@@ -1,0 +1,26 @@
+{
+  "test": "tb_tone_play",
+  "passed": true,
+  "assertions": 375334,
+  "epochs": {
+    "0": {
+      "frames": 850,
+      "left_equals_right": true,
+      "peak_min": -1024,
+      "peak_max": 1023,
+      "first_nonzero_frame": 482
+    },
+    "1": {
+      "frames": 850,
+      "left_equals_right": true,
+      "peak_min": -1024,
+      "peak_max": 1023,
+      "first_nonzero_frame": 482
+    }
+  },
+  "isolated_channel_frames_per_epoch": 120,
+  "sample_rate_hz": 48000,
+  "fcw": 39370534,
+  "tone_hz": 440.0000050663948,
+  "source_of_audio_values": "RTL pin-level simulation, NOT hardware measurement"
+}

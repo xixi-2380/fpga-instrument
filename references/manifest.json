@@ -1,0 +1,98 @@
+[
+  {
+    "url": "https://github.com/sipeed/TangMega-138KPro-example/blob/d3cebf1703f1bcd06dca8a53bf2b660c86a5ec16/audio/audio_sinewave/audio.gprj",
+    "commit": "d3cebf1703f1bcd06dca8a53bf2b660c86a5ec16",
+    "path": "audio/audio_sinewave/audio.gprj",
+    "sha256": "3434f59ce18a47c1e73a1756098d9250f988ef5399e893780428fcac9d4e3afe",
+    "github_blob_matches": true,
+    "local_path": "references\\official_audio\\audio\\audio_sinewave\\audio.gprj"
+  },
+  {
+    "url": "https://github.com/sipeed/TangMega-138KPro-example/blob/d3cebf1703f1bcd06dca8a53bf2b660c86a5ec16/audio/audio_sinewave/impl/audio_process_config.json",
+    "commit": "d3cebf1703f1bcd06dca8a53bf2b660c86a5ec16",
+    "path": "audio/audio_sinewave/impl/audio_process_config.json",
+    "sha256": "b54736e42ff9ca84ff1f3fb5b083c8722f8f02e46691820405759c97ef12295e",
+    "github_blob_matches": true,
+    "local_path": "references\\official_audio\\audio\\audio_sinewave\\impl\\audio_process_config.json"
+  },
+  {
+    "url": "https://github.com/sipeed/TangMega-138KPro-example/blob/d3cebf1703f1bcd06dca8a53bf2b660c86a5ec16/audio/audio_sinewave/src/audio.cst",
+    "commit": "d3cebf1703f1bcd06dca8a53bf2b660c86a5ec16",
+    "path": "audio/audio_sinewave/src/audio.cst",
+    "sha256": "efa048ebf5fff90359fa69476efee6234c93d2b39c67e2f3a2aaa356887f4590",
+    "github_blob_matches": true,
+    "local_path": "references\\official_audio\\audio\\audio_sinewave\\src\\audio.cst"
+  },
+  {
+    "url": "https://github.com/sipeed/TangMega-138KPro-example/blob/d3cebf1703f1bcd06dca8a53bf2b660c86a5ec16/audio/audio_sinewave/src/audio_driver.v",
+    "commit": "d3cebf1703f1bcd06dca8a53bf2b660c86a5ec16",
+    "path": "audio/audio_sinewave/src/audio_driver.v",
+    "sha256": "d6dcc02023bf593c0a064ced26ddc5edd162d2896cd8da3b2260115e383a5d62",
+    "github_blob_matches": true,
+    "local_path": "references\\official_audio\\audio\\audio_sinewave\\src\\audio_driver.v"
+  },
+  {
+    "url": "https://github.com/sipeed/TangMega-138KPro-example/blob/d3cebf1703f1bcd06dca8a53bf2b660c86a5ec16/audio/audio_sinewave/src/sine_wave.v",
+    "commit": "d3cebf1703f1bcd06dca8a53bf2b660c86a5ec16",
+    "path": "audio/audio_sinewave/src/sine_wave.v",
+    "sha256": "3bb6ab98ac68a05815c4a6a51d9ec878354f420fb5f4ee35137e69ba4a139a49",
+    "github_blob_matches": true,
+    "local_path": "references\\official_audio\\audio\\audio_sinewave\\src\\sine_wave.v"
+  },
+  {
+    "url": "https://github.com/sipeed/TangMega-138KPro-example/blob/d3cebf1703f1bcd06dca8a53bf2b660c86a5ec16/audio/audio_sinewave/src/top.v",
+    "commit": "d3cebf1703f1bcd06dca8a53bf2b660c86a5ec16",
+    "path": "audio/audio_sinewave/src/top.v",
+    "sha256": "98e12691fc5ee35db98336a6d90966eff05157ca651baeec55555ef2611a8385",
+    "github_blob_matches": true,
+    "local_path": "references\\official_audio\\audio\\audio_sinewave\\src\\top.v"
+  },
+  {
+    "url": "https://dl.sipeed.com/fileList/TANG/Mega_138K_Pro/02_Schematic/TANG_MEGA-138K_Dock-4071f3__Schematics.pdf",
+    "path": "TANG_MEGA-138K_Dock-4071f3__Schematics.pdf",
+    "bytes": 5728047,
+    "sha256": "153d1c170a7d54e11a5d5e9b128ee9139a07b27249377d909e204cbf56e25cec",
+    "local_path": "references\\TANG_MEGA-138K_Dock-4071f3__Schematics.pdf"
+  },
+  {
+    "url": "https://dl.sipeed.com/fileList/TANG/Mega_138K_Pro/02_Schematic/TANG_MEGA-138K-Pro_4071_Schematics.pdf",
+    "path": "TANG_MEGA-138K-Pro_4071_Schematics.pdf",
+    "bytes": 2005092,
+    "sha256": "ee1900257e287f611c42516c24dfdc3f170722a67736a9ccabc8e102c2547636",
+    "local_path": "references\\TANG_MEGA-138K-Pro_4071_Schematics.pdf"
+  },
+  {
+    "url": "https://dl.sipeed.com/fileList/TANG/Mega_138K_Pro/02_Schematic/TANG_MEGA-138K_Pro-Dock-4071f_Schematics.pdf",
+    "path": "TANG_MEGA-138K_Pro-Dock-4071f_Schematics.pdf",
+    "bytes": 5568843,
+    "sha256": "852040eda6eedfaf9638d8de42192542b56cd817eb79cffb872056fb4d12f82f",
+    "local_path": "references\\TANG_MEGA-138K_Pro-Dock-4071f_Schematics.pdf"
+  },
+  {
+    "url": "https://dl.sipeed.com/fileList/TANG/Mega_138K_Pro/02_Schematic/TANG_MEGA-138K-Pro_4072_Schematics.pdf",
+    "path": "TANG_MEGA-138K-Pro_4072_Schematics.pdf",
+    "bytes": 5707118,
+    "sha256": "fd308dbb33a10a928f7759207f39717881733945981c2fc34e9bbcfb3e1008eb",
+    "local_path": "references\\TANG_MEGA-138K-Pro_4072_Schematics.pdf"
+  },
+  {
+    "url": "https://dl.sipeed.com/fileList/TANG/Mega_138K_Pro/09_Misc/tang_mega_138k-pro_pins.cst",
+    "path": "tang_mega_138k-pro_pins.cst",
+    "bytes": 18688,
+    "sha256": "f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba",
+    "local_path": "references\\tang_mega_138k-pro_pins.cst"
+  },
+  {
+    "url": "https://www.princeton.com.tw/LinkClick.aspx?fileticket=S9pGNkngU-k%3D&language=en-US&mid=13928&portalid=0&tabid=3476",
+    "path": "pt8211-v1.7.pdf",
+    "sha256": "3ceb112d58b95ce2af9478c531c9c54fe578e3b634ff18e11960ef8e5370d035",
+    "bytes": 518330,
+    "local_path": "references\\pt8211-v1.7.pdf"
+  },
+  {
+    "local_path": "references/UG306-1.0.9E_Arora V Clock User Guide.pdf",
+    "url": "https://www.gowinsemi.com.cn/document/index",
+    "sha256": "ee8ed3e6545b287b64506a2672dbe480db4ac8b195e7732217e6ab2dab651376",
+    "origin": "installed official Gowin documentation; relevant pages 18,43-50"
+  }
+]

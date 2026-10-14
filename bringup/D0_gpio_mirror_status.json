@@ -1,0 +1,62 @@
+{
+  "profile": "D0_gpio_mirror",
+  "programming_owner": "user",
+  "automatic_programming_authorized": false,
+  "purpose": "SRAM muted diagnostic: original DAC pins plus four PMOD1 GPIO mirrors",
+  "device": "GW5AST-138C",
+  "part": "GW5AST-LV138FPG676AC1/I0",
+  "source_files_sha256": {
+    "rtl\\audio_timing.sv": "7a8edde957cd109984590313285a7395b1ce6b8b003ce63387eb456eccce7887",
+    "rtl\\dds_sine.sv": "6dcdf647e7a2d703d4aeb1dd76028eaec317deff505e1d7d0ae1e48c545432e9",
+    "rtl\\frame_buffer.sv": "dbf0d9b5cc9a0ad1ff4b1a32b2e9b4fdb0fc5c7c8d01a8b1fe9a1c7685e844c8",
+    "rtl\\lock_guard.sv": "9a5f4602f95f980eff30ccc60d2419a49d7a9d4227afbc25d04ed3bd8dbb88ae",
+    "rtl\\pt8211_tx.sv": "5c5b56945efda77df100ca332b91df4bf2927add8d826c12e8499f957278710c",
+    "rtl\\reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+    "rtl\\sine_rom.sv": "d165a0f5973a6b52fe1cd2a4849f6ab37388ed35014a6651b099290f4acf2c25",
+    "rtl\\startup_envelope.sv": "d1169b2ec8ecb28ad8bc715ca2664d5ab2c4b84d5fde4af4d6a9415faefaa1c6",
+    "rtl\\tone_core.sv": "9d3114becb4ea3969c0704fa5523060dea510f849b093bc3a7927b1346901482",
+    "rtl\\tone_gain.sv": "1db6353ec52424143beab050a3edae461ccdf3b4fa50e2e3dbe58277e1bb34ec",
+    "boards\\mega138k_pro\\bringup_digital.sv": "53fa0272bfbac1bcc885d3828e018837266ecf0f9d7ac26e16eeddbd494e7058",
+    "boards\\mega138k_pro\\clock_reset.sv": "381b7af821aee73752ee6c103bfaddf8b465038e19b47c008f51e59ff5b03743",
+    "boards\\mega138k_pro\\pll_pair.sv": "7de2d85f6c514f94744360507cf8ca1eac03f094356e0d3dd728dd4ad2a148fd",
+    "boards\\mega138k_pro\\tone_top.sv": "381456a847e987742bee829ed07ed67a540a94c0b402e72aea403dbec2c07900",
+    "config\\synth_config.svh": "ecc58fe56df18639de2d0e8330f7e3ebac4ea71c9e7fd127ab94adc2ff5478c0",
+    "boards\\mega138k_pro\\bringup.cst": "109cb83cb6a9ddadff225b746a6d6c1dfb6dc70aa55717a8557932b071df2234",
+    "boards\\mega138k_pro\\bringup_digital.sdc": "ff04b4f491a409a9b33f9110e436642b4bfd13cb356d838105b8f9fe8daec978",
+    "rom\\sine4096.hex": "d62e7528ad6c0400fab616087abbdaa7b7977fcd9adbce1b347e3a5743ea3d6e"
+  },
+  "bitstream_sha256": "e7130b096bce0ddb7d785be1045e1071825dd20afe36f2d2ce1a22f2adf2d968",
+  "pins": {
+    "clk": "P16",
+    "rst": "U4",
+    "HP_BCK": "E22",
+    "HP_WS": "F24",
+    "HP_DIN": "G24",
+    "PA_EN": "H17",
+    "DBG_BCK": "C24",
+    "DBG_WS": "B24",
+    "DBG_DIN": "E25",
+    "DBG_PA_EN": "D25"
+  },
+  "setup_hold_violations": {
+    "Setup": 0,
+    "Hold": 0
+  },
+  "simulation_passed": true,
+  "gpio_mirror_simulation_passed": true,
+  "pnr_passed": true,
+  "documentary_mapping_checked": true,
+  "readback_protection_disabled": true,
+  "PA_EN_hard_zero": true,
+  "DIN_hard_zero": true,
+  "gpio_mirrors": {
+    "DBG_BCK": "HP_BCK",
+    "DBG_WS": "HP_WS",
+    "DBG_DIN": "HP_DIN",
+    "DBG_PA_EN": "PA_EN"
+  },
+  "hardware_measurements_passed": false,
+  "full_audio_release_qualified": false,
+  "device_speed_basis": "Sipeed official IDE installation device table; chip marking hidden",
+  "core_compatibility_basis": "4071 and 4072 schematics agree for P16/U4; actual core PCB revision remains unreadable"
+}

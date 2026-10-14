@@ -1,0 +1,3 @@
+VCD info: dumpfile reports/sim/D1_boundaries.vcd opened for output.
+PASS tb_tone_play checks=375334 stereo_frames_per_epoch=850 epochs=2 channel_profiles=3
+E:\gowin\fpga-instrument-mega138k-pro\sim\tb_tone_play.sv:113: $finish called at 35621118350 (1ps)

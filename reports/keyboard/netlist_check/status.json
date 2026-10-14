@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "netlist_sha256": "f29d07d75591cd81c92bd7e2adc4433d6e9cba64b95d56b71629ad2ff7f7ef2f",
+  "pll_bypassed": true,
+  "hardware_verified": false
+}
