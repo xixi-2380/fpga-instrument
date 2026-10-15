@@ -1,0 +1,81 @@
+{
+    "Device": "GW5AST-138C",
+    "Files": [
+        {
+            "Path": "E:/gowin/fpga-instrument/src/keyboard_top.sv",
+            "Type": "verilog"
+        },
+        {
+            "Path": "E:/gowin/fpga-instrument/src/adsr_envelope.sv",
+            "Type": "verilog"
+        },
+        {
+            "Path": "E:/gowin/fpga-instrument/src/audio_timing.sv",
+            "Type": "verilog"
+        },
+        {
+            "Path": "E:/gowin/fpga-instrument/src/clock_reset.sv",
+            "Type": "verilog"
+        },
+        {
+            "Path": "E:/gowin/fpga-instrument/src/dds_sine.sv",
+            "Type": "verilog"
+        },
+        {
+            "Path": "E:/gowin/fpga-instrument/src/frame_buffer.sv",
+            "Type": "verilog"
+        },
+        {
+            "Path": "E:/gowin/fpga-instrument/src/keyboard_core.sv",
+            "Type": "verilog"
+        },
+        {
+            "Path": "E:/gowin/fpga-instrument/src/lock_guard.sv",
+            "Type": "verilog"
+        },
+        {
+            "Path": "E:/gowin/fpga-instrument/src/matrix_keypad.sv",
+            "Type": "verilog"
+        },
+        {
+            "Path": "E:/gowin/fpga-instrument/src/mono_note_control.sv",
+            "Type": "verilog"
+        },
+        {
+            "Path": "E:/gowin/fpga-instrument/src/pll_pair.sv",
+            "Type": "verilog"
+        },
+        {
+            "Path": "E:/gowin/fpga-instrument/src/pt8211_tx.sv",
+            "Type": "verilog"
+        },
+        {
+            "Path": "E:/gowin/fpga-instrument/src/reset_sync.sv",
+            "Type": "verilog"
+        },
+        {
+            "Path": "E:/gowin/fpga-instrument/src/run_leds.sv",
+            "Type": "verilog"
+        },
+        {
+            "Path": "E:/gowin/fpga-instrument/src/sine_rom.sv",
+            "Type": "verilog"
+        },
+        {
+            "Path": "E:/gowin/fpga-instrument/src/startup_envelope.sv",
+            "Type": "verilog"
+        },
+        {
+            "Path": "E:/gowin/fpga-instrument/src/tone_gain.sv",
+            "Type": "verilog"
+        }
+    ],
+    "IncludePath": [
+        "E:/gowin/fpga-instrument/config"
+    ],
+    "LoopLimit": 2000,
+    "ResultFile": "E:/gowin/fpga-instrument/impl/temp/rtl_parser.result",
+    "Top": "keyboard_top",
+    "VerilogStd": "sysv",
+    "VhdlStd": "vhdl_93"
+}

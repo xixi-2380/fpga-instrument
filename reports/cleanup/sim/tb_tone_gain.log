@@ -1,0 +1,2 @@
+PASS tb_tone_gain checks=2001
+E:\gowin\fpga-instrument\sim\tb_tone_gain.sv:20: $finish called at 20026000 (1ps)

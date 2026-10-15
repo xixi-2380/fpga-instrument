@@ -1,8 +1,6 @@
-# Existing legacy reference project
-/fpga-instrument/
 # Gowin outputs; retain the process configurations needed by the IDE
 /impl/*
-!/impl/*_process_config.json
+!/impl/keyboard_adsr_process_config.json
 /build/
 *.gprj.user
 # Local simulator distribution, reproducible from its manifest

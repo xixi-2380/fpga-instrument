@@ -1,0 +1,2 @@
+PASS tb_lock_guard checks=5
+E:\gowin\fpga-instrument\sim\tb_lock_guard.sv:13: $finish called at 172000 (1ps)

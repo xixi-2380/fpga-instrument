@@ -1,0 +1,108 @@
+GowinSynthesis start
+Running parser ...
+ERROR (EX5985) : Cannot open include file 'keyboard_config.svh'("E:\gowin\fpga-instrument\src\keyboard_top.sv":2)
+ERROR (EX5985) : Cannot open include file 'run_leds_config.svh'("E:\gowin\fpga-instrument\src\keyboard_top.sv":3)
+ERROR (EX5985) : Cannot open include file 'keyboard_config.svh'("E:\gowin\fpga-instrument\src\adsr_envelope.sv":2)
+ERROR (EX5985) : Cannot open include file 'synth_config.svh'("E:\gowin\fpga-instrument\src\audio_timing.sv":2)
+ERROR (EX5985) : Cannot open include file 'synth_config.svh'("E:\gowin\fpga-instrument\src\clock_reset.sv":2)
+ERROR (EX5985) : Cannot open include file 'synth_config.svh'("E:\gowin\fpga-instrument\src\dds_sine.sv":2)
+ERROR (EX5985) : Cannot open include file 'keyboard_config.svh'("E:\gowin\fpga-instrument\src\keyboard_core.sv":2)
+ERROR (EX5985) : Cannot open include file 'synth_config.svh'("E:\gowin\fpga-instrument\src\lock_guard.sv":2)
+ERROR (EX5985) : Cannot open include file 'keyboard_config.svh'("E:\gowin\fpga-instrument\src\matrix_keypad.sv":2)
+ERROR (EX5985) : Cannot open include file 'keyboard_notes.svh'("E:\gowin\fpga-instrument\src\mono_note_control.sv":5)
+ERROR (EX5985) : Cannot open include file 'synth_config.svh'("E:\gowin\fpga-instrument\src\pll_pair.sv":2)
+ERROR (EX5985) : Cannot open include file 'run_leds_config.svh'("E:\gowin\fpga-instrument\src\run_leds.sv":2)
+ERROR (EX5985) : Cannot open include file 'synth_config.svh'("E:\gowin\fpga-instrument\src\sine_rom.sv":2)
+ERROR (EX5985) : Cannot open include file 'synth_config.svh'("E:\gowin\fpga-instrument\src\startup_envelope.sv":2)
+ERROR (EX5985) : Cannot open include file 'synth_config.svh'("E:\gowin\fpga-instrument\src\tone_gain.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument\src\keyboard_top.sv'
+ERROR (EX3755) : Cannot open include file 'keyboard_config.svh'("E:\gowin\fpga-instrument\src\keyboard_top.sv":2)
+ERROR (EX3755) : Cannot open include file 'run_leds_config.svh'("E:\gowin\fpga-instrument\src\keyboard_top.sv":3)
+ERROR (EX3842) : Use of undefined macro 'RUN_LED_STEP_CYCLES'("E:\gowin\fpga-instrument\src\keyboard_top.sv":5)
+ERROR (EX3863) : Syntax error near ','("E:\gowin\fpga-instrument\src\keyboard_top.sv":5)
+Verilog file 'E:\gowin\fpga-instrument\src\keyboard_top.sv' ignored due to errors
+Analyzing Verilog file 'E:\gowin\fpga-instrument\src\adsr_envelope.sv'
+ERROR (EX3755) : Cannot open include file 'keyboard_config.svh'("E:\gowin\fpga-instrument\src\adsr_envelope.sv":2)
+ERROR (EX3842) : Use of undefined macro 'ADSR_ATTACK_FRAMES'("E:\gowin\fpga-instrument\src\adsr_envelope.sv":4)
+ERROR (EX3863) : Syntax error near ','("E:\gowin\fpga-instrument\src\adsr_envelope.sv":4)
+Verilog file 'E:\gowin\fpga-instrument\src\adsr_envelope.sv' ignored due to errors
+Analyzing Verilog file 'E:\gowin\fpga-instrument\src\audio_timing.sv'
+ERROR (EX3755) : Cannot open include file 'synth_config.svh'("E:\gowin\fpga-instrument\src\audio_timing.sv":2)
+ERROR (EX3842) : Use of undefined macro 'BCK_HALF_CYCLES'("E:\gowin\fpga-instrument\src\audio_timing.sv":3)
+ERROR (EX3863) : Syntax error near ')'("E:\gowin\fpga-instrument\src\audio_timing.sv":3)
+Verilog file 'E:\gowin\fpga-instrument\src\audio_timing.sv' ignored due to errors
+Analyzing Verilog file 'E:\gowin\fpga-instrument\src\clock_reset.sv'
+ERROR (EX3755) : Cannot open include file 'synth_config.svh'("E:\gowin\fpga-instrument\src\clock_reset.sv":2)
+ERROR (EX3842) : Use of undefined macro 'LOCK_CYCLES'("E:\gowin\fpga-instrument\src\clock_reset.sv":3)
+ERROR (EX3863) : Syntax error near ')'("E:\gowin\fpga-instrument\src\clock_reset.sv":3)
+Verilog file 'E:\gowin\fpga-instrument\src\clock_reset.sv' ignored due to errors
+Analyzing Verilog file 'E:\gowin\fpga-instrument\src\dds_sine.sv'
+ERROR (EX3755) : Cannot open include file 'synth_config.svh'("E:\gowin\fpga-instrument\src\dds_sine.sv":2)
+ERROR (EX3842) : Use of undefined macro 'PHASE_W'("E:\gowin\fpga-instrument\src\dds_sine.sv":4)
+ERROR (EX3842) : Use of undefined macro 'ROM_DATA_W'("E:\gowin\fpga-instrument\src\dds_sine.sv":5)
+ERROR (EX3842) : Use of undefined macro 'ROM_ADDR_W'("E:\gowin\fpga-instrument\src\dds_sine.sv":8)
+ERROR (EX3863) : Syntax error near ']'("E:\gowin\fpga-instrument\src\dds_sine.sv":8)
+ERROR (EX3928) : Module 'dds_sine' is ignored due to previous errors("E:\gowin\fpga-instrument\src\dds_sine.sv":13)
+Verilog file 'E:\gowin\fpga-instrument\src\dds_sine.sv' ignored due to errors
+Analyzing Verilog file 'E:\gowin\fpga-instrument\src\frame_buffer.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument\src\keyboard_core.sv'
+ERROR (EX3755) : Cannot open include file 'keyboard_config.svh'("E:\gowin\fpga-instrument\src\keyboard_core.sv":2)
+ERROR (EX3842) : Use of undefined macro 'KEY_SLOT_CYCLES'("E:\gowin\fpga-instrument\src\keyboard_core.sv":4)
+ERROR (EX3863) : Syntax error near ','("E:\gowin\fpga-instrument\src\keyboard_core.sv":4)
+Verilog file 'E:\gowin\fpga-instrument\src\keyboard_core.sv' ignored due to errors
+Analyzing Verilog file 'E:\gowin\fpga-instrument\src\lock_guard.sv'
+ERROR (EX3755) : Cannot open include file 'synth_config.svh'("E:\gowin\fpga-instrument\src\lock_guard.sv":2)
+ERROR (EX3842) : Use of undefined macro 'LOCK_CYCLES'("E:\gowin\fpga-instrument\src\lock_guard.sv":3)
+ERROR (EX3863) : Syntax error near ')'("E:\gowin\fpga-instrument\src\lock_guard.sv":3)
+Verilog file 'E:\gowin\fpga-instrument\src\lock_guard.sv' ignored due to errors
+Analyzing Verilog file 'E:\gowin\fpga-instrument\src\matrix_keypad.sv'
+ERROR (EX3755) : Cannot open include file 'keyboard_config.svh'("E:\gowin\fpga-instrument\src\matrix_keypad.sv":2)
+ERROR (EX3842) : Use of undefined macro 'KEY_SLOT_CYCLES'("E:\gowin\fpga-instrument\src\matrix_keypad.sv":4)
+ERROR (EX3863) : Syntax error near ','("E:\gowin\fpga-instrument\src\matrix_keypad.sv":4)
+Verilog file 'E:\gowin\fpga-instrument\src\matrix_keypad.sv' ignored due to errors
+Analyzing Verilog file 'E:\gowin\fpga-instrument\src\mono_note_control.sv'
+ERROR (EX3755) : Cannot open include file 'keyboard_notes.svh'("E:\gowin\fpga-instrument\src\mono_note_control.sv":5)
+ERROR (EX3928) : Module 'mono_note_control' is ignored due to previous errors("E:\gowin\fpga-instrument\src\mono_note_control.sv":30)
+Verilog file 'E:\gowin\fpga-instrument\src\mono_note_control.sv' ignored due to errors
+Analyzing Verilog file 'E:\gowin\fpga-instrument\src\pll_pair.sv'
+ERROR (EX3755) : Cannot open include file 'synth_config.svh'("E:\gowin\fpga-instrument\src\pll_pair.sv":2)
+ERROR (EX3842) : Use of undefined macro 'PLL1_FCLKIN'("E:\gowin\fpga-instrument\src\pll_pair.sv":7)
+ERROR (EX3842) : Use of undefined macro 'PLL1_IDIV'("E:\gowin\fpga-instrument\src\pll_pair.sv":7)
+ERROR (EX3842) : Use of undefined macro 'PLL1_FBDIV'("E:\gowin\fpga-instrument\src\pll_pair.sv":7)
+ERROR (EX3842) : Use of undefined macro 'PLL1_MDIV'("E:\gowin\fpga-instrument\src\pll_pair.sv":7)
+ERROR (EX3842) : Use of undefined macro 'PLL1_ODIV'("E:\gowin\fpga-instrument\src\pll_pair.sv":8)
+ERROR (EX3842) : Use of undefined macro 'PLL2_FCLKIN'("E:\gowin\fpga-instrument\src\pll_pair.sv":21)
+ERROR (EX3842) : Use of undefined macro 'PLL2_IDIV'("E:\gowin\fpga-instrument\src\pll_pair.sv":21)
+ERROR (EX3842) : Use of undefined macro 'PLL2_FBDIV'("E:\gowin\fpga-instrument\src\pll_pair.sv":21)
+ERROR (EX3842) : Use of undefined macro 'PLL2_MDIV'("E:\gowin\fpga-instrument\src\pll_pair.sv":21)
+ERROR (EX3842) : Use of undefined macro 'PLL2_ODIV'("E:\gowin\fpga-instrument\src\pll_pair.sv":22)
+ERROR (EX3842) : Use of undefined macro 'PLL2_ODIV_FRAC'("E:\gowin\fpga-instrument\src\pll_pair.sv":22)
+ERROR (EX3928) : Module 'pll_pair' is ignored due to previous errors("E:\gowin\fpga-instrument\src\pll_pair.sv":35)
+Verilog file 'E:\gowin\fpga-instrument\src\pll_pair.sv' ignored due to errors
+Analyzing Verilog file 'E:\gowin\fpga-instrument\src\pt8211_tx.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument\src\reset_sync.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument\src\run_leds.sv'
+ERROR (EX3755) : Cannot open include file 'run_leds_config.svh'("E:\gowin\fpga-instrument\src\run_leds.sv":2)
+ERROR (EX3842) : Use of undefined macro 'RUN_LED_STEP_CYCLES'("E:\gowin\fpga-instrument\src\run_leds.sv":4)
+ERROR (EX3863) : Syntax error near ','("E:\gowin\fpga-instrument\src\run_leds.sv":4)
+Verilog file 'E:\gowin\fpga-instrument\src\run_leds.sv' ignored due to errors
+Analyzing Verilog file 'E:\gowin\fpga-instrument\src\sine_rom.sv'
+ERROR (EX3755) : Cannot open include file 'synth_config.svh'("E:\gowin\fpga-instrument\src\sine_rom.sv":2)
+ERROR (EX3842) : Use of undefined macro 'ROM_ADDR_W'("E:\gowin\fpga-instrument\src\sine_rom.sv":4)
+ERROR (EX3842) : Use of undefined macro 'ROM_DATA_W'("E:\gowin\fpga-instrument\src\sine_rom.sv":5)
+ERROR (EX3863) : Syntax error near ')'("E:\gowin\fpga-instrument\src\sine_rom.sv":6)
+ERROR (EX3413) : Second argument of '$readmemh' must be a memory("E:\gowin\fpga-instrument\src\sine_rom.sv":7)
+ERROR (EX3872) : 'mem' is not declared("E:\gowin\fpga-instrument\src\sine_rom.sv":8)
+ERROR (EX3928) : Module 'sine_rom' is ignored due to previous errors("E:\gowin\fpga-instrument\src\sine_rom.sv":9)
+Verilog file 'E:\gowin\fpga-instrument\src\sine_rom.sv' ignored due to errors
+Analyzing Verilog file 'E:\gowin\fpga-instrument\src\startup_envelope.sv'
+ERROR (EX3755) : Cannot open include file 'synth_config.svh'("E:\gowin\fpga-instrument\src\startup_envelope.sv":2)
+ERROR (EX3842) : Use of undefined macro 'MUTE_FRAMES'("E:\gowin\fpga-instrument\src\startup_envelope.sv":3)
+ERROR (EX3863) : Syntax error near ','("E:\gowin\fpga-instrument\src\startup_envelope.sv":3)
+Verilog file 'E:\gowin\fpga-instrument\src\startup_envelope.sv' ignored due to errors
+Analyzing Verilog file 'E:\gowin\fpga-instrument\src\tone_gain.sv'
+ERROR (EX3755) : Cannot open include file 'synth_config.svh'("E:\gowin\fpga-instrument\src\tone_gain.sv":2)
+ERROR (EX3842) : Use of undefined macro 'GAIN_SHIFT'("E:\gowin\fpga-instrument\src\tone_gain.sv":9)
+ERROR (EX3928) : Module 'tone_gain' is ignored due to previous errors("E:\gowin\fpga-instrument\src\tone_gain.sv":21)
+Verilog file 'E:\gowin\fpga-instrument\src\tone_gain.sv' ignored due to errors
+GowinSynthesis finish

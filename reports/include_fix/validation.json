@@ -1,0 +1,286 @@
+{
+  "date": "2026-10-14",
+  "observed_failure": "Gowin EX5985/EX3755 missing include files; EX3842 undefined macros and dependent syntax errors",
+  "actual_IDE_include_before": [
+    "E:/gowin/fpga-instrument/config"
+  ],
+  "failure_evidence": [
+    {
+      "source": "impl/gwsynthesis/D2_keyboard_leds.log",
+      "snapshot": "reports/include_fix/user_failed_build/impl/gwsynthesis/D2_keyboard_leds.log",
+      "sha256": "9baf934a2665e7325de003071d7ec8614212fd5bc0a7c509abeb7df55760ba2d"
+    },
+    {
+      "source": "impl/gwsynthesis/D2_keyboard_leds.prj",
+      "snapshot": "reports/include_fix/user_failed_build/impl/gwsynthesis/D2_keyboard_leds.prj",
+      "sha256": "84387c687def1037345dcf87e582c1d119fe0c8256321548901430d86cda92af"
+    },
+    {
+      "source": "impl/temp/rtl_parser_arg.json",
+      "snapshot": "reports/include_fix/user_failed_build/impl/temp/rtl_parser_arg.json",
+      "sha256": "e9372356e12eae332b4ea0acb0c0d7703077c85c358426dd3456dcf252fb32d0"
+    },
+    {
+      "source": "impl/temp/rtl_parser.result",
+      "snapshot": "reports/include_fix/user_failed_build/impl/temp/rtl_parser.result",
+      "sha256": "3517d7543849bf508c08152896bf4c4cfea58a28a688f46b909d1e4b10f197fa"
+    }
+  ],
+  "before_no_config_search_path_preprocess_returncode": 4294967295,
+  "before_reproduced_missing_header": true,
+  "sources_before_sha256": {
+    "src/adsr_envelope.sv": "28a78683d0ed57810d56ad651c6d9e02e4a342e3057533afcc846fc6fc67c235",
+    "src/audio_timing.sv": "7a8edde957cd109984590313285a7395b1ce6b8b003ce63387eb456eccce7887",
+    "src/clock_reset.sv": "381b7af821aee73752ee6c103bfaddf8b465038e19b47c008f51e59ff5b03743",
+    "src/dds_sine.sv": "6dcdf647e7a2d703d4aeb1dd76028eaec317deff505e1d7d0ae1e48c545432e9",
+    "src/frame_buffer.sv": "dbf0d9b5cc9a0ad1ff4b1a32b2e9b4fdb0fc5c7c8d01a8b1fe9a1c7685e844c8",
+    "src/keyboard.cst": "182f8b477e920e5526425cc9245f544d376a00d65f77cef9653dd4e4368d010a",
+    "src/keyboard.sdc": "d4cda6eda4eabf4c1eb77b25273648a8e94d466d7489bd83f175fdaf27251086",
+    "src/keyboard_core.sv": "6ddf7f286f9ad89359bed1e09f7ef4e848b36bd0bbba65dd5474577aa57255a5",
+    "src/keyboard_top.sv": "88851613185030f48293c3b10a97ed3ae38bebca4a220d25208845f68a95224a",
+    "src/lock_guard.sv": "9a5f4602f95f980eff30ccc60d2419a49d7a9d4227afbc25d04ed3bd8dbb88ae",
+    "src/matrix_keypad.sv": "c523577f149c49507d8357cd3fc509397e8091b5ce95a20c0ac84e78e62c3607",
+    "src/mono_note_control.sv": "bebc913e1c9208dee63334d5c184363c9304c3f354e0b1a9c2b3ce03e79c4fe5",
+    "src/pll_pair.sv": "7de2d85f6c514f94744360507cf8ca1eac03f094356e0d3dd728dd4ad2a148fd",
+    "src/pt8211_tx.sv": "5c5b56945efda77df100ca332b91df4bf2927add8d826c12e8499f957278710c",
+    "src/reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+    "src/run_leds.sv": "d479eb0a62fc9f3a0f7294cfafaf4c1795f6d07860e4fa39f54d5484ebd59a41",
+    "src/sine_rom.sv": "bb884ae2f6f9ac79b0ccb1ec4b4d6479a8d0538b7337e963d8e6c227837c436c",
+    "src/startup_envelope.sv": "d1169b2ec8ecb28ad8bc715ca2664d5ab2c4b84d5fde4af4d6a9415faefaa1c6",
+    "src/tone_gain.sv": "1db6353ec52424143beab050a3edae461ccdf3b4fa50e2e3dbe58277e1bb34ec",
+    "src/config/keyboard_config.svh": "f7f74a4e3d5fede10b5fb0e2820af76e34327576b673eaf1e05c8a3ca1b4baeb",
+    "src/config/keyboard_notes.svh": "55c63120d48c3f42e587c8c42d83b0d0ef10228650faff4cf0348aef3be5fe66",
+    "src/config/run_leds_config.svh": "2cdc3ed138ed6a3b70c58e53e9de871f15afb7898f8c88a4b597c624734a1589",
+    "src/config/synth_config.svh": "ecc58fe56df18639de2d0e8330f7e3ebac4ea71c9e7fd127ab94adc2ff5478c0",
+    "src/rom/manifest.json": "2f8f3ac0227822e66ce769afea86b2f5515873595221d7477ae9a419ca15f3d8",
+    "src/rom/sine4096.hex": "d62e7528ad6c0400fab616087abbdaa7b7977fcd9adbce1b347e3a5743ea3d6e",
+    "sim/tb_adsr_envelope.sv": "677b645aac79cce0b4da272f003a6ac2c19c6de6b269e2085cc142bb17ddaa91",
+    "sim/tb_adsr_production.sv": "67b4f88f46b5f8cd563c6861a3fe05762dd666dab919b14fbf45907bc1ce3720",
+    "sim/tb_audio_timing.sv": "78cabe6605a6c80ea2cae01d81c9be00f93fcda4ad75b619a210b449a56a6ad1",
+    "sim/tb_clock_reset.sv": "8df38db54b95f6b3645c182a2e0e528308c4f203486f28dddef39f1747e03328",
+    "sim/tb_dds_sine.sv": "c2faefd8b5da875827ae123888f6de3ee5f6dd599ce1887749d6fc6ad5663389",
+    "sim/tb_frame_buffer.sv": "f7ca2a215fc3e17c52efa88dc9980a4cbd67fd9295fbc57e3957c88968e78de7",
+    "sim/tb_keyboard_core.sv": "9577f8a246d8e86a467aa78299100d8f5f855af426d4988b921d95ec140f1fb9",
+    "sim/tb_keyboard_latency.sv": "a2e5946dcebb5afc0599b279489c302086dae4bc3518af2f377158f7dc7dc236",
+    "sim/tb_keyboard_top.sv": "aa3e7556a8acab5aed2a0d70952b2b9288d5930cbebec0241eb07e796e25e5cb",
+    "sim/tb_lock_guard.sv": "f70f8f9110b59cd8cd1fdf11f6d2d43bfb424406e0795c03222a80b6bd5400be",
+    "sim/tb_matrix_keypad.sv": "0f407a7718e4336783c24e67df777891cc576ce223e8fb5ee6a13ff2ebe2cab9",
+    "sim/tb_mono_note_control.sv": "7e95fafeb13479b4eff45738cf3d24a772df4b42a2f06412d33f0798478741ab",
+    "sim/tb_pll_pair.sv": "fe7e1b6f8aea43a41edda904474087345224cc325cf30c6f5d271529edc43bb4",
+    "sim/tb_pt8211_tx.sv": "fc0c8d934771e719144b70ce9cfff6f3ff41b41583449a931abd7b703b44fde8",
+    "sim/tb_reset_sync.sv": "d3d208ecfab924b849c67c98464519d35b7da5b9f96c70ac482d897bf6ff7029",
+    "sim/tb_run_leds.sv": "e44be5f9e849269c4d33f113750daca47491a0746b903d9c8ee1c61bd5929406",
+    "sim/tb_sine_rom.sv": "8b740624273b0999fcaa32eeacdfeb8412e714df6e19c1cd5add51dfecdce266",
+    "sim/tb_startup_envelope.sv": "4b9136644993f959763895213ff57046568e55d3584ae0e2070fa54362e22030",
+    "sim/tb_tone_gain.sv": "21e58ad9cd92daf334e1a49f7cc8294161038ca70cc442a4a0f24c182aa40313"
+  },
+  "synthesis_run_by_assistant": false,
+  "pnr_run_by_assistant": false,
+  "programmed_by_assistant": false,
+  "git_commit_created": false,
+  "tests_pending": false,
+  "changed_files": [
+    "src/adsr_envelope.sv",
+    "src/audio_timing.sv",
+    "src/clock_reset.sv",
+    "src/dds_sine.sv",
+    "src/keyboard_core.sv",
+    "src/keyboard_top.sv",
+    "src/lock_guard.sv",
+    "src/matrix_keypad.sv",
+    "src/mono_note_control.sv",
+    "src/pll_pair.sv",
+    "src/run_leds.sv",
+    "src/sine_rom.sv",
+    "src/startup_envelope.sv",
+    "src/tone_gain.sv",
+    "sim/tb_adsr_production.sv",
+    "sim/tb_audio_timing.sv",
+    "scripts/run_sim.py",
+    "scripts/run_keyboard_pinmap.py",
+    "scripts/build_keyboard.tcl",
+    "impl/keyboard_adsr_process_config.json"
+  ],
+  "actual_IDE_include_after": [
+    "E:/gowin/fpga-instrument/src",
+    "E:/gowin/fpga-instrument/src/config"
+  ],
+  "include_references_checked": 42,
+  "all_project_files_exist": true,
+  "logic_config_rom_unchanged": true,
+  "python_syntax_valid": true,
+  "after_preprocess_without_config_search_path": {
+    "project_root": true,
+    "unrelated_cwd": true
+  },
+  "rtl_tests": [
+    {
+      "test": "tb_adsr_envelope",
+      "passed": true,
+      "seconds": 0.128
+    },
+    {
+      "test": "tb_adsr_production",
+      "passed": true,
+      "seconds": 0.163
+    },
+    {
+      "test": "tb_audio_timing",
+      "passed": true,
+      "seconds": 0.25
+    },
+    {
+      "test": "tb_clock_reset",
+      "passed": true,
+      "seconds": 0.114
+    },
+    {
+      "test": "tb_dds_sine",
+      "passed": true,
+      "seconds": 0.135
+    },
+    {
+      "test": "tb_frame_buffer",
+      "passed": true,
+      "seconds": 0.113
+    },
+    {
+      "test": "tb_keyboard_core",
+      "passed": true,
+      "seconds": 21.213
+    },
+    {
+      "test": "tb_keyboard_latency",
+      "passed": true,
+      "seconds": 1.109
+    },
+    {
+      "test": "tb_lock_guard",
+      "passed": true,
+      "seconds": 0.115
+    },
+    {
+      "test": "tb_matrix_keypad",
+      "passed": true,
+      "seconds": 0.206
+    },
+    {
+      "test": "tb_mono_note_control",
+      "passed": true,
+      "seconds": 0.11
+    },
+    {
+      "test": "tb_pt8211_tx",
+      "passed": true,
+      "seconds": 0.149
+    },
+    {
+      "test": "tb_reset_sync",
+      "passed": true,
+      "seconds": 0.118
+    },
+    {
+      "test": "tb_run_leds",
+      "passed": true,
+      "seconds": 0.126
+    },
+    {
+      "test": "tb_sine_rom",
+      "passed": true,
+      "seconds": 0.127
+    },
+    {
+      "test": "tb_startup_envelope",
+      "passed": true,
+      "seconds": 0.116
+    },
+    {
+      "test": "tb_tone_gain",
+      "passed": true,
+      "seconds": 0.131
+    }
+  ],
+  "board_tests": [
+    {
+      "test": "tb_keyboard_top",
+      "passed": true,
+      "seconds": 18.986
+    }
+  ],
+  "pinmap_tests": [
+    {
+      "variant": "corrected",
+      "passed": true,
+      "transposed": false
+    },
+    {
+      "variant": "previous",
+      "passed": true,
+      "transposed": true
+    }
+  ],
+  "checks_by_log": {
+    "sim/tb_adsr_envelope.log": 59,
+    "sim/tb_adsr_production.log": 14881,
+    "sim/tb_audio_timing.log": 9996,
+    "sim/tb_clock_reset.log": 6,
+    "sim/tb_dds_sine.log": 10001,
+    "sim/tb_frame_buffer.log": 9,
+    "sim/tb_keyboard_core.log": 2342532,
+    "sim/tb_keyboard_latency.log": 5,
+    "sim/tb_keyboard_top.log": 593419,
+    "sim/tb_lock_guard.log": 5,
+    "sim/tb_matrix_keypad.log": 7183,
+    "sim/tb_mono_note_control.log": 163,
+    "sim/tb_pt8211_tx.log": 646,
+    "sim/tb_reset_sync.log": 5,
+    "sim/tb_run_leds.log": 183,
+    "sim/tb_sine_rom.log": 4097,
+    "sim/tb_startup_envelope.log": 726,
+    "sim/tb_tone_gain.log": 2001,
+    "pinmap/corrected/result.log": 34,
+    "pinmap/previous/result.log": 34
+  },
+  "total_checks": 2985985,
+  "all_tests_passed": true,
+  "user_failure_error_codes": {
+    "EX5985": 15,
+    "EX3755": 15,
+    "EX3842": 26,
+    "EX3863": 11,
+    "EX3928": 5,
+    "EX3413": 1,
+    "EX3872": 1
+  },
+  "removed_reproducible_outputs": [
+    "sim/tb_adsr_envelope.vvp",
+    "sim/tb_adsr_production.vvp",
+    "sim/tb_audio_timing.vvp",
+    "sim/tb_clock_reset.vvp",
+    "sim/tb_dds_sine.vvp",
+    "sim/tb_frame_buffer.vvp",
+    "sim/tb_keyboard_core.vvp",
+    "sim/tb_keyboard_latency.vvp",
+    "sim/tb_keyboard_top.vvp",
+    "sim/tb_lock_guard.vvp",
+    "sim/tb_matrix_keypad.vvp",
+    "sim/tb_mono_note_control.vvp",
+    "sim/tb_pt8211_tx.vvp",
+    "sim/tb_reset_sync.vvp",
+    "sim/tb_run_leds.vvp",
+    "sim/tb_sine_rom.vvp",
+    "sim/tb_startup_envelope.vvp",
+    "sim/tb_tone_gain.vvp",
+    "pinmap/corrected/test.vvp",
+    "pinmap/previous/test.vvp",
+    "before_preprocessed.v",
+    "after_project_root.v",
+    "after_unrelated_cwd.v"
+  ],
+  "git_diff_check_passed": true,
+  "IDE_config_still_correct_at_final_check": true,
+  "limitations": [
+    "Gowin synthesis/P&R/programming were not run; user must close/reopen main project to reload corrected disk configuration.",
+    "Cold-start delay and idle analog hiss remain unresolved and are unrelated to this include-path verification."
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "date": "2026-10-14",
+  "user_observation": {
+    "schematic_LED1": "blinking",
+    "schematic_LED3": "continuously lit with USR released",
+    "source": "User confirmed previous LED interpretation and that USR was not held; no electrical measurement"
+  },
+  "inference": "In delayed diagnostic mode, synchronized U4 reset input remains high; this holds both PLLs and audio in reset. Physical cause is not established.",
+  "schematics": {
+    "4071_page7": "USR SW5 feeds U4 from 1.5V through R35=1k; R37=4.7k pulls U4 to ground; C167=100nF.",
+    "4072_page7": "Same USR circuit and polarity.",
+    "actual_core_revision_known": false
+  },
+  "documentation": "Installed UG304-1.3.8E sections 3.3.1 and 3.5.4 support weak pull-down and CST PULL_MODE=DOWN.",
+  "before_CST_sha256": "182f8b477e920e5526425cc9245f544d376a00d65f77cef9653dd4e4368d010a",
+  "before_source_hashes": {
+    "src/adsr_envelope.sv": "ea82777b3125f1e333305265ba735223dd0fd848a5cb70f08df9101287163de2",
+    "src/audio_timing.sv": "ebd73edfceef85128760141410b95ccbf82e5665ce18ba10075e67c1d72ecc1e",
+    "src/clock_reset.sv": "6064ed61bbdcec68e2bd04f934c8510ee3b95aabbe0a009e54f21b2c2d10af6b",
+    "src/dds_sine.sv": "710ae8687bf15c3713ff8a15ac811405facdedcb1fd00680b90cf4e3ea1170fe",
+    "src/frame_buffer.sv": "dbf0d9b5cc9a0ad1ff4b1a32b2e9b4fdb0fc5c7c8d01a8b1fe9a1c7685e844c8",
+    "src/keyboard.cst": "182f8b477e920e5526425cc9245f544d376a00d65f77cef9653dd4e4368d010a",
+    "src/keyboard.sdc": "d4cda6eda4eabf4c1eb77b25273648a8e94d466d7489bd83f175fdaf27251086",
+    "src/keyboard_core.sv": "0efe45701af7d1505295da6abecf5f266bdc6dccaa99e1c032b42e67aa71d485",
+    "src/keyboard_top.sv": "cfb62c1e15d74a202888775e63c601e720517b187c3af10cfec86638dcadad37",
+    "src/lock_guard.sv": "1ccbb8e306689ea8da65a8889b45aa2c3cceaf90aa3f2a31762e195d5fce6377",
+    "src/matrix_keypad.sv": "c7af5fec02c122b50132d01ff3911d27ab394535dcfa51173b2b511e176a7350",
+    "src/mono_note_control.sv": "3211011ab0546def56e329bac45fec25af2a24e6bb26f4f4731d66508e10a6bb",
+    "src/pll_pair.sv": "29775d84d6b0deb8a8fc6e3bc80e36e0e321f84ddaa418e068622e5ade6d061e",
+    "src/pt8211_tx.sv": "5c5b56945efda77df100ca332b91df4bf2927add8d826c12e8499f957278710c",
+    "src/reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+    "src/run_leds.sv": "db725978a1e9e386a848ec1223985eeded526ff2eb64f29b21987f1ac7d10713",
+    "src/sine_rom.sv": "b43e6cfe2b2fb35d29a09efd503ad9b787961d1ff430b130e788ef13d0a9c081",
+    "src/startup_envelope.sv": "c5fc6b434759e6f0b85e6315c42baa9d0149332f47d7c58d36cd47bb18587e65",
+    "src/tone_gain.sv": "de969abbebf1b5cfedd1a91e3199ff400b018a8de437e3acb85bf13ad0887335",
+    "src/config/keyboard_config.svh": "f7f74a4e3d5fede10b5fb0e2820af76e34327576b673eaf1e05c8a3ca1b4baeb",
+    "src/config/keyboard_notes.svh": "55c63120d48c3f42e587c8c42d83b0d0ef10228650faff4cf0348aef3be5fe66",
+    "src/config/run_leds_config.svh": "2cdc3ed138ed6a3b70c58e53e9de871f15afb7898f8c88a4b597c624734a1589",
+    "src/config/synth_config.svh": "ecc58fe56df18639de2d0e8330f7e3ebac4ea71c9e7fd127ab94adc2ff5478c0",
+    "src/rom/manifest.json": "2f8f3ac0227822e66ce769afea86b2f5515873595221d7477ae9a419ca15f3d8",
+    "src/rom/sine4096.hex": "d62e7528ad6c0400fab616087abbdaa7b7977fcd9adbce1b347e3a5743ea3d6e"
+  },
+  "before_tb_sha256": "aa3e7556a8acab5aed2a0d70952b2b9288d5930cbebec0241eb07e796e25e5cb",
+  "existing_user_build_evidence": [
+    {
+      "source": "impl/gwsynthesis/D2_keyboard_leds.log",
+      "snapshot": "reports/reset_input/user_build_before/impl/gwsynthesis/D2_keyboard_leds.log",
+      "sha256": "6b808fb3288e9248fe7076e74c4511bdb011c2e602b998a0832191e1bcb4ee2e"
+    },
+    {
+      "source": "impl/gwsynthesis/D2_keyboard_leds.prj",
+      "snapshot": "reports/reset_input/user_build_before/impl/gwsynthesis/D2_keyboard_leds.prj",
+      "sha256": "84387c687def1037345dcf87e582c1d119fe0c8256321548901430d86cda92af"
+    },
+    {
+      "source": "impl/pnr/D2_keyboard_leds.log",
+      "snapshot": "reports/reset_input/user_build_before/impl/pnr/D2_keyboard_leds.log",
+      "sha256": "66174a4323dbc751361042d8dd1a02a39bfcdca9af5a6c783f36cfd556c3c1b2"
+    },
+    {
+      "source": "impl/pnr/D2_keyboard_leds.rpt.txt",
+      "snapshot": "reports/reset_input/user_build_before/impl/pnr/D2_keyboard_leds.rpt.txt",
+      "sha256": "7f56606d0a2c81fca38b3faed37a5ac14dbd18ff4587b4965dc6138d901850c5"
+    },
+    {
+      "source": "impl/pnr/D2_keyboard_leds.tr",
+      "snapshot": "reports/reset_input/user_build_before/impl/pnr/D2_keyboard_leds.tr",
+      "sha256": "dec3b06d33331f01e9c8d51fe41fa861123cccd9c6e692f08680459b4afaa6d7"
+    }
+  ],
+  "existing_bitstream_sha256": "d31a13f083881043a9b3d6a43d4f7bd74a9888c1b3eaf1e5aa09334fc3d26a7d",
+  "existing_bitstream_mtime": "2026-10-14T22:23:50.232355",
+  "change": "Only U4 rst PULL_MODE NONE -> DOWN; retain U4, LVCMOS15, input-only, active-high reset and all audio/PLL logic.",
+  "tests_pending": false,
+  "synthesis_run_by_assistant": false,
+  "pnr_run_by_assistant": false,
+  "programmed_by_assistant": false,
+  "git_commit_created": false,
+  "hardware_fix_verified": true,
+  "tests": [
+    {
+      "test": "tb_clock_reset",
+      "passed": true,
+      "checks": 6
+    },
+    {
+      "test": "tb_run_leds",
+      "passed": true,
+      "checks": 183
+    },
+    {
+      "test": "tb_keyboard_top",
+      "passed": true,
+      "checks": 701884
+    }
+  ],
+  "total_checks": 702073,
+  "all_tests_passed": true,
+  "current_source_changed": [
+    "src/keyboard.cst"
+  ],
+  "all_functional_RTL_config_ROM_unchanged": true,
+  "pin_balls_and_voltage_unchanged": true,
+  "pin_table_matches_current_constraints": true,
+  "project_dependencies_exist": true,
+  "after_CST_sha256": "c5142d642e17b4f49629dc65839bd841c9f40925194549c1adf79112a33e3e01",
+  "after_tb_sha256": "a3b71ab51d370800a03e47e8d5d34153e476f4968be550e30e59d9266c19c148",
+  "removed_reproducible_outputs": [
+    "sim/tb_clock_reset.vvp",
+    "sim/tb_keyboard_top.vvp",
+    "sim/tb_run_leds.vvp"
+  ],
+  "git_diff_check_passed": true,
+  "limitations": [
+    "No electrical model of internal pull-down in HDL simulation; effect on real U4 voltage requires user rebuild/programming and observation.",
+    "User observation identifies asserted reset but not its physical cause.",
+    "Cold-start and idle background noise are not yet verified fixed."
+  ],
+  "user_followup": "好的，现在正常了",
+  "hardware_startup_user_report_passed": true,
+  "hardware_fix_verification_scope": "User qualitative confirmation only; U4 voltage and repeated cold-boot timing not measured.",
+  "idle_background_noise_resolved": false
+}

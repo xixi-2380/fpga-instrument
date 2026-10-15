@@ -10,5 +10,16 @@
   "adsr_verified": false,
   "multikey_ghost_policy_verified": false,
   "measured_input_audio_latency_ms": null,
-  "continuous_play_minutes": null
+  "continuous_play_minutes": null,
+  "user_qualitative_report_2026_10_14": {
+    "audio_after_warmup": true,
+    "cold_start_delay": "several minutes, not measured",
+    "run_leds_start_immediately": true,
+    "ready_and_gate_initially_off": true,
+    "ready_stable_after_recovery": true,
+    "gate_off_when_idle": true,
+    "idle_noise": "persistent low-frequency hiss",
+    "manual_USR_reset_helps": false,
+    "oscilloscope_measurements_available": false
+  }
 }

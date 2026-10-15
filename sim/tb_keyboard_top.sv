@@ -10,7 +10,7 @@ module tb_keyboard_top;
  wire [5:0] leds;
  wire [3:0] flow_on=~leds[3:0];
  reg [3:0] previous_flow=4'b1110;
- integer flow_moves=0,reset_flow_moves=0;
+ integer flow_moves=0,reset_flow_moves=0,idle_edge_start,diag_heartbeat;
  integer checks=0,edges=0,bitn=0,ch=0,word=0,right_word=0,nonzero=0;
  realtime last_rise=0,period;
  for(genvar k=0;k<4;k=k+1)assign selected[k]=(columns[k]===1'b0);
@@ -21,7 +21,9 @@ module tb_keyboard_top;
    .HP_BCK(bck),.HP_WS(ws),.HP_DIN(din),.PA_EN(pa),
    .DBG_BCK(db),.DBG_WS(dw),.DBG_DIN(dd),.DBG_PA_EN(dp),.led_n(leds));
  always @(negedge clk)begin
-  `CHECK(flow_on!=0 && (flow_on&(flow_on-4'd1))==0,"one running LED independent of audio reset")
+  if(!dut.status_leds.diagnostic_active)begin
+   `CHECK(flow_on!=0 && (flow_on&(flow_on-4'd1))==0,"one running LED outside startup diagnosis")
+  end
   if(leds[3:0]!=previous_flow)flow_moves=flow_moves+1;
   previous_flow=leds[3:0];
  end
@@ -60,6 +62,38 @@ module tb_keyboard_top;
   #81;`CHECK(flow_moves>reset_flow_moves && leds[5:4]==2'b11,"run LEDs continue while reset clears status")
   #19 rst=0;wait(pa);wait(nonzero>=10);
   `CHECK(dut.gate && dut.selected_key==9,"vendor PLL integration resumes held key")
+  // Verify real serial idle behavior before attributing audible hiss to analog hardware.
+  pressed=0;wait(!dut.gate);wait(dut.envelope_level==0);
+  repeat(64)@(posedge bck);#0.002;nonzero=0;idle_edge_start=edges;
+  wait(edges>=idle_edge_start+640);#0.002;
+  `CHECK(nonzero==0,"released voice sends zero on both channels for twenty frames")
+  `CHECK(pa && leds[5],"existing idle behavior keeps amplifier enabled while note LED is off")
+  // Simulate persistent PLL2 failure; diagnostics must work from the reference domain.
+  force dut.lock2=1'b0;#1;
+  `CHECK(dut.audio_reset && !pa,"PLL loss still immediately resets and mutes audio")
+  bitn=0;ch=0;word=0;last_rise=0;nonzero=0;
+  repeat(40)@(negedge clk);
+  `CHECK(dut.status_leds.diagnostic_active,"board enters delayed PLL status diagnostics")
+  `CHECK(leds[3:1]==3'b110 && leds[5:4]==2'b11,"board shows PLL1 lock, PLL2 failure, no external reset")
+  diag_heartbeat=leds[0];repeat(4)@(negedge clk);
+  `CHECK(leds[0]!=diag_heartbeat,"diagnostic heartbeat survives stalled audio domain")
+  release dut.lock2;wait(pa);repeat(4)@(negedge clk);
+  `CHECK(!dut.status_leds.diagnostic_active && !leds[4],"qualified PLL recovery restores running lights")
+  `CHECK(nonzero==0,"recovered idle stream stays zero")
+  // Reproduce the reported diagnostic state with a persistently high reset input.
+  #3 rst=1;#1;
+  `CHECK(!pa && din==0 && columns===4'bzzzz,"held reset immediately mutes and releases matrix")
+  bitn=0;ch=0;word=0;last_rise=0;nonzero=0;
+  repeat(40)@(negedge clk);
+  `CHECK(dut.status_leds.diagnostic_active && !leds[3],"persistent high USR lights reset diagnostic LED")
+  `CHECK(leds[2:1]==2'b11 && leds[5:4]==2'b11,"held reset keeps PLL lock, ready and note LEDs off")
+  `CHECK(dut.pll1_reset && dut.pll2_reset && dut.audio_reset,"reset is not bypassed or timed out")
+  diag_heartbeat=leds[0];repeat(4)@(negedge clk);
+  `CHECK(leds[0]!=diag_heartbeat,"reference heartbeat continues with USR stuck high")
+  rst=0;wait(pa);repeat(4)@(negedge clk);
+  `CHECK(!dut.audio_reset && !leds[4] && !dut.status_leds.diagnostic_active,"released USR restores qualified startup")
+  pressed=16'h0200;wait(dut.gate);wait(nonzero>=10);
+  `CHECK(dut.selected_key==9 && !leds[5],"keyboard and serial audio recover after released USR")
   $display("PASS tb_keyboard_top checks=%0d",checks);$finish;
  end
  initial begin #10000000;$fatal(1,"keyboard board timeout");end

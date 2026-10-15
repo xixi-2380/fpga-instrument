@@ -1,0 +1,162 @@
+[
+    {
+        "InstFile": "E:/gowin/fpga-instrument/boards/mega138k_pro/keyboard_top.sv",
+        "InstLine": 4,
+        "InstName": "keyboard_top",
+        "ModuleFile": "E:/gowin/fpga-instrument/boards/mega138k_pro/keyboard_top.sv",
+        "ModuleLine": 4,
+        "ModuleName": "keyboard_top",
+        "SubInsts": [
+            {
+                "InstFile": "E:/gowin/fpga-instrument/boards/mega138k_pro/keyboard_top.sv",
+                "InstLine": 18,
+                "InstName": "status_leds",
+                "ModuleFile": "E:/gowin/fpga-instrument/rtl/run_leds.sv",
+                "ModuleLine": 3,
+                "ModuleName": "run_leds"
+            },
+            {
+                "InstFile": "E:/gowin/fpga-instrument/boards/mega138k_pro/keyboard_top.sv",
+                "InstLine": 21,
+                "InstName": "clocks",
+                "ModuleFile": "E:/gowin/fpga-instrument/boards/mega138k_pro/pll_pair.sv",
+                "ModuleLine": 5,
+                "ModuleName": "pll_pair"
+            },
+            {
+                "InstFile": "E:/gowin/fpga-instrument/boards/mega138k_pro/keyboard_top.sv",
+                "InstLine": 22,
+                "InstName": "reset_control",
+                "ModuleFile": "E:/gowin/fpga-instrument/boards/mega138k_pro/clock_reset.sv",
+                "ModuleLine": 3,
+                "ModuleName": "clock_reset",
+                "SubInsts": [
+                    {
+                        "InstFile": "E:/gowin/fpga-instrument/boards/mega138k_pro/clock_reset.sv",
+                        "InstLine": 11,
+                        "InstName": "ref_sync",
+                        "ModuleFile": "E:/gowin/fpga-instrument/rtl/reset_sync.sv",
+                        "ModuleLine": 2,
+                        "ModuleName": "reset_sync"
+                    },
+                    {
+                        "InstFile": "E:/gowin/fpga-instrument/boards/mega138k_pro/clock_reset.sv",
+                        "InstLine": 13,
+                        "InstName": "g1",
+                        "ModuleFile": "E:/gowin/fpga-instrument/rtl/lock_guard.sv",
+                        "ModuleLine": 3,
+                        "ModuleName": "lock_guard"
+                    },
+                    {
+                        "InstFile": "E:/gowin/fpga-instrument/boards/mega138k_pro/clock_reset.sv",
+                        "InstLine": 15,
+                        "InstName": "g2",
+                        "ModuleFile": "E:/gowin/fpga-instrument/rtl/lock_guard.sv",
+                        "ModuleLine": 3,
+                        "ModuleName": "lock_guard"
+                    },
+                    {
+                        "InstFile": "E:/gowin/fpga-instrument/boards/mega138k_pro/clock_reset.sv",
+                        "InstLine": 16,
+                        "InstName": "audio_sync",
+                        "ModuleFile": "E:/gowin/fpga-instrument/rtl/reset_sync.sv",
+                        "ModuleLine": 2,
+                        "ModuleName": "reset_sync"
+                    }
+                ]
+            },
+            {
+                "InstFile": "E:/gowin/fpga-instrument/boards/mega138k_pro/keyboard_top.sv",
+                "InstLine": 30,
+                "InstName": "core",
+                "ModuleFile": "E:/gowin/fpga-instrument/rtl/keyboard_core.sv",
+                "ModuleLine": 3,
+                "ModuleName": "keyboard_core",
+                "SubInsts": [
+                    {
+                        "InstFile": "E:/gowin/fpga-instrument/rtl/keyboard_core.sv",
+                        "InstLine": 22,
+                        "InstName": "keyboard",
+                        "ModuleFile": "E:/gowin/fpga-instrument/rtl/matrix_keypad.sv",
+                        "ModuleLine": 3,
+                        "ModuleName": "matrix_keypad"
+                    },
+                    {
+                        "InstFile": "E:/gowin/fpga-instrument/rtl/keyboard_core.sv",
+                        "InstLine": 23,
+                        "InstName": "timing",
+                        "ModuleFile": "E:/gowin/fpga-instrument/rtl/audio_timing.sv",
+                        "ModuleLine": 3,
+                        "ModuleName": "audio_timing"
+                    },
+                    {
+                        "InstFile": "E:/gowin/fpga-instrument/rtl/keyboard_core.sv",
+                        "InstLine": 24,
+                        "InstName": "control",
+                        "ModuleFile": "E:/gowin/fpga-instrument/rtl/mono_note_control.sv",
+                        "ModuleLine": 2,
+                        "ModuleName": "mono_note_control"
+                    },
+                    {
+                        "InstFile": "E:/gowin/fpga-instrument/rtl/keyboard_core.sv",
+                        "InstLine": 27,
+                        "InstName": "envelope",
+                        "ModuleFile": "E:/gowin/fpga-instrument/rtl/adsr_envelope.sv",
+                        "ModuleLine": 3,
+                        "ModuleName": "adsr_envelope"
+                    },
+                    {
+                        "InstFile": "E:/gowin/fpga-instrument/rtl/keyboard_core.sv",
+                        "InstLine": 28,
+                        "InstName": "startup",
+                        "ModuleFile": "E:/gowin/fpga-instrument/rtl/startup_envelope.sv",
+                        "ModuleLine": 3,
+                        "ModuleName": "startup_envelope"
+                    },
+                    {
+                        "InstFile": "E:/gowin/fpga-instrument/rtl/keyboard_core.sv",
+                        "InstLine": 29,
+                        "InstName": "dds",
+                        "ModuleFile": "E:/gowin/fpga-instrument/rtl/dds_sine.sv",
+                        "ModuleLine": 3,
+                        "ModuleName": "dds_sine",
+                        "SubInsts": [
+                            {
+                                "InstFile": "E:/gowin/fpga-instrument/rtl/dds_sine.sv",
+                                "InstLine": 7,
+                                "InstName": "rom",
+                                "ModuleFile": "E:/gowin/fpga-instrument/rtl/sine_rom.sv",
+                                "ModuleLine": 3,
+                                "ModuleName": "sine_rom"
+                            }
+                        ]
+                    },
+                    {
+                        "InstFile": "E:/gowin/fpga-instrument/rtl/keyboard_core.sv",
+                        "InstLine": 40,
+                        "InstName": "gain",
+                        "ModuleFile": "E:/gowin/fpga-instrument/rtl/tone_gain.sv",
+                        "ModuleLine": 3,
+                        "ModuleName": "tone_gain"
+                    },
+                    {
+                        "InstFile": "E:/gowin/fpga-instrument/rtl/keyboard_core.sv",
+                        "InstLine": 41,
+                        "InstName": "buffer",
+                        "ModuleFile": "E:/gowin/fpga-instrument/rtl/frame_buffer.sv",
+                        "ModuleLine": 2,
+                        "ModuleName": "frame_buffer"
+                    },
+                    {
+                        "InstFile": "E:/gowin/fpga-instrument/rtl/keyboard_core.sv",
+                        "InstLine": 42,
+                        "InstName": "tx",
+                        "ModuleFile": "E:/gowin/fpga-instrument/rtl/pt8211_tx.sv",
+                        "ModuleLine": 2,
+                        "ModuleName": "pt8211_tx"
+                    }
+                ]
+            }
+        ]
+    }
+]

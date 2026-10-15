@@ -1,0 +1,31 @@
+Reading netlist file: "E:\gowin\fpga-instrument\impl\gwsynthesis\D2_keyboard_leds.vg"
+Parsing netlist file "E:\gowin\fpga-instrument\impl\gwsynthesis\D2_keyboard_leds.vg" completed
+Processing netlist completed
+Reading constraint file: "E:\gowin\fpga-instrument\boards\mega138k_pro\keyboard.cst"
+Physical Constraint parsed completed
+Running placement......
+[10%] Placement Phase 0 completed
+[20%] Placement Phase 1 completed
+[30%] Placement Phase 2 completed
+[50%] Placement Phase 3 completed
+Running routing......
+[60%] Routing Phase 0 completed
+[70%] Routing Phase 1 completed
+[80%] Routing Phase 2 completed
+WARN  (PR1014) : Generic routing resource will be used to clock signal 'clk_d' by the specified constraint. And then it may lead to the excessive delay or skew
+[90%] Routing Phase 3 completed
+Running timing analysis......
+[95%] Timing analysis completed
+Placement and routing completed
+Bitstream generation in progress......
+Bitstream generation completed
+Running power analysis......
+[100%] Power analysis completed
+Generate file "E:\gowin\fpga-instrument\impl\pnr\D2_keyboard_leds.power.html" completed
+Generate file "E:\gowin\fpga-instrument\impl\pnr\D2_keyboard_leds.pin.html" completed
+Generate file "E:\gowin\fpga-instrument\impl\pnr\D2_keyboard_leds.rpt.html" completed
+Generate file "E:\gowin\fpga-instrument\impl\pnr\D2_keyboard_leds.rpt.txt" completed
+Generate file "E:\gowin\fpga-instrument\impl\pnr\D2_keyboard_leds.tr.html" completed
+Generate file "E:\gowin\fpga-instrument\impl\pnr\D2_keyboard_leds.tr" completed
+Wed Oct 14 20:20:55 2026
+

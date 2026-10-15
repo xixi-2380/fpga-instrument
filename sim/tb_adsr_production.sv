@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 `include "check.svh"
-`include "keyboard_config.svh"
+`include "../src/config/keyboard_config.svh"
 module tb_adsr_production;
  reg clk=0,rst=1,on=0,off=0;always #5 clk=~clk;
  wire [16:0] q;wire active;integer checks=0,expected;

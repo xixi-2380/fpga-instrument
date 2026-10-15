@@ -1,0 +1,366 @@
+{
+  "date": "2026-10-14",
+  "root": "E:\\gowin\\fpga-instrument",
+  "reference_project": "C:\\Gowin\\Gowin_V1.9.12.04_x64\\IDE\\bin\\Documents\\fpga_project_test\\fpga_project_test.gprj",
+  "reference_files_unchanged": {
+    "fpga_project_test.gprj": "3284dc55e941eff981a35b049e2aaca36bec452c93ae2334d0b7b0df3cc35484",
+    "src/top_module.v": "576e7358670d5dce09e23d9b71ffe12888ab9f984e186986fde67f30e469f678",
+    "src/fpga_project_test.cst": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "moves": [
+    {
+      "from": "rtl/adsr_envelope.sv",
+      "to": "src/adsr_envelope.sv",
+      "before_sha256": "28a78683d0ed57810d56ad651c6d9e02e4a342e3057533afcc846fc6fc67c235",
+      "after_sha256": "28a78683d0ed57810d56ad651c6d9e02e4a342e3057533afcc846fc6fc67c235",
+      "content_changed": false
+    },
+    {
+      "from": "rtl/audio_timing.sv",
+      "to": "src/audio_timing.sv",
+      "before_sha256": "7a8edde957cd109984590313285a7395b1ce6b8b003ce63387eb456eccce7887",
+      "after_sha256": "7a8edde957cd109984590313285a7395b1ce6b8b003ce63387eb456eccce7887",
+      "content_changed": false
+    },
+    {
+      "from": "rtl/dds_sine.sv",
+      "to": "src/dds_sine.sv",
+      "before_sha256": "6dcdf647e7a2d703d4aeb1dd76028eaec317deff505e1d7d0ae1e48c545432e9",
+      "after_sha256": "6dcdf647e7a2d703d4aeb1dd76028eaec317deff505e1d7d0ae1e48c545432e9",
+      "content_changed": false
+    },
+    {
+      "from": "rtl/frame_buffer.sv",
+      "to": "src/frame_buffer.sv",
+      "before_sha256": "dbf0d9b5cc9a0ad1ff4b1a32b2e9b4fdb0fc5c7c8d01a8b1fe9a1c7685e844c8",
+      "after_sha256": "dbf0d9b5cc9a0ad1ff4b1a32b2e9b4fdb0fc5c7c8d01a8b1fe9a1c7685e844c8",
+      "content_changed": false
+    },
+    {
+      "from": "rtl/keyboard_core.sv",
+      "to": "src/keyboard_core.sv",
+      "before_sha256": "6ddf7f286f9ad89359bed1e09f7ef4e848b36bd0bbba65dd5474577aa57255a5",
+      "after_sha256": "6ddf7f286f9ad89359bed1e09f7ef4e848b36bd0bbba65dd5474577aa57255a5",
+      "content_changed": false
+    },
+    {
+      "from": "rtl/lock_guard.sv",
+      "to": "src/lock_guard.sv",
+      "before_sha256": "9a5f4602f95f980eff30ccc60d2419a49d7a9d4227afbc25d04ed3bd8dbb88ae",
+      "after_sha256": "9a5f4602f95f980eff30ccc60d2419a49d7a9d4227afbc25d04ed3bd8dbb88ae",
+      "content_changed": false
+    },
+    {
+      "from": "rtl/matrix_keypad.sv",
+      "to": "src/matrix_keypad.sv",
+      "before_sha256": "c523577f149c49507d8357cd3fc509397e8091b5ce95a20c0ac84e78e62c3607",
+      "after_sha256": "c523577f149c49507d8357cd3fc509397e8091b5ce95a20c0ac84e78e62c3607",
+      "content_changed": false
+    },
+    {
+      "from": "rtl/mono_note_control.sv",
+      "to": "src/mono_note_control.sv",
+      "before_sha256": "bebc913e1c9208dee63334d5c184363c9304c3f354e0b1a9c2b3ce03e79c4fe5",
+      "after_sha256": "bebc913e1c9208dee63334d5c184363c9304c3f354e0b1a9c2b3ce03e79c4fe5",
+      "content_changed": false
+    },
+    {
+      "from": "rtl/pt8211_tx.sv",
+      "to": "src/pt8211_tx.sv",
+      "before_sha256": "5c5b56945efda77df100ca332b91df4bf2927add8d826c12e8499f957278710c",
+      "after_sha256": "5c5b56945efda77df100ca332b91df4bf2927add8d826c12e8499f957278710c",
+      "content_changed": false
+    },
+    {
+      "from": "rtl/reset_sync.sv",
+      "to": "src/reset_sync.sv",
+      "before_sha256": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+      "after_sha256": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+      "content_changed": false
+    },
+    {
+      "from": "rtl/run_leds.sv",
+      "to": "src/run_leds.sv",
+      "before_sha256": "d479eb0a62fc9f3a0f7294cfafaf4c1795f6d07860e4fa39f54d5484ebd59a41",
+      "after_sha256": "d479eb0a62fc9f3a0f7294cfafaf4c1795f6d07860e4fa39f54d5484ebd59a41",
+      "content_changed": false
+    },
+    {
+      "from": "rtl/sine_rom.sv",
+      "to": "src/sine_rom.sv",
+      "before_sha256": "d165a0f5973a6b52fe1cd2a4849f6ab37388ed35014a6651b099290f4acf2c25",
+      "after_sha256": "bb884ae2f6f9ac79b0ccb1ec4b4d6479a8d0538b7337e963d8e6c227837c436c",
+      "content_changed": true
+    },
+    {
+      "from": "rtl/startup_envelope.sv",
+      "to": "src/startup_envelope.sv",
+      "before_sha256": "d1169b2ec8ecb28ad8bc715ca2664d5ab2c4b84d5fde4af4d6a9415faefaa1c6",
+      "after_sha256": "d1169b2ec8ecb28ad8bc715ca2664d5ab2c4b84d5fde4af4d6a9415faefaa1c6",
+      "content_changed": false
+    },
+    {
+      "from": "rtl/tone_gain.sv",
+      "to": "src/tone_gain.sv",
+      "before_sha256": "1db6353ec52424143beab050a3edae461ccdf3b4fa50e2e3dbe58277e1bb34ec",
+      "after_sha256": "1db6353ec52424143beab050a3edae461ccdf3b4fa50e2e3dbe58277e1bb34ec",
+      "content_changed": false
+    },
+    {
+      "from": "boards/mega138k_pro/clock_reset.sv",
+      "to": "src/clock_reset.sv",
+      "before_sha256": "381b7af821aee73752ee6c103bfaddf8b465038e19b47c008f51e59ff5b03743",
+      "after_sha256": "381b7af821aee73752ee6c103bfaddf8b465038e19b47c008f51e59ff5b03743",
+      "content_changed": false
+    },
+    {
+      "from": "boards/mega138k_pro/hardware_status.json",
+      "to": "docs/hardware/hardware_status.json",
+      "before_sha256": "1a9cd6d12e271e47d8f3cb40a51f369cf57eb1f8b75f35c77703b63eef2ec17e",
+      "after_sha256": "e530edc8b0ccf9338e9302a6bf447101530d908a934216a49196ec93475c9e3d",
+      "content_changed": true
+    },
+    {
+      "from": "boards/mega138k_pro/keyboard.cst",
+      "to": "src/keyboard.cst",
+      "before_sha256": "182f8b477e920e5526425cc9245f544d376a00d65f77cef9653dd4e4368d010a",
+      "after_sha256": "182f8b477e920e5526425cc9245f544d376a00d65f77cef9653dd4e4368d010a",
+      "content_changed": false
+    },
+    {
+      "from": "boards/mega138k_pro/keyboard.sdc",
+      "to": "src/keyboard.sdc",
+      "before_sha256": "d4cda6eda4eabf4c1eb77b25273648a8e94d466d7489bd83f175fdaf27251086",
+      "after_sha256": "d4cda6eda4eabf4c1eb77b25273648a8e94d466d7489bd83f175fdaf27251086",
+      "content_changed": false
+    },
+    {
+      "from": "boards/mega138k_pro/keyboard_notes.json",
+      "to": "docs/hardware/keyboard_notes.json",
+      "before_sha256": "9585e2bd55eafe662c054622e1cc36927087467aa52fffe3dd9c869bb8a98991",
+      "after_sha256": "9585e2bd55eafe662c054622e1cc36927087467aa52fffe3dd9c869bb8a98991",
+      "content_changed": false
+    },
+    {
+      "from": "boards/mega138k_pro/keyboard_top.sv",
+      "to": "src/keyboard_top.sv",
+      "before_sha256": "88851613185030f48293c3b10a97ed3ae38bebca4a220d25208845f68a95224a",
+      "after_sha256": "88851613185030f48293c3b10a97ed3ae38bebca4a220d25208845f68a95224a",
+      "content_changed": false
+    },
+    {
+      "from": "boards/mega138k_pro/matrix_keypad_mapping.json",
+      "to": "docs/hardware/matrix_keypad_mapping.json",
+      "before_sha256": "37a702014d98e3bc09f21979158de0ffcd185a1413070d89f12c0b298ca2081c",
+      "after_sha256": "37a702014d98e3bc09f21979158de0ffcd185a1413070d89f12c0b298ca2081c",
+      "content_changed": false
+    },
+    {
+      "from": "boards/mega138k_pro/pll_pair.sv",
+      "to": "src/pll_pair.sv",
+      "before_sha256": "7de2d85f6c514f94744360507cf8ca1eac03f094356e0d3dd728dd4ad2a148fd",
+      "after_sha256": "7de2d85f6c514f94744360507cf8ca1eac03f094356e0d3dd728dd4ad2a148fd",
+      "content_changed": false
+    },
+    {
+      "from": "boards/mega138k_pro/reference_pins.csv",
+      "to": "docs/hardware/reference_pins.csv",
+      "before_sha256": "788740185646747d54e0e4d0ba105e43e165ff97903efc1fba34d87122315601",
+      "after_sha256": "788740185646747d54e0e4d0ba105e43e165ff97903efc1fba34d87122315601",
+      "content_changed": false
+    },
+    {
+      "from": "config/keyboard_config.svh",
+      "to": "src/config/keyboard_config.svh",
+      "before_sha256": "f7f74a4e3d5fede10b5fb0e2820af76e34327576b673eaf1e05c8a3ca1b4baeb",
+      "after_sha256": "f7f74a4e3d5fede10b5fb0e2820af76e34327576b673eaf1e05c8a3ca1b4baeb",
+      "content_changed": false
+    },
+    {
+      "from": "config/keyboard_notes.svh",
+      "to": "src/config/keyboard_notes.svh",
+      "before_sha256": "55c63120d48c3f42e587c8c42d83b0d0ef10228650faff4cf0348aef3be5fe66",
+      "after_sha256": "55c63120d48c3f42e587c8c42d83b0d0ef10228650faff4cf0348aef3be5fe66",
+      "content_changed": false
+    },
+    {
+      "from": "config/run_leds_config.svh",
+      "to": "src/config/run_leds_config.svh",
+      "before_sha256": "2cdc3ed138ed6a3b70c58e53e9de871f15afb7898f8c88a4b597c624734a1589",
+      "after_sha256": "2cdc3ed138ed6a3b70c58e53e9de871f15afb7898f8c88a4b597c624734a1589",
+      "content_changed": false
+    },
+    {
+      "from": "config/synth_config.svh",
+      "to": "src/config/synth_config.svh",
+      "before_sha256": "ecc58fe56df18639de2d0e8330f7e3ebac4ea71c9e7fd127ab94adc2ff5478c0",
+      "after_sha256": "ecc58fe56df18639de2d0e8330f7e3ebac4ea71c9e7fd127ab94adc2ff5478c0",
+      "content_changed": false
+    },
+    {
+      "from": "rom/manifest.json",
+      "to": "src/rom/manifest.json",
+      "before_sha256": "2f8f3ac0227822e66ce769afea86b2f5515873595221d7477ae9a419ca15f3d8",
+      "after_sha256": "2f8f3ac0227822e66ce769afea86b2f5515873595221d7477ae9a419ca15f3d8",
+      "content_changed": false
+    },
+    {
+      "from": "rom/sine4096.hex",
+      "to": "src/rom/sine4096.hex",
+      "before_sha256": "d62e7528ad6c0400fab616087abbdaa7b7977fcd9adbce1b347e3a5743ea3d6e",
+      "after_sha256": "d62e7528ad6c0400fab616087abbdaa7b7977fcd9adbce1b347e3a5743ea3d6e",
+      "content_changed": false
+    }
+  ],
+  "moved_file_count": 29,
+  "project_file_count": 24,
+  "hdl_files": 17,
+  "constraints": 2,
+  "auxiliary_headers": 4,
+  "rom_file": 1,
+  "root_project": "keyboard_adsr.gprj",
+  "tests_pending": false,
+  "functional_change": "ROM file path only; no signal processing or diagnostic logic change",
+  "synthesis_run": false,
+  "pnr_run": false,
+  "programmed": false,
+  "git_commit_created": false,
+  "all_checks_passed": true,
+  "tests": [
+    {
+      "test": "tb_adsr_envelope",
+      "checks": 59,
+      "passed": true
+    },
+    {
+      "test": "tb_adsr_production",
+      "checks": 14881,
+      "passed": true
+    },
+    {
+      "test": "tb_audio_timing",
+      "checks": 9996,
+      "passed": true
+    },
+    {
+      "test": "tb_clock_reset",
+      "checks": 6,
+      "passed": true
+    },
+    {
+      "test": "tb_dds_sine",
+      "checks": 10001,
+      "passed": true
+    },
+    {
+      "test": "tb_frame_buffer",
+      "checks": 9,
+      "passed": true
+    },
+    {
+      "test": "tb_keyboard_core",
+      "checks": 2342532,
+      "passed": true
+    },
+    {
+      "test": "tb_keyboard_latency",
+      "checks": 5,
+      "passed": true
+    },
+    {
+      "test": "tb_lock_guard",
+      "checks": 5,
+      "passed": true
+    },
+    {
+      "test": "tb_matrix_keypad",
+      "checks": 7183,
+      "passed": true
+    },
+    {
+      "test": "tb_mono_note_control",
+      "checks": 163,
+      "passed": true
+    },
+    {
+      "test": "tb_pt8211_tx",
+      "checks": 646,
+      "passed": true
+    },
+    {
+      "test": "tb_reset_sync",
+      "checks": 5,
+      "passed": true
+    },
+    {
+      "test": "tb_run_leds",
+      "checks": 183,
+      "passed": true
+    },
+    {
+      "test": "tb_sine_rom",
+      "checks": 4097,
+      "passed": true
+    },
+    {
+      "test": "tb_startup_envelope",
+      "checks": 726,
+      "passed": true
+    },
+    {
+      "test": "tb_tone_gain",
+      "checks": 2001,
+      "passed": true
+    },
+    {
+      "test": "tb_keyboard_top",
+      "checks": 593419,
+      "passed": true
+    },
+    {
+      "test": "tb_keyboard_pinmap",
+      "variant": "corrected",
+      "checks": 34,
+      "passed": true
+    },
+    {
+      "test": "tb_keyboard_pinmap",
+      "variant": "previous",
+      "checks": 34,
+      "passed": true
+    }
+  ],
+  "total_checks": 2985985,
+  "rtl_test_count": 17,
+  "board_test_count": 1,
+  "pinmap_variant_count": 2,
+  "project_relative_paths_validated": true,
+  "header_search_paths_validated": true,
+  "ROM_path_validated_by_simulation": true,
+  "diagnostic_logic_preserved": true,
+  "historical_report_and_reference_byte_checks": 178,
+  "regenerated_vvp_removed": [
+    "reports/ide_layout/sim/tb_adsr_envelope.vvp",
+    "reports/ide_layout/sim/tb_adsr_production.vvp",
+    "reports/ide_layout/sim/tb_audio_timing.vvp",
+    "reports/ide_layout/sim/tb_clock_reset.vvp",
+    "reports/ide_layout/sim/tb_dds_sine.vvp",
+    "reports/ide_layout/sim/tb_frame_buffer.vvp",
+    "reports/ide_layout/sim/tb_keyboard_core.vvp",
+    "reports/ide_layout/sim/tb_keyboard_latency.vvp",
+    "reports/ide_layout/sim/tb_keyboard_top.vvp",
+    "reports/ide_layout/sim/tb_lock_guard.vvp",
+    "reports/ide_layout/sim/tb_matrix_keypad.vvp",
+    "reports/ide_layout/sim/tb_mono_note_control.vvp",
+    "reports/ide_layout/sim/tb_pt8211_tx.vvp",
+    "reports/ide_layout/sim/tb_reset_sync.vvp",
+    "reports/ide_layout/sim/tb_run_leds.vvp",
+    "reports/ide_layout/sim/tb_sine_rom.vvp",
+    "reports/ide_layout/sim/tb_startup_envelope.vvp",
+    "reports/ide_layout/sim/tb_tone_gain.vvp",
+    "reports/ide_layout/pinmap/corrected/test.vvp",
+    "reports/ide_layout/pinmap/previous/test.vvp"
+  ],
+  "current_source_requires_user_rebuild": true,
+  "cold_start_and_noise_resolved": false
+}

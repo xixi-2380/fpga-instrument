@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE gowin-synthesis-project>
+<Project>
+    <Version>beta</Version>
+    <Device id="GW5AST-138C" package="FCPBGA676A" speed="1" partNumber="GW5AST-LV138FPG676AC1/I0"/>
+    <FileList>
+        <File path="E:\gowin\fpga-instrument\src\keyboard_top.sv" type="verilog"/>
+        <File path="E:\gowin\fpga-instrument\src\adsr_envelope.sv" type="verilog"/>
+        <File path="E:\gowin\fpga-instrument\src\audio_timing.sv" type="verilog"/>
+        <File path="E:\gowin\fpga-instrument\src\clock_reset.sv" type="verilog"/>
+        <File path="E:\gowin\fpga-instrument\src\dds_sine.sv" type="verilog"/>
+        <File path="E:\gowin\fpga-instrument\src\frame_buffer.sv" type="verilog"/>
+        <File path="E:\gowin\fpga-instrument\src\keyboard_core.sv" type="verilog"/>
+        <File path="E:\gowin\fpga-instrument\src\lock_guard.sv" type="verilog"/>
+        <File path="E:\gowin\fpga-instrument\src\matrix_keypad.sv" type="verilog"/>
+        <File path="E:\gowin\fpga-instrument\src\mono_note_control.sv" type="verilog"/>
+        <File path="E:\gowin\fpga-instrument\src\pll_pair.sv" type="verilog"/>
+        <File path="E:\gowin\fpga-instrument\src\pt8211_tx.sv" type="verilog"/>
+        <File path="E:\gowin\fpga-instrument\src\reset_sync.sv" type="verilog"/>
+        <File path="E:\gowin\fpga-instrument\src\run_leds.sv" type="verilog"/>
+        <File path="E:\gowin\fpga-instrument\src\sine_rom.sv" type="verilog"/>
+        <File path="E:\gowin\fpga-instrument\src\startup_envelope.sv" type="verilog"/>
+        <File path="E:\gowin\fpga-instrument\src\tone_gain.sv" type="verilog"/>
+    </FileList>
+    <OptionList>
+        <Option type="disable_insert_pad" value="0"/>
+        <Option type="dsp_style" value="auto"/>
+        <Option type="global_freq" value="100.000"/>
+        <Option type="include_path" value="E:/gowin/fpga-instrument/config"/>
+        <Option type="looplimit" value="2000"/>
+        <Option type="map_option" value="1"/>
+        <Option type="max_fanout" value="1000"/>
+        <Option type="netlist_hierarchy" value="1"/>
+        <Option type="opt_goal" value="auto"/>
+        <Option type="output_file" value="E:\gowin\fpga-instrument\impl\gwsynthesis\D2_keyboard_leds.vg"/>
+        <Option type="print_all_synthesis_warning" value="0"/>
+        <Option type="ram_rw_check" value="0"/>
+        <Option type="ram_style" value="auto"/>
+        <Option type="rom_style" value="auto"/>
+        <Option type="shift_reg" value="auto"/>
+        <Option type="top_module" value="keyboard_top"/>
+        <Option type="vcc" value="0.9"/>
+        <Option type="verilog_language" value="sysv-2017"/>
+        <Option type="vhdl_language" value="vhdl-1993"/>
+    </OptionList>
+</Project>

@@ -1,0 +1,2 @@
+PASS tb_clock_reset checks=6
+E:\gowin\fpga-instrument\sim\tb_clock_reset.sv:16: $finish called at 1535806 (1ps)

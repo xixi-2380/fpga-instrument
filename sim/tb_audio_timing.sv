@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 `include "check.svh"
-`include "synth_config.svh"
+`include "../src/config/synth_config.svh"
 module tb_audio_timing;
  reg clk=0,rst=1; always #5 clk=~clk;
  wire bck,rise_ce,fall_ce,frame_ce;wire [4:0] bit_index;

@@ -1,0 +1,77 @@
+// User reference: E:/FPGA竞赛/开发板资料/09_Misc/tang_mega_138k-pro_pins.cst
+// SHA256: f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba
+// Project copy: references/tang_mega_138k-pro_pins.cst (byte-identical).
+// Dock 4071f3 schematics supplement PA_EN and document physical LED labels.
+// Core 4071 AND 4072: P16=50MHz, U4=user button, same electrical mapping.
+// These are documentary checks; physical voltages and waveforms remain unmeasured.
+IO_LOC "clk" P16;
+IO_PORT "clk" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "rst" U4;
+// Diagnostic experiment: released USR is low in both core schematics.
+// Add weak pull-down after user observed reset LED stuck on; physical cause unverified.
+IO_PORT "rst" IO_TYPE=LVCMOS15 PULL_MODE=DOWN DRIVE=OFF BANK_VCCIO=1.5;
+IO_LOC "HP_BCK" E22;
+IO_PORT "HP_BCK" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "HP_WS" F24;
+IO_PORT "HP_WS" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "HP_DIN" G24;
+IO_PORT "HP_DIN" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+// PA_EN is absent from the user CST; Dock 4071f3 schematic page 18: H17.
+IO_LOC "PA_EN" H17;
+IO_PORT "PA_EN" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+
+// GPIO scope mirrors: user-selected 2x4 section of Dock J23 header.
+// Official Dock 4071f3 schematic page 16 and full-pin CST Header section.
+// J23 pins 39/37/35/33 = U22/V19/W20/U26 (user diagram upper row).
+// Lower row V22/W19/Y20/V26 is NOT used and is NOT ground.
+IO_LOC "DBG_BCK" U22;
+IO_PORT "DBG_BCK" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "DBG_WS" V19;
+IO_PORT "DBG_WS" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "DBG_DIN" W20;
+IO_PORT "DBG_DIN" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "DBG_PA_EN" U26;
+IO_PORT "DBG_PA_EN" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+
+// Reference pin_header indices: columns 29/27/25/23, rows 28/26/24/22.
+// Preserve user wiring: selected column low, others Z; input rows need pull-ups.
+// The generic Header DRIVE=8/PULL=NONE defaults are not input-row requirements.
+IO_LOC "key_col[0]" W25;
+IO_PORT "key_col[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+
+IO_LOC "key_col[1]" M24;
+IO_PORT "key_col[1]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+
+IO_LOC "key_col[2]" Y25;
+IO_PORT "key_col[2]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+
+IO_LOC "key_col[3]" AA24;
+IO_PORT "key_col[3]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+
+IO_LOC "key_row[0]" W26;
+IO_PORT "key_row[0]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+
+IO_LOC "key_row[1]" L22;
+IO_PORT "key_row[1]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+
+IO_LOC "key_row[2]" Y26;
+IO_PORT "key_row[2]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+
+IO_LOC "key_row[3]" AA25;
+IO_PORT "key_row[3]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+
+// Logical led_n indices now follow the user CST led[0..5]: R26/J14/L20/M25/N21/N23.
+// Dock schematic page 15 labels J14 as physical LED0 and R26 as physical LED1.
+// Thus logical LEDs 0/1 have reversed schematic labels; active-low polarity remains.
+IO_LOC "led_n[0]" R26;
+IO_PORT "led_n[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "led_n[1]" J14;
+IO_PORT "led_n[1]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "led_n[2]" L20;
+IO_PORT "led_n[2]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "led_n[3]" M25;
+IO_PORT "led_n[3]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "led_n[4]" N21;
+IO_PORT "led_n[4]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "led_n[5]" N23;
+IO_PORT "led_n[5]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;

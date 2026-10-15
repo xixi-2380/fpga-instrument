@@ -1,0 +1,87 @@
+[
+  {
+    "test": "tb_adsr_envelope",
+    "passed": true,
+    "seconds": 0.229
+  },
+  {
+    "test": "tb_adsr_production",
+    "passed": true,
+    "seconds": 0.256
+  },
+  {
+    "test": "tb_audio_timing",
+    "passed": true,
+    "seconds": 0.409
+  },
+  {
+    "test": "tb_clock_reset",
+    "passed": true,
+    "seconds": 0.211
+  },
+  {
+    "test": "tb_dds_sine",
+    "passed": true,
+    "seconds": 0.229
+  },
+  {
+    "test": "tb_frame_buffer",
+    "passed": true,
+    "seconds": 0.202
+  },
+  {
+    "test": "tb_keyboard_core",
+    "passed": true,
+    "seconds": 31.164
+  },
+  {
+    "test": "tb_keyboard_latency",
+    "passed": true,
+    "seconds": 2.1
+  },
+  {
+    "test": "tb_lock_guard",
+    "passed": true,
+    "seconds": 0.214
+  },
+  {
+    "test": "tb_matrix_keypad",
+    "passed": true,
+    "seconds": 0.386
+  },
+  {
+    "test": "tb_mono_note_control",
+    "passed": true,
+    "seconds": 0.225
+  },
+  {
+    "test": "tb_pt8211_tx",
+    "passed": true,
+    "seconds": 0.262
+  },
+  {
+    "test": "tb_reset_sync",
+    "passed": true,
+    "seconds": 0.237
+  },
+  {
+    "test": "tb_run_leds",
+    "passed": true,
+    "seconds": 0.219
+  },
+  {
+    "test": "tb_sine_rom",
+    "passed": true,
+    "seconds": 0.229
+  },
+  {
+    "test": "tb_startup_envelope",
+    "passed": true,
+    "seconds": 0.212
+  },
+  {
+    "test": "tb_tone_gain",
+    "passed": true,
+    "seconds": 0.239
+  }
+]

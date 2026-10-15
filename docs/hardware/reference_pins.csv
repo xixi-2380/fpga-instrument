@@ -1,0 +1,25 @@
+port,ball,io_standard,status,source,reference_port,pull_mode,drive,bank_vccio,note
+clk,P16,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,clk,UP,OFF,3.3,
+rst,U4,LVCMOS15,diagnostic_bias_change_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,rst,DOWN,OFF,1.5,Override reference NONE: weak pull-down matches released active-high USR; user reports reset diagnostic LED stuck on; physical cause unverified
+HP_BCK,E22,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,HP_BCK,NONE,8,3.3,
+HP_WS,F24,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,HP_WS,NONE,8,3.3,
+HP_DIN,G24,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,HP_DIN,NONE,8,3.3,
+PA_EN,H17,LVCMOS33,documentary_checked_hardware_unverified,Dock_4071f3_audio_sheet,,NONE,8,3.3,Not listed in user CST; Dock 4071f3 schematic page 18
+DBG_BCK,U22,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[36],NONE,8,3.3,
+DBG_WS,V19,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[34],NONE,8,3.3,
+DBG_DIN,W20,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[32],NONE,8,3.3,
+DBG_PA_EN,U26,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[30],NONE,8,3.3,
+key_col[0],W25,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[29],NONE,8,3.3,
+key_col[1],M24,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[27],NONE,8,3.3,
+key_col[2],Y25,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[25],NONE,8,3.3,
+key_col[3],AA24,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[23],NONE,8,3.3,
+key_row[0],W26,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[28],UP,OFF,3.3,Input pull-up and DRIVE=OFF required by passive matrix; generic header defaults overridden
+key_row[1],L22,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[26],UP,OFF,3.3,Input pull-up and DRIVE=OFF required by passive matrix; generic header defaults overridden
+key_row[2],Y26,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[24],UP,OFF,3.3,Input pull-up and DRIVE=OFF required by passive matrix; generic header defaults overridden
+key_row[3],AA25,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[22],UP,OFF,3.3,Input pull-up and DRIVE=OFF required by passive matrix; generic header defaults overridden
+led_n[0],R26,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,led[0],NONE,8,3.3,Logical index follows user CST; schematic LED0/1 labels are reversed
+led_n[1],J14,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,led[1],NONE,8,3.3,Logical index follows user CST; schematic LED0/1 labels are reversed
+led_n[2],L20,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,led[2],NONE,8,3.3,
+led_n[3],M25,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,led[3],NONE,8,3.3,
+led_n[4],N21,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,led[4],NONE,8,3.3,
+led_n[5],N23,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,led[5],NONE,8,3.3,

@@ -8,6 +8,7 @@ module tb_keyboard_core;
  wire bck,ws,din,pa,u,ghost,gate;wire [16:0] level;
  integer checks=0,frames=0,bitn=0,ch=0,word=0,current_code=0,pending_code=0;
  integer addr,romcode,nonzero=0,cycles=0,last_frame_cycle=-1,f;
+ string sim_out_dir;
  reg [31:0] ref_phase=0;
  reg signed [63:0] product;
  real x;
@@ -52,7 +53,10 @@ module tb_keyboard_core;
  end
  task more_frames(input integer n);integer target;begin target=frames+n;wait(frames>=target);#2;end endtask
  initial begin
-  f=$fopen("reports/sim/D2_samples.csv","w");$fdisplay(f,"frame,keys,key,envelope,ghost,sample");
+  if(!$value$plusargs("SIM_OUT_DIR=%s",sim_out_dir))sim_out_dir="reports/sim/current";
+  f=$fopen({sim_out_dir,"/D2_samples.csv"},"w");
+  if(f==0)$fatal(1,"Cannot open simulation sample output");
+  $fdisplay(f,"frame,keys,key,envelope,ghost,sample");
   #23 rst=0;more_frames(20);`CHECK(nonzero==0 && !gate,"idle keyboard is silent")
   for(integer k=0;k<16;k=k+1)begin
    pressed=16'h1<<k;more_frames(24);

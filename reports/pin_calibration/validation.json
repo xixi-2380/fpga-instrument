@@ -1,0 +1,351 @@
+{
+  "date": "2026-10-14",
+  "reference_path": "E:\\FPGA竞赛\\开发板资料\\09_Misc\\tang_mega_138k-pro_pins.cst",
+  "reference_sha256": "f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba",
+  "archived_reference_identical": true,
+  "current_cst": "boards/mega138k_pro/keyboard.cst",
+  "before_cst_sha256": "b532271cce6ef520f618d530c00c28c50ffe9fb30da7db44db1ff6d54dee06ed",
+  "after_cst_sha256": "182f8b477e920e5526425cc9245f544d376a00d65f77cef9653dd4e4368d010a",
+  "port_count": 24,
+  "reference_matched_count": 23,
+  "pa_en_schematic_only": {
+    "ball": "H17",
+    "document": "references/TANG_MEGA-138K_Dock-4071f3__Schematics.pdf",
+    "pages_visually_checked": [
+      5,
+      15,
+      18
+    ]
+  },
+  "port_reference_aliases": {
+    "clk": "clk",
+    "rst": "rst",
+    "HP_BCK": "HP_BCK",
+    "HP_WS": "HP_WS",
+    "HP_DIN": "HP_DIN",
+    "DBG_BCK": "pin_header[36]",
+    "DBG_WS": "pin_header[34]",
+    "DBG_DIN": "pin_header[32]",
+    "DBG_PA_EN": "pin_header[30]",
+    "key_col[0]": "pin_header[29]",
+    "key_row[0]": "pin_header[28]",
+    "key_col[1]": "pin_header[27]",
+    "key_row[1]": "pin_header[26]",
+    "key_col[2]": "pin_header[25]",
+    "key_row[2]": "pin_header[24]",
+    "key_col[3]": "pin_header[23]",
+    "key_row[3]": "pin_header[22]",
+    "led_n[0]": "led[0]",
+    "led_n[1]": "led[1]",
+    "led_n[2]": "led[2]",
+    "led_n[3]": "led[3]",
+    "led_n[4]": "led[4]",
+    "led_n[5]": "led[5]"
+  },
+  "pins": {
+    "clk": "P16",
+    "rst": "U4",
+    "HP_BCK": "E22",
+    "HP_WS": "F24",
+    "HP_DIN": "G24",
+    "PA_EN": "H17",
+    "DBG_BCK": "U22",
+    "DBG_WS": "V19",
+    "DBG_DIN": "W20",
+    "DBG_PA_EN": "U26",
+    "key_col[0]": "W25",
+    "key_col[1]": "M24",
+    "key_col[2]": "Y25",
+    "key_col[3]": "AA24",
+    "key_row[0]": "W26",
+    "key_row[1]": "L22",
+    "key_row[2]": "Y26",
+    "key_row[3]": "AA25",
+    "led_n[0]": "R26",
+    "led_n[1]": "J14",
+    "led_n[2]": "L20",
+    "led_n[3]": "M25",
+    "led_n[4]": "N21",
+    "led_n[5]": "N23"
+  },
+  "electrical_attributes": {
+    "clk": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "UP",
+      "DRIVE": "OFF",
+      "BANK_VCCIO": "3.3"
+    },
+    "rst": {
+      "IO_TYPE": "LVCMOS15",
+      "PULL_MODE": "NONE",
+      "DRIVE": "OFF",
+      "BANK_VCCIO": "1.5"
+    },
+    "HP_BCK": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "NONE",
+      "DRIVE": "8",
+      "BANK_VCCIO": "3.3"
+    },
+    "HP_WS": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "NONE",
+      "DRIVE": "8",
+      "BANK_VCCIO": "3.3"
+    },
+    "HP_DIN": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "NONE",
+      "DRIVE": "8",
+      "BANK_VCCIO": "3.3"
+    },
+    "PA_EN": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "NONE",
+      "DRIVE": "8",
+      "BANK_VCCIO": "3.3"
+    },
+    "DBG_BCK": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "NONE",
+      "DRIVE": "8",
+      "BANK_VCCIO": "3.3"
+    },
+    "DBG_WS": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "NONE",
+      "DRIVE": "8",
+      "BANK_VCCIO": "3.3"
+    },
+    "DBG_DIN": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "NONE",
+      "DRIVE": "8",
+      "BANK_VCCIO": "3.3"
+    },
+    "DBG_PA_EN": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "NONE",
+      "DRIVE": "8",
+      "BANK_VCCIO": "3.3"
+    },
+    "key_col[0]": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "NONE",
+      "DRIVE": "8",
+      "BANK_VCCIO": "3.3"
+    },
+    "key_col[1]": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "NONE",
+      "DRIVE": "8",
+      "BANK_VCCIO": "3.3"
+    },
+    "key_col[2]": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "NONE",
+      "DRIVE": "8",
+      "BANK_VCCIO": "3.3"
+    },
+    "key_col[3]": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "NONE",
+      "DRIVE": "8",
+      "BANK_VCCIO": "3.3"
+    },
+    "key_row[0]": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "UP",
+      "DRIVE": "OFF",
+      "BANK_VCCIO": "3.3"
+    },
+    "key_row[1]": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "UP",
+      "DRIVE": "OFF",
+      "BANK_VCCIO": "3.3"
+    },
+    "key_row[2]": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "UP",
+      "DRIVE": "OFF",
+      "BANK_VCCIO": "3.3"
+    },
+    "key_row[3]": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "UP",
+      "DRIVE": "OFF",
+      "BANK_VCCIO": "3.3"
+    },
+    "led_n[0]": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "NONE",
+      "DRIVE": "8",
+      "BANK_VCCIO": "3.3"
+    },
+    "led_n[1]": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "NONE",
+      "DRIVE": "8",
+      "BANK_VCCIO": "3.3"
+    },
+    "led_n[2]": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "NONE",
+      "DRIVE": "8",
+      "BANK_VCCIO": "3.3"
+    },
+    "led_n[3]": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "NONE",
+      "DRIVE": "8",
+      "BANK_VCCIO": "3.3"
+    },
+    "led_n[4]": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "NONE",
+      "DRIVE": "8",
+      "BANK_VCCIO": "3.3"
+    },
+    "led_n[5]": {
+      "IO_TYPE": "LVCMOS33",
+      "PULL_MODE": "NONE",
+      "DRIVE": "8",
+      "BANK_VCCIO": "3.3"
+    }
+  },
+  "changes": {
+    "clock_pull": [
+      "NONE",
+      "UP"
+    ],
+    "led_n[0]": [
+      "J14",
+      "R26"
+    ],
+    "led_n[1]": [
+      "R26",
+      "J14"
+    ]
+  },
+  "intentional_overrides": [
+    "Explicit IO_TYPE retained when reference omits it",
+    "Matrix input rows PULL_MODE=UP and DRIVE=OFF",
+    "PA_EN supplemented from schematic"
+  ],
+  "logical_led_numbering_basis": "user_CST",
+  "schematic_led0_ball": "J14",
+  "schematic_led1_ball": "R26",
+  "functional_rtl_and_testbench_unchanged": true,
+  "preserved_sha256": {
+    "rtl/adsr_envelope.sv": "28a78683d0ed57810d56ad651c6d9e02e4a342e3057533afcc846fc6fc67c235",
+    "rtl/audio_timing.sv": "7a8edde957cd109984590313285a7395b1ce6b8b003ce63387eb456eccce7887",
+    "rtl/dds_sine.sv": "6dcdf647e7a2d703d4aeb1dd76028eaec317deff505e1d7d0ae1e48c545432e9",
+    "rtl/frame_buffer.sv": "dbf0d9b5cc9a0ad1ff4b1a32b2e9b4fdb0fc5c7c8d01a8b1fe9a1c7685e844c8",
+    "rtl/keyboard_core.sv": "6ddf7f286f9ad89359bed1e09f7ef4e848b36bd0bbba65dd5474577aa57255a5",
+    "rtl/lock_guard.sv": "9a5f4602f95f980eff30ccc60d2419a49d7a9d4227afbc25d04ed3bd8dbb88ae",
+    "rtl/matrix_keypad.sv": "c523577f149c49507d8357cd3fc509397e8091b5ce95a20c0ac84e78e62c3607",
+    "rtl/mono_note_control.sv": "bebc913e1c9208dee63334d5c184363c9304c3f354e0b1a9c2b3ce03e79c4fe5",
+    "rtl/pt8211_tx.sv": "5c5b56945efda77df100ca332b91df4bf2927add8d826c12e8499f957278710c",
+    "rtl/reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+    "rtl/run_leds.sv": "7ca3f075cbbaa8878c66dcf35b48b46687ddb3552caec750f97300bbc50ed10b",
+    "rtl/sine_rom.sv": "d165a0f5973a6b52fe1cd2a4849f6ab37388ed35014a6651b099290f4acf2c25",
+    "rtl/startup_envelope.sv": "d1169b2ec8ecb28ad8bc715ca2664d5ab2c4b84d5fde4af4d6a9415faefaa1c6",
+    "rtl/tone_gain.sv": "1db6353ec52424143beab050a3edae461ccdf3b4fa50e2e3dbe58277e1bb34ec",
+    "sim/check.svh": "e72479555ce83d9f4665986601f62f4f7c360c0f59ce1ae43d09397d7ab77a7c",
+    "sim/passive_matrix_model.svh": "a65fae65d958bc648ac38c95bd385cb152a27b19c72b81864f9d0f2976776e19",
+    "sim/pinmap_keyboard_tb.v": "92d04ab11bb266e4ce9a63fb0a55ae83101a03b89fdc6bb9a738168b5a9f7e3d",
+    "sim/tb_adsr_envelope.sv": "677b645aac79cce0b4da272f003a6ac2c19c6de6b269e2085cc142bb17ddaa91",
+    "sim/tb_adsr_production.sv": "67b4f88f46b5f8cd563c6861a3fe05762dd666dab919b14fbf45907bc1ce3720",
+    "sim/tb_audio_timing.sv": "78cabe6605a6c80ea2cae01d81c9be00f93fcda4ad75b619a210b449a56a6ad1",
+    "sim/tb_clock_reset.sv": "8df38db54b95f6b3645c182a2e0e528308c4f203486f28dddef39f1747e03328",
+    "sim/tb_dds_sine.sv": "c2faefd8b5da875827ae123888f6de3ee5f6dd599ce1887749d6fc6ad5663389",
+    "sim/tb_frame_buffer.sv": "f7ca2a215fc3e17c52efa88dc9980a4cbd67fd9295fbc57e3957c88968e78de7",
+    "sim/tb_keyboard_core.sv": "9577f8a246d8e86a467aa78299100d8f5f855af426d4988b921d95ec140f1fb9",
+    "sim/tb_keyboard_latency.sv": "a2e5946dcebb5afc0599b279489c302086dae4bc3518af2f377158f7dc7dc236",
+    "sim/tb_keyboard_top.sv": "12b836b9243931b6f89bb80f4292943dcc66e36dd2f21e3c7aeef21d20938d17",
+    "sim/tb_lock_guard.sv": "f70f8f9110b59cd8cd1fdf11f6d2d43bfb424406e0795c03222a80b6bd5400be",
+    "sim/tb_matrix_keypad.sv": "0f407a7718e4336783c24e67df777891cc576ce223e8fb5ee6a13ff2ebe2cab9",
+    "sim/tb_mono_note_control.sv": "7e95fafeb13479b4eff45738cf3d24a772df4b42a2f06412d33f0798478741ab",
+    "sim/tb_pll_pair.sv": "fe7e1b6f8aea43a41edda904474087345224cc325cf30c6f5d271529edc43bb4",
+    "sim/tb_pt8211_tx.sv": "fc0c8d934771e719144b70ce9cfff6f3ff41b41583449a931abd7b703b44fde8",
+    "sim/tb_reset_sync.sv": "d3d208ecfab924b849c67c98464519d35b7da5b9f96c70ac482d897bf6ff7029",
+    "sim/tb_run_leds.sv": "a0f99793388590872d0160cd8cd4ff885751b2fd8ee54b88d9378a0e2f83a667",
+    "sim/tb_sine_rom.sv": "8b740624273b0999fcaa32eeacdfeb8412e714df6e19c1cd5add51dfecdce266",
+    "sim/tb_startup_envelope.sv": "4b9136644993f959763895213ff57046568e55d3584ae0e2070fa54362e22030",
+    "sim/tb_tone_gain.sv": "21e58ad9cd92daf334e1a49f7cc8294161038ca70cc442a4a0f24c182aa40313",
+    "config/keyboard_config.svh": "f7f74a4e3d5fede10b5fb0e2820af76e34327576b673eaf1e05c8a3ca1b4baeb",
+    "config/keyboard_notes.svh": "55c63120d48c3f42e587c8c42d83b0d0ef10228650faff4cf0348aef3be5fe66",
+    "config/run_leds_config.svh": "c514a391176ebec49897bcc64781af73b24e91dddd5485d60b8f014c765a76f2",
+    "config/synth_config.svh": "ecc58fe56df18639de2d0e8330f7e3ebac4ea71c9e7fd127ab94adc2ff5478c0",
+    "rom/manifest.json": "2f8f3ac0227822e66ce769afea86b2f5515873595221d7477ae9a419ca15f3d8",
+    "rom/sine4096.hex": "d62e7528ad6c0400fab616087abbdaa7b7977fcd9adbce1b347e3a5743ea3d6e",
+    "references/manifest.json": "07e0786dbc9890ce426d96e7af0e128f724932b40f94260f04e87a237879f242",
+    "references/pt8211-v1.7.pdf": "3ceb112d58b95ce2af9478c531c9c54fe578e3b634ff18e11960ef8e5370d035",
+    "references/TANG_MEGA-138K-Pro_4071_Schematics.pdf": "ee1900257e287f611c42516c24dfdc3f170722a67736a9ccabc8e102c2547636",
+    "references/TANG_MEGA-138K-Pro_4072_Schematics.pdf": "fd308dbb33a10a928f7759207f39717881733945981c2fc34e9bbcfb3e1008eb",
+    "references/TANG_MEGA-138K_Dock-4071f3__Schematics.pdf": "153d1c170a7d54e11a5d5e9b128ee9139a07b27249377d909e204cbf56e25cec",
+    "references/TANG_MEGA-138K_Pro-Dock-4071f_Schematics.pdf": "852040eda6eedfaf9638d8de42192542b56cd817eb79cffb872056fb4d12f82f",
+    "references/tang_mega_138k-pro_pins.cst": "f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba",
+    "references/UG306-1.0.9E_Arora V Clock User Guide.pdf": "ee8ed3e6545b287b64506a2672dbe480db4ac8b195e7732217e6ab2dab651376",
+    "references/official_audio/audio/audio_sinewave/audio.gprj": "3434f59ce18a47c1e73a1756098d9250f988ef5399e893780428fcac9d4e3afe",
+    "references/official_audio/audio/audio_sinewave/impl/audio_process_config.json": "b54736e42ff9ca84ff1f3fb5b083c8722f8f02e46691820405759c97ef12295e",
+    "references/official_audio/audio/audio_sinewave/src/audio.cst": "efa048ebf5fff90359fa69476efee6234c93d2b39c67e2f3a2aaa356887f4590",
+    "references/official_audio/audio/audio_sinewave/src/audio_driver.v": "d6dcc02023bf593c0a064ced26ddc5edd162d2896cd8da3b2260115e383a5d62",
+    "references/official_audio/audio/audio_sinewave/src/sine_wave.v": "3bb6ab98ac68a05815c4a6a51d9ec878354f420fb5f4ee35137e69ba4a139a49",
+    "references/official_audio/audio/audio_sinewave/src/top.v": "98e12691fc5ee35db98336a6d90966eff05157ca651baeec55555ef2611a8385",
+    "keyboard_adsr.gprj": "337fefd13770b5550b8a587ebf2973894a219121aff11d575967fa66a392aa28",
+    "boards/mega138k_pro/keyboard.sdc": "d4cda6eda4eabf4c1eb77b25273648a8e94d466d7489bd83f175fdaf27251086",
+    "boards/mega138k_pro/matrix_keypad_mapping.json": "37a702014d98e3bc09f21979158de0ffcd185a1413070d89f12c0b298ca2081c",
+    "impl/keyboard_adsr_process_config.json": "e5f06e0e284cc2353335debbed08266dfd2321298f78b62c3db51c273d23e7b9"
+  },
+  "tests_pending": false,
+  "synthesis_run": false,
+  "pnr_run": false,
+  "programmed": false,
+  "hardware_verified": false,
+  "D2_silence_resolved": false,
+  "git_commit_created": false,
+  "all_documentary_checks_passed": true,
+  "all_simulations_passed": true,
+  "tests": [
+    {
+      "test": "tb_run_leds",
+      "checks": 111,
+      "passed": true
+    },
+    {
+      "test": "tb_keyboard_top",
+      "checks": 329180,
+      "passed": true
+    },
+    {
+      "test": "tb_keyboard_pinmap",
+      "variant": "corrected",
+      "checks": 34,
+      "passed": true
+    },
+    {
+      "test": "tb_keyboard_pinmap",
+      "variant": "previous",
+      "checks": 34,
+      "passed": true
+    }
+  ],
+  "total_simulation_checks": 329359,
+  "build_pin_check_table_matches_current_cst": true,
+  "pin_inventory_matches_current_cst": true,
+  "all_reference_electrical_fields_checked_with_documented_overrides": true,
+  "regenerated_vvp_removed": [
+    "reports/pin_calibration/sim/tb_keyboard_top.vvp",
+    "reports/pin_calibration/sim/tb_run_leds.vvp",
+    "reports/pin_calibration/pinmap/corrected/test.vvp",
+    "reports/pin_calibration/pinmap/previous/test.vvp"
+  ],
+  "current_file_sha256": {
+    "boards/mega138k_pro/keyboard.cst": "182f8b477e920e5526425cc9245f544d376a00d65f77cef9653dd4e4368d010a",
+    "boards/mega138k_pro/reference_pins.csv": "788740185646747d54e0e4d0ba105e43e165ff97903efc1fba34d87122315601",
+    "boards/mega138k_pro/hardware_status.json": "7cf89cd61a99d218087504502e8b78e8b1e86f51ad4dea2f8002571aca2ae5d9",
+    "scripts/build_keyboard.py": "3fcc1f0665338adc8b0b609ee080a0cf842bc3d682eed641eb0c4c3d6ea52076"
+  }
+}

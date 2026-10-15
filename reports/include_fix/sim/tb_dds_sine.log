@@ -1,0 +1,2 @@
+PASS tb_dds_sine checks=10001
+E:/gowin/fpga-instrument/sim/tb_dds_sine.sv:20: $finish called at 100017000 (1ps)

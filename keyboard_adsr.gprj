@@ -1,29 +1,33 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE gowin-fpga-project>
 <Project>
-  <Template>FPGA</Template>
-  <Version>5</Version>
-  <Device name="GW5AST-138C" pn="GW5AST-LV138FPG676AC1/I0">gw5ast138c-003</Device>
-  <FileList>
-    <File path="boards/mega138k_pro/clock_reset.sv" type="file.verilog" enable="1" />
-    <File path="boards/mega138k_pro/pll_pair.sv" type="file.verilog" enable="1" />
-    <File path="boards/mega138k_pro/tone_top.sv" type="file.verilog" enable="1" />
-    <File path="rtl/audio_timing.sv" type="file.verilog" enable="1" />
-    <File path="rtl/dds_sine.sv" type="file.verilog" enable="1" />
-    <File path="rtl/frame_buffer.sv" type="file.verilog" enable="1" />
-    <File path="rtl/lock_guard.sv" type="file.verilog" enable="1" />
-    <File path="rtl/pt8211_tx.sv" type="file.verilog" enable="1" />
-    <File path="rtl/reset_sync.sv" type="file.verilog" enable="1" />
-    <File path="rtl/sine_rom.sv" type="file.verilog" enable="1" />
-    <File path="rtl/startup_envelope.sv" type="file.verilog" enable="1" />
-    <File path="rtl/tone_core.sv" type="file.verilog" enable="1" />
-    <File path="rtl/tone_gain.sv" type="file.verilog" enable="1" />
-    <File path="rtl/matrix_keypad.sv" type="file.verilog" enable="1" />
-    <File path="rtl/mono_note_control.sv" type="file.verilog" enable="1" />
-    <File path="rtl/adsr_envelope.sv" type="file.verilog" enable="1" />
-    <File path="rtl/keyboard_core.sv" type="file.verilog" enable="1" />
-    <File path="boards/mega138k_pro/keyboard_top.sv" type="file.verilog" enable="1" />
-    <File path="boards/mega138k_pro/keyboard.cst" type="file.cst" enable="1" />
-    <File path="boards/mega138k_pro/keyboard.sdc" type="file.sdc" enable="1" />
-    <File path="rtl/run_leds.sv" type="file.verilog" enable="1" />
-  </FileList>
+    <Template>FPGA</Template>
+    <Version>5</Version>
+    <Device name="GW5AST-138C" pn="GW5AST-LV138FPG676AC1/I0">gw5ast138c-003</Device>
+    <FileList>
+        <File path="src/keyboard_top.sv" type="file.verilog" enable="1" />
+        <File path="src/adsr_envelope.sv" type="file.verilog" enable="1" />
+        <File path="src/audio_timing.sv" type="file.verilog" enable="1" />
+        <File path="src/clock_reset.sv" type="file.verilog" enable="1" />
+        <File path="src/dds_sine.sv" type="file.verilog" enable="1" />
+        <File path="src/frame_buffer.sv" type="file.verilog" enable="1" />
+        <File path="src/keyboard_core.sv" type="file.verilog" enable="1" />
+        <File path="src/lock_guard.sv" type="file.verilog" enable="1" />
+        <File path="src/matrix_keypad.sv" type="file.verilog" enable="1" />
+        <File path="src/mono_note_control.sv" type="file.verilog" enable="1" />
+        <File path="src/pll_pair.sv" type="file.verilog" enable="1" />
+        <File path="src/pt8211_tx.sv" type="file.verilog" enable="1" />
+        <File path="src/reset_sync.sv" type="file.verilog" enable="1" />
+        <File path="src/run_leds.sv" type="file.verilog" enable="1" />
+        <File path="src/sine_rom.sv" type="file.verilog" enable="1" />
+        <File path="src/startup_envelope.sv" type="file.verilog" enable="1" />
+        <File path="src/tone_gain.sv" type="file.verilog" enable="1" />
+        <File path="src/config/keyboard_config.svh" type="file.other" enable="1" />
+        <File path="src/config/keyboard_notes.svh" type="file.other" enable="1" />
+        <File path="src/config/run_leds_config.svh" type="file.other" enable="1" />
+        <File path="src/config/synth_config.svh" type="file.other" enable="1" />
+        <File path="src/rom/sine4096.hex" type="file.other" enable="1" />
+        <File path="src/keyboard.cst" type="file.cst" enable="1" />
+        <File path="src/keyboard.sdc" type="file.sdc" enable="1" />
+    </FileList>
 </Project>

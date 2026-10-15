@@ -1,0 +1,2 @@
+PASS tb_adsr_envelope checks=59
+E:\gowin\fpga-instrument\sim\tb_adsr_envelope.sv:31: $finish called at 673000 (1ps)

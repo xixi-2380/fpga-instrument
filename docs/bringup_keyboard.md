@@ -8,7 +8,7 @@
 用户负责综合编译、布局布线、烧录。助手仅改文件及运行 HDL 仿真，后续不再启动 EDA 编译/下载工具。
 用 Gowin IDE 打开 `E:\gowin\fpga-instrument\keyboard_adsr.gprj`。
 顶层 `keyboard_top`；器件 `GW5AST-LV138FPG676AC1/I0`，Device Version C。
-配置路径为 config；SystemVerilog 2017；约束为 boards/mega138k_pro/keyboard.cst 和 keyboard.sdc。
+配置路径为 src/config；SystemVerilog 2017；约束为 src/keyboard.cst 和 keyboard.sdc。
 过程配置在 impl/keyboard_adsr_process_config.json，确认顶层/约束后由用户自行综合及布局布线。
 当前流水灯版编译输出为 impl/pnr/D2_keyboard_leds.fs，SRAM 回读保护关闭并请求包含 BSRAM 初始化。旧 D2_keyboard_adsr.fs 不含流水灯，不作为当前源码的下载文件。
 当前无声排查先按 [流水灯版操作说明](bringup_run_leds.md) 观察 LED0～3、LED4 和单按 A4 时的 LED5，再决定后续测点。
@@ -66,9 +66,9 @@ Release 过程中再次按键从当时的包络值重新起音，避免强行清
 
 ## 文件和复现
 
-- 扫描：rtl/matrix_keypad.sv；事件：rtl/mono_note_control.sv；包络：rtl/adsr_envelope.sv。
-- 集成：rtl/keyboard_core.sv、boards/mega138k_pro/keyboard_top.sv。
-- 参数：config/keyboard_config.svh；静态频率表：config/keyboard_notes.svh，ROM 仍为 rom/sine4096.hex。
+- 扫描：src/matrix_keypad.sv；事件：src/mono_note_control.sv；包络：src/adsr_envelope.sv。
+- 集成：src/keyboard_core.sv、src/keyboard_top.sv。
+- 参数：src/config/keyboard_config.svh；静态频率表：src/config/keyboard_notes.svh，ROM 仍为 src/rom/sine4096.hex。
 - 验证：reports/keyboard/validation.md、validation.json；每个新模块均有独立 TB，端到端/板级另测。
 
 ```powershell
@@ -96,3 +96,11 @@ python scripts/run_sim.py --test tb_keyboard_top --vendor
 W25/M24/Y25/AA24 为低/高阻列扫描输出，未选列不主动驱动高。音频测量点 U22/V19/W20/U26 不变。
 新增 scripts/run_keyboard_pinmap.py 从 CST 生成真实物理焊盘连接，并用 tranif1 开关网络检查；16 个键位、松开、非零音频、三角鬼键均通过。修正前的约束也单独模拟，确认旧方向会转置键位但仍能发声，完全无声原因仍待实板测量。
 此测试旁路 PLL，仅针对物理引脚到按键位置的映射；未重新运行 Gowin 综合/布局布线或烧录。
+
+## 按用户全引脚 CST 校准
+
+2026-10-14 按用户提供的 tang_mega_138k-pro_pins.cst 核对：参考时钟 P16 启用上拉，逻辑 LED0/1 分别使用 R26/J14；该逻辑灯号与 4071f3 图纸灯号相反，详见 bringup_run_leds.md。键盘八线及音频/测量球位保持原定义，行输入仍上拉、未选列仍高阻。PA_EN 未在参考 CST 中列出，按匹配板版原理图保留 H17。新约束需用户重新编译实现，仿真不能验证实际 IO 电气。
+
+## 最新实板反馈与下一步
+
+用户反馈数分钟后键盘能正常发声，但冷启动LED4/5不响应，短按核心板USR无改善；恢复后LED4稳定、松键LED5灭，持续低频嘶声。当前不是完全无声，冷启动与底噪仍未解决。原工程新增只读启动灯诊断，未就绪约1秒后LED0心跳、LED1/2显示原始PLL LOCK、LED3显示复位，LED4/5含义不变；恢复后再流水。详见bringup_run_leds.md，需用户重新编译烧录后观察。

@@ -1,0 +1,2 @@
+E:\gowin\fpga-instrument\src\keyboard_top.sv:3: Include file keyboard_config.svh not found
+Command signaled: E:\gowin\fpga-instrument\tools\mingw64\lib\ivl\ivlpp -F"C:\Users\x1767\AppData\Local\Temp\ivrlg243ca" -f"C:\Users\x1767\AppData\Local\Temp\ivrlg43ca" -p"C:\Users\x1767\AppData\Local\Temp\ivrli43ca" > "E:\gowin\fpga-instrument\reports\include_fix\before_preprocessed.v"

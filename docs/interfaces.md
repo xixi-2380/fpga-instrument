@@ -74,3 +74,7 @@ tone_play_board 及其 stereo/left/right 入口保留 10 个板级端口：clk/r
 新增 run_leds 及独立 TB，50 MHz 域四灯每 250 ms 轮流亮、不依赖音频 PLL 或用户复位；LED4 为同步后的音频域就绪，LED5 为同步后的音符门控。六灯均低有效，按 Dock 4071f3 图 LED0..5 约束 J14/R26/L20/M25/N21/N23（该版本 LED0/1 命名与旧 CST 位序相反）。键盘及音频球位未变。
 更新 keyboard_top 六位 led_n 端口、GPRJ、CST/SDC、编译脚本及输出配置；输出基名 D2_keyboard_leds，用于区分原旧文件。状态信号各两级同步，仅单向观测，不影响音频控制。
 tb_run_leds=111、tb_keyboard_top=329180 检查通过，物理键盘映射测试两方向各34项通过。没有运行 EDA 综合/布局布线/烧录，没有生成新的 .fs；当前需用户重新编译，实际无声原因尚未确定。详细用法见 docs/bringup_run_leds.md。
+
+## 启动状态灯只读诊断
+
+run_leds仅在ref_clk域运行，新增PLL1/PLL2 LOCK和外部复位的两级同步观察。未就绪持续RUN_LED_DIAG_STEPS个流水步进后，低四位改为心跳/LOCK1/LOCK2/复位显示；就绪时恢复四灯流水。LED4/5仍为同步后的音频复位解除/音符门控。该显示没有反向控制路径，原时钟、复位、锁定2ms资格和音频帧握手不变。原始LOCK显示不能代表连续稳定资格已满足。

@@ -1,0 +1,599 @@
+{
+  "date": "2026-10-14",
+  "root": "E:\\gowin\\fpga-instrument",
+  "removed": [
+    {
+      "path": "bringup_digital.gprj",
+      "sha256": "401d265873c38d5d8b9439cc311d0324e551d586dc8908a288eb884bd088f409",
+      "bytes": 1492
+    },
+    {
+      "path": "tone_feasibility.gprj",
+      "sha256": "25153a4f3c87da737c36d4f35ff3057b18197c323a0550845031cbb1b5bf3a94",
+      "bytes": 1328
+    },
+    {
+      "path": "tone_play_left.gprj",
+      "sha256": "85047cf3a4ce5ae7d342ba599ab07985cc92f24671b4e228984f236190607626",
+      "bytes": 1482
+    },
+    {
+      "path": "tone_play_right.gprj",
+      "sha256": "85047cf3a4ce5ae7d342ba599ab07985cc92f24671b4e228984f236190607626",
+      "bytes": 1482
+    },
+    {
+      "path": "tone_play_stereo.gprj",
+      "sha256": "85047cf3a4ce5ae7d342ba599ab07985cc92f24671b4e228984f236190607626",
+      "bytes": 1482
+    },
+    {
+      "path": "impl/bringup_digital_process_config.json",
+      "sha256": "36f6ef59074f088ff725b6b25cb6014f0e1ee5aeb702aab0a45cfabe4431a165",
+      "bytes": 3320
+    },
+    {
+      "path": "impl/tone_feasibility_process_config.json",
+      "sha256": "c04ba21feffb499bdbfe36537194796e865f530c3486a018204e00d4bc181491",
+      "bytes": 3311
+    },
+    {
+      "path": "impl/tone_play_left_process_config.json",
+      "sha256": "91f4554a92a1e850beeefdef09a08763e99f572317f32afe6d4bc7d37e4db5d4",
+      "bytes": 3314
+    },
+    {
+      "path": "impl/tone_play_right_process_config.json",
+      "sha256": "62809d2d7f3994b763a00f389262ceb69d38dd383af8fa1c5eca415110fdc534",
+      "bytes": 3316
+    },
+    {
+      "path": "impl/tone_play_stereo_process_config.json",
+      "sha256": "cff716a0f8ed7eb1949eafd4059ae09853b17cb446e1d4a23c12fe55ab1c9db1",
+      "bytes": 3318
+    },
+    {
+      "path": "boards/mega138k_pro/bringup.cst",
+      "sha256": "939ebe7d88a0778ea460423a405e58d040c61ed2585b45b2cfb271e0147c941d",
+      "bytes": 1466
+    },
+    {
+      "path": "boards/mega138k_pro/bringup_digital.sdc",
+      "sha256": "ff04b4f491a409a9b33f9110e436642b4bfd13cb356d838105b8f9fe8daec978",
+      "bytes": 1362
+    },
+    {
+      "path": "boards/mega138k_pro/bringup_digital.sv",
+      "sha256": "1322ee462fa16ecdea1b5fc73fcea63c9202296d0fded63a21761e8640784c28",
+      "bytes": 739
+    },
+    {
+      "path": "boards/mega138k_pro/tone.sdc",
+      "sha256": "c1fea64c00fac7e526ce3cf5fff257d4b252ed408b5399212cf1c60428fdcde5",
+      "bytes": 410
+    },
+    {
+      "path": "boards/mega138k_pro/tone_play.cst",
+      "sha256": "939ebe7d88a0778ea460423a405e58d040c61ed2585b45b2cfb271e0147c941d",
+      "bytes": 1466
+    },
+    {
+      "path": "boards/mega138k_pro/tone_play.sdc",
+      "sha256": "760b9adf38b1e653b4d1e25ca413fd3b0dbbd20b218088f87a3bb465cb28e363",
+      "bytes": 1380
+    },
+    {
+      "path": "boards/mega138k_pro/tone_play.sv",
+      "sha256": "853c2844d1bee52612b40476ec7f64cfdaef078c53ea8ea27fd6771fcf4414aa",
+      "bytes": 1203
+    },
+    {
+      "path": "boards/mega138k_pro/tone_top.sv",
+      "sha256": "381456a847e987742bee829ed07ed67a540a94c0b402e72aea403dbec2c07900",
+      "bytes": 715
+    },
+    {
+      "path": "rtl/tone_core.sv",
+      "sha256": "9d3114becb4ea3969c0704fa5523060dea510f849b093bc3a7927b1346901482",
+      "bytes": 1219
+    },
+    {
+      "path": "sim/tb_bringup_digital.sv",
+      "sha256": "7ed4c72329b4ee0cc84138b88b55adaf5f97ee0126e2815361da2d4d2015441b",
+      "bytes": 1747
+    },
+    {
+      "path": "sim/tb_tone_core.sv",
+      "sha256": "388ad7adab7b6d4f84c3ad563c2a1b913cf0db3d146f94b81e00982c3ad16b78",
+      "bytes": 1955
+    },
+    {
+      "path": "sim/tb_tone_play.sv",
+      "sha256": "f3fd109385b33bba09524f54fbf5751a52807a49111688346e6b42a469503cf9",
+      "bytes": 4819
+    },
+    {
+      "path": "sim/tb_tone_top.sv",
+      "sha256": "e55b624298d3596049e7255fbe1129649b4edb0f69f01a37ddd5022e9037ad34",
+      "bytes": 1176
+    },
+    {
+      "path": "scripts/build.tcl",
+      "sha256": "22bb005e9627711b81be9a9ae1113ffedef0d2ce746f81592b6d77c609e130b4",
+      "bytes": 443
+    },
+    {
+      "path": "scripts/build_bringup.py",
+      "sha256": "8b512675f225fa70024164b75945e28f29e5e8e1bfb397b69b400b8250b547a2",
+      "bytes": 4719
+    },
+    {
+      "path": "scripts/build_bringup.tcl",
+      "sha256": "35875bc055f6f8fae055af4ee67bc0b617f128d774045f9bfc2fdda4cbce3864",
+      "bytes": 589
+    },
+    {
+      "path": "scripts/build_tone_play.py",
+      "sha256": "04589093e0f300ff8ee5c9e583e1ebc942002ec488dfb8099b254315cd0a6e2e",
+      "bytes": 6223
+    },
+    {
+      "path": "scripts/build_tone_play.tcl",
+      "sha256": "de92522a4f38d33543a44104c8462d50f2517ff5902e600317049b7515b3cbcf",
+      "bytes": 500
+    },
+    {
+      "path": "scripts/finalize_reports.py",
+      "sha256": "00b5697e581eda3ebbd614ccbaffa85b018fef0bbf80a625809d684e0df012af",
+      "bytes": 8884
+    },
+    {
+      "path": "scripts/run_build.py",
+      "sha256": "596624789d32e6baad7ebbe7e1b12b4084d82513acb24f145f4720861f1f2b2f",
+      "bytes": 1241
+    },
+    {
+      "path": "scripts/program_bringup.py",
+      "sha256": "6c9882501de2b67388c6f4900846c09cc8fc7fcc4380e46a8f90c0139ab5db88",
+      "bytes": 2945
+    },
+    {
+      "path": "scripts/program_sram.py",
+      "sha256": "f7ab2106236d24381eee6e116411915a526cb5c542ee3091b7ac8f847025f51b",
+      "bytes": 1843
+    },
+    {
+      "path": "scripts/run_keyboard_netlist.py",
+      "sha256": "2eaaab0580192a01d58670c5cb7290143d3e63364569a0be59ff400de993d306",
+      "bytes": 1451
+    },
+    {
+      "path": "sim/keyboard_netlist_tb.v",
+      "sha256": "0f965a96a1cf3210095564674e5e5a7b95d5c47de65353adb8499b25368e1e25",
+      "bytes": 1767
+    },
+    {
+      "path": "impl/gwsynthesis/D2_keyboard_adsr.vg",
+      "sha256": "f29d07d75591cd81c92bd7e2adc4433d6e9cba64b95d56b71629ad2ff7f7ef2f",
+      "bytes": 269875
+    },
+    {
+      "path": "bringup/README_manual.md",
+      "sha256": "4310e82f3f3b284b0e14a3f4954e06c38d1ce2356072d295586c899760226a92",
+      "bytes": 4074
+    },
+    {
+      "path": "bringup/D0_gpio_mirror.fs",
+      "sha256": "e7130b096bce0ddb7d785be1045e1071825dd20afe36f2d2ce1a22f2adf2d968",
+      "bytes": 34690835
+    },
+    {
+      "path": "bringup/D0_header_mirror.fs",
+      "sha256": "0a03b95728c83c7b0e5179e121d66c8b618244a5771e1d5659383b8601939355",
+      "bytes": 34690835
+    },
+    {
+      "path": "bringup/D0_muted.fs",
+      "sha256": "dc2ab8ffd559fd6a25e436e6e1ee6f31ebbff8f7f83f4db432f6545687e24415",
+      "bytes": 34690835
+    },
+    {
+      "path": "bringup/D1_left_440.fs",
+      "sha256": "6b0f593229b1f1c6eb556a52fac86bf42d809ba8d1351975b4ec99efc14398ba",
+      "bytes": 34967947
+    },
+    {
+      "path": "bringup/D1_right_440.fs",
+      "sha256": "07eb1a6515c25bfc850a408275954365d58c978c169e5ea5bd39da51cba650a8",
+      "bytes": 34967947
+    },
+    {
+      "path": "bringup/D1_stereo_440.fs",
+      "sha256": "e4066fb37bc02216a28d54860329be0d5d526213a20853b4d547c125263ffdb2",
+      "bytes": 34967947
+    },
+    {
+      "path": "bringup/D2_keyboard_adsr.fs",
+      "sha256": "a16a9619feb87c240f350af66dbef065fe3dcb71cc3831197c5d23b8b499b7e6",
+      "bytes": 35222923
+    },
+    {
+      "path": "reports/migration/sim/tb_keyboard_latency.vvp",
+      "sha256": "cea0ac2d29e15cbe98d22b8774c259cac380eba532890f36ea7b3366165382bf",
+      "bytes": 76004
+    },
+    {
+      "path": "reports/migration/sim/tb_keyboard_top.vvp",
+      "sha256": "d0da1c858edd0be28e4fc11a15b87e60b1155e7221239d58572c7206ead14305",
+      "bytes": 386317
+    },
+    {
+      "path": "reports/migration/sim/tb_run_leds.vvp",
+      "sha256": "0642390dc036e74b36ac0182943b2654a16b74ae532ea54b2293566db39af5b5",
+      "bytes": 14385
+    },
+    {
+      "path": "reports/migration/pinmap/corrected/test.vvp",
+      "sha256": "5e9bc6bf1920c19dbb4751524f48bd96b0c8572118bd93c1465b54f877b75838",
+      "bytes": 391893
+    },
+    {
+      "path": "reports/migration/pinmap/previous/test.vvp",
+      "sha256": "f50ef2f05bde69eb4399d4045f1c965e119c57ec62b1f05af3878bb160faf178",
+      "bytes": 392042
+    },
+    {
+      "path": "tools/.BUILDINFO",
+      "sha256": "3f7c1b979024bba5aab54385790a951bcb86f0c06fe2e14045e8c50380ca2474",
+      "bytes": 6050
+    },
+    {
+      "path": "tools/.MTREE",
+      "sha256": "f89fab86d2d4c5a4bd33cb918a9eee7ba1323066937f8c6ea1bfdbf5ab057ee0",
+      "bytes": 632
+    },
+    {
+      "path": "tools/.PKGINFO",
+      "sha256": "870ba629adb2bc0b58ef52ab215b161c8227d13b3a13ecb085556215dfe2693b",
+      "bytes": 474
+    },
+    {
+      "path": "tools/bzip2.pkg.tar.zst",
+      "sha256": "653ec97c18dc139ca94e2b4b9d161a9b4d9e77ceb18dfb064eb95ef2a71171b6",
+      "bytes": 93091
+    },
+    {
+      "path": "tools/mingw-w64-x86_64-bzip2-1.0.8-4-any.pkg.tar.zst",
+      "sha256": "123768f30ae14ba654a6feb70f8526146a331bc85f831a91a549ffb3f6cbffc7",
+      "bytes": 95428
+    },
+    {
+      "path": "tools/mingw-w64-x86_64-gcc-libs-16.2.0-5-any.pkg.tar.zst",
+      "sha256": "8b21408d59a0b92421eebdd681d052c6ee94124efb30ede65e838cca54967981",
+      "bytes": 2391
+    },
+    {
+      "path": "tools/mingw-w64-x86_64-iverilog-1~13.0-2-any.pkg.tar.zst",
+      "sha256": "e22c86dad1a0658d5f769362bfbec6533028c0d0bb63059b4fda0cc1084d1406",
+      "bytes": 1995969
+    },
+    {
+      "path": "tools/mingw-w64-x86_64-libgcc-16.2.0-5-any.pkg.tar.zst",
+      "sha256": "6cc48c5efe5ebab70a1ee1f6806c422205d5515c0f50d7a0e6a67336268c2afe",
+      "bytes": 77194
+    },
+    {
+      "path": "tools/mingw-w64-x86_64-libstdc++-16.2.0-5-any.pkg.tar.zst",
+      "sha256": "2ec9a91ce896249b1a440a44e1bc0126f82efb540955827adec30e83a9bfb1f6",
+      "bytes": 797549
+    },
+    {
+      "path": "tools/mingw-w64-x86_64-libwinpthread-14.0.0.r98.g19f5121a2-1-any.pkg.tar.zst",
+      "sha256": "565a7ac155098633ce66096c02c98f274127111758fd25d3f0e5451c4cd21120",
+      "bytes": 31425
+    },
+    {
+      "path": "tools/mingw-w64-x86_64-readline-8.3.003-1-any.pkg.tar.zst",
+      "sha256": "b943d7e2a61ac6e0304eac11cdcee15370a8c2ccee5b84487f8ad6c1e103d66c",
+      "bytes": 514518
+    },
+    {
+      "path": "tools/mingw-w64-x86_64-termcap-1.3.1-8-any.pkg.tar.zst",
+      "sha256": "205ece965d693274f200ff6c15bca8d29a093860951aeb4dbb9660817c255cc0",
+      "bytes": 19271
+    },
+    {
+      "path": "tools/mingw-w64-x86_64-zlib-1.3.2-2-any.pkg.tar.zst",
+      "sha256": "9e75842a070ba648e986e12424e1c92c9d7d77200e85f6a34eeb600819f2e694",
+      "bytes": 112476
+    },
+    {
+      "path": "tools/msys2-index.html",
+      "sha256": "4d4c6d300bca6353d64bfc397e974481ae6d8f7e1524e7f3d036863f25bcd4b6",
+      "bytes": 6648755
+    },
+    {
+      "path": "fpga-instrument/fpga-instrument.gprj",
+      "sha256": "d126a6ead705062f562a21c944a678b9c3b323c9f4f5a1659cd2c01c31dbbf58",
+      "bytes": 209
+    },
+    {
+      "path": "fpga-instrument/fpga-instrument.gprj.user",
+      "sha256": "7b2e21171111196e697c875ddfa759e2ac99bc8585eca4263d50b4db63882459",
+      "bytes": 1898
+    },
+    {
+      "path": "fpga-instrument/impl/fpga-instrument_process_config.json",
+      "sha256": "813743980f5bb285a24fc8688165cd5abe1530fa3653d7270e96e15cd7febcf1",
+      "bytes": 3256
+    }
+  ],
+  "removed_file_count": 65,
+  "removed_bytes": 256208552,
+  "moved_original_files": [
+    {
+      "from": "docs/bringup_440.md",
+      "to": "docs/archive/bringup_440.md",
+      "sha256": "989e9ff8cfd243ffaaee4e1adcc9ef1a15e913a2a855c6ce1c3a80dfd2603533"
+    },
+    {
+      "from": "docs/bringup_D0.md",
+      "to": "docs/archive/bringup_D0.md",
+      "sha256": "0370e8accfe8565c115b83ecb3710c23bf52d475e4d1f5e6c08156acde120445"
+    },
+    {
+      "from": "docs/bringup_GPIO.md",
+      "to": "docs/archive/bringup_GPIO.md",
+      "sha256": "cf48e659337ac35e4af678daa5eecab8f7f9f760b903909c969de5a6c61e87c0"
+    },
+    {
+      "from": "docs/handoff_2026-10-14.md",
+      "to": "docs/archive/handoff_2026-10-14.md",
+      "sha256": "e74f92ffb5f5ab9b164fd3fd94da8d76b22a1a1d9e49ae75b888b419ad2e70d1"
+    },
+    {
+      "from": "docs/continuation_check_2026-10-14.md",
+      "to": "docs/archive/continuation_check_2026-10-14.md",
+      "sha256": "69c9d18225c2ffe96e6dd15fca5b896a4f544f4b2246cc2b1772c46a413e185c"
+    },
+    {
+      "from": "bringup/D0_gpio_mirror_status.json",
+      "to": "reports/bringup/delivery_records/D0_gpio_mirror_status.json",
+      "sha256": "10dc72ec38bb1d0a06a6c2d336c656ece79c265789cb9df1e76ef775969710cf"
+    },
+    {
+      "from": "bringup/D0_header_mirror_status.json",
+      "to": "reports/bringup/delivery_records/D0_header_mirror_status.json",
+      "sha256": "6a9c97bebf107ead279d318afb51aed400cc62ae9fa7de3c9c490a1fbebfcf0a"
+    },
+    {
+      "from": "bringup/D0_status.json",
+      "to": "reports/bringup/delivery_records/D0_status.json",
+      "sha256": "fcd1ce70f79ad09eac687da25f62e5541f47ddcd06fa1e68cb6df484e963d881"
+    },
+    {
+      "from": "bringup/D1_left_440_status.json",
+      "to": "reports/bringup/delivery_records/D1_left_440_status.json",
+      "sha256": "0589dcc39df7414e7d58da84fc740866254b49d535f65d662b0c5c578364e35e"
+    },
+    {
+      "from": "bringup/D1_right_440_status.json",
+      "to": "reports/bringup/delivery_records/D1_right_440_status.json",
+      "sha256": "bd51580e0e73809b8d30cf6a656b3b97028787f635c2f9c9546df83a107c6819"
+    },
+    {
+      "from": "bringup/D1_stereo_440_status.json",
+      "to": "reports/bringup/delivery_records/D1_stereo_440_status.json",
+      "sha256": "20a3d35d334b7b592096bcb9aa864f2e57bae7412a28871a21c9265152482af4"
+    },
+    {
+      "from": "bringup/D2_keyboard_adsr_status.json",
+      "to": "reports/bringup/delivery_records/D2_keyboard_adsr_status.json",
+      "sha256": "b0d75ea3afd059544d490797688672fe9d4cbbca5ca165af446f30b89a0ad09d"
+    }
+  ],
+  "protected_sha256": {
+    "rtl/adsr_envelope.sv": "28a78683d0ed57810d56ad651c6d9e02e4a342e3057533afcc846fc6fc67c235",
+    "rtl/audio_timing.sv": "7a8edde957cd109984590313285a7395b1ce6b8b003ce63387eb456eccce7887",
+    "rtl/dds_sine.sv": "6dcdf647e7a2d703d4aeb1dd76028eaec317deff505e1d7d0ae1e48c545432e9",
+    "rtl/frame_buffer.sv": "dbf0d9b5cc9a0ad1ff4b1a32b2e9b4fdb0fc5c7c8d01a8b1fe9a1c7685e844c8",
+    "rtl/keyboard_core.sv": "6ddf7f286f9ad89359bed1e09f7ef4e848b36bd0bbba65dd5474577aa57255a5",
+    "rtl/lock_guard.sv": "9a5f4602f95f980eff30ccc60d2419a49d7a9d4227afbc25d04ed3bd8dbb88ae",
+    "rtl/matrix_keypad.sv": "c523577f149c49507d8357cd3fc509397e8091b5ce95a20c0ac84e78e62c3607",
+    "rtl/mono_note_control.sv": "bebc913e1c9208dee63334d5c184363c9304c3f354e0b1a9c2b3ce03e79c4fe5",
+    "rtl/pt8211_tx.sv": "5c5b56945efda77df100ca332b91df4bf2927add8d826c12e8499f957278710c",
+    "rtl/reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+    "rtl/run_leds.sv": "7ca3f075cbbaa8878c66dcf35b48b46687ddb3552caec750f97300bbc50ed10b",
+    "rtl/sine_rom.sv": "d165a0f5973a6b52fe1cd2a4849f6ab37388ed35014a6651b099290f4acf2c25",
+    "rtl/startup_envelope.sv": "d1169b2ec8ecb28ad8bc715ca2664d5ab2c4b84d5fde4af4d6a9415faefaa1c6",
+    "rtl/tone_gain.sv": "1db6353ec52424143beab050a3edae461ccdf3b4fa50e2e3dbe58277e1bb34ec",
+    "config/keyboard_config.svh": "f7f74a4e3d5fede10b5fb0e2820af76e34327576b673eaf1e05c8a3ca1b4baeb",
+    "config/keyboard_notes.svh": "55c63120d48c3f42e587c8c42d83b0d0ef10228650faff4cf0348aef3be5fe66",
+    "config/run_leds_config.svh": "c514a391176ebec49897bcc64781af73b24e91dddd5485d60b8f014c765a76f2",
+    "config/synth_config.svh": "ecc58fe56df18639de2d0e8330f7e3ebac4ea71c9e7fd127ab94adc2ff5478c0",
+    "rom/manifest.json": "2f8f3ac0227822e66ce769afea86b2f5515873595221d7477ae9a419ca15f3d8",
+    "rom/sine4096.hex": "d62e7528ad6c0400fab616087abbdaa7b7977fcd9adbce1b347e3a5743ea3d6e",
+    "references/manifest.json": "07e0786dbc9890ce426d96e7af0e128f724932b40f94260f04e87a237879f242",
+    "references/pt8211-v1.7.pdf": "3ceb112d58b95ce2af9478c531c9c54fe578e3b634ff18e11960ef8e5370d035",
+    "references/TANG_MEGA-138K-Pro_4071_Schematics.pdf": "ee1900257e287f611c42516c24dfdc3f170722a67736a9ccabc8e102c2547636",
+    "references/TANG_MEGA-138K-Pro_4072_Schematics.pdf": "fd308dbb33a10a928f7759207f39717881733945981c2fc34e9bbcfb3e1008eb",
+    "references/TANG_MEGA-138K_Dock-4071f3__Schematics.pdf": "153d1c170a7d54e11a5d5e9b128ee9139a07b27249377d909e204cbf56e25cec",
+    "references/TANG_MEGA-138K_Pro-Dock-4071f_Schematics.pdf": "852040eda6eedfaf9638d8de42192542b56cd817eb79cffb872056fb4d12f82f",
+    "references/tang_mega_138k-pro_pins.cst": "f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba",
+    "references/UG306-1.0.9E_Arora V Clock User Guide.pdf": "ee8ed3e6545b287b64506a2672dbe480db4ac8b195e7732217e6ab2dab651376",
+    "references/official_audio/audio/audio_sinewave/audio.gprj": "3434f59ce18a47c1e73a1756098d9250f988ef5399e893780428fcac9d4e3afe",
+    "references/official_audio/audio/audio_sinewave/impl/audio_process_config.json": "b54736e42ff9ca84ff1f3fb5b083c8722f8f02e46691820405759c97ef12295e",
+    "references/official_audio/audio/audio_sinewave/src/audio.cst": "efa048ebf5fff90359fa69476efee6234c93d2b39c67e2f3a2aaa356887f4590",
+    "references/official_audio/audio/audio_sinewave/src/audio_driver.v": "d6dcc02023bf593c0a064ced26ddc5edd162d2896cd8da3b2260115e383a5d62",
+    "references/official_audio/audio/audio_sinewave/src/sine_wave.v": "3bb6ab98ac68a05815c4a6a51d9ec878354f420fb5f4ee35137e69ba4a139a49",
+    "references/official_audio/audio/audio_sinewave/src/top.v": "98e12691fc5ee35db98336a6d90966eff05157ca651baeec55555ef2611a8385",
+    "reports/hardware/D0_gpio_measurements.json": "e408b34e48c0156b5a4c5bda19ddac33213f7b7661da7ed4ff24647dd12fef95",
+    "reports/hardware/D0_header_measurements.json": "49fe2d2b2200a9db41f3645839aa8eae984473e5431ae345f58ed5fb08287d3c",
+    "reports/hardware/D0_jtag_scan.log": "d7084db4d1d5d9b22aed98672ea44f182b346796099365095afe53cf89ec664d",
+    "reports/hardware/D0_measurements.json": "98937cf953e09d54119ee3f2770ac9fb30afa63e4ee678ed5a660dc24b87a91f",
+    "reports/hardware/D0_program_result.json": "b9b7218a0f9bc1842e254961ea132a6a270e2c44037098f5d8d8f725239cd35d",
+    "reports/hardware/D0_program_sram.log": "a5b2ae7d8c605e4d9e416aaf5417b58b2ba143a99ebc45294d4349d74de97cd2",
+    "reports/hardware/D1_measurements.json": "b2a997413b19fe608bd0dbcca51b5f87a6cd6df9a7897af77ac9dedc78014157",
+    "reports/hardware/D2_measurements.json": "60e0dee971e9057f7335c068c8f7391c1f176601ac682c330435688aa33316f4",
+    "reports/hardware/jtag_scan.log": "745774a3a95bca27d0cb0c2223393865d67710cd791f3e7178a5dee9aef7e77e",
+    "reports/hardware/attempt1_readback_protected/D0_program_result.json": "b9b7218a0f9bc1842e254961ea132a6a270e2c44037098f5d8d8f725239cd35d",
+    "reports/hardware/attempt1_readback_protected/D0_program_sram.log": "a5b2ae7d8c605e4d9e416aaf5417b58b2ba143a99ebc45294d4349d74de97cd2",
+    "reports/hardware/attempt1_readback_protected/D0_status.json": "558d8b2c5d26e17f773a5b99348c0a33f2433c8d5542b9e9161ca5b15d320aa9",
+    "reports/hardware/photos/assembled_front.jpg": "262226dcf15e37b1eb447a80fe71e47638f3cbdbadecb1b05b337256f71f6427",
+    "reports/hardware/photos/dock_back.jpg": "579a2b7ee0819c06caf64d2c2d4c3bba60e2d684a3fdfe54654ca48e8847ceb0",
+    "reports/hardware/photos/manifest.json": "47c79bc0dd4595fbd0b43befa899d639d2ed51ab9977547718c2ded1fee077be",
+    "reports/hardware/photos/matrix_keypad_photo.json": "5274a739fad8541c670c15b3742a261d23c161902d4f0d9d479a3915622ff653",
+    "reports/hardware/photos/matrix_keypad_user.png": "894bc7f473e6e1a0f4242c7ee26fc7b23f34e6976fc2bd354846d4ad167116c8",
+    "boards/mega138k_pro/keyboard_top.sv": "afa13d57fbe56fcf23a2d01abee375bfa5ec68b078dc70dba2a9b433f331ed9d",
+    "boards/mega138k_pro/keyboard.cst": "b532271cce6ef520f618d530c00c28c50ffe9fb30da7db44db1ff6d54dee06ed",
+    "boards/mega138k_pro/keyboard.sdc": "d4cda6eda4eabf4c1eb77b25273648a8e94d466d7489bd83f175fdaf27251086",
+    "boards/mega138k_pro/clock_reset.sv": "381b7af821aee73752ee6c103bfaddf8b465038e19b47c008f51e59ff5b03743",
+    "boards/mega138k_pro/pll_pair.sv": "7de2d85f6c514f94744360507cf8ca1eac03f094356e0d3dd728dd4ad2a148fd",
+    "impl/keyboard_adsr_process_config.json": "e5f06e0e284cc2353335debbed08266dfd2321298f78b62c3db51c273d23e7b9"
+  },
+  "remaining_project": "keyboard_adsr.gprj",
+  "enabled_project_files": 19,
+  "functional_rtl_constraints_parameters_rom_unchanged": true,
+  "tests_pending": false,
+  "synthesis_run": false,
+  "pnr_run": false,
+  "programmer_or_jtag_accessed": false,
+  "git_commit_created": false,
+  "all_passed": true,
+  "tests": [
+    {
+      "test": "tb_adsr_envelope",
+      "checks": 59,
+      "passed": true
+    },
+    {
+      "test": "tb_adsr_production",
+      "checks": 14881,
+      "passed": true
+    },
+    {
+      "test": "tb_audio_timing",
+      "checks": 9996,
+      "passed": true
+    },
+    {
+      "test": "tb_clock_reset",
+      "checks": 6,
+      "passed": true
+    },
+    {
+      "test": "tb_dds_sine",
+      "checks": 10001,
+      "passed": true
+    },
+    {
+      "test": "tb_frame_buffer",
+      "checks": 9,
+      "passed": true
+    },
+    {
+      "test": "tb_keyboard_core",
+      "checks": 2342532,
+      "passed": true
+    },
+    {
+      "test": "tb_keyboard_latency",
+      "checks": 5,
+      "passed": true
+    },
+    {
+      "test": "tb_lock_guard",
+      "checks": 5,
+      "passed": true
+    },
+    {
+      "test": "tb_matrix_keypad",
+      "checks": 7183,
+      "passed": true
+    },
+    {
+      "test": "tb_mono_note_control",
+      "checks": 163,
+      "passed": true
+    },
+    {
+      "test": "tb_pt8211_tx",
+      "checks": 646,
+      "passed": true
+    },
+    {
+      "test": "tb_reset_sync",
+      "checks": 5,
+      "passed": true
+    },
+    {
+      "test": "tb_run_leds",
+      "checks": 111,
+      "passed": true
+    },
+    {
+      "test": "tb_sine_rom",
+      "checks": 4097,
+      "passed": true
+    },
+    {
+      "test": "tb_startup_envelope",
+      "checks": 726,
+      "passed": true
+    },
+    {
+      "test": "tb_tone_gain",
+      "checks": 2001,
+      "passed": true
+    },
+    {
+      "test": "tb_keyboard_top",
+      "checks": 329180,
+      "passed": true
+    },
+    {
+      "test": "tb_keyboard_pinmap",
+      "variant": "corrected",
+      "checks": 34,
+      "passed": true
+    },
+    {
+      "test": "tb_keyboard_pinmap",
+      "variant": "previous",
+      "checks": 34,
+      "passed": true
+    }
+  ],
+  "total_checks": 2721674,
+  "rtl_test_count": 17,
+  "board_test_count": 1,
+  "pinmap_variant_count": 2,
+  "historical_reports_and_references_checked": 179,
+  "historical_csv_unchanged": true,
+  "new_csv_respects_out_dir": true,
+  "project_dependency_checks_passed": true,
+  "python_syntax_passed": true,
+  "regenerated_vvp_removed": [
+    "reports/cleanup/sim/tb_adsr_envelope.vvp",
+    "reports/cleanup/sim/tb_adsr_production.vvp",
+    "reports/cleanup/sim/tb_audio_timing.vvp",
+    "reports/cleanup/sim/tb_clock_reset.vvp",
+    "reports/cleanup/sim/tb_dds_sine.vvp",
+    "reports/cleanup/sim/tb_frame_buffer.vvp",
+    "reports/cleanup/sim/tb_keyboard_core.vvp",
+    "reports/cleanup/sim/tb_keyboard_latency.vvp",
+    "reports/cleanup/sim/tb_keyboard_top.vvp",
+    "reports/cleanup/sim/tb_lock_guard.vvp",
+    "reports/cleanup/sim/tb_matrix_keypad.vvp",
+    "reports/cleanup/sim/tb_mono_note_control.vvp",
+    "reports/cleanup/sim/tb_pt8211_tx.vvp",
+    "reports/cleanup/sim/tb_reset_sync.vvp",
+    "reports/cleanup/sim/tb_run_leds.vvp",
+    "reports/cleanup/sim/tb_sine_rom.vvp",
+    "reports/cleanup/sim/tb_startup_envelope.vvp",
+    "reports/cleanup/sim/tb_tone_gain.vvp",
+    "reports/cleanup/pinmap/corrected/test.vvp",
+    "reports/cleanup/pinmap/previous/test.vvp"
+  ],
+  "D2_silence_resolved": false
+}
