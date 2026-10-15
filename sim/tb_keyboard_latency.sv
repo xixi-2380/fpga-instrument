@@ -4,12 +4,18 @@
 module tb_keyboard_latency;
  reg clk=0,rst=1;always #8.138020833 clk=~clk;
  reg [15:0] pressed=0;
- wire [3:0] rows,columns,key;wire [15:0] keys;
- wire bck,ws,din,pa,u,ghost,gate;wire [16:0] level;
+ wire [3:0] rows,columns,key,voice_active,voice_held;wire [15:0] keys;
+ wire bck,ws,din,pa,u,ghost,gate,key_gate,frame_ce,input_ready,note_ready,note_valid,note_on;
+ wire [6:0] note_id;wire [31:0] note_fcw;wire [16:0] level;
  integer checks=0,edges=0,bits=0,word=0;
  real press_ns=0,first_code_ns=0,off_ns=0,note_on_ns=0;
- keyboard_core #(.MUTE(4),.FADE(4))
-  dut(clk,rst,rows,columns,bck,ws,din,pa,u,keys,ghost,gate,key,level);
+ keyboard_core dut(.clk(clk),.rst(rst),.input_ready(input_ready),.note_ready(note_ready),.key_row(rows),
+  .col_enable(columns),.keys(keys),.ghost(ghost),.note_valid(note_valid),.note_on(note_on),
+  .note_id(note_id),.note_fcw(note_fcw),.gate(key_gate),.last_key(key));
+ synth_core #(.MUTE(4),.FADE(4)) sound(
+  .clk(clk),.rst(rst),.note_valid(note_valid),.note_on(note_on),.note_id(note_id),.note_fcw(note_fcw),
+  .note_ready(note_ready),.input_ready(input_ready),.bck(bck),.ws(ws),.din(din),.pa_enable(pa),
+  .underrun(u),.frame_ce(frame_ce),.gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(level));
  passive_matrix_model model(pressed,columns,rows);
  always @(posedge gate)if(!rst && press_ns>0)note_on_ns=$realtime;
  always @(posedge bck)if(!rst)begin
@@ -21,17 +27,17 @@ module tb_keyboard_latency;
  end
  initial begin
   #23 rst=0;wait(pa);wait(edges>=800);#103;
-  press_ns=$realtime;pressed=16'h0200; // A4
+  press_ns=$realtime;pressed=16'h0200;
   wait(first_code_ns>0);
-  `CHECK(gate && key==9,"production scanner chooses pressed A4")
-  `CHECK(note_on_ns-press_ns<5000000.0,"production Note On latency below 5ms in simulation")
-  `CHECK(first_code_ns-press_ns<5000000.0,"first nonzero DAC code below 5ms in simulation")
+  `CHECK(gate && key==9 && $countones(voice_held)==1,"production scanner delivers A4 to allocator")
+  `CHECK(note_on_ns-press_ns<5000000.0,"production event latency stays below 5ms")
+  `CHECK(first_code_ns-press_ns<5000000.0,"production first DAC code stays below 5ms")
   #71;off_ns=$realtime;pressed=0;wait(!gate);
-  `CHECK($realtime-off_ns<5000000.0,"production Note Off latency below 5ms in simulation")
-  `CHECK(!u,"no audio underrun at production scan timings")
+  `CHECK($realtime-off_ns<5000000.0,"production release-event latency stays below 5ms")
+  `CHECK(!u,"polyphony adds no underrun at production scan timings")
   $display("LATENCY_US note_on=%0.3f first_code=%0.3f note_off=%0.3f",
    (note_on_ns-press_ns)/1000.0,(first_code_ns-press_ns)/1000.0,($realtime-off_ns)/1000.0);
   $display("PASS tb_keyboard_latency checks=%0d",checks);$finish;
  end
- initial begin #12000000;$fatal(1,"production scan latency timeout");end
+ initial begin #12000000;$fatal(1,"production latency timeout");end
 endmodule

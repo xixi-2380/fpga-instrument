@@ -1,4 +1,4 @@
-# D2 矩阵键盘 + Note On/Off + 单声部 ADSR
+# D2 矩阵键盘与四声部正弦复音
 
 > 2026-10-14 行列定义已按用户澄清修正：物理行（上到下）W26/L22/Y26/AA25；物理列（左到右）W25/M24/Y25/AA24。keyboard.cst 与编译脚本期望位置已同步修正，须由用户重新综合/布局布线/烧录；已有 D2 .fs 和历史时序报告属于旧行列版本，不作为新约束实现结果。
 
@@ -8,10 +8,10 @@
 用户负责综合编译、布局布线、烧录。助手仅改文件及运行 HDL 仿真，后续不再启动 EDA 编译/下载工具。
 用 Gowin IDE 打开 `E:\gowin\fpga-instrument\keyboard_adsr.gprj`。
 顶层 `keyboard_top`；器件 `GW5AST-LV138FPG676AC1/I0`，Device Version C。
-配置路径为 src/config；SystemVerilog 2017；约束为 src/keyboard.cst 和 keyboard.sdc。
+include搜索目录为src与src/config；SystemVerilog 2017；约束为 src/keyboard.cst 和 keyboard.sdc。
 过程配置在 impl/keyboard_adsr_process_config.json，确认顶层/约束后由用户自行综合及布局布线。
 当前流水灯版编译输出为 impl/pnr/D2_keyboard_leds.fs，SRAM 回读保护关闭并请求包含 BSRAM 初始化。旧 D2_keyboard_adsr.fs 不含流水灯，不作为当前源码的下载文件。
-当前无声排查先按 [流水灯版操作说明](bringup_run_leds.md) 观察 LED0～3、LED4 和单按 A4 时的 LED5，再决定后续测点。
+启动与接口分离版已获用户实板正常反馈，当前四声部版也已获用户“测试正常”的定性实板反馈。灯号沿用[流水灯版操作说明](bringup_run_leds.md)；LED5表示至少一个已分配声部仍被按住，松开后尾音不依赖此灯保持。
 如使用 Programmer，选择 GW5AST-138C、SRAM Program and Verify，由用户执行；不需要写 Flash。
 
 ## 保持现有接线
@@ -39,56 +39,59 @@
 | 第 4 行 | C5 | C#5 | D5 | D#5 |
 
 先按位置测试，不凭键帽字符猜引脚；若按下位置与音高不符，记录实际对应位置以便修正映射。
-本阶段为单声部：新按键优先；同一采样帧多个新增键选最高键号。松开当前键会切到仍按住的最高键号，全部松开进入 Release。
+本阶段为四声部：四个可识别按键可同时发声，各自独立Release。第五个新音符依次复用空闲或已释放声部；若四个音符都按住，替换最久未起音的声部。旧编号松开不会影响新音符，被替换且仍按住的旧键须松开再按，不自动回退。
 
 ## ADSR 和无二极管处理
 
 按下 Note On 从当前包络值开始 Attack，10 ms 到峰值；Decay 100 ms 到约 70%；按住保持 Sustain；Note Off 后 Release 200 ms 到零。
-Release 过程中再次按键从当时的包络值重新起音，避免强行清零。DDS 相位连续，频率和控制事件在音频采样边界更新。
-最终峰值仍限制在满幅 1/32。启动保留 PLL 资格判断、480 帧零码、功放开启和 240 帧淡入；未按键时输出零码，串行时钟持续运行。
+同一音符在Release中重按，从当前包络重新起音并保持相位；声部改分配给新音符时从零相位、零包络Attack。ADSR和相位在音频帧边界更新，各声部互不释放。
+每声部增益仍为1/32，四路合成最大约满幅1/8；40位求和后转16位并饱和。启动保留 PLL 资格判断、480 帧零码、功放开启和 240 帧淡入；未按键时输出零码，串行时钟持续运行。
 四列扫描周期 200 us，每列 50 us，在列切换后等待 10 us；普通按下/松开须 15 次稳定扫描，约 3 ms 消抖。
 
 用户已确认没有每键二极管。三角形三键可能与矩形四键产生相同扫描结果，无法保证任意多键无冲突。
-本版对矩形歧义清除接受键状态，释放当前音符并禁止新音符；解除歧义并消抖后恢复。单行多键、单列多键和互不连接的对角组合仍可按单声部优先级使用。
+本版对矩形歧义清除接受键状态，释放全部已接受音符并禁止由歧义产生的新音符；解除歧义并消抖后恢复。单行多键、单列多键和互不连接的组合可用于复音验证。
 这是保守鬼键处理，不是 16 键无冲突键盘，也不代表最终 FPGA 声部数量。
 
 ## 用户上板顺序
 
-1. 关闭并重新打开 keyboard_adsr.gprj，确认顶层 keyboard_top、文件列表包含 run_leds.sv、输出基名 D2_keyboard_leds；自行综合、布局布线，确认无编译错误及 setup/hold 违例，再保存报告并执行 SRAM Program and Verify。先按 bringup_run_leds.md 记录流水灯和 LED4/5 状态；无声未定位时先完成该诊断。
+1. 关闭并重新打开 keyboard_adsr.gprj，确认顶层 keyboard_top、文件列表包含synth_core.sv、key_note_events.sv、voice_allocator.sv、voice_mixer.sv与run_leds.sv、输出基名 D2_keyboard_leds；自行综合、布局布线，确认无编译错误及 setup/hold 违例，再保存报告并执行 SRAM Program and Verify。输出名仍为D2_keyboard_leds，须确认生成时间；旧文件不是新四声部版本。
 2. 不按键时应安静，BCK 仍为 1.536 MHz、WS 为 48 kHz，启动后 PA_EN 高。
 3. 逐个短按 16 个位置，确认都能发声且音高按上表变化；第三行第二列应为 A4。
 4. 长按一个键听起音/衰减/保持；松开听约 0.2 秒尾音。
-5. 快速连按、Release 中重按；按住一键再按另一键，确认新键优先及松开回退。
-6. 测三角形三键歧义，预期当前声部释放且不发出新鬼音；松开至可识别组合后应恢复。
+5. 先按同一列四个键（例如左列C4/E4/G#4/C5），确认四音共存；逐个松开，每次只结束对应声部，其他键继续保持。全部松开后应有约0.2秒尾音并归零；功放不自动关闭。
+6. 测三角形三键歧义，预期全部声部释放且不发出新鬼音；松开至可识别组合后应恢复。
 7. 演奏中按用户复位，确认音频及扫描恢复；最后完成至少 30 分钟稳定性测试。
 
 初始音量较低。若所有键无声，请保存编译/下载日志，并反馈 W20/DIN 是否随按键变化、U26/PA_EN 是否高及八根线的实际连接。
 
 ## 文件和复现
 
-- 扫描：src/matrix_keypad.sv；事件：src/mono_note_control.sv；包络：src/adsr_envelope.sv。
-- 集成：src/keyboard_core.sv、src/keyboard_top.sv。
-- 参数：src/config/keyboard_config.svh；静态频率表：src/config/keyboard_notes.svh，ROM 仍为 src/rom/sine4096.hex。
+- 扫描：src/matrix_keypad.sv；事件：src/key_note_events.sv；包络：src/adsr_envelope.sv。
+- 输入适配器：src/keyboard_core.sv；独立音源：src/synth_core.sv；板级连接：src/keyboard_top.sv。
+- 扫描参数：src/config/keyboard_config.svh；音源/ADSR参数：src/config/synth_config.svh；静态频率表：src/config/keyboard_notes.svh，ROM仍为src/rom/sine4096.hex。
 - 验证：reports/keyboard/validation.md、validation.json；每个新模块均有独立 TB，端到端/板级另测。
 
 ```powershell
 python scripts/run_sim.py --test tb_matrix_keypad
-python scripts/run_sim.py --test tb_mono_note_control
+python scripts/run_sim.py --test tb_key_note_events
 python scripts/run_sim.py --test tb_adsr_envelope
 python scripts/run_sim.py --test tb_adsr_production
 python scripts/run_sim.py --test tb_keyboard_core
 python scripts/run_sim.py --test tb_keyboard_latency
+python scripts/run_sim.py --test tb_synth_core
+python scripts/run_sim.py --test tb_voice_allocator
+python scripts/run_sim.py --test tb_voice_mixer
 python scripts/run_sim.py --test tb_keyboard_top --vendor
 ```
 
-七个新增仿真通过，总计 2631691 次检查。生产扫描参数的一次仿真中首个非零串行码延时约 3.135 ms；不把此值当作实板模拟输出延时。
+原单声部阶段的历史七项新增仿真总计2631691次检查。生产扫描参数的一次仿真中首个非零串行码延时约 3.135 ms；不把此值当作实板模拟输出延时。
 此前已完成的一次 D2 离线实现保留作证据：18 端口位置匹配，setup/hold=0，Logic 916、Register 384、BSRAM 4、DSP 2、PLL 2。
 用户明确分工后助手未再次启动编译或下载器；硬件验收尚未完成，保留已知时钟路由/未约束路径统计及实际电气测量限制。
 
 ## 下一阶段约束
 
-保持 32 位相位、12 位波表地址、24 位声部、40 位混音及 16 位 DAC。后续把 16 位稳定按键状态和 Note 事件接入四声部，再扩展 32 声部。
-控制不得阻塞串行输出；当前样本在 frame_ce 后固定三周期写入下一帧缓冲，测试检查 1280 周期截止时间和欠载。
+当前保持32位相位、12位波表地址、24位声部、40位混音及16位DAC，实现四声部；32声部属于未来规划，本轮不实施。
+控制不得阻塞串行输出；当前四声部样本在frame_ce后第4周期写入下一帧缓冲，测试检查 1280 周期截止时间和欠载。
 
 ## 行列修正后的测量
 
@@ -103,4 +106,14 @@ W25/M24/Y25/AA24 为低/高阻列扫描输出，未选列不主动驱动高。�
 
 ## 最新实板反馈与下一步
 
-用户反馈数分钟后键盘能正常发声，但冷启动LED4/5不响应，短按核心板USR无改善；恢复后LED4稳定、松键LED5灭，持续低频嘶声。当前不是完全无声，冷启动与底噪仍未解决。原工程新增只读启动灯诊断，未就绪约1秒后LED0心跳、LED1/2显示原始PLL LOCK、LED3显示复位，LED4/5含义不变；恢复后再流水。详见bringup_run_leds.md，需用户重新编译烧录后观察。
+此前启动灯诊断显示USR松开时复位仍高；原U4约束启用内部下拉后，用户已反馈“现在正常了”。用户又确认底噪来自耳机阻抗过低，明确取消软件处理。接口分离版已获用户正常反馈；用户随后明确选择四声部复音，当前实现本阶段，功放、PLL和复位参数不变。灯号仍见bringup_run_leds.md。重新打开主工程加载新增synth_core后，由用户自行编译烧录验证接口分离版本。
+
+2026-10-15用户已确认输入/音源分离版“测试正常”，不再将该版本记为待首次实板验证。没有新增频率、电压或长稳测量；随后用户明确选择四声部复音；这条实板确认仅属于先前分离版，不代表新四声部版已上板。
+
+## 第五键与旧松键的可选实板验证
+
+为避免鬼键掩盖溢出策略，可按顺序保持第一行前三个键C4/C#4/D4，再按第二行第四个键G4，形成四声部；再加第三行第四个键B4。两组接线互不连通，不构成矩形歧义，第五音应替换最早的C4。随后松开旧C4，B4应继续响；其他三个音符也继续保持。若想恢复C4，须先松开再按。
+
+此组合与同列四键、独立Release、矩形歧义及复位已在物理开关网络/板级HDL中覆盖。仿真首个非零码约3.177ms，不是实板模拟延迟。当前四声部完整回归及开发失败记录见reports/four_voice/validation.json；未由助手综合、布局布线、烧录或提交Git。
+
+四声部后续实板反馈：用户确认“测试正常”，并明确要求提交Git；当前源码与完整回归哈希一致。上文待上板语句属于验证时的历史状态，不另填实测频率、延迟或长期稳定性结果。

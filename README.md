@@ -2,13 +2,13 @@
 
 工作目录：`E:\gowin\fpga-instrument`。唯一工程入口：[keyboard_adsr.gprj](keyboard_adsr.gprj)，顶层 `keyboard_top`，输出 `D2_keyboard_leds`。Device Version C；实际速度等级仍待核验。
 
-当前为 4×4 矩阵键盘、单声部正弦、ADSR、四颗流水灯和两颗状态灯。D1 固定 440 Hz 曾由用户反馈正常发声；D2现已反馈数分钟后可发声，但冷启动等待和持续空闲低频嘶声未解决，短按USR也未恢复。当前源码新增只读启动灯光诊断，尚待用户重新编译烧录；不扩展复音、音色或UI。
+当前为4×4矩阵键盘、四声部正弦复音、独立ADSR和六颗状态/运行灯。U4内部下拉修复启动等待后，用户反馈“现在正常了”。底噪已由用户确认为耳机阻抗过低，不作软件处理；单声部分离版已实板通过，用户已选择下一阶段四声部；本次不扩展32声部、音色或UI。
 
 ## 操作
 
 1. 先读 [AGENTS.md](AGENTS.md)，接口见 [docs/interfaces.md](docs/interfaces.md)，模块见 [docs/modules.md](docs/modules.md)。
 2. 用户打开本目录 keyboard_adsr.gprj，自行综合、布局布线及烧录；预期输出 `impl/pnr/D2_keyboard_leds.fs`，本次结构重排没有生成新下载文件；现有实现结果属于此前源码。
-3. 按 [流水灯排查说明](docs/bringup_run_leds.md) 依次记录 LED0～3、LED4 和单按 A4 时 LED5，再继续定位无声。
+3. 按 [流水灯排查说明](docs/bringup_run_leds.md) 依次记录 LED0～3、LED4 和单按 A4 时 LED5，检查启动、音符响应；当前启动故障已获用户反馈恢复。
 4. 直接修改对应原文件，不建立重复版本；用户提示后才提交 Git，不自动推送。
 
 ## 文件职责
@@ -71,10 +71,22 @@ fpga-instrument/
 
 顶层仍为keyboard_top，器件仍为GW5AST-LV138FPG676AC1/I0（C版），SystemVerilog 2017，include路径为src与src/config，HDL使用相对于原文件的config/*.svh引用。辅助头文件不作为独立模块综合。旧IDE流程状态已清空，UI布局保留；由用户重新实现确认。C:\Gowin下参考工程未修改。
 
-本轮只调整文件位置和路径；刚加入的PLL/复位诊断灯功能保留。冷启动延迟和空闲底噪未解决，最新验证见reports/ide_layout/validation.json，历史报告中的旧路径保持原样。
+src布局调整时的历史验证见reports/ide_layout/validation.json；当时的PLL/复位诊断功能保留。后续U4下拉已获用户启动恢复反馈，底噪按耳机阻抗结论关闭；历史报告中的旧路径保持原样。
 
 2026-10-14头文件报错修复：实际失败配置仍指向已移走的根目录config，导致EX5985/EX3755及后续未定义宏、语法连锁错误。已修正原过程配置和源文件引用，并去掉仿真的配置头文件搜索路径，改用源文件相对解析。关闭IDE中的当前工程，再重新打开根目录keyboard_adsr.gprj以加载磁盘配置；若IDE保留旧设置，在综合配置的Include Path中删除不存在的旧config路径，确认E:/gowin/fpga-instrument/src及E:/gowin/fpga-instrument/src/config。无需另建工程或复制头文件。证据与验证见reports/include_fix/validation.json；综合、布局布线和烧录仍由用户执行。
 
-最新复位排查：用户确认USR松开时复位诊断灯仍常亮。在原src/keyboard.cst给U4启用内部弱下拉，保留正常复位功能和音频逻辑；这是偏置验证，尚未证明实板修复。重新编译烧录后应观察LED4是否亮、前四灯是否恢复流水，详见docs/bringup_run_leds.md末段和reports/reset_input/validation.json。
+最新复位排查：用户确认USR松开时复位诊断灯仍常亮。在原src/keyboard.cst给U4启用内部弱下拉，保留正常复位功能和音频逻辑；用户已反馈启动恢复，电气原因仍未测量。重新编译烧录后应观察LED4是否亮、前四灯是否恢复流水，详见docs/bringup_run_leds.md末段和reports/reset_input/validation.json。
 
-用户最新确认：U4启用内部下拉后“现在正常了”。当前启动修复作为Git基线保存；底噪及键盘输入与音频模块分离在后续修改中处理。
+用户最新确认：U4启用内部下拉后“现在正常了”。当前启动修复作为Git基线保存；底噪已取消软件处理，当前修改仅继续键盘输入与音频模块分离。
+
+2026-10-15：启动修复与工程整理已提交为f48aeca。用户确认底噪是耳机阻抗过低，取消底噪软件修改；功放、静音、增益与PLL参数不变。
+
+键盘更换边界：src/keyboard_core.sv负责当前矩阵扫描与音符映射；src/synth_core.sv是独立音源，只接收note_on/note_off/fcw；src/keyboard_top.sv连接两者。更换键盘时替换输入适配器并遵循docs/interfaces.md中的同域帧事件接口即可，音源无需依赖新键盘的物理结构。USR复位由原clock_reset独立处理。主工程新增一个独立音源文件，重新打开根目录keyboard_adsr.gprj载入；编译烧录仍由用户负责。本次分离验证见reports/input_separation/validation.json，源文件修改尚未自动再次提交。
+
+用户后续确认：接口分离版“测试正常”，实板通过为用户定性反馈；原音频采样及仿真延迟保持。用户已明确选择四声部复音，Git仍以f48aeca为已提交基线。
+
+2026-10-15四声部阶段：主工程保持keyboard_adsr.gprj、keyboard_top和D2_keyboard_leds输出名。原mono_note_control及其TB重命名修改为key_note_events，新增独立voice_allocator、voice_mixer；当前20个HDL均在同一GPRJ中。键盘通过带note_id的valid/ready事件控制音源，四路独立包络与24位样本经40位混音送16位DAC。
+
+关闭并重新打开主工程加载新文件，再由用户综合/P&R/烧录；原引脚、U4下拉、PLL和功放策略不变。首次用同一列四键验证复音、逐个松键验证独立尾音。第五音在无空闲/释放声部时替换最久未起音的声部，旧松键不会误关新音；无二极管鬼键保护保留。验收步骤和安全五键组合见docs/bringup_keyboard.md，HDL证据见reports/four_voice/validation.json。四声部已获用户“测试正常”的定性实板确认，本轮按明确指令提交；此前“未提交”属于历史状态。
+
+最新确认：用户已测试四声部版正常并要求Git提交；源码与7051357项HDL回归记录一致。没有新增频率、电压或长稳测量，历史开发失败日志保留。

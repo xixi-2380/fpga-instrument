@@ -1,0 +1,4 @@
+MIX a=0 b=0 c=0 d=0 sum=0 expected=0 actual=x valid=1 total=x scaled=x
+FAIL signed wide sum, one truncation and DAC saturation at 26000
+FATAL: E:/gowin/fpga-instrument/sim/tb_voice_mixer.sv:15: 
+       Time: 26000  Scope: tb_voice_mixer.mix

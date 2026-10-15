@@ -1,12 +1,12 @@
 `timescale 1ns/1ps
 `include "check.svh"
 module tb_adsr_envelope;
- reg clk=0,rst=1,ce=0,on=0,off=0;always #5 clk=~clk;
+ reg clk=0,rst=1,ce=0,on=0,off=0,restart=0;always #5 clk=~clk;
  wire [16:0] q,qzero,qfull;wire active;
  integer checks=0,start_level,expected;
- adsr_envelope #(.ATTACK(4),.DECAY(3),.SUSTAIN(32768),.RELEASE(5)) dut(clk,rst,ce,on,off,q,active);
- adsr_envelope #(.ATTACK(0),.DECAY(0),.SUSTAIN(0),.RELEASE(0)) zero(clk,rst,ce,on,off,qzero);
- adsr_envelope #(.ATTACK(0),.DECAY(0),.SUSTAIN(65536),.RELEASE(0)) full(clk,rst,ce,on,off,qfull);
+ adsr_envelope #(.ATTACK(4),.DECAY(3),.SUSTAIN(32768),.RELEASE(5)) dut(clk,rst,ce,on,off,q,active,restart);
+ adsr_envelope #(.ATTACK(0),.DECAY(0),.SUSTAIN(0),.RELEASE(0)) zero(clk,rst,ce,on,off,qzero,,restart);
+ adsr_envelope #(.ATTACK(0),.DECAY(0),.SUSTAIN(65536),.RELEASE(0)) full(clk,rst,ce,on,off,qfull,,restart);
  task tick(input bit n,f);begin
   @(negedge clk);ce=1;on=n;off=f;@(posedge clk);#1;
   `CHECK(q<=65536 && qzero<=65536 && qfull<=65536,"Q1.16 bounds")
@@ -27,6 +27,13 @@ module tb_adsr_envelope;
    `CHECK(q==expected,"Attack from release level")
   end
   tick(1,1);repeat(5)tick(0,0);`CHECK(q==0,"simultaneous Off wins")
+  tick(1,0);tick(0,0);tick(0,0);
+  `CHECK(q>0,"voice has a level before reassignment")
+  restart=1;tick(1,0);
+  `CHECK(q==0 && active,"new voice ownership restarts Attack at zero")
+  restart=0;tick(0,0);`CHECK(q==16384,"restarted Attack uses full zero-to-peak slope")
+  restart=1;tick(0,0);restart=0;
+  `CHECK(q==0 && !active,"restart without Note On clears the voice")
   #2 rst=1;#1;`CHECK(q==0 && qfull==0,"reset mutes envelope")
   $display("PASS tb_adsr_envelope checks=%0d",checks);$finish;
  end

@@ -1,0 +1,2 @@
+PASS tb_voice_allocator checks=1317
+E:/gowin/fpga-instrument/sim/tb_voice_allocator.sv:85: $finish called at 5230000 (1ps)

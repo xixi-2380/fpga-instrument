@@ -54,20 +54,29 @@ module tb_keyboard_top;
   #100 rst=0;wait(pa);wait(edges>=320);
   `CHECK(nonzero==0,"production top idle silence")
   pressed=16'h0200;wait(dut.gate);wait(nonzero>=20);
-  `CHECK(dut.selected_key==9,"physical A4 mapping")
+  `CHECK(dut.last_key==9,"physical A4 mapping")
   `CHECK(leds[5:4]==0,"ready and pressed-note LEDs lit")
   reset_flow_moves=flow_moves;
   #3 rst=1;#1;`CHECK(!pa && !dp && din==0 && columns===4'bzzzz,"reset tri-states matrix and mutes")
   bitn=0;ch=0;word=0;last_rise=0;nonzero=0;
   #81;`CHECK(flow_moves>reset_flow_moves && leds[5:4]==2'b11,"run LEDs continue while reset clears status")
   #19 rst=0;wait(pa);wait(nonzero>=10);
-  `CHECK(dut.gate && dut.selected_key==9,"vendor PLL integration resumes held key")
+  `CHECK(dut.gate && dut.last_key==9,"vendor PLL integration resumes held key")
   // Verify real serial idle behavior before attributing audible hiss to analog hardware.
   pressed=0;wait(!dut.gate);wait(dut.envelope_level==0);
   repeat(64)@(posedge bck);#0.002;nonzero=0;idle_edge_start=edges;
   wait(edges>=idle_edge_start+640);#0.002;
   `CHECK(nonzero==0,"released voice sends zero on both channels for twenty frames")
   `CHECK(pa && leds[5],"existing idle behavior keeps amplifier enabled while note LED is off")
+  // Four physical keys sharing one column are unambiguous without diodes.
+  pressed=16'h1111;wait(dut.voice_held==4'hf);repeat(32*24)@(posedge bck);#0.002;
+  `CHECK(dut.voice_active==4'hf,"vendor PLL board sustains four physical voices")
+  pressed=16'h1101;wait($countones(dut.voice_held)==3);repeat(32*24)@(posedge bck);#0.002;
+  `CHECK($countones(dut.voice_active)==3,"board release preserves three held voices")
+  pressed=0;wait(!dut.gate);wait(dut.envelope_level==0);
+  repeat(64)@(posedge bck);#0.002;nonzero=0;idle_edge_start=edges;
+  wait(edges>=idle_edge_start+320);#0.002;
+  `CHECK(nonzero==0 && pa,"polyphonic Release returns to zero with original PA policy")
   // Simulate persistent PLL2 failure; diagnostics must work from the reference domain.
   force dut.lock2=1'b0;#1;
   `CHECK(dut.audio_reset && !pa,"PLL loss still immediately resets and mutes audio")
@@ -93,7 +102,7 @@ module tb_keyboard_top;
   rst=0;wait(pa);repeat(4)@(negedge clk);
   `CHECK(!dut.audio_reset && !leds[4] && !dut.status_leds.diagnostic_active,"released USR restores qualified startup")
   pressed=16'h0200;wait(dut.gate);wait(nonzero>=10);
-  `CHECK(dut.selected_key==9 && !leds[5],"keyboard and serial audio recover after released USR")
+  `CHECK(dut.last_key==9 && !leds[5],"keyboard and serial audio recover after released USR")
   $display("PASS tb_keyboard_top checks=%0d",checks);$finish;
  end
  initial begin #10000000;$fatal(1,"keyboard board timeout");end

@@ -5,7 +5,7 @@ root=pathlib.Path(__file__).resolve().parents[1]
 out=root/'reports/keyboard/current';out.mkdir(parents=True,exist_ok=True)
 sim_dir=pathlib.Path(a.sim_dir)
 if not sim_dir.is_absolute():sim_dir=root/sim_dir
-tests=['tb_matrix_keypad','tb_mono_note_control','tb_adsr_envelope','tb_adsr_production','tb_keyboard_core','tb_keyboard_top','tb_keyboard_latency','tb_run_leds']
+tests=['tb_matrix_keypad','tb_key_note_events','tb_adsr_envelope','tb_adsr_production','tb_keyboard_core','tb_keyboard_top','tb_keyboard_latency','tb_run_leds','tb_synth_core','tb_voice_allocator','tb_voice_mixer']
 if a.stage!='build':
     for name in tests:
         log=(sim_dir/(name+'.log')).read_text(encoding='utf8')
@@ -15,7 +15,7 @@ files=[f for f in tree.find('./FileList') if f.get('enable')=='1']
 assert files and all((root/f.get('path')).is_file() for f in files),'Missing enabled project dependency'
 
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
-paths=[root/f.get('path') for f in files]+list((root/'src/config').glob('*'))+[root/'src/rom/sine4096.hex',root/'scripts/build_keyboard.py',root/'scripts/build_keyboard.tcl']+[root/'sim'/(name+'.sv') for name in tests]+[root/'sim/passive_matrix_model.svh']
+paths=[root/f.get('path') for f in files]+list((root/'src/config').glob('*'))+[root/'src/rom/sine4096.hex',root/'scripts/build_keyboard.py',root/'scripts/build_keyboard.tcl']+[root/'sim'/(name+'.sv') for name in tests]+[root/'sim/passive_matrix_model.svh',root/'sim/poly_audio_reference.svh',root/'sim/check.svh']
 inputs={str(p.relative_to(root)):sha(p) for p in paths if p.is_file()}
 record=out/'build_inputs.json'
 if a.stage!='package':
@@ -57,7 +57,9 @@ status=dict(profile='D2_keyboard_leds',pins=expected,resources=usage,setup_hold_
     programming_owner='user',automatic_programming_authorized=False,programmed_by_assistant=False,
     hardware_measurements_passed=False,full_sta_signed=False,per_key_diodes=False,
     rollover_policy='ambiguous rectangles clear accepted keys; no arbitrary-key rollover claim',
-    voice_count=1,note_range='MIDI 60..75',gain_divisor=32,
+    voice_count=4,voice_bits=24,mix_bits=40,
+    allocation_policy='same identity retrigger; inactive slot, oldest released, then oldest held; no automatic resurrection of stolen held keys',
+    note_range='MIDI 60..75',gain_divisor=32,
     scan_column_us=50,scan_frame_us=200,debounce_scans=15,
     attack_frames=480,decay_frames=4800,sustain_q16=45875,release_frames=9600,
     warnings=re.findall(r'^.*WARN.*$',log,re.M))

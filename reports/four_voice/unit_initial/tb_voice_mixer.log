@@ -1,0 +1,3 @@
+FAIL signed wide sum, one truncation and DAC saturation at 26000
+FATAL: E:/gowin/fpga-instrument/sim/tb_voice_mixer.sv:13: 
+       Time: 26000  Scope: tb_voice_mixer.mix

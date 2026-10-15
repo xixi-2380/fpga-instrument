@@ -1,0 +1,2 @@
+PASS tb_synth_core checks=1329828
+E:/gowin/fpga-instrument/sim/tb_synth_core.sv:55: $finish called at 7145857730 (1ps)

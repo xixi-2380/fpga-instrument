@@ -36,7 +36,7 @@ module tb_keyboard_pinmap;
   for(integer k=0;k<16;k=k+1)begin
    pressed=16'h1<<k;settle;
    expected=`PINMAP_TRANSPOSED ? ((k%4)*4+k/4) : k;
-   if(!dut.gate || dut.selected_key!=expected)$fatal(1,"physical key %0d selected %0d gate=%b",k,dut.selected_key,dut.gate);
+   if(!dut.gate || dut.last_key!=expected)$fatal(1,"physical key %0d selected %0d gate=%b",k,dut.last_key,dut.gate);
    checks=checks+1;
    pressed=0;settle;
    if(dut.gate)$fatal(1,"physical release %0d not recognized",k);

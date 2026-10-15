@@ -1,0 +1,451 @@
+{
+  "date": "2026-10-15",
+  "user_authorization": "四声部复音（推荐，按原规划）",
+  "baseline": "User-tested input/audio separation, source bytes captured before four-voice changes; Git checkpoint remains f48aeca.",
+  "source_before_sha256": {
+    "src/adsr_envelope.sv": "c03247d0a195f9f26471b6b25a533ff93d61ca236cd0470b3a5eb41746954490",
+    "src/audio_timing.sv": "ebd73edfceef85128760141410b95ccbf82e5665ce18ba10075e67c1d72ecc1e",
+    "src/clock_reset.sv": "6064ed61bbdcec68e2bd04f934c8510ee3b95aabbe0a009e54f21b2c2d10af6b",
+    "src/dds_sine.sv": "710ae8687bf15c3713ff8a15ac811405facdedcb1fd00680b90cf4e3ea1170fe",
+    "src/frame_buffer.sv": "dbf0d9b5cc9a0ad1ff4b1a32b2e9b4fdb0fc5c7c8d01a8b1fe9a1c7685e844c8",
+    "src/keyboard.cst": "c5142d642e17b4f49629dc65839bd841c9f40925194549c1adf79112a33e3e01",
+    "src/keyboard.sdc": "d4cda6eda4eabf4c1eb77b25273648a8e94d466d7489bd83f175fdaf27251086",
+    "src/keyboard_core.sv": "23b6ca8fb07026534534c9aa4ab5b3ac97a28218d11380593570d001e0501aab",
+    "src/keyboard_top.sv": "99009e79b0cb989cfc6a1e22a90046036148949d23b0de1d934d8d31d585f8e3",
+    "src/lock_guard.sv": "1ccbb8e306689ea8da65a8889b45aa2c3cceaf90aa3f2a31762e195d5fce6377",
+    "src/matrix_keypad.sv": "c7af5fec02c122b50132d01ff3911d27ab394535dcfa51173b2b511e176a7350",
+    "src/mono_note_control.sv": "3211011ab0546def56e329bac45fec25af2a24e6bb26f4f4731d66508e10a6bb",
+    "src/pll_pair.sv": "29775d84d6b0deb8a8fc6e3bc80e36e0e321f84ddaa418e068622e5ade6d061e",
+    "src/pt8211_tx.sv": "5c5b56945efda77df100ca332b91df4bf2927add8d826c12e8499f957278710c",
+    "src/reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+    "src/run_leds.sv": "db725978a1e9e386a848ec1223985eeded526ff2eb64f29b21987f1ac7d10713",
+    "src/sine_rom.sv": "b43e6cfe2b2fb35d29a09efd503ad9b787961d1ff430b130e788ef13d0a9c081",
+    "src/startup_envelope.sv": "c5fc6b434759e6f0b85e6315c42baa9d0149332f47d7c58d36cd47bb18587e65",
+    "src/synth_core.sv": "b7ff59d6586bc7cafcccb40274e1914ee20b3bc9f1b82c7a4a0b2ab17b5e20ae",
+    "src/tone_gain.sv": "de969abbebf1b5cfedd1a91e3199ff400b018a8de437e3acb85bf13ad0887335",
+    "src/config/keyboard_config.svh": "941faf20aabe571b2636248a17aa4690d31bf5d5451c6801f825394227073e2c",
+    "src/config/keyboard_notes.svh": "55c63120d48c3f42e587c8c42d83b0d0ef10228650faff4cf0348aef3be5fe66",
+    "src/config/run_leds_config.svh": "2cdc3ed138ed6a3b70c58e53e9de871f15afb7898f8c88a4b597c624734a1589",
+    "src/config/synth_config.svh": "e3d2fcb59d6b718a24f2cb56f3974ec92d521d238ba3569c3b7ad0f27c31f434",
+    "src/rom/manifest.json": "2f8f3ac0227822e66ce769afea86b2f5515873595221d7477ae9a419ca15f3d8",
+    "src/rom/sine4096.hex": "d62e7528ad6c0400fab616087abbdaa7b7977fcd9adbce1b347e3a5743ea3d6e",
+    "sim/tb_adsr_envelope.sv": "677b645aac79cce0b4da272f003a6ac2c19c6de6b269e2085cc142bb17ddaa91",
+    "sim/tb_adsr_production.sv": "62091d3ea8b6156571a43f8ce3dfb2d29fe34d385bd1ede1800e082f76535911",
+    "sim/tb_audio_timing.sv": "f8747f39c36659e5defdc700ffa7b56f9eda89023f910351242647e26030cde5",
+    "sim/tb_clock_reset.sv": "8df38db54b95f6b3645c182a2e0e528308c4f203486f28dddef39f1747e03328",
+    "sim/tb_dds_sine.sv": "c2faefd8b5da875827ae123888f6de3ee5f6dd599ce1887749d6fc6ad5663389",
+    "sim/tb_frame_buffer.sv": "f7ca2a215fc3e17c52efa88dc9980a4cbd67fd9295fbc57e3957c88968e78de7",
+    "sim/tb_keyboard_core.sv": "47762d8c535095d5d2e26ccdec52319f21f5c5297ce3b8dba9bf5a08dfada5a4",
+    "sim/tb_keyboard_latency.sv": "3756f6145d1271bb0771a3d74616b790a7656fe99a0331838504f73865ffed2d",
+    "sim/tb_keyboard_top.sv": "a3b71ab51d370800a03e47e8d5d34153e476f4968be550e30e59d9266c19c148",
+    "sim/tb_lock_guard.sv": "f70f8f9110b59cd8cd1fdf11f6d2d43bfb424406e0795c03222a80b6bd5400be",
+    "sim/tb_matrix_keypad.sv": "0f407a7718e4336783c24e67df777891cc576ce223e8fb5ee6a13ff2ebe2cab9",
+    "sim/tb_mono_note_control.sv": "7e95fafeb13479b4eff45738cf3d24a772df4b42a2f06412d33f0798478741ab",
+    "sim/tb_pll_pair.sv": "fe7e1b6f8aea43a41edda904474087345224cc325cf30c6f5d271529edc43bb4",
+    "sim/tb_pt8211_tx.sv": "fc0c8d934771e719144b70ce9cfff6f3ff41b41583449a931abd7b703b44fde8",
+    "sim/tb_reset_sync.sv": "d3d208ecfab924b849c67c98464519d35b7da5b9f96c70ac482d897bf6ff7029",
+    "sim/tb_run_leds.sv": "e44be5f9e849269c4d33f113750daca47491a0746b903d9c8ee1c61bd5929406",
+    "sim/tb_sine_rom.sv": "8b740624273b0999fcaa32eeacdfeb8412e714df6e19c1cd5add51dfecdce266",
+    "sim/tb_startup_envelope.sv": "4b9136644993f959763895213ff57046568e55d3584ae0e2070fa54362e22030",
+    "sim/tb_synth_core.sv": "320b7862888548cf426a727f826f1ca42340eea6a2adbbf86afb8c417a0be3ad",
+    "sim/tb_tone_gain.sv": "21e58ad9cd92daf334e1a49f7cc8294161038ca70cc442a4a0f24c182aa40313",
+    "keyboard_adsr.gprj": "3579453d63087fff69e96b55d022040c5835edcc0e68770e313d457215267125",
+    "scripts/build_keyboard.py": "780d69a2c300160ec19eb779af7373168a0b9e4fa893d8b4dbb1943cc42dbe0b"
+  },
+  "voice_count": 4,
+  "noise_processing_cancelled": true,
+  "synthesis_run_by_assistant": false,
+  "pnr_run_by_assistant": false,
+  "programmed_by_assistant": false,
+  "tests_pending": false,
+  "hardware_verified": true,
+  "IDE_include_before_final_check": [
+    "E:/gowin/fpga-instrument/config"
+  ],
+  "IDE_config_before_include_update_sha256": "78f5339a94a1683b78ec1d562e1f53f8204de45e065bd543bc58c0e63a337c41",
+  "IDE_include_after_final_check": [
+    "E:/gowin/fpga-instrument/src",
+    "E:/gowin/fpga-instrument/src/config"
+  ],
+  "IDE_config_changed_fields": [
+    "IncludePath"
+  ],
+  "all_tests_passed": true,
+  "rtl_tests": [
+    {
+      "test": "tb_adsr_envelope",
+      "passed": true,
+      "seconds": 0.106
+    },
+    {
+      "test": "tb_adsr_production",
+      "passed": true,
+      "seconds": 0.129
+    },
+    {
+      "test": "tb_audio_timing",
+      "passed": true,
+      "seconds": 0.22
+    },
+    {
+      "test": "tb_clock_reset",
+      "passed": true,
+      "seconds": 0.098
+    },
+    {
+      "test": "tb_dds_sine",
+      "passed": true,
+      "seconds": 0.112
+    },
+    {
+      "test": "tb_frame_buffer",
+      "passed": true,
+      "seconds": 0.101
+    },
+    {
+      "test": "tb_key_note_events",
+      "passed": true,
+      "seconds": 0.103
+    },
+    {
+      "test": "tb_keyboard_core",
+      "passed": true,
+      "seconds": 26.529
+    },
+    {
+      "test": "tb_keyboard_latency",
+      "passed": true,
+      "seconds": 2.264
+    },
+    {
+      "test": "tb_lock_guard",
+      "passed": true,
+      "seconds": 0.106
+    },
+    {
+      "test": "tb_matrix_keypad",
+      "passed": true,
+      "seconds": 0.203
+    },
+    {
+      "test": "tb_pt8211_tx",
+      "passed": true,
+      "seconds": 0.117
+    },
+    {
+      "test": "tb_reset_sync",
+      "passed": true,
+      "seconds": 0.099
+    },
+    {
+      "test": "tb_run_leds",
+      "passed": true,
+      "seconds": 0.108
+    },
+    {
+      "test": "tb_sine_rom",
+      "passed": true,
+      "seconds": 0.112
+    },
+    {
+      "test": "tb_startup_envelope",
+      "passed": true,
+      "seconds": 0.102
+    },
+    {
+      "test": "tb_synth_core",
+      "passed": true,
+      "seconds": 2.35
+    },
+    {
+      "test": "tb_tone_gain",
+      "passed": true,
+      "seconds": 0.117
+    },
+    {
+      "test": "tb_voice_allocator",
+      "passed": true,
+      "seconds": 0.112
+    },
+    {
+      "test": "tb_voice_mixer",
+      "passed": true,
+      "seconds": 0.113
+    }
+  ],
+  "board_tests": [
+    {
+      "test": "tb_keyboard_top",
+      "passed": true,
+      "seconds": 36.284
+    }
+  ],
+  "pinmap_tests": [
+    {
+      "variant": "corrected",
+      "passed": true,
+      "transposed": false
+    },
+    {
+      "variant": "previous",
+      "passed": true,
+      "transposed": true
+    }
+  ],
+  "expanded_physical_five_key_test": [
+    {
+      "test": "tb_keyboard_core",
+      "passed": true,
+      "seconds": 31.663
+    }
+  ],
+  "latest_checks_by_test": {
+    "tb_adsr_envelope": 69,
+    "tb_adsr_production": 14881,
+    "tb_audio_timing": 9996,
+    "tb_clock_reset": 6,
+    "tb_dds_sine": 10003,
+    "tb_frame_buffer": 9,
+    "tb_key_note_events": 149,
+    "tb_keyboard_core": 4474101,
+    "tb_keyboard_latency": 5,
+    "tb_lock_guard": 5,
+    "tb_matrix_keypad": 7183,
+    "tb_pt8211_tx": 646,
+    "tb_reset_sync": 5,
+    "tb_run_leds": 183,
+    "tb_sine_rom": 4097,
+    "tb_startup_envelope": 726,
+    "tb_synth_core": 1329828,
+    "tb_tone_gain": 4001,
+    "tb_voice_allocator": 1317,
+    "tb_voice_mixer": 1011,
+    "tb_keyboard_top": 1193068
+  },
+  "pinmap_checks": {
+    "corrected": 34,
+    "previous": 34
+  },
+  "total_latest_checks": 7051357,
+  "latest_test_logs": {
+    "tb_adsr_envelope": "reports/four_voice/sim_initial/tb_adsr_envelope.log",
+    "tb_adsr_production": "reports/four_voice/sim_initial/tb_adsr_production.log",
+    "tb_audio_timing": "reports/four_voice/sim_initial/tb_audio_timing.log",
+    "tb_clock_reset": "reports/four_voice/sim_initial/tb_clock_reset.log",
+    "tb_dds_sine": "reports/four_voice/sim_initial/tb_dds_sine.log",
+    "tb_frame_buffer": "reports/four_voice/sim_initial/tb_frame_buffer.log",
+    "tb_key_note_events": "reports/four_voice/sim_initial/tb_key_note_events.log",
+    "tb_keyboard_core": "reports/four_voice/five_key_keyboard/tb_keyboard_core.log",
+    "tb_keyboard_latency": "reports/four_voice/sim_initial/tb_keyboard_latency.log",
+    "tb_lock_guard": "reports/four_voice/sim_initial/tb_lock_guard.log",
+    "tb_matrix_keypad": "reports/four_voice/sim_initial/tb_matrix_keypad.log",
+    "tb_pt8211_tx": "reports/four_voice/sim_initial/tb_pt8211_tx.log",
+    "tb_reset_sync": "reports/four_voice/sim_initial/tb_reset_sync.log",
+    "tb_run_leds": "reports/four_voice/sim_initial/tb_run_leds.log",
+    "tb_sine_rom": "reports/four_voice/sim_initial/tb_sine_rom.log",
+    "tb_startup_envelope": "reports/four_voice/sim_initial/tb_startup_envelope.log",
+    "tb_synth_core": "reports/four_voice/sim_initial/tb_synth_core.log",
+    "tb_tone_gain": "reports/four_voice/sim_initial/tb_tone_gain.log",
+    "tb_voice_allocator": "reports/four_voice/sim_initial/tb_voice_allocator.log",
+    "tb_voice_mixer": "reports/four_voice/sim_initial/tb_voice_mixer.log",
+    "tb_keyboard_top": "reports/four_voice/sim_initial/tb_keyboard_top.log"
+  },
+  "protected_source_files_unchanged": [
+    "src/audio_timing.sv",
+    "src/clock_reset.sv",
+    "src/frame_buffer.sv",
+    "src/lock_guard.sv",
+    "src/matrix_keypad.sv",
+    "src/pll_pair.sv",
+    "src/pt8211_tx.sv",
+    "src/reset_sync.sv",
+    "src/run_leds.sv",
+    "src/sine_rom.sv",
+    "src/startup_envelope.sv",
+    "src/keyboard.cst",
+    "src/keyboard.sdc",
+    "src/config/keyboard_config.svh",
+    "src/config/keyboard_notes.svh",
+    "src/config/run_leds_config.svh",
+    "src/rom/sine4096.hex",
+    "src/rom/manifest.json"
+  ],
+  "only_voice_count_config_changed": true,
+  "project_file_count": 27,
+  "HDL_file_count": 20,
+  "project_dependencies_unique_and_present": true,
+  "source_relative_include_check_passed": true,
+  "no_config_search_path_preprocessing_passed_from_both_directories": true,
+  "IDE_include_paths": [
+    "E:/gowin/fpga-instrument/src",
+    "E:/gowin/fpga-instrument/src/config"
+  ],
+  "python_syntax_valid": true,
+  "build_required_tests_verified": [
+    "tb_matrix_keypad",
+    "tb_key_note_events",
+    "tb_adsr_envelope",
+    "tb_adsr_production",
+    "tb_keyboard_core",
+    "tb_keyboard_top",
+    "tb_keyboard_latency",
+    "tb_run_leds",
+    "tb_synth_core",
+    "tb_voice_allocator",
+    "tb_voice_mixer"
+  ],
+  "production_latency_us": "LATENCY_US note_on=3079.088 first_code=3176.972 note_off=3102.037",
+  "source_after_sha256": {
+    "src/adsr_envelope.sv": "bd951b7f4a198e5d821d011116a5d073818c360a72d45ee97050c7e4ffd8c3e5",
+    "src/audio_timing.sv": "ebd73edfceef85128760141410b95ccbf82e5665ce18ba10075e67c1d72ecc1e",
+    "src/clock_reset.sv": "6064ed61bbdcec68e2bd04f934c8510ee3b95aabbe0a009e54f21b2c2d10af6b",
+    "src/dds_sine.sv": "4146e8aaeb27651270a70594cbabd1ba9f52114639e1157ee05a14389a6cf557",
+    "src/frame_buffer.sv": "dbf0d9b5cc9a0ad1ff4b1a32b2e9b4fdb0fc5c7c8d01a8b1fe9a1c7685e844c8",
+    "src/keyboard.cst": "c5142d642e17b4f49629dc65839bd841c9f40925194549c1adf79112a33e3e01",
+    "src/keyboard.sdc": "d4cda6eda4eabf4c1eb77b25273648a8e94d466d7489bd83f175fdaf27251086",
+    "src/keyboard_core.sv": "877d999ddd25a7805efd94e5a792c8dbc0d0cf79b46d91cd7b340c0604a31ba9",
+    "src/keyboard_top.sv": "86a0defdeb4c116d2d93f41553a64045d02a26a53989405b389c3e983ded4414",
+    "src/key_note_events.sv": "693727f840a0752f0afffa78b4adf965ee459291f67236bea3c16a14a378f0a7",
+    "src/lock_guard.sv": "1ccbb8e306689ea8da65a8889b45aa2c3cceaf90aa3f2a31762e195d5fce6377",
+    "src/matrix_keypad.sv": "c7af5fec02c122b50132d01ff3911d27ab394535dcfa51173b2b511e176a7350",
+    "src/pll_pair.sv": "29775d84d6b0deb8a8fc6e3bc80e36e0e321f84ddaa418e068622e5ade6d061e",
+    "src/pt8211_tx.sv": "5c5b56945efda77df100ca332b91df4bf2927add8d826c12e8499f957278710c",
+    "src/reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+    "src/run_leds.sv": "db725978a1e9e386a848ec1223985eeded526ff2eb64f29b21987f1ac7d10713",
+    "src/sine_rom.sv": "b43e6cfe2b2fb35d29a09efd503ad9b787961d1ff430b130e788ef13d0a9c081",
+    "src/startup_envelope.sv": "c5fc6b434759e6f0b85e6315c42baa9d0149332f47d7c58d36cd47bb18587e65",
+    "src/synth_core.sv": "8709252c6328520cf45ff2e34e8c887ba67858012c5ed42eb7c8839649224250",
+    "src/tone_gain.sv": "b70e31dc56c7025001ca535b1ce3b0597d84b4fa4dc518bddd3de8f18bab2c22",
+    "src/voice_allocator.sv": "e8bc92e72a8ee1a9f86dd177967b1db2c8ef4019e49f5b373ab0f87bf1aab5ae",
+    "src/voice_mixer.sv": "be2551d23c6f8c5caa33ce60d1f6fd12f217fa454c844de8446da147ed8de88d",
+    "src/config/keyboard_config.svh": "941faf20aabe571b2636248a17aa4690d31bf5d5451c6801f825394227073e2c",
+    "src/config/keyboard_notes.svh": "55c63120d48c3f42e587c8c42d83b0d0ef10228650faff4cf0348aef3be5fe66",
+    "src/config/run_leds_config.svh": "2cdc3ed138ed6a3b70c58e53e9de871f15afb7898f8c88a4b597c624734a1589",
+    "src/config/synth_config.svh": "24911cc3b90bba00cc67dc6650fcc150e79f6ed597792a3c03f1fa41b867abde",
+    "src/rom/manifest.json": "2f8f3ac0227822e66ce769afea86b2f5515873595221d7477ae9a419ca15f3d8",
+    "src/rom/sine4096.hex": "d62e7528ad6c0400fab616087abbdaa7b7977fcd9adbce1b347e3a5743ea3d6e",
+    "sim/tb_adsr_envelope.sv": "8f7a1d8103a66d936e8b99475fd2aa64a6f2f061e9d55800d2d104a5bb029ffd",
+    "sim/tb_adsr_production.sv": "e0c6636a6091435d3fae3bbcd693a2f2d669b29b707f0783e4a5d7cc6409cac4",
+    "sim/tb_audio_timing.sv": "f8747f39c36659e5defdc700ffa7b56f9eda89023f910351242647e26030cde5",
+    "sim/tb_clock_reset.sv": "8df38db54b95f6b3645c182a2e0e528308c4f203486f28dddef39f1747e03328",
+    "sim/tb_dds_sine.sv": "b90e462d0dfbe7f9c9c33df487cfb823c71476b06c515cf0e0524f1d38ee730b",
+    "sim/tb_frame_buffer.sv": "f7ca2a215fc3e17c52efa88dc9980a4cbd67fd9295fbc57e3957c88968e78de7",
+    "sim/tb_keyboard_core.sv": "264fd279c15eb68cec138175f9984d5ebb3ee4ff96ca7ead169736081dfecc3b",
+    "sim/tb_keyboard_latency.sv": "f45f4b976e6740fcdd84c1031c6dfba7093ea06a46dab219204e72323560d6af",
+    "sim/tb_keyboard_top.sv": "c8b8b1b70a18c61ae47f686b2fc04f134ff07e4848ebfaf56543ded7a1e505d8",
+    "sim/tb_key_note_events.sv": "15bfae1c22036e1c70e8e92d5e2a346132e4daa4654641dcf9c2ff01b73172f6",
+    "sim/tb_lock_guard.sv": "f70f8f9110b59cd8cd1fdf11f6d2d43bfb424406e0795c03222a80b6bd5400be",
+    "sim/tb_matrix_keypad.sv": "0f407a7718e4336783c24e67df777891cc576ce223e8fb5ee6a13ff2ebe2cab9",
+    "sim/tb_pll_pair.sv": "fe7e1b6f8aea43a41edda904474087345224cc325cf30c6f5d271529edc43bb4",
+    "sim/tb_pt8211_tx.sv": "fc0c8d934771e719144b70ce9cfff6f3ff41b41583449a931abd7b703b44fde8",
+    "sim/tb_reset_sync.sv": "d3d208ecfab924b849c67c98464519d35b7da5b9f96c70ac482d897bf6ff7029",
+    "sim/tb_run_leds.sv": "e44be5f9e849269c4d33f113750daca47491a0746b903d9c8ee1c61bd5929406",
+    "sim/tb_sine_rom.sv": "8b740624273b0999fcaa32eeacdfeb8412e714df6e19c1cd5add51dfecdce266",
+    "sim/tb_startup_envelope.sv": "4b9136644993f959763895213ff57046568e55d3584ae0e2070fa54362e22030",
+    "sim/tb_synth_core.sv": "793b08742a983171fb76b4da605e2ee790d75ee02a0536ddeddf242f70557387",
+    "sim/tb_tone_gain.sv": "07ba9fb1804c8c2a3ab8c323fa9ce080f27532fb81a5d3953f422ca3bedcc217",
+    "sim/tb_voice_allocator.sv": "807286b79db39be5e89421e887254b2bf820a6a410480fde3f034da6831ea510",
+    "sim/tb_voice_mixer.sv": "2aa9f444e7c242133681f55dde1efaf50ab299dc9340b6b2630716447831115e",
+    "sim/check.svh": "e72479555ce83d9f4665986601f62f4f7c360c0f59ce1ae43d09397d7ab77a7c",
+    "sim/passive_matrix_model.svh": "a65fae65d958bc648ac38c95bd385cb152a27b19c72b81864f9d0f2976776e19",
+    "sim/poly_audio_reference.svh": "ccf01a3831546b05661914096ea7b4e3a3d19a6ba0736d0a111eba0eea8bb657",
+    "sim/pinmap_keyboard_tb.v": "d1e1eb53f0b65931ee97528375e1b1226f2fffbff795463d2851c18bbc6197d5",
+    "keyboard_adsr.gprj": "184f3765db17d363ef3feb1b164116f6bd9cd477d752b047afd1bde02bf67acf",
+    "scripts/build_keyboard.py": "2ce65e338e11253ebaabb655b3212495ec45442184c26119ceb422c855073e79",
+    "scripts/run_sim.py": "935d03867c5923eac9a69b5e546b4150aaf9639700a1d1f6db209af76a117584",
+    "scripts/run_keyboard_pinmap.py": "6f17b35c0239d4dca431351332ac5b3c0c6d3051c41a6ff89fec1e1501581985"
+  },
+  "compile_warning_categories": {
+    "timescale for passive_matrix_model inherited from another file.": 4,
+    "@* is sensitive to all 4 words in array 'ids'.": 5,
+    "@* is sensitive to all 4 words in array 'rank'.": 20,
+    "@* is sensitive to all 4 words in array 'voice_level'.": 8,
+    "implicit definition of wire 'I_hs'.": 1,
+    "implicit definition of wire 'cnt_reset'.": 1,
+    "implicit definition of wire 'rst'.": 2,
+    "implicit definition of wire 'clk2_dt_dir'.": 2,
+    "@* found no sensitivities so it will never trigger.": 14
+  },
+  "development_failure": {
+    "test": "tb_voice_mixer",
+    "symptom": "Input staying zero from time zero left procedural combinational sum unknown in Icarus.",
+    "fix": "Explicit continuous 40-bit sign-extended sum; original tests retained.",
+    "failure_logs": [
+      "reports/four_voice/unit_initial/tb_voice_mixer.log",
+      "reports/four_voice/mixer_unknown_diagnosis/tb_voice_mixer.log"
+    ],
+    "corrected_log": "reports/four_voice/mixer_corrected/tb_voice_mixer.log"
+  },
+  "limits": [
+    "No Gowin synthesis/P&R/programming run; current area, ROM/DSP usage and STA require user implementation.",
+    "Four physical keyboard voices remain subject to diode-free matrix ambiguity; no arbitrary four-key rollover claim.",
+    "A fifth new note can replace a held note; the stolen held key does not resume until released and pressed again.",
+    "Voice replacement changes ownership at a frame boundary without a separate stealing crossfade.",
+    "Four-voice hardware now has user qualitative confirmation; numeric electrical/timing measurements and extended stability were not supplied.",
+    "User-confirmed headphone-impedance noise issue remains closed; amplifier, global gain, pins and PLL unchanged."
+  ],
+  "git_diff_check_passed_for_maintained_files": true,
+  "all_current_HDL_TB_whitespace_checked": true,
+  "final_source_hashes_still_match": true,
+  "removed_reproducible_outputs": [
+    "five_key_keyboard/tb_keyboard_core.vvp",
+    "mixer_corrected/tb_voice_mixer.vvp",
+    "mixer_diagnosis/tb_voice_mixer.vvp",
+    "mixer_unknown_diagnosis/tb_voice_mixer.vvp",
+    "sim_initial/tb_adsr_envelope.vvp",
+    "sim_initial/tb_adsr_production.vvp",
+    "sim_initial/tb_audio_timing.vvp",
+    "sim_initial/tb_clock_reset.vvp",
+    "sim_initial/tb_dds_sine.vvp",
+    "sim_initial/tb_frame_buffer.vvp",
+    "sim_initial/tb_keyboard_core.vvp",
+    "sim_initial/tb_keyboard_latency.vvp",
+    "sim_initial/tb_keyboard_top.vvp",
+    "sim_initial/tb_key_note_events.vvp",
+    "sim_initial/tb_lock_guard.vvp",
+    "sim_initial/tb_matrix_keypad.vvp",
+    "sim_initial/tb_pt8211_tx.vvp",
+    "sim_initial/tb_reset_sync.vvp",
+    "sim_initial/tb_run_leds.vvp",
+    "sim_initial/tb_sine_rom.vvp",
+    "sim_initial/tb_startup_envelope.vvp",
+    "sim_initial/tb_synth_core.vvp",
+    "sim_initial/tb_tone_gain.vvp",
+    "sim_initial/tb_voice_allocator.vvp",
+    "sim_initial/tb_voice_mixer.vvp",
+    "unit_initial/tb_adsr_envelope.vvp",
+    "unit_initial/tb_adsr_production.vvp",
+    "unit_initial/tb_dds_sine.vvp",
+    "unit_initial/tb_key_note_events.vvp",
+    "unit_initial/tb_tone_gain.vvp",
+    "unit_initial/tb_voice_allocator.vvp",
+    "unit_initial/tb_voice_mixer.vvp",
+    "pinmap_initial/corrected/test.vvp",
+    "pinmap_initial/previous/test.vvp",
+    "preprocessed_project_root.v",
+    "preprocessed_unrelated_cwd.v"
+  ],
+  "baseline_sources_json_sha256": "349f20be5d051879b80b46442e692f3509a87bafc110d2790db0541f9eec9316",
+  "renamed_original_files": [
+    {
+      "from": "src/mono_note_control.sv",
+      "to": "src/key_note_events.sv"
+    },
+    {
+      "from": "sim/tb_mono_note_control.sv",
+      "to": "sim/tb_key_note_events.sv"
+    }
+  ],
+  "new_functional_modules": [
+    "src/voice_allocator.sv",
+    "src/voice_mixer.sv"
+  ],
+  "git_head_at_final": "f48aeca",
+  "current_source_requires_user_rebuild": false,
+  "user_followup": "好的，现在提交git，测试正常",
+  "hardware_user_report_passed": true,
+  "hardware_verification_scope": "User qualitative confirmation of the four-voice build; no numeric frequency, voltage, latency or extended stability measurements supplied.",
+  "user_test_source_hashes_match_validation": true,
+  "git_submission_requested_after_user_test": true,
+  "git_commit_created_during_validation": false
+}

@@ -21,7 +21,7 @@
 `define VOICE_W 24
 `define MIX_W 40
 `define DAC_W 16
-`define VOICE_COUNT 32
+`define VOICE_COUNT 4
 `define BCK_HALF_CYCLES (`AUDIO_HZ/(`SAMPLE_HZ*`WORD_BITS*2*2))
 `define WORD_BITS 16
 `define FRAME_CYCLES (`BCK_HALF_CYCLES*2*`WORD_BITS*2)
@@ -30,4 +30,9 @@
 `define MUTE_FRAMES 480
 `define FADE_FRAMES 240
 `define GAIN_SHIFT 5
+// Voice defaults are independent of the physical keyboard adapter.
+`define ADSR_ATTACK_FRAMES (`SAMPLE_HZ/100)
+`define ADSR_DECAY_FRAMES (`SAMPLE_HZ/10)
+`define ADSR_SUSTAIN_LEVEL 17'd45875
+`define ADSR_RELEASE_FRAMES (`SAMPLE_HZ/5)
 `endif

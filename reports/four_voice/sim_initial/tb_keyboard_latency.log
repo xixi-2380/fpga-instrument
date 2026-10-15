@@ -1,0 +1,3 @@
+LATENCY_US note_on=3079.088 first_code=3176.972 note_off=3102.037
+PASS tb_keyboard_latency checks=5
+E:/gowin/fpga-instrument/sim/tb_keyboard_latency.sv:40: $finish called at 6800023282 (1ps)

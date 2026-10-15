@@ -1,0 +1,16 @@
+{
+  "tests": [
+    {
+      "variant": "corrected",
+      "passed": true,
+      "transposed": false
+    },
+    {
+      "variant": "previous",
+      "passed": true,
+      "transposed": true
+    }
+  ],
+  "clock_reset_bypassed": true,
+  "hardware_verified": false
+}

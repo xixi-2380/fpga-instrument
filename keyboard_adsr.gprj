@@ -12,9 +12,12 @@
         <File path="src/dds_sine.sv" type="file.verilog" enable="1" />
         <File path="src/frame_buffer.sv" type="file.verilog" enable="1" />
         <File path="src/keyboard_core.sv" type="file.verilog" enable="1" />
+        <File path="src/synth_core.sv" type="file.verilog" enable="1" />
+        <File path="src/voice_allocator.sv" type="file.verilog" enable="1" />
+        <File path="src/voice_mixer.sv" type="file.verilog" enable="1" />
         <File path="src/lock_guard.sv" type="file.verilog" enable="1" />
         <File path="src/matrix_keypad.sv" type="file.verilog" enable="1" />
-        <File path="src/mono_note_control.sv" type="file.verilog" enable="1" />
+        <File path="src/key_note_events.sv" type="file.verilog" enable="1" />
         <File path="src/pll_pair.sv" type="file.verilog" enable="1" />
         <File path="src/pt8211_tx.sv" type="file.verilog" enable="1" />
         <File path="src/reset_sync.sv" type="file.verilog" enable="1" />

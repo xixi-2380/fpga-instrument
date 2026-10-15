@@ -1,0 +1,2 @@
+PASS tb_key_note_events checks=149
+E:/gowin/fpga-instrument/sim/tb_key_note_events.sv:52: $finish called at 1280000 (1ps)
