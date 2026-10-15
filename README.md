@@ -1,92 +1,113 @@
-# Tang Mega 138K Pro：键盘与 PT8211 音频工程
+# Tang Mega 138K Pro：FPGA 电子乐器
 
-工作目录：`E:\gowin\fpga-instrument`。唯一工程入口：[keyboard_adsr.gprj](keyboard_adsr.gprj)，顶层 `keyboard_top`，输出 `D2_keyboard_leds`。Device Version C；实际速度等级仍待核验。
+当前版本已实现 **4×4 矩阵键盘、四声部正弦复音、每声部独立 ADSR、PT8211 音频输出和六颗状态灯**。用户于 2026-10-15 确认实板测试正常，功能提交为 `715920f`。
 
-当前为4×4矩阵键盘、四声部正弦复音、独立ADSR和六颗状态/运行灯。U4内部下拉修复启动等待后，用户反馈“现在正常了”。底噪已由用户确认为耳机阻抗过低，不作软件处理；单声部分离版已实板通过，用户已选择下一阶段四声部；本次不扩展32声部、音色或UI。
+唯一主工程：[keyboard_adsr.gprj](keyboard_adsr.gprj)，顶层 `keyboard_top`，输出 `D2_keyboard_leds`。本机工作目录为 `E:\gowin\fpga-instrument`；器件使用 Device Version C，实际速度等级仍待核验。
 
-## 操作
+## 项目规划与进度
 
-1. 先读 [AGENTS.md](AGENTS.md)，接口见 [docs/interfaces.md](docs/interfaces.md)，模块见 [docs/modules.md](docs/modules.md)。
-2. 用户打开本目录 keyboard_adsr.gprj，自行综合、布局布线及烧录；预期输出 `impl/pnr/D2_keyboard_leds.fs`，本次结构重排没有生成新下载文件；现有实现结果属于此前源码。
-3. 按 [流水灯排查说明](docs/bringup_run_leds.md) 依次记录 LED0～3、LED4 和单按 A4 时 LED5，检查启动、音符响应；当前启动故障已获用户反馈恢复。
-4. 直接修改对应原文件，不建立重复版本；用户提示后才提交 Git，不自动推送。
+规划依据：[原交接文档第 11 节](docs/archive/handoff_2026-10-14.md#11-项目最终目标及后续阶段)。下表按当前进展更新；旧交接中的“仍无声”“尚未完成四声部”等描述属于当时状态。
 
-## 文件职责
+| 阶段 | 规划内容 | 当前状态与验收重点 |
+|---|---|---|
+| 基础发声与启动 | PLL、48 kHz 音频、PT8211、复位、运行灯 | 已实现，用户确认发声与启动恢复；U4 启用内部下拉，电气成因未测量 |
+| 键盘与音源分离 | 输入适配器输出通用音符事件，音源独立运行 | 已完成并获用户实板确认；后续更换键盘沿用事件接口 |
+| 四声部复音 | 独立相位/频率/ADSR、动态分配、声部替换、定点混音 | 已完成，HDL 回归通过，用户确认实板测试正常 |
+| 32 声部复音 | 32 个独立逻辑声部，评估共享 ROM/运算资源与固定时隙调度 | 后续阶段，待用户启动；须验证帧预算、资源、实现时序和满负载行为 |
+| 多音色 | 至少 2 种音色，目标 6 种；每声部独立音色选择 | 尚未实现；先确定音色与固定点算法，再逐项验证 |
+| 效果器 | 在复音与多音色基础上扩展效果处理 | 后续可选扩展，具体效果与资源预算待确定 |
+| 扩展控制与显示 | 至少两个独立演奏维度，可替换键盘及其他控制输入，按需显示 | 尚未验收；第二维控制的形式待确定，跨域事件须原子传递 |
+| 完整系统验收 | 功能、延迟、连续运行、电气与资源/时序记录 | 当前只有定性实板反馈；数值测量与长稳记录待补充 |
 
-| 路径 | 用途 |
+原交接记录的最终目标：
+
+- 采用可综合 Verilog/SystemVerilog 完成实时合成，不依赖 CPU、软核或外部 MCU 承担实时音频计算。
+- 48 kHz 采样、32 个独立逻辑声部，每声部具备相位、频率、ADSR 与音色状态；动态分配并处理 Note On/Off。
+- 固定时隙调度、定点混音、饱和后送 PT8211；至少 2 种音色，目标 6 种。
+- 输入到输出不超过 10 ms，目标低于 5 ms；至少两个独立演奏维度。
+
+以上比赛目标来自原交接记录，最终验收仍需对照赛题原文。路线沿用“四声部 → 32 声部 → 多音色 → 效果器 → 扩展控制/显示”，具体新阶段由用户确认后实施。本次仅整理规划和中文说明。
+
+## 下一阶段的设计约束
+
+32 声部不能只修改 `VOICE_COUNT`。开始该阶段前，应先确定调度和资源方案：
+
+1. 保留 32 位相位、12 位波表地址、24 位声部样本、40 位混音和 16 位 DAC 输出约定。
+2. 音频主时钟为 61.44 MHz，一帧 1280 周期；共享调度须满足 `32 × slot_cycles + overhead ≤ 1280`，明确同步 ROM、运算和缓冲的流水线延迟。
+3. 输入适配器与音源继续分离，遵循 `note_valid/note_ready`、`note_on`、`note_id`、`note_fcw` 接口；回压时保持载荷。新时钟域通过原子握手或异步 FIFO 接入。
+4. 覆盖满 32 声部、释放尾音、同音重触发、第 33 音替换、旧 Note Off、复位/失锁与连续音频输出，再由用户验证资源、时序和实板效果。
+5. 当前无二极管矩阵键盘保留鬼键保护；32 个逻辑声部不代表现有键盘能够同时识别 32 个物理按键。
+
+现有接口与固定点细则见 [接口规范](docs/interfaces.md)，模块及独立测试见 [模块索引](docs/modules.md)。音频域使用主时钟和 CE，禁止组合派生时钟与实时浮点；音频发送不等待控制事件。
+
+## 当前功能与限制
+
+- 四声部各自维护相位与包络，释放后可独立保留尾音。分配顺序为同编号重触发、空闲声部、最久未起音的已释放声部、最久未起音的按住声部。
+- 满额时新音符可替换旧声部；旧音符的松键不会关闭新音符。被替换且仍按住的键需松开重按才会重新起音；当前替换没有额外交叉淡化。
+- 无二极管矩阵存在鬼键歧义，不能保证任意四键同时识别。安全四键/五键测试组合见 [键盘验收说明](docs/bringup_keyboard.md)。
+- 用户确认底噪源于耳机阻抗过低，已取消软件底噪处理；沿用现有功放、静音、增益和启动时序。
+- 实板“测试正常”为用户定性反馈；频率、电压、真实演奏延迟、当前资源/STA 和长稳数据尚未补齐。
+
+## 更改说明（中文）
+
+| 提交/本次更新 | 中文说明 |
 |---|---|
-| `src/` | 当前顶层、全部可综合模块及keyboard.cst/keyboard.sdc |
-| `src/config/`、`src/rom/` | 参数头文件、音符表及正弦ROM；已登记在IDE文件列表 |
-| `docs/hardware/` | 原硬件状态、键位表、音符记录和完整引脚清单 |
-| `sim/` | 当前模块和板级 HDL 测试 |
-| `scripts/` | HDL 仿真、ROM/工具准备及用户使用的键盘构建脚本 |
-| `impl/keyboard_adsr_process_config.json` | 当前 Gowin 工程配置；其余实现输出按需生成 |
-| `references/`、`reports/hardware/photos/` | 官方资料和原始照片，只读保留 |
-| `reports/` | 原始错误日志、历史证据及新验证记录 |
-| `docs/archive/` | 原文件迁入的历史 D0/D1 说明与旧交接，不作为当前操作入口 |
-| `tools/manifest.json`、`tools/mingw64/` | 模拟器来源与本机运行环境 |
+| 本次文档更新 | 将完整阶段规划与进度放到首页，补充下一阶段约束、中文更改索引和中文提交约定 |
+| `715920f` | 实现四声部复音，分离键盘输入与音源，加入独立包络、声部分配/替换、40 位混音及验证记录 |
+| `f48aeca` | 整理 `src/` 工程布局，修复头文件路径及复位持续有效造成的启动等待 |
+| `3e1e93b` | 迁移 FPGA 工程至统一目录，保存当时未解决的无声问题和错误证据 |
 
-## 仿真
+后续提交标题和更改摘要使用中文，模块名、信号名及工具错误原文保留原文。详细记录见 [中文更改日志](docs/change_log.md)，历史错误与通过日志按对应版本保存。
 
-在工程根目录执行：
+## 打开与修改工程
 
-```powershell
-& 'D:\py\python.exe' scripts/run_sim.py
-& 'D:\py\python.exe' scripts/run_sim.py --test tb_keyboard_top --vendor
-& 'D:\py\python.exe' scripts/run_keyboard_pinmap.py
-```
+1. 先读 [AGENTS.md](AGENTS.md)，再打开根目录 `keyboard_adsr.gprj`；关闭重开工程可载入磁盘上的文件列表与配置。
+2. 在 IDE 中直接编辑 `src/` 内对应原文件，参数在 `src/config/`，约束为 `src/keyboard.cst`、`src/keyboard.sdc`。
+3. 主工程包含 20 个 HDL、2 个约束、4 个参数头文件及 1 个 ROM；头文件不单独综合。使用 SystemVerilog 2017，搜索路径为 `src`、`src/config`，HDL 按源文件相对路径引用 `config/*.svh`。
+4. 综合、布局布线和烧录由用户执行，预期输出 `impl/pnr/D2_keyboard_leds.fs`。助手负责文件修改、纯 HDL 仿真和读取已有报告；旧实现结果不能代替修改后源码的实现验收。
+5. LED 逻辑位序与板上图纸灯号的对应关系、启动诊断见 [运行灯说明](docs/bringup_run_leds.md)。
 
-默认仿真日志和端到端 CSV 写入 `reports/sim/current/`，引脚映射结果写入 `reports/keyboard/pinmap_current/`。可用 `--out-dir` 指定另一目录，避免覆盖上次结果。器件 PLL 独立测试可使用 `--test tb_pll_pair --vendor`。
+更换键盘时替换 `keyboard_core` 输入适配器，保留 `synth_core` 的通用音符事件接口。矩阵扫描、键位表及鬼键策略属于输入模块；USR/POR/PLL 复位由 `clock_reset` 处理。
 
-需要脚本构建时，由用户自行运行 `scripts/build_keyboard.py`；它直接读取现有主工程，不重新生成工程、不依赖旧工程。其默认读取 `reports/sim/current/` 的验证日志，可用 `--sim-dir` 指定目录；构建报告写入 `reports/keyboard/current/`，手动交付目录 `bringup/` 仅在打包时生成。助手不运行该构建脚本。
-
-## 历史与边界
-
-旧工程入口、旧 D0/D1 专用模块和工具脚本、历史下载 `.fs`、模拟器安装缓存及可再生 `.vvp` 已从当前工作目录移除。共享音频模块、必要原始错误日志、资料、照片和下载状态仍保留。原工程 `E:\gowin\fpga-instrument-mega138k-pro` 未修改；完整迁移基线可从 Git `3e1e93b` 查阅，历史下载文件可从原目录获取。
-
-历史报告可能包含已移除文件的路径、哈希及旧输出名，仅用于对应历史版本。仿真通过不能代替当前工程的实现时序和实板音频验收。清理及验证记录见 `docs/change_log.md` 和 `reports/cleanup/validation.json`。
-
-当前引脚已按用户指定 CST 核对：时钟 P16 上拉，逻辑 LED0/1 为 R26/J14；二者与 4071f3 图纸 LED0/1 名称相反。其他音频、键盘及测量球位不变；PA_EN=H17 使用板版原理图补充。准确灯号表见 docs/bringup_run_leds.md。
-
-## 在高云 IDE 中修改
-
-参照用户提供的fpga_project_test工程布局，当前结构为：
+## 工程结构
 
 ```text
 fpga-instrument/
 ├─ keyboard_adsr.gprj          唯一主工程入口
-├─ src/
-│  ├─ keyboard_top.sv         顶层
-│  ├─ clock_reset.sv、pll_pair.sv
-│  ├─ 其他功能模块.sv
-│  ├─ keyboard.cst、keyboard.sdc
-│  ├─ config/                四个参数头文件
-│  └─ rom/                   sine4096.hex及原manifest
-├─ impl/                     IDE配置与用户生成的实现结果
-├─ sim/、scripts/            HDL测试及脚本
-└─ docs/、reports/、references/、tools/
+├─ src/                       当前 HDL、CST 与 SDC
+│  ├─ keyboard_top.sv          板级连接
+│  ├─ keyboard_core.sv         可替换的键盘输入适配器
+│  ├─ synth_core.sv            独立音源
+│  ├─ config/                 参数头文件及音符表
+│  └─ rom/                    正弦 ROM 及来源记录
+├─ impl/                      IDE 过程配置；实现输出由用户生成
+├─ sim/                       单元及板级 HDL 测试
+├─ scripts/                   仿真、ROM/工具准备及用户构建脚本
+├─ docs/                      接口、模块、硬件接线及更改记录
+│  └─ archive/                旧交接与历史操作说明
+├─ reports/                   通过/失败日志、验证记录及原始照片
+├─ references/                只读参考资料
+└─ tools/manifest.json        本机模拟器运行环境的来源
 ```
 
-关闭并重新打开 `E:\gowin\fpga-instrument\keyboard_adsr.gprj`。在IDE文件列表中双击 `src/keyboard_top.sv` 修改顶层，双击功能模块修改RTL，双击CST/SDC编辑约束；参数头文件和正弦HEX也已作为辅助文件登记，避免另找一份源码。
+硬件状态、键位与完整引脚清单在 [docs/hardware/](docs/hardware/)。本机模拟器二进制、`.fs`、`.vvp` 和 IDE 缓存不上传；源码、工具来源记录和验证证据保留。迁移来源 `E:\gowin\fpga-instrument-mega138k-pro` 保持不变；初始迁移版本可从 `3e1e93b` 查阅。
 
-顶层仍为keyboard_top，器件仍为GW5AST-LV138FPG676AC1/I0（C版），SystemVerilog 2017，include路径为src与src/config，HDL使用相对于原文件的config/*.svh引用。辅助头文件不作为独立模块综合。旧IDE流程状态已清空，UI布局保留；由用户重新实现确认。C:\Gowin下参考工程未修改。
+## 仿真与验证证据
 
-src布局调整时的历史验证见reports/ide_layout/validation.json；当时的PLL/复位诊断功能保留。后续U4下拉已获用户启动恢复反馈，底噪按耳机阻抗结论关闭；历史报告中的旧路径保持原样。
+在工程根目录执行，并使用新的输出目录避免覆盖历史日志：
 
-2026-10-14头文件报错修复：实际失败配置仍指向已移走的根目录config，导致EX5985/EX3755及后续未定义宏、语法连锁错误。已修正原过程配置和源文件引用，并去掉仿真的配置头文件搜索路径，改用源文件相对解析。关闭IDE中的当前工程，再重新打开根目录keyboard_adsr.gprj以加载磁盘配置；若IDE保留旧设置，在综合配置的Include Path中删除不存在的旧config路径，确认E:/gowin/fpga-instrument/src及E:/gowin/fpga-instrument/src/config。无需另建工程或复制头文件。证据与验证见reports/include_fix/validation.json；综合、布局布线和烧录仍由用户执行。
+```powershell
+& 'D:\py\python.exe' scripts/run_sim.py --out-dir reports/sim/current
+& 'D:\py\python.exe' scripts/run_sim.py --test tb_keyboard_top --vendor --out-dir reports/sim/current
+& 'D:\py\python.exe' scripts/run_keyboard_pinmap.py --out-dir reports/keyboard/pinmap_current
+```
 
-最新复位排查：用户确认USR松开时复位诊断灯仍常亮。在原src/keyboard.cst给U4启用内部弱下拉，保留正常复位功能和音频逻辑；用户已反馈启动恢复，电气原因仍未测量。重新编译烧录后应观察LED4是否亮、前四灯是否恢复流水，详见docs/bringup_run_leds.md末段和reports/reset_input/validation.json。
+上述 Python 路径属于当前电脑，队友需使用自己的 Python 路径，并按 `tools/manifest.json` 准备模拟器。仿真脚本读取同一主工程文件列表，使用源文件相对 include 解析，避免额外配置搜索路径掩盖 IDE 错误。
 
-用户最新确认：U4启用内部下拉后“现在正常了”。当前启动修复作为Git基线保存；底噪已取消软件处理，当前修改仅继续键盘输入与音频模块分离。
+四声部基线证据见 [验证汇总](reports/four_voice/validation.json)：20 项 RTL 测试、1 项官方 PLL 板级测试和 2 种物理引脚映射全部通过，按每项最新结果汇总 **7,051,357 次检查**。生产参数仿真的首个非零串行码延迟约 **3.177 ms**，属于数字仿真值，不能当作实板模拟输出测量。开发中混音零输入出现未知值的原始失败日志已保留，最终修正回归通过。
 
-2026-10-15：启动修复与工程整理已提交为f48aeca。用户确认底噪是耳机阻抗过低，取消底噪软件修改；功放、静音、增益与PLL参数不变。
+需要脚本构建时，由用户自行运行 `scripts/build_keyboard.py`；默认读取 `reports/sim/current/`，可用 `--sim-dir` 指定本次验证目录。助手不运行该构建脚本。
 
-键盘更换边界：src/keyboard_core.sv负责当前矩阵扫描与音符映射；src/synth_core.sv是独立音源，只接收note_on/note_off/fcw；src/keyboard_top.sv连接两者。更换键盘时替换输入适配器并遵循docs/interfaces.md中的同域帧事件接口即可，音源无需依赖新键盘的物理结构。USR复位由原clock_reset独立处理。主工程新增一个独立音源文件，重新打开根目录keyboard_adsr.gprj载入；编译烧录仍由用户负责。本次分离验证见reports/input_separation/validation.json，源文件修改尚未自动再次提交。
+## 协作约定
 
-用户后续确认：接口分离版“测试正常”，实板通过为用户定性反馈；原音频采样及仿真延迟保持。用户已明确选择四声部复音，Git仍以f48aeca为已提交基线。
-
-2026-10-15四声部阶段：主工程保持keyboard_adsr.gprj、keyboard_top和D2_keyboard_leds输出名。原mono_note_control及其TB重命名修改为key_note_events，新增独立voice_allocator、voice_mixer；当前20个HDL均在同一GPRJ中。键盘通过带note_id的valid/ready事件控制音源，四路独立包络与24位样本经40位混音送16位DAC。
-
-关闭并重新打开主工程加载新文件，再由用户综合/P&R/烧录；原引脚、U4下拉、PLL和功放策略不变。首次用同一列四键验证复音、逐个松键验证独立尾音。第五音在无空闲/释放声部时替换最久未起音的声部，旧松键不会误关新音；无二极管鬼键保护保留。验收步骤和安全五键组合见docs/bringup_keyboard.md，HDL证据见reports/four_voice/validation.json。四声部已获用户“测试正常”的定性实板确认，本轮按明确指令提交；此前“未提交”属于历史状态。
-
-最新确认：用户已测试四声部版正常并要求Git提交；源码与7051357项HDL回归记录一致。没有新增频率、电压或长稳测量，历史开发失败日志保留。
+直接修改现有原文件，避免复制第二套工程或带 `new/fix/v2` 后缀的重复模块。新增独立模块应有明确需求及对应测试；参考资料、原始照片与历史失败日志保持原样。Git 提交和上传按用户明确提示执行，提交采用中文标题与更改摘要。
