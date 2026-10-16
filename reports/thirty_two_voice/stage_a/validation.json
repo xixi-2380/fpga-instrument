@@ -1,0 +1,13 @@
+{
+  "stage": "A",
+  "voices_tested": [
+    1,
+    4,
+    32
+  ],
+  "checks": 1003276,
+  "all_passed": true,
+  "production_voices": 4,
+  "functional_RTL_unchanged": true,
+  "user_hardware_test_required_for_later_RTL": true
+}
