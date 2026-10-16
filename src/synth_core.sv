@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 `include "config/synth_config.svh"
-// Generic note-event synthesis. No matrix dimensions, key map or scan logic.
+// Generic note-event synthesis; physical keyboard logic stays in its adapter.
 module synth_core #(
     parameter integer VOICES=`VOICE_COUNT,MUTE=`MUTE_FRAMES,FADE=`FADE_FRAMES,
     ATTACK=`ADSR_ATTACK_FRAMES,DECAY=`ADSR_DECAY_FRAMES,
@@ -8,54 +8,89 @@ module synth_core #(
     input wire clk,rst,note_valid,note_on,input wire [6:0] note_id,input wire [31:0] note_fcw,
     output wire note_ready,input_ready,bck,ws,din,pa_enable,underrun,frame_ce,gate,
     output wire [VOICES-1:0] voice_active,voice_held,output reg [16:0] envelope_level);
+    localparam integer INDEX_W=VOICES>1?$clog2(VOICES):1;
+    localparam integer RENDER_BUDGET=32+16*VOICES;
+    localparam integer CYCLE_W=$clog2(RENDER_BUDGET+1);
     wire rise_ce,fall_ce;
     wire [4:0] bit_index;
     wire [16:0] startup_level;
-    wire [VOICES-1:0] voice_start,voice_stop,voice_restart,raw_valid,gain_valid;
+    wire [VOICES-1:0] voice_start,voice_stop,voice_restart;
     wire [VOICES*32-1:0] voice_fcw;
     wire [VOICES*7-1:0] voice_ids;
-    wire [16:0] voice_level [0:VOICES-1];
-    wire [VOICES*`VOICE_W-1:0] voice_samples;
-    wire mix_valid,ready;
+    wire [16:0] voice_level[0:VOICES-1];
+    reg render_busy;
+    reg [CYCLE_W-1:0] render_cycle;
+    reg [VOICES*32-1:0] frame_fcw;
+    reg [VOICES-1:0] frame_restart;
+    wire in_slots=render_busy && render_cycle>=16 && render_cycle<16+16*VOICES;
+    wire [INDEX_W-1:0] selected_voice=in_slots?((render_cycle >> 4)-1'b1):{INDEX_W{1'b0}};
+    wire dds_ce=in_slots && render_cycle[3:0]==0;
+    wire signed [15:0] raw_sample;
+    wire raw_valid,gain_valid,mix_valid,ready;
+    wire [VOICES*32-1:0] phase;
+    reg [33:0] level_product;
+    reg [16:0] combined_level;
+    reg gain_request,first_sample,last_sample;
+    reg [INDEX_W-1:0] sample_voice;
+    wire signed [`VOICE_W-1:0] gain_sample;
     wire signed [15:0] mix_sample;
     wire [15:0] frame_l,frame_r;
     audio_timing timing(clk,rst,bck,rise_ce,fall_ce,frame_ce,bit_index);
     startup_envelope #(.MUTE(MUTE),.FADE(FADE)) startup(clk,rst,frame_ce,input_ready,startup_level);
     assign pa_enable=input_ready;
     assign gate=|voice_held;
+    // Freeze ownership while rendering; external producers retain valid/data.
     voice_allocator #(.VOICES(VOICES)) allocator(
-        .clk(clk),.rst(rst),.enabled(input_ready),.frame_ce(frame_ce),
+        .clk(clk),.rst(rst),.enabled(input_ready && !render_busy),.frame_ce(frame_ce),
         .note_valid(note_valid),.note_on(note_on),.note_id(note_id),.note_fcw(note_fcw),
         .voice_active(voice_active),.note_ready(note_ready),.voice_start(voice_start),
         .voice_stop(voice_stop),.voice_restart(voice_restart),.voice_held(voice_held),
         .voice_fcw(voice_fcw),.voice_ids(voice_ids));
     for(genvar v=0;v<VOICES;v=v+1)begin: voices
-        wire signed [15:0] raw_sample;
-        wire [31:0] phase;
-        wire [33:0] level_product=voice_level[v]*startup_level;
-        reg [16:0] combined_level;
-        reg gain_request;
         adsr_envelope #(.ATTACK(ATTACK),.DECAY(DECAY),.SUSTAIN(SUSTAIN),.RELEASE(RELEASE)) envelope(
             .clk(clk),.rst(rst),.sample_ce(frame_ce),.note_on(voice_start[v]),.note_off(voice_stop[v]),
             .level(voice_level[v]),.active(voice_active[v]),.restart(voice_restart[v]));
-        dds_sine dds(.clk(clk),.rst(rst),.sample_ce(frame_ce),.fcw(voice_fcw[v*32+:32]),
-            .sample(raw_sample),.valid(raw_valid[v]),.phase(phase),.restart(voice_restart[v]));
-        always @(posedge clk or posedge rst)begin
-            if(rst)begin combined_level<=0;gain_request<=0;end
-            else begin
-                gain_request<=raw_valid[v];
-                if(raw_valid[v])combined_level<=level_product[32:16];
+    end
+    dds_sine #(.VOICES(VOICES)) dds(.clk(clk),.rst(rst),.sample_ce(dds_ce),
+        .fcw(frame_fcw[selected_voice*32+:32]),.sample(raw_sample),.valid(raw_valid),
+        .phase(phase),.restart(frame_restart[selected_voice]),.voice_index(selected_voice));
+    always @(posedge clk or posedge rst)begin
+        if(rst)begin
+            render_busy<=0;render_cycle<=0;frame_fcw<=0;frame_restart<=0;
+            level_product<=0;combined_level<=0;gain_request<=0;
+            first_sample<=0;last_sample<=0;sample_voice<=0;
+        end else begin
+            gain_request<=raw_valid;
+            if(raw_valid)combined_level<=level_product[32:16];
+            if(frame_ce)begin
+                render_busy<=1;render_cycle<=0;
+                frame_fcw<=voice_fcw;frame_restart<=voice_restart;
+            end else if(render_busy)begin
+                if(render_cycle==RENDER_BUDGET-2)render_busy<=0;
+                else render_cycle<=render_cycle+1'b1;
+            end
+            if(dds_ce)begin
+                level_product<=voice_level[selected_voice]*startup_level;
+                sample_voice<=selected_voice;
+                first_sample<=selected_voice==0;
+                last_sample<=selected_voice==VOICES-1;
             end
         end
-        tone_gain #(.OUTPUT_W(`VOICE_W)) gain(clk,rst,gain_request,raw_sample,combined_level,
-            gain_valid[v],voice_samples[v*`VOICE_W+:`VOICE_W]);
     end
+    tone_gain #(.OUTPUT_W(`VOICE_W)) gain(clk,rst,gain_request,raw_sample,combined_level,gain_valid,gain_sample);
+    voice_mixer mixer(clk,rst,gain_valid,gain_sample,first_sample,last_sample,mix_valid,mix_sample);
     always @* begin
         envelope_level=0;
         for(integer v=0;v<VOICES;v=v+1)
             if(voice_level[v]>envelope_level)envelope_level=voice_level[v];
     end
-    voice_mixer #(.VOICES(VOICES)) mixer(clk,rst,&gain_valid,voice_samples,mix_valid,mix_sample);
     frame_buffer buffer(clk,rst,frame_ce,mix_valid,ready,mix_sample,mix_sample,frame_l,frame_r,underrun);
     pt8211_tx tx(clk,rst,fall_ce,bit_index,frame_l,frame_r,ws,din);
+    // synthesis translate_off
+    initial if(VOICES<1 || VOICES>32 || RENDER_BUDGET>=`FRAME_CYCLES)$fatal(1,"Invalid render budget");
+    always @(posedge clk)if(!rst)begin
+        if(frame_ce && render_busy)$fatal(1,"Frame renderer missed deadline");
+        if(mix_valid && !ready)$fatal(1,"Frame buffer rejected render result");
+    end
+    // synthesis translate_on
 endmodule

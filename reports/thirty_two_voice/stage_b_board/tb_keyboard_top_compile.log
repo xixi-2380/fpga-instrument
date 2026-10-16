@@ -1,0 +1,29 @@
+E:/gowin/fpga-instrument/sim/passive_matrix_model.svh:3: warning: timescale for passive_matrix_model inherited from another file.
+E:/gowin/fpga-instrument/sim/tb_keyboard_top.sv:1: ...: The inherited timescale is here.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:997: warning: implicit definition of wire 'I_hs'.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:13072: warning: implicit definition of wire 'cnt_reset'.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:13835: warning: implicit definition of wire 'rst'.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14524: warning: implicit definition of wire 'clk2_dt_dir'.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:15635: warning: implicit definition of wire 'rst'.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:16324: warning: implicit definition of wire 'clk2_dt_dir'.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14421: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14657: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14752: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14847: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14942: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:15028: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:15114: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14421: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14657: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14752: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14847: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14942: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:15028: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:15114: warning: @* found no sensitivities so it will never trigger.
+E:/gowin/fpga-instrument/src/voice_allocator.sv:21: warning: @* is sensitive to all 4 words in array 'ids'.
+E:/gowin/fpga-instrument/src/voice_allocator.sv:26: warning: @* is sensitive to all 4 words in array 'rank'.
+E:/gowin/fpga-instrument/src/voice_allocator.sv:26: warning: @* is sensitive to all 4 words in array 'rank'.
+E:/gowin/fpga-instrument/src/voice_allocator.sv:28: warning: @* is sensitive to all 4 words in array 'rank'.
+E:/gowin/fpga-instrument/src/voice_allocator.sv:28: warning: @* is sensitive to all 4 words in array 'rank'.
+E:/gowin/fpga-instrument/src/synth_core.sv:85: warning: @* is sensitive to all 4 words in array 'voice_level'.
+E:/gowin/fpga-instrument/src/synth_core.sv:85: warning: @* is sensitive to all 4 words in array 'voice_level'.

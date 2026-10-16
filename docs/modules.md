@@ -38,8 +38,10 @@
 
 2026-10-15接口分离：原keyboard_core中的音频流水线提取到职责独立的synth_core，keyboard_top连接两者。新模块是用户要求的独立音源，不是重复版本；原流水线各子模块、功放及复位功能不变。
 
-当前四声部模块20个HDL均登记于唯一GPRJ；单声部分离阶段的音符接口已由valid/ready事件接口替代，见interfaces.md的“当前四声部通用音符事件接口”一节。每声部DDS使用独立同步ROM端口；本阶段未实现32声部或共享ROM调度，不引用旧P&R资源数字验收新源码。
+当前四声部模块20个HDL均登记于唯一GPRJ；单声部分离阶段的音符接口已由valid/ready事件接口替代，见interfaces.md的“四声部并行事件接口（历史）”一节。每声部DDS使用独立同步ROM端口；本阶段未实现32声部或共享ROM调度，不引用旧P&R资源数字验收新源码。
 
 ## 下一阶段修改分工（规划，尚未实施）
 
 32声部计划先验证原voice_allocator的参数边界，再在原synth_core/dds_sine/voice_mixer内共享波表、增益与顺序混音；ADSR第一版保留独立实例。原TB和poly_audio_reference将按声部数参数化，现有键盘和板级路径继续回归，不创建第二套工程。详细调度、接口一致性和验收矩阵见[32声部实现规划](interfaces.md#32-声部实现规划)。当前文件列表和RTL功能仍为四声部。
+
+2026-10-16阶段B：原dds_sine已改为多相位上下文共享ROM，原synth_core调度共享增益，原voice_mixer接收first/last串行声部样本。当前实际约定看interfaces.md的“共享调度实际接口”，上文并行说明是历史；仍为同一20文件工程，无新增功能模块。

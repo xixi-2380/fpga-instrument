@@ -1,10 +1,12 @@
 `timescale 1ns/1ps
 `include "check.svh"
+`include "../src/config/synth_config.svh"
 `include "passive_matrix_model.svh"
 module tb_keyboard_latency;
+ parameter integer VOICES=`VOICE_COUNT;
  reg clk=0,rst=1;always #8.138020833 clk=~clk;
  reg [15:0] pressed=0;
- wire [3:0] rows,columns,key,voice_active,voice_held;wire [15:0] keys;
+ wire [3:0] rows,columns,key;wire [VOICES-1:0] voice_active,voice_held;wire [15:0] keys;
  wire bck,ws,din,pa,u,ghost,gate,key_gate,frame_ce,input_ready,note_ready,note_valid,note_on;
  wire [6:0] note_id;wire [31:0] note_fcw;wire [16:0] level;
  integer checks=0,edges=0,bits=0,word=0;
@@ -12,7 +14,7 @@ module tb_keyboard_latency;
  keyboard_core dut(.clk(clk),.rst(rst),.input_ready(input_ready),.note_ready(note_ready),.key_row(rows),
   .col_enable(columns),.keys(keys),.ghost(ghost),.note_valid(note_valid),.note_on(note_on),
   .note_id(note_id),.note_fcw(note_fcw),.gate(key_gate),.last_key(key));
- synth_core #(.MUTE(4),.FADE(4)) sound(
+ synth_core #(.VOICES(VOICES),.MUTE(4),.FADE(4)) sound(
   .clk(clk),.rst(rst),.note_valid(note_valid),.note_on(note_on),.note_id(note_id),.note_fcw(note_fcw),
   .note_ready(note_ready),.input_ready(input_ready),.bck(bck),.ws(ws),.din(din),.pa_enable(pa),
   .underrun(u),.frame_ce(frame_ce),.gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(level));

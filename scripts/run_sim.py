@@ -1,5 +1,5 @@
 import argparse, pathlib, subprocess, os, json, time, xml.etree.ElementTree as ET
-p=argparse.ArgumentParser();p.add_argument('--test');p.add_argument('--vendor',action='store_true');p.add_argument('--out-dir',default='reports/sim/current');a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--test');p.add_argument('--param',action='append',default=[]);p.add_argument('--vendor',action='store_true');p.add_argument('--out-dir',default='reports/sim/current');a=p.parse_args()
 root=pathlib.Path(__file__).resolve().parents[1];os.chdir(root)
 bin=root/'tools/mingw64/bin';env=os.environ.copy();env['PATH']=str(bin)+os.pathsep+env['PATH']
 out=pathlib.Path(a.out_dir)
@@ -11,10 +11,15 @@ tests=sorted(root.glob('sim/tb_*.sv'))
 if a.test:tests=[t for t in tests if t.stem==a.test]
 elif not a.vendor:tests=[t for t in tests if t.stem not in ['tb_pll_pair','tb_keyboard_top']]
 assert tests,'No matching testbench'
+assert not a.param or a.test,'--param requires --test'
+for override in a.param:
+    key,sep,value=override.partition('=')
+    assert sep and key.isidentifier() and value.lstrip('-').isdigit(),'Use --param NAME=INTEGER'
 results=[]
 for t in tests:
     name=t.stem;print('RUN',name,flush=True);start=time.monotonic()
     cmd=[str(bin/'iverilog.exe'),'-g2012','-Wall','-grelative-include','-Isim','-s',name,'-o',str(out/(name+'.vvp'))]+[s.as_posix() for s in sources]+[t.as_posix()]
+    for override in a.param:cmd+=['-P'+name+'.'+override]
     if name in ['tb_pll_pair','tb_keyboard_top']:cmd+=['C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v']
     c=subprocess.run(cmd,capture_output=True,text=True,encoding='utf8',errors='replace',env=env)
     (out/(name+'_compile.log')).write_text(c.stdout+c.stderr,encoding='utf8')

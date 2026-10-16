@@ -1,14 +1,16 @@
 `timescale 1ns/1ps
 `include "check.svh"
+`include "../src/config/synth_config.svh"
 // Generic event source, deliberately independent of keyboard dimensions/maps.
 module tb_synth_core;
+ parameter integer VOICES=`VOICE_COUNT;
  reg clk=0,rst=1,note_valid=0,note_on=0;
  reg [6:0] note_id=0;reg [31:0] note_fcw=0;
  always #8.138020833 clk=~clk;
  wire bck,ws,din,pa,u,frame_ce,note_ready,input_ready,gate;
- wire [3:0] voice_active,voice_held;wire [16:0] level;
+ wire [VOICES-1:0] voice_active,voice_held;wire [16:0] level;
  integer checks=0,idle_nonzero;
- synth_core #(.MUTE(4),.FADE(4),.ATTACK(8),.DECAY(8),.SUSTAIN(32768),.RELEASE(16)) sound(
+ synth_core #(.VOICES(VOICES),.MUTE(4),.FADE(4),.ATTACK(8),.DECAY(8),.SUSTAIN(32768),.RELEASE(16)) sound(
   .clk(clk),.rst(rst),.note_valid(note_valid),.note_on(note_on),.note_id(note_id),.note_fcw(note_fcw),
   .note_ready(note_ready),.input_ready(input_ready),.bck(bck),.ws(ws),.din(din),.pa_enable(pa),
   .underrun(u),.frame_ce(frame_ce),.gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(level));
