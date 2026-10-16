@@ -21,7 +21,7 @@
 `define VOICE_W 24
 `define MIX_W 40
 `define DAC_W 16
-`define VOICE_COUNT 4
+`define VOICE_COUNT 32
 `define BCK_HALF_CYCLES (`AUDIO_HZ/(`SAMPLE_HZ*`WORD_BITS*2*2))
 `define WORD_BITS 16
 `define FRAME_CYCLES (`BCK_HALF_CYCLES*2*`WORD_BITS*2)

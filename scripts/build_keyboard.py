@@ -2,10 +2,11 @@
 import argparse,pathlib,xml.etree.ElementTree as ET,subprocess,json,re,hashlib,shutil,stat
 p=argparse.ArgumentParser();p.add_argument('--stage',choices=['all','build','package'],default='all');p.add_argument('--sim-dir',default='reports/sim/current');a=p.parse_args()
 root=pathlib.Path(__file__).resolve().parents[1]
+voice_count=int(re.search(r'^`define VOICE_COUNT (\d+)',(root/'src/config/synth_config.svh').read_text(encoding='utf8'),re.M)[1])
 out=root/'reports/keyboard/current';out.mkdir(parents=True,exist_ok=True)
 sim_dir=pathlib.Path(a.sim_dir)
 if not sim_dir.is_absolute():sim_dir=root/sim_dir
-tests=['tb_matrix_keypad','tb_key_note_events','tb_adsr_envelope','tb_adsr_production','tb_keyboard_core','tb_keyboard_top','tb_keyboard_latency','tb_run_leds','tb_synth_core','tb_voice_allocator','tb_voice_mixer']
+tests=['tb_dds_sine','tb_tone_gain','tb_sine_rom','tb_audio_timing','tb_matrix_keypad','tb_key_note_events','tb_adsr_envelope','tb_adsr_production','tb_keyboard_core','tb_keyboard_top','tb_keyboard_latency','tb_run_leds','tb_synth_core','tb_voice_allocator','tb_voice_mixer']
 if a.stage!='build':
     for name in tests:
         log=(sim_dir/(name+'.log')).read_text(encoding='utf8')
@@ -57,7 +58,8 @@ status=dict(profile='D2_keyboard_leds',pins=expected,resources=usage,setup_hold_
     programming_owner='user',automatic_programming_authorized=False,programmed_by_assistant=False,
     hardware_measurements_passed=False,full_sta_signed=False,per_key_diodes=False,
     rollover_policy='ambiguous rectangles clear accepted keys; no arbitrary-key rollover claim',
-    voice_count=4,voice_bits=24,mix_bits=40,
+    voice_count=voice_count,voice_bits=24,mix_bits=40,
+    scheduler='shared ROM/gain, 16 cycles per voice',render_budget_cycles=32+16*voice_count,
     allocation_policy='same identity retrigger; inactive slot, oldest released, then oldest held; no automatic resurrection of stolen held keys',
     note_range='MIDI 60..75',gain_divisor=32,
     scan_column_us=50,scan_frame_us=200,debounce_scans=15,

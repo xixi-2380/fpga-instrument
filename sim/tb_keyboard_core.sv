@@ -50,9 +50,17 @@ module tb_keyboard_core;
   pressed=16'h0007;more_frames(20);pressed=16'h0087;more_frames(20);
   `CHECK(!ghost && voice_held==15,"four sequential physical keys occupy the available voices")
   pressed=16'h0887;more_frames(20);
-  `CHECK(!ghost && voice_held==15 && sound.voice_ids[0+:7]==71,"fifth unambiguous physical key replaces oldest C4 with B4")
+  if(VOICES==4)begin
+   `CHECK(!ghost && voice_held==15 && sound.voice_ids[0+:7]==71,"fifth physical key replaces oldest only in four-voice mode")
+  end else begin
+   `CHECK(!ghost && voice_held==31 && sound.voice_ids[4*7+:7]==71,"five unambiguous keys have independent voices")
+  end
   pressed=16'h0886;more_frames(20);
-  `CHECK(voice_held==15 && sound.voice_ids[0+:7]==71,"releasing stolen physical C4 preserves new B4")
+  if(VOICES==4)begin
+   `CHECK(voice_held==15 && sound.voice_ids[0+:7]==71,"old physical release preserves replacement")
+  end else begin
+   `CHECK($countones(voice_held)==4 && sound.voice_ids[4*7+:7]==71,"C4 release leaves four independent physical notes")
+  end
   pressed=16'h0013;more_frames(24);
   `CHECK(ghost && !gate && level==0,"ambiguous rectangle releases every voice")
   pressed=16'h0002;more_frames(24);

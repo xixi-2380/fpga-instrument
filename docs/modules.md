@@ -28,9 +28,9 @@
 | key_note_events | 原单音键控文件重命名修改；矩阵位图转带编号的握手事件 | tb_key_note_events |
 | adsr_envelope | Attack/Decay/Sustain/Release 包络 | tb_adsr_envelope、tb_adsr_production |
 | keyboard_core | 可替换矩阵输入适配器：扫描、按键策略、通用音符事件 | tb_keyboard_core、tb_keyboard_latency |
-| synth_core | 独立四声部音源：事件分配、四路ADSR/DDS、混音及PT8211输出 | tb_synth_core及现有键盘/板级集成测试 |
+| synth_core | 32声部音源：独立ADSR/相位、共享ROM/增益、顺序混音及PT8211 | tb_synth_core及现有键盘/板级集成测试 |
 | voice_allocator | 音符身份、独立释放、重触发与满额替换；有界年龄排序 | tb_voice_allocator |
-| voice_mixer | 24位声部符号扩展后40位求和、一次截断及16位饱和 | tb_voice_mixer |
+| voice_mixer | 24位串行声部符号扩展后40位寄存累加，最后项后一次截断/饱和 | tb_voice_mixer |
 | run_leds | 参考域流水灯、未就绪超时的PLL/复位诊断和状态同步 | tb_run_leds |
 | keyboard_top | 板级 PLL、复位、键盘三态列和音频镜像 | tb_keyboard_top，官方 PLL 行为模型 |
 
@@ -45,3 +45,5 @@
 32声部计划先验证原voice_allocator的参数边界，再在原synth_core/dds_sine/voice_mixer内共享波表、增益与顺序混音；ADSR第一版保留独立实例。原TB和poly_audio_reference将按声部数参数化，现有键盘和板级路径继续回归，不创建第二套工程。详细调度、接口一致性和验收矩阵见[32声部实现规划](interfaces.md#32-声部实现规划)。当前文件列表和RTL功能仍为四声部。
 
 2026-10-16阶段B：原dds_sine已改为多相位上下文共享ROM，原synth_core调度共享增益，原voice_mixer接收first/last串行声部样本。当前实际约定看interfaces.md的“共享调度实际接口”，上文并行说明是历史；仍为同一20文件工程，无新增功能模块。
+
+2026-10-16阶段C：当前生产配置32，1/4/32参数与32满幅变体通过；最新实际接口见interfaces.md“32声部当前实现”。共享DDS每帧按索引更新32份相位，每16周期一个样本；voice_mixer的first/last划定帧，不重复或漏加最后项。原键盘TB已区分四声部溢出与32声部五键独立行为。旧四声部资源数字不能用于本版验收。

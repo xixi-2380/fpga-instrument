@@ -1,0 +1,2 @@
+PASS tb_keyboard_core checks=4612007
+E:/gowin/fpga-instrument/sim/tb_keyboard_core.sv:71: $finish called at 24041647810 (1ps)

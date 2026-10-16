@@ -1,7 +1,8 @@
 // Independent mathematical phase/ROM/fixed-point/serial scoreboard.
 integer frames=0,edges=0,bitn=0,ch=0,word=0,nonzero=0,cycles=0,last_frame_cycle=-1;
 integer current_code=0,pending_code=0,last_sample=0,romcode;
-integer rendered_terms=0,delivered=0,max_delivery_cycle=0;
+integer rendered_terms=0,delivered=0,max_delivery_cycle=0,peak_code=0,low_code=0;
+reg stalled=0;reg [39:0] stalled_event=0;
 reg frame_complete=0;
 reg [31:0] ref_phase[0:VOICES-1],phase_for_sample[0:VOICES-1];
 reg [11:0] ref_addr[0:VOICES-1];
@@ -11,11 +12,14 @@ real x;
 initial for(integer v=0;v<VOICES;v=v+1)ref_phase[v]=0;
 always @(posedge rst)begin
  frames=0;edges=0;bitn=0;ch=0;word=0;nonzero=0;current_code=0;pending_code=0;
- last_frame_cycle=-1;frame_complete=0;rendered_terms=0;delivered=0;
+ last_frame_cycle=-1;frame_complete=0;rendered_terms=0;delivered=0;stalled=0;peak_code=0;low_code=0;
  for(integer v=0;v<VOICES;v=v+1)ref_phase[v]=0;
 end
 always @(posedge clk)if(!rst)begin
  cycles=cycles+1;
+ if(stalled)begin `CHECK(note_valid && {note_on,note_id,note_fcw}==stalled_event,"producer preserves backpressured event until accepted") end
+ stalled=note_valid && !note_ready;
+ if(stalled)stalled_event={note_on,note_id,note_fcw};
  `CHECK(!u,"shared output never underruns")
  `CHECK(!sound.mix_valid || sound.ready,"shared generation meets buffer readiness")
  `CHECK(!sound.render_busy || !note_ready,"ownership is frozen throughout render")
@@ -65,6 +69,8 @@ always @(posedge bck)if(!rst)begin
  if(bitn==15)begin
   `CHECK(word==(current_code&65535),"shared output matches exact per-frame reference")
   `CHECK($signed(word[15:0])>=-VOICES*1024 && $signed(word[15:0])<=VOICES*1024-1,"configured voice gain headroom")
+  if($signed(word[15:0])>peak_code)peak_code=$signed(word[15:0]);
+  if($signed(word[15:0])<low_code)low_code=$signed(word[15:0]);
   if(word!=0)nonzero=nonzero+1;
   if(ch==1)begin frames=frames+1;last_sample=$signed(word[15:0]);frame_complete=1;end
   ch=1-ch;word=0;bitn=0;

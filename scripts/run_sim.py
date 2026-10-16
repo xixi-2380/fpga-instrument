@@ -19,7 +19,7 @@ results=[]
 for t in tests:
     name=t.stem;print('RUN',name,flush=True);start=time.monotonic()
     cmd=[str(bin/'iverilog.exe'),'-g2012','-Wall','-grelative-include','-Isim','-s',name,'-o',str(out/(name+'.vvp'))]+[s.as_posix() for s in sources]+[t.as_posix()]
-    for override in a.param:cmd+=['-P'+name+'.'+override]
+    for override in a.param:cmd[1:1]=['-P',name+'.'+override]
     if name in ['tb_pll_pair','tb_keyboard_top']:cmd+=['C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v']
     c=subprocess.run(cmd,capture_output=True,text=True,encoding='utf8',errors='replace',env=env)
     (out/(name+'_compile.log')).write_text(c.stdout+c.stderr,encoding='utf8')
