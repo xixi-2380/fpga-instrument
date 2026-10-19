@@ -1,0 +1,4 @@
+# Different score: leading rest, reed, sharp/flat pitches, unusual IDs and a tie-time reuse.
+1/2 1/2 17:F#4:reed 99:Bb3:sine
+1 1/4 17:C5:flute
+end 3/2

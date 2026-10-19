@@ -74,3 +74,8 @@ Windows原仿真入口保持scripts/run_sim.py；可用--test tb_multitimbral或
 需要纯手动启动时，将原keyboard_top参数SCORE_ENABLE改为0；默认节拍SCORE_BEAT_FRAMES=24000，对应48kHz下120 BPM。移植键盘仍只替换输入适配器，曲谱源与音源无键盘专属耦合。
 
 最终30个验证配置共17,323,372次检查通过，含完整120BPM曲谱计数、尾音、回压、一次播放、关闭功能、官方PLL顶层逐样本数学参考、曲终接回按住的键及USR重播，原手动/引脚回归继续通过。顶层音频测试缩短了节拍以控制仿真耗时，生产24000帧节拍与9604帧尾音由独立播放器测试完整验证。证据见[曲谱验证](../reports/demo_score/2026-10-19/validation.json)。未运行综合/P&R/烧录；试听前由用户确认新报告61.44 MHz与Setup/Hold通过，实际声音和爆音改善仍待实板确认。
+
+
+## 2026-10-19：曲谱改为文件输入
+
+原score_player已原位改成通用独立播放器，不再包含固定旋律、自动和弦或FCW函数。旧src/config/demo_score.svh已移除；请编辑src/scores/twinkle.txt并用scripts/compile_score.py生成twinkle.hex。顶层SCORE_FILE指定文件，SCORE_WORDS指定ROM容量；同步ROM在综合/配置时加载，换谱须由用户重新编译烧录。操作、格式、模块接口和验证见[播放器说明](score_player.md)。本次只迁移谱数据，不调整旧谱音色、伴奏响度或换音衔接，不能据此宣称音质已修复。

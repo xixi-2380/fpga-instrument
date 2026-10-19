@@ -2,7 +2,8 @@
 `include "config/keyboard_config.svh"
 `include "config/run_leds_config.svh"
 module keyboard_top #(
-    parameter integer SCORE_ENABLE=1,SCORE_BEAT_FRAMES=(`SAMPLE_HZ/2),
+    parameter SCORE_FILE="src/scores/twinkle.hex",
+    parameter integer SCORE_WORDS=512,SCORE_ENABLE=1,SCORE_BEAT_FRAMES=(`SAMPLE_HZ/2),
     LED_STEP_CYCLES=`RUN_LED_STEP_CYCLES,LED_DIAG_STEPS=`RUN_LED_DIAG_STEPS,
     LOCK_N=`LOCK_CYCLES,SLOT_CYCLES=`KEY_SLOT_CYCLES,
     SETTLE_CYCLES=`KEY_SETTLE_CYCLES,DEBOUNCE_SCANS=`KEY_DEBOUNCE_SCANS,
@@ -12,7 +13,7 @@ module keyboard_top #(
     output wire HP_BCK,HP_WS,HP_DIN,PA_EN,DBG_BCK,DBG_WS,DBG_DIN,DBG_PA_EN,
     output wire [5:0] led_n);
     wire [1:0] selected_timbre,event_timbre,key_timbre,score_timbre;
-    wire key_valid,key_on,score_valid,score_on,score_busy,score_done;
+    wire key_valid,key_on,score_valid,score_on,score_busy,score_done,score_error;
     wire [6:0] key_id,score_id;
     wire [31:0] key_fcw,score_fcw;
     wire mid_clk,audio_clk,lock1,lock2,pll1_reset,pll2_reset,audio_reset;
@@ -30,10 +31,11 @@ module keyboard_top #(
     assign note_id=score_busy?score_id:key_id;
     assign note_fcw=score_busy?score_fcw:key_fcw;
     assign event_timbre=score_busy?score_timbre:key_timbre;
-    score_player #(.ENABLE(SCORE_ENABLE),.BEAT_FRAMES(SCORE_BEAT_FRAMES),.TAIL_FRAMES(RELEASE+4))
+    score_player #(.SCORE_FILE(SCORE_FILE),.SCORE_WORDS(SCORE_WORDS),.ENABLE(SCORE_ENABLE),
+        .BEAT_FRAMES(SCORE_BEAT_FRAMES),.TAIL_FRAMES(RELEASE+4))
         score(.clk(audio_clk),.rst(audio_reset),.input_ready(input_ready),.frame_ce(frame_ce),
         .note_ready(note_ready && score_busy),.note_valid(score_valid),.note_on(score_on),
-        .note_id(score_id),.note_fcw(score_fcw),.note_timbre(score_timbre),.busy(score_busy),.done(score_done));
+        .note_id(score_id),.note_fcw(score_fcw),.note_timbre(score_timbre),.busy(score_busy),.done(score_done),.error(score_error));
     timbre_control timbre_buttons(audio_clk,audio_reset,score_busy?16'b0:keys,selected_timbre);
     run_leds #(.STEP_CYCLES(LED_STEP_CYCLES),.DIAG_STEPS(LED_DIAG_STEPS)) status_leds(
         .clk(clk),.audio_ready_async(!audio_reset),.key_active_async(gate),

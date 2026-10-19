@@ -61,3 +61,8 @@
 - 2026-10-19用户明确要求修改多音色版，最终症状更正为“任意普通双键均可触发瞬间爆音”，不仅是左上＋右下手势。已读取Downloads副本19:43:59新STA：音频Fmax5.499 MHz、1762个Setup违例、180级allocator关键路径181.520 ns。原voice_allocator已改逐拍读/比较、寄存目标/rank、握手提交；帧或停用取消未确认搜索，valid及全部音色载荷保持。32声部无打断搜索≤68拍，原帧渲染517拍不变。最终29个验证配置21228787次检查通过，证据reports/multitimbral_fix/2026-10-19/validation.json；新STA、资源、爆音改善未验证。用户需打开E:\gowin\fpga-instrument内原工程重新实现并先确认61.44MHz和Setup/Hold；助手不启动EDA。不增加手势静音、效果器或其他功能，音色操作和所有GPIO/PLL/PA/增益保持。
 
 - 2026-10-19用户明确授权加入一段曲谱，并确认上电自动播放一次《小星星》旋律＋简单和弦，结束恢复键盘。新增独立score_player及src/config/demo_score.svh，默认SCORE_ENABLE=1、SCORE_BEAT_FRAMES=24000；42音符、48拍约24秒，笛管旋律/正弦三音和弦。源身份0..3与键盘60..75分开，曲终Off后等RELEASE+4帧再交接，USR复位重播，SCORE_ENABLE=0退化原键盘。现22个HDL、32项依赖，更新后必须关闭重开原工程，避免旧IDE列表漏新模块。原音源及CST/SDC/PLL/PA/增益均未改。最终30配置17323372次检查通过，证据reports/demo_score/2026-10-19/validation.json；EDA、STA、资源和音质仍待用户验证，不自动扩展曲库或录放音功能。
+
+
+- 2026-10-19用户要求播放器独立并读取指定谱文件。原score_player原位改通用64位同步ROM事件源，SCORE_FILE/SCORE_WORDS可配置，顶层仅复用事件源。旧demo_score.svh歌曲函数移至src/scores/twinkle.txt与离线生成twinkle.hex，scripts/compile_score.py验证并转换，不启动EDA。22个HDL、33项依赖，保持旧谱编排、音源/ADSR/PLL/PA/增益/约束；此前粗糙听感不作为本次已修复项。格式及读文件仅在综合/配置时生效等限制见docs/score_player.md。已读取用户21:09:15旧版STA：Setup/Hold各0、音频Fmax61.535MHz，该结果不覆盖本次新结构；新STA/资源/试听由用户验证。
+
+- 文件播放器最终35个HDL配置、17327941次检查和6项谱转换器测试通过，证据reports/file_score/2026-10-19/validation.json。验证期间旧编辑页曾把score_player保存为Git基线；已比对为完全相同的旧内容后恢复新实现，记录external_save.json；请关闭旧编辑页后重开工程，避免覆盖磁盘新版。

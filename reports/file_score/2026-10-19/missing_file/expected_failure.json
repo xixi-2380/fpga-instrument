@@ -1,0 +1,6 @@
+{
+  "expected_failure": true,
+  "reason": "missing enabled score file",
+  "runner_exit_code": 1,
+  "matched_explicit_diagnostic": true
+}

@@ -78,7 +78,7 @@ module tb_score_audio;
   // Global reset replays from the beginning and cancels previous source state.
   ref_rst=1;#1;`CHECK(!pa && !note_valid && din==0,"reset cancels playback and keyboard audio")
   score_events=0;key_events=0;#99 ref_rst=0;wait(pa);wait(score_events>=4);
-  `CHECK(dut.score_busy && dut.score.step_index==0 && dut.sound.voice_ids[6:0]==0,"USR replay begins at the first score step")
+  `CHECK(dut.score_busy && dut.score.pc<=4 && dut.sound.voice_ids[6:0]==0,"USR replay begins at the first score step")
   $display("SCORE_AUDIO_METRICS events=%0d max_delivery=%0d",finished_events,max_delivery_cycle);
   $display("PASS tb_score_audio checks=%0d",checks);$finish;
  end

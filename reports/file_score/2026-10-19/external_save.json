@@ -1,0 +1,6 @@
+{
+  "external_save_matches_base_commit": true,
+  "base_sha256": "dbbd1065ded9f895cb4899134002460e63809f098ee559707d5554c76428516c",
+  "restored_file_sha256": "c5a003c20faad55ac09cfb1078706f993f1fda6d7d74426b75cdbdc6339d7fe3",
+  "reason": "Old editor content saved over in-progress file player"
+}

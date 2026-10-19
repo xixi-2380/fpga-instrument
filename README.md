@@ -1,3 +1,11 @@
+## 文件曲谱播放器
+
+当前播放器从`SCORE_FILE`指定的ROM谱文件读取事件，歌曲不再硬编码在RTL。编辑`src/scores/twinkle.txt`后，在工程根目录运行`D:\py\python.exe scripts/compile_score.py src/scores/twinkle.txt src/scores/twinkle.hex`，再自行重新综合/P&R/烧录；默认仍上电播放一次、尾音结束恢复键盘。格式、换谱和模块接口见[播放器说明](docs/score_player.md)。本次保持旧谱编排与音源，未将模块化当作音质修复。
+
+本次35个HDL配置、17,327,941次检查及6项谱转换器测试通过，详见[验证记录](reports/file_score/2026-10-19/validation.json)。新结构的综合/P&R和实板试听由用户执行。
+
+以下保留此前版本的实现与验证记录。
+
 ## 2026年10月19日 一次曲谱试听
 
 当前默认上电播放一次约24秒《小星星》：笛管旋律＋正弦三音和弦，尾音结束后自动恢复键盘；按USR复位可重播。请关闭旧IDE工程后重新打开原keyboard_adsr.gprj，确认新增score_player.sv已入列表（22个HDL、32依赖），再由用户重新综合/P&R和SRAM试听。30个HDL验证配置共17,323,372次检查通过；新的STA和实板音质仍待确认。操作与简谱见[曲谱试听](docs/multitimbral.md#2026-10-19上电曲谱试听)，证据见[验证记录](reports/demo_score/2026-10-19/validation.json)。

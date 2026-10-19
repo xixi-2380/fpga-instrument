@@ -1,72 +1,87 @@
 `timescale 1ns/1ps
 `include "config/synth_config.svh"
-// Autonomous, keyboard-independent valid/ready source. Lanes 0..3 are score
-// identities; keyboard IDs 60..75 remain disjoint. Only frame_ce counts time.
+// File-backed event source. No melody, harmony, keyboard mapping or synthesis
+// logic lives here. ROM is initialized at FPGA configuration, not runtime I/O.
 module score_player #(
-    parameter integer ENABLE=1,BEAT_FRAMES=(`SAMPLE_HZ/2),TAIL_FRAMES=(`ADSR_RELEASE_FRAMES+4),
-    MELODY_TIMBRE=1,CHORD_TIMBRE=0)(
+    parameter SCORE_FILE="src/scores/twinkle.hex",
+    parameter integer SCORE_WORDS=512,ENABLE=1,BEAT_FRAMES=(`SAMPLE_HZ/2),
+    TAIL_FRAMES=(`ADSR_RELEASE_FRAMES+4))(
     input wire clk,rst,input_ready,frame_ce,note_ready,
     output wire note_valid,note_on,output wire [6:0] note_id,
     output wire [31:0] note_fcw,output wire [1:0] note_timbre,
-    output wire busy,done);
-    `include "config/demo_score.svh"
-    localparam integer LONG_FRAMES=2*BEAT_FRAMES;
-    localparam integer MAX_FRAMES=LONG_FRAMES>TAIL_FRAMES?LONG_FRAMES:TAIL_FRAMES;
+    output wire busy,done,output reg error);
+    localparam integer AW=SCORE_WORDS>1?$clog2(SCORE_WORDS):1;
+    localparam integer TICK_FRAMES=BEAT_FRAMES/4;
+    localparam integer MAX_FRAMES=TICK_FRAMES>TAIL_FRAMES?TICK_FRAMES:TAIL_FRAMES;
     localparam integer CW=MAX_FRAMES>0?$clog2(MAX_FRAMES+1):1;
-    localparam [2:0] WAIT_START=0,NOTE_ON=1,HOLD=2,NOTE_OFF=3,GAP=4,TAIL=5,DONE=6;
-    localparam [CW-1:0] SHORT_GATE=(3*BEAT_FRAMES)/4,LONG_GATE=(3*LONG_FRAMES)/4;
-    localparam [CW-1:0] SHORT_GAP=BEAT_FRAMES-(3*BEAT_FRAMES)/4;
-    localparam [CW-1:0] LONG_GAP=LONG_FRAMES-(3*LONG_FRAMES)/4;
-    reg [2:0] state;
-    reg [5:0] step_index;
-    reg [1:0] lane;
+    localparam [3:0] WAIT_START=0,FETCH=1,DECODE=2,SEND=3,WAIT_TIME=4,
+        TAIL=5,DONE=6,NEXT=7,FAULT=8;
+    reg [63:0] rom[0:SCORE_WORDS-1];
+    reg [63:0] instruction;
+    reg [AW-1:0] pc;
+    reg [3:0] state;
+    reg [31:0] ticks_left;
     reg [CW-1:0] elapsed;
-    wire [7:0] step_data=score_step(step_index);
-    wire [CW-1:0] gate_frames=step_data[7]?LONG_GATE:SHORT_GATE;
-    wire [CW-1:0] gap_frames=step_data[7]?LONG_GAP:SHORT_GAP;
+    initial if(ENABLE)$readmemh(SCORE_FILE,rom);
+    // Synchronous read, matching the project's waveform ROM convention.
+    always @(posedge clk)if(ENABLE)instruction<=rom[pc];
     assign busy=ENABLE && state!=DONE;
     assign done=!ENABLE || state==DONE;
-    assign note_valid=!rst && ENABLE && (state==NOTE_ON || state==NOTE_OFF);
-    assign note_on=state==NOTE_ON;
-    assign note_id={5'b0,lane};
-    assign note_fcw=score_fcw(score_pitch(step_data[6:0],lane));
-    assign note_timbre=lane==0?MELODY_TIMBRE:CHORD_TIMBRE;
+    assign note_valid=!rst && ENABLE && state==SEND;
+    assign note_on=instruction[63:60]==4'h2;
+    assign note_id=instruction[40:34];
+    assign note_timbre=instruction[33:32];
+    assign note_fcw=instruction[31:0];
     always @(posedge clk or posedge rst)begin
         if(rst)begin
-            state<=ENABLE?WAIT_START:DONE;step_index<=0;lane<=0;elapsed<=0;
+            state<=ENABLE?WAIT_START:DONE;pc<=0;elapsed<=0;ticks_left<=0;error<=0;
         end else case(state)
-            WAIT_START:if(input_ready)begin state<=NOTE_ON;lane<=0;end
-            NOTE_ON:if(note_ready)begin
-                if(lane==3)begin state<=HOLD;lane<=0;elapsed<=0;end
-                else lane<=lane+1'b1;
-            end
-            HOLD:if(frame_ce)begin
-                if(elapsed==gate_frames-1'b1)begin state<=NOTE_OFF;lane<=0;elapsed<=0;end
-                else elapsed<=elapsed+1'b1;
-            end
-            NOTE_OFF:if(note_ready)begin
-                if(lane==3)begin
-                    lane<=0;elapsed<=0;
-                    if(step_index==41)state<=TAIL_FRAMES==0?DONE:TAIL;
-                    else state<=GAP;
-                end else lane<=lane+1'b1;
-            end
-            GAP:if(frame_ce)begin
-                if(elapsed==gap_frames-1'b1)begin
-                    step_index<=step_index+1'b1;state<=NOTE_ON;lane<=0;elapsed<=0;
+            WAIT_START:if(input_ready)state<=FETCH;
+            FETCH:state<=DECODE;
+            DECODE:case(instruction[63:60])
+                4'h0:begin elapsed<=0;state<=TAIL_FRAMES==0?DONE:TAIL;end
+                4'h1:begin
+                    elapsed<=0;ticks_left<=instruction[31:0];
+                    state<=instruction[31:0]==0?NEXT:WAIT_TIME;
+                end
+                4'h2,4'h3:state<=SEND;
+                default:begin state<=FAULT;error<=1;end
+            endcase
+            SEND:if(note_ready)state<=NEXT;
+            WAIT_TIME:if(frame_ce)begin
+                if(elapsed==TICK_FRAMES-1)begin
+                    elapsed<=0;
+                    if(ticks_left==1)state<=NEXT;
+                    else ticks_left<=ticks_left-1'b1;
                 end else elapsed<=elapsed+1'b1;
             end
+            NEXT:if(pc==SCORE_WORDS-1)begin state<=FAULT;error<=1;end
+                 else begin pc<=pc+1'b1;state<=FETCH;end
             TAIL:if(frame_ce)begin
                 if(elapsed==TAIL_FRAMES-1)begin state<=DONE;elapsed<=0;end
                 else elapsed<=elapsed+1'b1;
             end
             DONE:state<=DONE;
-            default:state<=ENABLE?WAIT_START:DONE;
+            FAULT:state<=FAULT; // Invalid ROM never hands an unfinished score to the keyboard.
+            default:begin state<=FAULT;error<=1;end
         endcase
     end
     // synthesis translate_off
-    initial if(BEAT_FRAMES<4 || TAIL_FRAMES<0 || MELODY_TIMBRE<0 ||
-               MELODY_TIMBRE>2 || CHORD_TIMBRE<0 || CHORD_TIMBRE>2)
-        $fatal(1,"Invalid score configuration");
+    integer score_fd;
+    initial begin
+        if(SCORE_WORDS<1 || BEAT_FRAMES<4 || BEAT_FRAMES%4!=0 || TAIL_FRAMES<0)
+            $fatal(1,"Invalid score configuration: beat frames must be a positive multiple of four");
+        if(ENABLE)begin
+            score_fd=$fopen(SCORE_FILE,"r");
+            if(!score_fd)$fatal(1,"Cannot open score file: %s",SCORE_FILE);
+            $fclose(score_fd);
+        end
+    end
+    always @(posedge clk)if(!rst && ENABLE && state==DECODE)begin
+        if((^instruction)===1'bx)$fatal(1,"Uninitialized score ROM at address %0d",pc);
+        if((instruction[63:60]==2 || instruction[63:60]==3) &&
+           (instruction[59:41]!=0 || instruction[33:32]>2 || instruction[31:0]==0))
+            $fatal(1,"Invalid score event at address %0d",pc);
+    end
     // synthesis translate_on
 endmodule

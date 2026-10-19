@@ -1,0 +1,4 @@
+Recovered verbatim diagnostic excerpt from tool output before restoring the external save:
+E:/gowin/fpga-instrument/src/score_player.sv:13: Include file config/demo_score.svh not found
+E:/gowin/fpga-instrument/src/score_player.sv:12: syntax error
+I give up.

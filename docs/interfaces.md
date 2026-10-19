@@ -210,3 +210,12 @@ frame_ce或enabled撤销会取消尚未确认的搜索，重新允许后对同�
 顶层以score_busy选通整个事件载荷和返回ready。自动播放时键盘适配器input_ready与note_ready均关闭，扫描继续；score_busy只有在最后四个Off已握手且RELEASE+4帧尾音结束后撤销。该时刻没有待确认的曲谱事件，切换不撤回valid、不截断包络；键盘随后重新对当前稳定位图发事件，期间按住的键不会丢失。音色控制在播放时看到零位图，恢复后沿用原操作。
 
 播放器只在frame_ce累加门长/间隔/尾音计数，不派生时钟。每步先发四个On、保持3/4拍长、再发四个Off，计完剩余间隔后前进，最后一步直接等待尾音。ready回压期间状态和全部事件字段保持，时长可随握手等待略延长；完成后不循环。SCORE_ENABLE=0退化到原键盘模式，USR复位重新播放。
+
+
+## 2026-10-19：文件曲谱播放器接口
+
+原score_player原位改为通用同步ROM事件解释器，使用SCORE_FILE/SCORE_WORDS选择谱文件和容量。删除旧src/config/demo_score.svh内置歌曲函数，歌曲转为src/scores/twinkle.txt与生成的twinkle.hex。音高和和弦都由谱文件明确给出，播放器不引用键位表或歌曲专属逻辑。keyboard_top原位增加同名文件/容量参数并转传，原事件源复用与键盘隔离不变。
+
+BEAT_FRAMES必须为正且为4的倍数，WAIT以1/4拍计数；同步ROM读取与握手有少量开销，回压延长曲长。每个ON/OFF在valid/ready握手前保持所有字段，END后的TAIL_FRAMES结束才交接键盘。error为非法操作码/ROM边界故障指示，故障不交接、须复位。ENABLE=0不读取ROM；USR复位从指定文件起始重新播放。完整64位指令格式、文本转换与验证限制见[播放器说明](score_player.md)。
+
+此次未更改同身份重触发、音源、包络、总增益、PLL或CST/SDC。此前粗糙听感的编排/发音衔接问题仍独立存在。

@@ -1,0 +1,6 @@
+RUN tb_score_player
+ERROR: E:/gowin/fpga-instrument/src/score_player.sv:25: $readmemh: Unable to open sim/data/does_not_exist.hex for reading.
+FATAL: E:/gowin/fpga-instrument/src/score_player.sv:76: Cannot open score file:        sim/data/does_not_exist.hex
+       Time: 0  Scope: tb_score_player.dut
+
+
