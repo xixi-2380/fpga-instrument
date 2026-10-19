@@ -1,0 +1,2 @@
+PASS tb_timbre_control checks=9
+E:/gowin/fpga-instrument/sim/tb_timbre_control.sv:18: $finish called at 711000 (1ps)

@@ -1,0 +1,12 @@
+CHORD_EVENT voice=0 frame=307 cycle=393086 offset=106
+CHORD_EVENT voice=1 frame=309 cycle=395646 offset=106
+CHORD_EVENT voice=2 frame=311 cycle=398206 offset=106
+CHORD_EVENT voice=3 frame=313 cycle=400766 offset=106
+COHERENT_PEAKS positive=1023 negative=0 expected=4095
+COHERENT_CONTEXT voice=0 id=32 phase=c0000000
+COHERENT_CONTEXT voice=1 id=33 phase=40000000
+COHERENT_CONTEXT voice=2 id=34 phase=c0000000
+COHERENT_CONTEXT voice=3 id=35 phase=40000000
+FAIL coherent positive peak preserves 1/32 gain at 7145825000
+FATAL: E:/gowin/fpga-instrument/sim/tb_synth_core.sv:72: 
+       Time: 7145825178  Scope: tb_synth_core

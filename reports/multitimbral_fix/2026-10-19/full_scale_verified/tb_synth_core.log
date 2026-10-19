@@ -1,0 +1,4 @@
+COHERENT_PEAKS positive=32767 negative=-32767 expected=32767
+RENDER_METRICS voices=32 max_delivery_cycles=517 budget=544
+PASS tb_synth_core checks=2511764
+E:/gowin/fpga-instrument/sim/tb_synth_core.sv:97: $finish called at 12750726194 (1ps)

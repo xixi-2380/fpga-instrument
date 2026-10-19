@@ -21,6 +21,11 @@ module tb_synth_core;
   wait(note_ready);@(posedge clk);#0.001;
   @(negedge clk);note_valid=0;
  end endtask
+ // Sample CE only on the source clock edge. Waiting on combinational CE
+ // transitions can count delta-cycle pulses during the BCK counter rollover.
+ task next_frame;begin
+  @(posedge clk);while(!frame_ce)@(posedge clk);#0.002;
+ end endtask
  initial begin
   #23 rst=0;wait(input_ready);more_frames(20);
   `CHECK(pa && level==0 && nonzero==0,"idle retains zero samples and existing PA policy")
@@ -53,21 +58,30 @@ module tb_synth_core;
   event_note(0,120,0);more_frames(30);
   event_note(1,120,32'h0258bf26);event_note(0,120,0);more_frames(30);
   `CHECK(!gate && voice_active==0,"short On/Off leaves no stuck voice")
-  // All events fit the idle part of one frame: coherent full-load phase starts.
-  wait(frame_ce);wait(!sound.render_busy);
-  for(integer v=0;v<VOICES;v=v+1)event_note(1,7'(32+v),32'h40000000);
+  // Four frames are one full turn at FCW=1/4. Stagger allocation on
+  // identical frame offsets; every voice still reaches the same phase without
+  // requiring all 32 ownership searches to fit inside one idle window.
+  for(integer v=0;v<VOICES;v=v+1)begin
+   next_frame;wait(!sound.render_busy);
+   event_note(1,7'(32+v),32'h40000000);
+   if(v<VOICES-1)repeat(3)next_frame;
+  end
   peak_code=0;low_code=0;more_frames(30);
   `CHECK(&voice_held && &voice_active,"coherent full-load chord occupies every logical voice")
   if(ATTACK_N==0 && DECAY_N==0 && SUSTAIN_N==65536)begin
+   $display("COHERENT_PEAKS positive=%0d negative=%0d expected=%0d",peak_code,low_code,((VOICES*32767)>>>5));
+   if(peak_code!=((VOICES*32767)>>>5))
+    for(integer v=0;v<VOICES;v=v+1)
+     $display("COHERENT_CONTEXT voice=%0d id=%0d phase=%h",v,sound.voice_ids[v*7+:7],sound.phase[v*32+:32]);
    `CHECK(peak_code==((VOICES*32767)>>>5),"coherent positive peak preserves 1/32 gain")
    `CHECK(low_code==((-(VOICES*32767))>>>5),"coherent negative peak preserves signed rounding")
   end
   // A queued input waits for the ongoing render without changing this frame.
-  wait(frame_ce);repeat(24)@(posedge clk);
+  next_frame;repeat(24)@(posedge clk);
   event_note(1,110,32'h0258bf26);more_frames(4);
   `CHECK(&voice_held,"event offered during busy eventually completes")
   // Reset in the middle of a job must cancel all old output and phase contexts.
-  wait(frame_ce);repeat(24)@(posedge clk);#3 rst=1;note_valid=0;#1;
+  next_frame;repeat(24)@(posedge clk);#3 rst=1;note_valid=0;#1;
   `CHECK(!pa && !input_ready && !gate && din==0 && level==0 && !sound.render_busy,"reset cancels in-flight render")
   #31 rst=0;wait(input_ready);more_frames(20);
   `CHECK(pa && level==0 && nonzero==0 && voice_held==0,"restart invents no note or stale sample")

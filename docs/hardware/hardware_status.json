@@ -144,8 +144,8 @@
   "four_voice_stage_user_authorized": true,
   "four_voice_simulation_passed": true,
   "four_voice_hardware_user_report_passed": true,
-  "current_source_function": "32-voice shared scheduled polyphony with three per-voice timbres and 4 mA serial-output diagnostic",
-  "note_input_protocol": "audio_clk valid/ready with note_id, Note On/Off kind and 32-bit FCW",
+  "current_source_function": "32-voice multitimbral synthesis with registered multi-cycle voice allocation and preserved 4mA serial-output diagnostic",
+  "note_input_protocol": "audio_clk valid/ready; producer holds kind, note_id, 32-bit FCW and 2-bit timbre throughout multi-cycle search",
   "voice_allocation_policy": "same identity; inactive; oldest released; oldest held; stale releases ignored",
   "four_voice_hardware_user_report": "好的，现在提交git，测试正常",
   "four_voice_hardware_electrical_measurements_available": false,
@@ -178,5 +178,18 @@
     "fixed_in_noise_diagnostic": false,
     "new_STA_report_read_this_turn": false,
     "require_passing_user_STA_before_programming": true
+  },
+  "multitimbral_transient_noise": {
+    "user_report_date": "2026-10-19",
+    "onset_or_switch_transient": true,
+    "ordinary_two_note_chord_reproduces": true,
+    "limited_to_selection_gesture": false,
+    "pre_fix_report_audio_fmax_mhz": 5.499,
+    "pre_fix_setup_violations": 1762,
+    "pre_fix_report_path": "C:\\Users\\x1767\\Downloads\\fpga-instrument-main\\fpga-instrument-main/impl/pnr/D2_keyboard_leds.tr",
+    "allocator_changed_to_registered_search": true,
+    "digital_validation_checks": 21228787,
+    "post_fix_sta_verified": false,
+    "hardware_improvement_verified": false
   }
 }

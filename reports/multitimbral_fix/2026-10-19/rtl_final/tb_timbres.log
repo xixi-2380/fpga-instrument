@@ -1,0 +1,2 @@
+PASS tb_timbres checks=12291
+E:/gowin/fpga-instrument/sim/tb_timbres.sv:32: $finish called at 122926000 (1ps)

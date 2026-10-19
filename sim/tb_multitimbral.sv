@@ -8,7 +8,7 @@ module tb_multitimbral;
  always #8.138020833 clk=~clk;
  wire bck,ws,din,pa,u,frame_ce,note_ready,input_ready,gate;
  wire [VOICES-1:0] voice_active,voice_held;wire [16:0] level;
- integer checks=0;
+ integer checks=0,isolated_nonzero;
  synth_core #(.VOICES(VOICES),.MUTE(4),.FADE(4),.ATTACK(8),.DECAY(8),.SUSTAIN(32768),.RELEASE(16)) sound(
  .clk(clk),.rst(rst),.note_valid(note_valid),.note_on(note_on),.note_id(note_id),.note_fcw(note_fcw),
  .note_ready(note_ready),.input_ready(input_ready),.bck(bck),.ws(ws),.din(din),.pa_enable(pa),
@@ -39,6 +39,34 @@ module tb_multitimbral;
  end endtask
  initial begin
   #23 rst=0;wait(input_ready);more_frames(10);
+  // A single held key in any preset cannot create a full-scale impulse.
+  for(integer t=0;t<3;t=t+1)begin
+   peak_code=0;low_code=0;
+   event_note(1,69,t);more_frames(40);
+   `CHECK($countones(voice_held)==1 && $countones(voice_active)==1,
+    "isolated preset starts exactly one voice")
+   `CHECK(peak_code<=1023 && low_code>=-1024 && (peak_code>0 || low_code<0),
+    "every isolated timbre stays within one voice gain, without full-scale spikes")
+   event_note(0,69,t);more_frames(30);
+   `CHECK(!gate && voice_active==0 && level==0,"each preset release drains to idle")
+   isolated_nonzero=nonzero;more_frames(4);
+   `CHECK(nonzero==isolated_nonzero,"no residual codes after isolated preset release")
+  end
+  // Reproduce ordinary two-note attacks, with independent note/voice state.
+  // Every serial word remains checked against the independent waveform model.
+  for(integer t=0;t<3;t=t+1)for(integer burst=0;burst<3;burst=burst+1)begin
+   peak_code=0;low_code=0;
+   event_note(1,60,t);event_note(1,69,t);more_frames(24);
+   `CHECK($countones(voice_held)==2 && $countones(voice_active)==2,
+    "ordinary two-note attacks preserve exactly two independent voices")
+   `CHECK(peak_code<=2047 && low_code>=-2048,
+    "two-note transient never exceeds two voices of gain")
+   event_note(0,60,t);more_frames(20);
+   `CHECK($countones(voice_held)==1 && $countones(voice_active)==1,
+    "releasing one of a pair leaves the other note intact")
+   event_note(0,69,t);more_frames(24);
+   `CHECK(!gate && voice_active==0,"repeated two-note attacks drain cleanly")
+  end
   for(integer v=0;v<VOICES;v=v+1)event_note(1,32+v,v%3);
   more_frames(25);
   `CHECK(&voice_active && &voice_held,"all 32 mixed-timbre voices sustain")
@@ -60,5 +88,5 @@ module tb_multitimbral;
   `CHECK(voice_active==0 && !u,"all timbres release to idle without underrun")
   $display("PASS tb_multitimbral checks=%0d delivery=%0d",checks,max_delivery_cycle);$finish;
  end
- initial begin #20000000;$fatal(1,"multitimbral timeout");end
+ initial begin #40000000;$fatal(1,"multitimbral timeout");end
 endmodule

@@ -1,0 +1,2 @@
+PASS tb_startup_envelope checks=726
+E:/gowin/fpga-instrument/sim/tb_startup_envelope.sv:17: $finish called at 14511000 (1ps)

@@ -2,7 +2,7 @@
 integer frames=0,edges=0,bitn=0,ch=0,word=0,nonzero=0,cycles=0,last_frame_cycle=-1;
 integer current_code=0,pending_code=0,last_sample=0,romcode;
 integer rendered_terms=0,delivered=0,max_delivery_cycle=0,peak_code=0,low_code=0;
-reg stalled=0;reg [39:0] stalled_event=0;
+reg stalled=0;reg [41:0] stalled_event=0;
 reg frame_complete=0;
 reg [31:0] ref_phase[0:VOICES-1],phase_for_sample[0:VOICES-1];
 reg [11:0] ref_addr[0:VOICES-1];
@@ -17,9 +17,17 @@ always @(posedge rst)begin
 end
 always @(posedge clk)if(!rst)begin
  cycles=cycles+1;
- if(stalled)begin `CHECK(note_valid && {note_on,note_id,note_fcw}==stalled_event,"producer preserves backpressured event until accepted") end
+`ifdef TIMBRE_REFERENCE
+ if(stalled)begin `CHECK(note_valid && {note_timbre,note_on,note_id,note_fcw}==stalled_event,
+  "producer preserves timbre and event until accepted") end
  stalled=note_valid && !note_ready;
- if(stalled)stalled_event={note_on,note_id,note_fcw};
+ if(stalled)stalled_event={note_timbre,note_on,note_id,note_fcw};
+`else
+ if(stalled)begin `CHECK(note_valid && {2'b0,note_on,note_id,note_fcw}==stalled_event,
+  "producer preserves backpressured event until accepted") end
+ stalled=note_valid && !note_ready;
+ if(stalled)stalled_event={2'b0,note_on,note_id,note_fcw};
+`endif
  `CHECK(!u,"shared output never underruns")
  `CHECK(!sound.mix_valid || sound.ready,"shared generation meets buffer readiness")
  `CHECK(!sound.render_busy || !note_ready,"ownership is frozen throughout render")

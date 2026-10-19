@@ -11,6 +11,7 @@ module tb_keyboard_top;
  wire [3:0] flow_on=~leds[3:0];
  reg [3:0] previous_flow=4'b1110;
  integer flow_moves=0,reset_flow_moves=0,idle_edge_start,diag_heartbeat;
+ reg pair_check=0;
  integer checks=0,edges=0,bitn=0,ch=0,word=0,right_word=0,nonzero=0;
  realtime last_rise=0,period;
  for(genvar k=0;k<4;k=k+1)assign selected[k]=(columns[k]===1'b0);
@@ -45,6 +46,8 @@ module tb_keyboard_top;
   last_rise=$realtime;edges=edges+1;
   word=((word<<1)|din)&65535;
   if(bitn==15)begin
+   if(pair_check)begin `CHECK($signed(word[15:0])>=-2048 && $signed(word[15:0])<=2047,
+    "physical two-key transient stays within two voices of gain") end
    if(ch==0)right_word=word;
    else begin `CHECK(word==right_word,"stereo keyboard atomics") if(word!=0)nonzero=nonzero+1;end
    ch=1-ch;word=0;bitn=0;
@@ -77,6 +80,20 @@ module tb_keyboard_top;
   repeat(64)@(posedge bck);#0.002;nonzero=0;idle_edge_start=edges;
   wait(edges>=idle_edge_start+320);#0.002;
   `CHECK(nonzero==0 && pa,"polyphonic Release returns to zero with original PA policy")
+  // Physical ordinary two-key attacks in every preset. Selection remains in
+  // the matrix adapter; do not replace these notes with the control gesture.
+  for(integer preset=0;preset<3;preset=preset+1)begin
+   if(preset>0)begin
+    pressed=16'h8001;wait(dut.selected_timbre==preset);
+    pressed=0;wait(!dut.gate);wait(dut.envelope_level==0);
+    repeat(64)@(posedge bck);
+   end
+   pair_check=1;pressed=16'h0003;
+   wait($countones(dut.voice_held)==2);repeat(32*24)@(posedge bck);
+   `CHECK($countones(dut.voice_active)==2,"all presets sustain a physical ordinary two-key chord")
+   pressed=0;wait(!dut.gate);wait(dut.envelope_level==0);
+   repeat(64)@(posedge bck);pair_check=0;
+  end
   // Simulate persistent PLL2 failure; diagnostics must work from the reference domain.
   force dut.lock2=1'b0;#1;
   `CHECK(dut.audio_reset && !pa,"PLL loss still immediately resets and mutes audio")

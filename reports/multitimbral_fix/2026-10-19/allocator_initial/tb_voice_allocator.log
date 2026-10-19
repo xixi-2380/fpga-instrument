@@ -1,0 +1,5 @@
+ALLOCATOR_CASE voices=1 checks=2846
+ALLOCATOR_CASE voices=4 checks=19224
+ALLOCATOR_CASE voices=32 checks=981206
+PASS tb_voice_allocator checks=1003276
+E:/gowin/fpga-instrument/sim/tb_voice_allocator.sv:106: $finish called at 573230000 (1ps)

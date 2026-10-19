@@ -1,0 +1,5 @@
+E:/gowin/fpga-instrument/sim/passive_matrix_model.svh:3: warning: timescale for passive_matrix_model inherited from another file.
+E:/gowin/fpga-instrument/sim/tb_keyboard_latency.sv:1: ...: The inherited timescale is here.
+E:/gowin/fpga-instrument/sim/tb_keyboard_latency.sv:14: warning: Instantiating module keyboard_core with dangling input port 15 (selected_timbre) floating.
+E:/gowin/fpga-instrument/src/synth_core.sv:88: warning: @* is sensitive to all 32 words in array 'voice_level'.
+E:/gowin/fpga-instrument/src/synth_core.sv:88: warning: @* is sensitive to all 32 words in array 'voice_level'.

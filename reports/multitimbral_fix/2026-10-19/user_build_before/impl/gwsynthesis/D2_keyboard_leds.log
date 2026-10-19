@@ -1,0 +1,115 @@
+GowinSynthesis start
+Running parser ...
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\timbre_control.sv'
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\keyboard_top.sv'
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\keyboard_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\keyboard_top.sv":2)
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\synth_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\keyboard_config.svh":3)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\keyboard_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\keyboard_config.svh":3)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\keyboard_top.sv'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\keyboard_top.sv":2)
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\run_leds_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\keyboard_top.sv":3)
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\synth_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\run_leds_config.svh":3)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\run_leds_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\run_leds_config.svh":3)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\keyboard_top.sv'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\keyboard_top.sv":3)
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\adsr_envelope.sv'
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\synth_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\adsr_envelope.sv":2)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\adsr_envelope.sv'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\adsr_envelope.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\audio_timing.sv'
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\synth_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\audio_timing.sv":2)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\audio_timing.sv'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\audio_timing.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\clock_reset.sv'
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\synth_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\clock_reset.sv":2)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\clock_reset.sv'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\clock_reset.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\dds_sine.sv'
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\synth_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\dds_sine.sv":2)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\dds_sine.sv'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\dds_sine.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\frame_buffer.sv'
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\keyboard_core.sv'
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\keyboard_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\keyboard_core.sv":2)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\keyboard_core.sv'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\keyboard_core.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\synth_core.sv'
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\synth_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\synth_core.sv":2)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\synth_core.sv'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\synth_core.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\voice_allocator.sv'
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\voice_mixer.sv'
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\synth_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\voice_mixer.sv":2)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\voice_mixer.sv'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\voice_mixer.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\lock_guard.sv'
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\synth_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\lock_guard.sv":2)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\lock_guard.sv'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\lock_guard.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\matrix_keypad.sv'
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\keyboard_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\matrix_keypad.sv":2)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\matrix_keypad.sv'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\matrix_keypad.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\key_note_events.sv'
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\keyboard_notes.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\key_note_events.sv":9)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\key_note_events.sv'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\key_note_events.sv":9)
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\pll_pair.sv'
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\synth_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\pll_pair.sv":2)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\pll_pair.sv'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\pll_pair.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\pt8211_tx.sv'
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\reset_sync.sv'
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\run_leds.sv'
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\run_leds_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\run_leds.sv":2)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\run_leds.sv'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\run_leds.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\sine_rom.sv'
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\synth_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\sine_rom.sv":2)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\sine_rom.sv'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\sine_rom.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\startup_envelope.sv'
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\synth_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\startup_envelope.sv":2)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\startup_envelope.sv'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\startup_envelope.sv":2)
+Analyzing Verilog file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\tone_gain.sv'
+Analyzing included file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\config\synth_config.svh'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\tone_gain.sv":2)
+Back to file 'C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\tone_gain.sv'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\tone_gain.sv":2)
+Compiling module 'keyboard_top'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\keyboard_top.sv":4)
+Compiling module 'timbre_control'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\timbre_control.sv":4)
+WARN  (EX3791) : Expression size 3 truncated to fit in target size 2("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\timbre_control.sv":11)
+Compiling module 'run_leds(STEP_CYCLES=12500000)'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\run_leds.sv":3)
+Compiling module 'pll_pair'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\pll_pair.sv":5)
+Compiling module 'clock_reset(LOCK_N=100000)'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\clock_reset.sv":3)
+Compiling module 'reset_sync'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\reset_sync.sv":2)
+Compiling module 'lock_guard(STABLE_CYCLES=100000)'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\lock_guard.sv":3)
+Compiling module 'keyboard_core(SLOT_CYCLES=3072,SETTLE_CYCLES=614)'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\keyboard_core.sv":4)
+Compiling module 'matrix_keypad(SLOT_CYCLES=3072,SETTLE_CYCLES=614)'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\matrix_keypad.sv":3)
+Compiling module 'key_note_events'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\key_note_events.sv":4)
+Compiling module 'synth_core(ATTACK=480,DECAY=4800,SUSTAIN=45875,RELEASE=9600)'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\synth_core.sv":4)
+WARN  (EX3791) : Expression size 10 truncated to fit in target size 5("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\synth_core.sv":28)
+Compiling module 'audio_timing'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\audio_timing.sv":3)
+Compiling module 'startup_envelope'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\startup_envelope.sv":3)
+Compiling module 'voice_allocator(VOICES=32)'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\voice_allocator.sv":4)
+Compiling module 'adsr_envelope(ATTACK=480,DECAY=4800,SUSTAIN=45875,RELEASE=9600)'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\adsr_envelope.sv":3)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 17("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\adsr_envelope.sv":36)
+WARN  (EX3791) : Expression size 15 truncated to fit in target size 14("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\adsr_envelope.sv":56)
+WARN  (EX3791) : Expression size 18 truncated to fit in target size 17("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\adsr_envelope.sv":57)
+WARN  (EX3791) : Expression size 18 truncated to fit in target size 17("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\adsr_envelope.sv":57)
+Compiling module 'dds_sine(VOICES=32)'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\dds_sine.sv":4)
+Compiling module 'sine_rom(ROM_FILE="src\rom\flute4096.hex")'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\sine_rom.sv":3)
+Extracting RAM for identifier 'mem'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\sine_rom.sv":6)
+Compiling module 'sine_rom(ROM_FILE="src\rom\reed4096.hex")'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\sine_rom.sv":3)
+Extracting RAM for identifier 'mem'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\sine_rom.sv":6)
+Compiling module 'sine_rom'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\sine_rom.sv":3)
+Extracting RAM for identifier 'mem'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\sine_rom.sv":6)
+Compiling module 'tone_gain(OUTPUT_W=24)'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\tone_gain.sv":3)
+Compiling module 'voice_mixer'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\voice_mixer.sv":5)
+Compiling module 'frame_buffer'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\frame_buffer.sv":2)
+Compiling module 'pt8211_tx'("C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\src\pt8211_tx.sv":2)
+NOTE  (EX0101) : Current top module is "keyboard_top"
+[5%] Running netlist conversion ...
+Running device independent optimization ...
+[10%] Optimizing Phase 0 completed
+[15%] Optimizing Phase 1 completed
+[25%] Optimizing Phase 2 completed
+Running inference ...
+[30%] Inferring Phase 0 completed
+[40%] Inferring Phase 1 completed
+[50%] Inferring Phase 2 completed
+[55%] Inferring Phase 3 completed
+Running technical mapping ...
+[60%] Tech-Mapping Phase 0 completed
+[65%] Tech-Mapping Phase 1 completed
+[75%] Tech-Mapping Phase 2 completed
+[80%] Tech-Mapping Phase 3 completed
+[90%] Tech-Mapping Phase 4 completed
+[95%] Generate netlist file "C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\impl\gwsynthesis\D2_keyboard_leds.vg" completed
+WARN  (CK3000) : Can't calculate clocks' relationship between: "clocks/pll2/CLKOUT0.default_gen_clk" and "clk"
+WARN  (CK3000) : Can't calculate clocks' relationship between: "clk" and "clocks/pll2/CLKOUT0.default_gen_clk"
+[100%] Generate report file "C:\Users\x1767\Downloads\fpga-instrument-main\fpga-instrument-main\impl\gwsynthesis\D2_keyboard_leds_syn.rpt.html" completed
+GowinSynthesis finish
