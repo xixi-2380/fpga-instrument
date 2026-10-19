@@ -50,6 +50,10 @@ always @(posedge clk)if(!rst)begin
   #0.001;reference_sum=0;
   for(integer v=0;v<VOICES;v=v+1)begin
    x=$sin(6.283185307179586*ref_addr[v]/4096.0)*32767.0;
+`ifdef TIMBRE_REFERENCE
+   x=waveform(sound.frame_timbres[v*2+:2],6.283185307179586*ref_addr[v]/4096.0)
+      /peaks[sound.frame_timbres[v*2+:2]]*32767.0;
+`endif
    romcode=x>=0?$rtoi(x+0.5):$rtoi(x-0.5);
    reference_term=sound.voice_level[v];
    reference_term=reference_term*sound.startup_level;reference_term=reference_term>>>16;
@@ -79,3 +83,4 @@ end
 task more_frames(input integer n);integer target;begin
  target=frames+n;wait(frames>=target);#2;
 end endtask
+

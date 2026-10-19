@@ -2,17 +2,19 @@
 `include "check.svh"
 module tb_key_note_events;
  reg clk=0,rst=1,enabled=0,ready=0;always #5 clk=~clk;
+ always @(negedge clk)if(!rst)selected_timbre<=selected_timbre==2?0:selected_timbre+1'b1;
  reg [15:0] keys=0,observed=0;
  wire valid,on,gate;wire [6:0] id;wire [31:0] fcw;wire [3:0] last_key;
- reg stalled=0;reg [39:0] payload;
+ wire [1:0] event_timbre;reg [1:0] selected_timbre=0;
+ reg stalled=0;reg [41:0] payload;
  integer checks=0,events=0,idx;
  real hz;reg [31:0] expected;
- key_note_events dut(clk,rst,enabled,keys,ready,valid,on,id,fcw,gate,last_key);
+ key_note_events dut(clk,rst,enabled,keys,ready,valid,on,id,fcw,gate,last_key,selected_timbre,event_timbre);
  always @(posedge clk)begin
   if(rst)begin observed=0;stalled=0;events=0;end
   else begin
-   if(stalled)begin `CHECK(valid && {on,id,fcw}===payload,"offered event survives backpressure and changed keys") end
-   stalled=valid && !ready;payload={on,id,fcw};
+   if(stalled)begin `CHECK(valid && {event_timbre,on,id,fcw}===payload,"offered event survives backpressure and changed keys") end
+   stalled=valid && !ready;payload={event_timbre,on,id,fcw};
    if(valid && ready)begin
     `CHECK(id>=60 && id<=75,"matrix adapter emits reusable MIDI note identities")
     idx=id-60;hz=440.0*(2.0**(($itor(id)-69.0)/12.0));
@@ -34,9 +36,9 @@ module tb_key_note_events;
  initial begin
   #12 rst=0;keys=16'hffff;repeat(10)@(negedge clk);
   `CHECK(!valid && observed==0,"startup admission holds events")
-  enabled=1;wait(valid);#1;payload={on,id,fcw};
+  enabled=1;wait(valid);#1;payload={event_timbre,on,id,fcw};
   repeat(10)@(negedge clk);keys=0;repeat(10)@(negedge clk);
-  `CHECK(valid && {on,id,fcw}===payload,"pending event is not withdrawn when keys change")
+  `CHECK(valid && {event_timbre,on,id,fcw}===payload,"pending event is not withdrawn when keys change")
   ready=1;settled(0);`CHECK(events==2,"queued press is followed by its release, with no stuck note")
   keys=16'hffff;settled(16'hffff);`CHECK(events==18,"all simultaneous key presses are delivered")
   keys=0;settled(0);`CHECK(events==34,"all simultaneous releases are delivered")
@@ -53,3 +55,4 @@ module tb_key_note_events;
  end
  initial begin #100000;$fatal(1,"key event timeout");end
 endmodule
+

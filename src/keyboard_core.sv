@@ -7,10 +7,12 @@ module keyboard_core #(
     input wire clk,rst,input_ready,note_ready,input wire [3:0] key_row,
     output wire [3:0] col_enable,output wire [15:0] keys,output wire ghost,
     output wire note_valid,note_on,output wire [6:0] note_id,
-    output wire [31:0] note_fcw,output wire gate,output wire [3:0] last_key);
+    output wire [31:0] note_fcw,output wire gate,output wire [3:0] last_key,
+    input wire [1:0] selected_timbre,output wire [1:0] note_timbre);
     wire scan_valid;
     matrix_keypad #(.SLOT_CYCLES(SLOT_CYCLES),.SETTLE_CYCLES(SETTLE_CYCLES),.DEBOUNCE_SCANS(DEBOUNCE_SCANS))
         keyboard(clk,rst,key_row,col_enable,keys,scan_valid,ghost);
     key_note_events control(clk,rst,input_ready,keys,note_ready,
-        note_valid,note_on,note_id,note_fcw,gate,last_key);
+        note_valid,note_on,note_id,note_fcw,gate,last_key,selected_timbre,note_timbre);
 endmodule
+

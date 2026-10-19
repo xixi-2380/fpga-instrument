@@ -4,7 +4,8 @@
 module key_note_events #(parameter integer BASE_NOTE=60)(
     input wire clk,rst,enabled,input wire [15:0] keys,input wire note_ready,
     output reg note_valid,note_on,output reg [6:0] note_id,
-    output reg [31:0] note_fcw,output wire gate,output reg [3:0] last_key);
+    output reg [31:0] note_fcw,output wire gate,output reg [3:0] last_key,
+    input wire [1:0] selected_timbre,output reg [1:0] note_timbre);
     `include "config/keyboard_notes.svh"
     reg [15:0] reported_keys;
     reg [3:0] offered_key;
@@ -21,7 +22,7 @@ module key_note_events #(parameter integer BASE_NOTE=60)(
     always @(posedge clk or posedge rst)begin
         if(rst)begin
             reported_keys<=0;offered_key<=0;last_key<=0;
-            note_valid<=0;note_on<=0;note_id<=0;note_fcw<=0;
+            note_valid<=0;note_on<=0;note_id<=0;note_fcw<=0;note_timbre<=0;
         end else if(note_valid)begin
             if(note_ready)begin
                 reported_keys[offered_key]<=note_on;
@@ -33,6 +34,11 @@ module key_note_events #(parameter integer BASE_NOTE=60)(
             note_on<=!(|released);
             note_id<=BASE_NOTE+candidate;
             note_fcw<=key_fcw(candidate);
+            case(selected_timbre)
+                2'd1:note_timbre<=1;
+                2'd2:note_timbre<=2;
+                default:note_timbre<=0;
+            endcase
             note_valid<=1;
         end
     end
@@ -40,3 +46,4 @@ module key_note_events #(parameter integer BASE_NOTE=60)(
     initial if(BASE_NOTE<0 || BASE_NOTE+15>127)$fatal(1,"Invalid matrix note range");
     // synthesis translate_on
 endmodule
+
