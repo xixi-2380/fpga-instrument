@@ -226,7 +226,15 @@
   ],
   "limitations": [
     "No synthesis, place-and-route or programming performed",
-    "Timing closure and analog noise improvement are not verified by HDL simulation",
-    "Unstaged edits to bringup_keyboard.md, change_log.md and hardware_status.json belong to another concurrent session and remain untouched"
-  ]
+    "Timing closure and analog noise improvement are not verified by HDL simulation"
+  ],
+  "concurrent_session": {
+    "merge_commit": "c021de9",
+    "documents_staged_by_other_session_and_included_in_merge": [
+      "docs/bringup_keyboard.md",
+      "docs/change_log.md",
+      "docs/hardware/hardware_status.json"
+    ],
+    "explanation": "These concurrent edits were staged before the merge commit completed and included without content changes by this session. The merge commit message incorrectly said excluded; this record corrects that description. Other session changes remain preserved."
+  }
 }
