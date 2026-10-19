@@ -1,0 +1,122 @@
+[
+  {
+    "test": "tb_adsr_envelope",
+    "passed": true,
+    "seconds": 0.12
+  },
+  {
+    "test": "tb_adsr_production",
+    "passed": true,
+    "seconds": 0.151
+  },
+  {
+    "test": "tb_audio_timing",
+    "passed": true,
+    "seconds": 0.256
+  },
+  {
+    "test": "tb_clock_reset",
+    "passed": true,
+    "seconds": 0.118
+  },
+  {
+    "test": "tb_dds_sine",
+    "passed": true,
+    "seconds": 0.202
+  },
+  {
+    "test": "tb_frame_buffer",
+    "passed": true,
+    "seconds": 0.11
+  },
+  {
+    "test": "tb_key_note_events",
+    "passed": true,
+    "seconds": 0.112
+  },
+  {
+    "test": "tb_keyboard_core",
+    "passed": true,
+    "seconds": 36.082
+  },
+  {
+    "test": "tb_keyboard_latency",
+    "passed": true,
+    "seconds": 4.486
+  },
+  {
+    "test": "tb_lock_guard",
+    "passed": true,
+    "seconds": 0.126
+  },
+  {
+    "test": "tb_matrix_keypad",
+    "passed": true,
+    "seconds": 0.23
+  },
+  {
+    "test": "tb_multitimbral",
+    "passed": true,
+    "seconds": 13.789
+  },
+  {
+    "test": "tb_pt8211_tx",
+    "passed": true,
+    "seconds": 0.143
+  },
+  {
+    "test": "tb_reset_sync",
+    "passed": true,
+    "seconds": 0.12
+  },
+  {
+    "test": "tb_run_leds",
+    "passed": true,
+    "seconds": 0.131
+  },
+  {
+    "test": "tb_score_player",
+    "passed": true,
+    "seconds": 0.142
+  },
+  {
+    "test": "tb_sine_rom",
+    "passed": true,
+    "seconds": 0.135
+  },
+  {
+    "test": "tb_startup_envelope",
+    "passed": true,
+    "seconds": 0.124
+  },
+  {
+    "test": "tb_synth_core",
+    "passed": true,
+    "seconds": 8.839
+  },
+  {
+    "test": "tb_timbre_control",
+    "passed": true,
+    "seconds": 0.127
+  },
+  {
+    "test": "tb_timbres",
+    "passed": true,
+    "seconds": 0.225
+  },
+  {
+    "test": "tb_tone_gain",
+    "passed": true,
+    "seconds": 0.137
+  },
+  {
+    "test": "tb_voice_allocator",
+    "passed": true,
+    "seconds": 2.325
+  },
+  {
+    "test": "tb_voice_mixer",
+    "passed": true,
+    "seconds": 0.369
+  }
+]

@@ -1,3 +1,8 @@
+// Override only the DUT hierarchy; the arithmetic/phase reference is unchanged.
+`ifndef AUDIO_REF_DUT
+`define AUDIO_REF_DUT sound
+`define AUDIO_REF_LOCAL_DUT
+`endif
 // Independent mathematical phase/ROM/fixed-point/serial scoreboard.
 integer frames=0,edges=0,bitn=0,ch=0,word=0,nonzero=0,cycles=0,last_frame_cycle=-1;
 integer current_code=0,pending_code=0,last_sample=0,romcode;
@@ -29,17 +34,17 @@ always @(posedge clk)if(!rst)begin
  if(stalled)stalled_event={2'b0,note_on,note_id,note_fcw};
 `endif
  `CHECK(!u,"shared output never underruns")
- `CHECK(!sound.mix_valid || sound.ready,"shared generation meets buffer readiness")
- `CHECK(!sound.render_busy || !note_ready,"ownership is frozen throughout render")
- if(sound.gain_valid)begin
-  `CHECK(sound.sample_voice==rendered_terms && rendered_terms<VOICES,"each voice is rendered once in order")
-  `CHECK($signed(sound.gain_sample)==expected_terms[rendered_terms],"shared voice matches independent exact arithmetic")
-  `CHECK(sound.phase[rendered_terms*32+:32]==ref_phase[rendered_terms],"shared phase context advances exactly once")
+ `CHECK(!`AUDIO_REF_DUT.mix_valid || `AUDIO_REF_DUT.ready,"shared generation meets buffer readiness")
+ `CHECK(!`AUDIO_REF_DUT.render_busy || !note_ready,"ownership is frozen throughout render")
+ if(`AUDIO_REF_DUT.gain_valid)begin
+  `CHECK(`AUDIO_REF_DUT.sample_voice==rendered_terms && rendered_terms<VOICES,"each voice is rendered once in order")
+  `CHECK($signed(`AUDIO_REF_DUT.gain_sample)==expected_terms[rendered_terms],"shared voice matches independent exact arithmetic")
+  `CHECK(`AUDIO_REF_DUT.phase[rendered_terms*32+:32]==ref_phase[rendered_terms],"shared phase context advances exactly once")
   rendered_terms=rendered_terms+1;
  end
- if(sound.mix_valid)begin
+ if(`AUDIO_REF_DUT.mix_valid)begin
   `CHECK(delivered==0 && rendered_terms==VOICES,"one complete mixed result per frame")
-  `CHECK($signed(sound.mix_sample)==pending_code,"full mix matches independent mathematical sum")
+  `CHECK($signed(`AUDIO_REF_DUT.mix_sample)==pending_code,"full mix matches independent mathematical sum")
   `CHECK(cycles-last_frame_cycle<=32+16*VOICES,"render meets fixed frame budget")
   if(cycles-last_frame_cycle>max_delivery_cycle)max_delivery_cycle=cycles-last_frame_cycle;
   delivered=delivered+1;
@@ -51,20 +56,20 @@ always @(posedge clk)if(!rst)begin
   end
   last_frame_cycle=cycles;current_code=pending_code;rendered_terms=0;delivered=0;
   for(integer v=0;v<VOICES;v=v+1)begin
-   phase_for_sample[v]=sound.voice_restart[v]?0:ref_phase[v];
+   phase_for_sample[v]=`AUDIO_REF_DUT.voice_restart[v]?0:ref_phase[v];
    ref_addr[v]=phase_for_sample[v][31:20];
-   ref_phase[v]=phase_for_sample[v]+sound.voice_fcw[v*32+:32];
+   ref_phase[v]=phase_for_sample[v]+`AUDIO_REF_DUT.voice_fcw[v*32+:32];
   end
   #0.001;reference_sum=0;
   for(integer v=0;v<VOICES;v=v+1)begin
    x=$sin(6.283185307179586*ref_addr[v]/4096.0)*32767.0;
 `ifdef TIMBRE_REFERENCE
-   x=waveform(sound.frame_timbres[v*2+:2],6.283185307179586*ref_addr[v]/4096.0)
-      /peaks[sound.frame_timbres[v*2+:2]]*32767.0;
+   x=waveform(`AUDIO_REF_DUT.frame_timbres[v*2+:2],6.283185307179586*ref_addr[v]/4096.0)
+      /peaks[`AUDIO_REF_DUT.frame_timbres[v*2+:2]]*32767.0;
 `endif
    romcode=x>=0?$rtoi(x+0.5):$rtoi(x-0.5);
-   reference_term=sound.voice_level[v];
-   reference_term=reference_term*sound.startup_level;reference_term=reference_term>>>16;
+   reference_term=`AUDIO_REF_DUT.voice_level[v];
+   reference_term=reference_term*`AUDIO_REF_DUT.startup_level;reference_term=reference_term>>>16;
    reference_term=reference_term*romcode;reference_term=reference_term>>>13;
    expected_terms[v]=reference_term;reference_sum=reference_sum+reference_term;
   end
@@ -92,3 +97,8 @@ task more_frames(input integer n);integer target;begin
  target=frames+n;wait(frames>=target);#2;
 end endtask
 
+
+`ifdef AUDIO_REF_LOCAL_DUT
+`undef AUDIO_REF_DUT
+`undef AUDIO_REF_LOCAL_DUT
+`endif

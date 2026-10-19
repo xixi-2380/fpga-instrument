@@ -2,7 +2,8 @@
 `include "config/keyboard_config.svh"
 `include "config/run_leds_config.svh"
 module keyboard_top #(
-    parameter integer LED_STEP_CYCLES=`RUN_LED_STEP_CYCLES,LED_DIAG_STEPS=`RUN_LED_DIAG_STEPS,
+    parameter integer SCORE_ENABLE=1,SCORE_BEAT_FRAMES=(`SAMPLE_HZ/2),
+    LED_STEP_CYCLES=`RUN_LED_STEP_CYCLES,LED_DIAG_STEPS=`RUN_LED_DIAG_STEPS,
     LOCK_N=`LOCK_CYCLES,SLOT_CYCLES=`KEY_SLOT_CYCLES,
     SETTLE_CYCLES=`KEY_SETTLE_CYCLES,DEBOUNCE_SCANS=`KEY_DEBOUNCE_SCANS,
     MUTE=`MUTE_FRAMES,FADE=`FADE_FRAMES,ATTACK=`ADSR_ATTACK_FRAMES,
@@ -10,7 +11,10 @@ module keyboard_top #(
     input wire clk,rst,input wire [3:0] key_row,inout wire [3:0] key_col,
     output wire HP_BCK,HP_WS,HP_DIN,PA_EN,DBG_BCK,DBG_WS,DBG_DIN,DBG_PA_EN,
     output wire [5:0] led_n);
-    wire [1:0] selected_timbre,event_timbre;
+    wire [1:0] selected_timbre,event_timbre,key_timbre,score_timbre;
+    wire key_valid,key_on,score_valid,score_on,score_busy,score_done;
+    wire [6:0] key_id,score_id;
+    wire [31:0] key_fcw,score_fcw;
     wire mid_clk,audio_clk,lock1,lock2,pll1_reset,pll2_reset,audio_reset;
     wire [3:0] col_enable,last_key;
     wire [15:0] keys;
@@ -19,7 +23,18 @@ module keyboard_top #(
     wire [6:0] note_id;
     wire [31:0] note_fcw;
     wire [`VOICE_COUNT-1:0] voice_active,voice_held;
-    timbre_control timbre_buttons(audio_clk,audio_reset,keys,selected_timbre);
+    // A source owns the event interface through its final release/tail. The
+    // keyboard is admitted only after the one-shot score has fully completed.
+    assign note_valid=score_busy?score_valid:key_valid;
+    assign note_on=score_busy?score_on:key_on;
+    assign note_id=score_busy?score_id:key_id;
+    assign note_fcw=score_busy?score_fcw:key_fcw;
+    assign event_timbre=score_busy?score_timbre:key_timbre;
+    score_player #(.ENABLE(SCORE_ENABLE),.BEAT_FRAMES(SCORE_BEAT_FRAMES),.TAIL_FRAMES(RELEASE+4))
+        score(.clk(audio_clk),.rst(audio_reset),.input_ready(input_ready),.frame_ce(frame_ce),
+        .note_ready(note_ready && score_busy),.note_valid(score_valid),.note_on(score_on),
+        .note_id(score_id),.note_fcw(score_fcw),.note_timbre(score_timbre),.busy(score_busy),.done(score_done));
+    timbre_control timbre_buttons(audio_clk,audio_reset,score_busy?16'b0:keys,selected_timbre);
     run_leds #(.STEP_CYCLES(LED_STEP_CYCLES),.DIAG_STEPS(LED_DIAG_STEPS)) status_leds(
         .clk(clk),.audio_ready_async(!audio_reset),.key_active_async(gate),
         .pll1_lock_async(lock1),.pll2_lock_async(lock2),.reset_active_async(rst),.led_n(led_n));
@@ -31,11 +46,11 @@ module keyboard_top #(
     end
     keyboard_core #(.SLOT_CYCLES(SLOT_CYCLES),.SETTLE_CYCLES(SETTLE_CYCLES),
         .DEBOUNCE_SCANS(DEBOUNCE_SCANS)) core(
-        .clk(audio_clk),.rst(audio_reset),.input_ready(input_ready),.note_ready(note_ready),
+        .clk(audio_clk),.rst(audio_reset),.input_ready(input_ready && !score_busy),.note_ready(note_ready && !score_busy),
         .key_row(key_row),.col_enable(col_enable),.keys(keys),.ghost(ghost),
-        .note_valid(note_valid),.note_on(note_on),.note_id(note_id),.note_fcw(note_fcw),
+        .note_valid(key_valid),.note_on(key_on),.note_id(key_id),.note_fcw(key_fcw),
         .gate(key_gate),.last_key(last_key),
-        .selected_timbre(selected_timbre),.note_timbre(event_timbre));
+        .selected_timbre(selected_timbre),.note_timbre(key_timbre));
     synth_core #(.MUTE(MUTE),.FADE(FADE),.ATTACK(ATTACK),.DECAY(DECAY),
         .SUSTAIN(SUSTAIN),.RELEASE(RELEASE)) sound(
         .clk(audio_clk),.rst(audio_reset),.note_valid(note_valid),.note_on(note_on),

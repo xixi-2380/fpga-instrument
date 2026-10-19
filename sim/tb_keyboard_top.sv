@@ -16,7 +16,7 @@ module tb_keyboard_top;
  realtime last_rise=0,period;
  for(genvar k=0;k<4;k=k+1)assign selected[k]=(columns[k]===1'b0);
  passive_matrix_model model(pressed,selected,rows);
- keyboard_top #(.LED_STEP_CYCLES(4),.LOCK_N(32),.SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
+ keyboard_top #(.SCORE_ENABLE(0),.LED_STEP_CYCLES(4),.LOCK_N(32),.SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
   .MUTE(4),.FADE(4),.ATTACK(8),.DECAY(8),.SUSTAIN(32768),.RELEASE(16))
   dut(.clk(clk),.rst(rst),.key_row(rows),.key_col(columns),
    .HP_BCK(bck),.HP_WS(ws),.HP_DIN(din),.PA_EN(pa),

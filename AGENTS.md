@@ -59,3 +59,5 @@
 - 本次同步保留远端281c167多音色功能，当前工程21个HDL、3个ROM，共30项依赖。远端交接记载旧音频域Fmax约3.994 MHz、1576个Setup违例，本轮驱动对照不修复此问题；用户须先取得满足61.44 MHz且无Setup/Hold违例的新报告，才能进行新版本烧录对照。报告未在本轮重新测得，不将该数字当作当前合并版本结果。
 
 - 2026-10-19用户明确要求修改多音色版，最终症状更正为“任意普通双键均可触发瞬间爆音”，不仅是左上＋右下手势。已读取Downloads副本19:43:59新STA：音频Fmax5.499 MHz、1762个Setup违例、180级allocator关键路径181.520 ns。原voice_allocator已改逐拍读/比较、寄存目标/rank、握手提交；帧或停用取消未确认搜索，valid及全部音色载荷保持。32声部无打断搜索≤68拍，原帧渲染517拍不变。最终29个验证配置21228787次检查通过，证据reports/multitimbral_fix/2026-10-19/validation.json；新STA、资源、爆音改善未验证。用户需打开E:\gowin\fpga-instrument内原工程重新实现并先确认61.44MHz和Setup/Hold；助手不启动EDA。不增加手势静音、效果器或其他功能，音色操作和所有GPIO/PLL/PA/增益保持。
+
+- 2026-10-19用户明确授权加入一段曲谱，并确认上电自动播放一次《小星星》旋律＋简单和弦，结束恢复键盘。新增独立score_player及src/config/demo_score.svh，默认SCORE_ENABLE=1、SCORE_BEAT_FRAMES=24000；42音符、48拍约24秒，笛管旋律/正弦三音和弦。源身份0..3与键盘60..75分开，曲终Off后等RELEASE+4帧再交接，USR复位重播，SCORE_ENABLE=0退化原键盘。现22个HDL、32项依赖，更新后必须关闭重开原工程，避免旧IDE列表漏新模块。原音源及CST/SDC/PLL/PA/增益均未改。最终30配置17323372次检查通过，证据reports/demo_score/2026-10-19/validation.json；EDA、STA、资源和音质仍待用户验证，不自动扩展曲库或录放音功能。

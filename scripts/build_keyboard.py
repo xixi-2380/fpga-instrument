@@ -6,7 +6,7 @@ voice_count=int(re.search(r'^`define VOICE_COUNT (\d+)',(root/'src/config/synth_
 out=root/'reports/keyboard/current';out.mkdir(parents=True,exist_ok=True)
 sim_dir=pathlib.Path(a.sim_dir)
 if not sim_dir.is_absolute():sim_dir=root/sim_dir
-tests=['tb_dds_sine','tb_tone_gain','tb_sine_rom','tb_audio_timing','tb_matrix_keypad','tb_key_note_events','tb_adsr_envelope','tb_adsr_production','tb_keyboard_core','tb_keyboard_top','tb_keyboard_latency','tb_run_leds','tb_synth_core','tb_voice_allocator','tb_voice_mixer']
+tests=['tb_score_player','tb_score_audio','tb_dds_sine','tb_tone_gain','tb_sine_rom','tb_audio_timing','tb_matrix_keypad','tb_key_note_events','tb_adsr_envelope','tb_adsr_production','tb_keyboard_core','tb_keyboard_top','tb_keyboard_latency','tb_run_leds','tb_synth_core','tb_voice_allocator','tb_voice_mixer']
 if a.stage!='build':
     for name in tests:
         log=(sim_dir/(name+'.log')).read_text(encoding='utf8')

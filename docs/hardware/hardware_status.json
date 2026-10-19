@@ -144,7 +144,7 @@
   "four_voice_stage_user_authorized": true,
   "four_voice_simulation_passed": true,
   "four_voice_hardware_user_report_passed": true,
-  "current_source_function": "32-voice multitimbral synthesis with registered multi-cycle voice allocation and preserved 4mA serial-output diagnostic",
+  "current_source_function": "32-voice multitimbral synthesis with one-shot melody/chord score, then keyboard handoff",
   "note_input_protocol": "audio_clk valid/ready; producer holds kind, note_id, 32-bit FCW and 2-bit timbre throughout multi-cycle search",
   "voice_allocation_policy": "same identity; inactive; oldest released; oldest held; stale releases ignored",
   "four_voice_hardware_user_report": "好的，现在提交git，测试正常",
@@ -191,5 +191,21 @@
     "digital_validation_checks": 21228787,
     "post_fix_sta_verified": false,
     "hardware_improvement_verified": false
+  },
+  "score_autoplay": {
+    "enabled_by_default": true,
+    "piece": "Twinkle Twinkle Little Star",
+    "tempo_bpm": 120,
+    "nominal_seconds": 24,
+    "melody_timbre": 1,
+    "chord_timbre": 0,
+    "lanes": 4,
+    "steps": 42,
+    "event_count": 336,
+    "once_then_keyboard": true,
+    "replay_by_existing_reset": true,
+    "simulation_checks": 17323372,
+    "hardware_verified": false,
+    "post_update_sta_verified": false
   }
 }
