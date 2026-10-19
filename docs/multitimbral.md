@@ -48,3 +48,11 @@ Windows原仿真入口保持scripts/run_sim.py；可用--test tb_multitimbral或
 最终验证共21,228,787次检查通过：23项RTL、1项官方PLL板级（含三种音色物理双键）、2种引脚映射，以及1/4声部与32声部同相满幅变体。32声部仍517周期交付，首个非零串行码3.176972 ms；这些均为数字仿真结果。证据及初次测试刺激失败见[本次验证](../reports/multitimbral_fix/2026-10-19/validation.json)。
 
 本次维护源码在E:\gowin\fpga-instrument。请关闭旧下载目录工程，打开该目录原keyboard_adsr.gprj重新综合/P&R，先核对音频61.44 MHz和Setup/Hold通过，再进行SRAM试听；未确认前不能将生成.fs视为稳定验收。不执行Flash写入。当前尚未验证新Fmax、资源及实际爆音改善；收到新报告后按真实剩余路径继续处理。
+
+## 2026-10-19：EX3937模块未识别
+
+用户在E盘主工程报告EX3937：keyboard_top第22行实例化未知模块timbre_control。读取当次综合日志及impl/temp/rtl_parser_arg.json确认编译仍使用旧20个HDL文件，缺少timbre_control；磁盘主GPRJ实际已启用src/timbre_control.sv，共21个HDL、30项依赖，模块源码也存在。这是IDE仍使用旧文件列表的证据，不应复制第二个模块或改模块名称来绕过。
+
+关闭旧工程后重新打开仓库根目录原keyboard_adsr.gprj，确认源文件列表包含现有timbre_control.sv，再由用户重新综合；若列表仍未刷新，添加该现有文件。IDE自动保存曾把IncludePath退回已废弃的E:/gowin/fpga-instrument/config，本次恢复已入库的src与src/config相对目录；没有更改其他工程设置。运行中的旧IDE仍可能再次保存旧配置，重新打开前不要用旧工程列表覆盖磁盘新版。
+
+本次只修正配置回退并补充排查说明，未更改RTL，也未重新运行综合/P&R或烧录。HDL证据仍属于4901d8f的29个配置；EX3937在高云中的消失与新的STA须由用户重编译确认。
