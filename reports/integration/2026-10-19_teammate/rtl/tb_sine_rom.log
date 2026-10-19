@@ -1,0 +1,2 @@
+PASS tb_sine_rom checks=4097
+E:/gowin/fpga-instrument/sim/tb_sine_rom.sv:15: $finish called at 40976000 (1ps)

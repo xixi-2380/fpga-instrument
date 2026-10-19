@@ -6,9 +6,9 @@ module tb_dds_sine;
  reg multi_ce=0,multi_restart=0;reg [4:0] index=0;reg [31:0] multi_fcw=0;
  wire signed [15:0] multi_sample;wire multi_valid;wire [1023:0] multi_phase;
  reg [31:0] models[0:31];
- dds_sine #(.VOICES(32)) shared(clk,rst,multi_ce,multi_fcw,multi_sample,multi_valid,multi_phase,multi_restart,index);
+ dds_sine #(.VOICES(32)) shared(clk,rst,multi_ce,multi_fcw,multi_sample,multi_valid,multi_phase,multi_restart,index,2'd0);
  integer checks=0,i,j,a,expected;reg [31:0] model=0;real x;
- dds_sine dut(clk,rst,ce,fcw,sample,valid,phase,restart,1'b0);
+ dds_sine dut(clk,rst,ce,fcw,sample,valid,phase,restart,1'b0,2'd0);
  initial begin
   #12 rst=0;
   for(j=0;j<5;j=j+1) begin
@@ -45,3 +45,4 @@ module tb_dds_sine;
   $display("PASS tb_dds_sine checks=%0d",checks);$finish;
  end
 endmodule
+

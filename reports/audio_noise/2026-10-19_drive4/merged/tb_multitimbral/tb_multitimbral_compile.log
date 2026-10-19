@@ -1,0 +1,7 @@
+E:/gowin/fpga-instrument/src/voice_allocator.sv:23: warning: @* is sensitive to all 32 words in array 'ids'.
+E:/gowin/fpga-instrument/src/voice_allocator.sv:28: warning: @* is sensitive to all 32 words in array 'rank'.
+E:/gowin/fpga-instrument/src/voice_allocator.sv:28: warning: @* is sensitive to all 32 words in array 'rank'.
+E:/gowin/fpga-instrument/src/voice_allocator.sv:30: warning: @* is sensitive to all 32 words in array 'rank'.
+E:/gowin/fpga-instrument/src/voice_allocator.sv:30: warning: @* is sensitive to all 32 words in array 'rank'.
+E:/gowin/fpga-instrument/src/synth_core.sv:88: warning: @* is sensitive to all 32 words in array 'voice_level'.
+E:/gowin/fpga-instrument/src/synth_core.sv:88: warning: @* is sensitive to all 32 words in array 'voice_level'.

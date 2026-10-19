@@ -1,0 +1,4 @@
+ALLOCATOR_CASE voices=1 checks=2846
+ALLOCATOR_CASE voices=4 checks=19224
+ALLOCATOR_CASE voices=32 checks=981206
+PASS tb_voice_allocator checks=1003276

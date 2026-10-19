@@ -5,12 +5,13 @@ module allocator_case #(parameter integer N=4)(output reg done=0,output integer 
  reg [6:0] id=0;reg [31:0] fcw=0;reg [N-1:0] active=0;
  always #5 clk=~clk;
  wire ready;wire [N-1:0] start,stop,restart,held;
+ wire [N*2-1:0] unused_timbres;
  wire [N*32-1:0] words;wire [N*7-1:0] ids;
  integer serial=0,target,oldest;
  integer age[0:N-1];reg [6:0] owner[0:N-1];reg [31:0] frequency[0:N-1];
  reg [N-1:0] owned=0,model_held=0,pending=0,reset_pending=0,committed=0;
  reg [N-1:0] expected_start,expected_stop,expected_restart;
- voice_allocator #(.VOICES(N)) dut(clk,rst,enabled,ce,valid,on,id,fcw,active,ready,start,stop,restart,held,words,ids);
+ voice_allocator #(.VOICES(N)) dut(clk,rst,enabled,ce,valid,on,id,fcw,active,ready,start,stop,restart,held,words,ids,2'd0,unused_timbres);
  task model_reset;begin
   serial=0;owned=0;model_held=0;pending=0;reset_pending=0;committed=0;
   for(integer i=0;i<N;i=i+1)begin age[i]=0;owner[i]=0;frequency[i]=0;end
@@ -105,3 +106,4 @@ module tb_voice_allocator;
  initial begin wait(d1 && d4 && d32);$display("PASS tb_voice_allocator checks=%0d",c1+c4+c32);$finish;end
  initial begin #1000000;$fatal(1,"allocator timeout");end
 endmodule
+

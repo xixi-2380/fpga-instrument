@@ -5,6 +5,9 @@
     <Version>5</Version>
     <Device name="GW5AST-138C" pn="GW5AST-LV138FPG676AC1/I0">gw5ast138c-003</Device>
     <FileList>
+        <File path="src/timbre_control.sv" type="file.verilog" enable="1" />
+        <File path="src/rom/flute4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/reed4096.hex" type="file.other" enable="1" />
         <File path="src/keyboard_top.sv" type="file.verilog" enable="1" />
         <File path="src/adsr_envelope.sv" type="file.verilog" enable="1" />
         <File path="src/audio_timing.sv" type="file.verilog" enable="1" />
@@ -34,3 +37,4 @@
         <File path="src/keyboard.sdc" type="file.sdc" enable="1" />
     </FileList>
 </Project>
+

@@ -144,7 +144,7 @@
   "four_voice_stage_user_authorized": true,
   "four_voice_simulation_passed": true,
   "four_voice_hardware_user_report_passed": true,
-  "current_source_function": "32-voice shared scheduled polyphony",
+  "current_source_function": "32-voice shared scheduled polyphony with three per-voice timbres and 4 mA serial-output diagnostic",
   "note_input_protocol": "audio_clk valid/ready with note_id, Note On/Off kind and 32-bit FCW",
   "voice_allocation_policy": "same identity; inactive; oldest released; oldest held; stale releases ignored",
   "four_voice_hardware_user_report": "好的，现在提交git，测试正常",
@@ -169,5 +169,14 @@
     "spikes_fixed_to_bck_edges": true,
     "loaded_bitstream_identified": false,
     "audio_band_noise_quantified": false
+  },
+  "merged_multitimbral_commit": "281c167c8c6dda0faa9d70fd3536db339959b345",
+  "inherited_timing_issue": {
+    "source": "remote AGENTS.md and docs/multitimbral.md at 281c167c8c6dda0faa9d70fd3536db339959b345",
+    "reported_previous_audio_fmax_mhz": 3.994,
+    "reported_previous_setup_violations": 1576,
+    "fixed_in_noise_diagnostic": false,
+    "new_STA_report_read_this_turn": false,
+    "require_passing_user_STA_before_programming": true
   }
 }

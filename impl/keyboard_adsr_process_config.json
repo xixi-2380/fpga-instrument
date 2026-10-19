@@ -36,7 +36,8 @@
     "INCREMENTAL_PLACE_AND_ROUTING": "0",
     "INCREMENTAL_PLACE_ONLY": "0",
     "IncludePath": [
-        "E:/gowin/fpga-instrument/config"
+        "src",
+        "src/config"
     ],
     "Incremental_Compile": "",
     "Initialize_Primitives": false,

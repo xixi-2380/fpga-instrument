@@ -7,7 +7,7 @@ module synth_core #(
     SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES)(
     input wire clk,rst,note_valid,note_on,input wire [6:0] note_id,input wire [31:0] note_fcw,
     output wire note_ready,input_ready,bck,ws,din,pa_enable,underrun,frame_ce,gate,
-    output wire [VOICES-1:0] voice_active,voice_held,output reg [16:0] envelope_level);
+    output wire [VOICES-1:0] voice_active,voice_held,output reg [16:0] envelope_level,input wire [1:0] note_timbre);
     localparam integer INDEX_W=VOICES>1?$clog2(VOICES):1;
     localparam integer RENDER_BUDGET=32+16*VOICES;
     localparam integer CYCLE_W=$clog2(RENDER_BUDGET+1);
@@ -18,6 +18,8 @@ module synth_core #(
     wire [VOICES*32-1:0] voice_fcw;
     wire [VOICES*7-1:0] voice_ids;
     wire [16:0] voice_level[0:VOICES-1];
+    wire [VOICES*2-1:0] voice_timbres;
+    reg [VOICES*2-1:0] frame_timbres;
     reg render_busy;
     reg [CYCLE_W-1:0] render_cycle;
     reg [VOICES*32-1:0] frame_fcw;
@@ -45,7 +47,8 @@ module synth_core #(
         .note_valid(note_valid),.note_on(note_on),.note_id(note_id),.note_fcw(note_fcw),
         .voice_active(voice_active),.note_ready(note_ready),.voice_start(voice_start),
         .voice_stop(voice_stop),.voice_restart(voice_restart),.voice_held(voice_held),
-        .voice_fcw(voice_fcw),.voice_ids(voice_ids));
+        .voice_fcw(voice_fcw),.voice_ids(voice_ids),
+        .note_timbre(note_timbre),.voice_timbres(voice_timbres));
     for(genvar v=0;v<VOICES;v=v+1)begin: voices
         adsr_envelope #(.ATTACK(ATTACK),.DECAY(DECAY),.SUSTAIN(SUSTAIN),.RELEASE(RELEASE)) envelope(
             .clk(clk),.rst(rst),.sample_ce(frame_ce),.note_on(voice_start[v]),.note_off(voice_stop[v]),
@@ -53,10 +56,10 @@ module synth_core #(
     end
     dds_sine #(.VOICES(VOICES)) dds(.clk(clk),.rst(rst),.sample_ce(dds_ce),
         .fcw(frame_fcw[selected_voice*32+:32]),.sample(raw_sample),.valid(raw_valid),
-        .phase(phase),.restart(frame_restart[selected_voice]),.voice_index(selected_voice));
+        .phase(phase),.restart(frame_restart[selected_voice]),.voice_index(selected_voice),.timbre(frame_timbres[selected_voice*2+:2]));
     always @(posedge clk or posedge rst)begin
         if(rst)begin
-            render_busy<=0;render_cycle<=0;frame_fcw<=0;frame_restart<=0;
+            render_busy<=0;render_cycle<=0;frame_fcw<=0;frame_restart<=0;frame_timbres<=0;
             level_product<=0;combined_level<=0;gain_request<=0;
             first_sample<=0;last_sample<=0;sample_voice<=0;
         end else begin
@@ -64,7 +67,7 @@ module synth_core #(
             if(raw_valid)combined_level<=level_product[32:16];
             if(frame_ce)begin
                 render_busy<=1;render_cycle<=0;
-                frame_fcw<=voice_fcw;frame_restart<=voice_restart;
+                frame_fcw<=voice_fcw;frame_restart<=voice_restart;frame_timbres<=voice_timbres;
             end else if(render_busy)begin
                 if(render_cycle==RENDER_BUDGET-2)render_busy<=0;
                 else render_cycle<=render_cycle+1'b1;
@@ -94,3 +97,4 @@ module synth_core #(
     end
     // synthesis translate_on
 endmodule
+

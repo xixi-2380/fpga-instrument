@@ -1,0 +1,4 @@
+WARNING: E:/gowin/fpga-instrument/sim/tb_keyboard_core.sv:28: $fopen's file name argument contains non-printable characters.
+                                                              "C:/Users/x1767/Documents/ChatGPT/FPGA\377\377\377\377/tmp/pull_teammate_20261019/rtl_recheck/D2_samples.csv"
+FATAL: E:/gowin/fpga-instrument/sim/tb_keyboard_core.sv:29: Cannot open simulation sample output
+       Time: 0  Scope: tb_keyboard_core

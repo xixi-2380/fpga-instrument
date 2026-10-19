@@ -1,0 +1,2 @@
+PASS tb_multitimbral checks=546002 delivery=517
+E:/gowin/fpga-instrument/sim/tb_multitimbral.sv:61: $finish called at 2854169498 (1ps)

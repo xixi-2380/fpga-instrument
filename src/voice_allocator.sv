@@ -8,12 +8,14 @@ module voice_allocator #(parameter integer VOICES=4)(
     output wire note_ready,output wire [VOICES-1:0] voice_start,voice_stop,voice_restart,
     output reg [VOICES-1:0] voice_held,
     output wire [VOICES*32-1:0] voice_fcw,
-    output wire [VOICES*7-1:0] voice_ids);
+    output wire [VOICES*7-1:0] voice_ids,input wire [1:0] note_timbre,
+    output wire [VOICES*2-1:0] voice_timbres);
     localparam integer RW=VOICES>1?$clog2(VOICES):1;
     reg [VOICES-1:0] owned,pending_start,pending_restart,committed_gate;
     reg [6:0] ids [0:VOICES-1];
     reg [31:0] frequencies [0:VOICES-1];
     reg [RW-1:0] rank [0:VOICES-1];
+    reg [1:0] timbres[0:VOICES-1];
     integer match_slot,free_slot,released_slot,oldest_slot,target;
     always @* begin
         match_slot=-1;free_slot=-1;released_slot=-1;oldest_slot=0;
@@ -38,6 +40,7 @@ module voice_allocator #(parameter integer VOICES=4)(
     for(genvar v=0;v<VOICES;v=v+1)begin: ports
         assign voice_fcw[v*32+:32]=frequencies[v];
         assign voice_ids[v*7+:7]=ids[v];
+        assign voice_timbres[v*2+:2]=timbres[v];
         assign voice_start[v]=!rst && frame_ce && pending_start[v];
         assign voice_restart[v]=voice_start[v] && pending_restart[v];
         assign voice_stop[v]=!rst && frame_ce && !pending_start[v] && committed_gate[v] && !voice_held[v];
@@ -45,7 +48,7 @@ module voice_allocator #(parameter integer VOICES=4)(
     always @(posedge clk or posedge rst)begin
         if(rst)begin
             owned<=0;voice_held<=0;pending_start<=0;pending_restart<=0;committed_gate<=0;
-            for(integer i=0;i<VOICES;i=i+1)begin ids[i]<=0;frequencies[i]<=0;rank[i]<=i;end
+            for(integer i=0;i<VOICES;i=i+1)begin ids[i]<=0;frequencies[i]<=0;rank[i]<=i;timbres[i]<=0;end
         end else if(frame_ce)begin
             for(integer i=0;i<VOICES;i=i+1)begin
                 if(pending_start[i])begin
@@ -57,6 +60,11 @@ module voice_allocator #(parameter integer VOICES=4)(
             if(note_on)begin
                 owned[target]<=1;voice_held[target]<=1;ids[target]<=note_id;frequencies[target]<=note_fcw;
                 pending_start[target]<=1;
+                case(note_timbre)
+                    2'd1:timbres[target]<=1;
+                    2'd2:timbres[target]<=2;
+                    default:timbres[target]<=0;
+                endcase
                 if(match_slot<0)pending_restart[target]<=1;
                 rank[target]<=VOICES-1;
                 for(integer i=0;i<VOICES;i=i+1)
@@ -72,3 +80,4 @@ module voice_allocator #(parameter integer VOICES=4)(
     initial if(VOICES<1 || VOICES>32)$fatal(1,"Invalid voice count");
     // synthesis translate_on
 endmodule
+

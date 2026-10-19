@@ -1,0 +1,2 @@
+LATENCY_US note_on=3079.088 first_code=3176.972 note_off=3102.851
+PASS tb_keyboard_latency checks=5

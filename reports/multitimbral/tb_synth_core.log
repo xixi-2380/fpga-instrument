@@ -1,0 +1,2 @@
+RENDER_METRICS voices=32 max_delivery_cycles=517 budget=544
+PASS tb_synth_core checks=1868087
