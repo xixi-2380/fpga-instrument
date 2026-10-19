@@ -4,10 +4,11 @@
 module synth_core #(
     parameter integer VOICES=`VOICE_COUNT,MUTE=`MUTE_FRAMES,FADE=`FADE_FRAMES,
     ATTACK=`ADSR_ATTACK_FRAMES,DECAY=`ADSR_DECAY_FRAMES,
-    SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES)(
+    SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES,
+    DELAY_SAMPLES=7200)(
     input wire clk,rst,note_valid,note_on,input wire [6:0] note_id,input wire [31:0] note_fcw,
     output wire note_ready,input_ready,bck,ws,din,pa_enable,underrun,frame_ce,gate,
-    output wire [VOICES-1:0] voice_active,voice_held,output reg [16:0] envelope_level,input wire [1:0] note_timbre);
+    output wire [VOICES-1:0] voice_active,voice_held,output reg [16:0] envelope_level,input wire [1:0] note_timbre,input wire effects_enable);
     localparam integer INDEX_W=VOICES>1?$clog2(VOICES):1;
     localparam integer RENDER_BUDGET=32+16*VOICES;
     localparam integer CYCLE_W=$clog2(RENDER_BUDGET+1);
@@ -29,6 +30,8 @@ module synth_core #(
     wire dds_ce=in_slots && render_cycle[3:0]==0;
     wire signed [15:0] raw_sample;
     wire raw_valid,gain_valid,mix_valid,ready;
+    wire effect_ready,effect_valid;
+    wire signed [15:0] effect_sample;
     wire [VOICES*32-1:0] phase;
     reg [33:0] level_product;
     reg [16:0] combined_level;
@@ -87,14 +90,19 @@ module synth_core #(
         for(integer v=0;v<VOICES;v=v+1)
             if(voice_level[v]>envelope_level)envelope_level=voice_level[v];
     end
-    frame_buffer buffer(clk,rst,frame_ce,mix_valid,ready,mix_sample,mix_sample,frame_l,frame_r,underrun);
+    audio_delay #(.DELAY_SAMPLES(DELAY_SAMPLES)) effect(
+        .clk(clk),.rst(rst),.enable(effects_enable),.in_valid(mix_valid),.in_sample(mix_sample),
+        .in_ready(effect_ready),.out_valid(effect_valid),.out_sample(effect_sample));
+    frame_buffer buffer(clk,rst,frame_ce,effect_valid,ready,effect_sample,effect_sample,frame_l,frame_r,underrun);
     pt8211_tx tx(clk,rst,fall_ce,bit_index,frame_l,frame_r,ws,din);
     // synthesis translate_off
     initial if(VOICES<1 || VOICES>32 || RENDER_BUDGET>=`FRAME_CYCLES)$fatal(1,"Invalid render budget");
     always @(posedge clk)if(!rst)begin
         if(frame_ce && render_busy)$fatal(1,"Frame renderer missed deadline");
-        if(mix_valid && !ready)$fatal(1,"Frame buffer rejected render result");
+        if(mix_valid && !effect_ready)$fatal(1,"Effect rejected render result");
+        if(effect_valid && !ready)$fatal(1,"Frame buffer rejected effect result");
     end
     // synthesis translate_on
 endmodule
+
 

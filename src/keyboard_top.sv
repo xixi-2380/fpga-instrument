@@ -11,6 +11,7 @@ module keyboard_top #(
     output wire HP_BCK,HP_WS,HP_DIN,PA_EN,DBG_BCK,DBG_WS,DBG_DIN,DBG_PA_EN,
     output wire [5:0] led_n);
     wire [1:0] selected_timbre,event_timbre;
+    wire effects_enabled;
     wire mid_clk,audio_clk,lock1,lock2,pll1_reset,pll2_reset,audio_reset;
     wire [3:0] col_enable,last_key;
     wire [15:0] keys;
@@ -19,7 +20,7 @@ module keyboard_top #(
     wire [6:0] note_id;
     wire [31:0] note_fcw;
     wire [`VOICE_COUNT-1:0] voice_active,voice_held;
-    timbre_control timbre_buttons(audio_clk,audio_reset,keys,selected_timbre);
+    timbre_control timbre_buttons(audio_clk,audio_reset,keys,selected_timbre,effects_enabled);
     run_leds #(.STEP_CYCLES(LED_STEP_CYCLES),.DIAG_STEPS(LED_DIAG_STEPS)) status_leds(
         .clk(clk),.audio_ready_async(!audio_reset),.key_active_async(gate),
         .pll1_lock_async(lock1),.pll2_lock_async(lock2),.reset_active_async(rst),.led_n(led_n));
@@ -39,11 +40,12 @@ module keyboard_top #(
     synth_core #(.MUTE(MUTE),.FADE(FADE),.ATTACK(ATTACK),.DECAY(DECAY),
         .SUSTAIN(SUSTAIN),.RELEASE(RELEASE)) sound(
         .clk(audio_clk),.rst(audio_reset),.note_valid(note_valid),.note_on(note_on),
-        .note_id(note_id),.note_fcw(note_fcw),.note_timbre(event_timbre),
+        .note_id(note_id),.note_fcw(note_fcw),.note_timbre(event_timbre),.effects_enable(effects_enabled),
         .bck(HP_BCK),.ws(HP_WS),.din(HP_DIN),.pa_enable(PA_EN),.underrun(underrun),
         .frame_ce(frame_ce),.note_ready(note_ready),.input_ready(input_ready),
         .gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(envelope_level));
     assign DBG_BCK=HP_BCK;assign DBG_WS=HP_WS;
     assign DBG_DIN=HP_DIN;assign DBG_PA_EN=PA_EN;
 endmodule
+
 

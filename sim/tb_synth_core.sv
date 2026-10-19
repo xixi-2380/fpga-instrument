@@ -14,7 +14,7 @@ module tb_synth_core;
  synth_core #(.VOICES(VOICES),.MUTE(4),.FADE(4),.ATTACK(ATTACK_N),.DECAY(DECAY_N),.SUSTAIN(SUSTAIN_N),.RELEASE(16)) sound(
   .clk(clk),.rst(rst),.note_valid(note_valid),.note_on(note_on),.note_id(note_id),.note_fcw(note_fcw),
   .note_ready(note_ready),.input_ready(input_ready),.bck(bck),.ws(ws),.din(din),.pa_enable(pa),
-  .underrun(u),.frame_ce(frame_ce),.gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(level),.note_timbre(2'd0));
+  .underrun(u),.frame_ce(frame_ce),.gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(level),.note_timbre(2'd0),.effects_enable(1'b0));
  `include "poly_audio_reference.svh"
  task event_note(input bit n,input [6:0] id,input [31:0] word_fcw);begin
   @(negedge clk);note_valid=1;note_on=n;note_id=id;note_fcw=word_fcw;
@@ -98,4 +98,5 @@ module tb_synth_core;
  end
  initial begin #30000000;$fatal(1,"shared synth timeout");end
 endmodule
+
 

@@ -202,3 +202,13 @@ voice_allocator的公开音符/音色字段不变，note_ready现在只在注册
 frame_ce或enabled撤销会取消尚未确认的搜索，重新允许后对同一个仍保持的事件重新读取；不会提前应答或重复提交。ADSR仍只在frame_ce消费pending命令，渲染仍冻结所有权。外部接口、替换顺序及短On/Off语义不变，内部rank更新不再用组合候选索引读取其他rank。32事件不再保证塞进一帧空窗；样本生成预算仍544拍且每帧只交付一次。
 
 这一结构调整移除了旧报告中的串行比较链，不等于已经通过61.44 MHz STA；需要用户重新实现报告确认。
+
+
+
+## 2026年10月19日 延迟效果器接口
+
+synth_core新增effects_enable单比特输入，须与audio_clk同域；keyboard_top将原timbre_control输出的effects_enabled接入。跨时钟控制源须先同步，当前控制器与键盘均在同一音频域。
+
+audio_delay接收mix_valid/mix_sample，in_ready仅在空闲有效；接收后下一拍输出out_valid/out_sample，再由原frame_buffer接收。输出端不提供回压，消费者必须能接收。本工程每帧一个结果并断言frame_buffer就绪。禁止将effects_enable作为时钟；开关变化在接受音频样本时采样，64个样本渐变。
+
+原32声部调度不变，原声路径仅增加效果器的两拍左右流水等待，没有150ms整段缓冲。具体参数和验收见effects.md。
