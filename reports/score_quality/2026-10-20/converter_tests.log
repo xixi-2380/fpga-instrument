@@ -1,0 +1,12 @@
+test_bad_conversion_preserves_existing_rom (__main__.ScoreCompilerTest.test_bad_conversion_preserves_existing_rom) ... ok
+test_checked_in_roms_reproduce (__main__.ScoreCompilerTest.test_checked_in_roms_reproduce) ... ok
+test_default_score_has_keyboard_pitch_identities (__main__.ScoreCompilerTest.test_default_score_has_keyboard_pitch_identities) ... ok
+test_empty_score_is_valid (__main__.ScoreCompilerTest.test_empty_score_is_valid) ... ok
+test_invalid_source_is_rejected (__main__.ScoreCompilerTest.test_invalid_source_is_rejected) ... ok
+test_note_names_and_independent_a4 (__main__.ScoreCompilerTest.test_note_names_and_independent_a4) ... ok
+test_simultaneous_release_before_new_note (__main__.ScoreCompilerTest.test_simultaneous_release_before_new_note) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.148s
+
+OK

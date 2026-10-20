@@ -7,7 +7,7 @@ module tb_score_player;
   SCORE_KIND==2?"sim/data/score_player_fault.hex":
   SCORE_KIND==3?"sim/data/score_player_boundary.hex":"sim/data/does_not_exist.hex";
  localparam WORDS=SCORE_KIND==0?512:SCORE_KIND==1?16:1;
- localparam EVENT_COUNT=SCORE_KIND==0?336:6;
+ localparam EVENT_COUNT=SCORE_KIND==0?84:6;
  reg clk=0,rst=1,input_ready=0,ready=0,block_ready=0;
  reg [3:0] tick=0;wire frame_ce=tick==15;
  wire valid,on,busy,done,error;wire [6:0] id;wire [31:0] fcw;wire [1:0] timbre;
@@ -48,9 +48,9 @@ module tb_score_player;
    stalled=valid && !ready;payload={timbre,on,id,fcw};
    if(SCORE_KIND<2 && valid && observed!=accepted)begin
     if(SCORE_KIND==0)begin
-     step=accepted/8;expected_wait=0;
-     if(accepted%8==4)expected_wait=(step%7==6?6:3)*(BEAT_FRAMES/4);
-     if(accepted%8==0 && accepted>0)expected_wait=((step-1)%7==6?2:1)*(BEAT_FRAMES/4);
+     step=accepted/2;expected_wait=0;
+     if(accepted%2==1)expected_wait=(step%7==6?6:3)*(BEAT_FRAMES/4);
+     if(accepted%2==0 && accepted>0)expected_wait=((step-1)%7==6?2:1)*(BEAT_FRAMES/4);
     end else begin
      case(accepted)0,2:expected_wait=BEAT_FRAMES/2;5:expected_wait=BEAT_FRAMES/4;
       default:expected_wait=0;endcase
@@ -65,13 +65,8 @@ module tb_score_player;
     if(SCORE_KIND<2)begin
      `CHECK(accepted<EVENT_COUNT,"file must not emit extra events")
      if(SCORE_KIND==0)begin
-      step=accepted/8;slot=accepted%4;note=melody(step);expected_id=slot;
-      `CHECK(on==(accepted%8<4),"original score keeps four Ons followed by four Offs")
-      if(slot==0)pitch=note;
-      else if(note==65 || note==69)case(slot)1:pitch=65;2:pitch=69;default:pitch=72;endcase
-      else if(note==62)case(slot)1:pitch=67;2:pitch=71;default:pitch=74;endcase
-      else case(slot)1:pitch=60;2:pitch=64;default:pitch=67;endcase
-      expected_timbre=slot==0?1:0;
+      step=accepted/2;pitch=melody(step);expected_id=pitch;expected_timbre=0;
+      `CHECK(on==(accepted%2==0),"melody emits one On and matching Off per note")
      end else begin
       case(accepted)
        0,2:begin expected_id=17;pitch=66;expected_timbre=2;end
@@ -116,7 +111,7 @@ module tb_score_player;
    `CHECK(accepted==0 && busy && valid,"reset rewinds specified file even with ready blocked")
    rst=1;#1;`CHECK(!valid,"reset cancels an offered file event")
    #11;rst=0;wait(valid);#1;
-   `CHECK(on && id==(SCORE_KIND==0?0:17) && timbre==(SCORE_KIND==0?1:2),"replay starts at selected file's first event")
+   `CHECK(on && id==(SCORE_KIND==0?60:17) && timbre==(SCORE_KIND==0?0:2),"replay starts at selected file's first event")
   end
   $display("PASS tb_score_player checks=%0d beat_frames=%0d score_kind=%0d",checks,BEAT_FRAMES,SCORE_KIND);$finish;
  end

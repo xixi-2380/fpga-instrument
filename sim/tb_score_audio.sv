@@ -10,7 +10,7 @@ module tb_score_audio;
  tri [3:0] columns;wire [3:0] rows,selected;
  wire bck,ws,din,pa,db,dw,dd,dp;wire [5:0] leds;
  integer checks=0,score_events=0,key_events=0,finished_events=0,prior_nonzero;
- reg four_seen=0,melody_seen=0,chord_seen=0;
+ reg melody_seen=0;
  keyboard_top #(.SCORE_ENABLE(1),.SCORE_BEAT_FRAMES(8),.LED_STEP_CYCLES(4),.LOCK_N(32),
   .SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
   .MUTE(4),.FADE(4),.ATTACK(2),.DECAY(2),.SUSTAIN(32768),.RELEASE(2))
@@ -45,14 +45,17 @@ module tb_score_audio;
  `undef AUDIO_REF_DUT
  `undef TIMBRE_REFERENCE
  always @(posedge clk)if(!rst)begin
-  if($countones(dut.voice_held)==4)four_seen=1;
+  if(dut.score_busy)begin
+   `CHECK($countones(dut.voice_held)<=1,"default score has only one held melody note")
+  end
   if(dut.score_busy)begin
    `CHECK(!dut.key_valid,"physical keyboard cannot enqueue notes during playback")
    if(note_valid && note_ready)begin
     score_events=score_events+1;
-    `CHECK(note_id<4,"score events use reserved identities")
-    if(note_on && note_timbre==1)melody_seen=1;
-    if(note_on && note_timbre==0)chord_seen=1;
+    `CHECK(note_id==60 || note_id==62 || note_id==64 || note_id==65 || note_id==67 || note_id==69,
+      "melody identity follows pitch exactly as keyboard input")
+    `CHECK(note_timbre==0,"default score shares the keyboard sine preset")
+    if(note_on)melody_seen=1;
    end
   end else if(note_valid && note_ready)begin
    key_events=key_events+1;
@@ -68,7 +71,7 @@ module tb_score_audio;
   pressed=16'h0200;wait(dut.keys==16'h0200);more_frames(12);
   `CHECK(dut.score_busy && key_events==0,"held physical input cannot interrupt the score")
   wait(dut.score_done);#0.002;finished_events=score_events;
-  `CHECK(score_events==336 && four_seen && melody_seen && chord_seen,"all 42 melody/chord steps finish exactly once")
+  `CHECK(score_events==84 && melody_seen,"all 42 single melody notes finish exactly once")
   `CHECK(dut.voice_held==0 && dut.voice_active==0,"score releases and tail finish before source handoff")
   wait(key_events==1);more_frames(20);
   `CHECK($countones(dut.voice_held)==1 && dut.sound.voice_ids[6:0]==69,"a key held during the score is recognized after handoff")
@@ -77,8 +80,8 @@ module tb_score_audio;
   `CHECK(score_events==finished_events && dut.score_done,"keyboard activity cannot restart the one-shot score")
   // Global reset replays from the beginning and cancels previous source state.
   ref_rst=1;#1;`CHECK(!pa && !note_valid && din==0,"reset cancels playback and keyboard audio")
-  score_events=0;key_events=0;#99 ref_rst=0;wait(pa);wait(score_events>=4);
-  `CHECK(dut.score_busy && dut.score.pc<=4 && dut.sound.voice_ids[6:0]==0,"USR replay begins at the first score step")
+  score_events=0;key_events=0;#99 ref_rst=0;wait(pa);wait(score_events>=1);#0.002;
+  `CHECK(dut.score_busy && dut.score.pc<=1 && dut.sound.voice_ids[6:0]==60,"USR replay begins at the first score step")
   $display("SCORE_AUDIO_METRICS events=%0d max_delivery=%0d",finished_events,max_delivery_cycle);
   $display("PASS tb_score_audio checks=%0d",checks);$finish;
  end

@@ -18,6 +18,17 @@ class ScoreCompilerTest(unittest.TestCase):
                 self.assertEqual(''.join(f'{w:016x}\n' for w in words),(ROOT/(stem+'.hex')).read_text(encoding='ascii'))
                 self.assertLessEqual(stats['words'],depth)
 
+    def test_default_score_has_keyboard_pitch_identities(self):
+        words,stats=compiler.compile_text((ROOT/'src/scores/twinkle.txt').read_text(encoding='utf8'))
+        expected=[60,60,67,67,69,69,67,65,65,64,64,62,62,60,
+                  67,67,65,65,64,64,62,67,67,65,65,64,64,62,
+                  60,60,67,67,69,69,67,65,65,64,64,62,62,60]
+        ons=[w for w in words if w>>60==2]
+        self.assertEqual(stats['notes'],42)
+        self.assertEqual(stats['events'],84)
+        self.assertEqual([w>>34&127 for w in ons],expected)
+        self.assertTrue(all(w>>32&3==0 for w in ons))
+
     def test_note_names_and_independent_a4(self):
         self.assertEqual([compiler.pitch_number(x) for x in ['C4','F#4','Gb4','Bb3','69']], [60,66,66,58,69])
         words,stats=compiler.compile_text('0 1/4 127:A4:reed\nend 1/4\n',8)

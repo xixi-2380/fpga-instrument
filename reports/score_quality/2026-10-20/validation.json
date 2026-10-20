@@ -1,0 +1,161 @@
+{
+  "date": "2026-10-20",
+  "base_commit": "a9c5413d2b26d8e3e9b80d42b2cef325f4eda613",
+  "change": "Default score becomes a 42-note sine melody with pitch-based identities; preserve independent old-pitch release tails and keyboard retrigger semantics.",
+  "score": {
+    "notes": 42,
+    "events": 84,
+    "used_rom_words": 168,
+    "rom_depth": 512,
+    "tempo_bpm": 120,
+    "gate_fraction": 0.75,
+    "melody_timbre": 0,
+    "identities": "MIDI pitch, matching keyboard adapter",
+    "accompaniment_in_default": false
+  },
+  "tests": [
+    {
+      "test": "tb_score_player",
+      "passed": true,
+      "seconds": 0.157,
+      "group": "player",
+      "checks": 1074
+    },
+    {
+      "test": "tb_score_player",
+      "passed": true,
+      "seconds": 52.873,
+      "group": "production",
+      "checks": 1283
+    },
+    {
+      "test": "tb_score_articulation",
+      "passed": true,
+      "seconds": 18.994,
+      "group": "articulation",
+      "checks": 4234087
+    },
+    {
+      "test": "tb_score_audio",
+      "passed": true,
+      "seconds": 66.655,
+      "group": "audio_final",
+      "checks": 2802275
+    },
+    {
+      "test": "tb_score_player",
+      "passed": true,
+      "seconds": 0.119,
+      "group": "custom",
+      "checks": 52
+    }
+  ],
+  "hdl_configurations": 5,
+  "hdl_checks": 7038771,
+  "converter_tests": {
+    "passed": true,
+    "test_methods": 7,
+    "log": "converter_tests.log"
+  },
+  "production_articulation": {
+    "beat_frames": 24000,
+    "attack_frames": 480,
+    "decay_frames": 4800,
+    "sustain_q16": 45875,
+    "release_frames": 9600,
+    "tested_sequence": [
+      "C4",
+      "C4 retrigger",
+      "G4 change and C4 release"
+    ],
+    "frames": 58001,
+    "dds_samples": 232004,
+    "test_ce_spacing_cycles": 64,
+    "hardware_audio_serial_timing_verified_by_this_test": false
+  },
+  "protected_project_dependencies_unchanged": [
+    "src/score_player.sv",
+    "src/timbre_control.sv",
+    "src/rom/flute4096.hex",
+    "src/rom/reed4096.hex",
+    "src/keyboard_top.sv",
+    "src/adsr_envelope.sv",
+    "src/audio_timing.sv",
+    "src/clock_reset.sv",
+    "src/dds_sine.sv",
+    "src/frame_buffer.sv",
+    "src/keyboard_core.sv",
+    "src/synth_core.sv",
+    "src/voice_allocator.sv",
+    "src/voice_mixer.sv",
+    "src/lock_guard.sv",
+    "src/matrix_keypad.sv",
+    "src/key_note_events.sv",
+    "src/pll_pair.sv",
+    "src/pt8211_tx.sv",
+    "src/reset_sync.sv",
+    "src/run_leds.sv",
+    "src/sine_rom.sv",
+    "src/startup_envelope.sv",
+    "src/tone_gain.sv",
+    "src/config/keyboard_config.svh",
+    "src/config/keyboard_notes.svh",
+    "src/config/run_leds_config.svh",
+    "src/config/synth_config.svh",
+    "src/rom/sine4096.hex",
+    "src/keyboard.cst",
+    "src/keyboard.sdc"
+  ],
+  "source_sha256": {
+    "src/score_player.sv": "c5a003c20faad55ac09cfb1078706f993f1fda6d7d74426b75cdbdc6339d7fe3",
+    "src/scores/twinkle.hex": "e3a85861a59a51d5e07987e0125a53b342048c162284099f9c8d815c3c2d9e6d",
+    "src/scores/twinkle.txt": "41a523098bfb7b306c43f15c5767d043b797e8fa4a91e0f31885271c40d6ea9c",
+    "src/timbre_control.sv": "64dd2b9a820bb7ed84410df1a0c0ca7ea28662754422ea2284803879348dc50c",
+    "src/rom/flute4096.hex": "630a276aac151a989700648aa4a4b44b4ae48dbfbfd46413c68537f873521eaa",
+    "src/rom/reed4096.hex": "b81e3b514e23cb9b925097fbe22bc59dce76a617d910da33739a6297074eb61d",
+    "src/keyboard_top.sv": "861a532a465b1f92a992d54abd8c9d32bcb11d15cf6f145e57ee4c3937602f39",
+    "src/adsr_envelope.sv": "bd951b7f4a198e5d821d011116a5d073818c360a72d45ee97050c7e4ffd8c3e5",
+    "src/audio_timing.sv": "ebd73edfceef85128760141410b95ccbf82e5665ce18ba10075e67c1d72ecc1e",
+    "src/clock_reset.sv": "6064ed61bbdcec68e2bd04f934c8510ee3b95aabbe0a009e54f21b2c2d10af6b",
+    "src/dds_sine.sv": "9c9207a6d5824a0f18dcfdd12b85cdd1db7ef4a53dd1e824019e10132954cb9b",
+    "src/frame_buffer.sv": "dbf0d9b5cc9a0ad1ff4b1a32b2e9b4fdb0fc5c7c8d01a8b1fe9a1c7685e844c8",
+    "src/keyboard_core.sv": "fc0c821c96c485a019b9e0418a0b593b49a560c2e63372c1742cc31fbd352902",
+    "src/synth_core.sv": "2a6fc5d5f2e76ef5d1b5e06f6837b894e3d7a1ec28751e2f1bfdd46ca3ac606c",
+    "src/voice_allocator.sv": "fa744ac1c2b28e5bd97f4d7119f3acbf07210f04ae1fe3b781cf49d004815b30",
+    "src/voice_mixer.sv": "51e90e6a63192b7851e9a6635553701b4e528c49b2472e10906a6574171b3a19",
+    "src/lock_guard.sv": "1ccbb8e306689ea8da65a8889b45aa2c3cceaf90aa3f2a31762e195d5fce6377",
+    "src/matrix_keypad.sv": "c7af5fec02c122b50132d01ff3911d27ab394535dcfa51173b2b511e176a7350",
+    "src/key_note_events.sv": "7a51a2551bf58f658428c8a3ccd4440de720e747bf135353a7f199934c9981d7",
+    "src/pll_pair.sv": "29775d84d6b0deb8a8fc6e3bc80e36e0e321f84ddaa418e068622e5ade6d061e",
+    "src/pt8211_tx.sv": "5c5b56945efda77df100ca332b91df4bf2927add8d826c12e8499f957278710c",
+    "src/reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+    "src/run_leds.sv": "db725978a1e9e386a848ec1223985eeded526ff2eb64f29b21987f1ac7d10713",
+    "src/sine_rom.sv": "b43e6cfe2b2fb35d29a09efd503ad9b787961d1ff430b130e788ef13d0a9c081",
+    "src/startup_envelope.sv": "c5fc6b434759e6f0b85e6315c42baa9d0149332f47d7c58d36cd47bb18587e65",
+    "src/tone_gain.sv": "b70e31dc56c7025001ca535b1ce3b0597d84b4fa4dc518bddd3de8f18bab2c22",
+    "src/config/keyboard_config.svh": "941faf20aabe571b2636248a17aa4690d31bf5d5451c6801f825394227073e2c",
+    "src/config/keyboard_notes.svh": "55c63120d48c3f42e587c8c42d83b0d0ef10228650faff4cf0348aef3be5fe66",
+    "src/config/run_leds_config.svh": "2cdc3ed138ed6a3b70c58e53e9de871f15afb7898f8c88a4b597c624734a1589",
+    "src/config/synth_config.svh": "e3d2fcb59d6b718a24f2cb56f3974ec92d521d238ba3569c3b7ad0f27c31f434",
+    "src/rom/sine4096.hex": "d62e7528ad6c0400fab616087abbdaa7b7977fcd9adbce1b347e3a5743ea3d6e",
+    "src/keyboard.cst": "e6dcd89c6bc4890e40e5cc68fef5cf81993d543968b234f978555af80e1399b9",
+    "src/keyboard.sdc": "d4cda6eda4eabf4c1eb77b25273648a8e94d466d7489bd83f175fdaf27251086"
+  },
+  "initial_failure": {
+    "log": "audio/tb_score_audio.log",
+    "reason": "USR test checked allocator identity on the first handshake edge before its nonblocking register writes. Added delta-settling delay to the test and reran; production RTL unchanged."
+  },
+  "hardware": {
+    "eda_invoked_by_assistant": false,
+    "programmed_by_assistant": false,
+    "new_sta_verified": false,
+    "subjective_audio_quality_verified": false
+  },
+  "limits": [
+    "Production articulation component test accelerates CE spacing; all production beat/ADSR frame counts retained.",
+    "Full official-PLL top test covers all 42 notes and serial samples with accelerated beat/envelope parameters.",
+    "Same-pitch retrigger intentionally preserves nonzero level like the keyboard; no global ADSR change.",
+    "Removed default accompaniment for a comparable sine melody baseline; generic polyphonic/timbre score support remains.",
+    "Solo playback uses existing 1/32 voice gain and may be quieter than the former four-note arrangement."
+  ]
+}

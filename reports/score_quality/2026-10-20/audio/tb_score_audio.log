@@ -1,0 +1,3 @@
+FAIL USR replay begins at the first score step at 9173117000
+FATAL: E:/gowin/fpga-instrument/sim/tb_score_audio.sv:84: 
+       Time: 9173117349  Scope: tb_score_audio

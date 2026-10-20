@@ -1,0 +1,2 @@
+PASS tb_score_player checks=1283 beat_frames=24000 score_kind=0
+E:/gowin/fpga-instrument/sim/tb_score_player.sv:116: $finish called at 183946046000 (1ps)

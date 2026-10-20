@@ -66,3 +66,8 @@
 - 2026-10-19用户要求播放器独立并读取指定谱文件。原score_player原位改通用64位同步ROM事件源，SCORE_FILE/SCORE_WORDS可配置，顶层仅复用事件源。旧demo_score.svh歌曲函数移至src/scores/twinkle.txt与离线生成twinkle.hex，scripts/compile_score.py验证并转换，不启动EDA。22个HDL、33项依赖，保持旧谱编排、音源/ADSR/PLL/PA/增益/约束；此前粗糙听感不作为本次已修复项。格式及读文件仅在综合/配置时生效等限制见docs/score_player.md。已读取用户21:09:15旧版STA：Setup/Hold各0、音频Fmax61.535MHz，该结果不覆盖本次新结构；新STA/资源/试听由用户验证。
 
 - 文件播放器最终35个HDL配置、17327941次检查和6项谱转换器测试通过，证据reports/file_score/2026-10-19/validation.json。验证期间旧编辑页曾把score_player保存为Git基线；已比对为完全相同的旧内容后恢复新实现，记录external_save.json；请关闭旧编辑页后重开工程，避免覆盖磁盘新版。
+
+
+- 2026-10-20用户要求处理乐谱与手动音质差异：默认twinkle.txt/hex原位改为正弦单旋律，以MIDI音高为身份，42音/84事件，保留原音高、节奏/门长。不同音高独立起音、旧尾音原频率释放，同音重触发保持键盘语义；不改音源/ADSR/增益/PA/PLL/CST/SDC。原通用播放器保留复音/多音色/文件接口。新增tb_score_articulation补生产包络与节拍的前三音衔接验证，CE间隔压缩为64仿真时钟；不能当生产串行STA或实板音质。最终证据reports/score_quality/2026-10-20/validation.json。新编译烧录/听感确认由用户执行。
+
+- 本次5个HDL验证配置共7,038,771次检查与7项谱转换器测试通过，含生产参数换音组件、完整生产节拍、官方PLL顶层音频/键盘交接以及另一份多音色复音谱。验证记录：reports/score_quality/2026-10-20/validation.json。实际音质仍待用户试听。
