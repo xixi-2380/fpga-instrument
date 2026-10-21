@@ -1,0 +1,35 @@
+[
+  {
+    "test": "tb_score_player",
+    "variant": "custom",
+    "params": {
+      "SCORE_KIND": 1
+    },
+    "passed": true
+  },
+  {
+    "test": "tb_score_player",
+    "variant": "disabled",
+    "params": {
+      "ENABLE": 0,
+      "SCORE_KIND": 4
+    },
+    "passed": true
+  },
+  {
+    "test": "tb_score_player",
+    "variant": "bad_opcode",
+    "params": {
+      "SCORE_KIND": 2
+    },
+    "passed": true
+  },
+  {
+    "test": "tb_score_player",
+    "variant": "boundary",
+    "params": {
+      "SCORE_KIND": 3
+    },
+    "passed": true
+  }
+]

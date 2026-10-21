@@ -1,0 +1,3 @@
+FAIL effect output matches independent history at 8948309000
+FATAL: sim/poly_audio_reference.svh:63: 
+       Time: 8948308798 Scope: tb_score_effects

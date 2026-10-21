@@ -1,0 +1,1 @@
+{"test":"tb_score_player", "BEAT_FRAMES":24000, "status":"incomplete", "reason":"vvp exceeded 180-second process budget; no RTL failure observed before termination", "note":"Full melody is verified at reduced beat length; production frame counts for first transitions are covered by tb_score_articulation. No production timing/STA claim."}

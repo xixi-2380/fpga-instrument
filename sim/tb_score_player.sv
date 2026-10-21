@@ -2,10 +2,13 @@
 `include "check.svh"
 module tb_score_player;
  parameter integer ENABLE=1,BEAT_FRAMES=8,TAIL_FRAMES=6,SCORE_KIND=0;
- localparam SCORE_FILE=SCORE_KIND==0?"src/scores/twinkle.hex":
-  SCORE_KIND==1?"sim/data/score_player_test.hex":
-  SCORE_KIND==2?"sim/data/score_player_fault.hex":
-  SCORE_KIND==3?"sim/data/score_player_boundary.hex":"sim/data/does_not_exist.hex";
+ // Equal-width paths avoid NUL-padded conditional strings on Icarus 11.
+ // Repeated directory separators resolve to the same files.
+ localparam SCORE_FILE=SCORE_KIND==0?"src/////////////scores/twinkle.hex":
+  SCORE_KIND==1?"sim/////data/score_player_test.hex":
+  SCORE_KIND==2?"sim////data/score_player_fault.hex":
+  SCORE_KIND==3?"sim/data/score_player_boundary.hex":
+  "sim////////data/does_not_exist.hex";
  localparam WORDS=SCORE_KIND==0?512:SCORE_KIND==1?16:1;
  localparam EVENT_COUNT=SCORE_KIND==0?84:6;
  reg clk=0,rst=1,input_ready=0,ready=0,block_ready=0;

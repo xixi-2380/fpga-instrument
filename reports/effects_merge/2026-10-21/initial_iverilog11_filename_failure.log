@@ -1,0 +1,4 @@
+WARNING: src/score_player.sv:25: $readmemh's file name argument (vpiParameter) is not a valid string.
+WARNING: src/score_player.sv:74: $fopen's file name argument (vpiParameter) is not a valid string.
+FATAL: src/score_player.sv:75: Cannot open score file: 
+       Time: 0 Scope: tb_score_player.dut

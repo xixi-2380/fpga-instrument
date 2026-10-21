@@ -6,6 +6,11 @@
 // Independent mathematical phase/ROM/fixed-point/serial scoreboard.
 integer frames=0,edges=0,bitn=0,ch=0,word=0,nonzero=0,cycles=0,last_frame_cycle=-1;
 integer current_code=0,pending_code=0,last_sample=0,romcode;
+integer reference_dry_code=0;
+`ifdef FX_REFERENCE
+integer fx_history[0:FX_DELAY-1],fx_pointer=0,fx_filled=0,fx_weight=0,fx_old;
+reg signed [63:0] fx_sum;
+`endif
 integer rendered_terms=0,delivered=0,max_delivery_cycle=0,peak_code=0,low_code=0;
 reg stalled=0;reg [41:0] stalled_event=0;
 reg frame_complete=0;
@@ -18,6 +23,10 @@ initial for(integer v=0;v<VOICES;v=v+1)ref_phase[v]=0;
 always @(posedge rst)begin
  frames=0;edges=0;bitn=0;ch=0;word=0;nonzero=0;current_code=0;pending_code=0;
  last_frame_cycle=-1;frame_complete=0;rendered_terms=0;delivered=0;stalled=0;peak_code=0;low_code=0;
+ reference_dry_code=0;
+`ifdef FX_REFERENCE
+ fx_pointer=0;fx_filled=0;fx_weight=0;
+`endif
  for(integer v=0;v<VOICES;v=v+1)ref_phase[v]=0;
 end
 always @(posedge clk)if(!rst)begin
@@ -44,11 +53,26 @@ always @(posedge clk)if(!rst)begin
  end
  if(`AUDIO_REF_DUT.mix_valid)begin
   `CHECK(delivered==0 && rendered_terms==VOICES,"one complete mixed result per frame")
-  `CHECK($signed(`AUDIO_REF_DUT.mix_sample)==pending_code,"full mix matches independent mathematical sum")
+  `CHECK($signed(`AUDIO_REF_DUT.mix_sample)==reference_dry_code,"full mix matches independent mathematical sum")
   `CHECK(cycles-last_frame_cycle<=32+16*VOICES,"render meets fixed frame budget")
   if(cycles-last_frame_cycle>max_delivery_cycle)max_delivery_cycle=cycles-last_frame_cycle;
   delivered=delivered+1;
+`ifdef FX_REFERENCE
+  fx_old=fx_filled>=FX_DELAY?fx_history[fx_pointer]:0;
+  fx_history[fx_pointer]=reference_dry_code;
+  fx_sum=(256-fx_weight)*reference_dry_code+fx_weight*fx_old;
+  pending_code=fx_sum>>>8;
+  fx_pointer=(fx_pointer+1)%FX_DELAY;if(fx_filled<FX_DELAY)fx_filled=fx_filled+1;
+  if(effects_enable && fx_weight<64)fx_weight=fx_weight+1;
+  else if(!effects_enable && fx_weight>0)fx_weight=fx_weight-1;
+`endif
  end
+`ifdef FX_REFERENCE
+ if(`AUDIO_REF_DUT.effect_valid)begin
+  `CHECK($signed(`AUDIO_REF_DUT.effect_sample)==pending_code,"effect output matches independent history")
+  `CHECK(cycles-last_frame_cycle<=32+16*VOICES,"effect reaches buffer before fixed deadline")
+ end
+`endif
  if(frame_ce)begin
   if(last_frame_cycle>=0)begin
    `CHECK(cycles-last_frame_cycle==1280,"audio never stalls the 1280-cycle frame")
@@ -77,6 +101,8 @@ always @(posedge clk)if(!rst)begin
   if(reference_sum>32767)pending_code=32767;
   else if(reference_sum < -32768)pending_code=-32768;
   else pending_code=reference_sum;
+  reference_dry_code=pending_code;
+
  end
 end
 always @(posedge bck)if(!rst)begin

@@ -1,0 +1,3 @@
+FAIL other diagonal enables effect without changing timbre at 810000
+FATAL: sim/tb_timbre_control.sv:19: 
+       Time: 810000 Scope: tb_timbre_control

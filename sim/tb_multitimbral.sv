@@ -13,7 +13,7 @@ module tb_multitimbral;
  .clk(clk),.rst(rst),.note_valid(note_valid),.note_on(note_on),.note_id(note_id),.note_fcw(note_fcw),
  .note_ready(note_ready),.input_ready(input_ready),.bck(bck),.ws(ws),.din(din),.pa_enable(pa),
  .underrun(u),.frame_ce(frame_ce),.gate(gate),.voice_active(voice_active),.voice_held(voice_held),
- .envelope_level(level),.note_timbre(note_timbre));
+ .envelope_level(level),.note_timbre(note_timbre),.effects_enable(1'b0));
  function real waveform(input integer t,input real a);
  case(t)
  1:waveform=$sin(a)+0.20*$sin(2*a)+0.08*$sin(3*a);
@@ -90,3 +90,4 @@ module tb_multitimbral;
  end
  initial begin #40000000;$fatal(1,"multitimbral timeout");end
 endmodule
+

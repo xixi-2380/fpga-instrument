@@ -1,0 +1,67 @@
+{
+  "main_parent": "f2855067ccd2160c6bfe724c15aeac7e0d5f90e1",
+  "effects_parent": "a941443368e18c848cf186a9183b870d16ca9c06",
+  "result": "integration checks passed; hardware validation pending",
+  "hdl_configurations_passed": 34,
+  "hdl_checks_passed": 30451236,
+  "score_converter_tests_passed": 7,
+  "rtl_summary": "summary_rtl_final.json",
+  "top_summary": "summary_behavioral_top.json",
+  "player_variants": "summary_player_variants.json",
+  "top_pll_model": "sim/pll_pair_behavioral.sv replaces wrapper, not official PLL verification",
+  "coverage": [
+    "42-note/84-event score playback then held-key handoff",
+    "actual matrix gesture enables/disables echo, holds once and rearms on release",
+    "independent per-frame waveform and serializer reference",
+    "global reset disables effect and restarts score",
+    "32 mixed voices, 7200-sample delay unit tests, bypass and RAM reset",
+    "production ADSR/beat transition component test, 232004 DDS samples"
+  ],
+  "test_repairs": [
+    "effect reference advances enable ramp when mixer sample is accepted, not earlier at frame CE",
+    "testbench conditional paths use equal-width valid directory separators to avoid Icarus 11 NUL-padding"
+  ],
+  "incomplete_checks": [
+    {
+      "test": "full player with BEAT_FRAMES=24000",
+      "reason": "180-second process timeout, not marked passed",
+      "record": "production_timeout.json"
+    }
+  ],
+  "not_run": [
+    "Gowin synthesis",
+    "place and route",
+    "static timing/resource/RAM-inference verification",
+    "JTAG/SRAM/Flash operations",
+    "official vendor PLL and pinmap reruns"
+  ],
+  "user_feedback": "effects branch audition successful before integration; combined hardware image not yet tested",
+  "gprj": {
+    "hdl": 23,
+    "dependencies": 34,
+    "behavioral_pll_in_hardware_project": false
+  },
+  "source_sha256": {
+    "AGENTS.md": "c30004d78179ab8b1d9f8f7767c47c91a5c3f80ebfa13b020afbef47a102295e",
+    "README.md": "67ab2788e2b9d3d331e42501b792cda4437d6856056f33c7b5cd051f139fafa8",
+    "docs/effects.md": "5caefa8ac862526a65a95395948fab76da8c90e0f986713f4ee1d9a4ab20a49d",
+    "docs/interfaces.md": "af2cc0b206ba31bd7fde7c54878f09f024038a893a61ed5ff1dc0b1a91eded86",
+    "keyboard_adsr.gprj": "7d0eeb7d4271bd6ba74b8da114afb76497ba4172b4df2f2f641e716aed32a992",
+    "sim/poly_audio_reference.svh": "9e76ae2776beecb8dca8551208e97d6d45da12ba4b98dbe0d541bfceedb31af6",
+    "sim/tb_audio_delay.sv": "e8f2d46bb247dd6a6991279cec82ca0f0a888cff107ea52ee3a1599602e43854",
+    "sim/tb_effects_integration.sv": "782c17e91744c9e964339db0207210d4e2bcef7c3029e68ec369673d3cba58bb",
+    "sim/tb_keyboard_core.sv": "d28b87a74ce7c9a6bd3504031dd5d2d7b1c70cab747fe5bd7e859b8f84556ee7",
+    "sim/tb_keyboard_latency.sv": "9642c037dd27198d10d1f5c2f3497251a2bf639f246f0ce8c84cd33b751df0bd",
+    "sim/tb_multitimbral.sv": "5805d9d680236096f85b1d5ed283ac895b77e0a3d23466e47d716ab9d653a66c",
+    "sim/tb_synth_core.sv": "1e915e7cf7411249d01b3361e215ebb76c763ba10157a43bd1f21b73b67019b8",
+    "sim/tb_timbre_control.sv": "86a5d6d3d7b238393749467f1026c6a452a71fb1f6e064609c4f3c20632736a0",
+    "src/audio_delay.sv": "4958641acafb4e5c0e602d3c79b3dde7eee2035b89e328db50363007a885ca7f",
+    "src/keyboard_top.sv": "0d5f3f566fb928caab472765566b4abd15f70ab4ce704569cace0ceff221c53c",
+    "src/synth_core.sv": "2fec4d2e42ac81ff7498d57cb9d05603e656827ba67eaa3fa43f381c369384f2",
+    "src/timbre_control.sv": "994bccee3757c86cbe39434801f156acbc5332e4bbd93c711c51836e755d86ae",
+    "scripts/run_sim.py": "2e77bd30fa569b37abf3479f258985b16b87434d569fa2e4c8838209adc33f71",
+    "sim/tb_score_player.sv": "97240ad90727d5ca6b68b156e0e2c097487c2cbaac84b6624a9f517aa0c21db8",
+    "sim/pll_pair_behavioral.sv": "26111dfe62a653fc6b7553145d80408e22665fbb44acaf2349361ed5b4a818b9",
+    "sim/tb_score_effects.sv": "15709624e3438bb2dbf8f94878ac5681b325e193cb0d27587b69efcb8cb134c6"
+  }
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "test": "tb_score_player",
+    "passed": true,
+    "seconds": 0.25
+  },
+  {
+    "test": "tb_sine_rom",
+    "passed": true,
+    "seconds": 0.08
+  },
+  {
+    "test": "tb_startup_envelope",
+    "passed": true,
+    "seconds": 0.08
+  },
+  {
+    "test": "tb_synth_core",
+    "passed": true,
+    "seconds": 39.58
+  },
+  {
+    "test": "tb_timbre_control",
+    "passed": true,
+    "seconds": 0.04
+  },
+  {
+    "test": "tb_timbres",
+    "passed": true,
+    "seconds": 0.68
+  },
+  {
+    "test": "tb_tone_gain",
+    "passed": true,
+    "seconds": 0.1
+  },
+  {
+    "test": "tb_voice_allocator",
+    "passed": true,
+    "seconds": 5.57
+  },
+  {
+    "test": "tb_voice_mixer",
+    "passed": true,
+    "seconds": 1.23
+  }
+]

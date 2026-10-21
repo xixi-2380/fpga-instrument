@@ -1,0 +1,17 @@
+[
+  {
+    "test": "tb_audio_delay",
+    "passed": true,
+    "seconds": 0.36
+  },
+  {
+    "test": "tb_effects_integration",
+    "passed": true,
+    "seconds": 20.0
+  },
+  {
+    "test": "tb_timbre_control",
+    "passed": false,
+    "seconds": 0.01
+  }
+]

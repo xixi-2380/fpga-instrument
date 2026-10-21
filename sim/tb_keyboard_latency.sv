@@ -17,7 +17,7 @@ module tb_keyboard_latency;
  synth_core #(.VOICES(VOICES),.MUTE(4),.FADE(4)) sound(
   .clk(clk),.rst(rst),.note_valid(note_valid),.note_on(note_on),.note_id(note_id),.note_fcw(note_fcw),
   .note_ready(note_ready),.input_ready(input_ready),.bck(bck),.ws(ws),.din(din),.pa_enable(pa),
-  .underrun(u),.frame_ce(frame_ce),.gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(level),.note_timbre(2'd0));
+  .underrun(u),.frame_ce(frame_ce),.gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(level),.note_timbre(2'd0),.effects_enable(1'b0));
  passive_matrix_model model(pressed,columns,rows);
  always @(posedge gate)if(!rst && press_ns>0)note_on_ns=$realtime;
  always @(posedge bck)if(!rst)begin
@@ -43,4 +43,5 @@ module tb_keyboard_latency;
  end
  initial begin #12000000;$fatal(1,"production latency timeout");end
 endmodule
+
 
