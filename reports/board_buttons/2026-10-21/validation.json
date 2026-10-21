@@ -1,0 +1,95 @@
+{
+  "base_commit": "3dd2a152639f198bf07a6e7c4d5aca2c782f4d27",
+  "passed_configurations": 6,
+  "checks": 8914219,
+  "tests": [
+    {
+      "test": "tb_timbre_control",
+      "passed": true,
+      "checks": 14,
+      "pll": null
+    },
+    {
+      "test": "tb_score_audio",
+      "passed": true,
+      "checks": 2802275,
+      "pll": "behavioral replacement"
+    },
+    {
+      "test": "tb_score_effects",
+      "passed": true,
+      "checks": 4063774,
+      "pll": "behavioral replacement"
+    },
+    {
+      "test": "tb_keyboard_top",
+      "passed": true,
+      "checks": 2048130,
+      "pll": "behavioral replacement"
+    },
+    {
+      "test": "tb_timbre_control",
+      "N": 1,
+      "passed": true,
+      "checks": 12
+    },
+    {
+      "test": "tb_timbre_control",
+      "N": 614400,
+      "passed": true,
+      "checks": 14
+    }
+  ],
+  "source_sha256": {
+    "src/timbre_control.sv": "d1182f8ef38f1f3739d11686a0cb791c7f99e48ccfe4b21a1ea28d1f2b30d5b7",
+    "src/keyboard_top.sv": "9b864c3969b9af8adb380c9caf7dcd005ae3c6deb93052aef8108aeb545c4303",
+    "src/keyboard.cst": "3bed88f54d92cde68645f0812f8d2ac029515afe86f8ddcdcd08187255824ace",
+    "sim/tb_timbre_control.sv": "c93e6b346e0f4ea0fcf057893ecb11087b69484758cb7c0e5d002b6c2ed15dbe",
+    "sim/tb_keyboard_top.sv": "6051ea1346e9eadb818eac23d912030d1daee60d8e3b8e2ac98017772b3f1aa2",
+    "sim/tb_score_audio.sv": "ce33316fa5105e8dfe8cbb35e3aa3fc119d3f95d6e9553fbe9c3a4aadb592737",
+    "sim/tb_score_effects.sv": "a3bcc3bc1a45d93980318c33814cd5a8cba855eefa4c4d8f2f7671e619cde946",
+    "sim/pinmap_keyboard_tb.v": "db0e764cf7e2981fea5032ba87674e02967df6b7d3fce06e0d04cc4217278b25",
+    "docs/effects.md": "b5837292ca1311ea79cbf68002a435054c7a2c388aca38ca191849a457d27e71",
+    "docs/multitimbral.md": "e812d6aebbdec6cd685ff89398848f67ee945235e243e552b6f140ed34393120",
+    "docs/interfaces.md": "40a0fe6b7dd7d3f72c6583bf87dea34dc891b795844666e2b30267bb2e878b4d",
+    "docs/hardware/reference_pins.csv": "bb4fa6e4e07f668f5a1d5534e2ea1a8f9d1ec6da95b68d40fbd6b68c6760cd50",
+    "README.md": "9df7c25ca74e5687950eab562e56cb7d04039f7577b01fa4a1004b89bd36e074",
+    "AGENTS.md": "c9ce5346e923a082132834fe4f694285c5005506feda26dcfa6b1c853a58698d",
+    "docs/board_buttons.md": "262eb8c5526636c728c7be60834947d1d3b2c567501b78ac5362047d97e3ec3b"
+  },
+  "behavior": [
+    "S0/K16 sine; S1/F15 flute; S2/G15 reed; S3/G16 echo toggle",
+    "all active low, LVCMOS33, UP, DRIVE=OFF",
+    "two-stage audio-domain synchronizer plus independent press/release debounce",
+    "production debounce tested with N=614400, 10ms at 61.44MHz",
+    "held buttons emit once; stable release rearms",
+    "matrix former diagonal chords only play notes",
+    "buttons do not produce note events; held voice keeps its original timbre",
+    "echo on/off during autoplay and held notes, full 84-event score handoff and reset",
+    "simultaneous preset events use lowest index, effect is independent"
+  ],
+  "pin_check": "pin_check.json",
+  "preprocessing": "passed at project root and other working directory, no config include search path",
+  "unchanged": [
+    "GPRJ and PLL",
+    "synth_core and audio_delay algorithm",
+    "score_player and score ROM",
+    "USR reset and existing pin assignments",
+    "DAC/PA/matrix/LED timing policy"
+  ],
+  "not_run": [
+    "Gowin synthesis or P&R",
+    "new STA/resource reports",
+    "official PLL model or physical pin/electrical simulation",
+    "SRAM/Flash/JTAG or hardware audition"
+  ],
+  "hardware_validation_pending": true,
+  "reproduce": [
+    "python scripts/run_sim.py --test tb_timbre_control --out-dir reports/local_buttons",
+    "python scripts/run_sim.py --test tb_timbre_control --param N=1 --out-dir reports/local_buttons_n1",
+    "python scripts/run_sim.py --test tb_timbre_control --param N=614400 --out-dir reports/local_buttons_production",
+    "python scripts/run_sim.py --test tb_score_audio --behavioral-pll --out-dir reports/local_score",
+    "python scripts/run_sim.py --test tb_score_effects --behavioral-pll --out-dir reports/local_button_audio",
+    "python scripts/run_sim.py --test tb_keyboard_top --behavioral-pll --out-dir reports/local_keyboard"
+  ]
+}

@@ -2,11 +2,12 @@
 `include "check.svh"
 `include "../src/config/synth_config.svh"
 `include "passive_matrix_model.svh"
-// Combined top with sim/pll_pair_behavioral.sv substituted for the vendor wrapper.
+// Combined top: independent Dock buttons, score, matrix and echo.
+// sim/pll_pair_behavioral.sv may substitute for the vendor wrapper.
 // Test-only eight-sample echo; production delay is separately unit-tested.
 module tb_score_effects;
  localparam integer FX_DELAY=8;
- reg control_phase=0;
+ reg control_phase=0;reg [3:0] buttons_n=4'hf;
  wire effects_enable=dut.effects_enabled;
  parameter integer VOICES=`VOICE_COUNT;
  reg ref_clk=0,ref_rst=1;reg [15:0] pressed=0;
@@ -15,10 +16,10 @@ module tb_score_effects;
  wire bck,ws,din,pa,db,dw,dd,dp;wire [5:0] leds;
  integer checks=0,score_events=0,key_events=0,finished_events=0,prior_nonzero;
  reg melody_seen=0;
- keyboard_top #(.SCORE_ENABLE(1),.SCORE_BEAT_FRAMES(8),.LED_STEP_CYCLES(4),.LOCK_N(32),
+ keyboard_top #(.BUTTON_DEBOUNCE_CYCLES(4),.SCORE_ENABLE(1),.SCORE_BEAT_FRAMES(8),.LED_STEP_CYCLES(4),.LOCK_N(32),
   .SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
   .MUTE(4),.FADE(4),.ATTACK(2),.DECAY(2),.SUSTAIN(32768),.RELEASE(2))
-  dut(.clk(ref_clk),.rst(ref_rst),.key_row(rows),.key_col(columns),
+  dut(.clk(ref_clk),.rst(ref_rst),.board_buttons_n(buttons_n),.key_row(rows),.key_col(columns),
    .HP_BCK(bck),.HP_WS(ws),.HP_DIN(din),.PA_EN(pa),
    .DBG_BCK(db),.DBG_WS(dw),.DBG_DIN(dd),.DBG_PA_EN(dp),.led_n(leds));
  defparam dut.sound.DELAY_SAMPLES=FX_DELAY;
@@ -74,6 +75,12 @@ module tb_score_effects;
  end
  initial begin
   #100 ref_rst=0;wait(pa);wait(score_events>=8);
+  // Echo controls are independent of the score; preset events stay in the file.
+  buttons_n=4'h7;more_frames(70);
+  `CHECK(dut.score_busy && effects_enable && dut.sound.effect.wet_level==64,"S3 enables echo during autoplay")
+  buttons_n=4'hf;more_frames(2);buttons_n=4'h7;more_frames(70);
+  `CHECK(dut.score_busy && !effects_enable && dut.sound.effect.wet_level==0,"S3 restores dry autoplay")
+  buttons_n=4'hf;more_frames(2);
   // Hold A4 during playback: it must remain outside the synth until handoff.
   pressed=16'h0200;wait(dut.keys==16'h0200);more_frames(12);
   `CHECK(dut.score_busy && key_events==0,"held physical input cannot interrupt the score")
@@ -85,15 +92,30 @@ module tb_score_effects;
   pressed=0;wait(!dut.gate);more_frames(12);prior_nonzero=nonzero;more_frames(4);
   `CHECK(dut.voice_active==0 && nonzero==prior_nonzero && pa,"handoff and keyboard release return to zero without muting PA")
   `CHECK(score_events==finished_events && dut.score_done,"keyboard activity cannot restart the one-shot score")
-  // Actual matrix gesture must reach the effect after score-to-keyboard handoff.
-  control_phase=1;pressed=16'h1008;wait(dut.keys==16'h1008);more_frames(70);
-  `CHECK(effects_enable && dut.sound.effect.wet_level==64,"matrix gesture enables echo after autoplay")
-  more_frames(5);`CHECK(effects_enable,"held gesture does not toggle repeatedly")
+  control_phase=1;
+  // Both former control chords now remain ordinary musical input.
+  pressed=16'h8001;wait(dut.keys==16'h8001);more_frames(20);
+  `CHECK(dut.selected_timbre==0 && !effects_enable && $countones(dut.voice_held)==2,"old timbre chord only plays two notes")
   pressed=0;wait(dut.keys==0);more_frames(20);
-  `CHECK(dut.voice_active==0 && pending_code==0,"gesture notes and echo tail drain")
-  pressed=16'h1008;wait(dut.keys==16'h1008);more_frames(70);
-  `CHECK(!effects_enable && dut.sound.effect.wet_level==0,"second released gesture restores bypass")
+  pressed=16'h1008;wait(dut.keys==16'h1008);more_frames(20);
+  `CHECK(dut.selected_timbre==0 && !effects_enable && $countones(dut.voice_held)==2,"old effect chord only plays two notes")
   pressed=0;wait(dut.keys==0);more_frames(20);
+  prior_nonzero=key_events;buttons_n=4'hd;more_frames(4);
+  `CHECK(dut.selected_timbre==1 && key_events==prior_nonzero && !dut.gate,"S1 selects flute without creating a note")
+  buttons_n=4'hf;more_frames(2);pressed=16'h0200;wait(dut.keys==16'h0200);more_frames(20);
+  `CHECK(dut.sound.voice_timbres[1:0]==1 && $countones(dut.voice_held)==1,"new A4 captures flute")
+  buttons_n=4'hb;more_frames(4);
+  `CHECK(dut.selected_timbre==2 && dut.sound.voice_timbres[1:0]==1,"S2 does not rewrite a held voice's timbre")
+  buttons_n=4'hf;more_frames(2);pressed=0;wait(dut.keys==0);more_frames(12);
+  pressed=16'h0200;wait(dut.keys==16'h0200);more_frames(20);
+  `CHECK(dut.sound.voice_timbres[1:0]==2,"next A4 captures reed")
+  buttons_n=4'h7;more_frames(70);
+  `CHECK(effects_enable && dut.sound.effect.wet_level==64 && $countones(dut.voice_held)==1,"S3 enables echo while a key stays held")
+  more_frames(5);`CHECK(effects_enable,"held S3 does not toggle repeatedly")
+  buttons_n=4'hf;more_frames(2);buttons_n=4'h7;more_frames(70);
+  `CHECK(!effects_enable && dut.sound.effect.wet_level==0,"released S3 press restores bypass")
+  buttons_n=4'hf;pressed=0;wait(dut.keys==0);more_frames(20);
+  `CHECK(dut.voice_active==0 && pending_code==0,"notes and echo tail drain after release")
   // Global reset replays from the beginning and cancels previous source state.
   ref_rst=1;#1;`CHECK(!effects_enable && !pa && !note_valid && din==0,"reset cancels playback and keyboard audio")
   score_events=0;key_events=0;#99 ref_rst=0;wait(pa);wait(score_events>=1);#0.002;

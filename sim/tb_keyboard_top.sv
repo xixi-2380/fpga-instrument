@@ -3,7 +3,7 @@
 `include "passive_matrix_model.svh"
 module tb_keyboard_top;
  reg clk=0,rst=1;always #10 clk=~clk;
- reg [15:0] pressed=0;
+ reg [15:0] pressed=0;reg [3:0] buttons_n=4'hf;
  tri [3:0] columns;
  wire [3:0] selected,rows;
  wire bck,ws,din,pa,db,dw,dd,dp;
@@ -16,9 +16,9 @@ module tb_keyboard_top;
  realtime last_rise=0,period;
  for(genvar k=0;k<4;k=k+1)assign selected[k]=(columns[k]===1'b0);
  passive_matrix_model model(pressed,selected,rows);
- keyboard_top #(.SCORE_ENABLE(0),.LED_STEP_CYCLES(4),.LOCK_N(32),.SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
+ keyboard_top #(.BUTTON_DEBOUNCE_CYCLES(4),.SCORE_ENABLE(0),.LED_STEP_CYCLES(4),.LOCK_N(32),.SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
   .MUTE(4),.FADE(4),.ATTACK(8),.DECAY(8),.SUSTAIN(32768),.RELEASE(16))
-  dut(.clk(clk),.rst(rst),.key_row(rows),.key_col(columns),
+  dut(.clk(clk),.rst(rst),.board_buttons_n(buttons_n),.key_row(rows),.key_col(columns),
    .HP_BCK(bck),.HP_WS(ws),.HP_DIN(din),.PA_EN(pa),
    .DBG_BCK(db),.DBG_WS(dw),.DBG_DIN(dd),.DBG_PA_EN(dp),.led_n(leds));
  always @(negedge clk)begin
@@ -81,11 +81,12 @@ module tb_keyboard_top;
   wait(edges>=idle_edge_start+320);#0.002;
   `CHECK(nonzero==0 && pa,"polyphonic Release returns to zero with original PA policy")
   // Physical ordinary two-key attacks in every preset. Selection remains in
-  // the matrix adapter; do not replace these notes with the control gesture.
+  // independent board buttons; selection itself must never generate notes.
   for(integer preset=0;preset<3;preset=preset+1)begin
    if(preset>0)begin
-    pressed=16'h8001;wait(dut.selected_timbre==preset);
-    pressed=0;wait(!dut.gate);wait(dut.envelope_level==0);
+    buttons_n=4'hf ^ (4'b1<<preset);wait(dut.selected_timbre==preset);
+    buttons_n=4'hf;
+    `CHECK(!dut.gate && dut.voice_active==0,"preset button does not create notes")
     repeat(64)@(posedge bck);
    end
    pair_check=1;pressed=16'h0003;

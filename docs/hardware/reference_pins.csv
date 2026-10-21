@@ -23,3 +23,7 @@ led_n[2],L20,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f6
 led_n[3],M25,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,led[3],NONE,8,3.3,
 led_n[4],N21,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,led[4],NONE,8,3.3,
 led_n[5],N23,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,led[5],NONE,8,3.3,
+board_buttons_n[0],K16,LVCMOS33,documentary_checked_hardware_unverified,Dock_4071f3_PERIPHERALS_sheet15,S0,UP,OFF,3.3,Active-low independent user button; physical S numbering (generic key[1]/key[2] aliases differ)
+board_buttons_n[1],F15,LVCMOS33,documentary_checked_hardware_unverified,Dock_4071f3_PERIPHERALS_sheet15,S1,UP,OFF,3.3,Active-low independent user button; physical S numbering (generic key[1]/key[2] aliases differ)
+board_buttons_n[2],G15,LVCMOS33,documentary_checked_hardware_unverified,Dock_4071f3_PERIPHERALS_sheet15,S2,UP,OFF,3.3,Active-low independent user button; physical S numbering (generic key[1]/key[2] aliases differ)
+board_buttons_n[3],G16,LVCMOS33,documentary_checked_hardware_unverified,Dock_4071f3_PERIPHERALS_sheet15,S3,UP,OFF,3.3,Active-low independent user button; physical S numbering (generic key[1]/key[2] aliases differ)

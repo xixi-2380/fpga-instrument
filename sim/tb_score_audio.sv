@@ -11,10 +11,10 @@ module tb_score_audio;
  wire bck,ws,din,pa,db,dw,dd,dp;wire [5:0] leds;
  integer checks=0,score_events=0,key_events=0,finished_events=0,prior_nonzero;
  reg melody_seen=0;
- keyboard_top #(.SCORE_ENABLE(1),.SCORE_BEAT_FRAMES(8),.LED_STEP_CYCLES(4),.LOCK_N(32),
+ keyboard_top #(.BUTTON_DEBOUNCE_CYCLES(4),.SCORE_ENABLE(1),.SCORE_BEAT_FRAMES(8),.LED_STEP_CYCLES(4),.LOCK_N(32),
   .SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
   .MUTE(4),.FADE(4),.ATTACK(2),.DECAY(2),.SUSTAIN(32768),.RELEASE(2))
-  dut(.clk(ref_clk),.rst(ref_rst),.key_row(rows),.key_col(columns),
+  dut(.clk(ref_clk),.rst(ref_rst),.board_buttons_n(4'hf),.key_row(rows),.key_col(columns),
    .HP_BCK(bck),.HP_WS(ws),.HP_DIN(din),.PA_EN(pa),
    .DBG_BCK(db),.DBG_WS(dw),.DBG_DIN(dd),.DBG_PA_EN(dp),.led_n(leds));
  for(genvar k=0;k<4;k=k+1)assign selected[k]=(columns[k]===1'b0);

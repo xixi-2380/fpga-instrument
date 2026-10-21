@@ -445,3 +445,10 @@ audio_delay接收mix_valid/mix_sample，in_ready仅在空闲有效；接收后�
 ### 2026-10-21曲谱与效果器整合
 
 keyboard_top沿用score_busy选择score/key事件，timbre_control的输入为score_busy?0:keys，并额外接出effects_enabled到synth_core.effects_enable。自动曲谱默认干声，曲终尾音完成才允许键盘控制。效果串接在公共混音后，播放器不依赖效果器，原握手、逐声部音色/身份、曲谱文件接口均保持。
+
+
+### 2026-10-21独立板载按钮替代矩阵手势
+
+keyboard_top新增board_buttons_n[3:0]（低有效S0..S3，K16/F15/G15/G16）及BUTTON_DEBOUNCE_CYCLES=614400参数。原timbre_control端口keys[15:0]替换为buttons_n[3:0]，内部两级同步及每位独立稳定计数，产生单周期按下事件；S0/S1/S2直接选择音色0/1/2，S3开关effects_enabled。音色事件同时确认时低编号优先，效果事件独立。
+
+控制器不再读取keys或受score_busy屏蔽；自动曲谱仍独立指定事件音色，S0..S2只选后续手动预设，S3可处理曲谱混音。keyboard_core仅演奏，不再有对角组合副作用；已有声部保持已捕获音色，原valid/ready、frame_ce、音源和效果算法不改。完整硬件依据/操作/验证见docs/board_buttons.md。

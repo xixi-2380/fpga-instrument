@@ -4,12 +4,13 @@
 module keyboard_top #(
     parameter SCORE_FILE="src/scores/twinkle.hex",
     parameter integer SCORE_WORDS=512,SCORE_ENABLE=1,SCORE_BEAT_FRAMES=(`SAMPLE_HZ/2),
+    BUTTON_DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
     LED_STEP_CYCLES=`RUN_LED_STEP_CYCLES,LED_DIAG_STEPS=`RUN_LED_DIAG_STEPS,
     LOCK_N=`LOCK_CYCLES,SLOT_CYCLES=`KEY_SLOT_CYCLES,
     SETTLE_CYCLES=`KEY_SETTLE_CYCLES,DEBOUNCE_SCANS=`KEY_DEBOUNCE_SCANS,
     MUTE=`MUTE_FRAMES,FADE=`FADE_FRAMES,ATTACK=`ADSR_ATTACK_FRAMES,
     DECAY=`ADSR_DECAY_FRAMES,SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES)(
-    input wire clk,rst,input wire [3:0] key_row,inout wire [3:0] key_col,
+    input wire clk,rst,input wire [3:0] board_buttons_n,input wire [3:0] key_row,inout wire [3:0] key_col,
     output wire HP_BCK,HP_WS,HP_DIN,PA_EN,DBG_BCK,DBG_WS,DBG_DIN,DBG_PA_EN,
     output wire [5:0] led_n);
     wire effects_enabled;
@@ -37,7 +38,9 @@ module keyboard_top #(
         score(.clk(audio_clk),.rst(audio_reset),.input_ready(input_ready),.frame_ce(frame_ce),
         .note_ready(note_ready && score_busy),.note_valid(score_valid),.note_on(score_on),
         .note_id(score_id),.note_fcw(score_fcw),.note_timbre(score_timbre),.busy(score_busy),.done(score_done),.error(score_error));
-    timbre_control timbre_buttons(audio_clk,audio_reset,score_busy?16'b0:keys,selected_timbre,effects_enabled);
+    timbre_control #(.DEBOUNCE_CYCLES(BUTTON_DEBOUNCE_CYCLES)) timbre_buttons(
+        .clk(audio_clk),.rst(audio_reset),.buttons_n(board_buttons_n),
+        .selected(selected_timbre),.effects_enabled(effects_enabled));
     run_leds #(.STEP_CYCLES(LED_STEP_CYCLES),.DIAG_STEPS(LED_DIAG_STEPS)) status_leds(
         .clk(clk),.audio_ready_async(!audio_reset),.key_active_async(gate),
         .pll1_lock_async(lock1),.pll2_lock_async(lock2),.reset_active_async(rst),.led_n(led_n));

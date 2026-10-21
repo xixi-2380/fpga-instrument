@@ -77,3 +77,14 @@ IO_LOC "led_n[4]" N21;
 IO_PORT "led_n[4]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
 IO_LOC "led_n[5]" N23;
 IO_PORT "led_n[5]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+
+// Dock 4071f3 schematic sheet 15: S0/S1/S2/S3, active-low, 3.3V.
+// Follow physical switch numbering, not swapped key[1]/key[2] reference aliases.
+IO_LOC "board_buttons_n[0]" K16;
+IO_PORT "board_buttons_n[0]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "board_buttons_n[1]" F15;
+IO_PORT "board_buttons_n[1]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "board_buttons_n[2]" G15;
+IO_PORT "board_buttons_n[2]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "board_buttons_n[3]" G16;
+IO_PORT "board_buttons_n[3]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;

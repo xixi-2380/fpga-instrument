@@ -1,0 +1,36 @@
+{
+  "source": "official Dock 4071f3 schematic sheet 15",
+  "pdf_sha256": "153d1c170a7d54e11a5d5e9b128ee9139a07b27249377d909e204cbf56e25cec",
+  "physical_buttons": [
+    {
+      "switch": "S0",
+      "port": "board_buttons_n[0]",
+      "ball": "K16",
+      "active_low": true
+    },
+    {
+      "switch": "S1",
+      "port": "board_buttons_n[1]",
+      "ball": "F15",
+      "active_low": true
+    },
+    {
+      "switch": "S2",
+      "port": "board_buttons_n[2]",
+      "ball": "G15",
+      "active_low": true
+    },
+    {
+      "switch": "S3",
+      "port": "board_buttons_n[3]",
+      "ball": "G16",
+      "active_low": true
+    }
+  ],
+  "all_existing_ports_preserved": true,
+  "no_pin_collisions": true,
+  "io_type": "LVCMOS33",
+  "pull": "UP",
+  "drive": "OFF",
+  "hardware_measured": false
+}

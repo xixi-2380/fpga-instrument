@@ -1,0 +1,20 @@
+[
+  {
+    "test": "tb_score_audio",
+    "passed": true,
+    "pll_model": "behavioral substitute, not official",
+    "seconds": 46.05
+  },
+  {
+    "test": "tb_score_effects",
+    "passed": true,
+    "pll_model": "behavioral substitute, not official",
+    "seconds": 111.88
+  },
+  {
+    "test": "tb_keyboard_top",
+    "passed": true,
+    "pll_model": "behavioral substitute, not official",
+    "seconds": 37.28
+  }
+]
