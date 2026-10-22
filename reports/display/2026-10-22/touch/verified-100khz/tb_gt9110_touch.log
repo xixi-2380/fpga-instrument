@@ -1,0 +1,2 @@
+PASS tb_gt9110_touch checks=1194155 half_cycles=250
+E:/gowin/fpga-instrument/sim/tb_gt9110_touch.sv:177: $finish called at 11909477000 (1ps)

@@ -1,0 +1,3 @@
+FAIL asynchronous reset acts without a clock at 5000
+FATAL: E:/gowin/fpga-instrument/sim/tb_rgb_status_cdc.sv:43: 
+       Time: 5000  Scope: tb_rgb_status_cdc.restart

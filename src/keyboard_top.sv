@@ -3,6 +3,9 @@
 `include "config/run_leds_config.svh"
 module keyboard_top #(
     parameter SCORE_FILE="src/scores/twinkle.hex",
+    parameter integer LCD_ENABLE=1,LCD_TEST_PATTERN=0,LCD_PCLK_INVERT=1,
+    TOUCH_ENABLE=1,TOUCH_RESET_CYCLES=1000000,TOUCH_STRAP_CYCLES=300000,
+    TOUCH_BOOT_CYCLES=2500000,TOUCH_POLL_CYCLES=500000,TOUCH_I2C_HALF=250,
     parameter integer SCORE_WORDS=512,SCORE_ENABLE=1,SCORE_BEAT_FRAMES=(`SAMPLE_HZ/2),
     LED_STEP_CYCLES=`RUN_LED_STEP_CYCLES,LED_DIAG_STEPS=`RUN_LED_DIAG_STEPS,
     LOCK_N=`LOCK_CYCLES,SLOT_CYCLES=`KEY_SLOT_CYCLES,
@@ -11,7 +14,10 @@ module keyboard_top #(
     DECAY=`ADSR_DECAY_FRAMES,SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES)(
     input wire clk,rst,input wire [3:0] key_row,inout wire [3:0] key_col,
     output wire HP_BCK,HP_WS,HP_DIN,PA_EN,DBG_BCK,DBG_WS,DBG_DIN,DBG_PA_EN,
-    output wire [5:0] led_n);
+    output wire [5:0] led_n,
+    output wire lcd_clk,lcd_hs,lcd_vs,lcd_en,
+    output wire [5:0] lcd_r,lcd_g,lcd_b,
+    inout wire touch_scl,touch_sda,touch_int,touch_rst_n);
     wire [1:0] selected_timbre,event_timbre,key_timbre,score_timbre;
     wire key_valid,key_on,score_valid,score_on,score_busy,score_done,score_error;
     wire [6:0] key_id,score_id;
@@ -24,6 +30,41 @@ module keyboard_top #(
     wire [6:0] note_id;
     wire [31:0] note_fcw;
     wire [`VOICE_COUNT-1:0] voice_active,voice_held;
+    wire touch_ready,touch_error,touch_down,touch_report;
+    wire [3:0] touch_count;
+    wire [15:0] touch_x,touch_y,touch_size,touch_resolution_x,touch_resolution_y;
+    wire [7:0] touch_track_id;
+    wire [31:0] touch_product_id;
+    wire [38:0] touch_status={touch_ready,touch_error,touch_down,touch_count,touch_x,touch_y};
+    if(TOUCH_ENABLE)begin: touch_on
+        gt9110_touch #(.RESET_CYCLES(TOUCH_RESET_CYCLES),.STRAP_CYCLES(TOUCH_STRAP_CYCLES),
+            .BOOT_CYCLES(TOUCH_BOOT_CYCLES),.POLL_CYCLES(TOUCH_POLL_CYCLES),
+            .I2C_HALF_CYCLES(TOUCH_I2C_HALF)) touch_reader(
+            .clk(clk),.rst(pll1_reset),.touch_scl(touch_scl),.touch_sda(touch_sda),
+            .touch_int(touch_int),.touch_rst_n(touch_rst_n),.ready(touch_ready),
+            .error(touch_error),.touch_down(touch_down),.report_pulse(touch_report),
+            .touch_count(touch_count),.touch_x(touch_x),.touch_y(touch_y),.touch_size(touch_size),
+            .track_id(touch_track_id),.product_id(touch_product_id),
+            .resolution_x(touch_resolution_x),.resolution_y(touch_resolution_y));
+    end else begin: touch_off
+        assign touch_scl=1'bz;assign touch_sda=1'bz;assign touch_int=1'bz;assign touch_rst_n=1'bz;
+        assign touch_ready=0;assign touch_error=0;assign touch_down=0;assign touch_report=0;
+        assign touch_count=0;assign touch_x=0;assign touch_y=0;assign touch_size=0;
+        assign touch_track_id=0;assign touch_product_id=0;assign touch_resolution_x=0;assign touch_resolution_y=0;
+    end
+    if(LCD_ENABLE)begin: lcd_on
+        rgb_display #(.VOICES(`VOICE_COUNT),.TEST_PATTERN(LCD_TEST_PATTERN),
+            .PCLK_INVERT(LCD_PCLK_INVERT)) display_driver(
+            .ref_clk(clk),.pll_reset(pll1_reset),.audio_clk(audio_clk),.audio_reset(audio_reset),
+            .voice_active(voice_active),.voice_held(voice_held),.selected_timbre(selected_timbre),
+            .score_busy(score_busy),.audio_ready(input_ready),.score_error(score_error),
+            .underrun(underrun),.ghost(ghost),.lcd_clk(lcd_clk),.lcd_hs(lcd_hs),
+            .lcd_vs(lcd_vs),.lcd_en(lcd_en),.lcd_r(lcd_r),.lcd_g(lcd_g),.lcd_b(lcd_b),
+            .touch_status(touch_status));
+    end else begin: lcd_off
+        assign lcd_clk=0;assign lcd_hs=1;assign lcd_vs=1;assign lcd_en=0;
+        assign lcd_r=0;assign lcd_g=0;assign lcd_b=0;
+    end
     // A source owns the event interface through its final release/tail. The
     // keyboard is admitted only after the one-shot score has fully completed.
     assign note_valid=score_busy?score_valid:key_valid;

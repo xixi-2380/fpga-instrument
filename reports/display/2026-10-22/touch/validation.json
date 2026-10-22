@@ -1,0 +1,250 @@
+{
+  "date": "2026-10-22",
+  "local_baseline": "fdab3c5",
+  "functional_baseline": "f285506",
+  "tests": [
+    {
+      "case": "i2c_master",
+      "test": "tb_i2c_register_master",
+      "parameters": {},
+      "passed": true,
+      "checks": 430,
+      "log": "hold-master/tb_i2c_register_master.log",
+      "compile_log": "hold-master/tb_i2c_register_master_compile.log",
+      "summary": "hold-master/summary_tb_i2c_register_master.json"
+    },
+    {
+      "case": "touch_fast",
+      "test": "tb_gt9110_touch",
+      "parameters": {
+        "HALF": 4
+      },
+      "passed": true,
+      "checks": 29591,
+      "log": "verified-fast/tb_gt9110_touch.log",
+      "compile_log": "verified-fast/tb_gt9110_touch_compile.log",
+      "summary": "verified-fast/summary_tb_gt9110_touch.json"
+    },
+    {
+      "case": "touch_100khz",
+      "test": "tb_gt9110_touch",
+      "parameters": {
+        "HALF": 250
+      },
+      "passed": true,
+      "checks": 1194155,
+      "log": "verified-100khz/tb_gt9110_touch.log",
+      "compile_log": "verified-100khz/tb_gt9110_touch_compile.log",
+      "summary": "verified-100khz/summary_tb_gt9110_touch.json"
+    },
+    {
+      "case": "touch_boot",
+      "test": "tb_gt9110_boot",
+      "parameters": {},
+      "passed": true,
+      "checks": 7,
+      "log": "boot/tb_gt9110_boot.log",
+      "compile_log": "boot/tb_gt9110_boot_compile.log",
+      "summary": "boot/summary_tb_gt9110_boot.json"
+    },
+    {
+      "case": "renderer",
+      "test": "tb_rgb_ui_renderer",
+      "parameters": {},
+      "passed": true,
+      "checks": 2319698,
+      "log": "final-renderer/tb_rgb_ui_renderer.log",
+      "compile_log": "final-renderer/tb_rgb_ui_renderer_compile.log",
+      "summary": "final-renderer/summary_tb_rgb_ui_renderer.json"
+    },
+    {
+      "case": "display",
+      "test": "tb_rgb_display",
+      "parameters": {
+        "PATTERN": 0
+      },
+      "passed": true,
+      "checks": 5970495,
+      "log": "verified-display/tb_rgb_display.log",
+      "compile_log": "verified-display/tb_rgb_display_compile.log",
+      "summary": "verified-display/summary_tb_rgb_display.json"
+    },
+    {
+      "case": "keyboard",
+      "test": "tb_keyboard_top",
+      "parameters": {},
+      "passed": true,
+      "checks": 2048114,
+      "log": "keyboard/tb_keyboard_top.log",
+      "compile_log": "keyboard/tb_keyboard_top_compile.log",
+      "summary": "keyboard/summary_tb_keyboard_top.json"
+    },
+    {
+      "case": "score_audio",
+      "test": "tb_score_audio",
+      "parameters": {},
+      "passed": true,
+      "checks": 2802275,
+      "log": "score-audio/tb_score_audio.log",
+      "compile_log": "score-audio/tb_score_audio_compile.log",
+      "summary": "score-audio/summary_tb_score_audio.json"
+    },
+    {
+      "case": "scan_sync",
+      "test": "tb_rgb_scan_timing",
+      "parameters": {},
+      "passed": true,
+      "checks": 4754316,
+      "log": "../phase2/scan/tb_rgb_scan_timing.log",
+      "compile_log": "../phase2/scan/tb_rgb_scan_timing_compile.log",
+      "summary": "../phase2/scan/summary_tb_rgb_scan_timing.json"
+    },
+    {
+      "case": "scan_de_reference",
+      "test": "tb_rgb_scan_timing",
+      "parameters": {
+        "HS": 0,
+        "HB": 182,
+        "HF": 210,
+        "VS": 0,
+        "VB": 8,
+        "VF": 45,
+        "DE_ONLY": 1
+      },
+      "passed": true,
+      "checks": 7122326,
+      "log": "../phase2/scan-reference/tb_rgb_scan_timing.log",
+      "compile_log": "../phase2/scan-reference/tb_rgb_scan_timing_compile.log",
+      "summary": "../phase2/scan-reference/summary_tb_rgb_scan_timing.json"
+    },
+    {
+      "case": "cdc_base",
+      "test": "tb_rgb_status_cdc",
+      "parameters": {},
+      "passed": true,
+      "checks": 5302,
+      "log": "../phase2/cdc-final-base/tb_rgb_status_cdc.log",
+      "compile_log": "../phase2/cdc-final-base/tb_rgb_status_cdc_compile.log",
+      "summary": "../phase2/cdc-final-base/summary_tb_rgb_status_cdc.json"
+    },
+    {
+      "case": "cdc_fast_pixel",
+      "test": "tb_rgb_status_cdc",
+      "parameters": {
+        "SOURCE_HALF": 17,
+        "PIXEL_HALF": 3
+      },
+      "passed": true,
+      "checks": 4107,
+      "log": "../phase2/cdc-final-fast/tb_rgb_status_cdc.log",
+      "compile_log": "../phase2/cdc-final-fast/tb_rgb_status_cdc_compile.log",
+      "summary": "../phase2/cdc-final-fast/summary_tb_rgb_status_cdc.json"
+    },
+    {
+      "case": "cdc_equal",
+      "test": "tb_rgb_status_cdc",
+      "parameters": {
+        "SOURCE_HALF": 5,
+        "PIXEL_HALF": 5
+      },
+      "passed": true,
+      "checks": 4871,
+      "log": "../phase2/cdc-final-equal/tb_rgb_status_cdc.log",
+      "compile_log": "../phase2/cdc-final-equal/tb_rgb_status_cdc_compile.log",
+      "summary": "../phase2/cdc-final-equal/summary_tb_rgb_status_cdc.json"
+    }
+  ],
+  "configurations": 13,
+  "total_checks": 26255687,
+  "project_hdl_files": 28,
+  "project_dependencies": 39,
+  "top_cst_ports": 50,
+  "preprocess_without_config_search_path": true,
+  "disabled_lcd_and_touch_top_elaboration": "disabled_top_compile_final.log",
+  "python_scripts_syntax_passed": true,
+  "pinmap": "pinmap.json",
+  "source_manifest": "../hardware/source_manifest.json",
+  "preview": "ui_preview.png",
+  "project_inputs_sha256": {
+    "src/i2c_register_master.sv": "61a7ae805985c834975b2f6cfac16d8eb5bfb03890c2c13f224d17c580de83d1",
+    "src/gt9110_touch.sv": "715cfea71a70e5eabc70b8212dbe19cf83872e5754346c6886e81d3ea180ca6b",
+    "src/rgb_display.sv": "62143cd281be1136cdd22b98b952c685997d4cfa9fca4a5bab93231a296204c1",
+    "src/rgb_scan_timing.sv": "4cc871b48f4c61d5eb68ebe403566628a5db890ea3a569d68fafc9186a419950",
+    "src/rgb_status_cdc.sv": "aa58cffd588a8fca8f21c917e08b8cc2b99cb600bd50dc8c8924faecd61de5e5",
+    "src/rgb_ui_renderer.sv": "e143d4eec2a650d47bd9dafb556cad365b1bdc5db5527d7c13924003a304b63e",
+    "src/score_player.sv": "c5a003c20faad55ac09cfb1078706f993f1fda6d7d74426b75cdbdc6339d7fe3",
+    "src/scores/twinkle.hex": "e3a85861a59a51d5e07987e0125a53b342048c162284099f9c8d815c3c2d9e6d",
+    "src/scores/twinkle.txt": "41a523098bfb7b306c43f15c5767d043b797e8fa4a91e0f31885271c40d6ea9c",
+    "src/timbre_control.sv": "64dd2b9a820bb7ed84410df1a0c0ca7ea28662754422ea2284803879348dc50c",
+    "src/rom/flute4096.hex": "630a276aac151a989700648aa4a4b44b4ae48dbfbfd46413c68537f873521eaa",
+    "src/rom/reed4096.hex": "b81e3b514e23cb9b925097fbe22bc59dce76a617d910da33739a6297074eb61d",
+    "src/keyboard_top.sv": "a7e2f8a21600c348586ab5d387c11a6640d7bcbfaed1e3e26aaab048c3c23b03",
+    "src/adsr_envelope.sv": "bd951b7f4a198e5d821d011116a5d073818c360a72d45ee97050c7e4ffd8c3e5",
+    "src/audio_timing.sv": "ebd73edfceef85128760141410b95ccbf82e5665ce18ba10075e67c1d72ecc1e",
+    "src/clock_reset.sv": "6064ed61bbdcec68e2bd04f934c8510ee3b95aabbe0a009e54f21b2c2d10af6b",
+    "src/dds_sine.sv": "9c9207a6d5824a0f18dcfdd12b85cdd1db7ef4a53dd1e824019e10132954cb9b",
+    "src/frame_buffer.sv": "dbf0d9b5cc9a0ad1ff4b1a32b2e9b4fdb0fc5c7c8d01a8b1fe9a1c7685e844c8",
+    "src/keyboard_core.sv": "fc0c821c96c485a019b9e0418a0b593b49a560c2e63372c1742cc31fbd352902",
+    "src/synth_core.sv": "2a6fc5d5f2e76ef5d1b5e06f6837b894e3d7a1ec28751e2f1bfdd46ca3ac606c",
+    "src/voice_allocator.sv": "fa744ac1c2b28e5bd97f4d7119f3acbf07210f04ae1fe3b781cf49d004815b30",
+    "src/voice_mixer.sv": "51e90e6a63192b7851e9a6635553701b4e528c49b2472e10906a6574171b3a19",
+    "src/lock_guard.sv": "1ccbb8e306689ea8da65a8889b45aa2c3cceaf90aa3f2a31762e195d5fce6377",
+    "src/matrix_keypad.sv": "c7af5fec02c122b50132d01ff3911d27ab394535dcfa51173b2b511e176a7350",
+    "src/key_note_events.sv": "7a51a2551bf58f658428c8a3ccd4440de720e747bf135353a7f199934c9981d7",
+    "src/pll_pair.sv": "29775d84d6b0deb8a8fc6e3bc80e36e0e321f84ddaa418e068622e5ade6d061e",
+    "src/pt8211_tx.sv": "5c5b56945efda77df100ca332b91df4bf2927add8d826c12e8499f957278710c",
+    "src/reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+    "src/run_leds.sv": "db725978a1e9e386a848ec1223985eeded526ff2eb64f29b21987f1ac7d10713",
+    "src/sine_rom.sv": "b43e6cfe2b2fb35d29a09efd503ad9b787961d1ff430b130e788ef13d0a9c081",
+    "src/startup_envelope.sv": "c5fc6b434759e6f0b85e6315c42baa9d0149332f47d7c58d36cd47bb18587e65",
+    "src/tone_gain.sv": "b70e31dc56c7025001ca535b1ce3b0597d84b4fa4dc518bddd3de8f18bab2c22",
+    "src/config/keyboard_config.svh": "941faf20aabe571b2636248a17aa4690d31bf5d5451c6801f825394227073e2c",
+    "src/config/keyboard_notes.svh": "55c63120d48c3f42e587c8c42d83b0d0ef10228650faff4cf0348aef3be5fe66",
+    "src/config/run_leds_config.svh": "2cdc3ed138ed6a3b70c58e53e9de871f15afb7898f8c88a4b597c624734a1589",
+    "src/config/synth_config.svh": "e3d2fcb59d6b718a24f2cb56f3974ec92d521d238ba3569c3b7ad0f27c31f434",
+    "src/rom/sine4096.hex": "d62e7528ad6c0400fab616087abbdaa7b7977fcd9adbce1b347e3a5743ea3d6e",
+    "src/keyboard.cst": "3466fb71b03f837d10fe849bdcddb1780a6281b84c160bf71eaa2c55086020d9",
+    "src/keyboard.sdc": "9b6d44466e6aa643af74589c42cf7a3ef9a5d444222fc55d48d5a7870392e2c9"
+  },
+  "test_sources_sha256": {
+    "sim/tb_gt9110_boot.sv": "8fcaa62aa40267eda138021fa2c90b2dec57bdeb98d680ee474325d8aec50710",
+    "sim/tb_gt9110_touch.sv": "d80866db446156e16abbc667492c1738857e4bc287bf7452cfe7ff94d270f4b2",
+    "sim/tb_i2c_register_master.sv": "758a564ecd09e07024cd2773478fbbcfbf0ecbbabfec753d9ca6ce7da7e44682",
+    "sim/tb_keyboard_top.sv": "0cf4ba256712a8224166dbed925eac49f431bcf3deb230258cc28dad8cab7c03",
+    "sim/tb_rgb_display.sv": "f5d794f61b72db5351c3410a8045cf776a99067504f213d939c0f13acf8b889d",
+    "sim/tb_rgb_scan_timing.sv": "203becffc12a90f097403f12d69b0a6f6b8bb18d60dc1a3c03f0d025e1ec802a",
+    "sim/tb_rgb_status_cdc.sv": "2c7c6d95146630a51e51ca5a3a649842c78e888b948132d5ddb71e649269bb9e",
+    "sim/tb_rgb_ui_renderer.sv": "601f4147edf7534ab825a80670c754a8da28d880a52299c32330f89f5b893764",
+    "sim/tb_score_audio.sv": "7414ddc557fc95b546fd5e4dc27ae72dfd48cc343d94dc580404b3ec58832a27"
+  },
+  "development_corrections": [
+    {
+      "log": "../phase2/cdc/tb_rgb_status_cdc.log",
+      "kind": "TB initialization",
+      "fix": "Assert a real asynchronous-reset edge before checking outputs; initial high before the first clock had no event."
+    },
+    {
+      "log": "../phase2/cdc-fast-pixel/tb_rgb_status_cdc.log",
+      "kind": "TB throughput expectation",
+      "fix": "Use a minimum completion count compatible with slower source/faster pixel clock ratio; no data-integrity failure."
+    },
+    {
+      "kind": "Standalone Icarus invocation environment",
+      "fix": "Use the same tool-bin PATH as run_sim.py; disabled-top elaboration then exited zero."
+    }
+  ],
+  "limits": [
+    "Pure HDL simulation only; no EDA/STA/programming or hardware touch measurement",
+    "Touch slave is an independent test model, not an observed physical GT9110",
+    "Top audio regressions last under 10ms with production touch reset still asserted; I2C protocol and production 76ms boot are tested separately",
+    "Only first touch coordinate/size/ID exported; total count up to 10; no multi-point coordinate array or gestures",
+    "No sensor calibration configuration writes; error/retry tested; electrical pull-ups and module voltage remain unmeasured",
+    "LCD profile from Sipeed Pro reference, not a confirmed timing spec for this QTB panel",
+    "No remote branch merge or push performed"
+  ],
+  "project_xml_sha256": "196c771142245b4eca437fcad3c7037d2e230dbd18e69fa46c9cf18fa34b84a3",
+  "scripts_sha256": {
+    "scripts/run_sim.py": "3d630f48d5b3c85d73bd9ff335dba9967126fe54b348e7888f853341e0a606a1",
+    "scripts/build_keyboard.py": "5b9d81f07e6dd44d5a4634c13351c02b2ad56d8ecc92275d5086c984c2142115"
+  }
+}

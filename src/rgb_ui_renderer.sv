@@ -9,12 +9,18 @@ module rgb_ui_renderer(
     input wire [10:0] x, y,
     input wire de_in, hs_in, vs_in,
     output reg [23:0] rgb,
-    output reg de_out, hs_out, vs_out
+    output reg de_out, hs_out, vs_out,
+    input wire [38:0] touch_data,
+    input wire touch_valid
 );
     localparam [23:0] BG=24'h101826, PANEL=24'h1c293b,
         WHITE=24'he8eef5, DIM=24'h7890a8, CYAN=24'h35d5cf,
         GREEN=24'h65d48b, RED=24'hff6578, AMBER=24'hf4c46b;
     reg [19:0] state;
+    // [38] initialized, [37] bus/protocol error, [36] down, [35:32] count,
+    // [31:16] raw X, [15:0] raw Y. Separate ref->pixel atomic snapshot.
+    reg [38:0] touch_state;
+    reg touch_seen;
     reg [23:0] color;
     wire [5:0] active_count=state[5:0]>32 ? 6'd32 : state[5:0];
     wire [5:0] held_count=state[11:6]>32 ? 6'd32 : state[11:6];
@@ -44,6 +50,7 @@ module rgb_ui_renderer(
                 "U":glyph=35'b10001_10001_10001_10001_10001_10001_01110;
                 "V":glyph=35'b10001_10001_10001_10001_10001_01010_00100;
                 "W":glyph=35'b10001_10001_10001_10101_10101_11011_10001;
+                "X":glyph=35'b10001_10001_01010_00100_01010_10001_10001;
                 "Y":glyph=35'b10001_10001_01010_00100_00100_00100_00100;
                 "0":glyph=35'b01110_10001_10011_10101_11001_10001_01110;
                 "1":glyph=35'b00100_01100_00100_00100_00100_00100_01110;
@@ -59,6 +66,24 @@ module rgb_ui_renderer(
                 "?":glyph=35'b01110_10001_00001_00010_00100_00000_00100;
                 default:glyph=0;
             endcase
+        end
+    endfunction
+
+    function automatic coordinate_pixel(input [15:0] value,input integer dx,dy);
+        reg [127:0] digits;
+        begin
+            digits=0;
+            digits[39:32]=48+value/10000;digits[31:24]=48+(value/1000)%10;
+            digits[23:16]=48+(value/100)%10;digits[15:8]=48+(value/10)%10;
+            digits[7:0]=48+value%10;
+            coordinate_pixel=text_pixel(digits,5,dx,dy);
+        end
+    endfunction
+    function automatic count_pixel(input [3:0] value,input integer dx,dy);
+        reg [15:0] digits;
+        begin
+            digits[15:8]=48+value/10;digits[7:0]=48+value%10;
+            count_pixel=text_pixel(digits,2,dx,dy);
         end
     endfunction
 
@@ -117,6 +142,30 @@ module rgb_ui_renderer(
         if(text_pixel("SCORE",5,integer'(x)-216,integer'(y)-404))color=state[16]?RED:DIM;
         if(text_pixel("BUFFER",6,integer'(x)-384,integer'(y)-404))color=state[17]?RED:DIM;
         if(text_pixel("GHOST",5,integer'(x)-576,integer'(y)-404))color=state[18]?AMBER:DIM;
+        if(touch_seen)begin
+            if(text_pixel("TOUCH",5,integer'(x)-32,integer'(y)-452))
+                color=touch_state[37]?RED:(touch_state[38]?GREEN:AMBER);
+            if(touch_state[37])begin
+                if(text_pixel("ERROR",5,integer'(x)-216,integer'(y)-452))color=RED;
+            end else if(!touch_state[38])begin
+                if(text_pixel("WAIT",4,integer'(x)-216,integer'(y)-452))color=AMBER;
+            end else if(!touch_state[36])begin
+                if(text_pixel("UP",2,integer'(x)-216,integer'(y)-452))color=DIM;
+            end else begin
+                if(text_pixel("X",1,integer'(x)-192,integer'(y)-452) ||
+                   coordinate_pixel(touch_state[31:16],integer'(x)-240,integer'(y)-452) ||
+                   text_pixel("Y",1,integer'(x)-384,integer'(y)-452) ||
+                   coordinate_pixel(touch_state[15:0],integer'(x)-432,integer'(y)-452) ||
+                   text_pixel("N",1,integer'(x)-600,integer'(y)-452) ||
+                   count_pixel(touch_state[35:32],integer'(x)-648,integer'(y)-452))color=WHITE;
+                // Raw coordinate marker; no guessed calibration, scaling or rotation.
+                if(touch_state[31:16]<800 && touch_state[15:0]<480 &&
+                    ((x==touch_state[31:16] && integer'(y)>=integer'(touch_state[15:0])-8 &&
+                      integer'(y)<=integer'(touch_state[15:0])+8) ||
+                     (y==touch_state[15:0] && integer'(x)>=integer'(touch_state[31:16])-8 &&
+                      integer'(x)<=integer'(touch_state[31:16])+8)))color=WHITE;
+            end
+        end
         if(state[19])begin
             case(x/100)
                 0:color=24'hffffff; 1:color=24'hffff00;
@@ -131,9 +180,10 @@ module rgb_ui_renderer(
 
     always @(posedge pixel_clk)begin
         if(rst)begin
-            state<=0; rgb<=0; de_out<=0; hs_out<=0; vs_out<=0;
+            state<=0;touch_state<=0;touch_seen<=0;rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;
         end else begin
             if(frame_start && status_valid)state<=status_data;
+            if(frame_start && touch_valid)begin touch_state<=touch_data;touch_seen<=1;end
             rgb<=color;
             de_out<=de_in && x<800 && y<480;
             hs_out<=hs_in; vs_out<=vs_in;

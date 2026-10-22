@@ -4,14 +4,17 @@ module tb_rgb_ui_renderer;
     reg clk=0; always #5 clk=~clk;
     reg rst=1,frame_start=0,status_valid=0,de=0,hs=0,vs=0;
     reg [19:0] status=0;
+    reg [38:0] touch_data=0;
+    reg touch_valid=0;
     reg [10:0] x=0,y=0;
     wire [23:0] rgb;
     wire deo,hso,vso;
     integer checks=0,i,j,k,n,fd;
     reg [23:0] expected,old_rgb;
     reg [19:0] frozen;
+    reg [38:0] frozen_touch;
     string out_dir;
-    rgb_ui_renderer dut(clk,rst,frame_start,status_valid,status,x,y,de,hs,vs,rgb,deo,hso,vso);
+    rgb_ui_renderer dut(clk,rst,frame_start,status_valid,status,x,y,de,hs,vs,rgb,deo,hso,vso,touch_data,touch_valid);
 
     task pixel(input integer px,py,input bit enable_pixel);
         begin
@@ -38,6 +41,8 @@ module tb_rgb_ui_renderer;
         @(negedge clk);rst=0;
         // Screen preview is a real DUT raster with synthetic test status.
         frozen={1'b0,1'b0,1'b0,1'b0,1'b1,1'b1,2'd1,6'd4,6'd12};
+        frozen_touch={1'b1,1'b0,1'b1,4'd1,16'd456,16'd123};
+        touch_data=frozen_touch;touch_valid=1;
         publish(frozen,1);
         fd=$fopen({out_dir,"/ui_preview.ppm"},"wb");
         `CHECK(fd!=0,"open raster preview")
@@ -52,8 +57,9 @@ module tb_rgb_ui_renderer;
                     `CHECK(rgb==expected,"independent active bar count and gaps")
                 end
                 // New input status half way through a frame must not tear it.
-                if(i==400 && j==240)begin status=20'hfffff;status_valid=1;end
+                if(i==400 && j==240)begin status=20'hfffff;status_valid=1;touch_data=39'h7fffffffff;end
                 `CHECK(dut.state==frozen,"status snapshot held for entire raster")
+                `CHECK(dut.touch_state==frozen_touch,"touch snapshot held for entire raster")
             end
         end
         $fclose(fd);
@@ -89,6 +95,19 @@ module tb_rgb_ui_renderer;
         pixel(580,404,1);`CHECK(rgb==24'hf4c46b,"ghost amber")
         publish(0,1);pixel(48,408,1);
         `CHECK(rgb==24'hf4c46b,"audio not ready amber")
+        touch_data={1'b1,1'b0,1'b1,4'd1,16'd456,16'd123};touch_valid=1;
+        publish(0,1);pixel(456,123,1);
+        `CHECK(rgb==24'he8eef5,"atomic touch coordinate draws crosshair")
+        touch_data={1'b1,1'b0,1'b1,4'd1,16'd0,16'd0};
+        pixel(456,123,1);`CHECK(rgb==24'he8eef5,"touch coordinates do not tear mid-frame")
+        publish(0,1);pixel(0,0,1);
+        `CHECK(rgb==24'he8eef5,"touch marker clips correctly at top-left corner")
+        touch_data={1'b1,1'b1,1'b0,4'd0,16'd0,16'd0};
+        publish(0,1);pixel(216,452,1);
+        `CHECK(rgb==24'hff6578,"touch communication error displayed")
+        touch_data={1'b1,1'b0,1'b1,4'd1,16'd65535,16'd65535};
+        publish(0,1);pixel(0,0,1);
+        `CHECK(rgb==24'h35d5cf,"out-of-screen raw coordinate never wraps marker")
         // Test bars: all columns checked against an independent color table.
         publish(20'h80000,1);
         for(i=0;i<800;i=i+1)begin

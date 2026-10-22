@@ -5,6 +5,11 @@
     <Version>5</Version>
     <Device name="GW5AST-138C" pn="GW5AST-LV138FPG676AC1/I0">gw5ast138c-003</Device>
     <FileList>
+        <File path="src/i2c_register_master.sv" type="file.verilog" enable="1" />
+        <File path="src/gt9110_touch.sv" type="file.verilog" enable="1" />
+        <File path="src/rgb_display.sv" type="file.verilog" enable="1" />
+        <File path="src/rgb_scan_timing.sv" type="file.verilog" enable="1" />
+        <File path="src/rgb_status_cdc.sv" type="file.verilog" enable="1" />
         <File path="src/rgb_ui_renderer.sv" type="file.verilog" enable="1" />
         <File path="src/score_player.sv" type="file.verilog" enable="1" />
         <File path="src/scores/twinkle.hex" type="file.other" enable="1" />
