@@ -11,7 +11,10 @@ module tb_audio_effects;
  always #5 clk=~clk;
  audio_effects #(.DELAY_SAMPLES(PROD?7200:8),.D0(PROD?1499:3),.D1(PROD?1601:5),
   .D2(PROD?1867:7),.D3(PROD?2053:11),.LFO_STEP(PROD?32'd447392:32'h10000000))
-  dut(clk,rst,en,mode,valid,sample,ready,out_valid,result);
+  dut(.clk(clk),.rst(rst),.enable(en),.mode(mode),.in_valid(valid),.in_sample(sample),
+   .in_ready(ready),.out_valid(out_valid),.out_sample(result),.cfg_valid(1'b0),
+   .cfg_echo_wet(9'd64),.cfg_room_wet(9'd64),.cfg_tremolo_depth(9'd128),
+   .cfg_tremolo_rate_hz(4'd5),.cfg_ready(),.cfg_applied());
  initial begin
   if(!$value$plusargs("EFFECT_VECTORS=%s",filename))$fatal(1,"Generate effects vectors first");
   fd=$fopen(filename,"r");if(!fd)$fatal(1,"Cannot open effect vectors");

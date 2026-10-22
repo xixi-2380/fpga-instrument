@@ -1,0 +1,10 @@
+{
+  "dependencies": 36,
+  "hdl": 25,
+  "preprocess_without_config_I": [
+    "/workspace/scratch/6579ba30d432/fpga-integration",
+    "/workspace/scratch/6579ba30d432"
+  ],
+  "constraints_changed": false,
+  "new_pins": false
+}

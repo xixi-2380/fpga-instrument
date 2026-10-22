@@ -23,12 +23,13 @@ results=[]
 for t in tests:
     name=t.stem
     extra_args=[]
-    if name=='tb_audio_effects':
+    if name in ['tb_audio_effects','tb_effect_parameters']:
         vector_file=out/'effects_vectors.hex'
-        generator=[sys.executable,str(root/'scripts/reference_effects.py'),'--output',str(vector_file)]
+        generator=[sys.executable,str(root/('scripts/reference_effect_parameters.py' if name=='tb_effect_parameters' else 'scripts/reference_effects.py')),'--output',str(vector_file)]
         if any(x.startswith('PROD=') and int(x.split('=',1)[1])!=0 for x in a.param):generator+=['--production']
         subprocess.run(generator,check=True,env=env)
-        extra_args=['+EFFECT_VECTORS='+vector_file.as_posix()]
+        extra_args=[('+'+'PARAM_VECTORS' if name=='tb_effect_parameters' else '+EFFECT_VECTORS')+'='+vector_file.as_posix()]
+    if name=='tb_effect_parameter_path':extra_args=['+PARAM_TRACE='+(out/'runtime_trace.txt').as_posix()]
     print('RUN',name,flush=True);start=time.monotonic()
     cmd=[str(bin/'iverilog.exe'),'-g2012','-Wall','-grelative-include','-Isim','-s',name,'-o',str(out/(name+'.vvp'))]+[s.as_posix() for s in sources]+[t.as_posix()]
     for override in a.param:cmd[1:1]=['-P',name+'.'+override]
@@ -40,6 +41,10 @@ for t in tests:
     (out/(name+'.log')).write_text(run.stdout+run.stderr,encoding='utf8')
     print(run.stdout,flush=True)
     ok=run.returncode==0 and 'PASS '+name in run.stdout
+    if ok and name=='tb_effect_parameter_path':
+        checked=subprocess.run([sys.executable,str(root/'scripts/check_effect_parameter_trace.py'),str(out/'runtime_trace.txt')],capture_output=True,text=True,encoding='utf8',env=env)
+        (out/'runtime_trace_check.log').write_text(checked.stdout+checked.stderr,encoding='utf8')
+        print(checked.stdout+checked.stderr,flush=True);ok=checked.returncode==0
     results.append(dict(test=name,passed=ok,pll_model=('behavioral substitute' if a.behavioral_pll else 'project/vendor when required'),seconds=round(time.monotonic()-start,3)))
     if not ok: print(run.stderr);break
 (out/('summary_'+(a.test or ('vendor' if a.vendor else 'rtl'))+'.json')).write_text(json.dumps(results,indent=2),encoding='utf8')

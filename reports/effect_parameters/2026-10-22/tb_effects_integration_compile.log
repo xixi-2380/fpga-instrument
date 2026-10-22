@@ -1,0 +1,8 @@
+src/synth_core.sv:93: warning: @* is sensitive to all 32 words in array 'voice_level'.
+src/synth_core.sv:93: warning: @* is sensitive to all 32 words in array 'voice_level'.
+sim/tb_effects_integration.sv:14: warning: Instantiating module synth_core with dangling input port 21 (effect_mode) floating.
+sim/tb_effects_integration.sv:14: warning: Instantiating module synth_core with dangling input port 22 (effect_cfg_valid) floating.
+sim/tb_effects_integration.sv:14: warning: Instantiating module synth_core with dangling input port 23 (effect_echo_wet) floating.
+sim/tb_effects_integration.sv:14: warning: Instantiating module synth_core with dangling input port 24 (effect_room_wet) floating.
+sim/tb_effects_integration.sv:14: warning: Instantiating module synth_core with dangling input port 25 (effect_tremolo_depth) floating.
+sim/tb_effects_integration.sv:14: warning: Instantiating module synth_core with dangling input port 26 (effect_tremolo_rate_hz) floating.

@@ -2,6 +2,9 @@
 `include "check.svh"
 `include "passive_matrix_model.svh"
 module tb_effect_button_path;
+// QUICK inserts bypass between mode changes; the independent effects
+ // tests retain production-length fades and mid-wet switching coverage.
+ parameter integer QUICK=0;
  reg clk=0,rst=1;always #10 clk=~clk;
  reg [3:0] buttons_n=4'hf;reg [15:0] pressed=0;
  tri [3:0] columns;wire [3:0] rows,selected;
@@ -26,20 +29,23 @@ module tb_effect_button_path;
  initial begin
   #100 rst=0;wait(pa);more_frames(4);
   `CHECK(dut.effect_mode==0 && !dut.effects_enabled,"reset starts in dry echo preset")
-  short_effect;more_frames(270);
-  `CHECK(dut.effects_enabled && dut.sound.effect.fade_level==256,"short release enables echo")
-  prior_events=events;long_effect;more_frames(530);
+  short_effect;more_frames(QUICK?8:270);
+  `CHECK(dut.effects_enabled && (QUICK?dut.sound.effect.fade_level>0:dut.sound.effect.fade_level==256),"short release enables echo and starts the fade")
+  if(QUICK)begin short_effect;more_frames(16);end
+  prior_events=events;long_effect;more_frames(QUICK?24:530);
   `CHECK(dut.effect_mode==1 && dut.sound.effect.active_mode==1,"long hold reaches room engine")
   `CHECK(events==prior_events && !dut.gate,"effect controls cannot create notes")
   buttons_n=4'hd;audio_cycles(20);buttons_n=4'hf;audio_cycles(20);
   pressed=16'h0200;wait(dut.gate);more_frames(20);
   `CHECK($countones(dut.voice_held)==1 && dut.sound.voice_timbres[1:0]==1,"manual flute voice starts through new effects")
-  prior_events=events;long_effect;more_frames(530);
+  if(QUICK)begin short_effect;more_frames(64);end
+  prior_events=events;long_effect;more_frames(QUICK?24:530);
   `CHECK(dut.effect_mode==2 && dut.sound.effect.active_mode==2 && dut.gate,"long hold reaches tremolo without releasing a held note")
   `CHECK(events==prior_events,"effect change does not retrigger held notes")
-  long_effect;more_frames(530);
+  if(QUICK)begin short_effect;more_frames(32);end
+  long_effect;more_frames(QUICK?24:530);
   `CHECK(dut.effect_mode==0 && dut.sound.effect.active_mode==0,"third long hold returns to echo")
-  short_effect;more_frames(270);
+  short_effect;more_frames(QUICK?32:270);
   `CHECK(!dut.effects_enabled && dut.sound.effect.fade_level==0 && dut.gate,"bypass preserves held audio")
   pressed=0;wait(!dut.gate);more_frames(12);
   rst=1;#1;`CHECK(!pa && !dut.effects_enabled && dut.effect_mode==0,"global reset clears effect state")

@@ -13,6 +13,14 @@ class EffectsReference:
         self.combs = [deque([0] * n) for n in self.delays]
         self.step = 447392 if production else 0x10000000
         self.phase = self.fade = self.active = 0
+        self.echo_level = self.echo_target = 64
+        self.room_level = self.room_target = 64
+        self.depth = self.depth_target = 128
+
+    def configure(self, echo, room, depth, hz):
+        self.echo_target, self.room_target, self.depth_target = [min(256, v) for v in (echo, room, depth)]
+        hz = max(1, min(10, hz))
+        self.step = (hz * (1 << 32) + 24000) // 48000
 
     def sample(self, x, enabled, mode):
         delayed = self.echo.popleft()
@@ -27,10 +35,10 @@ class EffectsReference:
         triangle = (self.phase >> 23) & 255
         if self.phase & 0x80000000:
             triangle = 255 - triangle
-        tremolo = x * (128 + triangle // 2) // 256
+        tremolo = x * (256 - self.depth + triangle * self.depth // 256) // 256
         self.phase = (self.phase + self.step) & 0xFFFFFFFF
-        wet = ((192 * x + 64 * room) // 256 if self.active == 1 else
-               tremolo if self.active == 2 else (192 * x + 64 * delayed) // 256)
+        wet = (((256 - self.room_level) * x + self.room_level * room) // 256 if self.active == 1 else
+               tremolo if self.active == 2 else ((256 - self.echo_level) * x + self.echo_level * delayed) // 256)
         value = ((256 - self.fade) * x + self.fade * wet) // 256
         assert -32768 <= value <= 32767
         requested = mode if mode in (1, 2) else 0
@@ -43,6 +51,9 @@ class EffectsReference:
             self.fade = min(256, self.fade + 1)
         else:
             self.fade = max(0, self.fade - 1)
+        for attr, target in [('echo_level', self.echo_target), ('room_level', self.room_target), ('depth', self.depth_target)]:
+            level = getattr(self, attr)
+            setattr(self, attr, level + (target > level) - (target < level))
         return value
 
 

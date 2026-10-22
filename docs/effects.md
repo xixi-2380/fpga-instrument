@@ -1,8 +1,28 @@
 # 效果器操作与实现
 
+## 2026-10-22 运行时参数接口补充
+
+在已试听三效果版上新增四参数原子提交：回声强度、混响强度、音量颤动深度0..256，以及1..10Hz整数速度。强度/深度按每采样一步平滑至目标，速度变化保持相位连续。默认25%/25%/50%/5Hz；原S3操作、算法延迟、音源、GPIO和PLL保持。详情和杨同学UI协作约定见[效果器与UI接口](effect_ui_interface.md)。
+
+当前keyboard_top明确将配置valid固定为0，未接入触摸/矩阵菜单，因此单独下载不会出现可调参数页面。synth_core公开audio_clk域valid/ready/ack与四字段接口，旧调用未提交配置时使用默认值；跨域邮箱及按钮/UI仲裁留待整合，不能把裸多位参数直接跨域。强度确认指目标已接受，最大约5.33ms渐变完成；处理中的样本不被中途修改。
+
+本轮验证记录位于reports/effect_parameters/2026-10-22；不将上一版试听或旧STA当作新版验收。
+
+新增接口验证可由用户运行（纯HDL，不启动高云EDA）：
+
+```powershell
+python scripts/run_sim.py --test tb_effect_parameters --out-dir reports/local_parameters
+python scripts/run_sim.py --test tb_effect_parameters --param PROD=1 --out-dir reports/local_parameters_production
+python scripts/run_sim.py --test tb_effect_parameter_path --out-dir reports/local_parameter_path
+python scripts/run_sim.py --test tb_effect_button_path --param QUICK=1 --behavioral-pll --out-dir reports/local_parameter_buttons
+```
+
+前两项使用独立Python队列模型逐样本比较。第三项在完整32声部合成路径中写入参数，记录实际混音和效果输出，再由独立Python模型校验，同时检查两路DAC串行样本、持音状态与544周期交付预算。该TB不实例化PLL，不能代替板级时钟或时序验收。
+
+
 ## 2026-10-22：三种效果（当前开发分支）
 
-工作分支为feature/audio-effects，基于main的837748c；不合并、不改动codex/fpga-migration显示/触摸分支。屏幕可以保持拆下，矩阵键盘与杜邦线按现有位置保留。本版新增效果还没有实板试听，不能沿用旧回声的实板结论。偶发双键噪音仍为独立待处理项，本次不宣称修复。
+工作分支为feature/audio-effects，基于main的837748c；不合并、不改动codex/fpga-migration显示/触摸分支。屏幕可以保持拆下，矩阵键盘与杜邦线按现有位置保留。4fdedfb三效果版已于本轮获王开册实板试听成功反馈；下述新增运行时参数版尚待重新实现/上板验证。偶发双键噪音仍为独立待处理项，本次不宣称修复。
 
 | 选择编号 | 效果 | 实际声音处理 |
 |---|---|---|

@@ -8,7 +8,9 @@ module synth_core #(
     DELAY_SAMPLES=7200,ROOM_D0=1499,ROOM_D1=1601,ROOM_D2=1867,ROOM_D3=2053)(
     input wire clk,rst,note_valid,note_on,input wire [6:0] note_id,input wire [31:0] note_fcw,
     output wire note_ready,input_ready,bck,ws,din,pa_enable,underrun,frame_ce,gate,
-    output wire [VOICES-1:0] voice_active,voice_held,output reg [16:0] envelope_level,input wire [1:0] note_timbre,input wire effects_enable,input wire [1:0] effect_mode);
+    output wire [VOICES-1:0] voice_active,voice_held,output reg [16:0] envelope_level,input wire [1:0] note_timbre,input wire effects_enable,input wire [1:0] effect_mode,
+    input wire effect_cfg_valid,input wire [8:0] effect_echo_wet,effect_room_wet,effect_tremolo_depth,
+    input wire [3:0] effect_tremolo_rate_hz,output wire effect_cfg_ready,effect_cfg_applied);
     localparam integer INDEX_W=VOICES>1?$clog2(VOICES):1;
     localparam integer RENDER_BUDGET=32+16*VOICES;
     localparam integer CYCLE_W=$clog2(RENDER_BUDGET+1);
@@ -92,7 +94,10 @@ module synth_core #(
     end
     audio_effects #(.DELAY_SAMPLES(DELAY_SAMPLES),.D0(ROOM_D0),.D1(ROOM_D1),.D2(ROOM_D2),.D3(ROOM_D3)) effect(
         .clk(clk),.rst(rst),.enable(effects_enable),.mode(effect_mode),.in_valid(mix_valid),.in_sample(mix_sample),
-        .in_ready(effect_ready),.out_valid(effect_valid),.out_sample(effect_sample));
+        .in_ready(effect_ready),.out_valid(effect_valid),.out_sample(effect_sample),
+        .cfg_valid(effect_cfg_valid),.cfg_echo_wet(effect_echo_wet),.cfg_room_wet(effect_room_wet),
+        .cfg_tremolo_depth(effect_tremolo_depth),.cfg_tremolo_rate_hz(effect_tremolo_rate_hz),
+        .cfg_ready(effect_cfg_ready),.cfg_applied(effect_cfg_applied));
     frame_buffer buffer(clk,rst,frame_ce,effect_valid,ready,effect_sample,effect_sample,frame_l,frame_r,underrun);
     pt8211_tx tx(clk,rst,fall_ce,bit_index,frame_l,frame_r,ws,din);
     // synthesis translate_off

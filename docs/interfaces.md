@@ -461,3 +461,10 @@ keyboard_top新增board_buttons_n[3:0]（低有效S0..S3，K16/F15/G15/G16）及
 synth_core新增尾部effect_mode输入，内部原effect实例改为audio_effects；混音和frame_buffer接口不变。新audio_reverb提供四路归一化反馈延迟湿声；原audio_delay增加out_history提供原始历史，单回声算法接口保留。两个新模块加入原GPRJ。效果模式/开关与音源同audio_clk域，样本接收时原子锁存；今后触摸跨域设置必须经握手或FIFO，不逐位同步多位模式/参数。
 
 现有运行时入口只有effects_enable和effect_mode，混合比例及速率是工程参数，尚无矩阵菜单、触摸控制或运行时数值调节。新UI应读取并显示真实设置，触摸分支仍保持独立待其调通后合并。预算、算式、波形参考及用户试听步骤见docs/effects.md。
+
+
+## 2026年10月22日运行时效果参数
+
+synth_core新增effect_cfg_valid/ready/applied与effect_echo_wet[8:0]、effect_room_wet[8:0]、effect_tremolo_depth[8:0]、effect_tremolo_rate_hz[3:0]。四参数同audio_clk上升沿原子提交，强度/深度限0..256并逐采样平滑；速度限1..10Hz，保留LFO相位。处理延迟仍为接收后3个后续沿输出，32声部总效果交付须≤544周期。keyboard_top固定valid为0，现有上板默认设置不变。
+
+完整UI范围、端口时序、跨域及状态仲裁约定见[效果器UI接口](effect_ui_interface.md)。该接口不自带CDC，不等于触摸或矩阵调参已实现。

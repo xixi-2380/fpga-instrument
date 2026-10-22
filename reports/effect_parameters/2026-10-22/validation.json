@@ -1,0 +1,122 @@
+{
+  "date": "2026-10-22",
+  "branch": "feature/audio-effects",
+  "base_commit": "4fdedfb07f3da24561f116199d417455d107c3d5",
+  "hdl_configurations_passed": 9,
+  "hdl_checks_passed": 13303984,
+  "tests": [
+    {
+      "configuration": "tb_effect_parameters",
+      "passed": true,
+      "checks": 121456,
+      "log": "tb_effect_parameters.log",
+      "pll_model": "not exercised"
+    },
+    {
+      "configuration": "tb_effect_parameters_production",
+      "passed": true,
+      "checks": 403372,
+      "log": "tb_effect_parameters_production.log",
+      "pll_model": "not exercised"
+    },
+    {
+      "configuration": "tb_audio_effects",
+      "passed": true,
+      "checks": 29330,
+      "log": "tb_audio_effects.log",
+      "pll_model": "not exercised"
+    },
+    {
+      "configuration": "tb_audio_effects_production",
+      "passed": true,
+      "checks": 358634,
+      "log": "tb_audio_effects_production.log",
+      "pll_model": "not exercised"
+    },
+    {
+      "configuration": "tb_effect_parameter_path",
+      "passed": true,
+      "checks": 2963728,
+      "log": "tb_effect_parameter_path.log",
+      "pll_model": "not exercised"
+    },
+    {
+      "configuration": "tb_effects_integration",
+      "passed": true,
+      "checks": 6311863,
+      "log": "tb_effects_integration.log",
+      "pll_model": "not exercised"
+    },
+    {
+      "configuration": "tb_timbre_control",
+      "passed": true,
+      "checks": 21,
+      "log": "tb_timbre_control.log",
+      "pll_model": "not exercised"
+    },
+    {
+      "configuration": "tb_effect_button_path_quick",
+      "passed": true,
+      "checks": 337950,
+      "log": "tb_effect_button_path_quick.log",
+      "pll_model": "behavioral substitute"
+    },
+    {
+      "configuration": "tb_effect_button_path",
+      "passed": true,
+      "checks": 2777630,
+      "log": "tb_effect_button_path.log",
+      "pll_model": "behavioral substitute"
+    }
+  ],
+  "independent_runtime_vectors": 86694,
+  "default_regression_vectors": 64664,
+  "runtime_synth_trace": {
+    "samples": 2252,
+    "configurations": 37,
+    "max_delivery_cycles": 521,
+    "budget_cycles": 544
+  },
+  "runtime_board_input_connected": false,
+  "prior_hardware_feedback": "User confirmed 4fdedfb effects audition; does not cover runtime parameter revision",
+  "new_hardware_audition": false,
+  "gowin_synthesis": false,
+  "place_and_route": false,
+  "sta": false,
+  "main_and_display_unchanged": true,
+  "untouched_files_verified": [
+    "src/keyboard.cst",
+    "src/keyboard.sdc",
+    "keyboard_adsr.gprj",
+    "src/pll_pair.sv",
+    "src/timbre_control.sv",
+    "src/audio_reverb.sv",
+    "src/audio_delay.sv"
+  ],
+  "source_sha256": {
+    "src/audio_effects.sv": "b9fa10c82db37ae4fbf83bb4018fb27c595745bdef0d17c97568f1ce21f7a06e",
+    "src/synth_core.sv": "b6aa6f394ce91110a6e43a81a53472e19fbc3475e590ecc20c026f48ba28f987",
+    "src/keyboard_top.sv": "0a11c838b64d1b6197abda70ee785d1817c6ecbcd00859c5d980fefffd000df1",
+    "sim/tb_audio_effects.sv": "255489a0a21b9dcb4979e9627eb9a7f66c91a1966c4c0437b66297e7442d1de2",
+    "scripts/run_sim.py": "a8130decdd83e3090b59d6678edc63709717275514b38e27352ebb28c511a7a2",
+    "scripts/reference_effects.py": "362bd462b3c271114af3680e15165e6bf69719f6a6a316e4b24e7c2fb76670a5",
+    "docs/effects.md": "81eec92717c55687401eccef47765498c5602f67e549d5b1a1ec3727ecd1f14a",
+    "docs/interfaces.md": "bbdb57a1527c04e67988b10f083f442af7780ecce83779c63906322975db1563",
+    "README.md": "97b1fa5f00e2af6a3d10166aa2b6ce81562c7f237c68542fed9d477b2673efd7",
+    "AGENTS.md": "c4e8a9e928399a41728b3c4209298b00a0113ca8dfc085168edd213ae4f279fa",
+    "sim/tb_effect_button_path.sv": "c8c3cc902be4d3716172c37de610b971cd86b86e6a897acc16d682db26f830cc",
+    "sim/tb_effect_parameters.sv": "185defde3e54192b52ddc4177ef20ffb02745b9342177fb46b709056714d12ff",
+    "sim/tb_effect_parameter_path.sv": "8e4f53aafd24b951fdb97ff50d785ff58d08844e7e33b79d17e548ee3d218bff",
+    "scripts/reference_effect_parameters.py": "7479c08d9687862bcbc1f2105e353c44f7f82381c007976b30fe4f597fb696e7",
+    "scripts/check_effect_parameter_trace.py": "0a234cca81e358c85a7e8966a93d53f4dd334dd374f72730f19ae5a02971f8ff",
+    "docs/effect_ui_interface.md": "1abf60018b9de659d885a46e3a6410b57d8ea60cd7309f46c6bd0650821d0f1a"
+  },
+  "full_button_top": "Full default configuration passed after isolated rerun; QUICK=1 also passed as a separate configuration.",
+  "full_score_and_synth_core_regression": "Not completed this round; no historical checks counted",
+  "limitations": [
+    "Parameter interface is audio-domain only; UI/CDC/arbitration not connected",
+    "Standalone top ties cfg_valid low and retains existing controls/defaults",
+    "No chorus/delay-time control/stacked effects or noise fix",
+    "Top QUICK uses behavioral PLL; no official PLL/physical timing validation"
+  ]
+}

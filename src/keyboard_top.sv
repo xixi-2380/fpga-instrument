@@ -62,6 +62,11 @@ module keyboard_top #(
         .SUSTAIN(SUSTAIN),.RELEASE(RELEASE)) sound(
         .clk(audio_clk),.rst(audio_reset),.note_valid(note_valid),.note_on(note_on),
         .note_id(note_id),.note_fcw(note_fcw),.note_timbre(event_timbre),.effects_enable(effects_enabled),.effect_mode(effect_mode),
+        // Standalone audio build keeps the auditioned defaults. Future UI
+        // submits audio-domain snapshots here after CDC and arbitration.
+        .effect_cfg_valid(1'b0),.effect_echo_wet(9'd64),.effect_room_wet(9'd64),
+        .effect_tremolo_depth(9'd128),.effect_tremolo_rate_hz(4'd5),
+        .effect_cfg_ready(),.effect_cfg_applied(),
         .bck(HP_BCK),.ws(HP_WS),.din(HP_DIN),.pa_enable(PA_EN),.underrun(underrun),
         .frame_ce(frame_ce),.note_ready(note_ready),.input_ready(input_ready),
         .gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(envelope_level));
