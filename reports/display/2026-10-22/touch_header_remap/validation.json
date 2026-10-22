@@ -1,0 +1,71 @@
+{
+  "baseline_commit": "ecb0ba1",
+  "touch_pins": {
+    "touch_scl": "AB26",
+    "touch_sda": "U25",
+    "touch_int": "V23",
+    "touch_rst_n": "R23"
+  },
+  "ports": 50,
+  "unique_locations": 50,
+  "only_four_IO_LOC_changed": true,
+  "all_IO_PORT_attributes_preserved": true,
+  "reference_CST_matches": true,
+  "existing_package_report": {
+    "AB26": {
+      "bank": "2",
+      "function": "-",
+      "bank_vccio": "3.3"
+    },
+    "U25": {
+      "bank": "2",
+      "function": "-",
+      "bank_vccio": "3.3"
+    },
+    "V23": {
+      "bank": "2",
+      "function": "-",
+      "bank_vccio": "3.3"
+    },
+    "R23": {
+      "bank": "3",
+      "function": "D16",
+      "bank_vccio": "3.3"
+    },
+    "P25": {
+      "bank": "3",
+      "function": "D25/VREF",
+      "bank_vccio": "3.3"
+    },
+    "T25": {
+      "bank": "3",
+      "function": "D22",
+      "bank_vccio": "3.3"
+    }
+  },
+  "power_wiring": {
+    "P25": "signal IO, not GND; not assigned",
+    "T25": "signal IO, not VDD; not assigned",
+    "requirement": "Use real board GND and module-rated supply; no GPIO power output",
+    "schematic": "references/TANG_MEGA-138K_Dock-4071f3__Schematics.pdf page 16, visually inspected"
+  },
+  "CPU_SSPI_flags": {
+    "CPU": false,
+    "SSPI": false
+  },
+  "forced_CPU_SSPI_Tcl_options_removed": true,
+  "existing_other_working_IDE_settings_preserved": true,
+  "staged_config_only_CPU_SSPI_changed": true,
+  "working_config_sha256": "78f5339a94a1683b78ec1d562e1f53f8204de45e065bd543bc58c0e63a337c41",
+  "cst_sha256": "886501fc360358ed4a1fcabe3b8191446147fc9feb76fcaa3b88957b436d2e4f",
+  "build_python_AST_checked_without_execution": true,
+  "RTL_and_SDC_unchanged": true,
+  "checks": "Static pin/attribute/reference/existing report checks and Python AST only",
+  "EDA_executed": false,
+  "hardware_verified": false,
+  "limits": [
+    "Existing report is only package metadata, not placement acceptance for new wiring",
+    "User must rerun synthesis/P&R/STA",
+    "Touch supply rating and physical voltages remain unverified"
+  ]
+}

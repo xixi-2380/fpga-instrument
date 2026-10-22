@@ -125,13 +125,14 @@ IO_PORT "lcd_r[1]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
 IO_LOC "lcd_r[0]" K17;
 IO_PORT "lcd_r[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
 
-// User 2026-10-22: GT9110 on PMOD0. Open-drain LOW or Z only.
+// User 2026-10-22: GT9110 on J23 header. Open-drain LOW or Z only.
+// P25/T25 are signal IO, NOT power pins; use real GND/module-rated supply.
 // External module pull-ups required; INT is released after address strap.
-IO_LOC "touch_scl" N18;
+IO_LOC "touch_scl" AB26;
 IO_PORT "touch_scl" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
-IO_LOC "touch_sda" N26;
+IO_LOC "touch_sda" U25;
 IO_PORT "touch_sda" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
-IO_LOC "touch_int" R16;
+IO_LOC "touch_int" V23;
 IO_PORT "touch_int" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
-IO_LOC "touch_rst_n" R17;
+IO_LOC "touch_rst_n" R23;
 IO_PORT "touch_rst_n" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;

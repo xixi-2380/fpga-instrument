@@ -6,14 +6,16 @@
 
 | 顶层端口 | 用户指定球位 | 示例CST对应 | 实现 |
 |---|---|---|---|
-| touch_scl | N18 | pmod_0[7] | 开漏I²C时钟，拉低/释放，支持时钟拉伸 |
-| touch_sda | N26 | pmod_0[5] | 开漏I²C数据，拉低/释放 |
-| touch_int | R16 | pmod_0[3] | 复位选址时拉低，此后高阻；不依赖中断极性 |
-| touch_rst_n | R17 | pmod_0[1] | 低有效复位，拉低/释放，与USR全局rst分开命名 |
+| touch_scl | AB26 | pin_header[21] / J23-24 | 开漏I²C时钟，拉低/释放，支持时钟拉伸 |
+| touch_sda | U25 | pin_header[19] / J23-22 | 开漏I²C数据，拉低/释放 |
+| touch_int | V23 | pin_header[17] / J23-20 | 复位选址时拉低，此后高阻；不依赖中断极性 |
+| touch_rst_n | R23 | pin_header[11] / J23-14 | 低有效复位，拉低/释放，与USR全局rst分开命名 |
 
-四个球位与原24个端口及22个LCD端口均无冲突，主CST共50个端口。依据用户指定映射实施，不改线、不重新分配键盘或音频引脚。触摸端口采用所在PMOD的LVCMOS33/3.3V Bank，DRIVE=4、PULL_MODE=NONE。**四根线均不主动输出高电平**，高电平由外部模组上拉提供；不把FPGA内部弱上拉当I²C上拉。GT9110手册要求/RSTB外部10k上拉，模组SCL/SDA上拉及其实际电压尚无接口图/实测，首版没有假定上拉已实测合格，也没有用GPIO给触摸板供电。
+四个球位与原24个端口及22个LCD端口均无冲突，主CST共50个端口。依据用户最新映射修改触摸信号，键盘或音频引脚保持。触摸端口采用所在Bank 2/3的LVCMOS33/3.3V，DRIVE=4、PULL_MODE=NONE。**四根线均不主动输出高电平**，高电平由外部模组上拉提供；不把FPGA内部弱上拉当I²C上拉。GT9110手册要求/RSTB外部10k上拉，模组SCL/SDA上拉及其实际电压尚无接口图/实测，首版没有假定上拉已实测合格，也没有用GPIO给触摸板供电。
 
-2026-10-22用户布局报告PR2028/PR2017后补充：没有端口球位冲突不等于已释放器件专用功能。当前FPG676A报告中N18为D08/VREF/SO、R16为D06/SSPI_CLK、R17为D07/SSPI_WPN；N26为D24，本轮已成功匹配，前三个因CPU/SSPI专用保留而失败。已将原工程配置中的`CPU`和`SSPI`改为`true`，含义是**将CPU/SSPI相关管脚复用为普通IO**，不是启用CPU。用户若在IDE中查看：`Project → Configuration → Place & Route → Dual-Purpose Pin`，确认勾选`Use CPU as regular IO`及`Use SSPI as regular IO`。原编译Tcl也加入对应`set_option -use_cpu_as_gpio 1`和`-use_sspi_as_gpio 1`，助手未执行脚本。JTAG/MSPI及其余设置保持；N18/N26/R16/R17接线不变。IDE旧配置页可能把改动写回，重开原工程后请确认这两个勾选仍在，再自行重新运行实现。修正与未验证范围见[专用管脚复用核查](../reports/display/2026-10-22/touch_pin_reuse/validation.json)。
+**供电接线纠正：用户同时提出P25接GND、T25接VDD，但这两个球位都是FPGA信号IO，不能作为触摸板电源。** 示例CST分别将其列为`pin_header[15]`、`pin_header[13]`；底板原理图第16页对应J23-18、J23-16，均不是电源。本版不增加供电GPIO、不主动驱动它们。触摸板GND须接板上真正GND（例如J23-12）；VDD须接符合模组额定电压的板上电源，模组额定电压仍未确认，不能据3.3V IO配置推定。不要误用J23-11的+5V。若模组已确认使用3.3V，可从PMOD J22的1/2脚取+3V3，3/4脚为GND；按连接器标号定位，不凭排针朝向推断。
+
+历史PR2028/PR2017来自旧映射N18/R16/R17的CPU/SSPI保留功能，旧证据仍保留在[专用管脚复用核查](../reports/display/2026-10-22/touch_pin_reuse/validation.json)。用户现已改选四根信号到AB26/U25/V23/R23，已有封装报告显示前3个无专用功能标记，R23为D16；此次不再依赖旧CPU/SSPI GPIO复用开关，原编译Tcl移除强制释放选项，工程CPU/SSPI恢复false。JTAG/MSPI及其他IDE设置保持。新约束仅完成静态映射/占用核查，实际布局仍待用户执行；见[改线核查](../reports/display/2026-10-22/touch_header_remap/validation.json)。
 
 用户已表示没有其他资料，不再以补充手册为前提暂停代码。依据为用户目录 `E:\FPGA竞赛\开发板资料\屏幕及触摸屏` 中GT9110中文PDF（22页，正文Rev.02）；读过相关完整页并查看上电时序图。原件保持只读，来源路径、摘要和SHA256见[硬件依据](../reports/display/2026-10-22/hardware/source_manifest.json)。此触摸芯片通过独立四线连接；屏幕PDF的40P第37..40脚为X1/Y1/X2/Y2，不能把这些电阻触摸引脚当作本版电容触摸I²C。
 

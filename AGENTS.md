@@ -90,3 +90,6 @@
 - 2026-10-22用户报告TA2000：keyboard.sdc第32行不接受if。已删除if/llength条件块，使用直接SDC命令；读取用户17:09生成的综合网表，确认顶层generate实例实际名为lcd_on.display_driver，像素PLL对象改为lcd_on.display_driver/pixel_pll/CLKOUT0（不可恢复为lcd_on/display_driver）。14条平面命令结构核查通过，原预算和其余约束保持，未改RTL/CST、未运行EDA；修正证据reports/display/2026-10-22/sdc_ta2000/validation.json，原TA2000日志摘要保留。用户需重跑约束解析及P&R/STA，不能把结构核查或旧HDL仿真当成Gowin解析通过。该SDC对应LCD_ENABLE=1，若关闭显示须同步去除三条像素约束，不能重新在SDC加入Tcl控制流。
 
 - 2026-10-22用户17:21布局报告PR2028/PR2017：N18(touch_scl)、R16(touch_int)、R17(touch_rst_n)仍保留CPU/SSPI专用功能，N26(touch_sda)已匹配。已按官方Dual-Purpose Pin含义将原impl/keyboard_adsr_process_config.json的CPU/SSPI改为true（复用为普通IO，不是启用CPU），原scripts/build_keyboard.tcl显式添加-use_cpu_as_gpio 1和-use_sspi_as_gpio 1。不换用户接线，不改RTL/CST/SDC，JTAG/MSPI不动。工作区已有IncludePath与换行差异保留；提交JSON仅包含本次两字段，不能借机提交或恢复用户其他IDE设置。核查与原失败证据reports/display/2026-10-22/touch_pin_reuse/validation.json；未运行EDA，新布局/STA由用户执行。IDE若缓存旧配置可能写回false，重开/运行前确认Use CPU as regular IO与Use SSPI as regular IO均勾选。
+
+
+- 2026-10-22用户最新改线优先：触摸SCL=AB26、SDA=U25、INT=V23、RST=R23（J23-24/22/20/14），替代旧N18/N26/R16/R17。同步原CST、构建报告映射核查与当前文档，移除Tcl强制CPU/SSPI GPIO选项并将工程两字段恢复false，保留用户其余IDE差异。用户提出P25=GND、T25=VDD，但官方示例/原理图确认二者是信号IO（J23-18/16），不得用GPIO给触摸板供电；仅实现四根信号，供电须接真正GND与模组额定电源。静态证据reports/display/2026-10-22/touch_header_remap/validation.json；未运行EDA，新P&R/STA由用户执行。不合远端、不推送main。

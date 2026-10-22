@@ -44,7 +44,7 @@ if lcd_enabled:
     for color,balls in [('r',['K17','J18','H18','G25','J19','H19']),('g',['G20','G21','G22','F22','K15','J16']),('b',['M16','M17','F18','F19','G19','F20'])]:
         expected.update({'lcd_'+color+'['+str(i)+']':v for i,v in enumerate(balls)})
 if touch_enabled:
-    expected.update({'touch_scl':'N18','touch_sda':'N26','touch_int':'R16','touch_rst_n':'R17'})
+    expected.update({'touch_scl':'AB26','touch_sda':'U25','touch_int':'V23','touch_rst_n':'R23'})
 for port,ball in expected.items():
     m=re.search(r'^'+re.escape(port)+r'\s*\|\s*[^|]*\|\s*([A-Z]+\d+)/\d+\s*\|\s*(Y|N)',rpt,re.M)
     assert m and m[1]==ball and m[2]=='Y','Pin mismatch: '+port
