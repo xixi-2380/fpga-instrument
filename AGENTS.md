@@ -93,3 +93,5 @@
 
 
 - 2026-10-22用户最新改线优先：触摸SCL=AB26、SDA=U25、INT=V23、RST=R23（J23-24/22/20/14），替代旧N18/N26/R16/R17。同步原CST、构建报告映射核查与当前文档，移除Tcl强制CPU/SSPI GPIO选项并将工程两字段恢复false，保留用户其余IDE差异。用户提出P25=GND、T25=VDD，但官方示例/原理图确认二者是信号IO（J23-18/16），不得用GPIO给触摸板供电；仅实现四根信号，供电须接真正GND与模组额定电源。静态证据reports/display/2026-10-22/touch_header_remap/validation.json；未运行EDA，新P&R/STA由用户执行。不合远端、不推送main。
+
+- 2026-10-22用户实板反馈`TOUCH ERROR`后明确要求先关闭触摸模块并上传Git。顶层默认`TOUCH_ENABLE=0`，关闭分支使SCL/SDA/INT/RST四线全部高阻；保留触摸RTL、AB26/U25/V23/R23约束和后续重新启用入口，不改RGB与音频功能。只推送当前`codex/fpga-migration`分支，不合并或覆盖远端main。

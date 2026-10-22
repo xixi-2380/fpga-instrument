@@ -39,7 +39,7 @@
 
 ## 参数、验证和用户上板
 
-顶层默认 `TOUCH_ENABLE=1`、`LCD_ENABLE=1`、`LCD_TEST_PATTERN=0`；`TOUCH_ENABLE=0`可使四根触摸线全部高阻并关闭触摸读取。可调整的仿真/启动参数在原 `keyboard_top`：`TOUCH_RESET_CYCLES`、`TOUCH_STRAP_CYCLES`、`TOUCH_BOOT_CYCLES`、`TOUCH_POLL_CYCLES`、`TOUCH_I2C_HALF`。生产默认时长见上文，不为实板缩短到测试值。
+因实板显示 `TOUCH ERROR`，顶层当前默认 `TOUCH_ENABLE=0`、`LCD_ENABLE=1`、`LCD_TEST_PATTERN=0`。关闭时不例化触摸读取逻辑，四根触摸信号全部保持高阻；触摸源码与约束保留，排查供电、上拉和电平后可将 `TOUCH_ENABLE` 改回1。可调整的仿真/启动参数在原 `keyboard_top`：`TOUCH_RESET_CYCLES`、`TOUCH_STRAP_CYCLES`、`TOUCH_BOOT_CYCLES`、`TOUCH_POLL_CYCLES`、`TOUCH_I2C_HALF`。生产默认时长见上文，不为实板缩短到测试值。
 
 `tb_gt9110_touch`独立模拟从机协议，验证ID/分辨率、1点/10点数量及首坐标、松手、无新帧、所有地址阶段NACK、清除NACK、异常数量、拉伸、超时、重试和复位；分别用加速半周期4和生产半周期250。两组功能测试只缩短启动/轮询计数；`tb_gt9110_boot`另用完整生产20ms+6ms+50ms计数，检查启动约76ms、INT释放和启动中复位。`tb_i2c_register_master`另覆盖非法读长度、SCL/SDA卡线、忙时输入命令忽略和字节中途复位。渲染与显示测试覆盖原子触摸快照、边角/越界十字和错误文字；最终结果、失败修正记录和验证范围见[本轮验证](../reports/display/2026-10-22/touch/validation.json)。仿真从机不是实测GT9110，不证明板上电压、上拉、实际芯片型号或触摸方向。
 
