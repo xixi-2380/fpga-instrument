@@ -60,10 +60,11 @@ always @(posedge clk)if(!rst)begin
 `ifdef FX_REFERENCE
   fx_old=fx_filled>=FX_DELAY?fx_history[fx_pointer]:0;
   fx_history[fx_pointer]=reference_dry_code;
+  fx_old=(192*reference_dry_code+64*fx_old)>>>8;
   fx_sum=(256-fx_weight)*reference_dry_code+fx_weight*fx_old;
   pending_code=fx_sum>>>8;
   fx_pointer=(fx_pointer+1)%FX_DELAY;if(fx_filled<FX_DELAY)fx_filled=fx_filled+1;
-  if(effects_enable && fx_weight<64)fx_weight=fx_weight+1;
+  if(effects_enable && fx_weight<256)fx_weight=fx_weight+1;
   else if(!effects_enable && fx_weight>0)fx_weight=fx_weight-1;
 `endif
  end

@@ -16,7 +16,7 @@ module tb_score_effects;
  wire bck,ws,din,pa,db,dw,dd,dp;wire [5:0] leds;
  integer checks=0,score_events=0,key_events=0,finished_events=0,prior_nonzero;
  reg melody_seen=0;
- keyboard_top #(.BUTTON_DEBOUNCE_CYCLES(4),.SCORE_ENABLE(1),.SCORE_BEAT_FRAMES(8),.LED_STEP_CYCLES(4),.LOCK_N(32),
+ keyboard_top #(.BUTTON_DEBOUNCE_CYCLES(4),.SCORE_ENABLE(1),.SCORE_BEAT_FRAMES(16),.LED_STEP_CYCLES(4),.LOCK_N(32),
   .SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
   .MUTE(4),.FADE(4),.ATTACK(2),.DECAY(2),.SUSTAIN(32768),.RELEASE(2))
   dut(.clk(ref_clk),.rst(ref_rst),.board_buttons_n(buttons_n),.key_row(rows),.key_col(columns),
@@ -76,10 +76,10 @@ module tb_score_effects;
  initial begin
   #100 ref_rst=0;wait(pa);wait(score_events>=8);
   // Echo controls are independent of the score; preset events stay in the file.
-  buttons_n=4'h7;more_frames(70);
-  `CHECK(dut.score_busy && effects_enable && dut.sound.effect.wet_level==64,"S3 enables echo during autoplay")
-  buttons_n=4'hf;more_frames(2);buttons_n=4'h7;more_frames(70);
-  `CHECK(dut.score_busy && !effects_enable && dut.sound.effect.wet_level==0,"S3 restores dry autoplay")
+  buttons_n=4'h7;more_frames(2);buttons_n=4'hf;more_frames(270);
+  `CHECK(dut.score_busy && effects_enable && dut.sound.effect.fade_level==256,"S3 enables echo during autoplay")
+  buttons_n=4'hf;more_frames(2);buttons_n=4'h7;more_frames(2);buttons_n=4'hf;more_frames(270);
+  `CHECK(dut.score_busy && !effects_enable && dut.sound.effect.fade_level==0,"S3 restores dry autoplay")
   buttons_n=4'hf;more_frames(2);
   // Hold A4 during playback: it must remain outside the synth until handoff.
   pressed=16'h0200;wait(dut.keys==16'h0200);more_frames(12);
@@ -109,11 +109,11 @@ module tb_score_effects;
   buttons_n=4'hf;more_frames(2);pressed=0;wait(dut.keys==0);more_frames(12);
   pressed=16'h0200;wait(dut.keys==16'h0200);more_frames(20);
   `CHECK(dut.sound.voice_timbres[1:0]==2,"next A4 captures reed")
-  buttons_n=4'h7;more_frames(70);
-  `CHECK(effects_enable && dut.sound.effect.wet_level==64 && $countones(dut.voice_held)==1,"S3 enables echo while a key stays held")
+  buttons_n=4'h7;more_frames(2);buttons_n=4'hf;more_frames(270);
+  `CHECK(effects_enable && dut.sound.effect.fade_level==256 && $countones(dut.voice_held)==1,"S3 enables echo while a key stays held")
   more_frames(5);`CHECK(effects_enable,"held S3 does not toggle repeatedly")
-  buttons_n=4'hf;more_frames(2);buttons_n=4'h7;more_frames(70);
-  `CHECK(!effects_enable && dut.sound.effect.wet_level==0,"released S3 press restores bypass")
+  buttons_n=4'hf;more_frames(2);buttons_n=4'h7;more_frames(2);buttons_n=4'hf;more_frames(270);
+  `CHECK(!effects_enable && dut.sound.effect.fade_level==0,"released S3 press restores bypass")
   buttons_n=4'hf;pressed=0;wait(dut.keys==0);more_frames(20);
   `CHECK(dut.voice_active==0 && pending_code==0,"notes and echo tail drain after release")
   // Global reset replays from the beginning and cancels previous source state.
@@ -123,5 +123,5 @@ module tb_score_effects;
   $display("SCORE_AUDIO_METRICS events=%0d max_delivery=%0d",finished_events,max_delivery_cycle);
   $display("PASS tb_score_effects checks=%0d",checks);$finish;
  end
- initial begin #30000000;$fatal(1,"score audio timeout");end
+ initial begin #80000000;$fatal(1,"score audio timeout");end
 endmodule

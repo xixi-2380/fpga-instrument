@@ -7,7 +7,7 @@ module delay_case #(parameter integer N=3)(output reg done=0,output integer chec
  reg signed [63:0] wide;
  reg [31:0] random_state=32'h12345678;
  always #5 clk=~clk;
- audio_delay #(.DELAY_SAMPLES(N)) dut(clk,rst,en,valid,sample,ready,out_valid,result);
+ audio_delay #(.DELAY_SAMPLES(N)) dut(clk,rst,en,valid,sample,ready,out_valid,result,);
  task send(input integer x,input bit enabled,input integer gaps);begin
   @(negedge clk);sample=x;en=enabled;valid=1;
   `CHECK(ready,"effect can accept the next frame")

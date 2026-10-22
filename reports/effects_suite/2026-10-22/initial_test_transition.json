@@ -1,0 +1,6 @@
+{
+  "test": "tb_timbre_control",
+  "initial_result": "old release-bounce assertion failed after short press semantics changed to release-triggered",
+  "resolution": "rewrote behavior tests to exercise bounce before stable release, and distinguish short/long actions; final N=4 and N=1 pass",
+  "rtl_change_for_this_test_failure": false
+}

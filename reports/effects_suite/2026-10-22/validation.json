@@ -1,0 +1,166 @@
+{
+  "date": "2026-10-22",
+  "branch": "feature/audio-effects",
+  "base_commit": "837748c0662cc00cfa7ce43472b06969119e153c",
+  "main_and_display_branch_not_merged": true,
+  "hdl_configurations_passed": 12,
+  "hdl_checks_passed": 25191015,
+  "tests": [
+    {
+      "test": "tb_audio_delay",
+      "passed": true,
+      "checks": 135069,
+      "log": "tb_audio_delay.log"
+    },
+    {
+      "test": "tb_audio_timing",
+      "passed": true,
+      "checks": 9996,
+      "log": "tb_audio_timing.log"
+    },
+    {
+      "test": "tb_audio_effects",
+      "passed": true,
+      "checks": 29330,
+      "log": "tb_audio_effects.log"
+    },
+    {
+      "test": "tb_effects_integration",
+      "passed": true,
+      "checks": 6311863,
+      "log": "tb_effects_integration.log"
+    },
+    {
+      "test": "tb_synth_core",
+      "passed": true,
+      "checks": 2511762,
+      "log": "tb_synth_core.log"
+    },
+    {
+      "test": "tb_timbre_control",
+      "passed": true,
+      "checks": 21,
+      "log": "tb_timbre_control.log"
+    },
+    {
+      "test": "tb_score_audio",
+      "passed": true,
+      "checks": 2802275,
+      "log": "tb_score_audio.log"
+    },
+    {
+      "test": "tb_score_effects",
+      "passed": true,
+      "checks": 8206286,
+      "log": "tb_score_effects.log"
+    },
+    {
+      "test": "tb_keyboard_top",
+      "passed": true,
+      "checks": 2048130,
+      "log": "tb_keyboard_top.log"
+    },
+    {
+      "test": "tb_effect_button_path",
+      "passed": true,
+      "checks": 2777630,
+      "log": "tb_effect_button_path.log"
+    },
+    {
+      "test": "tb_audio_effects",
+      "variant": "effects_production",
+      "passed": true,
+      "checks": 358634,
+      "log": "effects_production.log"
+    },
+    {
+      "test": "tb_timbre_control",
+      "variant": "control_n1",
+      "passed": true,
+      "checks": 19,
+      "log": "control_n1.log"
+    }
+  ],
+  "independent_reference": "scripts/reference_effects.py, integer sample-domain queues, seed 20261022",
+  "reference_vectors": {
+    "short": 4890,
+    "production": 59774
+  },
+  "production_effect_parameters": {
+    "echo_samples": 7200,
+    "room_samples": [
+      1499,
+      1601,
+      1867,
+      2053
+    ],
+    "lfo_step": 447392,
+    "sample_hz": 48000,
+    "echo_wet_256": 64,
+    "room_wet_256": 64,
+    "tremolo_min_256": 128,
+    "transition_samples": 256
+  },
+  "button_test_scope": "debounce N=4/N=1 and long threshold=100; top integration threshold=128. Production 10ms and 0.8s constants statically checked, not simulated as full-duration holds this round.",
+  "coverage": [
+    "150ms impulse position and gain",
+    "full production room delays with negative impulse tail returning to zero",
+    "full slow modulation cycle",
+    "random/full-scale input, illegal mode fallback, bypass, type/enable changes",
+    "control/data changed after sample acceptance",
+    "mid-processing reset with dirty RAM",
+    "32 mixed timbres and independent per-voice/serial reference in echo mode",
+    "effect buffer deadline <=544 cycles, uninterrupted 1280-cycle frames",
+    "84-event score playback and manual handoff",
+    "actual matrix plus S0/S1/S2 selection, S3 short and long hold path through all three engines",
+    "held notes preserved across mode change; reset restores dry echo selection"
+  ],
+  "new_effect_unit_latency_cycles_after_accept": 3,
+  "raw_sample_storage_bits": 227520,
+  "gprj_hdl": 25,
+  "gprj_dependencies": 36,
+  "preprocess_without_config_search_path": [
+    "project_root",
+    "other_directory"
+  ],
+  "not_run": [
+    "Gowin synthesis",
+    "place and route",
+    "new static timing, RAM inference or resource check",
+    "official vendor PLL simulation this round",
+    "SRAM/Flash/JTAG operations",
+    "hardware audition"
+  ],
+  "top_clock_model": "sim/pll_pair_behavioral.sv substitutes for original wrapper; no official PLL/STA claim",
+  "unchanged_hardware": "No CST/SDC/PLL edits, no new pins; leave existing keypad/touch Dupont wiring in place. Screen can stay disconnected.",
+  "known_limits": [
+    "basic four-comb mono room, no allpass diffusion or studio reverb claim",
+    "one effect at a time",
+    "parameters are compile-time constants, no runtime UI/menu parameter editor",
+    "occasional two-key noise remains a separate open issue",
+    "new effects not yet auditioned on hardware"
+  ],
+  "source_sha256": {
+    "AGENTS.md": "735ff1f7d2916eac57fc0f2a59c3762d7564cbfec89d561d5a872494ba38f1d2",
+    "README.md": "348d63621fef126136f5a544104ddb694ee95b22045ede58f56110a4a499a33b",
+    "docs/effects.md": "1c451cf3f1ed771ee2119c72750a47c5ca147cabf64bc89bef7b04b4b1e9db32",
+    "docs/board_buttons.md": "6785b82ccd696cffaec2977d0f005041b60fd21ea8fd224f50b610c0e05afe9b",
+    "docs/interfaces.md": "13659eae9f91fd7e7822cc26944dc48617674199ea9bd3d6bc4a7615267b2189",
+    "keyboard_adsr.gprj": "95925ac3ad2884cd95cda1a057086b27aca3a13460e326b06e55912df92f7077",
+    "src/audio_delay.sv": "97fef5c2a01c58dccd53341035bcc9df6d6560d51985d0517e17b803164fbc95",
+    "src/synth_core.sv": "3f4e70b0d26407235c440e373368819f28f50ec7d21eabb72499b3212db518ec",
+    "src/timbre_control.sv": "590b2e8e47160aabb55c629de5b10e14cebc75ae2f1aa96d4bf28baffae3d187",
+    "src/keyboard_top.sv": "18711d5b07437ce7809b3ef6808f8e49c51386783a7c798824265ea3f51d65ce",
+    "sim/tb_audio_delay.sv": "24d1b3d468445d06e48830c2dcde255a31b096d1c81750f2fb4900a909a42e72",
+    "sim/tb_effects_integration.sv": "7c3eb9f42b78d855691ba8d277233c38e3c4834f68b67d0a39383930c8bced79",
+    "sim/tb_timbre_control.sv": "b4af839ad52d3841c7421095dae8736aded03c422b38f13411cb4f39aa9ceabb",
+    "sim/tb_score_effects.sv": "b75e5099ce7f0408114c65f9e5e0bc9ea9fd4adcc2df7337b3a40dd4d8448dd0",
+    "sim/poly_audio_reference.svh": "cf21ba152878f66c4e8938b01a1093acad838b2e3896608584d7309e32dabd44",
+    "scripts/run_sim.py": "bef9022735dea24ac341ff13665be6154587eb9a912d518a4526c7b212834359",
+    "scripts/reference_effects.py": "d53dcfdfbf94de933bd26fa735d3121add56387d6d5884f034e7051187454dcb",
+    "src/audio_effects.sv": "b17e01992bf69b1429e862deba91b958546fce3818c40dd6ab4a647ac71665ed",
+    "src/audio_reverb.sv": "1adcf71ed5bf3e2110c51acaaac688cdcfa39fcc0da54aa1759057720618412f",
+    "sim/tb_audio_effects.sv": "9830fbb1bd4a4260aa29a39da66d514dc0ee687795944d090a1642b4095c63e3",
+    "sim/tb_effect_button_path.sv": "a141b373e419e21e4e7b3a86cca274f8e74b98cc1fc4c2be3e866c9dae2fbae7"
+  }
+}

@@ -452,3 +452,12 @@ keyboard_top沿用score_busy选择score/key事件，timbre_control的输入为sc
 keyboard_top新增board_buttons_n[3:0]（低有效S0..S3，K16/F15/G15/G16）及BUTTON_DEBOUNCE_CYCLES=614400参数。原timbre_control端口keys[15:0]替换为buttons_n[3:0]，内部两级同步及每位独立稳定计数，产生单周期按下事件；S0/S1/S2直接选择音色0/1/2，S3开关effects_enabled。音色事件同时确认时低编号优先，效果事件独立。
 
 控制器不再读取keys或受score_busy屏蔽；自动曲谱仍独立指定事件音色，S0..S2只选后续手动预设，S3可处理曲谱混音。keyboard_core仅演奏，不再有对角组合副作用；已有声部保持已捕获音色，原valid/ready、frame_ce、音源和效果算法不改。完整硬件依据/操作/验证见docs/board_buttons.md。
+
+
+### 2026-10-22效果器扩展（音频工作分支）
+
+保留main的独立四键和混音后处理；timbre_control新增尾部输出effect_mode[1:0]和LONG_PRESS_CYCLES默认49152000（0.8s）。S3短按稳定松开时toggle enable，长按只一次循环0回声/1房间/2颤音并开启，长按松开无第二动作。S0..S2、GPIO与10ms消抖保持。
+
+synth_core新增尾部effect_mode输入，内部原effect实例改为audio_effects；混音和frame_buffer接口不变。新audio_reverb提供四路归一化反馈延迟湿声；原audio_delay增加out_history提供原始历史，单回声算法接口保留。两个新模块加入原GPRJ。效果模式/开关与音源同audio_clk域，样本接收时原子锁存；今后触摸跨域设置必须经握手或FIFO，不逐位同步多位模式/参数。
+
+现有运行时入口只有effects_enable和effect_mode，混合比例及速率是工程参数，尚无矩阵菜单、触摸控制或运行时数值调节。新UI应读取并显示真实设置，触摸分支仍保持独立待其调通后合并。预算、算式、波形参考及用户试听步骤见docs/effects.md。

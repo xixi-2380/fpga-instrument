@@ -4,7 +4,7 @@
 module keyboard_top #(
     parameter SCORE_FILE="src/scores/twinkle.hex",
     parameter integer SCORE_WORDS=512,SCORE_ENABLE=1,SCORE_BEAT_FRAMES=(`SAMPLE_HZ/2),
-    BUTTON_DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
+    BUTTON_DEBOUNCE_CYCLES=(`AUDIO_HZ/100),BUTTON_LONG_PRESS_CYCLES=(`AUDIO_HZ*4/5),
     LED_STEP_CYCLES=`RUN_LED_STEP_CYCLES,LED_DIAG_STEPS=`RUN_LED_DIAG_STEPS,
     LOCK_N=`LOCK_CYCLES,SLOT_CYCLES=`KEY_SLOT_CYCLES,
     SETTLE_CYCLES=`KEY_SETTLE_CYCLES,DEBOUNCE_SCANS=`KEY_DEBOUNCE_SCANS,
@@ -14,6 +14,7 @@ module keyboard_top #(
     output wire HP_BCK,HP_WS,HP_DIN,PA_EN,DBG_BCK,DBG_WS,DBG_DIN,DBG_PA_EN,
     output wire [5:0] led_n);
     wire effects_enabled;
+    wire [1:0] effect_mode;
     wire [1:0] selected_timbre,event_timbre,key_timbre,score_timbre;
     wire key_valid,key_on,score_valid,score_on,score_busy,score_done,score_error;
     wire [6:0] key_id,score_id;
@@ -38,9 +39,9 @@ module keyboard_top #(
         score(.clk(audio_clk),.rst(audio_reset),.input_ready(input_ready),.frame_ce(frame_ce),
         .note_ready(note_ready && score_busy),.note_valid(score_valid),.note_on(score_on),
         .note_id(score_id),.note_fcw(score_fcw),.note_timbre(score_timbre),.busy(score_busy),.done(score_done),.error(score_error));
-    timbre_control #(.DEBOUNCE_CYCLES(BUTTON_DEBOUNCE_CYCLES)) timbre_buttons(
+    timbre_control #(.DEBOUNCE_CYCLES(BUTTON_DEBOUNCE_CYCLES),.LONG_PRESS_CYCLES(BUTTON_LONG_PRESS_CYCLES)) timbre_buttons(
         .clk(audio_clk),.rst(audio_reset),.buttons_n(board_buttons_n),
-        .selected(selected_timbre),.effects_enabled(effects_enabled));
+        .selected(selected_timbre),.effects_enabled(effects_enabled),.effect_mode(effect_mode));
     run_leds #(.STEP_CYCLES(LED_STEP_CYCLES),.DIAG_STEPS(LED_DIAG_STEPS)) status_leds(
         .clk(clk),.audio_ready_async(!audio_reset),.key_active_async(gate),
         .pll1_lock_async(lock1),.pll2_lock_async(lock2),.reset_active_async(rst),.led_n(led_n));
@@ -60,7 +61,7 @@ module keyboard_top #(
     synth_core #(.MUTE(MUTE),.FADE(FADE),.ATTACK(ATTACK),.DECAY(DECAY),
         .SUSTAIN(SUSTAIN),.RELEASE(RELEASE)) sound(
         .clk(audio_clk),.rst(audio_reset),.note_valid(note_valid),.note_on(note_on),
-        .note_id(note_id),.note_fcw(note_fcw),.note_timbre(event_timbre),.effects_enable(effects_enabled),
+        .note_id(note_id),.note_fcw(note_fcw),.note_timbre(event_timbre),.effects_enable(effects_enabled),.effect_mode(effect_mode),
         .bck(HP_BCK),.ws(HP_WS),.din(HP_DIN),.pa_enable(PA_EN),.underrun(underrun),
         .frame_ce(frame_ce),.note_ready(note_ready),.input_ready(input_ready),
         .gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(envelope_level));

@@ -3,7 +3,7 @@
 // samples, including across resets. Read and write occupy different cycles.
 module audio_delay #(parameter integer DELAY_SAMPLES=7200)(
     input wire clk,rst,enable,in_valid,input wire signed [15:0] in_sample,
-    output wire in_ready,output reg out_valid,output reg signed [15:0] out_sample);
+    output wire in_ready,output reg out_valid,output reg signed [15:0] out_sample,output reg signed [15:0] out_history);
     localparam integer AW=DELAY_SAMPLES>1?$clog2(DELAY_SAMPLES):1;
     localparam integer FW=$clog2(DELAY_SAMPLES+1);
     reg signed [15:0] memory[0:DELAY_SAMPLES-1];
@@ -30,7 +30,7 @@ module audio_delay #(parameter integer DELAY_SAMPLES=7200)(
     always @(posedge clk or posedge rst)begin
         if(rst)begin
             pointer<=0;filled<=0;busy<=0;history_valid<=0;dry<=0;
-            wet_level<=0;used_level<=0;out_valid<=0;out_sample<=0;
+            wet_level<=0;used_level<=0;out_valid<=0;out_sample<=0;out_history<=0;
         end else begin
             out_valid<=0;
             if(accept)begin
@@ -45,7 +45,7 @@ module audio_delay #(parameter integer DELAY_SAMPLES=7200)(
                 if(result>32767)out_sample<=16'sh7fff;
                 else if(result < -32768)out_sample<=16'sh8000;
                 else out_sample<=result[15:0];
-                out_valid<=1;busy<=0;
+                out_history<=delayed_ext[15:0];out_valid<=1;busy<=0;
                 if(pointer==DELAY_SAMPLES-1)pointer<=0;else pointer<=pointer+1'b1;
                 if(filled<DELAY_SAMPLES)filled<=filled+1'b1;
             end

@@ -1,0 +1,26 @@
+[
+  {
+    "test": "tb_score_audio",
+    "passed": true,
+    "pll_model": "behavioral substitute, not official",
+    "seconds": 31.76
+  },
+  {
+    "test": "tb_score_effects",
+    "passed": true,
+    "pll_model": "behavioral substitute, not official",
+    "seconds": 172.54
+  },
+  {
+    "test": "tb_keyboard_top",
+    "passed": true,
+    "pll_model": "behavioral substitute, not official",
+    "seconds": 46.18
+  },
+  {
+    "test": "tb_effect_button_path",
+    "passed": true,
+    "pll_model": "behavioral substitute, not official",
+    "seconds": 213.33
+  }
+]

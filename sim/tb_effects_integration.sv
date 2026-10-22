@@ -93,11 +93,11 @@ module tb_effects_integration;
   // After the voices reach idle, the delayed release tail must drain too.
   more_frames(FX_DELAY+4);
   `CHECK(pending_code==0,"echo drains to exact zero")
-  effects_enable=0;more_frames(70);
+  effects_enable=0;more_frames(270);
   event_note(1,60,1);more_frames(25);
-  `CHECK(sound.effect.wet_level==0,"off selection fades fully to bit-exact bypass")
-  effects_enable=1;more_frames(70);
-  `CHECK(sound.effect.wet_level==64,"effect ramps to one-quarter wet")
+  `CHECK(sound.effect.fade_level==0,"off selection fades fully to bit-exact bypass")
+  effects_enable=1;more_frames(270);
+  `CHECK(sound.effect.fade_level==256,"effect ramps to full selected echo blend")
   rst=1;note_valid=0;#3;
   `CHECK(!pa && sound.effect.out_sample==0,"reset clears enabled effect output")
   rst=0;wait(input_ready);more_frames(20);

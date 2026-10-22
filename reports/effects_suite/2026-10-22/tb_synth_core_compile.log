@@ -1,0 +1,3 @@
+src/synth_core.sv:91: warning: @* is sensitive to all 32 words in array 'voice_level'.
+src/synth_core.sv:91: warning: @* is sensitive to all 32 words in array 'voice_level'.
+sim/tb_synth_core.sv:14: warning: Instantiating module synth_core with dangling input port 21 (effect_mode) floating.
