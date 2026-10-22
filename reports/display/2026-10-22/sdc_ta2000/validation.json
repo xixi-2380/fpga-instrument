@@ -1,0 +1,22 @@
+{
+  "baseline_commit": "0383393",
+  "changed_file": "src/keyboard.sdc",
+  "corrected_sdc_sha256": "f93afd1063839ecfa6278eadca5a4e1828cba3e32c1051358b091a5da685272e",
+  "flat_command_count": 14,
+  "allowed_commands_only": true,
+  "braces_and_collection_brackets_balanced": true,
+  "existing_commands_and_budgets_preserved": true,
+  "only_object_name_correction": "lcd_on/display_driver/pixel_pll/CLKOUT0 -> lcd_on.display_driver/pixel_pll/CLKOUT0",
+  "existing_synthesis_netlist": "impl\\gwsynthesis\\D2_keyboard_leds.vg",
+  "existing_netlist_sha256": "fb29d066486a90ac9488be7a2e67748acaf0c7d18ea1532440387d6f2a8d73bf",
+  "netlist_module_and_pll_instance_confirmed": true,
+  "pixel_hz": 35000000.0,
+  "rtl_and_pin_constraints_unchanged": true,
+  "documentation_reference": "C:/Gowin/Gowin_V1.9.12.04_x64/IDE/doc/EN/SUG940-2.0.5E_Gowin Design Timing Constraints User Guide.pdf, chapter 5",
+  "scope": "Read-only existing reports and netlist; static command/structure comparison; no Gowin parser/EDA invoked",
+  "limits": [
+    "Gowin SDC parse and new STA/P&R must be rerun by user",
+    "SDC now explicitly targets LCD_ENABLE=1; remove three pixel constraints when disabling LCD",
+    "Historical HDL simulation does not validate SDC grammar"
+  ]
+}

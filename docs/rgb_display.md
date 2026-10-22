@@ -80,4 +80,6 @@ D:\py\python.exe scripts/run_sim.py --test tb_keyboard_top --vendor --out-dir re
 
 上方初阶段验证与图片保留为历史；本轮驱动、触摸与音频回归见[本轮验证](../reports/display/2026-10-22/touch/validation.json)及[带触摸的RTL预览](../reports/display/2026-10-22/touch/ui_preview.png)，均为TB示例状态而非上板照片。新增时钟在原SDC中声明35MHz；LCD的6ns输出路线预算、触摸的100ns预算是工程约束，不冒充面板setup/hold数据。打包脚本新增50端口核查、像素时钟/第三PLL检查与相关TB清单，本轮只做Python语法检查，没有运行会启动EDA的打包/编译脚本。
 
+2026-10-22用户实现时报告TA2000：原SDC第32行的`if/llength`被解析器拒绝。已改成直接的三条SDC命令，并按用户本轮综合网表将像素PLL路径改为`lcd_on.display_driver/pixel_pll/CLKOUT0`（generate实例名带点）。本SDC对应默认`LCD_ENABLE=1`；若将其改为0，需要同时删除像素域的这三条约束，不能用Tcl条件块自动选择。只做语法结构、差异和已有网表节点核对，助手未启动新的EDA解析/P&R；证据见[约束修正记录](../reports/display/2026-10-22/sdc_ta2000/validation.json)。此前HDL仿真不覆盖Gowin SDC解析，旧13配置记录仍属于修改前的RTL功能验证。
+
 用户提供的资料不足以证明当前面板时序/电气兼容性，接下来由用户重新综合/P&R，确认50/61.44/35MHz三个域及新增CDC、无Setup/Hold违例、全部50个球位，然后烧录试亮。先看默认UI及触摸；若图像异常可改 `LCD_TEST_PATTERN=1` 检查彩条，再根据实测调整原配置。需要检查具体极性/相位时以单项对照方式修改，不能宣称参考参数已经过本屏验收。助手没有运行EDA、编程器或烧录。
