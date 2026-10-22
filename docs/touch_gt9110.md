@@ -13,6 +13,8 @@
 
 四个球位与原24个端口及22个LCD端口均无冲突，主CST共50个端口。依据用户指定映射实施，不改线、不重新分配键盘或音频引脚。触摸端口采用所在PMOD的LVCMOS33/3.3V Bank，DRIVE=4、PULL_MODE=NONE。**四根线均不主动输出高电平**，高电平由外部模组上拉提供；不把FPGA内部弱上拉当I²C上拉。GT9110手册要求/RSTB外部10k上拉，模组SCL/SDA上拉及其实际电压尚无接口图/实测，首版没有假定上拉已实测合格，也没有用GPIO给触摸板供电。
 
+2026-10-22用户布局报告PR2028/PR2017后补充：没有端口球位冲突不等于已释放器件专用功能。当前FPG676A报告中N18为D08/VREF/SO、R16为D06/SSPI_CLK、R17为D07/SSPI_WPN；N26为D24，本轮已成功匹配，前三个因CPU/SSPI专用保留而失败。已将原工程配置中的`CPU`和`SSPI`改为`true`，含义是**将CPU/SSPI相关管脚复用为普通IO**，不是启用CPU。用户若在IDE中查看：`Project → Configuration → Place & Route → Dual-Purpose Pin`，确认勾选`Use CPU as regular IO`及`Use SSPI as regular IO`。原编译Tcl也加入对应`set_option -use_cpu_as_gpio 1`和`-use_sspi_as_gpio 1`，助手未执行脚本。JTAG/MSPI及其余设置保持；N18/N26/R16/R17接线不变。IDE旧配置页可能把改动写回，重开原工程后请确认这两个勾选仍在，再自行重新运行实现。修正与未验证范围见[专用管脚复用核查](../reports/display/2026-10-22/touch_pin_reuse/validation.json)。
+
 用户已表示没有其他资料，不再以补充手册为前提暂停代码。依据为用户目录 `E:\FPGA竞赛\开发板资料\屏幕及触摸屏` 中GT9110中文PDF（22页，正文Rev.02）；读过相关完整页并查看上电时序图。原件保持只读，来源路径、摘要和SHA256见[硬件依据](../reports/display/2026-10-22/hardware/source_manifest.json)。此触摸芯片通过独立四线连接；屏幕PDF的40P第37..40脚为X1/Y1/X2/Y2，不能把这些电阻触摸引脚当作本版电容触摸I²C。
 
 ## 初始化与读取

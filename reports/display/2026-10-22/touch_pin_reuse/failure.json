@@ -1,0 +1,9 @@
+{
+  "source_config_sha256": "78f5339a94a1683b78ec1d562e1f53f8204de45e065bd543bc58c0e63a337c41",
+  "source_CPU": false,
+  "source_SSPI": false,
+  "existing_IncludePath": [
+    "E:/gowin/fpga-instrument/config"
+  ],
+  "report_before": "Reading netlist file: \"E:\\gowin\\fpga-instrument\\impl\\gwsynthesis\\D2_keyboard_leds.vg\"\nParsing netlist file \"E:\\gowin\\fpga-instrument\\impl\\gwsynthesis\\D2_keyboard_leds.vg\" completed\nProcessing netlist completed\nReading constraint file: \"E:\\gowin\\fpga-instrument\\src\\keyboard.cst\"\nPhysical Constraint parsed completed\nRunning placement......\nERROR  (PR2028) : The constrained location is useless in current package\nERROR  (PR2017) : 'touch_scl' cannot be placed according to constraint, for the location is a dedicated pin (CPU/SSPI)\nERROR  (PR2028) : The constrained location is useless in current package\nERROR  (PR2017) : 'touch_int' cannot be placed according to constraint, for the location is a dedicated pin (CPU/SSPI)\nERROR  (PR2028) : The constrained location is useless in current package\nERROR  (PR2017) : 'touch_rst_n' cannot be placed according to constraint, for the location is a dedicated pin (CPU/SSPI)\nGenerate file \"E:\\gowin\\fpga-instrument\\impl\\pnr\\D2_keyboard_leds.pin.html\" completed\nGenerate file \"E:\\gowin\\fpga-instrument\\impl\\pnr\\D2_keyboard_leds.rpt.html\" completed\nGenerate file \"E:\\gowin\\fpga-instrument\\impl\\pnr\\D2_keyboard_leds.rpt.txt\" completed\nThu Oct 22 17:21:48 2026\n\n"
+}

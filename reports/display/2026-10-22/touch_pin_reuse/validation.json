@@ -1,0 +1,40 @@
+{
+  "baseline_commit": "32f69ab",
+  "working_config_CPU": true,
+  "working_config_SSPI": true,
+  "only_two_working_values_changed": true,
+  "other_working_config_bytes_preserved": true,
+  "existing_include_path_preserved": [
+    "E:/gowin/fpga-instrument/config"
+  ],
+  "working_config_sha256": "39269b32194a8c2d869d1971170660feff7f7322075ae9a89df86e64d326efc2",
+  "staged_config_sha256": "986a6d94057c0279e0f3942ccedb196c62b3263837beee988b56fcbf7895f5e8",
+  "only_two_staged_keys_changed": [
+    "CPU",
+    "SSPI"
+  ],
+  "JTAG_and_MSPI_unchanged": true,
+  "tcl_options": [
+    "set_option -use_cpu_as_gpio 1",
+    "set_option -use_sspi_as_gpio 1"
+  ],
+  "installed_CPU_option_found_in_GWTE_dll": true,
+  "failed_pin_report": {
+    "N18": "D08/VREF/SO",
+    "R16": "D06/SSPI_CLK",
+    "R17": "D07/SSPI_WPN",
+    "N26": "D24, touch_sda already matched"
+  },
+  "documentation": [
+    "SUG100-4.4.7E page 53 / section Dual-Purpose Pin",
+    "SUG1220-2.1E page 52 / -use_sspi_as_gpio",
+    "https://cdn.gowinsemi.com.cn/SUG100.pdf"
+  ],
+  "RTL_CST_SDC_and_project_file_unchanged": true,
+  "checks": "JSON semantic and byte preservation; Tcl command comparison; existing pin report and installed official documentation read only",
+  "limits": [
+    "No Gowin/EDA invocation or new placement run",
+    "Actual pin placement and STA need user rerun",
+    "Existing IDE config page may overwrite file; confirm both regular-IO checkboxes in GUI before implementation"
+  ]
+}

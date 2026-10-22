@@ -6,6 +6,10 @@ set_option -top_module keyboard_top
 set_option -include_path [list [file join $root src] [file join $root src config]]
 set_option -verilog_std sysv2017
 set_option -output_base_name D2_keyboard_leds
+# User touch wiring N18/R16/R17 shares CPU/SSPI functions. Release as GPIO.
+# Match IDE Dual-Purpose Pin settings; keep JTAG/MSPI configuration unchanged.
+set_option -use_cpu_as_gpio 1
+set_option -use_sspi_as_gpio 1
 set_option -bit_security 0
 set_option -bit_incl_bsram_init 1
 run syn
