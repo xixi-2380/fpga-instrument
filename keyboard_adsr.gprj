@@ -5,6 +5,7 @@
     <Version>5</Version>
     <Device name="GW5AST-138C" pn="GW5AST-LV138FPG676AC1/I0">gw5ast138c-003</Device>
     <FileList>
+        <File path="src/rgb_ui_renderer.sv" type="file.verilog" enable="1" />
         <File path="src/score_player.sv" type="file.verilog" enable="1" />
         <File path="src/scores/twinkle.hex" type="file.other" enable="1" />
         <File path="src/scores/twinkle.txt" type="file.other" enable="1" />

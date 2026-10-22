@@ -1,0 +1,2 @@
+PASS tb_rgb_ui_renderer checks=1935673
+E:/gowin/fpga-instrument/sim/tb_rgb_ui_renderer.sv:112: $finish called at 3870856000 (1ps)
