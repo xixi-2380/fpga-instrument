@@ -37,7 +37,7 @@ module ui_keypad_router #(parameter integer RELEASE_CYCLES=1)(
       0:action<=UI_SINE;1:action<=UI_FLUTE;2:action<=UI_REED;3:action<=UI_MODE;
       4:action<=UI_ECHO;5:action<=UI_ROOM;6:action<=UI_TREMOLO;7:action<=UI_FX;
       8:action<=UI_LESS;9:action<=UI_MORE;10:action<=UI_SLOWER;11:action<=UI_FASTER;
-      12:action<=UI_DEFAULTS;15:action<=UI_MODE;
+      12:action<=UI_DEFAULTS;13:action<=UI_PREV;14:action<=UI_NEXT;15:action<=UI_MODE;
       default:begin action<=UI_NONE;action_valid<=0;end
      endcase
     end

@@ -13,7 +13,7 @@ module tb_score_articulation;
  wire [6:0] id;wire [31:0] fcw;wire [1:0] timbre;
  wire [V-1:0] start,stop,restart,held,active;
  wire [V*32-1:0] frequencies,phases;wire [V*7-1:0] identities;
- wire [V*2-1:0] timbres;wire [16:0] level[0:V-1];
+ wire [V*3-1:0] timbres;wire [16:0] level[0:V-1];
  integer checks=0,frames=0,starts=0,accepted=0,first_slot=-1,new_slot=-1,change_frame=0;
  reg [V*32-1:0] frame_fcw=0;reg [V-1:0] frame_restart=0;
  wire dds_ce=subcycle>=16 && subcycle<20;
@@ -27,7 +27,7 @@ module tb_score_articulation;
   clk,rst,subcycle>=32,ce,valid,on,id,fcw,active,ready,start,stop,restart,held,
   frequencies,identities,timbre,timbres);
  for(genvar v=0;v<V;v=v+1)begin: envelopes
-  adsr_envelope envelope(clk,rst,ce,start[v],stop[v],level[v],active[v],restart[v]);
+  adsr_envelope envelope(clk,rst,ce,start[v],stop[v],level[v],active[v],restart[v],1'b0,17'd0);
  end
  dds_sine #(.VOICES(V)) dds(clk,rst,dds_ce,frame_fcw[slot*32+:32],raw,raw_valid,
   phases,frame_restart[slot],slot,2'b0);

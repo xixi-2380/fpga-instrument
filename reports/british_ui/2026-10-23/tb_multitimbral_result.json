@@ -1,0 +1,8 @@
+{
+  "test": "tb_multitimbral",
+  "parameters": "",
+  "passed": true,
+  "checks": 3917898,
+  "pll_model": "not exercised",
+  "seconds": 26.236
+}

@@ -1,0 +1,6 @@
+sim/tb_score_articulation.sv:24: warning: Port 10 (note_timbre) of score_player expects 3 bits, got 2.
+sim/tb_score_articulation.sv:24:        : Padding 1 high bits of the port.
+sim/tb_score_articulation.sv:26: warning: Port 17 (note_timbre) of voice_allocator expects 3 bits, got 2.
+sim/tb_score_articulation.sv:26:        : Padding 1 high bits of the port.
+sim/tb_score_articulation.sv:32: warning: Port 10 (timbre) of dds_sine expects 3 bits, got 2.
+sim/tb_score_articulation.sv:32:        : Padding 1 high bits of the port.

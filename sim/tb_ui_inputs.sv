@@ -8,7 +8,7 @@ module tb_ui_inputs;
  reg [15:0] x=0,y=0,rx=800,ry=480;reg [1:0] fx=0;
  wire tv;wire [5:0] ta;integer checks=0,kevents=0,tevents=0;
  ui_keypad_router #(.RELEASE_CYCLES(2)) k(clk,rst,menu,ghost,keys,inhibit,kv,ka);
- ui_touch_actions t(clk,rst,enabled,valid,ready,error,down,count,x,y,rx,ry,fx,tv,ta);
+ ui_touch_actions t(clk,rst,enabled,valid,ready,error,down,count,x,y,rx,ry,fx,menu,tv,ta);
  always @(posedge clk)begin if(kv)kevents=kevents+1;if(tv)tevents=tevents+1;end
  task cycles(input integer n);begin repeat(n)@(negedge clk);end endtask
  task contact(input integer px,py,input [5:0] expected);integer before_events;begin
@@ -29,15 +29,22 @@ module tb_ui_inputs;
   keys=0;cycles(3);keys=16'h8000;cycles(4);`CHECK(ka==UI_MODE && kevents==2,"R4C4 exits menu")
   menu=0;cycles(3);`CHECK(inhibit,"exit key cannot become a played note")
   keys=0;cycles(3);`CHECK(!inhibit,"all keys released rearms notes")
-  contact(24,104,UI_SINE);contact(450,130,UI_REED);contact(100,230,UI_ECHO);contact(600,230,UI_TREMOLO);contact(391,163,UI_FLUTE);contact(392,163,UI_NONE);
-  contact(664,40,UI_MODE);contact(650,130,UI_FX);contact(300,230,UI_ROOM);
-  contact(40,328,UI_LESS);contact(375,383,UI_MORE);contact(376,383,UI_NONE);
-  contact(450,350,UI_NONE);fx=2;contact(450,350,UI_SLOWER);contact(740,350,UI_FASTER);
-  contact(700,440,UI_DEFAULTS);contact(800,0,UI_NONE);
+  menu=1;cycles(4);keys=16'h2000;cycles(4);`CHECK(ka==UI_PREV,"R4C2 now selects previous timbre")
+  keys=0;cycles(4);keys=16'h4000;cycles(4);`CHECK(ka==UI_NEXT,"R4C3 now selects next timbre")
+  keys=0;cycles(4);menu=0;
+  contact(32,140,UI_NONE); // performance page must not select timbre
+  contact(664,40,UI_MODE);menu=1;
+  contact(28,132,UI_SINE);contact(152,132,UI_FLUTE);contact(28,196,UI_REED);
+  contact(152,196,UI_CELLO);contact(28,260,UI_PIANO);contact(152,260,UI_GUITAR);contact(28,324,UI_VIBES);
+  contact(139,183,UI_SINE);contact(140,183,UI_NONE);
+  contact(308,124,UI_ECHO);contact(464,124,UI_ROOM);contact(620,124,UI_TREMOLO);
+  contact(152,324,UI_FX);contact(308,240,UI_LESS);contact(767,287,UI_MORE);contact(768,287,UI_NONE);
+  contact(308,344,UI_NONE);fx=2;contact(308,344,UI_SLOWER);contact(716,344,UI_FASTER);
+  contact(664,420,UI_DEFAULTS);contact(800,0,UI_NONE);
   down=0;count=0;cycles(3);error=1;down=1;count=1;cycles(3);error=0;cycles(3);
   `CHECK(!tv,"error recovery cannot fire an already held touch")
-  rx=1024;contact(100,130,UI_NONE);rx=800;
-  enabled=0;contact(100,130,UI_NONE);enabled=1;cycles(3);`CHECK(!tv,"enabling while held requires release")
+  rx=1024;contact(30,140,UI_NONE);rx=800;
+  enabled=0;contact(30,140,UI_NONE);enabled=1;cycles(3);`CHECK(!tv,"enabling while held requires release")
   $display("PASS tb_ui_inputs checks=%0d keypad_events=%0d touch_events=%0d",checks,kevents,tevents);$finish;
  end
 endmodule

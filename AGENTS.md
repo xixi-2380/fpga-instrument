@@ -118,9 +118,16 @@
 - 不运行Gowin综合/P&R/STA/下载，由用户执行；软件仿真、仿真预览与实屏/实板结果分别记录。当前说明与证据见docs/instrument_ui.md及reports/instrument_ui/2026-10-23。
 
 
-## 2026年10月23日 UI 与 MAX98357A 合入 main
+## 本轮英伦七音色授权
 
-- 用户明确要求把当前`codex/fpga-migration`与远端`feature/instrument-ui`最新版本合入main。以UI分支c341406为功能主体，保留其显示、菜单、效果参数和触摸双开关逻辑，再接入当前386a3dd的MAX98357A标准I²S输出。
-- 外接功放信号为MAX_BCLK=V22、MAX_LRCLK=W19、MAX_DIN=Y20、MAX_SD_MODE=V26；旧板载PT8211/PA和DBG输出固定低。`synth_core`保留`audio_effects`，仅将效果后帧缓冲的串行器切换为`i2s_tx`。
-- 用户随后明确要求“触摸启动”：生产顶层默认`TOUCH_ENABLE=1`、`TOUCH_UI_ENABLE=1`，启用GT9110采集与受ready/error/800×480/单点范围保护的UI动作。此设置不代表此前`TOUCH ERROR`的实板电气问题已修复；专用非触摸回归测试显式覆盖为0。
-- 用户仍负责Gowin综合、P&R、STA、烧录和实板测量。合并验证只运行纯HDL/静态检查，不能写成新main已通过硬件验收。
+- 王开册明确选择英伦风格并授权执行两项待办：UI美化/真实波形与电平/音符高亮，新增大提琴及助手选择的钢琴、木吉他、颤音琴。继续feature/instrument-ui，保留main、feature/audio-effects与周同学触摸/MAX分支；杨同学负责蓝牙。用户后续自行EDA与下载，本轮不启动Gowin或Programmer。
+- 全链路音色3位，保留旧三ROM与小星星二进制；新四表+常量移位包络为合成近似，需实板听感验收，不宣称真实物理建模。R4C2/C3从保留改为上一/下一音色，触摸仍两开关关闭。
+- 新音色/可视化源码与独立测试可改，ADSR仅新增可选seed以保证同ID跨包络起音连续；旧参数路径经回归。原GPIO/CST/SDC/PLL/功放/三效果算法不改，不宣称底噪/双键噪音修复。像素帧状态扩1112位，CDC继续原子快照；视图X8不是音频增益。
+
+
+## 2026年10月23日最新 UI、MAX98357A 与触摸合入 main
+
+- 用户明确要求把当前`codex/fpga-migration`与远端`feature/instrument-ui`最新版本合入main；远端合并期间前进到44bebc6，因此最终功能主体包含英伦双页、七音色、实时波形/峰值/音符监视、菜单和运行时效果参数。
+- 保留MAX98357A标准I²S：MAX_BCLK=V22、MAX_LRCLK=W19、MAX_DIN=Y20、MAX_SD_MODE=V26；旧板载PT8211/PA和DBG输出固定低。串行器在效果器、可视化抽头和原frame_buffer之后由`i2s_tx`输出，不能丢失1112位显示状态或3位音色事件。
+- 用户随后明确要求“触摸启动”：生产顶层默认`TOUCH_ENABLE=1`、`TOUCH_UI_ENABLE=1`，启用GT9110采集与受ready/error/800×480/单点范围保护的UI动作。默认启动不代表此前`TOUCH ERROR`的实板电气问题已经修复；非触摸回归测试显式覆盖为0。
+- 用户仍负责Gowin综合、P&R、STA、烧录和实板测量。合并验证只运行纯HDL与静态检查，不能写成新main已通过硬件验收。

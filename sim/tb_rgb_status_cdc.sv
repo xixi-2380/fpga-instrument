@@ -6,7 +6,7 @@ module tb_rgb_status_cdc;
     always #(SOURCE_HALF) if(source_run)sc=~sc;else sc=0;
     always #(PIXEL_HALF) if(pixel_run)pc=~pc;else pc=0;
     reg [9:0] serial=0;
-    wire [79:0] pattern={serial,~serial,serial,~serial,serial,~serial,serial,~serial};
+    wire [((WIDTH+19)/20)*20-1:0] pattern={((WIDTH+19)/20){serial,~serial}};
     wire [WIDTH-1:0] data=pattern[WIDTH-1:0];
     wire [WIDTH-1:0] received;
     wire valid,pulse;

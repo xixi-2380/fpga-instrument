@@ -1,0 +1,8 @@
+{
+  "test": "tb_synth_core",
+  "parameters": "",
+  "passed": true,
+  "checks": 2511762,
+  "pll_model": "not exercised",
+  "seconds": 20.636
+}

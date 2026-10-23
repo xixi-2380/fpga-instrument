@@ -1,0 +1,4 @@
+sim/passive_matrix_model.svh:3: warning: timescale for passive_matrix_model inherited from another file.
+sim/tb_ui_score_handoff.sv:1: ...: The inherited timescale is here.
+src/synth_core.sv:108: warning: @* is sensitive to all 32 words in array 'voice_level'.
+src/synth_core.sv:108: warning: @* is sensitive to all 32 words in array 'voice_level'.

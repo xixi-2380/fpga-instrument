@@ -1,0 +1,8 @@
+{
+  "test": "tb_timbres",
+  "parameters": "",
+  "passed": true,
+  "checks": 28679,
+  "pll_model": "not exercised",
+  "seconds": 0.324
+}

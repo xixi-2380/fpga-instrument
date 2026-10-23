@@ -1,0 +1,2 @@
+sim/tb_timbre_control.sv:8: warning: Port 4 (selected) of timbre_control expects 3 bits, got 2.
+sim/tb_timbre_control.sv:8:        : Padding 1 high bits of the port.

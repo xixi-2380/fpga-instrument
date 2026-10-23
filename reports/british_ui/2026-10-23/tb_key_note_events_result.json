@@ -1,0 +1,8 @@
+{
+  "test": "tb_key_note_events",
+  "parameters": "",
+  "passed": true,
+  "checks": 149,
+  "pll_model": "not exercised",
+  "seconds": 0.02
+}

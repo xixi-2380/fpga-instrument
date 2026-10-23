@@ -4,9 +4,9 @@ module tb_adsr_envelope;
  reg clk=0,rst=1,ce=0,on=0,off=0,restart=0;always #5 clk=~clk;
  wire [16:0] q,qzero,qfull;wire active;
  integer checks=0,start_level,expected;
- adsr_envelope #(.ATTACK(4),.DECAY(3),.SUSTAIN(32768),.RELEASE(5)) dut(clk,rst,ce,on,off,q,active,restart);
- adsr_envelope #(.ATTACK(0),.DECAY(0),.SUSTAIN(0),.RELEASE(0)) zero(clk,rst,ce,on,off,qzero,,restart);
- adsr_envelope #(.ATTACK(0),.DECAY(0),.SUSTAIN(65536),.RELEASE(0)) full(clk,rst,ce,on,off,qfull,,restart);
+ adsr_envelope #(.ATTACK(4),.DECAY(3),.SUSTAIN(32768),.RELEASE(5)) dut(clk,rst,ce,on,off,q,active,restart,1'b0,17'd0);
+ adsr_envelope #(.ATTACK(0),.DECAY(0),.SUSTAIN(0),.RELEASE(0)) zero(clk,rst,ce,on,off,qzero,,restart,1'b0,17'd0);
+ adsr_envelope #(.ATTACK(0),.DECAY(0),.SUSTAIN(65536),.RELEASE(0)) full(clk,rst,ce,on,off,qfull,,restart,1'b0,17'd0);
  task tick(input bit n,f);begin
   @(negedge clk);ce=1;on=n;off=f;@(posedge clk);#1;
   `CHECK(q<=65536 && qzero<=65536 && qfull<=65536,"Q1.16 bounds")

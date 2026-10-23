@@ -4,7 +4,7 @@ module tb_ui_controls;
  `include "../src/config/ui_layout.svh"
  reg clk=0,rst=1;always #5 clk=~clk;
  reg [3:0] buttons=15;reg v=0,ready=1;reg [5:0] action=UI_NONE;
- wire [1:0] timbre,fx;wire en,menu,cv;wire [8:0] e,r,d;
+ wire [2:0] timbre;wire [1:0] fx;wire en,menu,cv;wire [8:0] e,r,d;
  wire [6:0] ep,rp,dp;wire [3:0] hz,cfg_hz;
  integer checks=0,commands=0;reg [30:0] held;
  timbre_control #(.DEBOUNCE_CYCLES(2),.LONG_PRESS_CYCLES(32)) dut(
@@ -24,6 +24,14 @@ module tb_ui_controls;
   cycles(50);`CHECK(menu,"held S0 toggles once")
   buttons=15;cycles(10);`CHECK(menu && timbre==1,"long release has no sine action")
   short0;`CHECK(timbre==0 && menu,"short S0 selects sine on release")
+  act(UI_CELLO);`CHECK(timbre==3,"direct cello command preserves third identity bit")
+  act(UI_PIANO);`CHECK(timbre==4,"direct piano command")
+  act(UI_GUITAR);`CHECK(timbre==5,"direct guitar command")
+  act(UI_VIBES);`CHECK(timbre==6,"direct vibraphone command")
+  act(UI_NEXT);`CHECK(timbre==0,"next wraps seven presets")
+  act(UI_PREV);`CHECK(timbre==6,"previous wraps seven presets")
+  repeat(7)act(UI_NEXT);`CHECK(timbre==6,"full cycle preserves preset identity")
+  act(UI_SINE);
   act(UI_ECHO);repeat(30)begin act(UI_MORE);`CHECK(e==(ep*256+50)/100,"percentage lookup matches rounded arithmetic") end
   `CHECK(ep==100 && e==256 && en,"echo amount clamps at 100 percent")
   repeat(30)begin act(UI_LESS);`CHECK(e==(ep*256+50)/100,"descending percentage lookup matches rounded arithmetic") end

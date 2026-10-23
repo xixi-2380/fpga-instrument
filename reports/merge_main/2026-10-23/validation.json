@@ -1,12 +1,12 @@
 {
   "date": "2026-10-23",
-  "scope": "Merge feature/instrument-ui and codex/fpga-migration into main, keep MAX98357A I2S output, and enable GT9110 touch plus touch UI by default.",
+  "scope": "Merge feature/instrument-ui 44bebc6 and codex/fpga-migration 386a3dd into main, keep MAX98357A I2S output, and enable GT9110 touch plus touch UI by default.",
   "production_defaults": {
     "TOUCH_ENABLE": 1,
     "TOUCH_UI_ENABLE": 1
   },
   "static_checks": {
-    "project_dependencies": 45,
+    "project_dependencies": 52,
     "constraint_ports": 58,
     "duplicate_constraint_ports": 0,
     "duplicate_constraint_balls": 0,
@@ -20,7 +20,13 @@
   "pure_hdl_tests": [
     {"name": "tb_gt9110_touch", "passed": true, "checks": 29591},
     {"name": "tb_gt9110_boot", "passed": true, "checks": 7, "production_boot_ms": 76.005135},
-    {"name": "tb_ui_inputs", "passed": true, "checks": 62, "touch_events": 13},
+    {"name": "tb_instrument_envelopes", "passed": true, "checks": 7932},
+    {"name": "tb_audio_visualizer", "passed": true, "checks": 6141, "windows": 4},
+    {"name": "tb_score_seven_timbres", "passed": true, "checks": 2267, "events": 14},
+    {"name": "tb_ui_inputs", "passed": true, "checks": 81, "touch_events": 18},
+    {"name": "tb_ui_controls", "passed": true, "checks": 85, "commands": 66},
+    {"name": "tb_rgb_ui_renderer", "passed": true, "checks": 3072031, "frames": 4},
+    {"name": "tb_british_top", "passed": true, "checks": 967221, "windows": 1},
     {"name": "tb_ui_top", "passed": true, "checks": 74274},
     {"name": "tb_keyboard_top", "passed": true, "checks": 2112305},
     {"name": "tb_i2s_tx", "passed": true, "checks": 5407},
@@ -29,6 +35,10 @@
     {"name": "tb_score_effects", "passed": true, "checks": 8205772, "score_events": 84},
     {"name": "tb_effect_button_path", "passed": true, "checks": 2777630},
     {"name": "tb_ui_score_handoff", "passed": true, "checks": 275225, "score_events": 84}
+  ],
+  "merge_fixes": [
+    "Moved synth_core.note_scan declaration before its procedural use for Icarus and tool-compatible elaboration.",
+    "Updated integration tests to observe MAX98357A I2S and to preserve the UI branch's release-before-rearm rule after reset."
   ],
   "limits": "No Gowin synthesis, place-and-route, STA, programming, panel timing measurement, or physical touch electrical validation was run. The user must perform those hardware steps."
 }

@@ -1,0 +1,8 @@
+{
+  "test": "tb_score_seven_timbres",
+  "parameters": "",
+  "passed": true,
+  "checks": 2267,
+  "pll_model": "not exercised",
+  "seconds": 0.025
+}

@@ -4,7 +4,7 @@
 module tb_adsr_production;
  reg clk=0,rst=1,on=0,off=0;always #5 clk=~clk;
  wire [16:0] q;wire active;integer checks=0,expected;
- adsr_envelope dut(clk,rst,1'b1,on,off,q,active,1'b0);
+ adsr_envelope dut(clk,rst,1'b1,on,off,q,active,1'b0,1'b0,17'd0);
  task next_tick;begin @(posedge clk);#1;end endtask
  initial begin
   #12 rst=0;@(negedge clk);on=1;next_tick;

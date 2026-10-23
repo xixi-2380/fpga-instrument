@@ -472,11 +472,15 @@ synth_core新增effect_cfg_valid/ready/applied与effect_echo_wet[8:0]、effect_r
 
 ## 2026年10月23日UI整合
 
-feature/instrument-ui独立整合音频b35cf2c与显示dd49c83。控制器位于audio_clk，S0长按切菜单、短按松开选正弦，S3与UI共用状态；四参数快照保持到接收，UI目标按5%/1Hz修改。矩阵菜单继续扫描并以零键位排空Note Off，返回演奏后须全松键重新武装。64位audio到pixel状态快照逐帧更新，71位触摸状态从ref到audio原子传递。该分支当时默认关闭触摸；合入main后已按用户要求默认启动。界面两级像素寄存器保持RGB/DE/HS/VS对齐。操作与准确接口以[instrument_ui.md](instrument_ui.md)为准。
+feature/instrument-ui独立整合音频b35cf2c与显示dd49c83。控制器位于audio_clk，S0长按切菜单、短按松开选正弦，S3与UI共用状态；四参数快照保持到接收，UI目标按5%/1Hz修改。矩阵菜单继续扫描并以零键位排空Note Off，返回演奏后须全松键重新武装。64位audio到pixel状态快照逐帧更新，71位触摸状态从ref到audio原子传递。该阶段触摸默认关闭；最终main已按用户要求启动。界面两级像素寄存器保持RGB/DE/HS/VS对齐。操作与准确接口以[instrument_ui.md](instrument_ui.md)为准。
 
 
-## 2026年10月23日 MAX98357A 与 UI 合并
+## 英伦七音色与实时可视化接口
 
-合并后的 `synth_core` 保留 `audio_effects` 及运行时四参数握手，效果输出继续经原 `frame_buffer` 形成左右相同的16位采样；串行器由 `pt8211_tx` 替换为标准一位延迟I²S的 `i2s_tx`。顶层新增 `MAX_BCLK/MAX_LRCLK/MAX_DIN/MAX_SD_MODE`，旧 `HP_*`、`PA_EN` 和 `DBG_*` 固定低。
+本轮用户确定英伦风格，新增大提琴/钢琴/木吉他/颤音琴。note_timbre从2位扩为3位，编号0..6，valid/ready原子载荷含三位音色。voice_timbres每声部切片v*3+:3，frame_timbres同样；源事件身份/FCW/相位/混音位宽不改。score高音色位取bit41，旧低位与ID布局不变。该功能现已连同MAX和触摸合入main；杨同学蓝牙仍未合入。
 
-`MAX_SD_MODE` 在音频复位解除并经过两个完整帧边界后拉高，生产启动静音仍在其后提供大于7.5ms的数字静音。用户指定球位为V22/W19/Y20/V26，CST使用LVCMOS33、4mA，SDC保留0..30ns输出路线预算；实际电气、STA和音质仍由用户重新实现并实测。协议、接线和外围限制见[max98357.md](max98357.md)。
+synth_core追加visual_sample_valid、16位signed visual_sample、16位visual_notes三个只读输出：前两项直接观察后效果器的送缓冲样本；notes在已有声部扫描中汇总held ID60..75，不阻塞音频。新增instrument_envelope保留旧三类ADSR，四种新包络按48kHz帧运行。ADSR追加seed_valid/seed_level用于同ID跨包络重触发幅度连续。
+
+rgb_display新增上述三个输入；64位设置低位继续保留，bit53为音色高位，bits79:64音符图、87:80全窗PCM峰值、1111:88波形。1112位通过原四相快照，帧边界整组更新。128点/4采样抽取，10.667ms；绘图X8饱和仅作用于视图，不改实际音频或原增益。完整布局/命中区域共享ui_layout.svh，触摸入口新增menu_mode；最终main默认启用触摸采集和UI动作。
+
+合入main后，串行器已在效果器、visual tap和原frame_buffer之后替换为标准一位延迟I²S的`i2s_tx`。顶层新增`MAX_BCLK/MAX_LRCLK/MAX_DIN/MAX_SD_MODE`，旧`HP_*`、`PA_EN`和`DBG_*`固定低；visual tap与3位音色事件保持。`MAX_SD_MODE`在音频复位解除并经过两个完整帧边界后拉高，生产启动静音仍在其后提供大于7.5ms的数字静音。球位为V22/W19/Y20/V26，最终新STA与实测由用户执行。

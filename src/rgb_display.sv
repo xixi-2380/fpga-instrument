@@ -9,7 +9,8 @@ module rgb_display #(
 )(
     input wire ref_clk,pll_reset,audio_clk,audio_reset,
     input wire [VOICES-1:0] voice_active,voice_held,
-    input wire [1:0] selected_timbre,
+    input wire [2:0] selected_timbre,
+    input wire visual_sample_valid,input wire signed [15:0] visual_sample,input wire [15:0] visual_notes,
     input wire score_busy,audio_ready,score_error,underrun,ghost,
     output wire lcd_clk,lcd_hs,lcd_vs,lcd_en,
     output wire [5:0] lcd_r,lcd_g,lcd_b,
@@ -53,12 +54,15 @@ module rgb_display #(
     endfunction
     wire [31:0] active_map=voice_active,held_map=voice_held;
     wire [19:0] legacy_status={TEST_PATTERN!=0,ghost,underrun,score_error,audio_ready,
-        score_busy,selected_timbre,count_voices(held_map),count_voices(active_map)};
-    wire [63:0] source_status={11'd0,touch_error_status,touch_ready_status,touch_ui_enabled,touch_enabled,
+        score_busy,selected_timbre[1:0],count_voices(held_map),count_voices(active_map)};
+    wire [1023:0] waveform;wire [7:0] peak;wire window_valid;
+    audio_visualizer monitor(audio_clk,audio_reset,visual_sample_valid,visual_sample,waveform,peak,window_valid);
+    wire [63:0] settings_status={10'd0,selected_timbre[2],touch_error_status,touch_ready_status,touch_ui_enabled,touch_enabled,
         tremolo_rate_hz,depth_percent,room_percent,echo_percent,effects_enabled,effect_mode,menu_mode,legacy_status};
-    wire [63:0] pixel_status;
+    wire [1111:0] source_status={waveform,peak,visual_notes,settings_status};
+    wire [1111:0] pixel_status;
     wire status_valid,update_pulse;
-    rgb_status_cdc #(.WIDTH(64)) status_bridge(audio_clk,pixel_clk,common_reset,source_status,
+    rgb_status_cdc #(.WIDTH(1112)) status_bridge(audio_clk,pixel_clk,common_reset,source_status,
         pixel_status,status_valid,update_pulse);
     wire [10:0] x,y;
     wire de,hs,vs,frame_start;

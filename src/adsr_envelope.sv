@@ -4,7 +4,8 @@ module adsr_envelope #(
     parameter integer ATTACK=`ADSR_ATTACK_FRAMES,DECAY=`ADSR_DECAY_FRAMES,
     SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES)(
     input wire clk,rst,sample_ce,note_on,note_off,
-    output reg [16:0] level,output wire active,input wire restart);
+    output reg [16:0] level,output wire active,input wire restart,
+    input wire seed_valid,input wire [16:0] seed_level);
     localparam integer MAX_AD=ATTACK>DECAY?ATTACK:DECAY;
     localparam integer MAX_N=MAX_AD>RELEASE?MAX_AD:RELEASE;
     localparam integer CW=MAX_N>0?$clog2(MAX_N+1):1;
@@ -16,7 +17,7 @@ module adsr_envelope #(
     wire [CW:0] error_sum={1'b0,error}+{1'b0,remainder};
     wire carry=error_sum>={1'b0,length};
     wire [17:0] delta={1'b0,base}+(carry?18'd1:18'd0);
-    wire [16:0] start_level=restart?17'd0:level;
+    wire [16:0] start_level=restart ? 17'd0 : (seed_valid===1'b1 ? seed_level : level);
     assign active=state!=IDLE;
     always @(posedge clk or posedge rst)begin
         if(rst)begin
@@ -31,6 +32,7 @@ module adsr_envelope #(
             end else if(note_on)begin
                 // Same-note retrigger preserves level; a newly owned voice starts at zero.
                 if(restart)level<=0;
+                else if(seed_valid===1'b1)level<=seed_level;
                 if(ATTACK>0)begin
                     state<=A;remaining<=ATTACK;length<=ATTACK;
                     base<=(17'd65536-start_level)/A_DEN;
