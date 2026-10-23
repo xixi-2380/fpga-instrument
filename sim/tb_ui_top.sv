@@ -35,7 +35,7 @@ module tb_ui_top;
  initial begin
   #100 rst=0;wait(pa);more_frames(4);
   `CHECK({scl,sda,tint,trst}===4'bzzzz,"disabled touch leaves all four signals high impedance")
-  buttons=13;cycles(12);buttons=15;cycles(12);
+  menu_button;more_frames(2);menu_key(1);menu_key(15);
   pressed=16'h0200;wait(dut.gate);more_frames(2);
   `CHECK(dut.selected_timbre==1 && $countones(dut.voice_held)==1,"flute note before menu")
   menu_button;more_frames(4);
@@ -51,7 +51,7 @@ module tb_ui_top;
   `CHECK(dut.sound.effect.phase_step==357914 && dut.sound.effect.depth_target==115,"full parameter tuple accepted by effect engine")
   `CHECK(events==before_events && !dut.gate,"menu navigation never generates note events")
   buttons=7;cycles(256);buttons=15;cycles(10);
-  `CHECK(dut.effect_mode==0,"S3 cycles from current UI state")
+  `CHECK(dut.effect_mode==2 && dut.theme_id==3,"long S3 enters hidden theme and preserves current effect")
   pressed=16'h8000;more_frames(3);
   `CHECK(!dut.menu_mode && dut.inhibit_notes && !dut.gate,"exit key cannot sound while held")
   pressed=0;more_frames(2);pressed=16'h0200;wait(dut.gate);more_frames(2);
@@ -60,10 +60,11 @@ module tb_ui_top;
   `CHECK(dut.voice_active==0,"no stuck voice after play-menu-play transition")
   if(LCD)begin
    wait(display_valid);cycles(40);
-   `CHECK(displayed[30:24]==35 && displayed[13:12]==1 && displayed[22:20]==0,
+   `CHECK(displayed[30:24]==35 && displayed[13:12]==1 && displayed[22:20]==4 && displayed[55:54]==3,
     "real top wiring transfers final parameters, timbre and mode to pixel domain")
   end
   $display("PASS tb_ui_top checks=%0d frames=%0d events=%0d",checks,frames,events);$finish;
  end
  initial begin #5000000;$fatal(1,"UI top timeout");end
 endmodule
+

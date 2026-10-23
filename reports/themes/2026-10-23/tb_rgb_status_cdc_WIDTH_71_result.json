@@ -1,0 +1,8 @@
+{
+  "test": "tb_rgb_status_cdc",
+  "parameters": "WIDTH=71",
+  "passed": true,
+  "checks": 5302,
+  "pll_model": "not exercised",
+  "seconds": 0.085
+}

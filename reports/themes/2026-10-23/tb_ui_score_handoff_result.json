@@ -1,0 +1,8 @@
+{
+  "test": "tb_ui_score_handoff",
+  "parameters": "",
+  "passed": true,
+  "checks": 275225,
+  "pll_model": "explicit behavioral substitute",
+  "seconds": 16.63
+}

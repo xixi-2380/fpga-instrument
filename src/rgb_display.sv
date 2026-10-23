@@ -16,7 +16,8 @@ module rgb_display #(
     output wire [5:0] lcd_r,lcd_g,lcd_b,
     input wire menu_mode,effects_enabled,input wire [1:0] effect_mode,
     input wire [6:0] echo_percent,room_percent,depth_percent,input wire [3:0] tremolo_rate_hz,
-    input wire touch_enabled,touch_ui_enabled,touch_ready_status,touch_error_status
+    input wire touch_enabled,touch_ui_enabled,touch_ready_status,touch_error_status,
+    input wire [1:0] theme_id
 );
     wire pixel_clk,pixel_lock,pixel_reset;
     wire common_reset=pll_reset || !pixel_lock || audio_reset;
@@ -57,7 +58,7 @@ module rgb_display #(
         score_busy,selected_timbre[1:0],count_voices(held_map),count_voices(active_map)};
     wire [1023:0] waveform;wire [7:0] peak;wire window_valid;
     audio_visualizer monitor(audio_clk,audio_reset,visual_sample_valid,visual_sample,waveform,peak,window_valid);
-    wire [63:0] settings_status={10'd0,selected_timbre[2],touch_error_status,touch_ready_status,touch_ui_enabled,touch_enabled,
+    wire [63:0] settings_status={8'd0,theme_id,selected_timbre[2],touch_error_status,touch_ready_status,touch_ui_enabled,touch_enabled,
         tremolo_rate_hz,depth_percent,room_percent,echo_percent,effects_enabled,effect_mode,menu_mode,legacy_status};
     wire [1111:0] source_status={waveform,peak,visual_notes,settings_status};
     wire [1111:0] pixel_status;

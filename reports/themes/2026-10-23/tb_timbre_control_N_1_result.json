@@ -1,0 +1,8 @@
+{
+  "test": "tb_timbre_control",
+  "parameters": "N=1",
+  "passed": true,
+  "checks": 19,
+  "pll_model": "not exercised",
+  "seconds": 0.071
+}

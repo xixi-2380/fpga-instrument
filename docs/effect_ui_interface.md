@@ -1,6 +1,6 @@
 ## 本轮英伦界面接口更新
 
-当前main已接入菜单与七音色，见[instrument_ui.md](instrument_ui.md)与[instruments.md](instruments.md)。本页原四参数valid/ready接口保持不变；UI动作0..12保持，新增13CELLO、14PIANO、15GUITAR、16VIBRAPHONE、17上一音色、18下一音色。selected/note_timbre现3位，像素状态1112位，触摸命中函数新增menu参数。下方较早的“顶层valid固定0”只适用于feature/audio-effects，不是当前UI顶层。
+当前main已接入菜单与七音色，见[instrument_ui.md](instrument_ui.md)与[instruments.md](instruments.md)。本页原四参数valid/ready接口保持不变；UI动作0..12保持，新增13CELLO、14PIANO、15GUITAR、16VIBRAPHONE、17上一音色、18下一音色、19下一常规主题。selected/note_timbre现3位，像素状态1112位（bits55:54为主题），触摸命中函数新增menu参数。下方较早的“顶层valid固定0”只适用于feature/audio-effects，不是当前UI顶层。
 
 > 2026年10月23日整合更新：main已由统一音频域控制器连接参数入口、矩阵菜单及1112位显示状态CDC；S0长按切模式、S3与UI共用状态。触摸驱动和触摸UI现默认启动，命令继续受ready、无错误、800×480分辨率和单点范围保护。当前整合操作优先看[instrument_ui.md](instrument_ui.md)。下文描述b35cf2c独立音频版接口与当时尚未连接的状态，接口本身仍适用。
 
@@ -67,3 +67,4 @@ UI 可先设计三个效果标签、统一开关，以及当前效果对应的�
 6. 主工程 keyboard_top 暂时把effect_cfg_valid固定为0，不新增外部管脚；默认值与旧试听版本一致。杨同学应在显示分支做UI并保留对接位置，后续由整合分支接通并验证。
 
 本轮未实现回声时间可调、混响衰减可调、合唱或效果叠加。界面先按本文件四参数实现，不要把暂未支持的滑块标成已可用。
+

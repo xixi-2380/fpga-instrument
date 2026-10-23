@@ -26,7 +26,7 @@ module tb_rgb_ui_renderer;
   end
   @(negedge clk);de=0;repeat(3)@(negedge clk);record=0;
   `CHECK(n==384000,"exactly 800x480 rendered pixels after pipeline flush")
-  `CHECK(pixels[0]==24'h101214,"outer black background")
+  `CHECK(pixels[0]==dut.artwork.british_palette[dut.artwork.british[0]],"outer celestial background")
   if(frozen[20])begin
    `CHECK(pixels[132*800+28]==({frozen[53],frozen[13:12]}==0 ? 24'hd6b979 : 24'h4b4534),"selected timbre border")
    `CHECK(pixels[124*800+464]==(frozen[22:21]==1 ? 24'hd6b979 : 24'h4b4534),"selected effect border")
@@ -58,7 +58,7 @@ module tb_rgb_ui_renderer;
   snapshot;render(3);
   status=frozen;status[22:21]=0;status[30:24]=100;snapshot;
   spot(679,264,24'hd6b979,1);spot(680,264,24'h191c20,1);
-  status[30:24]=0;snapshot;spot(380,264,24'h101214,1);
+  status[30:24]=0;snapshot;spot(380,264,dut.artwork.british_palette[dut.artwork.british[132*400+190]],1);
   status=frozen;status[19]=1;snapshot;
   spot(50,200,24'hffffff,1);spot(150,200,24'hffff00,1);spot(250,200,24'h00ffff,1);
   spot(350,200,24'h00ff00,1);spot(450,200,24'hff00ff,1);spot(550,200,24'hff0000,1);

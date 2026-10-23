@@ -1,0 +1,8 @@
+{
+  "test": "tb_score_effects",
+  "parameters": "",
+  "passed": true,
+  "checks": 8205772,
+  "pll_model": "explicit behavioral substitute",
+  "seconds": 123.129
+}

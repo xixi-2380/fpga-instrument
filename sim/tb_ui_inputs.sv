@@ -32,6 +32,7 @@ module tb_ui_inputs;
   menu=1;cycles(4);keys=16'h2000;cycles(4);`CHECK(ka==UI_PREV,"R4C2 now selects previous timbre")
   keys=0;cycles(4);keys=16'h4000;cycles(4);`CHECK(ka==UI_NEXT,"R4C3 now selects next timbre")
   keys=0;cycles(4);menu=0;
+  contact(536,420,UI_THEME);contact(647,463,UI_THEME);contact(648,463,UI_NONE);
   contact(32,140,UI_NONE); // performance page must not select timbre
   contact(664,40,UI_MODE);menu=1;
   contact(28,132,UI_SINE);contact(152,132,UI_FLUTE);contact(28,196,UI_REED);
@@ -40,7 +41,7 @@ module tb_ui_inputs;
   contact(308,124,UI_ECHO);contact(464,124,UI_ROOM);contact(620,124,UI_TREMOLO);
   contact(152,324,UI_FX);contact(308,240,UI_LESS);contact(767,287,UI_MORE);contact(768,287,UI_NONE);
   contact(308,344,UI_NONE);fx=2;contact(308,344,UI_SLOWER);contact(716,344,UI_FASTER);
-  contact(664,420,UI_DEFAULTS);contact(800,0,UI_NONE);
+  contact(536,420,UI_THEME);contact(664,420,UI_DEFAULTS);contact(800,0,UI_NONE);
   down=0;count=0;cycles(3);error=1;down=1;count=1;cycles(3);error=0;cycles(3);
   `CHECK(!tv,"error recovery cannot fire an already held touch")
   rx=1024;contact(30,140,UI_NONE);rx=800;

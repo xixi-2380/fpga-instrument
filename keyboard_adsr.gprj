@@ -58,7 +58,18 @@
         <File path="src/rom/guitar4096.hex" type="file.other" enable="1" />
         <File path="src/rom/vibraphone4096.hex" type="file.other" enable="1" />
         <File path="src/rom/british_font.hex" type="file.other" enable="1" />
+        <File path="src/ui_theme_art.sv" type="file.verilog" enable="1" />
+        <File path="src/rom/theme_british.hex" type="file.other" enable="1" />
+        <File path="src/rom/theme_british_palette.hex" type="file.other" enable="1" />
+        <File path="src/rom/theme_capybara.hex" type="file.other" enable="1" />
+        <File path="src/rom/theme_capybara_palette.hex" type="file.other" enable="1" />
+        <File path="src/rom/theme_cat.hex" type="file.other" enable="1" />
+        <File path="src/rom/theme_cat_palette.hex" type="file.other" enable="1" />
+        <File path="src/rom/theme_egg.hex" type="file.other" enable="1" />
+        <File path="src/rom/theme_egg_palette.hex" type="file.other" enable="1" />
+        <File path="src/rom/theme_font.hex" type="file.other" enable="1" />
     </FileList>
 </Project>
+
 
 

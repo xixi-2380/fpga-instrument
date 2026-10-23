@@ -1,0 +1,238 @@
+{
+  "baseline": "bf5df5792f654ee9c29a30983cdbe83a0061669e",
+  "scope": "Only theme switching; language/master volume deferred",
+  "tests": [
+    {
+      "test": "tb_british_top",
+      "parameters": "",
+      "passed": true,
+      "checks": 967221,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 82.393
+    },
+    {
+      "test": "tb_effect_button_path",
+      "parameters": "QUICK=1",
+      "passed": true,
+      "checks": 407070,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 23.954
+    },
+    {
+      "test": "tb_i2s_tx",
+      "parameters": "",
+      "passed": true,
+      "checks": 5407,
+      "pll_model": "not exercised",
+      "seconds": 0.226
+    },
+    {
+      "test": "tb_keyboard_top",
+      "parameters": "",
+      "passed": true,
+      "checks": 2520567,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 32.87
+    },
+    {
+      "test": "tb_max98357_startup",
+      "parameters": "",
+      "passed": true,
+      "checks": 1851224,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 32.877
+    },
+    {
+      "test": "tb_rgb_display",
+      "parameters": "",
+      "passed": true,
+      "checks": 2793163,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 98.815
+    },
+    {
+      "test": "tb_rgb_status_cdc",
+      "parameters": "WIDTH=1112",
+      "passed": true,
+      "checks": 5302,
+      "pll_model": "not exercised",
+      "seconds": 1.383
+    },
+    {
+      "test": "tb_rgb_status_cdc",
+      "parameters": "WIDTH=71",
+      "passed": true,
+      "checks": 5302,
+      "pll_model": "not exercised",
+      "seconds": 0.085
+    },
+    {
+      "test": "tb_rgb_status_cdc",
+      "parameters": "",
+      "passed": true,
+      "checks": 5302,
+      "pll_model": "not exercised",
+      "seconds": 0.076
+    },
+    {
+      "test": "tb_rgb_ui_renderer",
+      "parameters": "",
+      "passed": true,
+      "checks": 3072031,
+      "pll_model": "not exercised",
+      "seconds": 175.882
+    },
+    {
+      "test": "tb_score_effects",
+      "parameters": "",
+      "passed": true,
+      "checks": 8205772,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 123.129
+    },
+    {
+      "test": "tb_theme_art",
+      "parameters": "",
+      "passed": true,
+      "checks": 276226,
+      "pll_model": "not exercised",
+      "seconds": 2.755
+    },
+    {
+      "test": "tb_theme_controls",
+      "parameters": "N=1",
+      "passed": true,
+      "checks": 28,
+      "pll_model": "not exercised",
+      "seconds": 0.054
+    },
+    {
+      "test": "tb_theme_controls",
+      "parameters": "",
+      "passed": true,
+      "checks": 29,
+      "pll_model": "not exercised",
+      "seconds": 0.106
+    },
+    {
+      "test": "tb_theme_pixels",
+      "parameters": "",
+      "passed": true,
+      "checks": 6144036,
+      "pll_model": "not exercised",
+      "seconds": 293.74
+    },
+    {
+      "test": "tb_theme_top",
+      "parameters": "",
+      "passed": true,
+      "checks": 7747367,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 389.348
+    },
+    {
+      "test": "tb_timbre_control",
+      "parameters": "N=1",
+      "passed": true,
+      "checks": 19,
+      "pll_model": "not exercised",
+      "seconds": 0.071
+    },
+    {
+      "test": "tb_timbre_control",
+      "parameters": "",
+      "passed": true,
+      "checks": 21,
+      "pll_model": "not exercised",
+      "seconds": 0.074
+    },
+    {
+      "test": "tb_ui_controls",
+      "parameters": "",
+      "passed": true,
+      "checks": 85,
+      "pll_model": "not exercised",
+      "seconds": 0.09
+    },
+    {
+      "test": "tb_ui_inputs",
+      "parameters": "",
+      "passed": true,
+      "checks": 92,
+      "pll_model": "not exercised",
+      "seconds": 0.06
+    },
+    {
+      "test": "tb_ui_score_handoff",
+      "parameters": "",
+      "passed": true,
+      "checks": 275225,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 16.63
+    },
+    {
+      "test": "tb_ui_top",
+      "parameters": "LCD=1",
+      "passed": true,
+      "checks": 87114,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 10.039
+    }
+  ],
+  "test_configurations": 22,
+  "checks": 34368603,
+  "hardware_validated": false,
+  "Gowin_or_programmer_run": false,
+  "pll_model": "Explicit behavioral substitutes for integration tests; not STA/vendor PLL proof",
+  "unchanged": "Pins, CST, SDC, PLLs, synth_core, audio algorithms, GT9110/I2C drivers byte identical to baseline",
+  "static_checks": "static_checks.json",
+  "source_sha256": {
+    "src/config/ui_layout.svh": "d891e9c9768379f39fd8807fd975ff1bcaff219690887b6b7ebae02bb0ea6c3c",
+    "src/keyboard_top.sv": "58bc0502ee78d79ea1f501f8473fcb3976cb939d4539626f083d0a90b61dd731",
+    "src/rgb_display.sv": "98a2d8e29f606d7256d4b3e78e07cca8a348724c16956a25a23a1a80021eb87a",
+    "src/rgb_ui_renderer.sv": "d7923266404e0d4de4974555ec4f53d9c426aa645b947b918576102d3855a025",
+    "src/rom/theme_british.hex": "d59978d92c6a001e412059d161cfbaa7c5a0404e9e843f746353a5c00a876a31",
+    "src/rom/theme_british_palette.hex": "9ce212232c988a3a3e2dd67c2b10a34a1429837e645ef4bb676b83e8a9e0bf07",
+    "src/rom/theme_capybara.hex": "7bde0d1fee2e0f1f8cc3b2248cef0582830604e44ecd3b31b6111dc497b34603",
+    "src/rom/theme_capybara_palette.hex": "aa43b2e7668f80c68e1edd89e396d75d602367e090e2c1534bea9b55c8ed93aa",
+    "src/rom/theme_cat.hex": "84ea2196f6c74c668c89b67a00836802db6c33408aeee2329fa795e6a1e0b3eb",
+    "src/rom/theme_cat_palette.hex": "7673aed05dfa699b8c35f94bd476111e56aa83dd2d9a743dfc9f72ccf324140e",
+    "src/rom/theme_egg.hex": "148be127540609d842cc75ed37801f2b5571ecbf28617e2272e0039012b10eef",
+    "src/rom/theme_egg_palette.hex": "1086c7903664b749847c55a9ef9cbd003cbadb3e48507bffcef35b455f968d61",
+    "src/rom/theme_font.hex": "ede7067c04ce49170deb7900708994595d4514c3af203856ff9eb483fda8be2a",
+    "src/timbre_control.sv": "e9f7cb7a53103a7f0bdf3821c2f58478971ed86ba96ad351c1ccace1e7cedd06",
+    "src/ui_theme_art.sv": "3b9a93c1767e92ccd0a7068c9848b1e5f31b6c1daa6189444bd3682dbd8b27ce",
+    "sim/tb_effect_button_path.sv": "6dd6185deeb8c06f391542d6885d25e9fc3711df5974a8bd978f8c29d36a9a5a",
+    "sim/tb_keyboard_top.sv": "b4a4259ddf0c1162ec83a6fb08598efea561fc0ed42af70afe6608dc03712aaf",
+    "sim/tb_rgb_display.sv": "12b01ac2f4bd2555b6373a4ede79272afa2211cbf93f5e6201f926d16ca252f2",
+    "sim/tb_rgb_ui_renderer.sv": "2955f1834cc9db87a1e4d22ac5b6bd909d9fc2b3e5efc131ea03290b18ff4646",
+    "sim/tb_score_effects.sv": "29263d0638f256a06c3155d1fae338706488729fb8b8b42fd869379d50daaee1",
+    "sim/tb_theme_art.sv": "ccb258b84ccb783610ad13366498db2edd604105f79edadc4de2b53763cb5c5d",
+    "sim/tb_theme_controls.sv": "daab38c31b759c4fcd82694a97c57b4aa8c9472124b0b8c4104c8e93a49c845c",
+    "sim/tb_theme_pixels.sv": "30c529e5da1b37a065c3e044224db0f0679409d3e13920378d431059073eb70b",
+    "sim/tb_theme_top.sv": "10e237f2a4d9f8143194d3a63df55a9b39201101b6cf445b264ef6e43530762e",
+    "sim/tb_timbre_control.sv": "b6d5bfde7b2d2d98366a3c8111ce5cf2fe163a95b9748a450fed347e9d53af7a",
+    "sim/tb_ui_controls.sv": "1212744193f49c02c6957a6a33b233df028905f175ecbcd0fda817d7a2587504",
+    "sim/tb_ui_inputs.sv": "85909cac8a2b6664476391bca2e6119046d109bd5e92ed6aeef3c77813c56902",
+    "sim/tb_ui_top.sv": "98e5e818fe3e14e3856910e5cfa6fddfad4c465e1b94b27efd8188804ff56741",
+    "scripts/gen_theme_assets.py": "60021e0dc310088193a76eed98110dcefeacda6b334d165c5d3a14f4c2e21d6a",
+    "docs/board_buttons.md": "3bb1bdbbcc06e3ed386d6f8869787b8f9cc7e37cd18a752364e920fb923c8031",
+    "docs/effect_ui_interface.md": "e019a6851631f06f79e4e088ede356a91f275ae7d0b42cd6a46c7d922803a8b1",
+    "docs/effects.md": "fabf9ba46a4728c713ffe608e3000808271b1888fc63e27f284167f02a0f2f21",
+    "docs/instrument_ui.md": "ed816e35781f7c5556ff22378d7a13860d0ac5838a2021a32e94c9831ea32325",
+    "docs/interfaces.md": "f7431a76068bb17b761e1bcaa0ce422be827a880542133cb6534c628b1d79730",
+    "docs/themes.md": "ac1251ad43d3f7bb5aec1dd10b4b954bf75d4e2071118ffb63119d448435da0f",
+    "assets/fonts/CormorantGaramond-OFL.txt": "60700d351cac4650c51f3f9db318d2a420f8b45052dba2715eb5fec41f0f6956",
+    "assets/fonts/GreatVibes-OFL.txt": "61093a21f5e63dedf54222b3c09997e54c0fe43e3851d21386e02ddcbc246d49",
+    "assets/fonts/HighWaterElegant.ttf": "96e15bd2f1d5bae90ac5c5ccee4a00cbfd398ed54b7eacf2d53424ea93723d50",
+    "assets/fonts/HighWaterRound.ttf": "8e6533f0f38c04786bc3816301f15f15bd88dd4777f430c8d85198facf398857",
+    "assets/fonts/HighWaterScript.ttf": "a5f69c9d4aa8303c2942c2a849d7e07eaef69729152d3575792ab9129cf57e3b",
+    "assets/fonts/Quicksand-OFL.txt": "14d28541780d90f6577bb7abcc6f005bf6969614294e75c82abb8758a696ad46",
+    "assets/fonts/README.md": "b64efc536a39458762f520516518d32d366a9480565111edfc501ef230f6a153",
+    "assets/theme_manifest.json": "ef870f80ef54ab3ed61387db435dd4232632a4c6eaad1b2031cd7082614e4a0e",
+    "AGENTS.md": "0f319b278ab7a7fe0dddd4999db4e0ca3104599e507e327cc88d479be6541c2f",
+    "README.md": "53d42f45683663a52eaec55ba5ee82b5937482ad15bea696c12a4c6046570581",
+    "keyboard_adsr.gprj": "31b3e18a6db3c92852fbbabbe1c9b88029d94bc15aa1ec3f525d306804e5d1c1",
+    "scripts/run_sim.py": "570d29420af838f6ba6c3246a09ae81fc8e1da6b251fc29181ad43585f45da3a"
+  }
+}

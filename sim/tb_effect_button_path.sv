@@ -26,26 +26,31 @@ module tb_effect_button_path;
  task audio_cycles(input integer n);begin repeat(n)@(negedge dut.audio_clk);end endtask
  task more_frames(input integer n);integer target;begin target=frames+n;wait(frames>=target);#1;end endtask
  task short_effect;begin buttons_n=4'h7;audio_cycles(20);buttons_n=4'hf;audio_cycles(20);end endtask
- task long_effect;begin buttons_n=4'h7;audio_cycles(400);buttons_n=4'hf;audio_cycles(20);end endtask
+ task select_effect(input integer k);begin
+  buttons_n=14;audio_cycles(260);buttons_n=15;audio_cycles(20);more_frames(2);
+  pressed=16'b1<<k;more_frames(2);pressed=0;more_frames(2);
+  pressed=16'h8000;more_frames(2);pressed=0;more_frames(2);
+ end endtask
  initial begin
   #100 rst=0;wait(pa);more_frames(4);
   `CHECK(dut.effect_mode==0 && !dut.effects_enabled,"reset starts in dry echo preset")
   short_effect;more_frames(QUICK?8:270);
   `CHECK(dut.effects_enabled && (QUICK?dut.sound.effect.fade_level>0:dut.sound.effect.fade_level==256),"short release enables echo and starts the fade")
   if(QUICK)begin short_effect;more_frames(16);end
-  prior_events=events;long_effect;more_frames(QUICK?24:530);
-  `CHECK(dut.effect_mode==1 && dut.sound.effect.active_mode==1,"long hold reaches room engine")
+  prior_events=events;select_effect(5);more_frames(QUICK?24:530);
+  `CHECK(dut.effect_mode==1 && dut.sound.effect.active_mode==1,"matrix menu reaches room engine")
   `CHECK(events==prior_events && !dut.gate,"effect controls cannot create notes")
-  buttons_n=4'hd;audio_cycles(20);buttons_n=4'hf;audio_cycles(20);
+  // Keep sine selected; theme controls no longer select flute.
   pressed=16'h0200;wait(dut.gate);more_frames(20);
-  `CHECK($countones(dut.voice_held)==1 && dut.sound.voice_timbres[1:0]==1,"manual flute voice starts through new effects")
+  `CHECK($countones(dut.voice_held)==1 && dut.sound.voice_timbres[1:0]==0,"manual sine voice starts through menu-selected effects")
   if(QUICK)begin short_effect;more_frames(64);end
-  prior_events=events;long_effect;more_frames(QUICK?24:530);
-  `CHECK(dut.effect_mode==2 && dut.sound.effect.active_mode==2 && dut.gate,"long hold reaches tremolo without releasing a held note")
-  `CHECK(events==prior_events,"effect change does not retrigger held notes")
+  pressed=0;more_frames(12);prior_events=events;select_effect(6);
+  pressed=16'h0200;wait(dut.gate);more_frames(QUICK?24:530);
+  `CHECK(dut.effect_mode==2 && dut.sound.effect.active_mode==2 && dut.gate,"matrix menu reaches tremolo and resumes deliberately played note")
+  `CHECK(events==prior_events+1,"menu-selected effect produces only the deliberate new Note On")
   if(QUICK)begin short_effect;more_frames(32);end
-  long_effect;more_frames(QUICK?24:530);
-  `CHECK(dut.effect_mode==0 && dut.sound.effect.active_mode==0,"third long hold returns to echo")
+  pressed=0;more_frames(12);select_effect(4);pressed=16'h0200;wait(dut.gate);more_frames(QUICK?24:530);
+  `CHECK(dut.effect_mode==0 && dut.sound.effect.active_mode==0,"matrix menu returns to echo")
   short_effect;more_frames(QUICK?32:270);
   `CHECK(!dut.effects_enabled && dut.sound.effect.fade_level==0 && dut.gate,"bypass preserves held audio")
   pressed=0;wait(!dut.gate);more_frames(12);
@@ -54,3 +59,4 @@ module tb_effect_button_path;
  end
  initial begin #70000000;$fatal(1,"effect button path timeout");end
 endmodule
+

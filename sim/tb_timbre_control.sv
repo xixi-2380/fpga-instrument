@@ -3,11 +3,11 @@
 module tb_timbre_control;
  parameter integer N=4,L=100;
  reg clk=0,rst=1;reg [3:0] buttons_n=4'hf;
- wire [1:0] selected,effect_mode;wire effects_enabled;integer checks=0,presses=0;
+ wire [2:0] selected;wire [1:0] effect_mode,theme;reg [1:0] remembered;wire effects_enabled;integer checks=0,presses=0;
  always #8.138020833 clk=~clk;
  timbre_control #(.DEBOUNCE_CYCLES(N),.LONG_PRESS_CYCLES(L)) dut(
   .clk(clk),.rst(rst),.buttons_n(buttons_n),.selected(selected),.effects_enabled(effects_enabled),
-  .effect_mode(effect_mode),.ui_action_valid(1'b0),.ui_action(6'd63),.cfg_ready(1'b1));
+  .theme_id(theme),.effect_mode(effect_mode),.ui_action_valid(1'b0),.ui_action(6'd63),.cfg_ready(1'b1));
  always @(posedge clk)if(!rst)presses=presses+$countones(dut.press_event);
  task settle(input [3:0] value);begin
   @(negedge clk);buttons_n=value;repeat(N+6)@(negedge clk);
@@ -20,9 +20,9 @@ module tb_timbre_control;
    repeat(N+6)@(negedge clk);
    `CHECK(selected==0 && presses==0,"short press bounce is rejected")
   end
-  settle(4'hd);`CHECK(selected==1 && presses==1,"S1 directly selects flute")
+  settle(4'hd);`CHECK(selected==0 && theme==2 && presses==1,"S1 selects previous theme without selecting an instrument")
   repeat(N+10)@(negedge clk);`CHECK(presses==1,"held preset does not repeat")
-  settle(4'hf);settle(4'hb);`CHECK(selected==2,"S2 directly selects reed")
+  settle(4'hf);settle(4'hb);`CHECK(selected==0 && theme==0,"S2 selects next theme")
   settle(4'hf);settle(4'he);settle(4'hf);`CHECK(selected==0,"S0 short release selects sine")
   settle(4'hf);settle(4'h7);
   `CHECK(!effects_enabled,"short S3 waits for stable release")
@@ -33,17 +33,17 @@ module tb_timbre_control;
   end
   settle(4'hf);`CHECK(effects_enabled && selected==0,"short release enables echo")
   settle(4'h7);settle(4'hf);`CHECK(!effects_enabled && effect_mode==0,"next short press bypasses echo")
-  settle(4'h5);`CHECK(selected==1,"preset selection works during an effect press")
-  settle(4'hf);`CHECK(effects_enabled && selected==1,"independent short release toggles effect")
+  settle(4'h5);`CHECK(selected==0 && theme==2,"theme selection works during an effect press")
+  settle(4'hf);`CHECK(effects_enabled && selected==0,"independent short release toggles effect")
   settle(4'h8);settle(4'hf);`CHECK(selected==0 && effects_enabled,"simultaneous presets resolve to S0 on short release")
-  settle(4'hf);settle(4'h7);repeat(L+10)@(negedge clk);
-  `CHECK(effect_mode==1 && effects_enabled,"long S3 selects room and enables it")
-  repeat(L+10)@(negedge clk);`CHECK(effect_mode==1,"long hold selects only once")
-  settle(4'hf);`CHECK(effect_mode==1 && effects_enabled,"long release is not a short toggle")
+  remembered=theme;settle(4'hf);settle(4'h7);repeat(L+10)@(negedge clk);
+  `CHECK(effect_mode==0 && effects_enabled && theme==3,"long S3 enters hidden theme and preserves audio")
+  repeat(L+10)@(negedge clk);`CHECK(effect_mode==0 && theme==3,"long hold selects hidden theme only once")
+  settle(4'hf);`CHECK(effect_mode==0 && effects_enabled && theme==3,"long release is not a short toggle")
   settle(4'h7);repeat(L+10)@(negedge clk);settle(4'hf);
-  `CHECK(effect_mode==2 && effects_enabled,"second long press selects tremolo")
+  `CHECK(effect_mode==0 && effects_enabled && theme==remembered,"second long press restores remembered normal theme")
   settle(4'h7);repeat(L+10)@(negedge clk);settle(4'hf);
-  `CHECK(effect_mode==0 && effects_enabled,"third long press returns to echo")
+  `CHECK(effect_mode==0 && effects_enabled && theme==3,"third long press returns to hidden theme")
   settle(4'h7);settle(4'hf);`CHECK(!effects_enabled && effect_mode==0,"short bypass keeps selected mode")
   rst=1;#1;`CHECK(selected==0 && !effects_enabled && effect_mode==0,"reset clears controls immediately")
   buttons_n=4'hf;#32;rst=0;settle(4'hf);

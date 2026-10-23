@@ -17,7 +17,7 @@ module tb_keyboard_top;
  realtime last_rise=0,period;
  for(genvar k=0;k<4;k=k+1)assign selected[k]=(columns[k]===1'b0);
  passive_matrix_model model(pressed,selected,rows);
- keyboard_top #(.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(4),.SCORE_ENABLE(0),.LED_STEP_CYCLES(4),.LOCK_N(32),.SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
+ keyboard_top #(.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(4),.BUTTON_LONG_PRESS_CYCLES(128),.SCORE_ENABLE(0),.LED_STEP_CYCLES(4),.LOCK_N(32),.SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
   .MUTE(4),.FADE(4),.ATTACK(8),.DECAY(8),.SUSTAIN(32768),.RELEASE(16))
   dut(.clk(clk),.rst(rst),.board_buttons_n(buttons_n),.key_row(rows),.key_col(columns),
    .MAX_BCLK(bck),.MAX_LRCLK(ws),.MAX_DIN(din),.MAX_SD_MODE(),
@@ -92,12 +92,14 @@ module tb_keyboard_top;
   wait(edges>=idle_edge_start+320);#0.002;
   `CHECK(nonzero==0 && pa,"polyphonic Release returns to zero with original PA policy") stage=7;
   // Physical ordinary two-key attacks in every preset. Selection remains in
-  // independent board buttons; selection itself must never generate notes.
+  // matrix menu; selecting a preset must never generate notes.
   for(integer preset=0;preset<3;preset=preset+1)begin
    stage=10+preset;
    if(preset>0)begin
-    buttons_n=4'hf ^ (4'b1<<preset);wait(dut.selected_timbre==preset);
-    buttons_n=4'hf;
+    buttons_n=4'he;repeat(260)@(negedge dut.audio_clk);buttons_n=4'hf;repeat(16)@(negedge dut.audio_clk);
+    pressed=16'b1<<preset;repeat(32*8)@(posedge bck);pressed=0;repeat(32*8)@(posedge bck);
+    pressed=16'h8000;repeat(32*8)@(posedge bck);pressed=0;repeat(32*8)@(posedge bck);
+    `CHECK(dut.selected_timbre==preset && !dut.menu_mode,"matrix menu selects requested preset")
     `CHECK(!dut.gate && dut.voice_active==0,"preset button does not create notes")
     repeat(64)@(posedge bck);
    end
@@ -142,3 +144,4 @@ module tb_keyboard_top;
   $fatal(1,"keyboard board timeout");
  end
 endmodule
+

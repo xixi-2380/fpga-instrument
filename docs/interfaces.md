@@ -484,3 +484,11 @@ synth_core追加visual_sample_valid、16位signed visual_sample、16位visual_no
 rgb_display新增上述三个输入；64位设置低位继续保留，bit53为音色高位，bits79:64音符图、87:80全窗PCM峰值、1111:88波形。1112位通过原四相快照，帧边界整组更新。128点/4采样抽取，10.667ms；绘图X8饱和仅作用于视图，不改实际音频或原增益。完整布局/命中区域共享ui_layout.svh，触摸入口新增menu_mode；最终main默认启用触摸采集和UI动作。
 
 合入main后，串行器已在效果器、visual tap和原frame_buffer之后替换为标准一位延迟I²S的`i2s_tx`。顶层新增`MAX_BCLK/MAX_LRCLK/MAX_DIN/MAX_SD_MODE`，旧`HP_*`、`PA_EN`和`DBG_*`固定低；visual tap与3位音色事件保持。`MAX_SD_MODE`在音频复位解除并经过两个完整帧边界后拉高，生产启动静音仍在其后提供大于7.5ms的数字静音。球位为V22/W19/Y20/V26，最终新STA与实测由用户执行。
+
+
+
+## 四主题显示接口（2026-10-23）
+
+`timbre_control.theme_id[1:0]`与音频参数分开维护，0英伦/1小猫/2卡皮巴拉/3隐藏彩蛋；`normal_theme`记忆0..2，S3长按切彩蛋时不写音色、效果类型、强度、深度或速度。S1上一/S2下一，UI动作19下一主题，旧0..18编号及矩阵映射保持。主题通过原1112位快照bits55:54传输，不增加CDC，也不覆盖bit53音色高位或波形。
+
+像素域逐LCD帧冻结主题、16帧视频索引与脚部动画相位，标题和装饰同步ROM读与原两级RGB/DE/HS/VS延迟对齐；仅脚部纹理变换，人物背景原坐标保留。动画10fps，在1192×533、35MHz下用整数相位累积，脚部往复128个LCD帧约2.32秒。无视频原声，无音频控制/背压线路。详见`docs/themes.md`。

@@ -47,7 +47,7 @@ module tb_ui_controls;
   `CHECK({e,r,d,cfg_hz}==held && ep==40,"offered tuple stable while newer targets coalesce")
   ready=1;cycles(8);`CHECK(e==102 && !cv,"latest target submitted after backpressure clears")
   act(UI_TREMOLO);buttons=7;cycles(50);buttons=15;cycles(10);
-  `CHECK(fx==0 && en,"S3 cycles from UI-selected tremolo instead of stale button state")
+  `CHECK(fx==2 && en && dut.theme_id==3,"long S3 enters hidden theme and preserves UI-selected effect")
   `CHECK(commands>10,"parameter snapshots exercised")
   rst=1;#1;`CHECK(!menu && !en && ep==25 && e==64,"reset restores controller and packet")
   $display("PASS tb_ui_controls checks=%0d commands=%0d",checks,commands);$finish;

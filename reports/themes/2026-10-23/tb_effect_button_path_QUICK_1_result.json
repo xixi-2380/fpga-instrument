@@ -1,0 +1,8 @@
+{
+  "test": "tb_effect_button_path",
+  "parameters": "QUICK=1",
+  "passed": true,
+  "checks": 407070,
+  "pll_model": "explicit behavioral substitute",
+  "seconds": 23.954
+}

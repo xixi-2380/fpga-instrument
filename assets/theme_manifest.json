@@ -1,0 +1,47 @@
+{
+  "cat": {
+    "width": 128,
+    "height": 160,
+    "frames": 16,
+    "bits_per_pixel": 4,
+    "bits": 1310720
+  },
+  "capybara": {
+    "width": 128,
+    "height": 160,
+    "frames": 16,
+    "bits_per_pixel": 4,
+    "bits": 1310720
+  },
+  "british": {
+    "width": 400,
+    "height": 240,
+    "frames": 1,
+    "bits_per_pixel": 4,
+    "bits": 384000
+  },
+  "egg": {
+    "width": 400,
+    "height": 240,
+    "frames": 1,
+    "bits_per_pixel": 8,
+    "bits": 768000
+  },
+  "font_bits": 262144,
+  "total_bits": 4035584,
+  "sources": {
+    "cat": {
+      "filename": "f6d0344fdcbeb4465513c8d285103969.mp4",
+      "sha256": "aabff9d6d403b4a545cebbb3f094d7594581f48eb68ce8fe1ccc44db4508972a"
+    },
+    "capybara": {
+      "filename": "155702861bd364a3fd481d31ee503ef8.mp4",
+      "sha256": "df09f8e8f6646bcf2c374e139d4e7d0a33f1c95bb61d35904aa19e2403333871"
+    },
+    "egg": {
+      "filename": "image(20261023-125826).png",
+      "sha256": "4a1ac7d87230d187a03205d17a93e452f2e8e2739795d392cf4ae0b774320e87"
+    }
+  },
+  "loop": "16 frames: 0..8 then 7..1, 10 fps, no video audio"
+}

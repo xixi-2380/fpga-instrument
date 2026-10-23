@@ -1,0 +1,8 @@
+{
+  "test": "tb_ui_top",
+  "parameters": "LCD=1",
+  "passed": true,
+  "checks": 87114,
+  "pll_model": "explicit behavioral substitute",
+  "seconds": 10.039
+}

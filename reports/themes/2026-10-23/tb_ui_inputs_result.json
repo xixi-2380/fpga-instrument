@@ -1,0 +1,8 @@
+{
+  "test": "tb_ui_inputs",
+  "parameters": "",
+  "passed": true,
+  "checks": 92,
+  "pll_model": "not exercised",
+  "seconds": 0.06
+}

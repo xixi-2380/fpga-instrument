@@ -1,0 +1,179 @@
+"""Offline video-to-indexed-ROM conversion and code-drawn celestial artwork.
+
+No video/audio decoder is required in the FPGA. Pillow, numpy, scipy, ffmpeg.
+Input movies/photo stay outside the repository; hashes/recipes are recorded.
+Fonts: Google Fonts Great Vibes / Cormorant Garamond / Quicksand (SIL OFL).
+Compile-ready generated ROMs are committed; regeneration is optional.
+"""
+from pathlib import Path
+import argparse, hashlib, json, subprocess, math, random
+import numpy as np
+import cv2
+from scipy import ndimage
+from PIL import Image, ImageDraw, ImageFont, ImageOps
+
+ROOT=Path(__file__).resolve().parents[1]
+ROM=ROOT/'src/rom'
+W,H,N=128,160,16
+
+def hexfile(name, values, digits):
+    vals=list(map(int,values))
+    # Packed hexadecimal tokens, 32 words per line; readmemh accepts whitespace.
+    (ROM/name).write_text('\n'.join(' '.join(f'{x:0{digits}x}' for x in vals[i:i+32])
+                                   for i in range(0,len(vals),32))+'\n')
+    return len(vals)
+
+def indexed(name, frames, masks=None, foot=None):
+    # One shared 16-colour palette per clip avoids colour pumping per frame.
+    sheet=Image.new('RGB',(frames[0].width,frames[0].height*len(frames)))
+    for n,im in enumerate(frames):sheet.paste(im,(0,n*im.height))
+    colors=32 if foot is not None else 16
+    pal=sheet.quantize(colors=15 if masks else colors,method=Image.Quantize.MEDIANCUT)
+    palette=pal.getpalette()[:colors*3]
+    rgb=np.array(palette+[0]*(colors*3-len(palette)),dtype=np.uint8).reshape(colors,3)
+    data=np.array(pal,dtype=np.uint8)
+    if masks:
+        # Index zero is transparent; 1..15 are genuine source video colours.
+        data=np.where(np.concatenate(masks,axis=0),data+1,0)
+        rgb=np.concatenate([np.zeros((1,3),dtype=np.uint8),rgb[:15]])
+    if foot is not None:data=data | (foot.astype(np.uint8)<<5)
+    hexfile('theme_'+name+'.hex',data.flatten(),2 if foot is not None else 1)
+    hexfile('theme_'+name+'_palette.hex',[(int(c[0])<<16)|(int(c[1])<<8)|int(c[2]) for c in rgb],6)
+    return {'width':frames[0].width,'height':frames[0].height,'frames':len(frames),
+            'bits_per_pixel':8 if foot is not None else 4,'bits':data.size*(8 if foot is not None else 4)}
+
+def movie(path,kind):
+    # 0.8 seconds of actual dancing + reversed interior frames make a closed
+    # 16-frame loop without an abrupt cut or duplicated turnaround endpoint.
+    crop='crop=420:480:480:160' if kind=='cat' else 'crop=580:680:110:25'
+    vf=crop+f',fps=10,scale={W}:{H}:force_original_aspect_ratio=decrease,pad={W}:{H}:(ow-iw)/2:(oh-ih)/2:color=0x00ff00'
+    raw=subprocess.check_output(['ffmpeg','-hide_banner','-loglevel','error','-ss','2',
+         '-i',str(path),'-vf',vf,'-frames:v','9','-f','rawvideo','-pix_fmt','rgb24','-an','-'])
+    arr=np.frombuffer(raw,dtype=np.uint8).reshape(9,H,W,3)
+    frames=[];masks=[]
+    for n in list(range(9))+list(range(7,0,-1)):
+        a=arr[n];a16=a.astype(np.int16)
+        if kind=='cat':
+            mask=~((a16[:,:,1]>a16[:,:,0]*1.25+25)&(a16[:,:,1]>a16[:,:,2]*1.25+25))
+        else:
+            # Character's warm yellow/orange connected component, hole-filled
+            # to retain eyes, mouth and cream bag; background gardens removed.
+            warm=(a16[:,:,0]>a16[:,:,2]+55)&(a16[:,:,0]>a16[:,:,1]+20)&(a16[:,:,1]>a16[:,:,2]+10)&(a16[:,:,0]>115)
+            # Spatial seed excludes the brown fence behind the hat. GrabCut
+            # refines the real character edge using foreground/background GMMs.
+            yy,xx=np.mgrid[:H,:W]
+            warm[(yy<32)&((xx<47)|(xx>88))]=False
+            gc=np.full((H,W),cv2.GC_PR_BGD,dtype=np.uint8)
+            gc[warm]=cv2.GC_PR_FGD
+            gc[warm&(xx>40)&(xx<90)&(yy>45)&(yy<125)]=cv2.GC_FGD
+            gc[(xx<4)|(xx>123)|(yy<7)|(yy>155)]=cv2.GC_BGD
+            gc[(yy<30)&((xx<43)|(xx>90))]=cv2.GC_BGD
+            cv2.setRNGSeed(2380)
+            cv2.grabCut(a.copy(),gc,None,np.zeros((1,65)),np.zeros((1,65)),5,cv2.GC_INIT_WITH_MASK)
+            warm=(gc==cv2.GC_FGD)|(gc==cv2.GC_PR_FGD)
+            warm[:7]=False;warm[-5:]=False
+            labs,num=ndimage.label(warm)
+            sizes=np.bincount(labs.flatten());sizes[0]=0
+            mask=labs==sizes.argmax()
+            mask=ndimage.binary_closing(mask,iterations=2)
+            mask=ndimage.binary_fill_holes(mask)
+            mask=ndimage.binary_dilation(mask,iterations=1)
+        # Transparent pixels must not consume palette entries (especially green).
+        clean=a.copy();clean[~mask]=[246,231,207]
+        frames.append(Image.fromarray(clean));masks.append(mask)
+    return frames,masks
+
+def british_art():
+    im=Image.new('RGB',(400,240),'#0c1014');d=ImageDraw.Draw(im)
+    # Celestial map: subtle astrolabe rings, meridians, stars and constellations.
+    for cx,cy,rad in [(345,28,79),(46,211,82),(214,122,155)]:
+        for rr in [rad,rad-5,rad-17]:d.ellipse((cx-rr,cy-rr,cx+rr,cy+rr),outline='#292a25')
+        d.line((cx-rad,cy,cx+rad,cy),fill='#242825')
+        d.line((cx,cy-rad,cx,cy+rad),fill='#242825')
+        for n in range(24):
+            t=n*math.pi/12;x=cx+rad*math.cos(t);y=cy+rad*math.sin(t)
+            x1=cx+(rad-3)*math.cos(t);y1=cy+(rad-3)*math.sin(t)
+            d.line((x,y,x1,y1),fill='#514532')
+    stars=[(9,22),(32,41),(48,23),(71,38),(87,19),(106,31),(155,43),(179,19),
+           (253,12),(279,30),(294,12),(328,44),(358,73),(386,57),
+           (14,195),(28,181),(50,198),(77,180),(93,199),(112,214),(164,222),
+           (265,212),(291,226),(323,204),(352,220),(382,207)]
+    for start,end in [(0,5),(6,7),(8,11),(12,13),(14,19),(21,25)]:
+        d.line(stars[start:end+1],fill='#4c4231',width=1)
+    for k,(x,y) in enumerate(stars):
+        d.ellipse((x-1,y-1,x+1,y+1),fill='#a58e5d')
+        if k%4==0:
+            d.line((x-3,y,x+3,y),fill='#6b5b3b');d.line((x,y-3,x,y+3),fill='#6b5b3b')
+    rng=random.Random(2380)
+    for _ in range(70):d.point((rng.randrange(400),rng.randrange(240)),fill='#615437')
+    # Fine gold corners are visible beyond the panels and never change hitboxes.
+    for flipx,flipy in [(0,0),(1,0),(0,1),(1,1)]:
+        def p(x,y):return (399-x if flipx else x,239-y if flipy else y)
+        d.line([p(5,26),p(5,5),p(30,5)],fill='#b49a62')
+        d.line([p(9,25),p(9,9),p(26,9)],fill='#665638')
+        for n in range(3):
+            x,y=p(15+n*6,12+n*3);d.arc((x-5,y-4,x+5,y+4),0,300,fill='#79653f')
+    return im
+
+def fonts(font_dir):
+    liberation=font_dir/'LiberationSansNarrow-Bold.ttf'
+    paths=[liberation,ROOT/'assets/fonts/HighWaterElegant.ttf',ROOT/'assets/fonts/HighWaterRound.ttf']
+    body=[ImageFont.truetype(str(p),17 if i==1 else 15) for i,p in enumerate(paths)]
+    script=ImageFont.truetype(str(ROOT/'assets/fonts/HighWaterScript.ttf'),39)
+    words=[]
+    for f in body:
+        for code in range(32,128):
+            ch=chr(code);box=f.getbbox(ch);w=max(1,box[2]-box[0]);h=max(1,box[3]-box[1])
+            glyph=Image.new('L',(w,h));ImageDraw.Draw(glyph).text((-box[0],-box[1]),ch,font=f,fill=255)
+            if w>9 or h>15:
+                glyph.thumbnail((9,15),Image.Resampling.LANCZOS);w,h=glyph.size
+            im=Image.new('L',(10,16));im.paste(glyph,((10-w)//2,max(0,14-h)))
+            for y in range(16):words.append(sum(1<<(15-x) for x in range(10) if im.getpixel((x,y))>=70))
+    assert len(words)==4608
+    def pack(im):
+        for y in range(im.height):
+            for tile in range(im.width//8):
+                words.append(sum(min(3,(im.getpixel((tile*8+x,y))+42)//85)<<(14-2*x) for x in range(8)))
+    for i in range(3):
+        im=Image.new('L',(384,64));d=ImageDraw.Draw(im)
+        f=script if i==0 else ImageFont.truetype(str(paths[i]),30 if i==1 else 24)
+        lines=['High Mountains,','Flowing Water']
+        for n,t in enumerate(lines):
+            box=f.getbbox(t);width=box[2]-box[0]
+            glyph=Image.new('L',(width,box[3]-box[1]));ImageDraw.Draw(glyph).text((-box[0],-box[1]),t,font=f,fill=255)
+            if glyph.width>370:glyph=glyph.resize((370,glyph.height),Image.Resampling.LANCZOS)
+            im.paste(glyph,((384-glyph.width)//2,n*32+(32-glyph.height)//2))
+        pack(im)
+    assert len(words)==13824
+    for t in ['Timbre','Effect','Amount','Room Model']:
+        f=ImageFont.truetype(str(ROOT/'assets/fonts/HighWaterScript.ttf'),26)
+        im=Image.new('L',(200,24));box=f.getbbox(t)
+        ImageDraw.Draw(im).text((1-box[0],-box[1]),t,font=f,fill=255);pack(im)
+    assert len(words)==16224
+    words += [0]*(16384-len(words));hexfile('theme_font.hex',words,4)
+    return len(words)*16
+
+def main():
+    p=argparse.ArgumentParser();p.add_argument('--cat',type=Path,required=True)
+    p.add_argument('--capybara',type=Path,required=True);p.add_argument('--egg',type=Path,required=True)
+    p.add_argument('--font-dir',type=Path,required=True);a=p.parse_args()
+    stats={}
+    for k,path in [('cat',a.cat),('capybara',a.capybara)]:
+        frames,masks=movie(path,k);stats[k]=indexed(k,frames,masks)
+    stats['british']=indexed('british',[british_art()])
+    # Original photo is only fitted/quantized. The foot is transformed in RTL,
+    # from its masked texture; the person/background coordinates remain fixed.
+    photo=Image.open(a.egg).convert('RGB');photo=ImageOps.contain(photo,(400,240),Image.Resampling.LANCZOS)
+    im=Image.new('RGB',(400,240),'#e7e5e3');im.paste(photo,((400-photo.width)//2,0))
+    ar=np.array(im).astype(np.int16);yy,xx=np.mgrid[:240,:400]
+    foot=(xx>=198)&(ar[:,:,0]>ar[:,:,2]+45)&(ar[:,:,0]>ar[:,:,1]+15)&(ar[:,:,0]>110)
+    foot=ndimage.binary_fill_holes(foot)
+    stats['egg']=indexed('egg',[im],foot=foot)
+    stats['font_bits']=fonts(a.font_dir)
+    stats['total_bits']=sum(x['bits'] for x in stats.values() if isinstance(x,dict))+stats['font_bits']
+    stats['sources']={k:{'filename':str(path.name),'sha256':hashlib.sha256(path.read_bytes()).hexdigest()} for k,path in [('cat',a.cat),('capybara',a.capybara),('egg',a.egg)]}
+    stats['loop']='16 frames: 0..8 then 7..1, 10 fps, no video audio'
+    (ROOT/'assets/theme_manifest.json').write_text(json.dumps(stats,indent=2,ensure_ascii=False)+'\n')
+    print(json.dumps(stats,indent=2,ensure_ascii=False))
+
+if __name__=='__main__':main()

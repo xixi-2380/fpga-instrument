@@ -1,14 +1,24 @@
 `timescale 1ns/1ps
-// British black/gold UI. Single synchronous font/title ROM, two pixel stages.
+// Four visual themes. Synchronous artwork + font ROMs, two pixel stages.
 // One atomic1112-bit snapshot per frame; no framebuffer and no audio stalls.
 module rgb_ui_renderer(
  input wire pixel_clk,rst,frame_start,status_valid,input wire [1111:0] status_data,
  input wire [10:0] x,y,input wire de_in,hs_in,vs_in,
  output reg [23:0] rgb,output reg de_out,hs_out,vs_out);
  `include "config/ui_layout.svh"
- localparam [23:0] BG=24'h101214,PANEL=24'h191c20,GOLD=24'hd6b979,
-  CREAM=24'hf2e6c9,INK=24'h17191b,DIM=24'h9c987f,LINE=24'h4b4534,
-  WINE=24'h67333e,GREEN=24'h8bc79b,RED=24'hef8f85;
+ // Palette changes are visual only; state bits 55:54 carry the theme.
+ wire [1:0] theme=state[55:54];
+ wire [1:0] font_theme=theme==3 ? 0 : theme;
+ wire [23:0] BG=theme==0 ? 24'h101214 : theme==1 ? 24'hf7f1e8 : theme==2 ? 24'hfff1d9 : 24'he7e5e3;
+ wire [23:0] PANEL=theme==0 ? 24'h191c20 : theme==1 ? 24'heee3d4 : theme==2 ? 24'hfbe3bc : 24'heee8e1;
+ wire [23:0] GOLD=theme==0 ? 24'hd6b979 : theme==1 ? 24'h856b57 : theme==2 ? 24'ha3652c : 24'h884652;
+ wire [23:0] CREAM=theme==0 ? 24'hf2e6c9 : theme==1 ? 24'h43392f : theme==2 ? 24'h493321 : 24'h332f2d;
+ wire [23:0] INK=theme==0 ? 24'h17191b : 24'hfffaf1;
+ wire [23:0] DIM=theme==0 ? 24'h9c987f : theme==1 ? 24'h73685c : 24'h7d6148;
+ wire [23:0] LINE=theme==0 ? 24'h4b4534 : theme==1 ? 24'hcbbba7 : 24'hd9b889;
+ wire [23:0] WINE=theme==0 ? 24'h67333e : 24'hb87e6c;
+ wire [23:0] GREEN=theme==0 ? 24'h8bc79b : 24'h3d795f;
+ localparam [23:0] RED=24'hef8f85;
  reg [1111:0] state;
  wire [2:0] timbre={state[53],state[13:12]};
  wire [1:0] fx=state[22:21];wire menu=state[20],enabled=state[23];
@@ -20,10 +30,38 @@ module rgb_ui_renderer(
  reg [319:0] text;
  integer len,tx,ty,dx,dy,ci,px,py,i,k,left,top,note_index;
  integer bin,point_y,previous_y,minimum_y,maximum_y,pc;
- reg [7:0] ch;reg [11:0] font_addr;reg [3:0] font_bit,bit_pipe;
+ reg [7:0] ch;reg [13:0] font_addr;reg [3:0] font_bit,bit_pipe;
+ reg alpha_font,alpha_pipe;reg [1:0] alpha;
  reg text_ink,ink_pipe,de_pipe,hs_pipe,vs_pipe;
- reg [15:0] font_rom[0:4095],font_row;
- initial $readmemh("src/rom/british_font.hex",font_rom);
+ reg [15:0] font_rom[0:16383],font_row;
+ initial $readmemh("src/rom/theme_font.hex",font_rom);
+ reg [25:0] animation_phase;
+ reg [3:0] animation_frame;
+ reg [6:0] foot_phase;
+ wire [5:0] foot_triangle=foot_phase[6] ? ~foot_phase[5:0] : foot_phase[5:0];
+ wire [23:0] art_pixel;
+ ui_theme_art artwork(pixel_clk,theme,animation_frame,foot_triangle[5:2],x,y,art_pixel);
+ reg background_pipe,panel_pipe,blank_pipe,test_pipe;
+ reg [1:0] theme_pipe;
+ reg [23:0] resolved_base;
+ function automatic [23:0] mix_color(input [23:0] a,b,input [1:0] weight);
+  integer rr,gg,bb;
+  begin
+   rr=(integer'(a[23:16])*(3-integer'(weight))+integer'(b[23:16])*integer'(weight)+1)/3;
+   gg=(integer'(a[15:8])*(3-integer'(weight))+integer'(b[15:8])*integer'(weight)+1)/3;
+   bb=(integer'(a[7:0])*(3-integer'(weight))+integer'(b[7:0])*integer'(weight)+1)/3;
+   mix_color={rr[7:0],gg[7:0],bb[7:0]};
+  end
+ endfunction
+ always @*begin
+  resolved_base=base_pipe;
+  if(!test_pipe)begin
+   if(background_pipe)resolved_base=art_pixel;
+   else if(panel_pipe && theme_pipe!=0)resolved_base=mix_color(base_pipe,art_pixel,2);
+  end
+  if(blank_pipe)resolved_base=0;
+  alpha=alpha_pipe ? ((font_row>>bit_pipe)&3) : (font_row[bit_pipe] ? 3 : 0);
+ end
  function automatic [7:0] digit(input integer value);
   begin digit=8'd48+value;end
  endfunction
@@ -36,9 +74,9 @@ module rgb_ui_renderer(
  function automatic integer name_length(input [2:0] id);
   begin case(id)1,3,4:name_length=5;2,0:name_length=4;5:name_length=6;default:name_length=10;endcase end
  endfunction
- function automatic [23:0] card(input integer xx,yy,l,t,w,h,input selected);
+ function [23:0] card(input integer xx,yy,l,t,w,h,input selected);
   begin
-   card=selected ? CREAM : PANEL;
+   card=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
    if(xx<l+1 || xx>=l+w-1 || yy<t+1 || yy>=t+h-1)card=selected ? GOLD : LINE;
   end
  endfunction
@@ -46,7 +84,7 @@ module rgb_ui_renderer(
   px=integer'(x);py=integer'(y);base=BG;fg=CREAM;text=0;len=0;tx=0;ty=0;
   dx=0;dy=0;ci=0;i=0;k=0;left=0;top=0;note_index=0;pc=0;
   bin=0;point_y=234;previous_y=234;minimum_y=234;maximum_y=234;
-  ch=0;font_addr=0;font_bit=0;text_ink=0;
+  ch=0;font_addr=0;font_bit=0;text_ink=0;alpha_font=0;
   // Sparse faint celestial motifs. Ornament is kept outside touch controls.
   if((py==78 && px>=20 && px<780) || (py==410 && px>=20 && px<780))base=LINE;
   if(px>398 && px<632 && py<72)begin
@@ -155,7 +193,10 @@ module rgb_ui_renderer(
    if(py<42)begin text={"VOICES ",digit(voices/10),digit(voices%10),"/32"};len=12;ty=24;end
    else begin text=state[15] ? "AUDIO READY" : "STARTING";len=state[15] ? 11 : 8;ty=46;fg=state[15] ? GREEN : GOLD;end
   end
-  if(py>=420 && py<464 && px<648)begin
+  if(ui_inside(px,py,536,420,112,44))begin
+   base=card(px,py,536,420,112,44,1'b0);text="THEME >";len=7;tx=557;ty=434;fg=GOLD;
+  end
+  if(py>=420 && py<464 && px<528)begin
    tx=24;fg=DIM;
    if(py<440)begin
     text=menu ? "R4C2 PREV / R4C3 NEXT TIMBRE" : "S0 HOLD: SETTINGS";len=menu ? 28 : 17;ty=422;
@@ -176,11 +217,23 @@ module rgb_ui_renderer(
   dx=px-tx;dy=py-ty;
   if(len>0 && dx>=0 && dx<len*10 && dy>=0 && dy<16)begin
    ci=dx/10;ch=text[(len-1-ci)*8+:8];
-   if(ch>=32 && ch<128)begin font_addr=(ch-32)*16+dy;font_bit=15-(dx%10);text_ink=1;end
+   if(ch>=32 && ch<128)begin font_addr=integer'(font_theme)*1536+(ch-32)*16+dy;font_bit=15-(dx%10);text_ink=1;end
   end
-  // The calligraphic title is a1-bit384x64 mask in the same synchronous ROM.
+  // 2-bit antialiased whole-word script headings preserve joined strokes.
+  if(theme==0 && menu)begin
+   k=-1;left=308;top=98;
+   if(ui_inside(px,py,32,98,200,24))begin k=0;left=32;end
+   else if(ui_inside(px,py,308,98,200,24))k=1;
+   else if(fx!=2 && ui_inside(px,py,308,204,200,24))begin k=2;top=204;end
+   else if(fx==1 && ui_inside(px,py,308,310,200,24))begin k=3;top=310;end
+   if(k>=0)begin
+    font_addr=13824+k*600+(py-top)*25+((px-left)>>3);
+    font_bit=14-((px-left)%8)*2;text_ink=1;alpha_font=1;fg=GOLD;
+   end
+  end
   if(ui_inside(px,py,24,4,384,64))begin
-   font_addr=1536+(py-4)*24+((px-24)>>4);font_bit=15-((px-24)%16);text_ink=1;fg=GOLD;
+   font_addr=4608+integer'(font_theme)*3072+(py-4)*48+((px-24)>>3);
+   font_bit=14-((px-24)%8)*2;text_ink=1;alpha_font=1;fg=GOLD;
   end
   if(state[19])begin
    case(px/100)
@@ -196,12 +249,25 @@ module rgb_ui_renderer(
  always @(posedge pixel_clk)begin
   font_row<=font_rom[font_addr];
   if(rst)begin state<=0;base_pipe<=0;fg_pipe<=0;bit_pipe<=0;ink_pipe<=0;
-   de_pipe<=0;hs_pipe<=0;vs_pipe<=0;rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;end
+   de_pipe<=0;hs_pipe<=0;vs_pipe<=0;rgb<=0;
+   alpha_pipe<=0;background_pipe<=0;panel_pipe<=0;blank_pipe<=1;test_pipe<=0;theme_pipe<=0;
+   animation_phase<=0;animation_frame<=0;foot_phase<=0;de_out<=0;hs_out<=0;vs_out<=0;end
   else begin
-   if(frame_start && status_valid)state<=status_data;
+   if(frame_start)begin
+    if(status_valid)state<=status_data;
+    if(status_valid && status_data[55:54]!=theme)begin animation_phase<=0;animation_frame<=0;foot_phase<=0;end
+    else begin
+     foot_phase<=foot_phase+1'b1;
+     if(animation_phase>=26'd28646640)begin
+      animation_phase<=animation_phase-26'd28646640;animation_frame<=animation_frame+1'b1;
+     end else animation_phase<=animation_phase+26'd6353360;
+    end
+   end
    base_pipe<=base;fg_pipe<=fg;
+   alpha_pipe<=alpha_font;background_pipe<=base==BG;panel_pipe<=base==PANEL;
+   theme_pipe<=theme;test_pipe<=state[19];blank_pipe<=!de_in || x>=800 || y>=480;
    bit_pipe<=font_bit;ink_pipe<=text_ink;de_pipe<=de_in && x<800 && y<480;hs_pipe<=hs_in;vs_pipe<=vs_in;
-   rgb<=ink_pipe && font_row[bit_pipe] ? fg_pipe : base_pipe;
+   rgb<=ink_pipe ? mix_color(resolved_base,fg_pipe,alpha) : resolved_base;
    de_out<=de_pipe;hs_out<=hs_pipe;vs_out<=vs_pipe;
   end
  end
