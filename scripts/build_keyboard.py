@@ -5,8 +5,8 @@ root=pathlib.Path(__file__).resolve().parents[1]
 voice_count=int(re.search(r'^`define VOICE_COUNT (\d+)',(root/'src/config/synth_config.svh').read_text(encoding='utf8'),re.M)[1])
 lcd_enabled=int(re.search(r'LCD_ENABLE=(\d+)',(root/'src/keyboard_top.sv').read_text(encoding='utf8'))[1])!=0
 touch_enabled=int(re.search(r'TOUCH_ENABLE=(\d+)',(root/'src/keyboard_top.sv').read_text(encoding='utf8'))[1])!=0
-# External audio ports intentionally await user pin planning. Fail BEFORE EDA
-# so the tool cannot auto-place MAX_* signals on arbitrary package pins.
+# Require the user-selected external audio pin map BEFORE EDA so a later
+# missing assignment cannot silently auto-place MAX_* on arbitrary pins.
 max_ports=['MAX_BCLK','MAX_LRCLK','MAX_DIN','MAX_SD_MODE']
 cst_text=(root/'src/keyboard.cst').read_text(encoding='utf8')
 external_pin_map=dict(re.findall(r'IO_LOC "(MAX_[A-Z_]+)" ([A-Z]+\d+);',cst_text))

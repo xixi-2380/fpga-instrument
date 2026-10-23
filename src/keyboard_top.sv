@@ -47,8 +47,8 @@ module keyboard_top #(
         else if(frame_ce && max_clock_frames!=2)max_clock_frames<=max_clock_frames+1'b1;
     end
     assign MAX_SD_MODE=!audio_reset && max_clock_frames==2;
-    // Existing constrained board pads are deliberately parked. New MAX_* pads
-    // have NO CST/SDC assignment yet; user requested pin planning separately.
+    // Existing board pads stay parked. User-selected external MAX_* pins
+    // are constrained in keyboard.cst and keyboard.sdc; see docs/max98357.md.
     assign HP_BCK=0;assign HP_WS=0;assign HP_DIN=0;assign PA_EN=0;
     assign DBG_BCK=0;assign DBG_WS=0;assign DBG_DIN=0;assign DBG_PA_EN=0;
 

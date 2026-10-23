@@ -242,4 +242,4 @@ GT9110在50MHz域由独立`gt9110_touch`和开漏`i2c_register_master`读取，U
 
 keyboard_top新增MAX_BCLK/MAX_LRCLK/MAX_DIN/MAX_SD_MODE，旧HP/PA/DBG全部固定低。SD_MODE在两次帧边界后先使能，生产原静音留出>7.5ms的器件开机时间；input_ready仍表示事件源准入，不能混同SD_MODE。RGB、触摸、矩阵及音符接口不改；TOUCH_ENABLE仍0。
 
-用户要求本轮不配置引脚，原CST/SDC不改，新端口未约束，需后续指定球位、电平与时序再由用户实现。构建脚本前置检查缺失的MAX端口映射，不运行EDA。资料依据、协议图和测试边界见[max98357说明](max98357.md)。
+初次迁移按用户要求未配置引脚；随后用户指定MAX_BCLK=V22、MAX_LRCLK=W19、MAX_DIN=Y20、MAX_SD_MODE=V26，现已更新原CST为3.3V/4mA输出、SDC为0..30ns音频输出路线预算。与现有端口无球位冲突，保留缺失映射的构建前置检查。助手不运行EDA，实际Bank电压、Gowin约束解析和新STA由用户核验。资料依据、协议图和测试边界见[max98357说明](max98357.md)。

@@ -99,4 +99,6 @@
 
 - 2026-10-23用户明确改用外接MAX98357，资料目录E:\FPGA竞赛\开发板资料\MAX98357_TEST\MAX98357_TEST，要求先不配置引脚、直接修改原工程。按本地原理图/播放示例的MAX98357A实现标准I²S（B版不兼容）：原pt8211_tx和TB原位重命名i2s_tx/tb_i2s_tx，GPRJ/synth_core更新；新顶层MAX_BCLK/MAX_LRCLK/MAX_DIN/MAX_SD_MODE未配置CST/SDC，旧HP/PA/DBG固定低。SD_MODE两次帧边界后先使能，生产480帧静音为器件留>7.5ms开机时间，原音源/增益/PLL/键盘/曲谱/RGB保留，触摸仍关闭。构建脚本在任何gw_sh之前拒绝缺少MAX映射的状态，本轮不执行该脚本/EDA。不得沿用旧引脚当外置DAC已布线，也不得自动分配球位；资料/协议/验收见docs/max98357.md。本地当前基线dd49c83，不合main；按最近约定只推送codex/fpga-migration分支，保留用户已有IDE配置和未跟踪UI证据。
 
-- MAX98357A迁移最终37配置、36974883次检查通过，证据reports/max98357/2026-10-23/validation.json；SD_MODE到事件准入间隔9979.141µs，渲染517/544不变。CST/SDC字节未改、新MAX端口未配置；不把数字仿真当硬件接线/STA/模拟音质验证。
+- MAX98357A迁移最终37配置、36974883次检查通过，证据reports/max98357/2026-10-23/validation.json；SD_MODE到事件准入间隔9979.141µs，渲染517/544不变。迁移阶段CST/SDC字节未改、新MAX端口当时未配置；不把数字仿真当硬件接线/STA/模拟音质验证。
+
+- 2026-10-23用户随后明确指定外接功放接线：BCLK=V22、LRC=W19、DIN=Y20、SD=V26。已在原CST约束MAX_BCLK/MAX_LRCLK/MAX_DIN/MAX_SD_MODE为上述球位，LVCMOS33、BANK_VCCIO=3.3、DRIVE=4、PULL_MODE=NONE；官方Header索引37/35/33/31，四脚都是信号而非GND/供电，无现有球位冲突。原SDC将音频0..30ns路线预算转至MAX_*，不在BCLK数据网上建内部时钟、不加false-path。RTL仅更新过时注释，键盘/音源/播放器/RGB/触摸关闭配置与旧板载输出固定低均保持。补充两项纯HDL仿真共1856631次检查通过，54球位无重复、14条平面SDC结构核查通过，原有源码/IDE设置保持；证据另存reports/max98357/2026-10-23/pins，不覆盖迁移阶段报告；Gowin解析、新STA、电气/音质仍待用户实现实测。继续仅提交推送当前codex/fpga-migration，不合main，保留既有IDE配置改动。
