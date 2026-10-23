@@ -8,7 +8,7 @@ import math
 from pathlib import Path
 import re
 
-TIMBRES={'sine':0,'flute':1,'reed':2}
+TIMBRES={'sine':0,'flute':1,'reed':2,'cello':3,'piano':4,'guitar':5,'vibraphone':6}
 
 def grid(value):
     number=Fraction(value)*4
@@ -55,8 +55,8 @@ def compile_text(text, depth=512):
                 if not 0<=identity<=127:
                     raise ValueError('identity outside 0..127')
                 timbre=TIMBRES[timbre] if timbre in TIMBRES else int(timbre)
-                if timbre not in (0,1,2):
-                    raise ValueError('timbre must be sine/flute/reed or 0/1/2')
+                if timbre not in range(7):
+                    raise ValueError('timbre must be sine/flute/reed/cello/piano/guitar/vibraphone or 0..6')
                 hz=440.0*2.0**((pitch-69)/12.0)
                 # Exact project sample rate, no keyboard-map dependency.
                 fcw=math.floor(hz*(1<<32)/48000+0.5)
@@ -69,7 +69,7 @@ def compile_text(text, depth=512):
                     if start<b and a<finish:
                         raise ValueError('overlapping notes reuse identity '+str(identity))
                 intervals[identity].append((start,finish))
-                payload=(identity<<34)|(timbre<<32)|fcw
+                payload=(identity<<34)|((timbre&3)<<32)|((timbre>>2)<<41)|fcw
                 events.extend([(start,1,identity,(2<<60)|payload),
                                (finish,0,identity,(3<<60)|payload)])
                 note_count+=1

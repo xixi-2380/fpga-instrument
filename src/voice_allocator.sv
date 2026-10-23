@@ -8,14 +8,14 @@ module voice_allocator #(parameter integer VOICES=4)(
     output wire note_ready,output wire [VOICES-1:0] voice_start,voice_stop,voice_restart,
     output reg [VOICES-1:0] voice_held,
     output wire [VOICES*32-1:0] voice_fcw,
-    output wire [VOICES*7-1:0] voice_ids,input wire [1:0] note_timbre,
-    output wire [VOICES*2-1:0] voice_timbres);
+    output wire [VOICES*7-1:0] voice_ids,input wire [2:0] note_timbre,
+    output wire [VOICES*3-1:0] voice_timbres);
     localparam integer RW=VOICES>1?$clog2(VOICES):1;
     reg [VOICES-1:0] owned,pending_start,pending_restart,committed_gate;
     reg [6:0] ids [0:VOICES-1];
     reg [31:0] frequencies [0:VOICES-1];
     reg [RW-1:0] rank [0:VOICES-1];
-    reg [1:0] timbres[0:VOICES-1];
+    reg [2:0] timbres[0:VOICES-1];
     // Read one context, then compare its registered metadata. No candidate
     // index feeds another context read in the same cycle. The producer holds
     // the event until OFFER; ownership still changes on its handshake edge.
@@ -30,7 +30,7 @@ module voice_allocator #(parameter integer VOICES=4)(
     reg event_on;
     reg [6:0] event_id;
     reg [31:0] event_fcw;
-    reg [1:0] event_timbre;
+    reg [2:0] event_timbre;
     assign note_ready=!rst && enabled && !frame_ce && search_state==OFFER;
     always @(posedge clk or posedge rst)begin
         if(rst)begin
@@ -48,8 +48,9 @@ module voice_allocator #(parameter integer VOICES=4)(
             IDLE:if(note_valid)begin
                 event_on<=note_on;event_id<=note_id;event_fcw<=note_fcw;
                 case(note_timbre)
-                    2'd1:event_timbre<=1;
-                    2'd2:event_timbre<=2;
+                    3'd1:event_timbre<=1;
+                    3'd2:event_timbre<=2;
+                3'd3:event_timbre<=3;3'd4:event_timbre<=4;3'd5:event_timbre<=5;3'd6:event_timbre<=6;
                     default:event_timbre<=0;
                 endcase
                 scan_slot<=0;match_found<=0;free_found<=0;
@@ -96,7 +97,7 @@ module voice_allocator #(parameter integer VOICES=4)(
     for(genvar v=0;v<VOICES;v=v+1)begin: ports
         assign voice_fcw[v*32+:32]=frequencies[v];
         assign voice_ids[v*7+:7]=ids[v];
-        assign voice_timbres[v*2+:2]=timbres[v];
+        assign voice_timbres[v*3+:3]=timbres[v];
         assign voice_start[v]=!rst && frame_ce && pending_start[v];
         assign voice_restart[v]=voice_start[v] && pending_restart[v];
         assign voice_stop[v]=!rst && frame_ce && !pending_start[v] && committed_gate[v] && !voice_held[v];

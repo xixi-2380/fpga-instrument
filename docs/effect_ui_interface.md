@@ -1,3 +1,7 @@
+## 本轮英伦界面接口更新
+
+当前feature/instrument-ui已接入菜单与七音色，见[instrument_ui.md](instrument_ui.md)与[instruments.md](instruments.md)。本页原四参数valid/ready接口保持不变；UI动作0..12保持，新增13CELLO、14PIANO、15GUITAR、16VIBRAPHONE、17上一音色、18下一音色。selected/note_timbre现3位，像素状态1112位，触摸命中函数新增menu参数。下方较早的“顶层valid固定0”只适用于feature/audio-effects，不是当前UI顶层。
+
 > 2026年10月23日整合更新：feature/instrument-ui已由统一音频域控制器连接参数入口、矩阵菜单及64位显示状态CDC；S0长按切模式、S3与UI共用状态。触摸驱动仍默认关闭，触摸命令仅保留受条件保护的入口。当前整合操作优先看[instrument_ui.md](instrument_ui.md)。下文描述b35cf2c独立音频版接口与当时尚未连接的状态，接口本身仍适用。
 
 # 效果器参数与 UI 对接约定

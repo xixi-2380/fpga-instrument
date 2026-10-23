@@ -1,0 +1,2 @@
+sim/tb_score_player.sv:27: warning: Port 10 (note_timbre) of score_player expects 3 bits, got 2.
+sim/tb_score_player.sv:27:        : Padding 1 high bits of the port.

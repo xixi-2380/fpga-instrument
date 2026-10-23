@@ -1,0 +1,6 @@
+{
+  "default_lcd": true,
+  "touch_default_off": true,
+  "passed": true,
+  "pll_model": "isolated behavioral clocks, not vendor/STA"
+}

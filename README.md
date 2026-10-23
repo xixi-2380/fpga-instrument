@@ -1,3 +1,9 @@
+## 当前英伦 UI 与七音色版本
+
+`feature/instrument-ui`在c341406上继续加入黑金英文演奏/参数双页、实际后效果器波形/峰值/音符监视与CELLO/PIANO/GUITAR/VIBRAPHONE。触摸仍关闭，仍用板上PT8211耳机；周同学MAX98357A/触摸和杨同学蓝牙待另行整合。旧三音色、小星星、三效果器与调参保留；矩阵菜单R4C2/C3现在是上一/下一音色。新版本35HDL/52依赖/54球位，须关闭重开工程。
+
+本次仅HDL仿真与静态检查，尚未Gowin综合/P&R/STA或实板试听。先前UI实测不覆盖本轮。操作与证据：[界面说明](docs/instrument_ui.md)、[音色说明](docs/instruments.md)、`reports/british_ui/2026-10-23/validation.json`。以下旧阶段记录按当时分支/提交解释。
+
 > 2026年10月23日：独立整合分支 **feature/instrument-ui** 已接入800×480界面和矩阵菜单。长按S0切换演奏/菜单，参数可在板上通过矩阵键盘调节；触摸默认仍关闭。操作、矩阵映射和上板流程见 [docs/instrument_ui.md](docs/instrument_ui.md)。main与原音频/显示分支保持各自版本。下方旧日期说明属于历史。
 
 > 2026年10月22日：feature/audio-effects 已增加运行时四参数接口，供后续UI整合。独立音频顶层尚未接入调参输入，默认听感与S3操作保持。接口和杨同学协作约定见 [docs/effect_ui_interface.md](docs/effect_ui_interface.md)。main和显示/触摸分支未同步本次修改。

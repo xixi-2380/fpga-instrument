@@ -1,0 +1,2 @@
+ARTICULATION_METRICS frames=58001 first_slot=0 new_slot=1 samples=232004
+PASS tb_score_articulation checks=4234087

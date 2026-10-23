@@ -5,7 +5,7 @@ module key_note_events #(parameter integer BASE_NOTE=60)(
     input wire clk,rst,enabled,input wire [15:0] keys,input wire note_ready,
     output reg note_valid,note_on,output reg [6:0] note_id,
     output reg [31:0] note_fcw,output wire gate,output reg [3:0] last_key,
-    input wire [1:0] selected_timbre,output reg [1:0] note_timbre);
+    input wire [2:0] selected_timbre,output reg [2:0] note_timbre);
     `include "config/keyboard_notes.svh"
     reg [15:0] reported_keys;
     reg [3:0] offered_key;
@@ -35,8 +35,9 @@ module key_note_events #(parameter integer BASE_NOTE=60)(
             note_id<=BASE_NOTE+candidate;
             note_fcw<=key_fcw(candidate);
             case(selected_timbre)
-                2'd1:note_timbre<=1;
-                2'd2:note_timbre<=2;
+                3'd1:note_timbre<=1;
+                3'd2:note_timbre<=2;
+                3'd3:note_timbre<=3;3'd4:note_timbre<=4;3'd5:note_timbre<=5;3'd6:note_timbre<=6;
                 default:note_timbre<=0;
             endcase
             note_valid<=1;

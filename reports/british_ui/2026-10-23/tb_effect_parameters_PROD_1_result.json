@@ -1,0 +1,8 @@
+{
+  "test": "tb_effect_parameters",
+  "parameters": "PROD=1",
+  "passed": true,
+  "checks": 403372,
+  "pll_model": "not exercised",
+  "seconds": 4.069
+}

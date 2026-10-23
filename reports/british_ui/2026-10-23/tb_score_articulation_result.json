@@ -1,0 +1,8 @@
+{
+  "test": "tb_score_articulation",
+  "parameters": "",
+  "passed": true,
+  "checks": 4234087,
+  "pll_model": "not exercised",
+  "seconds": 26.078
+}

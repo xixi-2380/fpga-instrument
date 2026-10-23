@@ -5,6 +5,8 @@
     <Version>5</Version>
     <Device name="GW5AST-138C" pn="GW5AST-LV138FPG676AC1/I0">gw5ast138c-003</Device>
     <FileList>
+        <File path="src/instrument_envelope.sv" type="file.verilog" enable="1" />
+        <File path="src/audio_visualizer.sv" type="file.verilog" enable="1" />
         <File path="src/ui_keypad_router.sv" type="file.verilog" enable="1" />
         <File path="src/ui_touch_actions.sv" type="file.verilog" enable="1" />
         <File path="src/rgb_display.sv" type="file.verilog" enable="1" />
@@ -51,6 +53,11 @@
         <File path="src/rom/sine4096.hex" type="file.other" enable="1" />
         <File path="src/keyboard.cst" type="file.cst" enable="1" />
         <File path="src/keyboard.sdc" type="file.sdc" enable="1" />
+        <File path="src/rom/cello4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/piano4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/guitar4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/vibraphone4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/british_font.hex" type="file.other" enable="1" />
     </FileList>
 </Project>
 

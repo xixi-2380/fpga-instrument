@@ -1,0 +1,8 @@
+{
+  "test": "tb_keyboard_core",
+  "parameters": "",
+  "passed": true,
+  "checks": 4615703,
+  "pll_model": "not exercised",
+  "seconds": 52.084
+}

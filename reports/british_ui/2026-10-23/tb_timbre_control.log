@@ -1,0 +1,1 @@
+PASS tb_timbre_control checks=21 debounce_cycles=4 long_cycles=100

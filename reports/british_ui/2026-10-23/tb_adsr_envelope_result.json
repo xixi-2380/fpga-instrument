@@ -1,0 +1,8 @@
+{
+  "test": "tb_adsr_envelope",
+  "parameters": "",
+  "passed": true,
+  "checks": 69,
+  "pll_model": "not exercised",
+  "seconds": 0.022
+}

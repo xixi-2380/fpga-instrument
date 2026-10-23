@@ -19,8 +19,9 @@ module keyboard_top #(
     output wire lcd_clk,lcd_hs,lcd_vs,lcd_en,output wire [5:0] lcd_r,lcd_g,lcd_b,
     inout wire touch_scl,touch_sda,touch_int,touch_rst_n);
     wire effects_enabled;
+    wire visual_sample_valid;wire signed [15:0] visual_sample;wire [15:0] visual_notes;
     wire [1:0] effect_mode;
-    wire [1:0] selected_timbre,event_timbre,key_timbre,score_timbre;
+    wire [2:0] selected_timbre,event_timbre,key_timbre,score_timbre;
     wire key_valid,key_on,score_valid,score_on,score_busy,score_done,score_error;
     wire [6:0] key_id,score_id;
     wire [31:0] key_fcw,score_fcw;
@@ -70,7 +71,7 @@ module keyboard_top #(
         .enabled(TOUCH_ENABLE!=0 && TOUCH_UI_ENABLE!=0),.snapshot_valid(touch_audio_valid),
         .ready(touch_audio[38]),.error(touch_audio[37]),.down(touch_audio[36]),.count(touch_audio[35:32]),
         .x(touch_audio[31:16]),.y(touch_audio[15:0]),.resolution_x(touch_audio[70:55]),
-        .resolution_y(touch_audio[54:39]),.effect_mode(effect_mode),
+        .resolution_y(touch_audio[54:39]),.effect_mode(effect_mode),.menu_mode(menu_mode),
         .action_valid(touch_action_valid),.action(touch_action));
     ui_keypad_router #(.RELEASE_CYCLES(SLOT_CYCLES*4*(DEBOUNCE_SCANS+1))) menu_keys(.clk(audio_clk),.rst(audio_reset),.menu_mode(menu_mode),
         .ghost(ghost),.keys(keys),.inhibit_notes(inhibit_notes),
@@ -80,6 +81,7 @@ module keyboard_top #(
             .PCLK_INVERT(LCD_PCLK_INVERT)) display_driver(
             .ref_clk(clk),.pll_reset(pll1_reset),.audio_clk(audio_clk),.audio_reset(audio_reset),
             .voice_active(voice_active),.voice_held(voice_held),.selected_timbre(selected_timbre),
+            .visual_sample_valid(visual_sample_valid),.visual_sample(visual_sample),.visual_notes(visual_notes),
             .score_busy(score_busy),.audio_ready(input_ready),.score_error(score_error),
             .underrun(underrun),.ghost(ghost),.lcd_clk(lcd_clk),.lcd_hs(lcd_hs),
             .lcd_vs(lcd_vs),.lcd_en(lcd_en),.lcd_r(lcd_r),.lcd_g(lcd_g),.lcd_b(lcd_b),
@@ -135,7 +137,8 @@ module keyboard_top #(
         .effect_cfg_ready(cfg_ready),.effect_cfg_applied(cfg_applied),
         .bck(HP_BCK),.ws(HP_WS),.din(HP_DIN),.pa_enable(PA_EN),.underrun(underrun),
         .frame_ce(frame_ce),.note_ready(note_ready),.input_ready(input_ready),
-        .gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(envelope_level));
+        .gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(envelope_level),
+        .visual_sample_valid(visual_sample_valid),.visual_sample(visual_sample),.visual_notes(visual_notes));
     assign DBG_BCK=HP_BCK;assign DBG_WS=HP_WS;
     assign DBG_DIN=HP_DIN;assign DBG_PA_EN=PA_EN;
 endmodule

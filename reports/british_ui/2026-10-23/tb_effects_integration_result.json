@@ -1,0 +1,8 @@
+{
+  "test": "tb_effects_integration",
+  "parameters": "",
+  "passed": true,
+  "checks": 6311863,
+  "pll_model": "not exercised",
+  "seconds": 43.632
+}
