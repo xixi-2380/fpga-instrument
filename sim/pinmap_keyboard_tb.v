@@ -19,7 +19,8 @@ module tb_keyboard_pinmap;
  keyboard_top #(.LCD_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(4),.SCORE_ENABLE(0),.LOCK_N(32),.SLOT_CYCLES(8),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(3),
   .MUTE(4),.FADE(4),.ATTACK(8),.DECAY(8),.SUSTAIN(32768),.RELEASE(16))
   dut(.clk(clk),.rst(rst),.board_buttons_n(4'hf),.key_row(port_rows),.key_col(port_cols),
-      .HP_BCK(bck),.HP_WS(ws),.HP_DIN(din),.PA_EN(pa),.DBG_BCK(db),.DBG_WS(dw),.DBG_DIN(dd),.DBG_PA_EN(dp));
+      .MAX_BCLK(bck),.MAX_LRCLK(ws),.MAX_DIN(din),.MAX_SD_MODE(),
+      .HP_BCK(),.HP_WS(),.HP_DIN(),.PA_EN(),.DBG_BCK(db),.DBG_WS(dw),.DBG_DIN(dd),.DBG_PA_EN(dp));
  // This is a physical-pin mapping test. Clock/reset behavior has its own TB.
  initial begin
   force dut.audio_clk=aclk;force dut.audio_reset=rst;

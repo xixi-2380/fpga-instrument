@@ -1,0 +1,3 @@
+MAX_STARTUP_METRICS enable_to_audio_ready_us=10043.924
+PASS tb_max98357_startup checks=1851224
+E:/gowin/fpga-instrument/sim/tb_max98357_startup.sv:31: $finish called at 10167636512 (1ps)

@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-23",
+  "scope": "Merge feature/instrument-ui and codex/fpga-migration into main, keep MAX98357A I2S output, and enable GT9110 touch plus touch UI by default.",
+  "production_defaults": {
+    "TOUCH_ENABLE": 1,
+    "TOUCH_UI_ENABLE": 1
+  },
+  "static_checks": {
+    "project_dependencies": 45,
+    "constraint_ports": 58,
+    "duplicate_constraint_ports": 0,
+    "duplicate_constraint_balls": 0,
+    "max98357_pins": {
+      "MAX_BCLK": "V22",
+      "MAX_LRCLK": "W19",
+      "MAX_DIN": "Y20",
+      "MAX_SD_MODE": "V26"
+    }
+  },
+  "pure_hdl_tests": [
+    {"name": "tb_gt9110_touch", "passed": true, "checks": 29591},
+    {"name": "tb_gt9110_boot", "passed": true, "checks": 7, "production_boot_ms": 76.005135},
+    {"name": "tb_ui_inputs", "passed": true, "checks": 62, "touch_events": 13},
+    {"name": "tb_ui_top", "passed": true, "checks": 74274},
+    {"name": "tb_keyboard_top", "passed": true, "checks": 2112305},
+    {"name": "tb_i2s_tx", "passed": true, "checks": 5407},
+    {"name": "tb_max98357_startup", "passed": true, "checks": 1851224, "enable_to_audio_ready_us": 9979.141},
+    {"name": "tb_score_audio", "passed": true, "checks": 2802273, "score_events": 84},
+    {"name": "tb_score_effects", "passed": true, "checks": 8205772, "score_events": 84},
+    {"name": "tb_effect_button_path", "passed": true, "checks": 2777630},
+    {"name": "tb_ui_score_handoff", "passed": true, "checks": 275225, "score_events": 84}
+  ],
+  "limits": "No Gowin synthesis, place-and-route, STA, programming, panel timing measurement, or physical touch electrical validation was run. The user must perform those hardware steps."
+}

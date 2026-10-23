@@ -1,4 +1,4 @@
-> 2026年10月23日：独立整合分支 **feature/instrument-ui** 已接入800×480界面和矩阵菜单。长按S0切换演奏/菜单，参数可在板上通过矩阵键盘调节；触摸默认仍关闭。操作、矩阵映射和上板流程见 [docs/instrument_ui.md](docs/instrument_ui.md)。main与原音频/显示分支保持各自版本。下方旧日期说明属于历史。
+> 2026年10月23日：`main` 已整合最新乐器UI与当前MAX98357A版本。800×480界面、矩阵菜单和运行时效果参数保留；数字音频改由MAX_BCLK/MAX_LRCLK/MAX_DIN/MAX_SD_MODE输出，GT9110采集和触摸UI默认启动。UI操作见 [docs/instrument_ui.md](docs/instrument_ui.md)，外接功放接线见 [docs/max98357.md](docs/max98357.md)。下方分支说明属于历史。
 
 > 2026年10月22日：feature/audio-effects 已增加运行时四参数接口，供后续UI整合。独立音频顶层尚未接入调参输入，默认听感与S3操作保持。接口和杨同学协作约定见 [docs/effect_ui_interface.md](docs/effect_ui_interface.md)。main和显示/触摸分支未同步本次修改。
 

@@ -16,12 +16,14 @@ module tb_score_effects;
  wire bck,ws,din,pa,db,dw,dd,dp;wire [5:0] leds;
  integer checks=0,score_events=0,key_events=0,finished_events=0,prior_nonzero;
  reg melody_seen=0;
- keyboard_top #(.LCD_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(4),.SCORE_ENABLE(1),.SCORE_BEAT_FRAMES(16),.LED_STEP_CYCLES(4),.LOCK_N(32),
+ keyboard_top #(.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(4),.SCORE_ENABLE(1),.SCORE_BEAT_FRAMES(16),.LED_STEP_CYCLES(4),.LOCK_N(32),
   .SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
   .MUTE(4),.FADE(4),.ATTACK(2),.DECAY(2),.SUSTAIN(32768),.RELEASE(2))
   dut(.clk(ref_clk),.rst(ref_rst),.board_buttons_n(buttons_n),.key_row(rows),.key_col(columns),
-   .HP_BCK(bck),.HP_WS(ws),.HP_DIN(din),.PA_EN(pa),
+   .MAX_BCLK(bck),.MAX_LRCLK(ws),.MAX_DIN(din),.MAX_SD_MODE(),
+   .HP_BCK(),.HP_WS(),.HP_DIN(),.PA_EN(),
    .DBG_BCK(db),.DBG_WS(dw),.DBG_DIN(dd),.DBG_PA_EN(dp),.led_n(leds));
+ assign pa=dut.input_ready;
  defparam dut.sound.DELAY_SAMPLES=FX_DELAY;
  for(genvar k=0;k<4;k=k+1)assign selected[k]=(columns[k]===1'b0);
  passive_matrix_model physical_keys(pressed,selected,rows);
@@ -71,7 +73,8 @@ module tb_score_effects;
   end
  end
  always @(bck or ws or din or pa)begin
-  #0.001;`CHECK({db,dw,dd,dp}==={bck,ws,din,pa},"autoplay preserves all audio mirrors")
+  #0.001;`CHECK({dut.HP_BCK,dut.HP_WS,dut.HP_DIN,dut.PA_EN,db,dw,dd,dp}===8'b0,
+   "autoplay leaves old board audio pads disabled")
  end
  initial begin
   #100 ref_rst=0;wait(pa);wait(score_events>=8);

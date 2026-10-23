@@ -25,7 +25,7 @@ IO_PORT "PA_EN" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
 // GPIO scope mirrors: user-selected 2x4 section of Dock J23 header.
 // Official Dock 4071f3 schematic page 16 and full-pin CST Header section.
 // J23 pins 39/37/35/33 = U22/V19/W20/U26 (user diagram upper row).
-// Lower row V22/W19/Y20/V26 is NOT used and is NOT ground.
+// Lower row V22/W19/Y20/V26 now drives external MAX98357A; none is ground.
 IO_LOC "DBG_BCK" U22;
 IO_PORT "DBG_BCK" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
 IO_LOC "DBG_WS" V19;
@@ -34,6 +34,18 @@ IO_LOC "DBG_DIN" W20;
 IO_PORT "DBG_DIN" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
 IO_LOC "DBG_PA_EN" U26;
 IO_PORT "DBG_PA_EN" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+
+// 2026-10-23 user wiring: external MAX98357A on the other J23 row.
+// Reference Header indices 37/35/33/31; all are signal IO, NOT power/GND.
+// Keep short 3.3V logic connections and share a real GND with the module.
+IO_LOC "MAX_BCLK" V22;
+IO_PORT "MAX_BCLK" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "MAX_LRCLK" W19;
+IO_PORT "MAX_LRCLK" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "MAX_DIN" Y20;
+IO_PORT "MAX_DIN" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "MAX_SD_MODE" V26;
+IO_PORT "MAX_SD_MODE" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
 
 // Reference pin_header indices: columns 29/27/25/23, rows 28/26/24/22.
 // Preserve user wiring: selected column low, others Z; input rows need pull-ups.

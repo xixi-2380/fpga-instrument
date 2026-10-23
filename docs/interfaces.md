@@ -472,4 +472,11 @@ synth_core新增effect_cfg_valid/ready/applied与effect_echo_wet[8:0]、effect_r
 
 ## 2026年10月23日UI整合
 
-feature/instrument-ui独立整合音频b35cf2c与显示dd49c83。控制器位于audio_clk，S0长按切菜单、短按松开选正弦，S3与UI共用状态；四参数快照保持到接收，UI目标按5%/1Hz修改。矩阵菜单继续扫描并以零键位排空Note Off，返回演奏后须全松键重新武装。64位audio到pixel状态快照逐帧更新，71位触摸状态从ref到audio原子传递。触摸默认关闭且四线高阻；界面两级像素寄存器保持RGB/DE/HS/VS对齐。操作与准确接口以[instrument_ui.md](instrument_ui.md)为准。
+feature/instrument-ui独立整合音频b35cf2c与显示dd49c83。控制器位于audio_clk，S0长按切菜单、短按松开选正弦，S3与UI共用状态；四参数快照保持到接收，UI目标按5%/1Hz修改。矩阵菜单继续扫描并以零键位排空Note Off，返回演奏后须全松键重新武装。64位audio到pixel状态快照逐帧更新，71位触摸状态从ref到audio原子传递。该分支当时默认关闭触摸；合入main后已按用户要求默认启动。界面两级像素寄存器保持RGB/DE/HS/VS对齐。操作与准确接口以[instrument_ui.md](instrument_ui.md)为准。
+
+
+## 2026年10月23日 MAX98357A 与 UI 合并
+
+合并后的 `synth_core` 保留 `audio_effects` 及运行时四参数握手，效果输出继续经原 `frame_buffer` 形成左右相同的16位采样；串行器由 `pt8211_tx` 替换为标准一位延迟I²S的 `i2s_tx`。顶层新增 `MAX_BCLK/MAX_LRCLK/MAX_DIN/MAX_SD_MODE`，旧 `HP_*`、`PA_EN` 和 `DBG_*` 固定低。
+
+`MAX_SD_MODE` 在音频复位解除并经过两个完整帧边界后拉高，生产启动静音仍在其后提供大于7.5ms的数字静音。用户指定球位为V22/W19/Y20/V26，CST使用LVCMOS33、4mA，SDC保留0..30ns输出路线预算；实际电气、STA和音质仍由用户重新实现并实测。协议、接线和外围限制见[max98357.md](max98357.md)。

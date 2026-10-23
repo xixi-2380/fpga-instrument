@@ -116,3 +116,11 @@
 - 新UI33个HDL/45依赖/54球位，单字库两级像素渲染、64位状态原子CDC、71位触摸原子CDC。统一timbre_control仲裁板载/菜单/触摸，四参数快照在背压时保持稳定。S0短按松开选正弦、长按0.8秒切演奏/菜单并保留音色；S1/S2及S3约定保留。
 - 菜单扫描持续运行、Note Off可排空，退出后须全松键重新武装；不通过冻结适配器状态留下持音。保持音频引擎/PLL/功放不变，不新增调音算法或噪声修复。完整84事件曲谱与菜单联合验证使用缩短但合法的4采样节拍，仅作逻辑验证。
 - 不运行Gowin综合/P&R/STA/下载，由用户执行；软件仿真、仿真预览与实屏/实板结果分别记录。当前说明与证据见docs/instrument_ui.md及reports/instrument_ui/2026-10-23。
+
+
+## 2026年10月23日 UI 与 MAX98357A 合入 main
+
+- 用户明确要求把当前`codex/fpga-migration`与远端`feature/instrument-ui`最新版本合入main。以UI分支c341406为功能主体，保留其显示、菜单、效果参数和触摸双开关逻辑，再接入当前386a3dd的MAX98357A标准I²S输出。
+- 外接功放信号为MAX_BCLK=V22、MAX_LRCLK=W19、MAX_DIN=Y20、MAX_SD_MODE=V26；旧板载PT8211/PA和DBG输出固定低。`synth_core`保留`audio_effects`，仅将效果后帧缓冲的串行器切换为`i2s_tx`。
+- 用户随后明确要求“触摸启动”：生产顶层默认`TOUCH_ENABLE=1`、`TOUCH_UI_ENABLE=1`，启用GT9110采集与受ready/error/800×480/单点范围保护的UI动作。此设置不代表此前`TOUCH ERROR`的实板电气问题已修复；专用非触摸回归测试显式覆盖为0。
+- 用户仍负责Gowin综合、P&R、STA、烧录和实板测量。合并验证只运行纯HDL/静态检查，不能写成新main已通过硬件验收。

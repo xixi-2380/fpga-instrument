@@ -1,0 +1,2 @@
+PASS tb_keyboard_pinmap checks=34 transposed=1 nonzero_words=126
+E:/gowin/fpga-instrument/sim/pinmap_keyboard_tb.v:53: $finish called at 1500412198 (1ps)

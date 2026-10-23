@@ -11,11 +11,12 @@ module tb_score_audio;
  wire bck,ws,din,pa,db,dw,dd,dp;wire [5:0] leds;
  integer checks=0,score_events=0,key_events=0,finished_events=0,prior_nonzero;
  reg melody_seen=0;
- keyboard_top #(.LCD_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(4),.SCORE_ENABLE(1),.SCORE_BEAT_FRAMES(8),.LED_STEP_CYCLES(4),.LOCK_N(32),
+ keyboard_top #(.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(4),.SCORE_ENABLE(1),.SCORE_BEAT_FRAMES(8),.LED_STEP_CYCLES(4),.LOCK_N(32),
   .SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
   .MUTE(4),.FADE(4),.ATTACK(2),.DECAY(2),.SUSTAIN(32768),.RELEASE(2))
   dut(.clk(ref_clk),.rst(ref_rst),.board_buttons_n(4'hf),.key_row(rows),.key_col(columns),
-   .HP_BCK(bck),.HP_WS(ws),.HP_DIN(din),.PA_EN(pa),
+   .MAX_BCLK(bck),.MAX_LRCLK(ws),.MAX_DIN(din),.MAX_SD_MODE(),
+   .HP_BCK(),.HP_WS(),.HP_DIN(),.PA_EN(),
    .DBG_BCK(db),.DBG_WS(dw),.DBG_DIN(dd),.DBG_PA_EN(dp),.led_n(leds));
  for(genvar k=0;k<4;k=k+1)assign selected[k]=(columns[k]===1'b0);
  passive_matrix_model physical_keys(pressed,selected,rows);
@@ -24,6 +25,7 @@ module tb_score_audio;
  wire [6:0] note_id=dut.note_id;wire [31:0] note_fcw=dut.note_fcw;
  wire [1:0] note_timbre=dut.event_timbre;
  wire u=dut.underrun,frame_ce=dut.frame_ce;
+ assign pa=dut.input_ready;
  function real waveform(input integer t,input real a);
  case(t)
  1:waveform=$sin(a)+0.20*$sin(2*a)+0.08*$sin(3*a);
@@ -63,7 +65,8 @@ module tb_score_audio;
   end
  end
  always @(bck or ws or din or pa)begin
-  #0.001;`CHECK({db,dw,dd,dp}==={bck,ws,din,pa},"autoplay preserves all audio mirrors")
+  #0.001;`CHECK({dut.HP_BCK,dut.HP_WS,dut.HP_DIN,dut.PA_EN,db,dw,dd,dp}===8'b0,
+   "autoplay leaves old board audio pads disabled")
  end
  initial begin
   #100 ref_rst=0;wait(pa);wait(score_events>=8);

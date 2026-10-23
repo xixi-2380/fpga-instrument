@@ -3,7 +3,7 @@
 `include "config/run_leds_config.svh"
 module keyboard_top #(
     parameter integer LCD_ENABLE=1,LCD_TEST_PATTERN=0,LCD_PCLK_INVERT=1,
-    TOUCH_ENABLE=0,TOUCH_UI_ENABLE=0,TOUCH_RESET_CYCLES=1000000,TOUCH_STRAP_CYCLES=300000,
+    TOUCH_ENABLE=1,TOUCH_UI_ENABLE=1,TOUCH_RESET_CYCLES=1000000,TOUCH_STRAP_CYCLES=300000,
     TOUCH_BOOT_CYCLES=2500000,TOUCH_POLL_CYCLES=500000,TOUCH_I2C_HALF=250,
     parameter SCORE_FILE="src/scores/twinkle.hex",
     parameter integer SCORE_WORDS=512,SCORE_ENABLE=1,SCORE_BEAT_FRAMES=(`SAMPLE_HZ/2),
@@ -15,10 +15,13 @@ module keyboard_top #(
     DECAY=`ADSR_DECAY_FRAMES,SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES)(
     input wire clk,rst,input wire [3:0] board_buttons_n,input wire [3:0] key_row,inout wire [3:0] key_col,
     output wire HP_BCK,HP_WS,HP_DIN,PA_EN,DBG_BCK,DBG_WS,DBG_DIN,DBG_PA_EN,
+    output wire MAX_BCLK,MAX_LRCLK,MAX_DIN,MAX_SD_MODE,
     output wire [5:0] led_n,
     output wire lcd_clk,lcd_hs,lcd_vs,lcd_en,output wire [5:0] lcd_r,lcd_g,lcd_b,
     inout wire touch_scl,touch_sda,touch_int,touch_rst_n);
     wire effects_enabled;
+    wire synth_pa_enable;
+    reg [1:0] max_clock_frames;
     wire [1:0] effect_mode;
     wire [1:0] selected_timbre,event_timbre,key_timbre,score_timbre;
     wire key_valid,key_on,score_valid,score_on,score_busy,score_done,score_error;
@@ -47,6 +50,17 @@ module keyboard_top #(
     wire [38:0] touch_status={touch_ready,touch_error,touch_down,touch_count,touch_x,touch_y};
     wire [70:0] touch_audio;
     wire touch_audio_valid,touch_update;
+    // Start the external amplifier only after I2S clocks have crossed two
+    // frame boundaries. The existing production mute interval then supplies
+    // more than 7.5 ms of digital silence before audio is admitted.
+    always @(posedge audio_clk or posedge audio_reset)begin
+        if(audio_reset)max_clock_frames<=0;
+        else if(frame_ce && max_clock_frames!=2)max_clock_frames<=max_clock_frames+1'b1;
+    end
+    assign MAX_SD_MODE=!audio_reset && max_clock_frames==2;
+    // Retired onboard PT8211/PA and scope-mirror pads remain parked low.
+    assign HP_BCK=0;assign HP_WS=0;assign HP_DIN=0;assign PA_EN=0;
+    assign DBG_BCK=0;assign DBG_WS=0;assign DBG_DIN=0;assign DBG_PA_EN=0;
     if(TOUCH_ENABLE)begin: touch_on
         gt9110_touch #(.RESET_CYCLES(TOUCH_RESET_CYCLES),.STRAP_CYCLES(TOUCH_STRAP_CYCLES),
             .BOOT_CYCLES(TOUCH_BOOT_CYCLES),.POLL_CYCLES(TOUCH_POLL_CYCLES),
@@ -133,11 +147,9 @@ module keyboard_top #(
         .effect_cfg_valid(cfg_valid),.effect_echo_wet(echo_wet),.effect_room_wet(room_wet),
         .effect_tremolo_depth(tremolo_depth),.effect_tremolo_rate_hz(cfg_rate_hz),
         .effect_cfg_ready(cfg_ready),.effect_cfg_applied(cfg_applied),
-        .bck(HP_BCK),.ws(HP_WS),.din(HP_DIN),.pa_enable(PA_EN),.underrun(underrun),
+        .bck(MAX_BCLK),.ws(MAX_LRCLK),.din(MAX_DIN),.pa_enable(synth_pa_enable),.underrun(underrun),
         .frame_ce(frame_ce),.note_ready(note_ready),.input_ready(input_ready),
         .gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(envelope_level));
-    assign DBG_BCK=HP_BCK;assign DBG_WS=HP_WS;
-    assign DBG_DIN=HP_DIN;assign DBG_PA_EN=PA_EN;
 endmodule
 
 

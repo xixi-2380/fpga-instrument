@@ -1,4 +1,4 @@
-> 2026年10月23日：本文件保留周建涛分支的硬件和历史实现记录。最新整合界面与控制连接见[instrument_ui.md](instrument_ui.md)，显示状态现为64位、渲染为两级寄存器；触摸默认仍关闭。
+> 2026年10月23日：本文件保留周建涛分支的硬件和历史实现记录。最新整合界面与控制连接见[instrument_ui.md](instrument_ui.md)，显示状态现为64位、渲染为两级寄存器；main已按用户要求默认启动触摸采集和触摸UI。
 
 # GT9110 触摸读取首版
 
@@ -41,11 +41,11 @@
 
 ## 参数、验证和用户上板
 
-因实板显示 `TOUCH ERROR`，顶层当前默认 `TOUCH_ENABLE=0`、`LCD_ENABLE=1`、`LCD_TEST_PATTERN=0`。关闭时不例化触摸读取逻辑，四根触摸信号全部保持高阻；触摸源码与约束保留，排查供电、上拉和电平后可将 `TOUCH_ENABLE` 改回1。可调整的仿真/启动参数在原 `keyboard_top`：`TOUCH_RESET_CYCLES`、`TOUCH_STRAP_CYCLES`、`TOUCH_BOOT_CYCLES`、`TOUCH_POLL_CYCLES`、`TOUCH_I2C_HALF`。生产默认时长见上文，不为实板缩短到测试值。
+用户后续要求启动触摸，顶层当前默认 `TOUCH_ENABLE=1`、`TOUCH_UI_ENABLE=1`、`LCD_ENABLE=1`、`LCD_TEST_PATTERN=0`。复位释放后按生产时长初始化并轮询；只有ready、无错误、800×480、单点且坐标有效时才执行UI动作。此前实板 `TOUCH ERROR` 仍提示需检查供电、上拉和电平，默认启动不等于该电气问题已解决。可调整的仿真/启动参数在 `keyboard_top`：`TOUCH_RESET_CYCLES`、`TOUCH_STRAP_CYCLES`、`TOUCH_BOOT_CYCLES`、`TOUCH_POLL_CYCLES`、`TOUCH_I2C_HALF`。生产默认时长见上文，不为实板缩短到测试值。
 
 `tb_gt9110_touch`独立模拟从机协议，验证ID/分辨率、1点/10点数量及首坐标、松手、无新帧、所有地址阶段NACK、清除NACK、异常数量、拉伸、超时、重试和复位；分别用加速半周期4和生产半周期250。两组功能测试只缩短启动/轮询计数；`tb_gt9110_boot`另用完整生产20ms+6ms+50ms计数，检查启动约76ms、INT释放和启动中复位。`tb_i2c_register_master`另覆盖非法读长度、SCL/SDA卡线、忙时输入命令忽略和字节中途复位。渲染与显示测试覆盖原子触摸快照、边角/越界十字和错误文字；最终结果、失败修正记录和验证范围见[本轮验证](../reports/display/2026-10-22/touch/validation.json)。仿真从机不是实测GT9110，不证明板上电压、上拉、实际芯片型号或触摸方向。
 
 用户自行关闭旧源码页，关闭再重开 `E:\gowin\fpga-instrument\keyboard_adsr.gprj`，确认28个HDL/39项依赖以及新顶层LCD/触摸端口已加载，再运行综合/P&R。实现报告须包含音频61.44MHz、像素35MHz及参考50MHz，Setup/Hold均无违例；核对3个PLL、全部50个球位和新CDC的实际布线/延迟，旧STA不适用。助手没有运行EDA或烧录。
 
-RGB部分使用Sipeed官方Pro 800×480的**试亮参考配置**，不是已确认的本屏厂家时序，详见[显示说明](rgb_display.md)。烧录后先确认UI是否稳定，再观察TOUCH WAIT是否变UP；单点按下/拖动/松开，再测四角与两点数量。若ERROR，按已给接线检查触摸板供电、四线电平/上拉和复位释放，保留实测结果，不以纯HDL结果认定物理连接成功。触摸不改变音量/音色，自动曲谱结束后仍按原规则恢复键盘。
+RGB部分使用Sipeed官方Pro 800×480的**试亮参考配置**，不是已确认的本屏厂家时序，详见[显示说明](rgb_display.md)。烧录后先确认UI是否稳定，再观察TOUCH WAIT是否变UP；单点按下/松开并核对各控件，再测四角与两点数量。若ERROR，按已给接线检查触摸板供电、四线电平/上拉和复位释放，保留实测结果，不以纯HDL结果认定物理连接成功。只有底部显示READY时触摸才会改变UI设置；自动曲谱结束后仍按原规则恢复键盘。
 

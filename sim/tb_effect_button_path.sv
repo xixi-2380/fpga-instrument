@@ -10,11 +10,12 @@ module tb_effect_button_path;
  tri [3:0] columns;wire [3:0] rows,selected;
  wire bck,ws,din,pa;wire [5:0] leds;
  integer checks=0,events=0,frames=0,prior_events;
- keyboard_top #(.LCD_ENABLE(0),.SCORE_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(4),.BUTTON_LONG_PRESS_CYCLES(128),
+ keyboard_top #(.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.SCORE_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(4),.BUTTON_LONG_PRESS_CYCLES(128),
   .LOCK_N(32),.SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
   .MUTE(4),.FADE(4),.ATTACK(2),.DECAY(2),.SUSTAIN(32768),.RELEASE(2))
   dut(.clk(clk),.rst(rst),.board_buttons_n(buttons_n),.key_row(rows),.key_col(columns),
-   .HP_BCK(bck),.HP_WS(ws),.HP_DIN(din),.PA_EN(pa),.led_n(leds));
+   .MAX_BCLK(bck),.MAX_LRCLK(ws),.MAX_DIN(din),.MAX_SD_MODE(),.led_n(leds));
+ assign pa=dut.input_ready;
  for(genvar k=0;k<4;k=k+1)assign selected[k]=(columns[k]===1'b0);
  passive_matrix_model physical_keys(pressed,selected,rows);
  always @(posedge dut.audio_clk)if(!dut.audio_reset)begin
