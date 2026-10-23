@@ -1,0 +1,14 @@
+{
+  "change": "Replace compact ternary clamp with equivalent if/else for Gowin parser",
+  "tests": [
+    {
+      "test": "tb_effect_parameters",
+      "result": "PASS tb_effect_parameters checks=121456 vectors=19854 production=0"
+    },
+    {
+      "test": "tb_effect_parameters_production",
+      "result": "PASS tb_effect_parameters checks=403372 vectors=66840 production=1"
+    }
+  ],
+  "gowin_run": false
+}

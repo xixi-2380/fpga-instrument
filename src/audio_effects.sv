@@ -24,7 +24,12 @@ module audio_effects #(
     reg [8:0] echo_level,room_level,depth_level,used_echo,used_room;
     assign cfg_ready=!rst;
     function automatic [8:0] clamp_amount(input [8:0] value);
-        begin clamp_amount=value>9'd256?9'd256:value;end
+        begin
+            if (value > 9'd256)
+                clamp_amount = 9'd256;
+            else
+                clamp_amount = value;
+        end
     endfunction
     // round(hz * 2^32 / 48000); no division or variable frequency clock.
     function automatic [31:0] rate_step(input [3:0] hz);
