@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-22",
+  "baseline": "3fbe052",
+  "functional_baseline": "f285506",
+  "tests": {
+    "tb_rgb_ui_renderer": {
+      "checks": 1935673,
+      "summary": "renderer/summary_tb_rgb_ui_renderer.json",
+      "log": "renderer/tb_rgb_ui_renderer.log",
+      "compile_log": "renderer/tb_rgb_ui_renderer_compile.log"
+    },
+    "tb_keyboard_top": {
+      "checks": 2048114,
+      "summary": "keyboard/summary_tb_keyboard_top.json",
+      "log": "keyboard/tb_keyboard_top.log",
+      "compile_log": "keyboard/tb_keyboard_top_compile.log"
+    }
+  },
+  "total_checks": 3983787,
+  "preprocess_without_config_search_path": true,
+  "pinmap": "pinmap.json",
+  "preview": "ui_preview.png",
+  "sha256": {
+    "src/rgb_ui_renderer.sv": "e975312dc860762e808c63cb5081b90526192966531064c5666163800d37cb71",
+    "sim/tb_rgb_ui_renderer.sv": "c1e367bbb6c2d814747da8db852016131164827d440b6955bcc0d8b459523a9d",
+    "keyboard_adsr.gprj": "e045bc9c0d6f7507908eafc97e0fdd90a0e9c648d52dc930936f924878b23b62",
+    "src/keyboard_top.sv": "861a532a465b1f92a992d54abd8c9d32bcb11d15cf6f145e57ee4c3937602f39",
+    "src/keyboard.cst": "e6dcd89c6bc4890e40e5cc68fef5cf81993d543968b234f978555af80e1399b9",
+    "src/keyboard.sdc": "d4cda6eda4eabf4c1eb77b25273648a8e94d466d7489bd83f175fdaf27251086"
+  },
+  "limits": [
+    "Renderer only; no production top instance, LCD clock/timing, CDC adapter or output constraints",
+    "Preview uses synthetic TB status",
+    "Panel timing and electrical manual pending from user",
+    "No EDA, STA, hardware programming or remote branch merge performed"
+  ]
+}

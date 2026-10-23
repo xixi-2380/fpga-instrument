@@ -1,13 +1,13 @@
 port,ball,io_standard,status,source,reference_port,pull_mode,drive,bank_vccio,note
 clk,P16,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,clk,UP,OFF,3.3,
 rst,U4,LVCMOS15,diagnostic_bias_change_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,rst,DOWN,OFF,1.5,Override reference NONE: weak pull-down matches released active-high USR; user reports reset diagnostic LED stuck on; physical cause unverified
-HP_BCK,E22,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,HP_BCK,NONE,8,3.3,
-HP_WS,F24,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,HP_WS,NONE,8,3.3,
-HP_DIN,G24,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,HP_DIN,NONE,8,3.3,
+HP_BCK,E22,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,HP_BCK,NONE,4,3.3,
+HP_WS,F24,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,HP_WS,NONE,4,3.3,
+HP_DIN,G24,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,HP_DIN,NONE,4,3.3,
 PA_EN,H17,LVCMOS33,documentary_checked_hardware_unverified,Dock_4071f3_audio_sheet,,NONE,8,3.3,Not listed in user CST; Dock 4071f3 schematic page 18
-DBG_BCK,U22,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[36],NONE,8,3.3,
-DBG_WS,V19,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[34],NONE,8,3.3,
-DBG_DIN,W20,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[32],NONE,8,3.3,
+DBG_BCK,U22,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[36],NONE,4,3.3,
+DBG_WS,V19,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[34],NONE,4,3.3,
+DBG_DIN,W20,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[32],NONE,4,3.3,
 DBG_PA_EN,U26,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[30],NONE,8,3.3,
 key_col[0],W25,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[29],NONE,8,3.3,
 key_col[1],M24,LVCMOS33,documentary_checked_hardware_unverified,user_CST_sha256_f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba,pin_header[27],NONE,8,3.3,
@@ -27,3 +27,29 @@ board_buttons_n[0],K16,LVCMOS33,documentary_checked_hardware_unverified,Dock_407
 board_buttons_n[1],F15,LVCMOS33,documentary_checked_hardware_unverified,Dock_4071f3_PERIPHERALS_sheet15,S1,UP,OFF,3.3,Active-low independent user button; physical S numbering (generic key[1]/key[2] aliases differ)
 board_buttons_n[2],G15,LVCMOS33,documentary_checked_hardware_unverified,Dock_4071f3_PERIPHERALS_sheet15,S2,UP,OFF,3.3,Active-low independent user button; physical S numbering (generic key[1]/key[2] aliases differ)
 board_buttons_n[3],G16,LVCMOS33,documentary_checked_hardware_unverified,Dock_4071f3_PERIPHERALS_sheet15,S3,UP,OFF,3.3,Active-low independent user button; physical S numbering (generic key[1]/key[2] aliases differ)
+lcd_clk,H21,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_hs,H22,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_vs,A23,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_en,A24,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_g[5],J16,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_g[4],K15,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_g[3],F22,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_g[2],G22,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_g[1],G21,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_g[0],G20,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_b[5],F20,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_b[4],G19,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_b[3],F19,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_b[2],F18,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_b[1],M17,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_b[0],M16,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_r[5],H19,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_r[4],J19,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_r[3],G25,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_r[2],H18,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_r[1],J18,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+lcd_r[0],K17,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,8,3.3,Preserved RGB connection and electrical settings
+touch_scl,AB26,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,4,3.3,Preserved wiring; touch signals default high impedance
+touch_sda,U25,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,4,3.3,Preserved wiring; touch signals default high impedance
+touch_int,V23,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,4,3.3,Preserved wiring; touch signals default high impedance
+touch_rst_n,R23,LVCMOS33,inherited_display_mapping_new_implementation_unverified,codex/fpga-migration_dd49c83_src/keyboard.cst,,NONE,4,3.3,Preserved wiring; touch signals default high impedance

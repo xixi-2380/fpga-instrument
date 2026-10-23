@@ -1,0 +1,158 @@
+{
+  "date": "2026-10-23",
+  "branch": "feature/instrument-ui",
+  "parents": {
+    "audio": "b35cf2ce25a08ac86bacfe2944282074ad20e44a",
+    "display": "dd49c83353b61c097f6f1ef2aa242f15101819e2"
+  },
+  "hdl_configurations_passed": 12,
+  "hdl_checks_passed": 11059391,
+  "tests": [
+    {
+      "configuration": "tb_ui_controls",
+      "checks": 78,
+      "passed": true,
+      "pll_model": "not exercised"
+    },
+    {
+      "configuration": "tb_ui_inputs",
+      "checks": 62,
+      "passed": true,
+      "pll_model": "not exercised"
+    },
+    {
+      "configuration": "tb_timbre_control",
+      "checks": 21,
+      "passed": true,
+      "pll_model": "not exercised"
+    },
+    {
+      "configuration": "tb_ui_top",
+      "checks": 74274,
+      "passed": true,
+      "pll_model": "behavioral substitute"
+    },
+    {
+      "configuration": "tb_ui_top_lcd",
+      "checks": 74314,
+      "passed": true,
+      "pll_model": "behavioral substitute"
+    },
+    {
+      "configuration": "tb_ui_score_handoff",
+      "checks": 275225,
+      "passed": true,
+      "pll_model": "behavioral substitute"
+    },
+    {
+      "configuration": "tb_rgb_status_cdc_w20",
+      "checks": 5302,
+      "passed": true,
+      "pll_model": "not exercised"
+    },
+    {
+      "configuration": "tb_rgb_status_cdc_w64",
+      "checks": 5302,
+      "passed": true,
+      "pll_model": "not exercised"
+    },
+    {
+      "configuration": "tb_rgb_status_cdc_w71",
+      "checks": 5302,
+      "passed": true,
+      "pll_model": "not exercised"
+    },
+    {
+      "configuration": "tb_rgb_scan_timing",
+      "checks": 4754316,
+      "passed": true,
+      "pll_model": "not exercised"
+    },
+    {
+      "configuration": "tb_rgb_ui_renderer",
+      "checks": 3072032,
+      "passed": true,
+      "pll_model": "not exercised"
+    },
+    {
+      "configuration": "tb_rgb_display",
+      "checks": 2793163,
+      "passed": true,
+      "pll_model": "behavioral substitute"
+    }
+  ],
+  "project_dependencies": 45,
+  "hdl_files": 33,
+  "pin_balls": 54,
+  "inherited_display_only_files": 82,
+  "audio_engine_files_unchanged": [
+    "src/audio_effects.sv",
+    "src/audio_delay.sv",
+    "src/audio_reverb.sv",
+    "src/synth_core.sv",
+    "src/score_player.sv",
+    "src/pll_pair.sv",
+    "src/key_note_events.sv",
+    "src/voice_allocator.sv"
+  ],
+  "touch_driver_and_scan_and_cdc_byte_identical": true,
+  "pixel_pll_primitive_configuration_unchanged": true,
+  "new_interface_uses_full_audio_domain_parameter_snapshots": true,
+  "default_touch_enabled": false,
+  "default_touch_ui_enabled": false,
+  "preview_source": "Actual HDL raster test input states; not hardware photos",
+  "render_latency": "two pixel registers; RGB DE HS VS aligned",
+  "score_handoff_events": 84,
+  "accelerated_score_beat_frames": 4,
+  "board_button_debounce_and_long_thresholds": "accelerated only in tests",
+  "gowin_synthesis": false,
+  "place_and_route": false,
+  "sta": false,
+  "hardware_display_or_audio_audition": false,
+  "main_audio_display_branches_unchanged": true,
+  "source_sha256": {
+    "src/timbre_control.sv": "710234814ebb4cd40cfa7211c3cea4a01b142fb3a7b45903cc6e76edf3abf772",
+    "src/keyboard_top.sv": "5b3760a4ef1c8d283d2945686a7ef93ca31f3eae354a21d197754f2b3d2c7ac6",
+    "src/keyboard_core.sv": "34842676120d06de9fe461887d2e58a8d4f130b7c07650dfbff7549529b0638e",
+    "src/keyboard.cst": "07b5b0d40c5c94a3877b2329fac3ef70d5ad6d9c5af23507d82e278312c25eed",
+    "src/keyboard.sdc": "f93afd1063839ecfa6278eadca5a4e1828cba3e32c1051358b091a5da685272e",
+    "keyboard_adsr.gprj": "61ab3a7b8e0fd0059f5aaa5e6ff075c5126e5c1697ec609191bbfb4dd28b011a",
+    "scripts/run_sim.py": "52fb8e84481cf5b023d4b4a914bfb134a2b06042952b39846edfbf619fa1d4cd",
+    "README.md": "256295f1f8d0710deae24c6dcdf5736ac03ab4844c2c1482de34df7264ffce99",
+    "AGENTS.md": "2b4ad2b3c39a7b590683b91cd2ee608c71a0337debe16e2cf16945b61fe3fb2f",
+    "docs/effect_ui_interface.md": "f30c7c8ffc4200d2eebd094786de7410d64ebba97e346d0c41b16c77fe8f8b36",
+    "sim/tb_timbre_control.sv": "e4b5a80c06a31993e2ea058e302b649f6d588e56bf1f5501acca30f878683969",
+    "sim/tb_keyboard_top.sv": "624f420021f5af19bc027cd8127c3f46135ca9d0cd71a96a3764c5c81a22efa0",
+    "sim/tb_score_audio.sv": "0b9ae56e690e880fd7024f1cc68bf25d148cc491eb7a8262ae8d9d486fd9f757",
+    "sim/tb_score_effects.sv": "ff7e9ec04f5d6a9c7cf27cdb895e965a9afc32127cd5ed8a4ac219802cafb139",
+    "sim/tb_effect_button_path.sv": "5e56eb5b6716b02c767ae615d402c7b48690f07940df052a6de621162dd6c70a",
+    "sim/pinmap_keyboard_tb.v": "5a997c76b4e1d6856ec8d4348ffbed9c961dfe4198d25ad237f223c3ba62ce46",
+    "scripts/build_keyboard.py": "6f61bcc02c409438cedab74050043b5f51e2a02f0ee7d93b9a24bebe6a87ced1",
+    "docs/hardware/reference_pins.csv": "c7b903463f580e180d748924abeaf2e79343d7dbd548aa0c4eadc7d82ab40c7f",
+    "docs/interfaces.md": "1bf1cf55ae9ed911c802904e2d91eea9ed9e820638ac681bdf70bf5117ead9c7",
+    "docs/rgb_display.md": "07ed22d028d82b964f110ef54d61f5463727790db49106d56ea6a68c45b96e70",
+    "docs/touch_gt9110.md": "e1bdcc8efbde5b2e786b61b87e0d7d042eab8dca0777c06116c74a68a5cd785c",
+    "sim/tb_rgb_display.sv": "393d49fd901fdbdd8af561861e320e3c5fb670803e422434c4ce484112375a51",
+    "sim/tb_rgb_scan_timing.sv": "833a813d5936473dc9d4fd0345a08a7780d24c6ce3c2678d41a96129b833bfa8",
+    "sim/tb_rgb_status_cdc.sv": "6f20cacdaacfac295c0151a3d703405da801813267d602dc303f528e9eb544f1",
+    "sim/tb_rgb_ui_renderer.sv": "1a96ca54d9f6e30cace3dac6a9d16bc4af0d2e05533fb4aad920cd8047323882",
+    "src/rgb_display.sv": "0cbff2e5700642b8248de226c922761cd044d1f512b416ebf8b501fba07abacf",
+    "src/rgb_ui_renderer.sv": "627356893046db51797d0fac862a986a39c991a8f6d58fced2f14be22e8bf660",
+    "src/ui_keypad_router.sv": "7c55ccbe804cb0905d1f21054a39656eed14ed358a2a8f3fe01b349160adaa73",
+    "src/ui_touch_actions.sv": "27cbe16cbc74d172fa9555d1c6a3c14ba6a45bb2cdf01afc8e29c364d904a239",
+    "src/config/ui_layout.svh": "5119a77909b4045de02bec9cf58b4827187b40890ac09fbc4602e26dd2987105",
+    "sim/pixel_pll_behavioral.sv": "d79f0c0fd3233fe961f544fb6578fd75fe5a57cd5e6771684442a4d7a4f32e82",
+    "sim/tb_ui_controls.sv": "782e95326f34ba4ebc4b8cb992d828ebcbd9b8949fa3d5e68ce350110979f9bf",
+    "sim/tb_ui_inputs.sv": "aa194c1d5f1005edd1fbbea71e9fbd7ef1d882bfc2eb83aec44b7dc436ba30e1",
+    "sim/tb_ui_top.sv": "4ca298a3141493a0a447fa234fe36f07bbe12b53ee3a46fcca8a89ab95f50f7a",
+    "sim/tb_ui_score_handoff.sv": "703321d4ca82b99b3361e605921775c39055133f4daaf4c384670cae44f2df85",
+    "docs/instrument_ui.md": "96afddb8f9ff8a1860f66af68375a75c287b6a687b996d302cccd05f782a3c7a"
+  },
+  "limitations": [
+    "Physical touch remains unresolved and disabled by default",
+    "Touch coordinates require verified raw 800x480 orientation; no guessed calibration",
+    "No official PLL/physical GPIO/STA validation in this environment",
+    "No claimed double-key noise or analog noise fix",
+    "Formal Yang handoff DOCX intentionally deferred"
+  ]
+}

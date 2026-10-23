@@ -1,0 +1,13 @@
+{
+  "hdl_files": 33,
+  "project_dependencies": 45,
+  "unique_pin_balls": 54,
+  "all_audio_and_button_balls_preserved": true,
+  "source_preprocess_without_config_I": [
+    "project directory",
+    "parent directory"
+  ],
+  "default_top_lcd_on_touch_off_elaborated": true,
+  "flat_sdc_commands": 14,
+  "official_pll_model_used": false
+}

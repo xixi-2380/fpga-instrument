@@ -107,3 +107,12 @@
 - 王开册确认4fdedfb三效果版实板试听成功，并授权继续推进效果参数控制接口；杨金鹏拟负责UI，硬件资料稍后由王开册交接。当前仍在feature/audio-effects工作，不更新main或codex/fpga-migration。
 - 新增audio域四参数整组提交与逐采样强度/深度平滑；速度1..10Hz整数、保留相位。当前keyboard_top配置valid固定0，未接入UI或矩阵菜单，跨域和统一按钮状态仲裁留待合并。准确接口见docs/effect_ui_interface.md。
 - 不改GPIO/PLL/SDC/CST/PA及音符通路，不运行Gowin综合/P&R/STA/烧录。新版用户重编译验证；旧试听与STA不代表新版结果。独立模型、生产参数和集成证据见reports/effect_parameters/2026-10-22。
+
+
+## 2026年10月23日UI整合授权
+
+- 王开册明确推迟杨金鹏交接，授权本聊天先完成UI。基于音频b35cf2c与显示dd49c83，在feature/instrument-ui独立整合，不更新main、feature/audio-effects或codex/fpga-migration。正式给杨同学的DOCX交接文档暂不改，待其到来前补充。
+- 保留原RGB扫描/像素PLL/引脚、GT9110与I2C逻辑；触摸默认TOUCH_ENABLE=0、TOUCH_UI_ENABLE=0且四线高阻。只实现受分辨率/ready/错误/单点范围条件保护的触摸命令入口，不宣称实物触摸修复。
+- 新UI33个HDL/45依赖/54球位，单字库两级像素渲染、64位状态原子CDC、71位触摸原子CDC。统一timbre_control仲裁板载/菜单/触摸，四参数快照在背压时保持稳定。S0短按松开选正弦、长按0.8秒切演奏/菜单并保留音色；S1/S2及S3约定保留。
+- 菜单扫描持续运行、Note Off可排空，退出后须全松键重新武装；不通过冻结适配器状态留下持音。保持音频引擎/PLL/功放不变，不新增调音算法或噪声修复。完整84事件曲谱与菜单联合验证使用缩短但合法的4采样节拍，仅作逻辑验证。
+- 不运行Gowin综合/P&R/STA/下载，由用户执行；软件仿真、仿真预览与实屏/实板结果分别记录。当前说明与证据见docs/instrument_ui.md及reports/instrument_ui/2026-10-23。

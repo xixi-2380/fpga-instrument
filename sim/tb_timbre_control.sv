@@ -6,7 +6,8 @@ module tb_timbre_control;
  wire [1:0] selected,effect_mode;wire effects_enabled;integer checks=0,presses=0;
  always #8.138020833 clk=~clk;
  timbre_control #(.DEBOUNCE_CYCLES(N),.LONG_PRESS_CYCLES(L)) dut(
-  clk,rst,buttons_n,selected,effects_enabled,effect_mode);
+  .clk(clk),.rst(rst),.buttons_n(buttons_n),.selected(selected),.effects_enabled(effects_enabled),
+  .effect_mode(effect_mode),.ui_action_valid(1'b0),.ui_action(6'd63),.cfg_ready(1'b1));
  always @(posedge clk)if(!rst)presses=presses+$countones(dut.press_event);
  task settle(input [3:0] value);begin
   @(negedge clk);buttons_n=value;repeat(N+6)@(negedge clk);
@@ -22,7 +23,7 @@ module tb_timbre_control;
   settle(4'hd);`CHECK(selected==1 && presses==1,"S1 directly selects flute")
   repeat(N+10)@(negedge clk);`CHECK(presses==1,"held preset does not repeat")
   settle(4'hf);settle(4'hb);`CHECK(selected==2,"S2 directly selects reed")
-  settle(4'hf);settle(4'he);`CHECK(selected==0,"S0 directly selects sine")
+  settle(4'hf);settle(4'he);settle(4'hf);`CHECK(selected==0,"S0 short release selects sine")
   settle(4'hf);settle(4'h7);
   `CHECK(!effects_enabled,"short S3 waits for stable release")
   if(N>1)begin
@@ -34,7 +35,7 @@ module tb_timbre_control;
   settle(4'h7);settle(4'hf);`CHECK(!effects_enabled && effect_mode==0,"next short press bypasses echo")
   settle(4'h5);`CHECK(selected==1,"preset selection works during an effect press")
   settle(4'hf);`CHECK(effects_enabled && selected==1,"independent short release toggles effect")
-  settle(4'h8);`CHECK(selected==0 && effects_enabled,"simultaneous presets choose lowest index")
+  settle(4'h8);settle(4'hf);`CHECK(selected==0 && effects_enabled,"simultaneous presets resolve to S0 on short release")
   settle(4'hf);settle(4'h7);repeat(L+10)@(negedge clk);
   `CHECK(effect_mode==1 && effects_enabled,"long S3 selects room and enables it")
   repeat(L+10)@(negedge clk);`CHECK(effect_mode==1,"long hold selects only once")

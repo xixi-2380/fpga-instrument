@@ -5,6 +5,16 @@
     <Version>5</Version>
     <Device name="GW5AST-138C" pn="GW5AST-LV138FPG676AC1/I0">gw5ast138c-003</Device>
     <FileList>
+        <File path="src/ui_keypad_router.sv" type="file.verilog" enable="1" />
+        <File path="src/ui_touch_actions.sv" type="file.verilog" enable="1" />
+        <File path="src/rgb_display.sv" type="file.verilog" enable="1" />
+        <File path="src/rgb_status_cdc.sv" type="file.verilog" enable="1" />
+        <File path="src/rgb_scan_timing.sv" type="file.verilog" enable="1" />
+        <File path="src/rgb_ui_renderer.sv" type="file.verilog" enable="1" />
+        <File path="src/gt9110_touch.sv" type="file.verilog" enable="1" />
+        <File path="src/i2c_register_master.sv" type="file.verilog" enable="1" />
+        <File path="src/config/ui_layout.svh" type="file.other" enable="1" />
+
         <File path="src/audio_effects.sv" type="file.verilog" enable="1" />
         <File path="src/audio_reverb.sv" type="file.verilog" enable="1" />
         <File path="src/score_player.sv" type="file.verilog" enable="1" />

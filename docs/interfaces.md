@@ -468,3 +468,8 @@ synth_core新增尾部effect_mode输入，内部原effect实例改为audio_effec
 synth_core新增effect_cfg_valid/ready/applied与effect_echo_wet[8:0]、effect_room_wet[8:0]、effect_tremolo_depth[8:0]、effect_tremolo_rate_hz[3:0]。四参数同audio_clk上升沿原子提交，强度/深度限0..256并逐采样平滑；速度限1..10Hz，保留LFO相位。处理延迟仍为接收后3个后续沿输出，32声部总效果交付须≤544周期。keyboard_top固定valid为0，现有上板默认设置不变。
 
 完整UI范围、端口时序、跨域及状态仲裁约定见[效果器UI接口](effect_ui_interface.md)。该接口不自带CDC，不等于触摸或矩阵调参已实现。
+
+
+## 2026年10月23日UI整合
+
+feature/instrument-ui独立整合音频b35cf2c与显示dd49c83。控制器位于audio_clk，S0长按切菜单、短按松开选正弦，S3与UI共用状态；四参数快照保持到接收，UI目标按5%/1Hz修改。矩阵菜单继续扫描并以零键位排空Note Off，返回演奏后须全松键重新武装。64位audio到pixel状态快照逐帧更新，71位触摸状态从ref到audio原子传递。触摸默认关闭且四线高阻；界面两级像素寄存器保持RGB/DE/HS/VS对齐。操作与准确接口以[instrument_ui.md](instrument_ui.md)为准。

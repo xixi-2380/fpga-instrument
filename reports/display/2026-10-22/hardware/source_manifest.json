@@ -1,0 +1,70 @@
+{
+  "review_date": "2026-10-22",
+  "manuals": [
+    {
+      "path": "E:\\FPGA竞赛\\开发板资料\\屏幕及触摸屏\\3736156946QTB203V121C-40P(1)21灯(1)(1).pdf",
+      "sha256": "135056069ecfb681982bc05f170a2658a0da27e9258221a53ba257e97d001d56",
+      "pages": 19,
+      "reviewed_pages": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "kind": "QTB203V121C-40P LCD",
+      "notes": [
+        "800x480 RGB888 40P; fCLK and scan timing absent",
+        "Panel connector supply and pixel sampling edge not measured"
+      ]
+    },
+    {
+      "path": "E:\\FPGA竞赛\\开发板资料\\屏幕及触摸屏\\3736264061电容触控芯片GT9110 (中文)(1)(1).pdf",
+      "sha256": "3666246f929ee5d3cd6481ff4f471423db3dcc4ee82bed627372e9d74e3c0aea",
+      "pages": 22,
+      "reviewed_pages": [
+        6,
+        9,
+        10,
+        11,
+        12,
+        15
+      ],
+      "kind": "GT9110 protocol",
+      "notes": [
+        "GT9110 7-bit address 5D selected with INT low; 16-bit registers; read-ready bit7, point count low4",
+        "No module-specific sensor configuration supplied"
+      ]
+    }
+  ],
+  "schematic": {
+    "path": "references/TANG_MEGA-138K_Dock-4071f3__Schematics.pdf",
+    "sha256": "153d1c170a7d54e11a5d5e9b128ee9139a07b27249377d909e204cbf56e25cec",
+    "page": 14,
+    "facts": [
+      "J20 RGB low two bits grounded; six FPGA bits to panel upper six bits",
+      "DISP pin31 to 3.3V; CLK30 HS32 VS33 DE34",
+      "Backlight LP3320 on board, no GPIO power drive"
+    ]
+  },
+  "official_trial_profile": {
+    "repository": "https://github.com/sipeed/TangMega-138KPro-example",
+    "timing_url": "https://github.com/sipeed/TangMega-138KPro-example/blob/main/rgb_screen/800_480_screen/src/lcd_timing.v",
+    "pll_url": "https://github.com/sipeed/TangMega-138KPro-example/blob/main/rgb_screen/800_480_screen/src/gowin_pll/gowin_pll.v",
+    "pins_url": "https://github.com/sipeed/TangMega-138KPro-example/blob/main/rgb_screen/800_480_screen/src/800_480_screen.cst",
+    "pixel_hz": 35000000,
+    "h_active": 800,
+    "h_blank_before": 182,
+    "h_blank_after": 210,
+    "v_active": 480,
+    "v_blank_before": 8,
+    "v_blank_after": 45,
+    "de_only": true,
+    "frame_hz": 55.088960801843434,
+    "limits": [
+      "Reference example, not a confirmed timing spec for QTB203V121C",
+      "Original inclusive boundary count and gated-DE code are not copied",
+      "Default forwarded PCLK inversion is an engineering trial phase, not confirmed panel edge"
+    ]
+  }
+}

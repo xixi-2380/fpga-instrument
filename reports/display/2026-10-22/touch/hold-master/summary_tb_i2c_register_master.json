@@ -1,0 +1,7 @@
+[
+  {
+    "test": "tb_i2c_register_master",
+    "passed": true,
+    "seconds": 0.131
+  }
+]

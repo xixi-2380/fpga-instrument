@@ -10,7 +10,7 @@ module tb_effect_button_path;
  tri [3:0] columns;wire [3:0] rows,selected;
  wire bck,ws,din,pa;wire [5:0] leds;
  integer checks=0,events=0,frames=0,prior_events;
- keyboard_top #(.SCORE_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(4),.BUTTON_LONG_PRESS_CYCLES(128),
+ keyboard_top #(.LCD_ENABLE(0),.SCORE_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(4),.BUTTON_LONG_PRESS_CYCLES(128),
   .LOCK_N(32),.SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
   .MUTE(4),.FADE(4),.ATTACK(2),.DECAY(2),.SUSTAIN(32768),.RELEASE(2))
   dut(.clk(clk),.rst(rst),.board_buttons_n(buttons_n),.key_row(rows),.key_col(columns),

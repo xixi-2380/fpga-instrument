@@ -3,10 +3,12 @@ import argparse,pathlib,xml.etree.ElementTree as ET,subprocess,json,re,hashlib,s
 p=argparse.ArgumentParser();p.add_argument('--stage',choices=['all','build','package'],default='all');p.add_argument('--sim-dir',default='reports/sim/current');a=p.parse_args()
 root=pathlib.Path(__file__).resolve().parents[1]
 voice_count=int(re.search(r'^`define VOICE_COUNT (\d+)',(root/'src/config/synth_config.svh').read_text(encoding='utf8'),re.M)[1])
+lcd_enabled=int(re.search(r'LCD_ENABLE=(\d+)',(root/'src/keyboard_top.sv').read_text(encoding='utf8'))[1])!=0
+touch_enabled=int(re.search(r'TOUCH_ENABLE=(\d+)',(root/'src/keyboard_top.sv').read_text(encoding='utf8'))[1])!=0
 out=root/'reports/keyboard/current';out.mkdir(parents=True,exist_ok=True)
 sim_dir=pathlib.Path(a.sim_dir)
 if not sim_dir.is_absolute():sim_dir=root/sim_dir
-tests=['tb_score_articulation','tb_score_player','tb_score_audio','tb_dds_sine','tb_tone_gain','tb_sine_rom','tb_audio_timing','tb_matrix_keypad','tb_key_note_events','tb_adsr_envelope','tb_adsr_production','tb_keyboard_core','tb_keyboard_top','tb_keyboard_latency','tb_run_leds','tb_synth_core','tb_voice_allocator','tb_voice_mixer']
+tests=['tb_ui_controls','tb_ui_inputs','tb_ui_top','tb_ui_score_handoff','tb_audio_delay','tb_audio_effects','tb_effect_parameters','tb_effect_parameter_path','tb_effects_integration','tb_timbre_control','tb_effect_button_path','tb_i2c_register_master','tb_gt9110_boot','tb_gt9110_touch','tb_rgb_ui_renderer','tb_rgb_scan_timing','tb_rgb_status_cdc','tb_rgb_display','tb_score_articulation','tb_score_player','tb_score_audio','tb_dds_sine','tb_tone_gain','tb_sine_rom','tb_audio_timing','tb_matrix_keypad','tb_key_note_events','tb_adsr_envelope','tb_adsr_production','tb_keyboard_core','tb_keyboard_top','tb_keyboard_latency','tb_run_leds','tb_synth_core','tb_voice_allocator','tb_voice_mixer']
 if a.stage!='build':
     for name in tests:
         log=(sim_dir/(name+'.log')).read_text(encoding='utf8')
@@ -37,6 +39,13 @@ expected={'clk':'P16','rst':'U4','HP_BCK':'E22','HP_WS':'F24','HP_DIN':'G24','PA
 expected.update({'key_col['+str(i)+']':v for i,v in enumerate(['W25','M24','Y25','AA24'])})
 expected.update({'key_row['+str(i)+']':v for i,v in enumerate(['W26','L22','Y26','AA25'])})
 expected.update({'led_n['+str(i)+']':v for i,v in enumerate(['R26','J14','L20','M25','N21','N23'])})
+expected.update({'board_buttons_n['+str(i)+']':v for i,v in enumerate(['K16','F15','G15','G16'])})
+if lcd_enabled:
+    expected.update({'lcd_clk':'H21','lcd_hs':'H22','lcd_vs':'A23','lcd_en':'A24'})
+    for color,balls in [('r',['K17','J18','H18','G25','J19','H19']),('g',['G20','G21','G22','F22','K15','J16']),('b',['M16','M17','F18','F19','G19','F20'])]:
+        expected.update({'lcd_'+color+'['+str(i)+']':v for i,v in enumerate(balls)})
+if touch_enabled:
+    expected.update({'touch_scl':'AB26','touch_sda':'U25','touch_int':'V23','touch_rst_n':'R23'})
 for port,ball in expected.items():
     m=re.search(r'^'+re.escape(port)+r'\s*\|\s*[^|]*\|\s*([A-Z]+\d+)/\d+\s*\|\s*(Y|N)',rpt,re.M)
     assert m and m[1]==ball and m[2]=='Y','Pin mismatch: '+port
@@ -44,6 +53,8 @@ usage={}
 for key in ['Logic','Register','BSRAM','DSP','PLL']:
     m=re.search(r'^\s*'+key+r'\s*\|\s*(\d+)/(\d+)',rpt,re.M)
     if m:usage[key]=dict(used=int(m[1]),available=int(m[2]))
+if lcd_enabled:
+    assert 'pixel_clk' in tr and usage.get('PLL',{}).get('used',0)>=3,'LCD pixel clock/PLL missing from implementation report'
 with base.with_suffix('.fs').open(encoding='ascii',errors='replace') as f:header=f.read(3000)
 assert '//SecurityBit: OFF' in header
 assert usage.get('BSRAM',{}).get('used',0)>0 and usage.get('DSP',{}).get('used',0)>0

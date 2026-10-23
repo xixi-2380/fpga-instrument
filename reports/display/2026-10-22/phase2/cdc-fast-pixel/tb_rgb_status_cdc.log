@@ -1,0 +1,3 @@
+FAIL many snapshots completed at asynchronous clock ratio at 14454000
+FATAL: E:/gowin/fpga-instrument/sim/tb_rgb_status_cdc.sv:67: 
+       Time: 14454000  Scope: tb_rgb_status_cdc
