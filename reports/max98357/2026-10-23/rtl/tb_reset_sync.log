@@ -1,0 +1,2 @@
+PASS tb_reset_sync checks=5
+E:/gowin/fpga-instrument/sim/tb_reset_sync.sv:12: $finish called at 46000 (1ps)

@@ -1,0 +1,2 @@
+PASS tb_rgb_display checks=5970495 pattern=0
+E:/gowin/fpga-instrument/sim/tb_rgb_display.sv:108: $finish called at 36356662972 (1ps)

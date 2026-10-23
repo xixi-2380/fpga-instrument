@@ -1,0 +1,433 @@
+{
+  "date": "2026-10-23",
+  "base_commit": "dd49c83353b61c097f6f1ef2aa242f15101819e2",
+  "scope": "Replace existing PT8211 serializer with MAX98357A standard I2S in the original project; no pin planning or EDA.",
+  "audio": {
+    "part": "MAX98357A",
+    "sample_hz": 48000,
+    "word_bits": 16,
+    "slots": 2,
+    "bclk_hz": 1536000,
+    "bclk_rising_edge_sampling": true,
+    "lrclk_left_level": 0,
+    "msb_delay_after_lrclk_bclk": 1,
+    "right_lsb_at_next_frame_boundary": true,
+    "new_pair_latched_at_original_frame_ce": true,
+    "render_cycles": 517,
+    "render_budget_cycles": 544,
+    "enable_to_audio_ready_us": 9979.141,
+    "mono_mix_sent_to_both_channels": true,
+    "new_top_ports": [
+      "MAX_BCLK",
+      "MAX_LRCLK",
+      "MAX_DIN",
+      "MAX_SD_MODE"
+    ],
+    "old_hp_pa_debug_outputs_constant_low": true,
+    "new_ports_have_pin_constraints": false
+  },
+  "materials": [
+    {
+      "path": "E:\\FPGA竞赛\\开发板资料\\MAX98357_TEST\\MAX98357_TEST\\MAX98357 datasheet.pdf",
+      "sha256": "97a18f7721a2517eb5457d529bf043cf052134a5e455c941ece5f51d6bdd8778"
+    },
+    {
+      "path": "E:\\FPGA竞赛\\开发板资料\\MAX98357_TEST\\MAX98357_TEST\\原理图.png",
+      "sha256": "f49a65ea7fece1287d3b39448ba70c2993a07a15dd72f37680d9729c1e8a0c5c"
+    },
+    {
+      "path": "E:\\FPGA竞赛\\开发板资料\\MAX98357_TEST\\MAX98357_TEST\\max98357播放接线图.jpg",
+      "sha256": "b30b7630f47887f1c57096d91986dbc1da3be146f82b82405005af5ee6378ff2"
+    },
+    {
+      "path": "E:\\FPGA竞赛\\开发板资料\\MAX98357_TEST\\MAX98357_TEST\\esp32_MusicPlayer-master\\README.md",
+      "sha256": "9b9ca910435971d4add3439511777d152d1c1d186c1cb2aeb0eb18556227a1fc"
+    },
+    {
+      "path": "E:\\FPGA竞赛\\开发板资料\\MAX98357_TEST\\MAX98357_TEST\\esp32_MusicPlayer-master\\esp32_I2S_player\\I2S.cpp",
+      "sha256": "7ed3af170dda2315e13747a79786bb99f6d116f9c5f2a9f67e02d1e7404b6a6d"
+    }
+  ],
+  "dependencies": {
+    "hdl": 28,
+    "enabled": 39,
+    "sha256": {
+      "src/i2c_register_master.sv": "61a7ae805985c834975b2f6cfac16d8eb5bfb03890c2c13f224d17c580de83d1",
+      "src/gt9110_touch.sv": "715cfea71a70e5eabc70b8212dbe19cf83872e5754346c6886e81d3ea180ca6b",
+      "src/rgb_display.sv": "62143cd281be1136cdd22b98b952c685997d4cfa9fca4a5bab93231a296204c1",
+      "src/rgb_scan_timing.sv": "4cc871b48f4c61d5eb68ebe403566628a5db890ea3a569d68fafc9186a419950",
+      "src/rgb_status_cdc.sv": "aa58cffd588a8fca8f21c917e08b8cc2b99cb600bd50dc8c8924faecd61de5e5",
+      "src/rgb_ui_renderer.sv": "e143d4eec2a650d47bd9dafb556cad365b1bdc5db5527d7c13924003a304b63e",
+      "src/score_player.sv": "c5a003c20faad55ac09cfb1078706f993f1fda6d7d74426b75cdbdc6339d7fe3",
+      "src/scores/twinkle.hex": "e3a85861a59a51d5e07987e0125a53b342048c162284099f9c8d815c3c2d9e6d",
+      "src/scores/twinkle.txt": "41a523098bfb7b306c43f15c5767d043b797e8fa4a91e0f31885271c40d6ea9c",
+      "src/timbre_control.sv": "64dd2b9a820bb7ed84410df1a0c0ca7ea28662754422ea2284803879348dc50c",
+      "src/rom/flute4096.hex": "630a276aac151a989700648aa4a4b44b4ae48dbfbfd46413c68537f873521eaa",
+      "src/rom/reed4096.hex": "b81e3b514e23cb9b925097fbe22bc59dce76a617d910da33739a6297074eb61d",
+      "src/keyboard_top.sv": "a78cdb01d469fc5034737bbdb0f84b3ce9241b5b7e241847fa76674a62eb2457",
+      "src/adsr_envelope.sv": "bd951b7f4a198e5d821d011116a5d073818c360a72d45ee97050c7e4ffd8c3e5",
+      "src/audio_timing.sv": "ebd73edfceef85128760141410b95ccbf82e5665ce18ba10075e67c1d72ecc1e",
+      "src/clock_reset.sv": "6064ed61bbdcec68e2bd04f934c8510ee3b95aabbe0a009e54f21b2c2d10af6b",
+      "src/dds_sine.sv": "9c9207a6d5824a0f18dcfdd12b85cdd1db7ef4a53dd1e824019e10132954cb9b",
+      "src/frame_buffer.sv": "dbf0d9b5cc9a0ad1ff4b1a32b2e9b4fdb0fc5c7c8d01a8b1fe9a1c7685e844c8",
+      "src/keyboard_core.sv": "fc0c821c96c485a019b9e0418a0b593b49a560c2e63372c1742cc31fbd352902",
+      "src/synth_core.sv": "1b7fcb8bc48aec9a1db2ac9b314a8f4946fb0e20a432887732d2b7a88de208c7",
+      "src/voice_allocator.sv": "fa744ac1c2b28e5bd97f4d7119f3acbf07210f04ae1fe3b781cf49d004815b30",
+      "src/voice_mixer.sv": "51e90e6a63192b7851e9a6635553701b4e528c49b2472e10906a6574171b3a19",
+      "src/lock_guard.sv": "1ccbb8e306689ea8da65a8889b45aa2c3cceaf90aa3f2a31762e195d5fce6377",
+      "src/matrix_keypad.sv": "c7af5fec02c122b50132d01ff3911d27ab394535dcfa51173b2b511e176a7350",
+      "src/key_note_events.sv": "7a51a2551bf58f658428c8a3ccd4440de720e747bf135353a7f199934c9981d7",
+      "src/pll_pair.sv": "29775d84d6b0deb8a8fc6e3bc80e36e0e321f84ddaa418e068622e5ade6d061e",
+      "src/i2s_tx.sv": "777d3cba8511a20a723baf97e6e5888e955002a8ace8b6bf70b0a5b0fc0278ec",
+      "src/reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+      "src/run_leds.sv": "db725978a1e9e386a848ec1223985eeded526ff2eb64f29b21987f1ac7d10713",
+      "src/sine_rom.sv": "b43e6cfe2b2fb35d29a09efd503ad9b787961d1ff430b130e788ef13d0a9c081",
+      "src/startup_envelope.sv": "c5fc6b434759e6f0b85e6315c42baa9d0149332f47d7c58d36cd47bb18587e65",
+      "src/tone_gain.sv": "b70e31dc56c7025001ca535b1ce3b0597d84b4fa4dc518bddd3de8f18bab2c22",
+      "src/config/keyboard_config.svh": "941faf20aabe571b2636248a17aa4690d31bf5d5451c6801f825394227073e2c",
+      "src/config/keyboard_notes.svh": "55c63120d48c3f42e587c8c42d83b0d0ef10228650faff4cf0348aef3be5fe66",
+      "src/config/run_leds_config.svh": "2cdc3ed138ed6a3b70c58e53e9de871f15afb7898f8c88a4b597c624734a1589",
+      "src/config/synth_config.svh": "e3d2fcb59d6b718a24f2cb56f3974ec92d521d238ba3569c3b7ad0f27c31f434",
+      "src/rom/sine4096.hex": "d62e7528ad6c0400fab616087abbdaa7b7977fcd9adbce1b347e3a5743ea3d6e",
+      "src/keyboard.cst": "886501fc360358ed4a1fcabe3b8191446147fc9feb76fcaa3b88957b436d2e4f",
+      "src/keyboard.sdc": "f93afd1063839ecfa6278eadca5a4e1828cba3e32c1051358b091a5da685272e"
+    }
+  },
+  "protected_sources_unchanged": [
+    "src/adsr_envelope.sv",
+    "src/audio_timing.sv",
+    "src/clock_reset.sv",
+    "src/config/keyboard_config.svh",
+    "src/config/keyboard_notes.svh",
+    "src/config/run_leds_config.svh",
+    "src/config/synth_config.svh",
+    "src/dds_sine.sv",
+    "src/frame_buffer.sv",
+    "src/gt9110_touch.sv",
+    "src/i2c_register_master.sv",
+    "src/key_note_events.sv",
+    "src/keyboard.cst",
+    "src/keyboard.sdc",
+    "src/keyboard_core.sv",
+    "src/lock_guard.sv",
+    "src/matrix_keypad.sv",
+    "src/pll_pair.sv",
+    "src/reset_sync.sv",
+    "src/rgb_display.sv",
+    "src/rgb_scan_timing.sv",
+    "src/rgb_status_cdc.sv",
+    "src/rgb_ui_renderer.sv",
+    "src/rom/flute4096.hex",
+    "src/rom/manifest.json",
+    "src/rom/reed4096.hex",
+    "src/rom/sine4096.hex",
+    "src/run_leds.sv",
+    "src/score_player.sv",
+    "src/scores/twinkle.hex",
+    "src/scores/twinkle.txt",
+    "src/sine_rom.sv",
+    "src/startup_envelope.sv",
+    "src/timbre_control.sv",
+    "src/tone_gain.sv",
+    "src/voice_allocator.sv",
+    "src/voice_mixer.sv"
+  ],
+  "hdl_configurations": 37,
+  "hdl_checks": 36974883,
+  "tests": [
+    {
+      "test": "tb_adsr_envelope",
+      "passed": true,
+      "seconds": 0.14,
+      "group": "rtl",
+      "checks": 69
+    },
+    {
+      "test": "tb_adsr_production",
+      "passed": true,
+      "seconds": 0.175,
+      "group": "rtl",
+      "checks": 14881
+    },
+    {
+      "test": "tb_audio_timing",
+      "passed": true,
+      "seconds": 0.266,
+      "group": "rtl",
+      "checks": 9996
+    },
+    {
+      "test": "tb_clock_reset",
+      "passed": true,
+      "seconds": 0.131,
+      "group": "rtl",
+      "checks": 6
+    },
+    {
+      "test": "tb_dds_sine",
+      "passed": true,
+      "seconds": 0.212,
+      "group": "rtl",
+      "checks": 44820
+    },
+    {
+      "test": "tb_frame_buffer",
+      "passed": true,
+      "seconds": 0.127,
+      "group": "rtl",
+      "checks": 9
+    },
+    {
+      "test": "tb_gt9110_boot",
+      "passed": true,
+      "seconds": 5.94,
+      "group": "rtl",
+      "checks": 7
+    },
+    {
+      "test": "tb_gt9110_touch",
+      "passed": true,
+      "seconds": 0.207,
+      "group": "rtl",
+      "checks": 29591
+    },
+    {
+      "test": "tb_i2c_register_master",
+      "passed": true,
+      "seconds": 0.153,
+      "group": "rtl",
+      "checks": 430
+    },
+    {
+      "test": "tb_i2s_tx",
+      "passed": true,
+      "seconds": 0.253,
+      "group": "rtl",
+      "checks": 5407
+    },
+    {
+      "test": "tb_key_note_events",
+      "passed": true,
+      "seconds": 0.145,
+      "group": "rtl",
+      "checks": 149
+    },
+    {
+      "test": "tb_keyboard_core",
+      "passed": true,
+      "seconds": 39.95,
+      "group": "rtl",
+      "checks": 4613937
+    },
+    {
+      "test": "tb_keyboard_latency",
+      "passed": true,
+      "seconds": 4.86,
+      "group": "rtl",
+      "checks": 657
+    },
+    {
+      "test": "tb_lock_guard",
+      "passed": true,
+      "seconds": 0.16,
+      "group": "rtl",
+      "checks": 5
+    },
+    {
+      "test": "tb_matrix_keypad",
+      "passed": true,
+      "seconds": 0.302,
+      "group": "rtl",
+      "checks": 7183
+    },
+    {
+      "test": "tb_multitimbral",
+      "passed": true,
+      "seconds": 15.277,
+      "group": "rtl",
+      "checks": 3912526
+    },
+    {
+      "test": "tb_reset_sync",
+      "passed": true,
+      "seconds": 0.152,
+      "group": "rtl",
+      "checks": 5
+    },
+    {
+      "test": "tb_rgb_scan_timing",
+      "passed": true,
+      "seconds": 6.583,
+      "group": "rtl",
+      "checks": 4754316
+    },
+    {
+      "test": "tb_rgb_status_cdc",
+      "passed": true,
+      "seconds": 0.183,
+      "group": "rtl",
+      "checks": 5302
+    },
+    {
+      "test": "tb_rgb_ui_renderer",
+      "passed": true,
+      "seconds": 25.246,
+      "group": "rtl",
+      "checks": 2319698
+    },
+    {
+      "test": "tb_run_leds",
+      "passed": true,
+      "seconds": 0.151,
+      "group": "rtl",
+      "checks": 183
+    },
+    {
+      "test": "tb_score_articulation",
+      "passed": true,
+      "seconds": 23.797,
+      "group": "rtl",
+      "checks": 4234087
+    },
+    {
+      "test": "tb_score_player",
+      "passed": true,
+      "seconds": 0.172,
+      "group": "rtl",
+      "checks": 1074
+    },
+    {
+      "test": "tb_sine_rom",
+      "passed": true,
+      "seconds": 0.153,
+      "group": "rtl",
+      "checks": 4097
+    },
+    {
+      "test": "tb_startup_envelope",
+      "passed": true,
+      "seconds": 0.142,
+      "group": "rtl",
+      "checks": 726
+    },
+    {
+      "test": "tb_synth_core",
+      "passed": true,
+      "seconds": 8.84,
+      "group": "rtl",
+      "checks": 2513903
+    },
+    {
+      "test": "tb_timbre_control",
+      "passed": true,
+      "seconds": 0.14,
+      "group": "rtl",
+      "checks": 9
+    },
+    {
+      "test": "tb_timbres",
+      "passed": true,
+      "seconds": 0.243,
+      "group": "rtl",
+      "checks": 12291
+    },
+    {
+      "test": "tb_tone_gain",
+      "passed": true,
+      "seconds": 0.153,
+      "group": "rtl",
+      "checks": 4001
+    },
+    {
+      "test": "tb_voice_allocator",
+      "passed": true,
+      "seconds": 2.46,
+      "group": "rtl",
+      "checks": 1747726
+    },
+    {
+      "test": "tb_voice_mixer",
+      "passed": true,
+      "seconds": 0.4,
+      "group": "rtl",
+      "checks": 65223
+    },
+    {
+      "test": "tb_keyboard_top",
+      "passed": true,
+      "seconds": 116.837,
+      "group": "keyboard",
+      "checks": 2048509
+    },
+    {
+      "test": "tb_score_audio",
+      "passed": true,
+      "seconds": 144.593,
+      "group": "score_audio",
+      "checks": 2802273
+    },
+    {
+      "test": "tb_rgb_display",
+      "passed": true,
+      "seconds": 221.627,
+      "group": "display",
+      "checks": 5970495
+    },
+    {
+      "test": "tb_max98357_startup",
+      "passed": true,
+      "seconds": 78.594,
+      "group": "startup_verified",
+      "checks": 1851224
+    },
+    {
+      "test": "tb_keyboard_pinmap",
+      "group": "pinmap/corrected",
+      "passed": true,
+      "checks": 34
+    },
+    {
+      "test": "tb_keyboard_pinmap",
+      "group": "pinmap/previous",
+      "passed": true,
+      "checks": 34
+    }
+  ],
+  "preprocessing": [
+    {
+      "cwd": "E:\\gowin\\fpga-instrument",
+      "passed": true,
+      "extra_config_include_paths": false
+    },
+    {
+      "cwd": "E:\\gowin\\fpga-instrument\\reports\\max98357\\2026-10-23",
+      "passed": true,
+      "extra_config_include_paths": false
+    }
+  ],
+  "build_script_review": {
+    "syntax_checked_without_execution": true,
+    "pin_guard_precedes_gw_sh": true,
+    "no_MAX_pin_assignments_exist": true
+  },
+  "initial_failure": {
+    "log": "startup/tb_max98357_startup_compile.log",
+    "reason": "Initial top-level insertion used audio_reset before its explicit declaration; moved logic after all net declarations and reran successfully."
+  },
+  "preserved": "Existing modified IDE config and all unrelated untracked display/touch evidence were left untouched.",
+  "not_run": [
+    "Gowin synthesis",
+    "place and route",
+    "MAX output pin/electrical planning",
+    "new STA",
+    "SRAM/Flash/JTAG/programming",
+    "MAX98357 analog chip/speaker audition"
+  ],
+  "limits": [
+    "Pin-level receiver and original audio mathematics are verified, not a MAX98357 analog device model.",
+    "Dedicated startup test uses production mute; other accelerated top tests do not verify analog turn-on time.",
+    "CST/SDC unchanged: new MAX ports are intentionally not constrained; user must complete pin/timing planning before EDA/download.",
+    "The MAX98357B left-justified variant is not supported by this A-format configuration.",
+    "No gain boost, noise gate, effects/main branch integration or display changes were introduced."
+  ]
+}

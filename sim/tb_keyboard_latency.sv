@@ -10,6 +10,7 @@ module tb_keyboard_latency;
  wire bck,ws,din,pa,u,ghost,gate,key_gate,frame_ce,input_ready,note_ready,note_valid,note_on;
  wire [6:0] note_id;wire [31:0] note_fcw;wire [16:0] level;
  integer checks=0,edges=0,bits=0,word=0;
+ reg rx_synced=0,previous_ws=1;
  real press_ns=0,first_code_ns=0,off_ns=0,note_on_ns=0;
  keyboard_core dut(.clk(clk),.rst(rst),.input_ready(input_ready),.note_ready(note_ready),.key_row(rows),
   .col_enable(columns),.keys(keys),.ghost(ghost),.note_valid(note_valid),.note_on(note_on),
@@ -21,11 +22,17 @@ module tb_keyboard_latency;
  passive_matrix_model model(pressed,columns,rows);
  always @(posedge gate)if(!rst && press_ns>0)note_on_ns=$realtime;
  always @(posedge bck)if(!rst)begin
-  edges=edges+1;word=((word<<1)|din)&65535;
-  if(bits==15)begin
-   if(press_ns>0 && first_code_ns==0 && word!=0)first_code_ns=$realtime;
-   word=0;bits=0;
-  end else bits=bits+1;
+  edges=edges+1;
+  if(!rx_synced)begin if(ws!=previous_ws)begin rx_synced=1;bits=0;word=0;end end
+  else begin
+   word=((word<<1)|din)&65535;
+   if(bits==15)begin
+    `CHECK(ws!=previous_ws,"latency is measured from a complete I2S word")
+    if(press_ns>0 && first_code_ns==0 && word!=0)first_code_ns=$realtime;
+    word=0;bits=0;
+   end else bits=bits+1;
+  end
+  previous_ws=ws;
  end
  initial begin
   #23 rst=0;wait(pa);wait(edges>=800);#103;

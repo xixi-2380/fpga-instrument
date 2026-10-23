@@ -88,7 +88,7 @@ module synth_core #(
             if(voice_level[v]>envelope_level)envelope_level=voice_level[v];
     end
     frame_buffer buffer(clk,rst,frame_ce,mix_valid,ready,mix_sample,mix_sample,frame_l,frame_r,underrun);
-    pt8211_tx tx(clk,rst,fall_ce,bit_index,frame_l,frame_r,ws,din);
+    i2s_tx tx(clk,rst,fall_ce,bit_index,frame_l,frame_r,ws,din);
     // synthesis translate_off
     initial if(VOICES<1 || VOICES>32 || RENDER_BUDGET>=`FRAME_CYCLES)$fatal(1,"Invalid render budget");
     always @(posedge clk)if(!rst)begin

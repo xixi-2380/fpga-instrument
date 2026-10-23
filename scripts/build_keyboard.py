@@ -5,10 +5,16 @@ root=pathlib.Path(__file__).resolve().parents[1]
 voice_count=int(re.search(r'^`define VOICE_COUNT (\d+)',(root/'src/config/synth_config.svh').read_text(encoding='utf8'),re.M)[1])
 lcd_enabled=int(re.search(r'LCD_ENABLE=(\d+)',(root/'src/keyboard_top.sv').read_text(encoding='utf8'))[1])!=0
 touch_enabled=int(re.search(r'TOUCH_ENABLE=(\d+)',(root/'src/keyboard_top.sv').read_text(encoding='utf8'))[1])!=0
+# External audio ports intentionally await user pin planning. Fail BEFORE EDA
+# so the tool cannot auto-place MAX_* signals on arbitrary package pins.
+max_ports=['MAX_BCLK','MAX_LRCLK','MAX_DIN','MAX_SD_MODE']
+cst_text=(root/'src/keyboard.cst').read_text(encoding='utf8')
+external_pin_map=dict(re.findall(r'IO_LOC "(MAX_[A-Z_]+)" ([A-Z]+\d+);',cst_text))
+assert all(port in external_pin_map for port in max_ports),'MAX98357A pin planning is pending: add and review MAX_* CST/SDC before any EDA build or package'
 out=root/'reports/keyboard/current';out.mkdir(parents=True,exist_ok=True)
 sim_dir=pathlib.Path(a.sim_dir)
 if not sim_dir.is_absolute():sim_dir=root/sim_dir
-tests=['tb_i2c_register_master','tb_gt9110_boot','tb_gt9110_touch','tb_rgb_ui_renderer','tb_rgb_scan_timing','tb_rgb_status_cdc','tb_rgb_display','tb_score_articulation','tb_score_player','tb_score_audio','tb_dds_sine','tb_tone_gain','tb_sine_rom','tb_audio_timing','tb_matrix_keypad','tb_key_note_events','tb_adsr_envelope','tb_adsr_production','tb_keyboard_core','tb_keyboard_top','tb_keyboard_latency','tb_run_leds','tb_synth_core','tb_voice_allocator','tb_voice_mixer']
+tests=['tb_i2s_tx','tb_max98357_startup','tb_i2c_register_master','tb_gt9110_boot','tb_gt9110_touch','tb_rgb_ui_renderer','tb_rgb_scan_timing','tb_rgb_status_cdc','tb_rgb_display','tb_score_articulation','tb_score_player','tb_score_audio','tb_dds_sine','tb_tone_gain','tb_sine_rom','tb_audio_timing','tb_matrix_keypad','tb_key_note_events','tb_adsr_envelope','tb_adsr_production','tb_keyboard_core','tb_keyboard_top','tb_keyboard_latency','tb_run_leds','tb_synth_core','tb_voice_allocator','tb_voice_mixer']
 if a.stage!='build':
     for name in tests:
         log=(sim_dir/(name+'.log')).read_text(encoding='utf8')
@@ -36,6 +42,7 @@ counts={key:int(m[1]) if (m:=re.search(r'<Numbers of '+key+r' Violated Endpoints
 assert counts=={'Setup':0,'Hold':0},'Timing violations: '+str(counts)
 expected={'clk':'P16','rst':'U4','HP_BCK':'E22','HP_WS':'F24','HP_DIN':'G24','PA_EN':'H17',
  'DBG_BCK':'U22','DBG_WS':'V19','DBG_DIN':'W20','DBG_PA_EN':'U26'}
+expected.update(external_pin_map)
 expected.update({'key_col['+str(i)+']':v for i,v in enumerate(['W25','M24','Y25','AA24'])})
 expected.update({'key_row['+str(i)+']':v for i,v in enumerate(['W26','L22','Y26','AA25'])})
 expected.update({'led_n['+str(i)+']':v for i,v in enumerate(['R26','J14','L20','M25','N21','N23'])})

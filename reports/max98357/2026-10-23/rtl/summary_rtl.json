@@ -1,0 +1,157 @@
+[
+  {
+    "test": "tb_adsr_envelope",
+    "passed": true,
+    "seconds": 0.14
+  },
+  {
+    "test": "tb_adsr_production",
+    "passed": true,
+    "seconds": 0.175
+  },
+  {
+    "test": "tb_audio_timing",
+    "passed": true,
+    "seconds": 0.266
+  },
+  {
+    "test": "tb_clock_reset",
+    "passed": true,
+    "seconds": 0.131
+  },
+  {
+    "test": "tb_dds_sine",
+    "passed": true,
+    "seconds": 0.212
+  },
+  {
+    "test": "tb_frame_buffer",
+    "passed": true,
+    "seconds": 0.127
+  },
+  {
+    "test": "tb_gt9110_boot",
+    "passed": true,
+    "seconds": 5.94
+  },
+  {
+    "test": "tb_gt9110_touch",
+    "passed": true,
+    "seconds": 0.207
+  },
+  {
+    "test": "tb_i2c_register_master",
+    "passed": true,
+    "seconds": 0.153
+  },
+  {
+    "test": "tb_i2s_tx",
+    "passed": true,
+    "seconds": 0.253
+  },
+  {
+    "test": "tb_key_note_events",
+    "passed": true,
+    "seconds": 0.145
+  },
+  {
+    "test": "tb_keyboard_core",
+    "passed": true,
+    "seconds": 39.95
+  },
+  {
+    "test": "tb_keyboard_latency",
+    "passed": true,
+    "seconds": 4.86
+  },
+  {
+    "test": "tb_lock_guard",
+    "passed": true,
+    "seconds": 0.16
+  },
+  {
+    "test": "tb_matrix_keypad",
+    "passed": true,
+    "seconds": 0.302
+  },
+  {
+    "test": "tb_multitimbral",
+    "passed": true,
+    "seconds": 15.277
+  },
+  {
+    "test": "tb_reset_sync",
+    "passed": true,
+    "seconds": 0.152
+  },
+  {
+    "test": "tb_rgb_scan_timing",
+    "passed": true,
+    "seconds": 6.583
+  },
+  {
+    "test": "tb_rgb_status_cdc",
+    "passed": true,
+    "seconds": 0.183
+  },
+  {
+    "test": "tb_rgb_ui_renderer",
+    "passed": true,
+    "seconds": 25.246
+  },
+  {
+    "test": "tb_run_leds",
+    "passed": true,
+    "seconds": 0.151
+  },
+  {
+    "test": "tb_score_articulation",
+    "passed": true,
+    "seconds": 23.797
+  },
+  {
+    "test": "tb_score_player",
+    "passed": true,
+    "seconds": 0.172
+  },
+  {
+    "test": "tb_sine_rom",
+    "passed": true,
+    "seconds": 0.153
+  },
+  {
+    "test": "tb_startup_envelope",
+    "passed": true,
+    "seconds": 0.142
+  },
+  {
+    "test": "tb_synth_core",
+    "passed": true,
+    "seconds": 8.84
+  },
+  {
+    "test": "tb_timbre_control",
+    "passed": true,
+    "seconds": 0.14
+  },
+  {
+    "test": "tb_timbres",
+    "passed": true,
+    "seconds": 0.243
+  },
+  {
+    "test": "tb_tone_gain",
+    "passed": true,
+    "seconds": 0.153
+  },
+  {
+    "test": "tb_voice_allocator",
+    "passed": true,
+    "seconds": 2.46
+  },
+  {
+    "test": "tb_voice_mixer",
+    "passed": true,
+    "seconds": 0.4
+  }
+]

@@ -14,11 +14,14 @@ module keyboard_top #(
     DECAY=`ADSR_DECAY_FRAMES,SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES)(
     input wire clk,rst,input wire [3:0] key_row,inout wire [3:0] key_col,
     output wire HP_BCK,HP_WS,HP_DIN,PA_EN,DBG_BCK,DBG_WS,DBG_DIN,DBG_PA_EN,
+    output wire MAX_BCLK,MAX_LRCLK,MAX_DIN,MAX_SD_MODE,
     output wire [5:0] led_n,
     output wire lcd_clk,lcd_hs,lcd_vs,lcd_en,
     output wire [5:0] lcd_r,lcd_g,lcd_b,
     inout wire touch_scl,touch_sda,touch_int,touch_rst_n);
     wire [1:0] selected_timbre,event_timbre,key_timbre,score_timbre;
+    wire synth_pa_enable;
+    reg [1:0] max_clock_frames;
     wire key_valid,key_on,score_valid,score_on,score_busy,score_done,score_error;
     wire [6:0] key_id,score_id;
     wire [31:0] key_fcw,score_fcw;
@@ -36,6 +39,19 @@ module keyboard_top #(
     wire [7:0] touch_track_id;
     wire [31:0] touch_product_id;
     wire [38:0] touch_status={touch_ready,touch_error,touch_down,touch_count,touch_x,touch_y};
+    // Bring MAX98357A out of shutdown after two running-clock frame boundaries.
+    // Production MUTE=480 leaves >7.5ms of digital silence for device turn-on
+    // before the existing startup fade or score/keyboard admission begins.
+    always @(posedge audio_clk or posedge audio_reset)begin
+        if(audio_reset)max_clock_frames<=0;
+        else if(frame_ce && max_clock_frames!=2)max_clock_frames<=max_clock_frames+1'b1;
+    end
+    assign MAX_SD_MODE=!audio_reset && max_clock_frames==2;
+    // Existing constrained board pads are deliberately parked. New MAX_* pads
+    // have NO CST/SDC assignment yet; user requested pin planning separately.
+    assign HP_BCK=0;assign HP_WS=0;assign HP_DIN=0;assign PA_EN=0;
+    assign DBG_BCK=0;assign DBG_WS=0;assign DBG_DIN=0;assign DBG_PA_EN=0;
+
     if(TOUCH_ENABLE)begin: touch_on
         gt9110_touch #(.RESET_CYCLES(TOUCH_RESET_CYCLES),.STRAP_CYCLES(TOUCH_STRAP_CYCLES),
             .BOOT_CYCLES(TOUCH_BOOT_CYCLES),.POLL_CYCLES(TOUCH_POLL_CYCLES),
@@ -98,10 +114,8 @@ module keyboard_top #(
         .SUSTAIN(SUSTAIN),.RELEASE(RELEASE)) sound(
         .clk(audio_clk),.rst(audio_reset),.note_valid(note_valid),.note_on(note_on),
         .note_id(note_id),.note_fcw(note_fcw),.note_timbre(event_timbre),
-        .bck(HP_BCK),.ws(HP_WS),.din(HP_DIN),.pa_enable(PA_EN),.underrun(underrun),
+        .bck(MAX_BCLK),.ws(MAX_LRCLK),.din(MAX_DIN),.pa_enable(synth_pa_enable),.underrun(underrun),
         .frame_ce(frame_ce),.note_ready(note_ready),.input_ready(input_ready),
         .gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(envelope_level));
-    assign DBG_BCK=HP_BCK;assign DBG_WS=HP_WS;
-    assign DBG_DIN=HP_DIN;assign DBG_PA_EN=PA_EN;
 endmodule
 

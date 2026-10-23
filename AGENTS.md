@@ -95,3 +95,8 @@
 - 2026-10-22用户最新改线优先：触摸SCL=AB26、SDA=U25、INT=V23、RST=R23（J23-24/22/20/14），替代旧N18/N26/R16/R17。同步原CST、构建报告映射核查与当前文档，移除Tcl强制CPU/SSPI GPIO选项并将工程两字段恢复false，保留用户其余IDE差异。用户提出P25=GND、T25=VDD，但官方示例/原理图确认二者是信号IO（J23-18/16），不得用GPIO给触摸板供电；仅实现四根信号，供电须接真正GND与模组额定电源。静态证据reports/display/2026-10-22/touch_header_remap/validation.json；未运行EDA，新P&R/STA由用户执行。不合远端、不推送main。
 
 - 2026-10-22用户实板反馈`TOUCH ERROR`后明确要求先关闭触摸模块并上传Git。顶层默认`TOUCH_ENABLE=0`，关闭分支使SCL/SDA/INT/RST四线全部高阻；保留触摸RTL、AB26/U25/V23/R23约束和后续重新启用入口，不改RGB与音频功能。只推送当前`codex/fpga-migration`分支，不合并或覆盖远端main。
+
+
+- 2026-10-23用户明确改用外接MAX98357，资料目录E:\FPGA竞赛\开发板资料\MAX98357_TEST\MAX98357_TEST，要求先不配置引脚、直接修改原工程。按本地原理图/播放示例的MAX98357A实现标准I²S（B版不兼容）：原pt8211_tx和TB原位重命名i2s_tx/tb_i2s_tx，GPRJ/synth_core更新；新顶层MAX_BCLK/MAX_LRCLK/MAX_DIN/MAX_SD_MODE未配置CST/SDC，旧HP/PA/DBG固定低。SD_MODE两次帧边界后先使能，生产480帧静音为器件留>7.5ms开机时间，原音源/增益/PLL/键盘/曲谱/RGB保留，触摸仍关闭。构建脚本在任何gw_sh之前拒绝缺少MAX映射的状态，本轮不执行该脚本/EDA。不得沿用旧引脚当外置DAC已布线，也不得自动分配球位；资料/协议/验收见docs/max98357.md。本地当前基线dd49c83，不合main；按最近约定只推送codex/fpga-migration分支，保留用户已有IDE配置和未跟踪UI证据。
+
+- MAX98357A迁移最终37配置、36974883次检查通过，证据reports/max98357/2026-10-23/validation.json；SD_MODE到事件准入间隔9979.141µs，渲染517/544不变。CST/SDC字节未改、新MAX端口未配置；不把数字仿真当硬件接线/STA/模拟音质验证。
