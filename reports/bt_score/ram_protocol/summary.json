@@ -1,0 +1,58 @@
+{
+  "results": [
+    {
+      "name": "core_2",
+      "top": "tb_bluetooth_score_core",
+      "parameters": {
+        "VOICES": 2
+      },
+      "passed": true,
+      "checks": 3551,
+      "output": "PASS tb_bluetooth_score_core checks=3551 responses=117 events=29\nE:\\gowin\\fpga-instrument-bt-score\\sim\\tb_bluetooth_score_core.sv:144: $finish called at 7276950000 (1ps)\n"
+    },
+    {
+      "name": "core_4",
+      "top": "tb_bluetooth_score_core",
+      "parameters": {
+        "VOICES": 4
+      },
+      "passed": true,
+      "checks": 3550,
+      "output": "PASS tb_bluetooth_score_core checks=3550 responses=117 events=29\nE:\\gowin\\fpga-instrument-bt-score\\sim\\tb_bluetooth_score_core.sv:144: $finish called at 7298620000 (1ps)\n"
+    },
+    {
+      "name": "core_8",
+      "top": "tb_bluetooth_score_core",
+      "parameters": {
+        "VOICES": 8
+      },
+      "passed": true,
+      "checks": 3557,
+      "output": "PASS tb_bluetooth_score_core checks=3557 responses=117 events=29\nE:\\gowin\\fpga-instrument-bt-score\\sim\\tb_bluetooth_score_core.sv:144: $finish called at 7343340000 (1ps)\n"
+    },
+    {
+      "name": "link_9600",
+      "top": "tb_bluetooth_score_link",
+      "parameters": {
+        "BAUD": 9600
+      },
+      "passed": true,
+      "checks": 114,
+      "output": "PASS tb_bluetooth_score_link checks=114 baud=9600\nE:\\gowin\\fpga-instrument-bt-score\\sim\\tb_bluetooth_score_link.sv:34: $finish called at 757920000 (1ps)\n"
+    },
+    {
+      "name": "link_115200",
+      "top": "tb_bluetooth_score_link",
+      "parameters": {
+        "BAUD": 115200,
+        "CLOCK_HZ": 5000000
+      },
+      "passed": true,
+      "checks": 114,
+      "output": "PASS tb_bluetooth_score_link checks=114 baud=115200\nE:\\gowin\\fpga-instrument-bt-score\\sim\\tb_bluetooth_score_link.sv:34: $finish called at 313820000 (1ps)\n"
+    }
+  ],
+  "all_passed": true,
+  "total_checks": 10886,
+  "scope": "HDL simulation only; no Gowin synthesis, timing, board, phone or audio verification"
+}

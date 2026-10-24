@@ -1,0 +1,2 @@
+PASS tb_master_volume checks=7
+E:/gowin/fpga-instrument-bt-score/sim/tb_master_volume.sv:18: $finish called at 8010000 (1ps)

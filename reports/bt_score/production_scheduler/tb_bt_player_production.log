@@ -1,0 +1,2 @@
+PASS tb_bt_player_production checks=157518
+E:/gowin/fpga-instrument-bt-score/sim/tb_bt_player_production.sv:34: $finish called at 3150320000 (1ps)

@@ -1,5 +1,5 @@
 `timescale 1ns/1ps
-// British black/gold UI. Single synchronous font/title ROM, two pixel stages.
+// British black/gold UI. Layout, glyph/ROM and output are three pixel stages.
 // One atomic1112-bit snapshot per frame; no framebuffer and no audio stalls.
 module rgb_ui_renderer(
  input wire pixel_clk,rst,frame_start,status_valid,input wire [1111:0] status_data,
@@ -14,14 +14,35 @@ module rgb_ui_renderer(
  wire [1:0] fx=state[22:21];wire menu=state[20],enabled=state[23];
  wire [6:0] percent=fx==0 ? state[30:24] : fx==1 ? state[37:31] : state[44:38];
  wire [3:0] rate=state[48:45];
+ wire [6:0] volume=state[60:54];
  wire [5:0] voices=state[5:0]>32 ? 6'd32 : state[5:0];
  wire [7:0] peak=state[87:80];
  reg [23:0] base,fg,base_pipe,fg_pipe;
  reg [319:0] text;
- integer len,tx,ty,dx,dy,ci,px,py,i,k,left,top,note_index;
- integer bin,point_y,previous_y,minimum_y,maximum_y,pc;
+ reg [5:0] len,ci;
+ reg [10:0] tx,ty;
+ reg signed [11:0] dx,dy;
+ integer px,py,i,k,left,top,note_index;
+ reg [6:0] bin;
+ integer point_y,previous_y,minimum_y,maximum_y,pc;
  reg [7:0] ch;reg [11:0] font_addr;reg [3:0] font_bit,bit_pipe;
  reg text_ink,ink_pipe,de_pipe,hs_pipe,vs_pipe;
+ reg [7:0] glyph_char;
+ reg [319:0] glyph_text;reg [5:0] glyph_len;
+ reg signed [11:0] glyph_dx,glyph_dy;
+ reg glyph_title,glyph_allow;
+ reg [11:0] title_address;
+ reg [3:0] title_bit;
+ reg [23:0] base_layout,fg_layout;
+ reg de_layout,hs_layout,vs_layout;
+ always @*begin
+  font_addr=0;font_bit=0;text_ink=0;ci=0;glyph_char=0;
+  if(glyph_allow && glyph_len>0 && glyph_dx>=0 && glyph_dx<glyph_len*12'd10 && glyph_dy>=0 && glyph_dy<16)begin
+   ci=glyph_dx/12'd10;glyph_char=glyph_text[(glyph_len-6'd1-ci)*8+:8];
+   if(glyph_char>=32 && glyph_char<128)begin font_addr=(glyph_char-8'd32)*12'd16+glyph_dy;font_bit=15-(glyph_dx%12'd10);text_ink=1;end
+  end
+  if(glyph_title)begin font_addr=title_address;font_bit=title_bit;text_ink=1;end
+ end
  reg [15:0] font_rom[0:4095],font_row;
  initial $readmemh("src/rom/british_font.hex",font_rom);
  function automatic [7:0] digit(input integer value);
@@ -44,9 +65,9 @@ module rgb_ui_renderer(
  endfunction
  always @*begin
   px=integer'(x);py=integer'(y);base=BG;fg=CREAM;text=0;len=0;tx=0;ty=0;
-  dx=0;dy=0;ci=0;i=0;k=0;left=0;top=0;note_index=0;pc=0;
+  dx=0;dy=0;i=0;k=0;left=0;top=0;note_index=0;pc=0;
   bin=0;point_y=234;previous_y=234;minimum_y=234;maximum_y=234;
-  ch=0;font_addr=0;font_bit=0;text_ink=0;
+  ch=0;
   // Sparse faint celestial motifs. Ornament is kept outside touch controls.
   if((py==78 && px>=20 && px<780) || (py==410 && px>=20 && px<780))base=LINE;
   if(px>398 && px<632 && py<72)begin
@@ -155,7 +176,7 @@ module rgb_ui_renderer(
    if(py<42)begin text={"VOICES ",digit(voices/10),digit(voices%10),"/32"};len=12;ty=24;end
    else begin text=state[15] ? "AUDIO READY" : "STARTING";len=state[15] ? 11 : 8;ty=46;fg=state[15] ? GREEN : GOLD;end
   end
-  if(py>=420 && py<464 && px<648)begin
+  if(py>=420 && py<464 && px<648 && !(menu && px<336))begin
    tx=24;fg=DIM;
    if(py<440)begin
     text=menu ? "R4C2 PREV / R4C3 NEXT TIMBRE" : "S0 HOLD: SETTINGS";len=menu ? 28 : 17;ty=422;
@@ -168,39 +189,46 @@ module rgb_ui_renderer(
      tx=360;
     end
    end else begin
-    text=menu ? "R3: AMOUNT / RATE   R4C4: RETURN" : "NOTE MONITOR C4-D#5 / 10.7 MS WINDOW";
-    len=menu ? 32 : 36;ty=446;
+    text=menu ? "S1-/S2+ VOLUME" : "NOTE MONITOR C4-D#5 / 10.7 MS WINDOW";
+    len=menu ? 14 : 36;ty=446;if(menu)tx=360;
     if(state[16] || state[17] || state[18])begin text=state[18] ? "GHOST KEYS" : "AUDIO ERROR";len=state[18] ? 10 : 11;fg=RED;end
    end
   end
-  dx=px-tx;dy=py-ty;
-  if(len>0 && dx>=0 && dx<len*10 && dy>=0 && dy<16)begin
-   ci=dx/10;ch=text[(len-1-ci)*8+:8];
-   if(ch>=32 && ch<128)begin font_addr=(ch-32)*16+dy;font_bit=15-(dx%10);text_ink=1;end
+  if(menu && ui_inside(px,py,24,420,292,44))begin
+   fg=GOLD;ty=434;
+   if(px<68 || px>=272)begin
+    left=px<68 ? 24 : 272;base=card(px,py,left,420,44,44,0);
+    text=px<68 ? "-" : "+";len=1;tx=left+17;
+   end else begin
+    text={"VOL ",volume==100 ? 8'd49 : 8'd32,volume>=10 ? digit((volume/10)%10) : 8'd32,digit(volume%10),"%"};len=8;tx=116;
+   end
   end
-  // The calligraphic title is a1-bit384x64 mask in the same synchronous ROM.
-  if(ui_inside(px,py,24,4,384,64))begin
-   font_addr=1536+(py-4)*24+((px-24)>>4);font_bit=15-((px-24)%16);text_ink=1;fg=GOLD;
-  end
+  dx=$signed({1'b0,x})-$signed({1'b0,tx});dy=$signed({1'b0,y})-$signed({1'b0,ty});
+  if(ui_inside(px,py,24,4,384,64))fg=GOLD;
   if(state[19])begin
    case(px/100)
     0:base=24'hffffff;1:base=24'hffff00;2:base=24'h00ffff;3:base=24'h00ff00;
     4:base=24'hff00ff;5:base=24'hff0000;6:base=24'h0000ff;default:base=0;
    endcase
    if(px==0 || px==799 || py==0 || py==479)base=CREAM;
-   text_ink=0;
   end
-  if(!de_in || px>=800 || py>=480)begin base=0;text_ink=0;end
+  if(!de_in || px>=800 || py>=480)begin base=0;end
  end
- // Synchronous read maps to a ROM; blanking has identical two-stage latency.
+ // Synchronous font ROM; RGB/DE/HS/VS all traverse the same three stages.
  always @(posedge pixel_clk)begin
   font_row<=font_rom[font_addr];
-  if(rst)begin state<=0;base_pipe<=0;fg_pipe<=0;bit_pipe<=0;ink_pipe<=0;
+  if(rst)begin glyph_text<=0;glyph_len<=0;glyph_dx<=0;glyph_dy<=0;glyph_title<=0;glyph_allow<=0;
+   title_address<=0;title_bit<=0;base_layout<=0;fg_layout<=0;de_layout<=0;hs_layout<=0;vs_layout<=0;state<=0;base_pipe<=0;fg_pipe<=0;bit_pipe<=0;ink_pipe<=0;
    de_pipe<=0;hs_pipe<=0;vs_pipe<=0;rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;end
   else begin
    if(frame_start && status_valid)state<=status_data;
-   base_pipe<=base;fg_pipe<=fg;
-   bit_pipe<=font_bit;ink_pipe<=text_ink;de_pipe<=de_in && x<800 && y<480;hs_pipe<=hs_in;vs_pipe<=vs_in;
+   glyph_text<=text;glyph_len<=len;glyph_dx<=dx;glyph_dy<=dy;
+   glyph_allow<=de_in && x<800 && y<480 && !state[19];
+   glyph_title<=de_in && !state[19] && ui_inside(px,py,24,4,384,64);
+   title_address<=1536+(py-4)*24+((px-24)>>4);title_bit<=15-((px-24)%16);
+   base_layout<=base;fg_layout<=fg;de_layout<=de_in && x<800 && y<480;hs_layout<=hs_in;vs_layout<=vs_in;
+   base_pipe<=base_layout;fg_pipe<=fg_layout;
+   bit_pipe<=font_bit;ink_pipe<=text_ink;de_pipe<=de_layout;hs_pipe<=hs_layout;vs_pipe<=vs_layout;
    rgb<=ink_pipe && font_row[bit_pipe] ? fg_pipe : base_pipe;
    de_out<=de_pipe;hs_out<=hs_pipe;vs_out<=vs_pipe;
   end

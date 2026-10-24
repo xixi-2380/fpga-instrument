@@ -1,0 +1,137 @@
+package cn.whu.gaoshan;
+
+import android.Manifest;
+import android.app.*;
+import android.bluetooth.*;
+import android.content.*;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.*;
+import android.provider.OpenableColumns;
+import android.text.InputType;
+import android.view.*;
+import android.widget.*;
+import cn.whu.gaoshan.core.*;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public final class MainActivity extends Activity {
+    private final ExecutorService worker=Executors.newSingleThreadExecutor();
+    private final Handler handler=new Handler(Looper.getMainLooper());
+    private volatile ProtocolClient client;private volatile int generation;
+    private final ModuleConnection module=new ModuleConnection((state,text,error)->ui(()->{append(text);if(error!=null){append(error.getClass().getSimpleName()+": "+error.getMessage());android.util.Log.e("Gaoshan-SPP",text,error);}renderConnection();}));
+    private ProtocolClient.Capabilities caps;private boolean busy=false,demo=false,dead=false;
+    private final AtomicBoolean cancel=new AtomicBoolean();
+    private MidiFile midi;private Score score;private String songName="未导入";
+    private TextView status,capacity,summary,log,position,progressText;private Spinner tracks,channels;
+    private EditText transpose;private ProgressBar progress;private LinearLayout page;
+    private Spinner connectionMode;private Button verifyButton;private String deviceLabel="";private boolean askedScanPermission;
+    private final List<Button> lockedButtons=new ArrayList<>();private final List<Button> connectedButtons=new ArrayList<>();
+    private int ink=Color.rgb(228,236,239),muted=Color.rgb(164,183,191),accent=Color.rgb(104,219,193);
+    private interface Job {void run()throws Exception;}
+    @Override public void onCreate(Bundle saved){super.onCreate(saved);getWindow().setStatusBarColor(Color.rgb(13,26,34));getWindow().setNavigationBarColor(Color.rgb(13,26,34));
+        ScrollView scroll=new ScrollView(this);page=new LinearLayout(this);page.setOrientation(LinearLayout.VERTICAL);page.setPadding(dp(20),dp(28),dp(20),dp(32));page.setBackgroundColor(Color.rgb(13,26,34));scroll.addView(page);scroll.setOnApplyWindowInsetsListener((v,insets)->{page.setPadding(dp(20)+insets.getSystemWindowInsetLeft(),dp(20)+insets.getSystemWindowInsetTop(),dp(20)+insets.getSystemWindowInsetRight(),dp(24)+insets.getSystemWindowInsetBottom());return insets;});setContentView(scroll);
+        label("高山流水",30,ink);label("曲谱传送 · 开发版 0.2 · 分步连接验证",14,accent);
+        label("连接电子琴",20,ink);status=label("未连接设备",15,accent);capacity=label("先在系统蓝牙设置中配对模块。此 App 只列出已配对的经典蓝牙设备。",13,muted);
+        label("第一步：仅连接蓝牙模块",15,ink);
+        connectionMode=new Spinner(this);setItems(connectionMode,new String[]{"自动兼容：安全失败后尝试 insecure","仅安全 RFCOMM","仅兼容 insecure RFCOMM"});page.addView(connectionMode);
+        row(button("连接蓝牙模块",this::chooseDevice,false),button("离线演示",this::startDemo,false));
+        Button disconnect=button("断开连接",this::disconnect,false);lockedButtons.remove(disconnect);page.addView(disconnect);
+        label("第二步：独立验证 FPGA 通信",15,ink);
+        verifyButton=button("验证 FPGA 通信（HELLO）",this::verifyFpga,false);page.addView(verifyButton);
+        label("模块连接成功后再点击验证；第一步不发送任何协议数据。",13,muted);
+        label("导入与选择",20,ink);row(button("导入 MIDI",this::pickMidi,false),button("三音符示例",this::golden,false));
+        tracks=new Spinner(this);channels=new Spinner(this);setItems(tracks,new String[]{"全部轨道"});setItems(channels,new String[]{"全部通道"});
+        label("轨道",13,muted);page.addView(tracks);label("MIDI 通道",13,muted);page.addView(channels);
+        transpose=new EditText(this);transpose.setSingleLine(true);transpose.setText("0");transpose.setTextColor(ink);transpose.setHintTextColor(muted);transpose.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_SIGNED);transpose.setHint("移调半音：-48 ～ +48");page.addView(transpose);
+        page.addView(button("应用筛选与移调",this::convert,false));summary=label("尚无曲谱。导入后检查轨道、音域和声部数。",14,ink);
+        label("传送到琴",20,ink);progress=new ProgressBar(this,null,android.R.attr.progressBarStyleHorizontal);progress.setMax(1000);page.addView(progress);progressText=label("尚未上传",13,muted);
+        row(button("下载到琴",this::confirmUpload,true),button("取消上传",()->{cancel.set(true);append("已请求取消；等待当前帧确认后发送ABORT。若链路失败，请重连。 ");},false));
+        // Cancellation must remain available during upload.
+        lockedButtons.remove(lockedButtons.get(lockedButtons.size()-1));
+        label("播放控制",20,ink);
+        row(button("播放",()->playCommand(0x20),true),button("暂停",()->playCommand(0x21),true));
+        row(button("继续",()->playCommand(0x22),true),button("停止",()->playCommand(0x23),true));
+        page.addView(button("刷新设备状态",this::refreshStatus,true));position=label("进度由设备状态返回，不在手机端猜测。",13,muted);
+        label("连接记录",20,ink);log=label("等待操作。离线演示不使用蓝牙，也不驱动扬声器。",12,muted);
+        Button copy=button("复制诊断记录",()->{android.content.ClipboardManager clipboard=(android.content.ClipboardManager)getSystemService(CLIPBOARD_SERVICE);clipboard.setPrimaryClip(ClipData.newPlainText("蓝牙诊断","高山流水 0.2-dev\n设备："+deviceLabel+"\n状态："+module.state()+"\n"+log.getText()));Toast.makeText(this,"诊断记录已复制",Toast.LENGTH_SHORT).show();},false);lockedButtons.remove(copy);page.addView(copy);render();
+    }
+    private int dp(int n){return (int)(getResources().getDisplayMetrics().density*n+.5f);}
+    private TextView label(String text,int size,int color){TextView v=new TextView(this);v.setText(text);v.setTextSize(size);v.setTextColor(color);v.setPadding(0,dp(10),0,dp(6));page.addView(v);return v;}
+    private Button button(String text,Runnable action,boolean needsConnection){Button b=new Button(this);b.setText(text);b.setAllCaps(false);b.setMinHeight(dp(52));b.setOnClickListener(v->action.run());lockedButtons.add(b);if(needsConnection)connectedButtons.add(b);return b;}
+    private void row(Button a,Button b){LinearLayout l=new LinearLayout(this);l.setOrientation(LinearLayout.HORIZONTAL);l.addView(a,new LinearLayout.LayoutParams(0,-2,1));l.addView(b,new LinearLayout.LayoutParams(0,-2,1));page.addView(l);}
+    private void setItems(Spinner s,String[] items){ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,items){@Override public View getView(int position,View convertView,ViewGroup parent){TextView text=(TextView)super.getView(position,convertView,parent);text.setTextColor(ink);text.setPadding(dp(8),dp(12),dp(8),dp(12));return text;}};adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);s.setAdapter(adapter);}
+    private void render(){for(Button b:lockedButtons)b.setEnabled(!busy&&(!connectedButtons.contains(b)||client!=null&&caps!=null));tracks.setEnabled(!busy&&midi!=null);channels.setEnabled(!busy&&midi!=null);transpose.setEnabled(!busy&&midi!=null);
+        ModuleConnection.State state=module.state();verifyButton.setEnabled(!busy&&!demo&&(state==ModuleConnection.State.MODULE_CONNECTED||state==ModuleConnection.State.READY));connectionMode.setEnabled(!busy);}
+    private void renderConnection(){
+        if(status==null||demo)return;
+        ModuleConnection.State state=module.state();
+        if(state!=ModuleConnection.State.READY){caps=null;client=null;}
+        switch(state){
+            case DISCONNECTED:status.setText("未连接模块");capacity.setText("请连接已配对设备；失败详情见连接记录。");position.setText("设备状态未知；断开连接不代表琴端停止播放。");break;
+            case CONNECTING:status.setText("正在连接模块 · "+deviceLabel);break;
+            case MODULE_CONNECTED:status.setText("模块已连接 · FPGA尚未验证");capacity.setText("蓝牙连接已建立。点击第二步验证；也可以仅测试断开和重连。");break;
+            case VERIFYING:status.setText("模块已连接 · 正在验证FPGA");break;
+            case READY:status.setText("模块已连接 · FPGA通信正常");break;
+        }
+        render();
+    }
+    private void append(String s){if(dead)return;String old=log.getText().toString();if(old.length()>6000)old=old.substring(old.length()-4000);log.setText(old+"\n"+new java.text.SimpleDateFormat("HH:mm:ss.SSS",Locale.ROOT).format(new Date())+" "+s);}
+    private void ui(Runnable r){runOnUiThread(()->{if(!dead)r.run();});}
+    private void task(String name,Job job){if(busy)return;busy=true;render();int epoch=generation;append(name+"…");worker.execute(()->{
+        try{if(epoch!=generation)return;job.run();}
+        catch(Exception e){ui(()->{if(epoch==generation){append(name+"失败："+e.getMessage());if(name.equals("上传曲谱"))progressText.setText("上传未完成："+e.getMessage());if(client!=null&&!client.sessionReady()){caps=null;if(!demo)module.protocolFailed();}new AlertDialog.Builder(this).setTitle(name+"未完成").setMessage(e.getMessage()).setPositiveButton("知道了",null).show();}});}
+        finally{ui(()->{if(epoch==generation){busy=false;render();}});}
+    });}
+    private boolean permission(){if(Build.VERSION.SDK_INT>=31&&(checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT)!=PackageManager.PERMISSION_GRANTED||(!askedScanPermission&&checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN)!=PackageManager.PERMISSION_GRANTED))){askedScanPermission=true;requestPermissions(new String[]{Manifest.permission.BLUETOOTH_CONNECT,Manifest.permission.BLUETOOTH_SCAN},7);return false;}return true;}
+    @Override public void onRequestPermissionsResult(int r,String[] p,int[] g){super.onRequestPermissionsResult(r,p,g);if(r==7){if(checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT)==PackageManager.PERMISSION_GRANTED)chooseDevice();else append("未获附近设备连接权限；请在系统设置授权。");}}
+    private void chooseDevice(){if(!permission())return;try{BluetoothManager manager=(BluetoothManager)getSystemService(BLUETOOTH_SERVICE);BluetoothAdapter adapter=manager==null?null:manager.getAdapter();
+        if(adapter==null){message("此设备没有可用的经典蓝牙适配器");return;}if(!adapter.isEnabled()){startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),12);return;}
+        ArrayList<BluetoothDevice> devices=new ArrayList<>(adapter.getBondedDevices());devices.sort(Comparator.comparing(d->String.valueOf(d.getName())));
+        if(devices.isEmpty()){new AlertDialog.Builder(this).setMessage("没有已配对设备。请先到系统蓝牙设置中配对模块。").setPositiveButton("蓝牙设置",(d,w)->startActivity(new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS))).setNegativeButton("取消",null).show();return;}
+        String[] names=new String[devices.size()];for(int i=0;i<names.length;i++)names[i]=devices.get(i).getName()+"\n"+devices.get(i).getAddress();
+        new AlertDialog.Builder(this).setTitle("选择已配对的 SPP 模块").setItems(names,(d,index)->connect(devices.get(index))).setNegativeButton("取消",null).show();
+        }catch(SecurityException e){message("蓝牙权限不可用，请在应用设置中允许附近设备权限。" );append("列出已配对设备失败："+e.getMessage());}
+    }
+    private void connect(BluetoothDevice device){disconnect();demo=false;try{deviceLabel=(device.getName()==null?"未命名模块":device.getName())+" · "+device.getAddress();}catch(SecurityException e){message("蓝牙权限已撤销，请重新授权。");return;}int epoch=generation;
+        int choice=connectionMode.getSelectedItemPosition();ModuleConnection.Mode mode=choice==1?ModuleConnection.Mode.SECURE:choice==2?ModuleConnection.Mode.INSECURE:ModuleConnection.Mode.AUTO;
+        task("连接蓝牙模块",()->{
+            BluetoothAdapter adapter=((BluetoothManager)getSystemService(BLUETOOTH_SERVICE)).getAdapter();
+            try{if(Build.VERSION.SDK_INT<31||checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN)==PackageManager.PERMISSION_GRANTED){adapter.cancelDiscovery();}else ui(()->append("未授权扫描控制，跳过停止系统扫描；仍尝试连接已配对设备。"));}
+            catch(SecurityException e){ui(()->append("停止扫描未获授权，继续建连："+e.getMessage()));}
+            module.connect(secure->new BluetoothAttempt(device,secure,module,text->ui(()->append(text))),mode,12000,()->epoch!=generation);
+        });
+    }
+    private void verifyFpga(){int epoch=generation;task("验证FPGA通信",()->{ProtocolClient.Capabilities cap=module.verify();ProtocolClient verified=module.readyClient();if(verified==null)throw new IOException("验证后连接已断开");ProtocolClient.Status actual;try{actual=verified.status();}catch(IOException e){module.protocolFailed();throw e;}ui(()->{if(epoch==generation&&module.state()==ModuleConnection.State.READY){client=verified;caps=cap;showCapacity(cap);showStatus(actual);append("HELLO及状态查询已确认；设备报告 UART "+cap.baud+" bit/s。");}});});}
+    private void showCapacity(ProtocolClient.Capabilities c){capacity.setText((demo?"模拟能力（非实板）：":"设备报告：")+c.maxNotes+" 条音符 / "+c.voices+" 声部 / MIDI "+c.minNote+"～"+c.maxNote+"\n"+((c.features&2)==0?"曲谱保存在RAM，断电丢失。":"设备声明掉电保留；以实际固件为准。"));}
+    private void startDemo(){disconnect();demo=true;int epoch=generation;task("启动离线演示",()->{ProtocolClient c=new ProtocolClient(new SimulatedDevice());client=c;ProtocolClient.Capabilities cap=c.hello();ui(()->{if(epoch==generation){caps=cap;status.setText("离线演示 · 未连接FPGA");showCapacity(cap);append("现在只与手机内模拟设备通信，不发声，不证明硬件通过。");}});});}
+    private void disconnect(){generation++;cancel.set(true);ProtocolClient c=client;client=null;caps=null;if(c!=null)c.close();module.disconnect();busy=false;if(status!=null){status.setText("未连接模块");capacity.setText("可以连接已配对的SPP模块，或先用离线演示。");render();}}
+    private void pickMidi(){Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT);i.setType("*/*");i.addCategory(Intent.CATEGORY_OPENABLE);startActivityForResult(i,11);}
+    @Override protected void onActivityResult(int request,int result,Intent intent){super.onActivityResult(request,result,intent);if(request==12){if(result==RESULT_OK)chooseDevice();else append("蓝牙未开启，未发起连接。");return;}if(request!=11||result!=RESULT_OK||intent==null||intent.getData()==null)return;Uri uri=intent.getData();
+        task("读取MIDI",()->{String name="导入曲谱.mid";try(Cursor cursor=getContentResolver().query(uri,new String[]{OpenableColumns.DISPLAY_NAME},null,null,null)){if(cursor!=null&&cursor.moveToFirst())name=cursor.getString(0);}
+            if(name==null||!(name.toLowerCase(Locale.ROOT).endsWith(".mid")||name.toLowerCase(Locale.ROOT).endsWith(".midi")))throw new IOException("请选择.mid或.midi文件");
+            ByteArrayOutputStream bytes=new ByteArrayOutputStream();try(InputStream in=getContentResolver().openInputStream(uri)){if(in==null)throw new IOException("无法打开所选文件");byte[] b=new byte[4096];int n;while((n=in.read(b))!=-1){if(bytes.size()+n>MidiFile.MAX_BYTES)throw new IOException("MIDI文件超过2MiB限制");bytes.write(b,0,n);}}
+            MidiFile parsed=new MidiFile(bytes.toByteArray());String label=name;ui(()->{midi=parsed;score=null;songName=label;String[] ts=new String[parsed.tracks.size()+1];ts[0]="全部轨道";for(int k=1;k<ts.length;k++)ts[k]=k+" · "+parsed.tracks.get(k-1);setItems(tracks,ts);String[] cs=new String[17];cs[0]="全部通道";for(int k=1;k<17;k++)cs[k]="通道 "+k;setItems(channels,cs);transpose.setText("0");summary.setText("已导入："+songName+"\nFormat "+parsed.format+" / PPQN "+parsed.ppqn+"\n请选择轨道／通道，再点击“应用筛选与移调”。");});
+        });
+    }
+    private void golden(){midi=null;score=Score.golden();songName="三音符示例（C4 D4 E4）";showScore();render();}
+    private void convert(){if(midi==null){message("先导入MIDI；三音符示例可直接下载。");return;}int shift;try{shift=Integer.parseInt(transpose.getText().toString().trim());}catch(Exception e){message("移调请输入-48到48的整数");return;}
+        MidiFile file=midi;int tr=tracks.getSelectedItemPosition()-1,ch=channels.getSelectedItemPosition()-1;int semitones=shift;
+        task("转换曲谱",()->{Score converted=file.convert(tr,ch,semitones);ui(()->{score=converted;showScore();});});
+    }
+    private void showScore(){Score s=score;summary.setText(songName+"\n"+s.notes.size()+" 条音符 · "+String.format(Locale.ROOT,"%.3f",s.duration/1000.0)+" 秒 · 最大同时 "+s.polyphony+" 音\nMIDI音域 "+s.minPitch+"～"+s.maxPitch+" · 数据 "+s.bytes().length+" 字节\nCRC32 "+String.format(Locale.ROOT,"%08X",Wire.crc32(s.bytes()))+(s.warnings.isEmpty()?"":"\n⚠ 简化演奏："+String.join("；",s.warnings)));}
+    private void confirmUpload(){Score s=score;ProtocolClient.Capabilities cap=caps;if(s==null||cap==null){message("请先生成曲谱预览，并连接设备或进入离线演示");return;}try{s.validate(cap);}catch(Exception e){message(e.getMessage());return;}
+        String text=(demo?"【离线模拟，无真实设备】\n":"")+songName+"\n"+s.notes.size()+" 条音符，"+s.duration+" ms。\n开始上传后会替换琴上原曲；RAM版本断电丢失。"+(s.warnings.isEmpty()?"":"\n\n将按简化方式演奏：\n"+String.join("\n",s.warnings));
+        new AlertDialog.Builder(this).setTitle("确认下载曲谱").setMessage(text).setNegativeButton("取消",null).setPositiveButton("确认下载",(dialog,which)->upload(s)).show();
+    }
+    private void upload(Score s){cancel.set(false);int epoch=generation;task("上传曲谱",()->{ProtocolClient c=client;if(c==null)throw new IOException("连接已断开");long duration=c.upload(s,cancel,(n,total)->ui(()->{if(epoch==generation){progress.setProgress((int)(n*1000L/total));progressText.setText("已确认 "+n+" / "+total+" 条；等待COMMIT后才算成功");}}));ui(()->{if(epoch==generation){progressText.setText((demo?"模拟上传完成":"设备已确认下载成功")+" · "+duration+" ms");append("COMMIT确认，时长一致。尚未自动播放。");}});});}
+    private void playCommand(int cmd){int epoch=generation;task("发送播放控制",()->{ProtocolClient c=client;if(c==null)throw new IOException("未连接");c.command(cmd);ProtocolClient.Status s=c.status();ui(()->{if(epoch==generation)showStatus(s);});});}
+    private void refreshStatus(){int epoch=generation;task("查询设备状态",()->{ProtocolClient c=client;if(c==null)throw new IOException("未连接");ProtocolClient.Status s=c.status();ui(()->{if(epoch==generation)showStatus(s);});});}
+    private void showStatus(ProtocolClient.Status s){String state=s.state==1?"播放中":s.state==2?"已暂停":"已停止";position.setText((demo?"模拟设备 · ":"")+state+" · "+s.position+" ms\n曲谱"+(s.songValid?"有效":"无效")+" · 上传"+(s.uploading?"进行中":"空闲")+" · 最近错误 0x"+Integer.toHexString(s.lastError));append("状态已确认："+state+"，"+s.position+" ms");}
+    private void message(String text){new AlertDialog.Builder(this).setMessage(text).setPositiveButton("知道了",null).show();}
+    @Override protected void onDestroy(){dead=true;disconnect();module.close();worker.shutdownNow();handler.removeCallbacksAndMessages(null);super.onDestroy();}
+}

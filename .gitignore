@@ -14,3 +14,6 @@
 /reports/keyboard/pinmap_current/
 __pycache__/
 *.pyc
+# Reproducible Java bytecode and raw simulation images; keep logs and PNG evidence
+*.class
+/reports/**/*.ppm

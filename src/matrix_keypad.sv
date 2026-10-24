@@ -12,6 +12,7 @@ module matrix_keypad #(
     reg [SW-1:0] slot_count;
     reg [1:0] column;
     reg [15:0] work;
+    reg [3:0] early_rows;
     reg [DW-1:0] debounce [0:15];
     reg ambiguous;
     reg [3:0] common_rows;
@@ -32,12 +33,15 @@ module matrix_keypad #(
     end
     always @(posedge clk or posedge rst)begin
         if(rst)begin
-            slot_count<=0;column<=0;work<=0;keys<=0;scan_valid<=0;ghost<=0;
+            slot_count<=0;column<=0;work<=0;keys<=0;scan_valid<=0;ghost<=0;early_rows<=4'hf;
             for(integer i=0;i<16;i=i+1)debounce[i]<=0;
         end else begin
             scan_valid<=0;
-            if(slot_count==SETTLE_CYCLES-1)
-                for(integer rr=0;rr<4;rr=rr+1)work[rr*4+column]<=!rows_sync[rr];
+            if(slot_count==SETTLE_CYCLES-1)early_rows<=rows_sync;
+            // Require low at both settled and late samples. A row still low
+            // from the preceding column must not create a second key.
+            if(slot_count==SLOT_CYCLES-2)
+                for(integer rr=0;rr<4;rr=rr+1)work[rr*4+column]<=!rows_sync[rr] && !early_rows[rr];
             if(slot_count==SLOT_CYCLES-1)begin
                 slot_count<=0;column<=column+1'b1;
                 if(column==3)begin

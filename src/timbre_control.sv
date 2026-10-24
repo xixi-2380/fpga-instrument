@@ -10,7 +10,7 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
     output reg [8:0] echo_wet,room_wet,tremolo_depth,
     output reg [3:0] cfg_tremolo_rate_hz,
     output reg [6:0] echo_percent,room_percent,depth_percent,
-    output reg [3:0] tremolo_rate_hz);
+    output reg [3:0] tremolo_rate_hz,output reg [6:0] volume_percent);
     localparam integer CW=DEBOUNCE_CYCLES>1?$clog2(DEBOUNCE_CYCLES):1;
     (* async_reg="true" *) reg [3:0] sync_meta,sync_buttons;
     reg [3:0] stable_buttons,press_event,release_event;
@@ -83,14 +83,16 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
     always @(posedge clk or posedge rst)begin
         if(rst)begin selected<=0;effects_enabled<=0;effect_mode<=0;hold_count<=0;holding<=0;long_fired<=0;
             menu_mode<=0;menu_hold<=0;menu_holding<=0;menu_fired<=0;
-            echo_percent<=25;room_percent<=25;depth_percent<=50;tremolo_rate_hz<=5;
+            echo_percent<=25;room_percent<=25;depth_percent<=50;tremolo_rate_hz<=5;volume_percent<=100;
         end
         else begin
             // S0 is a release action so a long menu press preserves timbre.
             // Board events take priority over a simultaneous UI action.
             if(release_event[0] && menu_holding && !menu_fired)selected<=0;
-            else if(!press_event[0] && press_event[1])selected<=1;
-            else if(!press_event[0] && press_event[2])selected<=2;
+            else if(!menu_mode && !press_event[0] && press_event[1])selected<=1;
+            else if(!menu_mode && !press_event[0] && press_event[2])selected<=2;
+            if(menu_mode && press_event[1])volume_percent<=volume_percent>=5 ? volume_percent-7'd5 : 7'd0;
+            else if(menu_mode && press_event[2])volume_percent<=volume_percent<=95 ? volume_percent+7'd5 : 7'd100;
             if(press_event[0])begin menu_holding<=1;menu_fired<=0;menu_hold<=0;end
             else if(menu_holding)begin
                 if(release_event[0])menu_holding<=0;
@@ -108,6 +110,8 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
                     UI_ECHO:begin effect_mode<=0;effects_enabled<=1;end
                     UI_ROOM:begin effect_mode<=1;effects_enabled<=1;end
                     UI_TREMOLO:begin effect_mode<=2;effects_enabled<=1;end
+                    UI_VOLUME_DOWN:volume_percent<=volume_percent>=5 ? volume_percent-7'd5 : 7'd0;
+                    UI_VOLUME_UP:volume_percent<=volume_percent<=95 ? volume_percent+7'd5 : 7'd100;
                     UI_FX:effects_enabled<=!effects_enabled;
                     UI_MODE:menu_mode<=!menu_mode;
                     UI_LESS,UI_MORE:begin
@@ -125,6 +129,7 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
                         if(tremolo_rate_hz<10)tremolo_rate_hz<=tremolo_rate_hz+1'b1;
                     end
                     UI_DEFAULTS:begin
+                        volume_percent<=100;
                         echo_percent<=25;room_percent<=25;depth_percent<=50;tremolo_rate_hz<=5;
                         effect_mode<=0;effects_enabled<=0;
                     end

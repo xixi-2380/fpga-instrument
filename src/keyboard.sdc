@@ -1,6 +1,9 @@
 create_clock -name ref_clk -period 20.000 [get_ports {clk}]
 create_generated_clock -name mid_clk -source [get_ports {clk}] -multiply_by 16 -divide_by 25 [get_pins {clocks/pll1/CLKOUT0}]
 create_generated_clock -name audio_clk -source [get_pins {clocks/pll1/CLKOUT0}] -multiply_by 48 -divide_by 25 [get_pins {clocks/pll2/CLKOUT0}]
+# UART TX route budget; RX is asynchronous and synchronized in uart_rx.
+set_max_delay -from [get_clocks {ref_clk}] -to [get_ports {bt_tx}] 100.000
+set_min_delay -from [get_clocks {ref_clk}] -to [get_ports {bt_tx}] 0.000
 # Bound external MAX98357A audio output paths to 0..30 ns, including implementation
 # clock insertion. No generated clock is placed on the BCK DATA net: Gowin
 # otherwise propagates that clock into BCK's counter/CE fanout.

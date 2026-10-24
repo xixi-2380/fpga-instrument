@@ -1,0 +1,8 @@
+[
+  {
+    "test": "tb_max98357_startup",
+    "passed": true,
+    "pll_model": "behavioral substitute",
+    "seconds": 45.516
+  }
+]

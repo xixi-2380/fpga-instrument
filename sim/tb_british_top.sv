@@ -21,7 +21,7 @@ module tb_british_top;
   if(dut.frame_ce)frames=frames+1;
   if(dut.note_valid && dut.note_ready && dut.note_on)begin seen[dut.event_timbre]=1;events=events+1;end
   if(dut.visual_sample_valid)begin
-   `CHECK(dut.visual_sample===dut.sound.effect_sample,"display observes post-effect samples")
+   `CHECK(dut.visual_sample===dut.sound.output_sample,"display observes actual post-volume I2S samples")
    tap_count=tap_count+1;
   end
   if(dut.lcd_on.display_driver.monitor.window_valid)windows=windows+1;

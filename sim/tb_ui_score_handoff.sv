@@ -6,7 +6,7 @@ module tb_ui_score_handoff;
  reg [3:0] buttons=15;reg [15:0] pressed=0;
  tri [3:0] columns;wire [3:0] rows,selected;wire pa;
  integer checks=0,score_events=0,key_events=0,frames=0;
- keyboard_top #(.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.SCORE_BEAT_FRAMES(4),.BUTTON_DEBOUNCE_CYCLES(2),.BUTTON_LONG_PRESS_CYCLES(128),
+ keyboard_top #(.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.SCORE_ENABLE(1),.SCORE_BEAT_FRAMES(4),.BUTTON_DEBOUNCE_CYCLES(2),.BUTTON_LONG_PRESS_CYCLES(128),
   .LOCK_N(16),.SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
   .MUTE(4),.FADE(4),.ATTACK(2),.DECAY(2),.RELEASE(2)) dut(
   .clk(clk),.rst(rst),.board_buttons_n(buttons),.key_row(rows),.key_col(columns),.MAX_SD_MODE());

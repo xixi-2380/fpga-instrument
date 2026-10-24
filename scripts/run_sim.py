@@ -9,7 +9,7 @@ sources=[root/f.get('path') for f in ET.parse(root/'keyboard_adsr.gprj').getroot
 assert sources and all(s.is_file() for s in sources),'Missing enabled project source'
 tests=sorted(root.glob('sim/tb_*.sv'))
 if a.test:tests=[t for t in tests if t.stem==a.test]
-elif not a.vendor:tests=[t for t in tests if t.stem not in ['tb_pll_pair','tb_keyboard_top','tb_score_audio','tb_score_effects','tb_effect_button_path','tb_rgb_display','tb_ui_top','tb_ui_score_handoff','tb_british_top','tb_max98357_startup']]
+elif not a.vendor:tests=[t for t in tests if t.stem not in ['tb_pll_pair','tb_keyboard_top','tb_score_audio','tb_score_effects','tb_effect_button_path','tb_rgb_display','tb_ui_top','tb_ui_score_handoff','tb_british_top','tb_max98357_startup','tb_bluetooth_top','tb_playback_regression','tb_bt_score_audio']]
 assert tests,'No matching testbench'
 assert not a.param or a.test,'--param requires --test'
 for override in a.param:
@@ -33,7 +33,7 @@ for t in tests:
     print('RUN',name,flush=True);start=time.monotonic()
     cmd=[str(bin/'iverilog.exe'),'-g2012','-Wall','-grelative-include','-Isim','-s',name,'-o',str(out/(name+'.vvp'))]+[s.as_posix() for s in sources]+[t.as_posix()]
     for override in a.param:cmd[1:1]=['-P',name+'.'+override]
-    if not a.behavioral_pll and name in ['tb_pll_pair','tb_keyboard_top','tb_score_audio','tb_score_effects','tb_effect_button_path','tb_rgb_display','tb_ui_top','tb_ui_score_handoff','tb_british_top','tb_max98357_startup']:cmd+=['C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v']
+    if not a.behavioral_pll and name in ['tb_pll_pair','tb_keyboard_top','tb_score_audio','tb_score_effects','tb_effect_button_path','tb_rgb_display','tb_ui_top','tb_ui_score_handoff','tb_british_top','tb_max98357_startup','tb_bluetooth_top','tb_playback_regression','tb_bt_score_audio']:cmd+=['C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v']
     c=subprocess.run(cmd,capture_output=True,text=True,encoding='utf8',errors='replace',env=env)
     (out/(name+'_compile.log')).write_text(c.stdout+c.stderr,encoding='utf8')
     if c.returncode: print('compile exit',c.returncode,c.stdout+c.stderr);raise SystemExit(1)

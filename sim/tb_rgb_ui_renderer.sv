@@ -40,13 +40,13 @@ module tb_rgb_ui_renderer;
   $fclose(fd);
  end endtask
  task spot(input integer xx,yy,input [23:0] expected,input bit visible);begin
-  @(negedge clk);x=xx;y=yy;de=1;repeat(2)@(negedge clk);
+  @(negedge clk);x=xx;y=yy;de=1;repeat(3)@(negedge clk);
   `CHECK(rgb===expected && de_out==visible,"test pattern and clipping follow same pixel pipeline")
  end endtask
  initial begin
   if(!$value$plusargs("SIM_OUT_DIR=%s",outdir))outdir=".";
   #12 rst=0;
-  status[15]=1;status[5:0]=3;status[64+:16]=16'h0091;status[87:80]=40;
+  status[15]=1;status[60:54]=100;status[5:0]=3;status[64+:16]=16'h0091;status[87:80]=40;
   for(integer j=0;j<128;j=j+1)status[88+j*8+:8]=$rtoi(60*$sin(6.28318530718*j/32));status[11:6]=1;
   status[30:24]=25;status[37:31]=25;status[44:38]=50;status[48:45]=5;
   snapshot;render(0);

@@ -1,0 +1,212 @@
+{
+  "base_commit": "bf5df5792f654ee9c29a30983cdbe83a0061669e",
+  "branch": "codex/bluetooth-score-integration",
+  "published_readme_commit": "b8194981f751a77c83275bdd030763993ec808e5",
+  "implementation_pushed": false,
+  "worktree": "E:\\gowin\\fpga-instrument-bt-score",
+  "all_selected_hdl_passed": true,
+  "hdl_configurations": 23,
+  "hdl_checks": 22580979,
+  "hdl_results": [
+    {
+      "test": "core_2",
+      "passed": true,
+      "checks": 3551,
+      "parameters": {
+        "VOICES": 2
+      },
+      "log": "protocol_final/core_2.log"
+    },
+    {
+      "test": "core_4",
+      "passed": true,
+      "checks": 3550,
+      "parameters": {
+        "VOICES": 4
+      },
+      "log": "protocol_final/core_4.log"
+    },
+    {
+      "test": "core_8",
+      "passed": true,
+      "checks": 3557,
+      "parameters": {
+        "VOICES": 8
+      },
+      "log": "protocol_final/core_8.log"
+    },
+    {
+      "test": "link_9600",
+      "passed": true,
+      "checks": 114,
+      "parameters": {
+        "BAUD": 9600
+      },
+      "log": "protocol_final/link_9600.log"
+    },
+    {
+      "test": "link_115200",
+      "passed": true,
+      "checks": 114,
+      "parameters": {
+        "BAUD": 115200,
+        "CLOCK_HZ": 5000000
+      },
+      "log": "protocol_final/link_115200.log"
+    },
+    {
+      "test": "tb_bluetooth_score_link",
+      "passed": true,
+      "checks": 114,
+      "pll_model": "project/vendor when required",
+      "log": "final/tb_bluetooth_score_link/tb_bluetooth_score_link.log"
+    },
+    {
+      "test": "tb_bluetooth_top",
+      "passed": true,
+      "checks": 700192,
+      "pll_model": "behavioral substitute",
+      "log": "final/tb_bluetooth_top/tb_bluetooth_top.log"
+    },
+    {
+      "test": "tb_british_top",
+      "passed": true,
+      "checks": 967221,
+      "pll_model": "behavioral substitute",
+      "log": "final/tb_british_top/tb_british_top.log"
+    },
+    {
+      "test": "tb_effects_integration",
+      "passed": true,
+      "checks": 6302595,
+      "pll_model": "project/vendor when required",
+      "log": "final/tb_effects_integration/tb_effects_integration.log"
+    },
+    {
+      "test": "tb_instrument_envelopes",
+      "passed": true,
+      "checks": 7932,
+      "pll_model": "project/vendor when required",
+      "log": "final/tb_instrument_envelopes/tb_instrument_envelopes.log"
+    },
+    {
+      "test": "tb_master_volume",
+      "passed": true,
+      "checks": 7,
+      "pll_model": "project/vendor when required",
+      "log": "final/tb_master_volume/tb_master_volume.log"
+    },
+    {
+      "test": "tb_matrix_keypad",
+      "passed": true,
+      "checks": 7183,
+      "pll_model": "project/vendor when required",
+      "log": "final/tb_matrix_keypad/tb_matrix_keypad.log"
+    },
+    {
+      "test": "tb_matrix_settling",
+      "passed": true,
+      "checks": 36,
+      "pll_model": "project/vendor when required",
+      "log": "final/tb_matrix_settling/tb_matrix_settling.log"
+    },
+    {
+      "test": "tb_max98357_startup",
+      "passed": true,
+      "checks": 1851224,
+      "pll_model": "behavioral substitute",
+      "log": "final/tb_max98357_startup/tb_max98357_startup.log"
+    },
+    {
+      "test": "tb_rgb_display",
+      "passed": true,
+      "checks": 2793163,
+      "pll_model": "behavioral substitute",
+      "log": "final/tb_rgb_display/tb_rgb_display.log"
+    },
+    {
+      "test": "tb_rgb_ui_renderer",
+      "passed": true,
+      "checks": 3072031,
+      "pll_model": "project/vendor when required",
+      "log": "final/tb_rgb_ui_renderer/tb_rgb_ui_renderer.log"
+    },
+    {
+      "test": "tb_score_audio",
+      "passed": true,
+      "checks": 2802401,
+      "pll_model": "behavioral substitute",
+      "log": "final/tb_score_audio/tb_score_audio.log"
+    },
+    {
+      "test": "tb_ui_controls",
+      "passed": true,
+      "checks": 91,
+      "pll_model": "project/vendor when required",
+      "log": "final/tb_ui_controls/tb_ui_controls.log"
+    },
+    {
+      "test": "tb_ui_inputs",
+      "passed": true,
+      "checks": 87,
+      "pll_model": "project/vendor when required",
+      "log": "final/tb_ui_inputs/tb_ui_inputs.log"
+    },
+    {
+      "test": "tb_bt_score_audio",
+      "passed": true,
+      "checks": 2434509,
+      "pll_model": "behavioral substitute",
+      "log": "end_to_end_final/tb_bt_score_audio.log"
+    },
+    {
+      "test": "tb_bt_player_production",
+      "passed": true,
+      "checks": 157518,
+      "pll_model": "project/vendor when required",
+      "log": "production_scheduler/tb_bt_player_production.log"
+    },
+    {
+      "test": "tb_bt_event_cdc",
+      "passed": true,
+      "checks": 131,
+      "pll_model": "project/vendor when required",
+      "log": "tb_bt_event_cdc/tb_bt_event_cdc.log"
+    },
+    {
+      "test": "tb_playback_regression",
+      "passed": true,
+      "checks": 1473658,
+      "pll_model": "behavioral substitute",
+      "log": "tb_playback_regression/tb_playback_regression.log"
+    }
+  ],
+  "java_core_checks": 36043,
+  "golden_protocol_frames": 10,
+  "static_checks": [
+    "62 enabled project dependencies present",
+    "61 unique constrained balls; RX=P24 TX=P23 EN=P21",
+    "Gowin flat SDC without if",
+    "project preprocessing without config -I path",
+    "Python AST and git whitespace checks",
+    "four original planning files byte-identical",
+    "Android app source byte-identical to migration source"
+  ],
+  "diagnostics": [
+    {
+      "log": "testbench_send_alignment_initial_failure.log",
+      "reason": "Testbench began byte transfer in audio-domain phase and dropped first SOF byte; sender corrected to reference-clock falling edge; end_to_end_final passed after correction."
+    }
+  ],
+  "not_performed": [
+    "Gowin synthesis/place-route/STA",
+    "programming or board tests",
+    "phone/EC05 radio/SPP connection",
+    "new APK build"
+  ],
+  "limits": [
+    "Behavioral PLL top simulations do not verify official PLL or STA.",
+    "Protocol/audio integration uses accelerated logical ms, VOICES=1 and HALF_CYCLES=2; scheduler has a separate production 50MHz test.",
+    "No proof of physical idle noise or double-key issue resolution until new STA and board tests."
+  ]
+}

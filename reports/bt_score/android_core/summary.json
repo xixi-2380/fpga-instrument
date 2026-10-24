@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "scope": "Java core only; not Android/BT/FPGA",
+  "output": "PASS core: 36043 checks; wire/MIDI/session/upload/cancel/retry; software only\n"
+}

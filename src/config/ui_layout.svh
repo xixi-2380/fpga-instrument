@@ -2,7 +2,7 @@
 localparam [5:0] UI_SINE=0,UI_FLUTE=1,UI_REED=2,UI_ECHO=3,UI_ROOM=4,
  UI_TREMOLO=5,UI_FX=6,UI_MODE=7,UI_LESS=8,UI_MORE=9,
  UI_SLOWER=10,UI_FASTER=11,UI_DEFAULTS=12,UI_CELLO=13,UI_PIANO=14,
- UI_GUITAR=15,UI_VIBES=16,UI_PREV=17,UI_NEXT=18,UI_NONE=63;
+ UI_GUITAR=15,UI_VIBES=16,UI_PREV=17,UI_NEXT=18,UI_VOLUME_DOWN=19,UI_VOLUME_UP=20,UI_NONE=63;
 function automatic ui_inside(input integer px,py,left,top,width,height);
  begin ui_inside=px>=left && px<left+width && py>=top && py<top+height;end
 endfunction
@@ -34,6 +34,8 @@ function automatic [5:0] ui_hit(input integer px,py,input [1:0] fx,input menu);
    if(ui_inside(px,py,716,240,52,48))ui_hit=UI_MORE;
    if(fx==2 && ui_inside(px,py,308,344,52,48))ui_hit=UI_SLOWER;
    if(fx==2 && ui_inside(px,py,716,344,52,48))ui_hit=UI_FASTER;
+   if(ui_inside(px,py,24,420,44,44))ui_hit=UI_VOLUME_DOWN;
+   if(ui_inside(px,py,272,420,44,44))ui_hit=UI_VOLUME_UP;
    if(ui_inside(px,py,664,420,116,44))ui_hit=UI_DEFAULTS;
   end
  end

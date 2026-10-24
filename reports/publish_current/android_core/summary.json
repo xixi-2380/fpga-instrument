@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "scope": "Java core and fake connection lifecycle; not Android/BT/FPGA",
+  "results": [
+    {
+      "test": "CoreTests",
+      "passed": true,
+      "output": "PASS core: 36043 checks; wire/MIDI/session/upload/cancel/retry; software only\n"
+    },
+    {
+      "test": "ConnectionTests",
+      "passed": true,
+      "output": "PASS connection: 32 checks; no phone/radio validation\n"
+    }
+  ]
+}

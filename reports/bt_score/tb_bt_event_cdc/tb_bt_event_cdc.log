@@ -1,0 +1,2 @@
+PASS tb_bt_event_cdc checks=131
+E:/gowin/fpga-instrument-bt-score/sim/tb_bt_event_cdc.sv:23: $finish called at 13202000 (1ps)

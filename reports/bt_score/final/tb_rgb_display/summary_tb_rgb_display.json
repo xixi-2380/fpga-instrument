@@ -1,0 +1,8 @@
+[
+  {
+    "test": "tb_rgb_display",
+    "passed": true,
+    "pll_model": "behavioral substitute",
+    "seconds": 52.613
+  }
+]

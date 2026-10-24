@@ -1,0 +1,23 @@
+{
+  "file": "E:\\gowin\\fpga-instrument-bt-score\\android\\examples\\twinkle_single_voice.mid",
+  "format": 0,
+  "tracks": 1,
+  "channel_display": 1,
+  "ppqn": 480,
+  "bpm": 120,
+  "notes": 42,
+  "polyphony": 1,
+  "midi_min": 60,
+  "midi_max": 69,
+  "velocity": 100,
+  "duration_ms": 23750,
+  "record_bytes": 336,
+  "score_crc32": "7DE8EB5E",
+  "midi_sha256": "2c4ca5ebf9df83316111247e552546d3a2914cba1ba43ab261c129c40b9d58e6",
+  "midi_size": 447,
+  "source": "src/scores/twinkle.txt",
+  "scope": "Actual App Java parser/converter and simulated protocol upload; no phone/radio/board test",
+  "actual_app_parser_passed": true,
+  "software_protocol_upload_passed": true,
+  "data_packets": 3
+}

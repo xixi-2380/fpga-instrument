@@ -1,0 +1,24 @@
+{
+  "scope": "planning only; no RTL or EDA execution",
+  "worktree": "E:\\gowin\\fpga-instrument-bt-score",
+  "target": "Bluetooth integration working changes on bf5df57 baseline",
+  "report_created": "2026-10-24 17:50:08",
+  "setup_violated_endpoints": 1276,
+  "hold_violated_endpoints": 0,
+  "reported_fmax_mhz": {
+    "reference": 58.678,
+    "audio": 55.847,
+    "pixel": 33.134
+  },
+  "required_clock_mhz": {
+    "reference": 50,
+    "audio": 61.44,
+    "pixel": 35
+  },
+  "timing_report_sha256": "861a9f623b71d8360dd2b95761f7bcf9e316363ddd53cdde3ee5c9ba853d9afa",
+  "source_files_checked_against_prior_manifest": 62,
+  "source_mismatches": [],
+  "loaded_hardware_bitstream_identity": "not verified",
+  "highest_planned_waveform_harmonic_hz": 9877.666025122482,
+  "plan_sha256": "cc59b8bb947cb6d36799b1a6895ba290e426b59d77f8d01666f975dd79381aed"
+}

@@ -50,6 +50,17 @@ module tb_ui_controls;
   `CHECK(fx==0 && en,"S3 cycles from UI-selected tremolo instead of stale button state")
   `CHECK(commands>10,"parameter snapshots exercised")
   rst=1;#1;`CHECK(!menu && !en && ep==25 && e==64,"reset restores controller and packet")
+  rst=0;cycles(4);act(UI_DEFAULTS);
+  `CHECK(dut.volume_percent==100,"volume defaults to unity")
+  repeat(25)act(UI_VOLUME_DOWN);
+  `CHECK(dut.volume_percent==0,"volume clamps at zero")
+  repeat(25)act(UI_VOLUME_UP);
+  `CHECK(dut.volume_percent==100,"volume clamps at full gain")
+  `CHECK(ui_hit(24,420,0,1)==UI_VOLUME_DOWN && ui_hit(272,420,0,1)==UI_VOLUME_UP,"settings volume buttons share hit layout")
+  act(UI_MODE);buttons=13;cycles(10);buttons=15;cycles(10);
+  `CHECK(dut.volume_percent==95 && timbre==0,"S1 in settings lowers volume without selecting flute")
+  buttons=11;cycles(10);buttons=15;cycles(10);
+  `CHECK(dut.volume_percent==100 && timbre==0,"S2 in settings raises volume without selecting reed")
   $display("PASS tb_ui_controls checks=%0d commands=%0d",checks,commands);$finish;
  end
 endmodule

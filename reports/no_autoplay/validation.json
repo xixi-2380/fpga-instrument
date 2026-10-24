@@ -1,0 +1,26 @@
+{
+  "change": "Default SCORE_ENABLE=0; no automatic demo on power-on or USR reset",
+  "worktree": "E:\\gowin\\fpga-instrument-bt-score",
+  "results": [
+    {
+      "test": "tb_max98357_startup",
+      "passed": true,
+      "checks": 3702449,
+      "pll_model": "behavioral test substitute"
+    },
+    {
+      "test": "tb_playback_regression",
+      "passed": true,
+      "checks": 1473658,
+      "pll_model": "behavioral test substitute"
+    }
+  ],
+  "total_checks": 5176107,
+  "top_sha256": "38b60c6218786d222db9adf121cdb5a9cce047a4e90d9b63d19494c1f676ad61",
+  "not_performed": [
+    "Gowin synthesis/P&R/STA",
+    "bitstream download",
+    "board test"
+  ],
+  "note": "Explicit SCORE_ENABLE=1 test fixtures retain legacy demo coverage; downloaded MIDI and playback path unchanged."
+}

@@ -1,0 +1,34 @@
+{
+  "base_commit": "bf5df5792f654ee9c29a30983cdbe83a0061669e",
+  "branch": "codex/bluetooth-score-integration",
+  "scope": "Current usable single automatic voice RAM score version; FPGA v1, Android 0.2, settings volume, default no autoplay",
+  "production_max_notes": 1024,
+  "production_auto_voices": 1,
+  "user_confirmed": [
+    "module connection",
+    "communication",
+    "MIDI download and playback",
+    "pause",
+    "stop"
+  ],
+  "publish_recheck": {
+    "protocol_checks": 10886,
+    "java_core_and_connection_passed": true,
+    "java_checks": 36075,
+    "apk_sha256": "cf3f97600316ea24dc96b0d850c2c481a241b7585cae3846a89d24310f8ee9f6",
+    "top_matches_no_autoplay_regression": true
+  },
+  "prior_no_autoplay_hdl_checks": 5176107,
+  "not_implemented": [
+    "16 automatic voices",
+    "4096 notes",
+    "Flash song library",
+    "more UI entry"
+  ],
+  "limitations": [
+    "Latest known audio/pixel setup violations remain; timing not closed",
+    "No Gowin tool, download or programming run by assistant",
+    "Newest no-autoplay change not board verified; previous user functional feedback covers earlier usable version"
+  ],
+  "historical_evidence": "reports/bt_score/validation.json and reports/android_connection/validation.json retain state at their generation time"
+}

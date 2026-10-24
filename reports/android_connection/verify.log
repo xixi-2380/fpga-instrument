@@ -1,0 +1,17 @@
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): true
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: CN=Gaoshan Development, OU=FPGA, O=Student Project, C=CN
+Signer #1 certificate SHA-256 digest: 5ea59e70b900f2bedb9fbc0bf071d74d111f69ad18d29c9fa6a26f27fb6b8f8f
+Signer #1 certificate SHA-1 digest: 22225ff7b451c37df1ffe14eebbc709973b2fc61
+Signer #1 certificate MD5 digest: 2e96fbdffd01eb029705ba7ebc152795
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 2048
+Signer #1 public key SHA-256 digest: bb2b29724f8dbe6f7b7c8f8bd91bbed06883a3d7fff8a9cd6975ebe2a1706bc2
+Signer #1 public key SHA-1 digest: e924d35bc8efe1a10358b1af3d66a1cc4bb8dc63
+Signer #1 public key MD5 digest: 9b9199e9101470502c036700bd6cfe4b

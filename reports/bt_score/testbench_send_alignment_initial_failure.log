@@ -1,0 +1,2 @@
+FATAL: E:/gowin/fpga-instrument-bt-score/sim/tb_bt_score_audio.sv:82: protocol/audio timeout replies=0 ons=0 offs=0 keys=0200 inhibit=0 gate=1 state=0 ready=1
+       Time: 60000000000  Scope: tb_bt_score_audio

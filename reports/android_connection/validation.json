@@ -1,0 +1,44 @@
+{
+  "version": "0.2-dev",
+  "scope": "P0/P1 combined implementation with independently triggered module connection and FPGA verification",
+  "apk": "E:\\gowin\\fpga-instrument-bt-score\\android\\dist\\GaoshanScore-0.2-dev.apk",
+  "apk_sha256": "cf3f97600316ea24dc96b0d850c2c481a241b7585cae3846a89d24310f8ee9f6",
+  "apk_bytes": 45459,
+  "java_core_checks": 36043,
+  "fake_connection_checks": 32,
+  "software_passed": true,
+  "apk_build_signing_passed": true,
+  "android_runtime_tested": false,
+  "phone_radio_tested": false,
+  "fpga_rtl_changed": false,
+  "old_apk_certificate_sha256": "7c6f29397bd7941945c817756b0cc4be5009f4652e847674f08dfd58f0119a3a",
+  "new_apk_certificate_sha256": "5ea59e70b900f2bedb9fbc0bf071d74d111f69ad18d29c9fa6a26f27fb6b8f8f",
+  "install_note": "Different development signature: uninstall old 0.1 before installing 0.2",
+  "compiler": "JDK 8 javac, Java 8 source/target, Android API35 stubs",
+  "dex_sign_runtime": "Java21",
+  "sdk_downloads": [
+    {
+      "url": "https://dl.google.com/android/repository/platform-35_r02.zip",
+      "verified_repository_sha1": "0bb560a90a7a2cbd0dd8348224d518b638fe7949"
+    },
+    {
+      "url": "https://dl.google.com/android/repository/build-tools_r35_windows.zip",
+      "verified_repository_sha1": "af059bb67cf7786f45ee0db85e2d24985df1b4b6"
+    }
+  ],
+  "files": {
+    "android/app/src/main/AndroidManifest.xml": "581cf87c7dbe9aef14bf339df55519e92f05d238693bcf13dfc573b8f201d70f",
+    "android/app/src/main/java/cn/whu/gaoshan/BluetoothAttempt.java": "e380a77f6c86d06a41587c9cb8ff1cfc0c9f861728129f8519954640f94d40e9",
+    "android/app/src/main/java/cn/whu/gaoshan/BluetoothTransport.java": "e073c53be188da221f664ebc44379e89006e789ed7e6ccfd54a4bf8c4ea44ad3",
+    "android/app/src/main/java/cn/whu/gaoshan/MainActivity.java": "f5f82867e4a25a74c3eaafffd7ed0ceed01c2f187b7ed2c918174fd6de1f7ce7",
+    "android/app/src/main/java/cn/whu/gaoshan/core/MidiFile.java": "f85ce45cfed6e6952bf77066ad81e4636fef9828ece71e6af8dfe5a0f5a4784d",
+    "android/app/src/main/java/cn/whu/gaoshan/core/ModuleConnection.java": "bf7def9120ede6c034d5c4bf114c07005a83770638d52a1c4b0820a63594109d",
+    "android/app/src/main/java/cn/whu/gaoshan/core/ProtocolClient.java": "7c91d160ae76f203d40dad8ea7bb2221d439f57074dd85905d267b8031606a07",
+    "android/app/src/main/java/cn/whu/gaoshan/core/Score.java": "3d890c6022361034f686880fd08a492a64342d37d4c2a37d0013035e1da0cfdf",
+    "android/app/src/main/java/cn/whu/gaoshan/core/SimulatedDevice.java": "5210a90401abc032e2f505c510493495dc0a28e6eb1d8ed1656c751484b445c9",
+    "android/app/src/main/java/cn/whu/gaoshan/core/Wire.java": "cb9332cb7dd54d9e9211ef3e79b5659a9df5fe4e70b29d9ac920ea21e7b09671",
+    "android/build_apk.py": "ba9d879df098b4139ce808f0785538320db5a11038739b892839e15d4fb44f8e",
+    "android/run_core_tests.py": "0256d7347de2baeac107222436bc288077501796ce149da6836aa54c1e869c6e",
+    "android/app/build.gradle": "567ee7a077758690ea7c0918703a684de24df1c52a032b680bcd18d74aaeb662"
+  }
+}

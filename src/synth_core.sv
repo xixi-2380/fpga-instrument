@@ -12,7 +12,156 @@ module synth_core #(
     input wire effect_cfg_valid,input wire [8:0] effect_echo_wet,effect_room_wet,effect_tremolo_depth,
     input wire [3:0] effect_tremolo_rate_hz,output wire effect_cfg_ready,effect_cfg_applied,
     output wire visual_sample_valid,output wire signed [15:0] visual_sample,
-    output reg [15:0] visual_notes);
+    output reg [15:0] visual_notes,
+    input wire flush,input wire velocity_valid,input wire [6:0] note_velocity,
+    input wire [6:0] volume_percent,input wire [6:0] note_pitch);
+    wire engine_reset=rst || (flush===1'b1);
+    // Only Bluetooth ID0 has velocity; legacy score/keyboard retain unity.
+    wire [8:0] velocities[0:127];
+    reg [8:0] bluetooth_velocity;
+    reg [6:0] bluetooth_pitch;
+    assign velocities[0]=bluetooth_velocity;
+    for(genvar n=1;n<128;n=n+1)assign velocities[n]=9'd256;
+    reg [8:0] velocity_scale;
+    function automatic [8:0] velocity_gain(input [6:0] value);
+    begin case(value)
+        7'd0:velocity_gain=9'd0;
+        7'd1:velocity_gain=9'd2;
+        7'd2:velocity_gain=9'd4;
+        7'd3:velocity_gain=9'd6;
+        7'd4:velocity_gain=9'd8;
+        7'd5:velocity_gain=9'd10;
+        7'd6:velocity_gain=9'd12;
+        7'd7:velocity_gain=9'd14;
+        7'd8:velocity_gain=9'd16;
+        7'd9:velocity_gain=9'd18;
+        7'd10:velocity_gain=9'd20;
+        7'd11:velocity_gain=9'd22;
+        7'd12:velocity_gain=9'd24;
+        7'd13:velocity_gain=9'd26;
+        7'd14:velocity_gain=9'd28;
+        7'd15:velocity_gain=9'd30;
+        7'd16:velocity_gain=9'd32;
+        7'd17:velocity_gain=9'd34;
+        7'd18:velocity_gain=9'd36;
+        7'd19:velocity_gain=9'd38;
+        7'd20:velocity_gain=9'd40;
+        7'd21:velocity_gain=9'd42;
+        7'd22:velocity_gain=9'd44;
+        7'd23:velocity_gain=9'd46;
+        7'd24:velocity_gain=9'd48;
+        7'd25:velocity_gain=9'd50;
+        7'd26:velocity_gain=9'd52;
+        7'd27:velocity_gain=9'd54;
+        7'd28:velocity_gain=9'd56;
+        7'd29:velocity_gain=9'd58;
+        7'd30:velocity_gain=9'd60;
+        7'd31:velocity_gain=9'd62;
+        7'd32:velocity_gain=9'd65;
+        7'd33:velocity_gain=9'd67;
+        7'd34:velocity_gain=9'd69;
+        7'd35:velocity_gain=9'd71;
+        7'd36:velocity_gain=9'd73;
+        7'd37:velocity_gain=9'd75;
+        7'd38:velocity_gain=9'd77;
+        7'd39:velocity_gain=9'd79;
+        7'd40:velocity_gain=9'd81;
+        7'd41:velocity_gain=9'd83;
+        7'd42:velocity_gain=9'd85;
+        7'd43:velocity_gain=9'd87;
+        7'd44:velocity_gain=9'd89;
+        7'd45:velocity_gain=9'd91;
+        7'd46:velocity_gain=9'd93;
+        7'd47:velocity_gain=9'd95;
+        7'd48:velocity_gain=9'd97;
+        7'd49:velocity_gain=9'd99;
+        7'd50:velocity_gain=9'd101;
+        7'd51:velocity_gain=9'd103;
+        7'd52:velocity_gain=9'd105;
+        7'd53:velocity_gain=9'd107;
+        7'd54:velocity_gain=9'd109;
+        7'd55:velocity_gain=9'd111;
+        7'd56:velocity_gain=9'd113;
+        7'd57:velocity_gain=9'd115;
+        7'd58:velocity_gain=9'd117;
+        7'd59:velocity_gain=9'd119;
+        7'd60:velocity_gain=9'd121;
+        7'd61:velocity_gain=9'd123;
+        7'd62:velocity_gain=9'd125;
+        7'd63:velocity_gain=9'd127;
+        7'd64:velocity_gain=9'd129;
+        7'd65:velocity_gain=9'd131;
+        7'd66:velocity_gain=9'd133;
+        7'd67:velocity_gain=9'd135;
+        7'd68:velocity_gain=9'd137;
+        7'd69:velocity_gain=9'd139;
+        7'd70:velocity_gain=9'd141;
+        7'd71:velocity_gain=9'd143;
+        7'd72:velocity_gain=9'd145;
+        7'd73:velocity_gain=9'd147;
+        7'd74:velocity_gain=9'd149;
+        7'd75:velocity_gain=9'd151;
+        7'd76:velocity_gain=9'd153;
+        7'd77:velocity_gain=9'd155;
+        7'd78:velocity_gain=9'd157;
+        7'd79:velocity_gain=9'd159;
+        7'd80:velocity_gain=9'd161;
+        7'd81:velocity_gain=9'd163;
+        7'd82:velocity_gain=9'd165;
+        7'd83:velocity_gain=9'd167;
+        7'd84:velocity_gain=9'd169;
+        7'd85:velocity_gain=9'd171;
+        7'd86:velocity_gain=9'd173;
+        7'd87:velocity_gain=9'd175;
+        7'd88:velocity_gain=9'd177;
+        7'd89:velocity_gain=9'd179;
+        7'd90:velocity_gain=9'd181;
+        7'd91:velocity_gain=9'd183;
+        7'd92:velocity_gain=9'd185;
+        7'd93:velocity_gain=9'd187;
+        7'd94:velocity_gain=9'd189;
+        7'd95:velocity_gain=9'd191;
+        7'd96:velocity_gain=9'd194;
+        7'd97:velocity_gain=9'd196;
+        7'd98:velocity_gain=9'd198;
+        7'd99:velocity_gain=9'd200;
+        7'd100:velocity_gain=9'd202;
+        7'd101:velocity_gain=9'd204;
+        7'd102:velocity_gain=9'd206;
+        7'd103:velocity_gain=9'd208;
+        7'd104:velocity_gain=9'd210;
+        7'd105:velocity_gain=9'd212;
+        7'd106:velocity_gain=9'd214;
+        7'd107:velocity_gain=9'd216;
+        7'd108:velocity_gain=9'd218;
+        7'd109:velocity_gain=9'd220;
+        7'd110:velocity_gain=9'd222;
+        7'd111:velocity_gain=9'd224;
+        7'd112:velocity_gain=9'd226;
+        7'd113:velocity_gain=9'd228;
+        7'd114:velocity_gain=9'd230;
+        7'd115:velocity_gain=9'd232;
+        7'd116:velocity_gain=9'd234;
+        7'd117:velocity_gain=9'd236;
+        7'd118:velocity_gain=9'd238;
+        7'd119:velocity_gain=9'd240;
+        7'd120:velocity_gain=9'd242;
+        7'd121:velocity_gain=9'd244;
+        7'd122:velocity_gain=9'd246;
+        7'd123:velocity_gain=9'd248;
+        7'd124:velocity_gain=9'd250;
+        7'd125:velocity_gain=9'd252;
+        7'd126:velocity_gain=9'd254;
+        7'd127:velocity_gain=9'd256;
+        default:velocity_gain=256;
+    endcase end endfunction
+    always @(posedge clk or posedge engine_reset)begin
+        if(engine_reset)begin bluetooth_velocity<=256;bluetooth_pitch<=0;end
+        else if(note_valid && note_ready && note_on && note_id==0)begin
+            bluetooth_velocity<=velocity_valid===1'b1 ? velocity_gain(note_velocity) : 9'd256;
+            bluetooth_pitch<=velocity_valid===1'b1 ? note_pitch : 7'd0;
+        end
+    end
     localparam integer INDEX_W=VOICES>1?$clog2(VOICES):1;
     localparam integer RENDER_BUDGET=32+16*VOICES;
     localparam integer CYCLE_W=$clog2(RENDER_BUDGET+1);
@@ -38,6 +187,7 @@ module synth_core #(
     wire signed [15:0] effect_sample;
     wire [VOICES*32-1:0] phase;
     reg [33:0] level_product;
+    wire [25:0] scaled_level=level_product[32:16]*velocity_scale;
     reg [16:0] combined_level;
     reg gain_request,first_sample,last_sample;
     reg [INDEX_W-1:0] sample_voice;
@@ -46,24 +196,28 @@ module synth_core #(
     wire [15:0] frame_l,frame_r;
     reg [15:0] note_scan;
     wire [6:0] scanning_id=voice_ids[selected_voice*7+:7];
-    wire [15:0] note_bit=(voice_held[selected_voice] && scanning_id>=60 && scanning_id<76) ? (16'b1 << (scanning_id-7'd60)) : 16'd0;
-    always @(posedge clk or posedge rst)begin
-        if(rst)begin note_scan<=0;visual_notes<=0;end
+    wire [6:0] scanning_pitch=scanning_id==0 ? bluetooth_pitch : scanning_id;
+    wire [15:0] note_bit=(voice_held[selected_voice] && scanning_pitch>=60 && scanning_pitch<76) ? (16'b1 << (scanning_pitch-7'd60)) : 16'd0;
+    always @(posedge clk or posedge engine_reset)begin
+        if(engine_reset)begin note_scan<=0;visual_notes<=0;end
         else if(dds_ce)begin
             if(selected_voice==0)note_scan<=note_bit;
             else note_scan<=note_scan | note_bit;
             if(selected_voice==VOICES-1)visual_notes<=VOICES==1 ? note_bit : note_scan | note_bit;
         end
     end
-    assign visual_sample_valid=effect_valid;
-    assign visual_sample=effect_sample;
+    wire output_valid;wire signed [15:0] output_sample;
+    // Flush drops buffered audio but must not reset the user's volume ramp.
+    master_volume volume_control(clk,rst,effect_valid,effect_sample,volume_percent,output_valid,output_sample);
+    assign visual_sample_valid=output_valid;
+    assign visual_sample=output_sample;
     audio_timing timing(clk,rst,bck,rise_ce,fall_ce,frame_ce,bit_index);
     startup_envelope #(.MUTE(MUTE),.FADE(FADE)) startup(clk,rst,frame_ce,input_ready,startup_level);
     assign pa_enable=input_ready;
     assign gate=|voice_held;
     // Freeze ownership while rendering; external producers retain valid/data.
     voice_allocator #(.VOICES(VOICES)) allocator(
-        .clk(clk),.rst(rst),.enabled(input_ready && !render_busy),.frame_ce(frame_ce),
+        .clk(clk),.rst(engine_reset),.enabled(input_ready && !render_busy),.frame_ce(frame_ce),
         .note_valid(note_valid),.note_on(note_on),.note_id(note_id),.note_fcw(note_fcw),
         .voice_active(voice_active),.note_ready(note_ready),.voice_start(voice_start),
         .voice_stop(voice_stop),.voice_restart(voice_restart),.voice_held(voice_held),
@@ -71,20 +225,20 @@ module synth_core #(
         .note_timbre(note_timbre),.voice_timbres(voice_timbres));
     for(genvar v=0;v<VOICES;v=v+1)begin: voices
         instrument_envelope #(.ATTACK(ATTACK),.DECAY(DECAY),.SUSTAIN(SUSTAIN),.RELEASE(RELEASE)) envelope(
-            .clk(clk),.rst(rst),.sample_ce(frame_ce),.note_on(voice_start[v]),.note_off(voice_stop[v]),
+            .clk(clk),.rst(engine_reset),.sample_ce(frame_ce),.note_on(voice_start[v]),.note_off(voice_stop[v]),
             .level(voice_level[v]),.active(voice_active[v]),.restart(voice_restart[v]),.timbre(voice_timbres[v*3+:3]));
     end
-    dds_sine #(.VOICES(VOICES)) dds(.clk(clk),.rst(rst),.sample_ce(dds_ce),
+    dds_sine #(.VOICES(VOICES)) dds(.clk(clk),.rst(engine_reset),.sample_ce(dds_ce),
         .fcw(frame_fcw[selected_voice*32+:32]),.sample(raw_sample),.valid(raw_valid),
         .phase(phase),.restart(frame_restart[selected_voice]),.voice_index(selected_voice),.timbre(frame_timbres[selected_voice*3+:3]));
-    always @(posedge clk or posedge rst)begin
-        if(rst)begin
+    always @(posedge clk or posedge engine_reset)begin
+        if(engine_reset)begin
             render_busy<=0;render_cycle<=0;frame_fcw<=0;frame_restart<=0;frame_timbres<=0;
             level_product<=0;combined_level<=0;gain_request<=0;
-            first_sample<=0;last_sample<=0;sample_voice<=0;
+            first_sample<=0;last_sample<=0;sample_voice<=0;velocity_scale<=256;
         end else begin
             gain_request<=raw_valid;
-            if(raw_valid)combined_level<=level_product[32:16];
+            if(raw_valid)combined_level<=scaled_level[24:8];
             if(frame_ce)begin
                 render_busy<=1;render_cycle<=0;
                 frame_fcw<=voice_fcw;frame_restart<=voice_restart;frame_timbres<=voice_timbres;
@@ -94,33 +248,34 @@ module synth_core #(
             end
             if(dds_ce)begin
                 level_product<=voice_level[selected_voice]*startup_level;
+                velocity_scale<=velocities[voice_ids[selected_voice*7+:7]];
                 sample_voice<=selected_voice;
                 first_sample<=selected_voice==0;
                 last_sample<=selected_voice==VOICES-1;
             end
         end
     end
-    tone_gain #(.OUTPUT_W(`VOICE_W)) gain(clk,rst,gain_request,raw_sample,combined_level,gain_valid,gain_sample);
-    voice_mixer mixer(clk,rst,gain_valid,gain_sample,first_sample,last_sample,mix_valid,mix_sample);
+    tone_gain #(.OUTPUT_W(`VOICE_W)) gain(clk,engine_reset,gain_request,raw_sample,combined_level,gain_valid,gain_sample);
+    voice_mixer mixer(clk,engine_reset,gain_valid,gain_sample,first_sample,last_sample,mix_valid,mix_sample);
     always @* begin
         envelope_level=0;
         for(integer v=0;v<VOICES;v=v+1)
             if(voice_level[v]>envelope_level)envelope_level=voice_level[v];
     end
     audio_effects #(.DELAY_SAMPLES(DELAY_SAMPLES),.D0(ROOM_D0),.D1(ROOM_D1),.D2(ROOM_D2),.D3(ROOM_D3)) effect(
-        .clk(clk),.rst(rst),.enable(effects_enable),.mode(effect_mode),.in_valid(mix_valid),.in_sample(mix_sample),
+        .clk(clk),.rst(engine_reset),.enable(effects_enable),.mode(effect_mode),.in_valid(mix_valid),.in_sample(mix_sample),
         .in_ready(effect_ready),.out_valid(effect_valid),.out_sample(effect_sample),
         .cfg_valid(effect_cfg_valid),.cfg_echo_wet(effect_echo_wet),.cfg_room_wet(effect_room_wet),
         .cfg_tremolo_depth(effect_tremolo_depth),.cfg_tremolo_rate_hz(effect_tremolo_rate_hz),
         .cfg_ready(effect_cfg_ready),.cfg_applied(effect_cfg_applied));
-    frame_buffer buffer(clk,rst,frame_ce,effect_valid,ready,effect_sample,effect_sample,frame_l,frame_r,underrun);
+    frame_buffer buffer(clk,engine_reset,frame_ce,output_valid,ready,output_sample,output_sample,frame_l,frame_r,underrun);
     i2s_tx tx(clk,rst,fall_ce,bit_index,frame_l,frame_r,ws,din);
     // synthesis translate_off
     initial if(VOICES<1 || VOICES>32 || RENDER_BUDGET>=`FRAME_CYCLES)$fatal(1,"Invalid render budget");
     always @(posedge clk)if(!rst)begin
         if(frame_ce && render_busy)$fatal(1,"Frame renderer missed deadline");
         if(mix_valid && !effect_ready)$fatal(1,"Effect rejected render result");
-        if(effect_valid && !ready)$fatal(1,"Frame buffer rejected effect result");
+        if(output_valid && !ready)$fatal(1,"Frame buffer rejected effect result");
     end
     // synthesis translate_on
 endmodule
