@@ -1,4 +1,12 @@
-## 当前 main：英伦 UI、七音色、MAX98357A 与触摸
+# 蓝牙整合重构版
+
+- 分支：`codex/bluetooth-score-integration`。
+- 版本基准：`bf5df5792f654ee9c29a30983cdbe83a0061669e`（main 的英伦七音色 UI、MAX98357A 与触摸整合版）。
+- 开发范围：按 `docs/bluetooth_score` 中的规划和 v1 协议重构 FPGA 蓝牙，加入设置页音量，重点验证松键后输出归零、单键识别和键位高亮，并控制组合路径、宽总线和跨时钟传递。
+- 当前状态：开发中。此次分支创建只提交版本说明，尚未发布完成的蓝牙重构实现，也未取得新综合、布局布线、STA 或实板验收结果。
+- 下方内容为基准版本记录；不能将基准版的历史测试视为本分支新功能已通过。
+
+## 基准 main：英伦 UI、七音色、MAX98357A 与触摸
 
 `main`现已整合远端`feature/instrument-ui`最新44bebc6和当前`codex/fpga-migration`。保留黑金英文演奏/参数双页、后效果器波形/峰值/音符监视、七音色、小星星、三效果器和矩阵菜单；数字音频由MAX_BCLK/MAX_LRCLK/MAX_DIN/MAX_SD_MODE输出，GT9110采集和触摸UI默认启动。旧板载PT8211/PA与DBG输出固定低。
 
