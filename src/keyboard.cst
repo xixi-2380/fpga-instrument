@@ -159,3 +159,11 @@ IO_LOC "touch_int" V23;
 IO_PORT "touch_int" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
 IO_LOC "touch_rst_n" R23;
 IO_PORT "touch_rst_n" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+
+// RCWL-9610A: user instruction Echo=U17, Trig=P21.
+// Reference pin_header[7]/[6]: 3.3V header bank. Echo MUST be 3.3V-compatible.
+// Pull-down keeps an unplugged Echo from floating. Verify supply/level physically.
+IO_LOC "ultrasonic_echo" U17;
+IO_PORT "ultrasonic_echo" IO_TYPE=LVCMOS33 PULL_MODE=DOWN DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "ultrasonic_trig" P21;
+IO_PORT "ultrasonic_trig" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;

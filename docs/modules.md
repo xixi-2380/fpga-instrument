@@ -47,3 +47,8 @@
 2026-10-16阶段B：原dds_sine已改为多相位上下文共享ROM，原synth_core调度共享增益，原voice_mixer接收first/last串行声部样本。当前实际约定看interfaces.md的“共享调度实际接口”，上文并行说明是历史；仍为同一20文件工程，无新增功能模块。
 
 2026-10-16阶段C：当前生产配置32，1/4/32参数与32满幅变体通过；最新实际接口见interfaces.md“32声部当前实现”。共享DDS每帧按索引更新32份相位，每16周期一个样本；voice_mixer的first/last划定帧，不重复或漏加最后项。原键盘TB已区分四声部溢出与32声部五键独立行为。旧四声部资源数字不能用于本版验收。
+
+
+## 超声波音量交互分支
+
+`ultrasonic_range`（50 MHz 脉宽测量）→ `ultrasonic_volume`（中值/音量映射）→ 复用 `rgb_status_cdc` 的 9 位原子快照 → `audio_master_gain`（61.44 MHz、48 kHz 样本使能）→ 原 `frame_buffer`/`i2s_tx`。音量级位于效果器之后；详见 [超声波说明](ultrasonic.md)。独立分支交付，暂不合入 main。

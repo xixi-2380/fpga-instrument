@@ -1,0 +1,2 @@
+PASS tb_audio_master_gain cycles=3400 signed/stalls/slew/clamp/reset
+sim/tb_audio_master_gain.sv:42: $finish called at 68120000 (1ps)

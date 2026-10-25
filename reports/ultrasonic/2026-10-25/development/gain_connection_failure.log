@@ -1,0 +1,3 @@
+FAIL I2S word matches exact per-frame reference at 158960000
+FATAL: sim/poly_audio_reference.svh:120: 
+       Time: 158959554  Scope: tb_score_audio

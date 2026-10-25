@@ -2,7 +2,7 @@
 `include "config/keyboard_config.svh"
 `include "config/run_leds_config.svh"
 module keyboard_top #(
-    parameter integer LCD_ENABLE=1,LCD_TEST_PATTERN=0,LCD_PCLK_INVERT=1,
+    parameter integer ULTRASONIC_ENABLE=1,LCD_ENABLE=1,LCD_TEST_PATTERN=0,LCD_PCLK_INVERT=1,
     TOUCH_ENABLE=1,TOUCH_UI_ENABLE=1,TOUCH_RESET_CYCLES=1000000,TOUCH_STRAP_CYCLES=300000,
     TOUCH_BOOT_CYCLES=2500000,TOUCH_POLL_CYCLES=500000,TOUCH_I2C_HALF=250,
     parameter SCORE_FILE="src/scores/twinkle.hex",
@@ -18,8 +18,10 @@ module keyboard_top #(
     output wire MAX_BCLK,MAX_LRCLK,MAX_DIN,MAX_SD_MODE,
     output wire [5:0] led_n,
     output wire lcd_clk,lcd_hs,lcd_vs,lcd_en,output wire [5:0] lcd_r,lcd_g,lcd_b,
-    inout wire touch_scl,touch_sda,touch_int,touch_rst_n);
+    inout wire touch_scl,touch_sda,touch_int,touch_rst_n,
+    input wire ultrasonic_echo,output wire ultrasonic_trig);
     wire effects_enabled;
+    wire [8:0] ultrasonic_gain;
     wire synth_pa_enable;
     reg [1:0] max_clock_frames;
     wire visual_sample_valid;wire signed [15:0] visual_sample;wire [15:0] visual_notes;
@@ -51,6 +53,24 @@ module keyboard_top #(
     wire [38:0] touch_status={touch_ready,touch_error,touch_down,touch_count,touch_x,touch_y};
     wire [70:0] touch_audio;
     wire touch_audio_valid,touch_update;
+    if(ULTRASONIC_ENABLE)begin: ultrasonic_on
+        wire [8:0] distance_cm,filtered_cm,gain_ref,gain_audio;
+        wire sample_done,sample_valid,control_valid,gain_valid,gain_update;
+        wire [2:0] error_code;
+        ultrasonic_range #(.CLK_HZ(`REF_HZ)) range_reader(
+            .clk(clk),.rst(pll1_reset),.echo_async(ultrasonic_echo),.trig(ultrasonic_trig),
+            .distance_cm(distance_cm),.sample_done(sample_done),.sample_valid(sample_valid),
+            .error_code(error_code));
+        ultrasonic_volume volume_control(
+            .clk(clk),.rst(pll1_reset),.sample_valid(sample_valid),.distance_cm(distance_cm),
+            .filtered_cm(filtered_cm),.gain_target(gain_ref),.control_valid(control_valid));
+        // Atomic bundled-data handshake. The 9 gain bits are NOT synchronized individually.
+        rgb_status_cdc #(.WIDTH(9)) gain_bridge(clk,audio_clk,pll1_reset || audio_reset,
+            gain_ref,gain_audio,gain_valid,gain_update);
+        assign ultrasonic_gain=gain_valid ? gain_audio : 9'd256;
+    end else begin: ultrasonic_off
+        assign ultrasonic_trig=1'b0;assign ultrasonic_gain=9'd256;
+    end
     // Start the external amplifier only after I2S clocks have crossed two
     // frame boundaries. The existing production mute interval then supplies
     // more than 7.5 ms of digital silence before audio is admitted.
@@ -142,9 +162,9 @@ module keyboard_top #(
         .note_valid(key_valid),.note_on(key_on),.note_id(key_id),.note_fcw(key_fcw),
         .gate(key_gate),.last_key(last_key),
         .selected_timbre(selected_timbre),.note_timbre(key_timbre),.inhibit_notes(inhibit_notes));
-    synth_core #(.MUTE(MUTE),.FADE(FADE),.ATTACK(ATTACK),.DECAY(DECAY),
+    synth_core #(.MASTER_GAIN_ENABLE(ULTRASONIC_ENABLE),.MUTE(MUTE),.FADE(FADE),.ATTACK(ATTACK),.DECAY(DECAY),
         .SUSTAIN(SUSTAIN),.RELEASE(RELEASE)) sound(
-        .clk(audio_clk),.rst(audio_reset),.note_valid(note_valid),.note_on(note_on),
+        .clk(audio_clk),.rst(audio_reset),.master_gain(ultrasonic_gain),.note_valid(note_valid),.note_on(note_on),
         .note_id(note_id),.note_fcw(note_fcw),.note_timbre(event_timbre),.effects_enable(effects_enabled),.effect_mode(effect_mode),
         .effect_cfg_valid(cfg_valid),.effect_echo_wet(echo_wet),.effect_room_wet(room_wet),
         .effect_tremolo_depth(tremolo_depth),.effect_tremolo_rate_hz(cfg_rate_hz),

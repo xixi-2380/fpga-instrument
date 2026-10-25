@@ -1,0 +1,787 @@
+- V e r i l a t i o n   R e p o r t:  rev vUNKNOWN-built20260516-4e853d8
+- Verilator: Built from 4.015 MB sources in 41 modules, into 2.500 MB in 8 C++ files needing 0.000 MB
+- Verilator: Walltime 0.419 s (elab=0.038, cvt=0.320, bld=0.000); cpu 0.419 s on 1 threads; allocated 51.641 MB
+%Warning-WIDTHEXPAND: src/keyboard_top.sv:15:22: Operator VAR 'SUSTAIN' expects 32 bits on the Initial value, but Initial value's CONST '17'hb333' generates 17 bits.
+                                               : ... note: In instance 'keyboard_top'
+   15 |     DECAY=(48000/10),SUSTAIN=17'd45875,RELEASE=(48000/5))(
+      |                      ^~~~~~~
+                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=0.000
+                      ... Use "/* verilator lint_off WIDTHEXPAND */" and lint_on around source to disable this message.
+%Warning-WIDTHTRUNC: src/keyboard_top.sv:56:5: Logical operator GENIF expects 1 bit on the If, but If's VARREF 'ULTRASONIC_ENABLE' generates 32 bits.
+                                             : ... note: In instance 'keyboard_top'
+   56 |     if(ULTRASONIC_ENABLE)begin: ultrasonic_on
+      |     ^~
+                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=0.000
+                     ... Use "/* verilator lint_off WIDTHTRUNC */" and lint_on around source to disable this message.
+%Warning-WIDTHTRUNC: src/keyboard_top.sv:85:5: Logical operator GENIF expects 1 bit on the If, but If's VARREF 'TOUCH_ENABLE' generates 32 bits.
+                                             : ... note: In instance 'keyboard_top'
+   85 |     if(TOUCH_ENABLE)begin: touch_on
+      |     ^~
+%Warning-WIDTHTRUNC: src/keyboard_top.sv:113:5: Logical operator GENIF expects 1 bit on the If, but If's VARREF 'LCD_ENABLE' generates 32 bits.
+                                              : ... note: In instance 'keyboard_top'
+  113 |     if(LCD_ENABLE)begin: lcd_on
+      |     ^~
+%Warning-WIDTHTRUNC: src/synth_core.sv:136:5: Logical operator GENIF expects 1 bit on the If, but If's VARREF 'MASTER_GAIN_ENABLE' generates 32 bits.
+                                            : ... note: In instance 'keyboard_top.sound'
+  136 |     if(MASTER_GAIN_ENABLE)begin: master_on
+      |     ^~
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:29:39: Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's VARREF 'RELEASE' generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   29 |                     state<=R;remaining<=RELEASE;length<=RELEASE;
+      |                                       ^~
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:29:55: Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's VARREF 'RELEASE' generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   29 |                     state<=R;remaining<=RELEASE;length<=RELEASE;
+      |                                                       ^~
+%Warning-WIDTHEXPAND: src/adsr_envelope.sv:30:32: Operator DIV expects 32 bits on the LHS, but LHS's VARREF 'level' generates 17 bits.
+                                                : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   30 |                     base<=level/R_DEN;remainder<=level%R_DEN;error<=0;
+      |                                ^
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:30:25: Operator ASSIGNDLY expects 17 bits on the Assign RHS, but Assign RHS's DIV generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   30 |                     base<=level/R_DEN;remainder<=level%R_DEN;error<=0;
+      |                         ^~
+%Warning-WIDTHEXPAND: src/adsr_envelope.sv:30:55: Operator MODDIV expects 32 bits on the LHS, but LHS's VARREF 'level' generates 17 bits.
+                                                : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   30 |                     base<=level/R_DEN;remainder<=level%R_DEN;error<=0;
+      |                                                       ^
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:30:48: Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's MODDIV generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   30 |                     base<=level/R_DEN;remainder<=level%R_DEN;error<=0;
+      |                                                ^~
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:37:39: Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's VARREF 'ATTACK' generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   37 |                     state<=A;remaining<=ATTACK;length<=ATTACK;
+      |                                       ^~
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:37:54: Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's VARREF 'ATTACK' generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   37 |                     state<=A;remaining<=ATTACK;length<=ATTACK;
+      |                                                      ^~
+%Warning-WIDTHEXPAND: src/adsr_envelope.sv:38:37: Operator SUB expects 32 bits on the LHS, but LHS's CONST '17'h10000' generates 17 bits.
+                                                : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   38 |                     base<=(17'd65536-start_level)/A_DEN;
+      |                                     ^
+%Warning-WIDTHEXPAND: src/adsr_envelope.sv:38:37: Operator SUB expects 32 bits on the RHS, but RHS's VARREF 'start_level' generates 17 bits.
+                                                : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   38 |                     base<=(17'd65536-start_level)/A_DEN;
+      |                                     ^
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:38:25: Operator ASSIGNDLY expects 17 bits on the Assign RHS, but Assign RHS's DIV generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   38 |                     base<=(17'd65536-start_level)/A_DEN;
+      |                         ^~
+%Warning-WIDTHEXPAND: src/adsr_envelope.sv:39:42: Operator SUB expects 32 bits on the LHS, but LHS's CONST '17'h10000' generates 17 bits.
+                                                : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   39 |                     remainder<=(17'd65536-start_level)%A_DEN;error<=0;
+      |                                          ^
+%Warning-WIDTHEXPAND: src/adsr_envelope.sv:39:42: Operator SUB expects 32 bits on the RHS, but RHS's VARREF 'start_level' generates 17 bits.
+                                                : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   39 |                     remainder<=(17'd65536-start_level)%A_DEN;error<=0;
+      |                                          ^
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:39:30: Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's MODDIV generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   39 |                     remainder<=(17'd65536-start_level)%A_DEN;error<=0;
+      |                              ^~
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:41:52: Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's VARREF 'DECAY' generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   41 |                     state<=D;level<=65536;remaining<=DECAY;length<=DECAY;
+      |                                                    ^~
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:41:66: Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's VARREF 'DECAY' generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   41 |                     state<=D;level<=65536;remaining<=DECAY;length<=DECAY;
+      |                                                                  ^~
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:42:25: Operator ASSIGNDLY expects 17 bits on the Assign RHS, but Assign RHS's DIVS generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   42 |                     base<=(65536-SUSTAIN)/D_DEN;remainder<=(65536-SUSTAIN)%D_DEN;error<=0;
+      |                         ^~
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:42:58: Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's MODDIVS generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   42 |                     base<=(65536-SUSTAIN)/D_DEN;remainder<=(65536-SUSTAIN)%D_DEN;error<=0;
+      |                                                          ^~
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:43:46: Operator ASSIGNDLY expects 17 bits on the Assign RHS, but Assign RHS's VARREF 'SUSTAIN' generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   43 |                 end else begin state<=S;level<=SUSTAIN;end
+      |                                              ^~
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:51:60: Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's VARREF 'DECAY' generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   51 |                             level<=65536;state<=D;remaining<=DECAY;length<=DECAY;
+      |                                                            ^~
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:51:74: Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's VARREF 'DECAY' generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   51 |                             level<=65536;state<=D;remaining<=DECAY;length<=DECAY;
+      |                                                                          ^~
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:52:33: Operator ASSIGNDLY expects 17 bits on the Assign RHS, but Assign RHS's DIVS generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   52 |                             base<=(65536-SUSTAIN)/D_DEN;remainder<=(65536-SUSTAIN)%D_DEN;
+      |                                 ^~
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:52:66: Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's MODDIVS generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   52 |                             base<=(65536-SUSTAIN)/D_DEN;remainder<=(65536-SUSTAIN)%D_DEN;
+      |                                                                  ^~
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:53:45: Operator ASSIGNDLY expects 17 bits on the Assign RHS, but Assign RHS's VARREF 'SUSTAIN' generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   53 |                         end else begin level<=SUSTAIN;state<=S;end
+      |                                             ^~
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:54:53: Operator ASSIGNDLY expects 17 bits on the Assign RHS, but Assign RHS's VARREF 'SUSTAIN' generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   54 |                     end else if(state==D)begin level<=SUSTAIN;state<=S;end
+      |                                                     ^~
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:58:26: Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's COND generates 15 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   58 |                     error<=carry?error_sum-length:error_sum;
+      |                          ^~
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:59:38: Operator ASSIGNDLY expects 17 bits on the Assign RHS, but Assign RHS's ADD generates 18 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   59 |                     if(state==A)level<=level+delta;else level<=level-delta;
+      |                                      ^~
+%Warning-WIDTHTRUNC: src/adsr_envelope.sv:59:62: Operator ASSIGNDLY expects 17 bits on the Assign RHS, but Assign RHS's SUB generates 18 bits.
+                                               : ... note: In instance 'keyboard_top.sound.voices[31].envelope.legacy'
+   59 |                     if(state==A)level<=level+delta;else level<=level-delta;
+      |                                                              ^~
+%Warning-WIDTHEXPAND: src/audio_delay.sv:37:53: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'filled' generates 13 bits.
+                                              : ... note: In instance 'keyboard_top.sound.effect.echo'
+   37 |                 dry<=in_sample;history_valid<=filled==DELAY_SAMPLES;
+      |                                                     ^~
+%Warning-WIDTHEXPAND: src/audio_delay.sv:49:27: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'pointer' generates 13 bits.
+                                              : ... note: In instance 'keyboard_top.sound.effect.echo'
+   49 |                 if(pointer==DELAY_SAMPLES-1)pointer<=0;else pointer<=pointer+1'b1;
+      |                           ^~
+%Warning-WIDTHEXPAND: src/audio_delay.sv:50:26: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'filled' generates 13 bits.
+                                              : ... note: In instance 'keyboard_top.sound.effect.echo'
+   50 |                 if(filled<DELAY_SAMPLES)filled<=filled+1'b1;
+      |                          ^
+%Warning-WIDTHTRUNC: src/audio_reverb.sv:15:24: Operator ASSIGN expects 16 bits on the Assign RHS, but Assign RHS's COND generates 32 bits.
+                                              : ... note: In instance 'keyboard_top.sound.effect.room'
+   15 |         begin half_zero=value<0 ? -((-value)>>>1) : value>>>1;end
+      |                        ^
+%Warning-WIDTHEXPAND: src/audio_reverb.sv:35:48: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'filled' generates 11 bits.
+                                               : ... note: In instance 'keyboard_top.sound.effect.room'
+   35 |                 if(accept)history_valid<=filled==N;
+      |                                                ^~
+%Warning-WIDTHEXPAND: src/audio_reverb.sv:37:37: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'pointer' generates 11 bits.
+                                               : ... note: In instance 'keyboard_top.sound.effect.room'
+   37 |                     pointer<=pointer==N-1?0:pointer+1'b1;
+      |                                     ^~
+%Warning-WIDTHEXPAND: src/audio_reverb.sv:38:30: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'filled' generates 11 bits.
+                                               : ... note: In instance 'keyboard_top.sound.effect.room'
+   38 |                     if(filled<N)filled<=filled+1'b1;
+      |                              ^
+%Warning-WIDTHEXPAND: src/audio_reverb.sv:35:48: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'filled' generates 12 bits.
+                                               : ... note: In instance 'keyboard_top.sound.effect.room'
+   35 |                 if(accept)history_valid<=filled==N;
+      |                                                ^~
+%Warning-WIDTHEXPAND: src/audio_reverb.sv:37:37: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'pointer' generates 12 bits.
+                                               : ... note: In instance 'keyboard_top.sound.effect.room'
+   37 |                     pointer<=pointer==N-1?0:pointer+1'b1;
+      |                                     ^~
+%Warning-WIDTHEXPAND: src/audio_reverb.sv:38:30: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'filled' generates 12 bits.
+                                               : ... note: In instance 'keyboard_top.sound.effect.room'
+   38 |                     if(filled<N)filled<=filled+1'b1;
+      |                              ^
+%Warning-WIDTHTRUNC: src/audio_reverb.sv:53:42: Operator ASSIGNDLY expects 16 bits on the Assign RHS, but Assign RHS's SHIFTRS generates 32 bits.
+                                              : ... note: In instance 'keyboard_top.sound.effect.room'
+   53 |             else if(busy)begin out_sample<=sum>>>2;out_valid<=1;busy<=0;end
+      |                                          ^~
+%Warning-WIDTHEXPAND: src/dds_sine.sv:52:61: Operator GTE expects 32 bits on the LHS, but LHS's VARREF 'voice_index' generates 5 bits.
+                                           : ... note: In instance 'keyboard_top.sound.dds'
+   52 |     always @(posedge clk)if(!rst && sample_ce && voice_index>=VOICES)$fatal(1,"DDS context out of range");
+      |                                                             ^~
+%Warning-WIDTHEXPAND: src/voice_allocator.sv:82:29: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'scan_slot' generates 5 bits.
+                                                  : ... note: In instance 'keyboard_top.sound.allocator'
+   82 |                 if(scan_slot==VOICES-1)search_state<=SELECT;
+      |                             ^~
+%Warning-WIDTHTRUNC: src/voice_allocator.sv:108:85: Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's VARREF 'i' generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.sound.allocator'
+  108 |             for(integer i=0;i<VOICES;i=i+1)begin ids[i]<=0;frequencies[i]<=0;rank[i]<=i;timbres[i]<=0;end
+      |                                                                                     ^~
+%Warning-WIDTHTRUNC: src/voice_allocator.sv:126:32: Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's SUB generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.sound.allocator'
+  126 |                         rank[i]<=VOICES-1;
+      |                                ^~
+%Warning-WIDTHEXPAND: src/voice_allocator.sv:121:30: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'target' generates 5 bits.
+                                                   : ... note: In instance 'keyboard_top.sound.allocator'
+  121 |                     if(target==i)begin
+      |                              ^~
+%Warning-WIDTHEXPAND: src/voice_allocator.sv:128:53: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'target' generates 5 bits.
+                                                   : ... note: In instance 'keyboard_top.sound.allocator'
+  128 |                 end else if(target_matched && target==i)begin
+      |                                                     ^~
+%Warning-WIDTHEXPAND: src/voice_allocator.sv:139:43: Operator GTE expects 32 bits on the LHS, but LHS's VARREF 'scan_slot' generates 5 bits.
+                                                   : ... note: In instance 'keyboard_top.sound.allocator'
+  139 |         if(search_state!=IDLE && scan_slot>=VOICES)$fatal(1,"Search context out of range");
+      |                                           ^~
+%Warning-WIDTHEXPAND: src/matrix_keypad.sv:40:26: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'slot_count' generates 12 bits.
+                                                : ... note: In instance 'keyboard_top.core.keyboard'
+   40 |             if(slot_count==SETTLE_CYCLES-1)early_rows<=rows_sync;
+      |                          ^~
+%Warning-WIDTHEXPAND: src/matrix_keypad.sv:44:56: Operator ADD expects 32 bits on the RHS, but RHS's VARREF 'column' generates 2 bits.
+                                                : ... note: In instance 'keyboard_top.core.keyboard'
+   44 |                 for(integer rr=0;rr<4;rr=rr+1)work[rr*4+column]<=!rows_sync[rr] && !early_rows[rr];
+      |                                                        ^
+%Warning-WIDTHEXPAND: src/matrix_keypad.sv:43:26: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'slot_count' generates 12 bits.
+                                                : ... note: In instance 'keyboard_top.core.keyboard'
+   43 |             if(slot_count==SLOT_CYCLES-2)
+      |                          ^~
+%Warning-WIDTHEXPAND: src/matrix_keypad.sv:54:44: Operator EQ expects 32 bits on the LHS, but LHS's ARRAYSEL generates 4 bits.
+                                                : ... note: In instance 'keyboard_top.core.keyboard'
+   54 |                         else if(debounce[i]==DEBOUNCE_SCANS-1)begin
+      |                                            ^~
+%Warning-WIDTHEXPAND: src/matrix_keypad.sv:45:26: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'slot_count' generates 12 bits.
+                                                : ... note: In instance 'keyboard_top.core.keyboard'
+   45 |             if(slot_count==SLOT_CYCLES-1)begin
+      |                          ^~
+%Warning-WIDTHEXPAND: src/lock_guard.sv:15:25: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'count' generates 17 bits.
+                                             : ... note: In instance 'keyboard_top.reset_control.g2'
+   15 |                 if(count==STABLE_CYCLES-1) qualified<=1;
+      |                         ^~
+%Warning-WIDTHEXPAND: src/rgb_scan_timing.sv:17:25: Operator GTE expects 32 bits on the LHS, but LHS's VARREF 'hpos' generates 11 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.scan'
+   17 |     wire visible_h=(hpos>=X_START && hpos<X_START+H_ACTIVE);
+      |                         ^~
+%Warning-WIDTHEXPAND: src/rgb_scan_timing.sv:17:42: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'hpos' generates 11 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.scan'
+   17 |     wire visible_h=(hpos>=X_START && hpos<X_START+H_ACTIVE);
+      |                                          ^
+%Warning-WIDTHEXPAND: src/rgb_scan_timing.sv:18:25: Operator GTE expects 32 bits on the LHS, but LHS's VARREF 'vpos' generates 11 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.scan'
+   18 |     wire visible_v=(vpos>=Y_START && vpos<Y_START+V_ACTIVE);
+      |                         ^~
+%Warning-WIDTHEXPAND: src/rgb_scan_timing.sv:18:42: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'vpos' generates 11 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.scan'
+   18 |     wire visible_v=(vpos>=Y_START && vpos<Y_START+V_ACTIVE);
+      |                                          ^
+%Warning-WIDTHEXPAND: src/rgb_scan_timing.sv:20:30: Operator SUB expects 32 bits on the LHS, but LHS's VARREF 'hpos' generates 11 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.scan'
+   20 |     assign x=visible_h ? hpos-X_START : 11'd0;
+      |                              ^
+%Warning-WIDTHEXPAND: src/rgb_scan_timing.sv:20:24: Operator COND expects 32 bits on the Conditional False, but Conditional False's CONST '11'h0' generates 11 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.scan'
+   20 |     assign x=visible_h ? hpos-X_START : 11'd0;
+      |                        ^
+%Warning-WIDTHTRUNC: src/rgb_scan_timing.sv:20:13: Operator ASSIGNW expects 11 bits on the Assign RHS, but Assign RHS's COND generates 32 bits.
+                                                 : ... note: In instance 'keyboard_top.lcd_on.display_driver.scan'
+   20 |     assign x=visible_h ? hpos-X_START : 11'd0;
+      |             ^
+%Warning-WIDTHEXPAND: src/rgb_scan_timing.sv:21:30: Operator SUB expects 32 bits on the LHS, but LHS's VARREF 'vpos' generates 11 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.scan'
+   21 |     assign y=visible_v ? vpos-Y_START : 11'd0;
+      |                              ^
+%Warning-WIDTHEXPAND: src/rgb_scan_timing.sv:21:24: Operator COND expects 32 bits on the Conditional False, but Conditional False's CONST '11'h0' generates 11 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.scan'
+   21 |     assign y=visible_v ? vpos-Y_START : 11'd0;
+      |                        ^
+%Warning-WIDTHTRUNC: src/rgb_scan_timing.sv:21:13: Operator ASSIGNW expects 11 bits on the Assign RHS, but Assign RHS's COND generates 32 bits.
+                                                 : ... note: In instance 'keyboard_top.lcd_on.display_driver.scan'
+   21 |     assign y=visible_v ? vpos-Y_START : 11'd0;
+      |             ^
+%Warning-WIDTHTRUNC: src/rgb_scan_timing.sv:23:16: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'DE_ONLY' generates 32 bits.
+                                                 : ... note: In instance 'keyboard_top.lcd_on.display_driver.scan'
+   23 |     assign hs=(!DE_ONLY && hpos<H_SYNC) ? HS_ACTIVE[0] : !HS_ACTIVE[0];
+      |                ^
+%Warning-WIDTHEXPAND: src/rgb_scan_timing.sv:23:32: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'hpos' generates 11 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.scan'
+   23 |     assign hs=(!DE_ONLY && hpos<H_SYNC) ? HS_ACTIVE[0] : !HS_ACTIVE[0];
+      |                                ^
+%Warning-WIDTHTRUNC: src/rgb_scan_timing.sv:24:16: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'DE_ONLY' generates 32 bits.
+                                                 : ... note: In instance 'keyboard_top.lcd_on.display_driver.scan'
+   24 |     assign vs=(!DE_ONLY && vpos<V_SYNC) ? VS_ACTIVE[0] : !VS_ACTIVE[0];
+      |                ^
+%Warning-WIDTHEXPAND: src/rgb_scan_timing.sv:24:32: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'vpos' generates 11 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.scan'
+   24 |     assign vs=(!DE_ONLY && vpos<V_SYNC) ? VS_ACTIVE[0] : !VS_ACTIVE[0];
+      |                                ^
+%Warning-WIDTHEXPAND: src/rgb_scan_timing.sv:31:20: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'vpos' generates 11 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.scan'
+   31 |             if(vpos==V_TOTAL-1)vpos<=0;
+      |                    ^~
+%Warning-WIDTHEXPAND: src/rgb_scan_timing.sv:29:21: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'hpos' generates 11 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.scan'
+   29 |         else if(hpos==H_TOTAL-1)begin
+      |                     ^~
+%Warning-WIDTHTRUNC: src/rgb_scan_timing.sv:38:13: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'DE_ONLY' generates 32 bits.
+                                                 : ... note: In instance 'keyboard_top.lcd_on.display_driver.scan'
+   38 |            (!DE_ONLY && (H_SYNC<1 || V_SYNC<1)) ||
+      |             ^
+%Warning-WIDTHEXPAND: src/startup_envelope.sv:8:40: Operator ADD expects 32 bits on the LHS, but LHS's VARREF 'fade_count' generates 8 bits.
+                                                  : ... note: In instance 'keyboard_top.sound.startup'
+    8 |     wire [31:0] next_level=((fade_count+32'd1)*32'd65536)/FADE;
+      |                                        ^
+%Warning-WIDTHEXPAND: src/startup_envelope.sv:15:30: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'mute_count' generates 9 bits.
+                                                   : ... note: In instance 'keyboard_top.sound.startup'
+   15 |                 if(mute_count==MUTE) pa_enable<=1;
+      |                              ^~
+%Warning-WIDTHEXPAND: src/startup_envelope.sv:17:35: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'fade_count' generates 8 bits.
+                                                   : ... note: In instance 'keyboard_top.sound.startup'
+   17 |             end else if(fade_count<FADE) begin
+      |                                   ^
+%Warning-WIDTHTRUNC: src/key_note_events.sv:19:60: Operator ASSIGN expects 4 bits on the Assign RHS, but Assign RHS's VARREF 'k' generates 32 bits.
+                                                 : ... note: In instance 'keyboard_top.core.control'
+   19 |             if((|released)?released[k]:pressed[k])candidate=k;
+      |                                                            ^
+%Warning-WIDTHEXPAND: src/key_note_events.sv:35:31: Operator ADD expects 32 bits on the RHS, but RHS's VARREF 'candidate' generates 4 bits.
+                                                  : ... note: In instance 'keyboard_top.core.control'
+   35 |             note_id<=BASE_NOTE+candidate;
+      |                               ^
+%Warning-WIDTHTRUNC: src/key_note_events.sv:35:20: Operator ASSIGNDLY expects 7 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.
+                                                 : ... note: In instance 'keyboard_top.core.control'
+   35 |             note_id<=BASE_NOTE+candidate;
+      |                    ^~
+%Warning-WIDTHEXPAND: src/audio_timing.sv:8:33: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'count' generates 5 bits.
+                                              : ... note: In instance 'keyboard_top.sound.timing'
+    8 |     assign fall_ce=!rst && count==HALF_CYCLES-1 && bck;
+      |                                 ^~
+%Warning-WIDTHEXPAND: src/audio_timing.sv:9:33: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'count' generates 5 bits.
+                                              : ... note: In instance 'keyboard_top.sound.timing'
+    9 |     assign rise_ce=!rst && count==HALF_CYCLES-1 && !bck;
+      |                                 ^~
+%Warning-WIDTHEXPAND: src/audio_timing.sv:13:22: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'count' generates 5 bits.
+                                               : ... note: In instance 'keyboard_top.sound.timing'
+   13 |         else if(count==HALF_CYCLES-1) begin
+      |                      ^~
+%Warning-WIDTHTRUNC: src/audio_effects.sv:54:24: Operator ASSIGNDLY expects 9 bits on the Assign RHS, but Assign RHS's VARREF 'ECHO_WET' generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.effect'
+   54 |             echo_target<=ECHO_WET;room_target<=ROOM_WET;
+      |                        ^~
+%Warning-WIDTHTRUNC: src/audio_effects.sv:54:46: Operator ASSIGNDLY expects 9 bits on the Assign RHS, but Assign RHS's VARREF 'ROOM_WET' generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.effect'
+   54 |             echo_target<=ECHO_WET;room_target<=ROOM_WET;
+      |                                              ^~
+%Warning-WIDTHTRUNC: src/audio_effects.sv:55:25: Operator ASSIGNDLY expects 9 bits on the Assign RHS, but Assign RHS's SUB generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.effect'
+   55 |             depth_target<=256-TREMOLO_MIN;phase_step<=LFO_STEP;cfg_applied<=0;
+      |                         ^~
+%Warning-WIDTHTRUNC: src/audio_effects.sv:99:23: Operator ASSIGNDLY expects 9 bits on the Assign RHS, but Assign RHS's VARREF 'ECHO_WET' generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.effect'
+   99 |             echo_level<=ECHO_WET;room_level<=ROOM_WET;depth_level<=256-TREMOLO_MIN;
+      |                       ^~
+%Warning-WIDTHTRUNC: src/audio_effects.sv:99:44: Operator ASSIGNDLY expects 9 bits on the Assign RHS, but Assign RHS's VARREF 'ROOM_WET' generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.effect'
+   99 |             echo_level<=ECHO_WET;room_level<=ROOM_WET;depth_level<=256-TREMOLO_MIN;
+      |                                            ^~
+%Warning-WIDTHTRUNC: src/audio_effects.sv:99:66: Operator ASSIGNDLY expects 9 bits on the Assign RHS, but Assign RHS's SUB generates 32 bits.
+                                               : ... note: In instance 'keyboard_top.sound.effect'
+   99 |             echo_level<=ECHO_WET;room_level<=ROOM_WET;depth_level<=256-TREMOLO_MIN;
+      |                                                                  ^~
+%Warning-WIDTHTRUNC: src/audio_effects.sv:100:22: Operator ASSIGNDLY expects 9 bits on the Assign RHS, but Assign RHS's VARREF 'ECHO_WET' generates 32 bits.
+                                                : ... note: In instance 'keyboard_top.sound.effect'
+  100 |             used_echo<=ECHO_WET;used_room<=ROOM_WET;
+      |                      ^~
+%Warning-WIDTHTRUNC: src/audio_effects.sv:100:42: Operator ASSIGNDLY expects 9 bits on the Assign RHS, but Assign RHS's VARREF 'ROOM_WET' generates 32 bits.
+                                                : ... note: In instance 'keyboard_top.sound.effect'
+  100 |             used_echo<=ECHO_WET;used_room<=ROOM_WET;
+      |                                          ^~
+%Warning-WIDTHTRUNC: src/audio_effects.sv:105:31: Operator ASSIGNDLY expects 16 bits on the Assign RHS, but Assign RHS's SHIFTRS generates 32 bits.
+                                                : ... note: In instance 'keyboard_top.sound.effect'
+  105 |                 tremolo_sample<=tremolo_product>>>8;lfo_phase<=lfo_phase+phase_step;
+      |                               ^~
+%Warning-WIDTHEXPAND: src/audio_effects.sv:121:32: Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's VARREF 'tremolo_sample' generates 16 bits.
+                                                 : ... note: In instance 'keyboard_top.sound.effect'
+  121 |                     2:candidate<=tremolo_sample;
+      |                                ^~
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:38:50: Operator ASSIGNDLY expects 7 bits on the Assign RHS, but Assign RHS's DIV generates 15 bits.
+                                                 : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+   38 |    peak_scaled<=peak*15'd100+15'd127;peak_percent<=peak_scaled/15'd255;
+      |                                                  ^~
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:40:53: Operator DIV expects 8 bits on the LHS, but LHS's VARREF 'peak_percent' generates 7 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+   40 |    peak_tens<=peak_percent>=10 ? 8'd48+(peak_percent/7'd10)%7'd10 : 8'd32;
+      |                                                     ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:40:53: Operator DIV expects 8 bits on the RHS, but RHS's CONST '7'ha' generates 7 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+   40 |    peak_tens<=peak_percent>=10 ? 8'd48+(peak_percent/7'd10)%7'd10 : 8'd32;
+      |                                                     ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:40:60: Operator MODDIV expects 8 bits on the RHS, but RHS's CONST '7'ha' generates 7 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+   40 |    peak_tens<=peak_percent>=10 ? 8'd48+(peak_percent/7'd10)%7'd10 : 8'd32;
+      |                                                            ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:41:34: Operator MODDIV expects 8 bits on the LHS, but LHS's VARREF 'peak_percent' generates 7 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+   41 |    peak_units<=8'd48+peak_percent%7'd10;
+      |                                  ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:41:34: Operator MODDIV expects 8 bits on the RHS, but RHS's CONST '7'ha' generates 7 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+   41 |    peak_units<=8'd48+peak_percent%7'd10;
+      |                                  ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:43:45: Operator DIV expects 8 bits on the LHS, but LHS's VARREF 'percent' generates 7 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+   43 |    amount_tens<=percent>=10 ? 8'd48+(percent/7'd10)%7'd10 : 8'd32;
+      |                                             ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:43:45: Operator DIV expects 8 bits on the RHS, but RHS's CONST '7'ha' generates 7 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+   43 |    amount_tens<=percent>=10 ? 8'd48+(percent/7'd10)%7'd10 : 8'd32;
+      |                                             ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:43:52: Operator MODDIV expects 8 bits on the RHS, but RHS's CONST '7'ha' generates 7 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+   43 |    amount_tens<=percent>=10 ? 8'd48+(percent/7'd10)%7'd10 : 8'd32;
+      |                                                    ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:44:31: Operator MODDIV expects 8 bits on the LHS, but LHS's VARREF 'percent' generates 7 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+   44 |    amount_units<=8'd48+percent%7'd10;
+      |                               ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:44:31: Operator MODDIV expects 8 bits on the RHS, but RHS's CONST '7'ha' generates 7 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+   44 |    amount_units<=8'd48+percent%7'd10;
+      |                               ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:45:28: Operator DIV expects 8 bits on the LHS, but LHS's VARREF 'voices' generates 6 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+   45 |    voice_tens<=8'd48+voices/6'd10;voice_units<=8'd48+voices%6'd10;
+      |                            ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:45:28: Operator DIV expects 8 bits on the RHS, but RHS's CONST '6'ha' generates 6 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+   45 |    voice_tens<=8'd48+voices/6'd10;voice_units<=8'd48+voices%6'd10;
+      |                            ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:45:60: Operator MODDIV expects 8 bits on the LHS, but LHS's VARREF 'voices' generates 6 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+   45 |    voice_tens<=8'd48+voices/6'd10;voice_units<=8'd48+voices%6'd10;
+      |                                                            ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:45:60: Operator MODDIV expects 8 bits on the RHS, but RHS's CONST '6'ha' generates 6 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+   45 |    voice_tens<=8'd48+voices/6'd10;voice_units<=8'd48+voices%6'd10;
+      |                                                            ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:72:19: Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's DIV generates 10 bits.
+                                                 : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+   72 |      blend_channel=sum/10'd3;
+      |                   ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:82:20: Operator ADD expects 32 bits on the LHS, but LHS's CONST '8'h30' generates 8 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+   82 |   begin digit=8'd48+value;end
+      |                    ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:82:14: Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.
+                                                 : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+   82 |   begin digit=8'd48+value;end
+      |              ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:117:44: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'timbre' generates 3 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  117 |      base=card(px,py,left,top,112,52,timbre==i);
+      |                                            ^~
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:118:15: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'timbre' generates 3 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  118 |      fg=timbre==i ? INK : CREAM;text=timbre_name(i);len=name_length(i);
+      |               ^~
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:118:38: Operator FUNCREF 'timbre_name' expects 3 bits on the Function Argument, but Function Argument's VARREF 'i' generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  118 |      fg=timbre==i ? INK : CREAM;text=timbre_name(i);len=name_length(i);
+      |                                      ^~~~~~~~~~~
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:118:37: Operator ASSIGN expects 320 bits on the Assign RHS, but Assign RHS's FUNCREF 'timbre_name' generates 80 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  118 |      fg=timbre==i ? INK : CREAM;text=timbre_name(i);len=name_length(i);
+      |                                     ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:118:57: Operator FUNCREF 'name_length' expects 3 bits on the Function Argument, but Function Argument's VARREF 'i' generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  118 |      fg=timbre==i ? INK : CREAM;text=timbre_name(i);len=name_length(i);
+      |                                                         ^~~~~~~~~~~
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:118:56: Operator ASSIGN expects 6 bits on the Assign RHS, but Assign RHS's FUNCREF 'name_length' generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  118 |      fg=timbre==i ? INK : CREAM;text=timbre_name(i);len=name_length(i);
+      |                                                        ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:119:8: Operator ASSIGN expects 11 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.
+                                                 : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  119 |      tx=left+(112-len*10)/2;ty=top+18;
+      |        ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:119:31: Operator ASSIGN expects 11 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  119 |      tx=left+(112-len*10)/2;ty=top+18;
+      |                               ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:129:40: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'fx' generates 2 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  129 |      base=card(px,py,left,124,148,48,fx==i);fg=fx==i ? INK : CREAM;
+      |                                        ^~
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:129:50: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'fx' generates 2 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  129 |      base=card(px,py,left,124,148,48,fx==i);fg=fx==i ? INK : CREAM;
+      |                                                  ^~
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:131:8: Operator ASSIGN expects 11 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.
+                                                 : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  131 |      tx=left+(148-len*10)/2;ty=140;
+      |        ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:137:82: Operator ASSIGN expects 11 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  137 |     base=card(px,py,left,top,52,48,1'b0);fg=GOLD;text=px<400 ? "-" : "+";len=1;tx=left+21;ty=top+16;
+      |                                                                                  ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:137:93: Operator ASSIGN expects 11 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  137 |     base=card(px,py,left,top,52,48,1'b0);fg=GOLD;text=px<400 ? "-" : "+";len=1;tx=left+21;ty=top+16;
+      |                                                                                             ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:148:20: Operator ASSIGN expects 320 bits on the Assign RHS, but Assign RHS's REPLICATE generates 32 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  148 |     else begin text={amount_hundreds,amount_tens,amount_units,"%"};len=4;tx=696;end
+      |                    ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:152:72: Operator MODDIV expects 32 bits on the LHS, but LHS's VARREF 'rate' generates 4 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  152 |     if(px>=656 && fx==2)begin text={rate==10 ? 8'd49 : 8'd32,digit(rate%10)," HZ"};len=5;tx=688;fg=GOLD;end
+      |                                                                        ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:152:35: Operator ASSIGN expects 320 bits on the Assign RHS, but Assign RHS's REPLICATE generates 40 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  152 |     if(px>=656 && fx==2)begin text={rate==10 ? 8'd49 : 8'd32,digit(rate%10)," HZ"};len=5;tx=688;fg=GOLD;end
+      |                                   ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:167:25: Operator ASSIGN expects 320 bits on the Assign RHS, but Assign RHS's FUNCREF 'timbre_name' generates 80 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  167 |     if(px<296)begin text=timbre_name(timbre);len=name_length(timbre);tx=24;end
+      |                         ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:167:49: Operator ASSIGN expects 6 bits on the Assign RHS, but Assign RHS's FUNCREF 'name_length' generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  167 |     if(px<296)begin text=timbre_name(timbre);len=name_length(timbre);tx=24;end
+      |                                                 ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:173:8: Operator ASSIGN expects 7 bits on the Assign RHS, but Assign RHS's SHIFTR generates 32 bits.
+                                                 : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  173 |     bin=(px-488)>>1;
+      |        ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:174:45: Operator SHIFTRS expects 32 bits on the LHS, but LHS's SIGNED generates 8 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  174 |     point_y=204-($signed(state[88+bin*8+:8])>>>2);
+      |                                             ^~~
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:175:60: Operator SHIFTRS expects 32 bits on the LHS, but LHS's SIGNED generates 8 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  175 |     previous_y=bin>0 ? 204-($signed(state[88+(bin-1)*8+:8])>>>2) : point_y;
+      |                                                            ^~~
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:184:7: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's VARREF 'peak_percent' generates 7 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  184 |     pc=peak_percent;
+      |       ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:185:9: Operator ASSIGN expects 320 bits on the Assign RHS, but Assign RHS's REPLICATE generates 72 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  185 |     text={peak_hundreds,peak_tens,peak_units,"% PEAK"};len=9;tx=668;ty=270;fg=DIM;
+      |         ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:190:70: Operator ADD expects 32 bits on the LHS, but LHS's VARREF 'note_index' generates 4 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  190 |      if(px>=480+tile*36 && px<516+tile*36)begin note_index=note_index+tile;left=480+tile*36;end
+      |                                                                      ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:190:59: Operator ASSIGN expects 4 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  190 |      if(px>=480+tile*36 && px<516+tile*36)begin note_index=note_index+tile;left=480+tile*36;end
+      |                                                           ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:192:19: Operator ADD expects 32 or 7 bits on the RHS, but RHS's VARREF 'note_index' generates 4 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  192 |      base=state[64+note_index] ? GOLD : BG;fg=state[64+note_index] ? INK : DIM;
+      |                   ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:192:55: Operator ADD expects 32 or 7 bits on the RHS, but RHS's VARREF 'note_index' generates 4 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  192 |      base=state[64+note_index] ? GOLD : BG;fg=state[64+note_index] ? INK : DIM;
+      |                                                       ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:197:10: Operator ASSIGN expects 320 bits on the Assign RHS, but Assign RHS's REPLICATE generates 24 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  197 |      text={ch,(note_index%12==1 || note_index%12==3 || note_index%12==6 || note_index%12==8 || note_index%12==10) ? 8'd35 : 8'd32,digit(note_index<12 ? 4 : 5)};
+      |          ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:198:14: Operator ASSIGN expects 11 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  198 |      len=3;tx=left+2;ty=top+6;
+      |              ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:198:24: Operator ASSIGN expects 11 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  198 |      len=3;tx=left+2;ty=top+6;
+      |                        ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:205:25: Operator ASSIGN expects 320 bits on the Assign RHS, but Assign RHS's FUNCREF 'timbre_name' generates 80 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  205 |     if(px<296)begin text=timbre_name(timbre);len=name_length(timbre);tx=24;end
+      |                         ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:205:49: Operator ASSIGN expects 6 bits on the Assign RHS, but Assign RHS's FUNCREF 'name_length' generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  205 |     if(px<296)begin text=timbre_name(timbre);len=name_length(timbre);tx=24;end
+      |                                                 ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:211:8: Operator ASSIGN expects 7 bits on the Assign RHS, but Assign RHS's SHIFTR generates 32 bits.
+                                                 : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  211 |     bin=(px-32)>>2;
+      |        ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:212:45: Operator SHIFTRS expects 32 bits on the LHS, but LHS's SIGNED generates 8 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  212 |     point_y=234-($signed(state[88+bin*8+:8])>>>1);
+      |                                             ^~~
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:213:61: Operator SHIFTRS expects 32 bits on the LHS, but LHS's SIGNED generates 8 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  213 |     if(bin>0)previous_y=234-($signed(state[88+(bin-1)*8+:8])>>>1);else previous_y=point_y;
+      |                                                             ^~~
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:226:7: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's VARREF 'peak_percent' generates 7 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  226 |     pc=peak_percent;
+      |       ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:227:9: Operator ASSIGN expects 320 bits on the Assign RHS, but Assign RHS's REPLICATE generates 72 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  227 |     text={peak_hundreds,peak_tens,peak_units,"% PEAK"};len=9;tx=608;ty=246;fg=DIM;
+      |         ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:233:57: Operator ASSIGN expects 4 bits on the Assign RHS, but Assign RHS's VARREF 'tile' generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  233 |      if(px>=32+tile*46 && px<78+tile*46)begin note_index=tile;left=32+tile*46;end
+      |                                                         ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:235:19: Operator ADD expects 32 or 7 bits on the RHS, but RHS's VARREF 'note_index' generates 4 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  235 |      base=state[64+note_index] ? GOLD : BG;fg=state[64+note_index] ? INK : DIM;
+      |                   ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:235:55: Operator ADD expects 32 or 7 bits on the RHS, but RHS's VARREF 'note_index' generates 4 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  235 |      base=state[64+note_index] ? GOLD : BG;fg=state[64+note_index] ? INK : DIM;
+      |                                                       ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:241:10: Operator ASSIGN expects 320 bits on the Assign RHS, but Assign RHS's REPLICATE generates 24 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  241 |      text={ch,(note_index%12==1 || note_index%12==3 || note_index%12==6 || note_index%12==8 || note_index%12==10) ? 8'd35 : 8'd32,digit(note_index<12 ? 4 : 5)};
+      |          ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:242:14: Operator ASSIGN expects 11 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  242 |      len=3;tx=left+6;ty=364;
+      |              ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:252:23: Operator ASSIGN expects 320 bits on the Assign RHS, but Assign RHS's REPLICATE generates 96 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  252 |    if(py<42)begin text={"VOICES ",voice_tens,voice_units,"/32"};len=12;ty=24;end
+      |                       ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:284:14: Operator ASSIGN expects 14 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  284 |     font_addr=13824+k*600+(py-top)*25+((px-left)>>3);
+      |              ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:285:13: Operator ASSIGN expects 4 bits on the Assign RHS, but Assign RHS's SUB generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  285 |     font_bit=14-((px-left)%8)*2;text_ink=1;alpha_font=1;fg=GOLD;
+      |             ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:289:13: Operator ASSIGN expects 14 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  289 |    font_addr=4608+integer'(font_theme)*3072+(py-4)*48+((px-24)>>3);
+      |             ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:290:12: Operator ASSIGN expects 4 bits on the Assign RHS, but Assign RHS's SUB generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  290 |    font_bit=14-((px-24)%8)*2;text_ink=1;alpha_font=1;fg=GOLD;
+      |            ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:371:11: Operator ASSIGNDLY expects 6 bits on the Assign RHS, but Assign RHS's COND generates 32 or 12 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  371 |    cell_s3<=normal_valid ? $unsigned(dx_s2)/12'd10 : 0;
+      |           ^~
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:372:17: Operator ASSIGNDLY expects 4 bits on the Assign RHS, but Assign RHS's SUB generates 32 or 12 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  372 |    normal_bit_s3<=15-($unsigned(dx_s2)%12'd10);row_s3<=dy_s2[3:0];normal_ink_s3<=normal_valid;
+      |                 ^~
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:376:62: Operator ADD expects 14 bits on the LHS, but LHS's REPLICATE generates 12 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  376 |    addr_s5<=direct_ink[3] ? direct_addr[3] : {fonts[3],10'd0}+({fonts[3],10'd0}>>1)+(char_s4-8'd32)*14'd16+row_s4;
+      |                                                              ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:376:80: Operator SHIFTR expects 14 bits on the LHS, but LHS's REPLICATE generates 12 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  376 |    addr_s5<=direct_ink[3] ? direct_addr[3] : {fonts[3],10'd0}+({fonts[3],10'd0}>>1)+(char_s4-8'd32)*14'd16+row_s4;
+      |                                                                                ^~
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:376:93: Operator SUB expects 14 bits on the LHS, but LHS's VARREF 'char_s4' generates 8 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  376 |    addr_s5<=direct_ink[3] ? direct_addr[3] : {fonts[3],10'd0}+({fonts[3],10'd0}>>1)+(char_s4-8'd32)*14'd16+row_s4;
+      |                                                                                             ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:376:93: Operator SUB expects 14 bits on the RHS, but RHS's CONST '8'h20' generates 8 bits.
+                                                   : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  376 |    addr_s5<=direct_ink[3] ? direct_addr[3] : {fonts[3],10'd0}+({fonts[3],10'd0}>>1)+(char_s4-8'd32)*14'd16+row_s4;
+      |                                                                                             ^
+%Warning-WIDTHEXPAND: src/rgb_ui_renderer.sv:376:107: Operator ADD expects 14 bits on the RHS, but RHS's VARREF 'row_s4' generates 4 bits.
+                                                    : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  376 |    addr_s5<=direct_ink[3] ? direct_addr[3] : {fonts[3],10'd0}+({fonts[3],10'd0}>>1)+(char_s4-8'd32)*14'd16+row_s4;
+      |                                                                                                           ^
+%Warning-WIDTHTRUNC: src/rgb_ui_renderer.sv:384:12: Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's COND generates 32 or 16 bits.
+                                                  : ... note: In instance 'keyboard_top.lcd_on.display_driver.renderer'
+  384 |    alpha_s7<=alpha_s6 ? ((font_row>>bit_s6)&3) : (font_row[bit_s6] ? 3 : 0);
+      |            ^~
+%Warning-WIDTHTRUNC: src/audio_master_gain.sv:33:42: Operator ASSIGNDLY expects 16 bits on the Assign RHS, but Assign RHS's SHIFTRS generates 26 bits.
+                                                   : ... note: In instance 'keyboard_top.sound.master_on.expression'
+   33 |             if(sample_pending) sample_out<=product >>> 8;
+      |                                          ^~
+%Warning-WIDTHEXPAND: src/synth_core.sv:34:66: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'render_cycle' generates 10 bits.
+                                             : ... note: In instance 'keyboard_top.sound'
+   34 |     wire in_slots=render_busy && render_cycle>=16 && render_cycle<16+16*VOICES;
+      |                                                                  ^
+%Warning-WIDTHEXPAND: src/synth_core.sv:35:47: Operator COND expects 10 bits on the Conditional False, but Conditional False's REPLICATE generates 5 bits.
+                                             : ... note: In instance 'keyboard_top.sound'
+   35 |     wire [INDEX_W-1:0] selected_voice=in_slots?((render_cycle >> 4)-1'b1):{INDEX_W{1'b0}};
+      |                                               ^
+%Warning-WIDTHTRUNC: src/synth_core.sv:35:38: Operator ASSIGNW expects 5 bits on the Assign RHS, but Assign RHS's COND generates 10 bits.
+                                            : ... note: In instance 'keyboard_top.sound'
+   35 |     wire [INDEX_W-1:0] selected_voice=in_slots?((render_cycle >> 4)-1'b1):{INDEX_W{1'b0}};
+      |                                      ^
+%Warning-WIDTHEXPAND: src/synth_core.sv:68:45: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'selected_voice' generates 5 bits.
+                                             : ... note: In instance 'keyboard_top.sound'
+   68 |                 monitor_last<=selected_voice==VOICES-1;
+      |                                             ^~
+%Warning-WIDTHEXPAND: src/synth_core.sv:110:32: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'render_cycle' generates 10 bits.
+                                              : ... note: In instance 'keyboard_top.sound'
+  110 |                 if(render_cycle==RENDER_BUDGET-2)render_busy<=0;
+      |                                ^~
+%Warning-WIDTHEXPAND: src/synth_core.sv:117:44: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'selected_voice' generates 5 bits.
+                                              : ... note: In instance 'keyboard_top.sound'
+  117 |                 last_sample<=selected_voice==VOICES-1;
+      |                                            ^~
+%Warning-WIDTHEXPAND: src/run_leds.sv:18:26: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'count' generates 24 bits.
+                                           : ... note: In instance 'keyboard_top.status_leds'
+   18 |     wire step_tick=(count==STEP_CYCLES-1);
+      |                          ^~
+%Warning-WIDTHEXPAND: src/run_leds.sv:19:78: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'waiting_steps' generates 3 bits.
+                                           : ... note: In instance 'keyboard_top.status_leds'
+   19 |     wire diagnostic_active=(DIAG_STEPS>0) && !ready_sync[1] && (waiting_steps==DIAG_STEPS);
+      |                                                                              ^~
+%Warning-WIDTHEXPAND: src/run_leds.sv:33:59: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'waiting_steps' generates 3 bits.
+                                           : ... note: In instance 'keyboard_top.status_leds'
+   33 |         else if(step_tick && DIAG_STEPS>0 && waiting_steps<DIAG_STEPS)
+      |                                                           ^
+%Warning-WIDTHEXPAND: src/timbre_control.sv:68:82: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'menu_hold' generates 26 bits.
+                                                 : ... note: In instance 'keyboard_top.timbre_buttons'
+   68 |     wire menu_long=menu_holding && !stable_buttons[0] && !menu_fired && menu_hold==LONG_PRESS_CYCLES-1;
+      |                                                                                  ^~
+%Warning-WIDTHEXPAND: src/timbre_control.sv:69:80: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'hold_count' generates 26 bits.
+                                                 : ... note: In instance 'keyboard_top.timbre_buttons'
+   69 |     wire effect_long=holding && !stable_buttons[3] && !long_fired && hold_count==LONG_PRESS_CYCLES-1;
+      |                                                                                ^~
+%Warning-WIDTHEXPAND: src/timbre_control.sv:83:30: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'count' generates 20 bits.
+                                                 : ... note: In instance 'keyboard_top.timbre_buttons'
+   83 |                 else if(count==DEBOUNCE_CYCLES-1)begin
+      |                              ^~
+%Warning-WIDTHEXPAND: src/timbre_control.sv:150:34: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'hold_count' generates 26 bits.
+                                                  : ... note: In instance 'keyboard_top.timbre_buttons'
+  150 |                     if(hold_count==LONG_PRESS_CYCLES-1)begin
+      |                                  ^~
+%Warning-WIDTHTRUNC: src/score_player.sv:25:13: Logical operator IF expects 1 bit on the If, but If's VARREF 'ENABLE' generates 32 bits.
+                                              : ... note: In instance 'keyboard_top.score'
+   25 |     initial if(ENABLE)$readmemh(SCORE_FILE,rom);
+      |             ^~
+%Warning-WIDTHTRUNC: src/score_player.sv:27:26: Logical operator IF expects 1 bit on the If, but If's VARREF 'ENABLE' generates 32 bits.
+                                              : ... note: In instance 'keyboard_top.score'
+   27 |     always @(posedge clk)if(ENABLE)instruction<=rom[pc];
+      |                          ^~
+%Warning-WIDTHTRUNC: src/score_player.sv:28:24: Logical operator LOGAND expects 1 bit on the LHS, but LHS's VARREF 'ENABLE' generates 32 bits.
+                                              : ... note: In instance 'keyboard_top.score'
+   28 |     assign busy=ENABLE && state!=DONE;
+      |                        ^~
+%Warning-WIDTHTRUNC: src/score_player.sv:29:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ENABLE' generates 32 bits.
+                                              : ... note: In instance 'keyboard_top.score'
+   29 |     assign done=!ENABLE || state==DONE;
+      |                 ^
+%Warning-WIDTHTRUNC: src/score_player.sv:30:28: Logical operator LOGAND expects 1 bit on the RHS, but RHS's VARREF 'ENABLE' generates 32 bits.
+                                              : ... note: In instance 'keyboard_top.score'
+   30 |     assign note_valid=!rst && ENABLE && state==SEND;
+      |                            ^~
+%Warning-WIDTHTRUNC: src/score_player.sv:37:26: Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's VARREF 'ENABLE' generates 32 bits.
+                                              : ... note: In instance 'keyboard_top.score'
+   37 |             state<=ENABLE?WAIT_START:DONE;pc<=0;elapsed<=0;ticks_left<=0;error<=0;
+      |                          ^
+%Warning-WIDTHEXPAND: src/score_player.sv:52:27: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'elapsed' generates 14 bits.
+                                               : ... note: In instance 'keyboard_top.score'
+   52 |                 if(elapsed==TICK_FRAMES-1)begin
+      |                           ^~
+%Warning-WIDTHEXPAND: src/score_player.sv:58:23: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'pc' generates 9 bits.
+                                               : ... note: In instance 'keyboard_top.score'
+   58 |             NEXT:if(pc==SCORE_WORDS-1)begin state<=FAULT;error<=1;end
+      |                       ^~
+%Warning-WIDTHEXPAND: src/score_player.sv:61:27: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'elapsed' generates 14 bits.
+                                               : ... note: In instance 'keyboard_top.score'
+   61 |                 if(elapsed==TAIL_FRAMES-1)begin state<=DONE;elapsed<=0;end
+      |                           ^~
+%Warning-WIDTHTRUNC: src/score_player.sv:76:16: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'score_fd' generates 32 bits.
+                                              : ... note: In instance 'keyboard_top.score'
+   76 |             if(!score_fd)$fatal(1,"Cannot open score file: %s",SCORE_FILE);
+      |                ^
+%Warning-WIDTHTRUNC: src/score_player.sv:74:9: Logical operator IF expects 1 bit on the If, but If's VARREF 'ENABLE' generates 32 bits.
+                                             : ... note: In instance 'keyboard_top.score'
+   74 |         if(ENABLE)begin
+      |         ^~
+%Warning-WIDTHTRUNC: src/score_player.sv:80:34: Logical operator LOGAND expects 1 bit on the RHS, but RHS's VARREF 'ENABLE' generates 32 bits.
+                                              : ... note: In instance 'keyboard_top.score'
+   80 |     always @(posedge clk)if(!rst && ENABLE && state==DECODE)begin
+      |                                  ^~
+%Warning-WIDTHEXPAND: src/ui_keypad_router.sv:10:33: Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'release_count' generates 18 bits.
+                                                   : ... note: In instance 'keyboard_top.menu_keys'
+   10 |  wire all_released=release_count==RELEASE_CYCLES;
+      |                                 ^~
+%Warning-WIDTHTRUNC: src/ui_keypad_router.sv:22:46: Operator ASSIGN expects 4 bits on the Assign RHS, but Assign RHS's VARREF 'k' generates 32 bits.
+                                                  : ... note: In instance 'keyboard_top.menu_keys'
+   22 |   for(integer k=0;k<16;k=k+1)if(keys[k])index=k;
+      |                                              ^
+%Warning-WIDTHTRUNC: src/rgb_display.sv:80:32: Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's VARREF 'PCLK_INVERT' generates 32 bits.
+                                             : ... note: In instance 'keyboard_top.lcd_on.display_driver'
+   80 |     assign lcd_clk=PCLK_INVERT ? ~pixel_clk : pixel_clk;
+      |                                ^

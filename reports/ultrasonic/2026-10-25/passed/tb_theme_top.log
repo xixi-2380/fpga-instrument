@@ -1,0 +1,2 @@
+PASS tb_theme_top checks=7747367 samples=2017 events=88
+sim/tb_theme_top.sv:64: $finish called at 42022445878 (1ps)

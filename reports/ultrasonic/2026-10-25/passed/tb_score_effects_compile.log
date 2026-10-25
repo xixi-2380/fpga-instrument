@@ -1,0 +1,5 @@
+sim/passive_matrix_model.svh:3: warning: timescale for passive_matrix_model inherited from another file.
+sim/tb_score_effects.sv:1: ...: The inherited timescale is here.
+src/synth_core.sv:126: warning: @* is sensitive to all 32 words in array 'voice_level'.
+src/synth_core.sv:126: warning: @* is sensitive to all 32 words in array 'voice_level'.
+sim/tb_score_effects.sv:22: warning: Instantiating module keyboard_top with dangling input port 30 (ultrasonic_echo) floating.

@@ -1,0 +1,2 @@
+PASS tb_ultrasonic_top checks=3846348 pcm=1416 unity_serial=51200 muted_frames=49 score_on=84 score_off=84 sensor_time_scale=50 gain_slew=1
+sim/tb_ultrasonic_top.sv:118: $finish called at 29502040360 (1ps)

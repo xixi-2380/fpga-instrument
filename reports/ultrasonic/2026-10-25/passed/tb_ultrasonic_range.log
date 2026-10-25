@@ -1,0 +1,2 @@
+PASS tb_ultrasonic_range cases=13 clk_hz=1000000
+sim/tb_ultrasonic_range.sv:58: $finish called at 842011501000 (1ps)

@@ -44,3 +44,10 @@ set_min_delay -from [get_clocks {pixel_clk}] -to [get_ports {lcd_clk lcd_hs lcd_
 # not a substitute for measuring pull-up rise time or panel IO voltage.
 set_max_delay -from [get_clocks {ref_clk}] -to [get_ports {touch_scl touch_sda touch_int touch_rst_n}] 100.000
 set_min_delay -from [get_clocks {ref_clk}] -to [get_ports {touch_scl touch_sda touch_int touch_rst_n}] 0.000
+
+# Ultrasonic Trig is registered ref_clk data, never a clock.
+# 100ns is a routing budget, NOT a module datasheet limit.
+set_max_delay -from [get_clocks {ref_clk}] -to [get_ports {ultrasonic_trig}] 100.000
+set_min_delay -from [get_clocks {ref_clk}] -to [get_ports {ultrasonic_trig}] 0.000
+# Echo is asynchronous and enters the two preserved synchronizer flops.
+# No blanket clock-group, payload false-path or multicycle exception is added.

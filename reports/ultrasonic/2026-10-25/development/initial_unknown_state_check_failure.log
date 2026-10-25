@@ -1,0 +1,3 @@
+FAIL gesture cannot underrun or corrupt score at 8000
+FATAL: sim/tb_ultrasonic_top.sv:53: 
+       Time: 8139  Scope: tb_ultrasonic_top

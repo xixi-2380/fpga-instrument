@@ -1,0 +1,8 @@
+src/keyboard_top.sv:30: warning: implicit definition of wire 'pll1_reset'.
+src/keyboard_top.sv:37: warning: implicit definition of wire 'audio_clk'.
+src/keyboard_top.sv:37: warning: implicit definition of wire 'audio_reset'.
+sim/passive_matrix_model.svh:3: warning: timescale for passive_matrix_model inherited from another file.
+sim/tb_score_audio.sv:1: ...: The inherited timescale is here.
+src/synth_core.sv:126: warning: @* is sensitive to all 32 words in array 'voice_level'.
+src/synth_core.sv:126: warning: @* is sensitive to all 32 words in array 'voice_level'.
+sim/tb_score_audio.sv:17: warning: Instantiating module keyboard_top with dangling input port 30 (ultrasonic_echo) floating.

@@ -2,7 +2,8 @@
 `include "config/synth_config.svh"
 // Generic note-event synthesis; physical keyboard logic stays in its adapter.
 module synth_core #(
-    parameter integer VOICES=`VOICE_COUNT,MUTE=`MUTE_FRAMES,FADE=`FADE_FRAMES,
+    parameter integer MASTER_GAIN_ENABLE=0,MASTER_GAIN_SLEW_SAMPLES=4,
+    VOICES=`VOICE_COUNT,MUTE=`MUTE_FRAMES,FADE=`FADE_FRAMES,
     ATTACK=`ADSR_ATTACK_FRAMES,DECAY=`ADSR_DECAY_FRAMES,
     SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES,
     DELAY_SAMPLES=7200,ROOM_D0=1499,ROOM_D1=1601,ROOM_D2=1867,ROOM_D3=2053)(
@@ -12,7 +13,8 @@ module synth_core #(
     input wire effect_cfg_valid,input wire [8:0] effect_echo_wet,effect_room_wet,effect_tremolo_depth,
     input wire [3:0] effect_tremolo_rate_hz,output wire effect_cfg_ready,effect_cfg_applied,
     output wire visual_sample_valid,output wire signed [15:0] visual_sample,
-    output reg [15:0] visual_notes);
+    output reg [15:0] visual_notes,
+    input wire [8:0] master_gain);
     localparam integer INDEX_W=VOICES>1?$clog2(VOICES):1;
     localparam integer RENDER_BUDGET=32+16*VOICES;
     localparam integer CYCLE_W=$clog2(RENDER_BUDGET+1);
@@ -35,7 +37,9 @@ module synth_core #(
     wire signed [15:0] raw_sample;
     wire raw_valid,gain_valid,mix_valid,ready;
     wire effect_ready,effect_valid;
-    wire signed [15:0] effect_sample;
+    wire signed [15:0] effect_sample,output_sample;
+    wire output_valid;
+    wire [8:0] master_gain_current;
     wire [VOICES*32-1:0] phase;
     reg [33:0] level_product;
     reg [16:0] combined_level;
@@ -127,14 +131,25 @@ module synth_core #(
         .cfg_valid(effect_cfg_valid),.cfg_echo_wet(effect_echo_wet),.cfg_room_wet(effect_room_wet),
         .cfg_tremolo_depth(effect_tremolo_depth),.cfg_tremolo_rate_hz(effect_tremolo_rate_hz),
         .cfg_ready(effect_cfg_ready),.cfg_applied(effect_cfg_applied));
-    frame_buffer buffer(clk,rst,frame_ce,effect_valid,ready,effect_sample,effect_sample,frame_l,frame_r,underrun);
+    // Optional post-effect expression gain; core callers default to exact bypass.
+    // The existing visual tap remains pre-master-gain; UI is unchanged.
+    if(MASTER_GAIN_ENABLE)begin: master_on
+        audio_master_gain #(.SAMPLE_BITS(16),.SLEW_SAMPLES(MASTER_GAIN_SLEW_SAMPLES)) expression(
+            .clk(clk),.rst(rst),.gain_target(master_gain),.sample_ce(effect_valid),
+            .sample_in(effect_sample),.sample_out(output_sample),.out_valid(output_valid),
+            .gain_current(master_gain_current));
+    end else begin: master_off
+        assign output_sample=effect_sample;assign output_valid=effect_valid;
+        assign master_gain_current=9'd256;
+    end
+    frame_buffer buffer(clk,rst,frame_ce,output_valid,ready,output_sample,output_sample,frame_l,frame_r,underrun);
     i2s_tx tx(clk,rst,fall_ce,bit_index,frame_l,frame_r,ws,din);
     // synthesis translate_off
     initial if(VOICES<1 || VOICES>32 || RENDER_BUDGET>=`FRAME_CYCLES)$fatal(1,"Invalid render budget");
     always @(posedge clk)if(!rst)begin
         if(frame_ce && render_busy)$fatal(1,"Frame renderer missed deadline");
         if(mix_valid && !effect_ready)$fatal(1,"Effect rejected render result");
-        if(effect_valid && !ready)$fatal(1,"Frame buffer rejected effect result");
+        if(output_valid && !ready)$fatal(1,"Frame buffer rejected post-effect/master result");
     end
     // synthesis translate_on
 endmodule

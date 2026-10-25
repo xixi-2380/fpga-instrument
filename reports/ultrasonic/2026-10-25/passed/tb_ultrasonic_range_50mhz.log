@@ -1,0 +1,5 @@
+PASS tb_ultrasonic_range cases=13 clk_hz=50000000
+- sim/tb_ultrasonic_range.sv:58: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.49
+- Verilator: $finish at 842ms; walltime 14.644 s; speed 57.512 ms/s
+- Verilator: cpu 14.641 s on 1 threads; allocated 6 MB

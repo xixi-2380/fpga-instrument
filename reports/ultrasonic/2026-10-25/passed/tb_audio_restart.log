@@ -1,0 +1,2 @@
+PASS tb_audio_restart checks=834006 score_on=126 score_off=126 key_on=3 key_off=3
+sim/tb_audio_restart.sv:46: $finish called at 13566843524 (1ps)

@@ -1,0 +1,2 @@
+PASS tb_ultrasonic_volume mapping=2..45 median/hold/reset
+sim/tb_ultrasonic_volume.sv:35: $finish called at 3920000 (1ps)

@@ -1,0 +1,3 @@
+[720531500000] %Fatal: tb_ultrasonic_range.sv:12: Assertion failed in tb_ultrasonic_range: Trigger interval <60ms
+%Error: sim/tb_ultrasonic_range.sv:12: Verilog $stop
+Aborting...

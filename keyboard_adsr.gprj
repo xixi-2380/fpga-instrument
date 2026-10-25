@@ -5,6 +5,9 @@
     <Version>5</Version>
     <Device name="GW5AST-138C" pn="GW5AST-LV138FPG676AC1/I0">gw5ast138c-003</Device>
     <FileList>
+        <File path="src/ultrasonic_range.sv" type="file.verilog" enable="1" />
+        <File path="src/ultrasonic_volume.sv" type="file.verilog" enable="1" />
+        <File path="src/audio_master_gain.sv" type="file.verilog" enable="1" />
         <File path="src/instrument_envelope.sv" type="file.verilog" enable="1" />
         <File path="src/audio_visualizer.sv" type="file.verilog" enable="1" />
         <File path="src/ui_keypad_router.sv" type="file.verilog" enable="1" />

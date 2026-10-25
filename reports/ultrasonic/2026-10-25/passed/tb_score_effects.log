@@ -1,0 +1,3 @@
+SCORE_AUDIO_METRICS events=84 max_delivery=517
+PASS tb_score_effects checks=8206156
+sim/tb_score_effects.sv:127: $finish called at 31785245780 (1ps)
