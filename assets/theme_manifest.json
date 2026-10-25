@@ -4,14 +4,70 @@
     "height": 160,
     "frames": 16,
     "bits_per_pixel": 4,
-    "bits": 1310720
+    "bits": 348840,
+    "storage": {
+      "encoding": "lossless deduplicated frames with implicit transparent margins",
+      "x": 10,
+      "y": 38,
+      "width": 102,
+      "height": 95,
+      "unique_frames": 9,
+      "frame_map": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ],
+      "words": 87210,
+      "unpacked_sha256": "493b2fb07badde719c21a63e981e633bc7ef371e214d50647c4c9e46b4253196"
+    }
   },
   "capybara": {
     "width": 128,
     "height": 160,
     "frames": 16,
     "bits_per_pixel": 4,
-    "bits": 1310720
+    "bits": 480384,
+    "storage": {
+      "encoding": "lossless deduplicated frames with implicit transparent margins",
+      "x": 17,
+      "y": 17,
+      "width": 96,
+      "height": 139,
+      "unique_frames": 9,
+      "frame_map": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ],
+      "words": 120096,
+      "unpacked_sha256": "ec9d34c81e66b98eaf3775e1f840c92da06a12789ee27769c6e90275cf7b2530"
+    }
   },
   "british": {
     "width": 400,
@@ -30,7 +86,7 @@
     "animated": false
   },
   "font_bits": 262144,
-  "total_bits": 3747584,
+  "total_bits": 1955368,
   "sources": {
     "cat": {
       "filename": "f6d0344fdcbeb4465513c8d285103969.mp4",

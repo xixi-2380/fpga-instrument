@@ -1,0 +1,126 @@
+//Copyright (C)2014-2026 Gowin Semiconductor Corporation.
+//All rights reserved.
+
+
+1. PnR Messages
+
+  <Report Title>: PnR Report
+  <Design File>: F:\FPGA_Projects\fpga-instrument-main\impl\gwsynthesis\D2_keyboard_leds.vg
+  <Physical Constraints File>: F:\FPGA_Projects\fpga-instrument-main\src\keyboard.cst
+  <Timing Constraints File>: F:\FPGA_Projects\fpga-instrument-main\src\keyboard.sdc
+  <Tool Version>: V1.9.12.04 (64-bit)
+  <Part Number>: GW5AST-LV138FPG676AC1/I0
+  <Device>: GW5AST-138
+  <Device Version>: C
+  <Created Time>:Sun Oct 25 18:06:18 2026
+
+
+2. PnR Details
+
+  Running placement:
+    Placement Phase 0: CPU time = 0h 0m 10s, Elapsed time = 0h 0m 10s
+    Placement Phase 1: CPU time = 0h 0m 0.692s, Elapsed time = 0h 0m 0.691s
+    Placement Phase 2: CPU time = 0h 2m 26s, Elapsed time = 0h 2m 26s
+    Placement Phase 3: CPU time = 0h 1m 32s, Elapsed time = 0h 1m 32s
+    Total Placement: CPU time = 0h 4m 8s, Elapsed time = 0h 4m 8s
+ Running routing:
+    Routing Phase 0: CPU time = 0h 0m 0.8s, Elapsed time = 0h 0m 0.8s
+    Routing Phase 1: CPU time = 1h 4m 31s, Elapsed time = 1h 4m 31s
+    Routing Phase 2: CPU time = 0h 0m 0.791s, Elapsed time = 0h 0m 0.791s
+    Routing Phase 3: CPU time = 0h 0m 0s, Elapsed time = 0h 0m 0s
+    Total Routing: CPU time = 1h 4m 32s, Elapsed time = 1h 4m 32s
+ Generate output files:
+    CPU time = 0h 0m 11s, Elapsed time = 0h 0m 11s
+
+ Total Time and Memory Usage: CPU time = 1h 8m 51s, Elapsed time = 1h 8m 51s, Peak memory usage = 1911MB
+
+
+3. Resource Usage Summary
+
+  --------------------------------------------------------------------------------
+  Resources                   | Usage                               | Utilization
+  --------------------------------------------------------------------------------
+  Logic                       | 36543/138240                        |  27%
+    --LUT,ALU,ROM16           | 36285(31056 LUT, 5229 ALU, 0 ROM16) | -
+    --SSRAM(RAM16)            | 43                                  | -
+  Register                    | 13474/139140                        |  10%
+    --Logic Register as Latch | 0/138240                            |  0%
+    --Logic Register as FF    | 13474/138240                        |  10%
+    --I/O Register as Latch   | 0/900                               |  0%
+    --I/O Register as FF      | 0/900                               |  0%
+  CLS                         | 26025/69120                         |  38%
+  I/O Port                    | 58/312                              |  19%
+  I/O Buf                     | 58                                  | -
+    --Input Buf               | 10                                  | -
+    --Output Buf              | 46                                  | -
+    --Inout Buf               | 2                                   | -
+  BSRAM                       | 280/340                             | 83%
+    --SDPB                    | 18
+    --pROM                    | 260
+    --pROMX9                  | 2
+  DSP                         | 17/298                              | 6%
+    --MULT12X12               | 12
+    --MULTALU27X18            | 11
+  ================================================================================
+
+
+
+4. I/O Bank Usage Summary
+
+  --------------------------------------
+  I/O Bank  | Usage       | Utilization 
+  --------------------------------------
+  bank 2   | 17/50       | 34%         
+  bank 3   | 9/50        | 18%         
+  bank 4   | 20/50       | 40%         
+  bank 5   | 11/50       | 22%         
+  bank 6   | 0/50        | 0%          
+  bank 7   | 1/50        | 2%          
+  bank 10  | 0/12        | 0%          
+  ======================================
+
+
+5. Clock Resource Usage Summary
+
+  ------------------------------------------
+  Clock Resource| Usage         | Utilization 
+  ------------------------------------------
+  PRIMARY       | 4/8           | 50%
+  LW            | 8/8           | 100%
+  GCLK_PIN      | 5/24          | 21%
+  PLL           | 3/12          | 25%
+  ==========================================
+
+
+6. Global Clock Signals
+Reading netlist file: "F:\FPGA_Projects\fpga-instrument-main\impl\gwsynthesis\D2_keyboard_leds.vg"
+Parsing netlist file "F:\FPGA_Projects\fpga-instrument-main\impl\gwsynthesis\D2_keyboard_leds.vg" completed
+Processing netlist completed
+Reading constraint file: "F:\FPGA_Projects\fpga-instrument-main\src\keyboard.cst"
+Physical Constraint parsed completed
+Running placement......
+[10%] Placement Phase 0 completed
+[20%] Placement Phase 1 completed
+[30%] Placement Phase 2 completed
+[50%] Placement Phase 3 completed
+Running routing......
+[60%] Routing Phase 0 completed
+[70%] Routing Phase 1 completed
+[80%] Routing Phase 2 completed
+WARN  (PR1014) : Generic routing resource will be used to clock signal 'clk_d' by the specified constraint. And then it may lead to the excessive delay or skew
+[90%] Routing Phase 3 completed
+Running timing analysis......
+[95%] Timing analysis completed
+Placement and routing completed
+Bitstream generation in progress......
+Bitstream generation completed
+Running power analysis......
+[100%] Power analysis completed
+Generate file "F:\FPGA_Projects\fpga-instrument-main\impl\pnr\D2_keyboard_leds.power.html" completed
+Generate file "F:\FPGA_Projects\fpga-instrument-main\impl\pnr\D2_keyboard_leds.pin.html" completed
+Generate file "F:\FPGA_Projects\fpga-instrument-main\impl\pnr\D2_keyboard_leds.rpt.html" completed
+Generate file "F:\FPGA_Projects\fpga-instrument-main\impl\pnr\D2_keyboard_leds.rpt.txt" completed
+Generate file "F:\FPGA_Projects\fpga-instrument-main\impl\pnr\D2_keyboard_leds.tr.html" completed
+Generate file "F:\FPGA_Projects\fpga-instrument-main\impl\pnr\D2_keyboard_leds.tr" completed
+Sun Oct 25 18:06:19 2026
+

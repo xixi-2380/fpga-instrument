@@ -1,0 +1,8 @@
+{
+  "test": "tb_audio_timing",
+  "parameters": "",
+  "passed": true,
+  "checks": 9996,
+  "pll_model": "not exercised",
+  "seconds": 0.206
+}

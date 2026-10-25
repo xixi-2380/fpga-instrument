@@ -1,0 +1,8 @@
+{
+  "test": "tb_reset_sync",
+  "parameters": "",
+  "passed": true,
+  "checks": 5,
+  "pll_model": "not exercised",
+  "seconds": 0.019
+}

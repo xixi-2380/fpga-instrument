@@ -1,0 +1,12 @@
+{
+  "cat": {
+    "commit": "b07c0d558cecfa3005b3b47eb08b2c6f7684af94",
+    "path": "src/rom/theme_cat.hex",
+    "git_blob_sha": "9fdc37a242bc4035b091a95f07825538edee47fc"
+  },
+  "capybara": {
+    "commit": "b07c0d558cecfa3005b3b47eb08b2c6f7684af94",
+    "path": "src/rom/theme_capybara.hex",
+    "git_blob_sha": "bf37391cc2599747c133443e1f8ed2b1376534d2"
+  }
+}

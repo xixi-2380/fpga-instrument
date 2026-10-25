@@ -1,0 +1,20 @@
+{
+  "structural_checks_passed": true,
+  "command_count": 19,
+  "reset_entry_pins": [
+    "lcd_on.display_driver/pixel_reset_sync/pipe_0_s0/PRESET",
+    "lcd_on.display_driver/pixel_reset_sync/pipe_1_s0/PRESET",
+    "lcd_on.display_driver/status_bridge/pixel_reset_sync/pipe_0_s0/PRESET",
+    "lcd_on.display_driver/status_bridge/pixel_reset_sync/pipe_1_s0/PRESET"
+  ],
+  "reset_pin_names_in_input_report": true,
+  "ordinary_data_false_paths": 0,
+  "whole_clock_group_exceptions": 0,
+  "multicycle_exceptions": 0,
+  "internal_clock_ratios_unchanged": true,
+  "setup_reserve_ns": 8.286,
+  "hold_floor_ns": 0,
+  "nominal_data_budget_ns": 5.999714,
+  "scope": "Static review against official SUG940; not Gowin parsing/object matching/STA",
+  "Gowin_commands_run": false
+}

@@ -15,9 +15,9 @@ module tb_theme_art;
   if(!$value$plusargs("SIM_OUT_DIR=%s",outdir))outdir=".";
   for(n=0;n<16;n=n+1)begin
    animation=n;theme=1;at(620,250);
-   `CHECK(dut.anim_addr>=0 && dut.anim_addr<327680,"cat frame address bounded")
+   `CHECK(dut.cat_addr>=0 && dut.cat_addr<dut.CAT_WORDS,"cat frame address bounded")
    theme=2;at(620,250);
-   `CHECK(dut.anim_addr>=0 && dut.anim_addr<327680,"capybara frame address bounded")
+   `CHECK(dut.capybara_addr>=0 && dut.capybara_addr<dut.CAPYBARA_WORDS,"capybara frame address bounded")
   end
   theme=1;animation=0;
   for(n=0;n<20480;n=n+1)begin at(500+(n%128)*2,96+(n/128)*2);cat_sample[n]=pixel;end

@@ -7,7 +7,15 @@ module audio_timing #(parameter integer HALF_CYCLES=`BCK_HALF_CYCLES)(
     reg [CW-1:0] count;
     assign fall_ce=!rst && count==HALF_CYCLES-1 && bck;
     assign rise_ce=!rst && count==HALF_CYCLES-1 && !bck;
-    assign frame_ce=fall_ce && bit_index==0;
+    generate if(HALF_CYCLES>1)begin: registered_frame
+        reg frame_q;
+        always @(posedge clk or posedge rst)
+            if(rst)frame_q<=0;
+            else frame_q<=count==HALF_CYCLES-2 && bck && bit_index==0;
+        assign frame_ce=!rst && frame_q;
+    end else begin: single_cycle_frame
+        assign frame_ce=fall_ce && bit_index==0;
+    end endgenerate
     always @(posedge clk or posedge rst) begin
         if(rst) begin count<=0; bck<=1; bit_index<=0; end
         else if(count==HALF_CYCLES-1) begin

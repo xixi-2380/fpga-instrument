@@ -1,0 +1,281 @@
+{
+  "baseline_commit": "b07c0d558cecfa3005b3b47eb08b2c6f7684af94",
+  "user_baseline_hardware_test": "passed without observed issues; timing failed and PnR exceeded one hour",
+  "test_configurations": 22,
+  "checks": 22103875,
+  "tests": [
+    {
+      "test": "tb_animation_storage",
+      "parameters": "",
+      "passed": true,
+      "checks": 1310720,
+      "pll_model": "not exercised",
+      "seconds": 8.618
+    },
+    {
+      "test": "tb_audio_restart",
+      "parameters": "",
+      "passed": true,
+      "checks": 834006,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 107.377
+    },
+    {
+      "test": "tb_audio_timing",
+      "parameters": "",
+      "passed": true,
+      "checks": 9996,
+      "pll_model": "not exercised",
+      "seconds": 0.206
+    },
+    {
+      "test": "tb_audio_visualizer",
+      "parameters": "",
+      "passed": true,
+      "checks": 6141,
+      "pll_model": "not exercised",
+      "seconds": 0.297
+    },
+    {
+      "test": "tb_clock_path_equivalence",
+      "parameters": "",
+      "passed": true,
+      "checks": 400686,
+      "pll_model": "not exercised",
+      "seconds": 4.413
+    },
+    {
+      "test": "tb_clock_reset",
+      "parameters": "",
+      "passed": true,
+      "checks": 6,
+      "pll_model": "not exercised",
+      "seconds": 0.021
+    },
+    {
+      "test": "tb_lock_guard",
+      "parameters": "",
+      "passed": true,
+      "checks": 5,
+      "pll_model": "not exercised",
+      "seconds": 0.021
+    },
+    {
+      "test": "tb_matrix_settling",
+      "parameters": "",
+      "passed": true,
+      "checks": 36,
+      "pll_model": "not exercised",
+      "seconds": 0.073
+    },
+    {
+      "test": "tb_release_pcm",
+      "parameters": "",
+      "passed": true,
+      "checks": 1225050,
+      "pll_model": "not exercised",
+      "seconds": 15.64
+    },
+    {
+      "test": "tb_reset_sync",
+      "parameters": "",
+      "passed": true,
+      "checks": 5,
+      "pll_model": "not exercised",
+      "seconds": 0.019
+    },
+    {
+      "test": "tb_rgb_display",
+      "parameters": "THEME=3",
+      "passed": true,
+      "checks": 2793166,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 202.248
+    },
+    {
+      "test": "tb_rgb_display",
+      "parameters": "",
+      "passed": true,
+      "checks": 2793163,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 207.98
+    },
+    {
+      "test": "tb_rgb_status_cdc",
+      "parameters": "WIDTH=1112",
+      "passed": true,
+      "checks": 5302,
+      "pll_model": "not exercised",
+      "seconds": 0.868
+    },
+    {
+      "test": "tb_rgb_status_cdc",
+      "parameters": "WIDTH=71",
+      "passed": true,
+      "checks": 5302,
+      "pll_model": "not exercised",
+      "seconds": 0.042
+    },
+    {
+      "test": "tb_rgb_status_cdc",
+      "parameters": "",
+      "passed": true,
+      "checks": 5302,
+      "pll_model": "not exercised",
+      "seconds": 0.035
+    },
+    {
+      "test": "tb_rgb_ui_renderer",
+      "parameters": "",
+      "passed": true,
+      "checks": 3072031,
+      "pll_model": "not exercised",
+      "seconds": 165.119
+    },
+    {
+      "test": "tb_score_audio",
+      "parameters": "",
+      "passed": true,
+      "checks": 2802401,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 23.563
+    },
+    {
+      "test": "tb_theme_art",
+      "parameters": "",
+      "passed": true,
+      "checks": 329026,
+      "pll_model": "not exercised",
+      "seconds": 1.655
+    },
+    {
+      "test": "tb_theme_controls",
+      "parameters": "",
+      "passed": true,
+      "checks": 35,
+      "pll_model": "not exercised",
+      "seconds": 0.039
+    },
+    {
+      "test": "tb_theme_pixels",
+      "parameters": "",
+      "passed": true,
+      "checks": 6144037,
+      "pll_model": "not exercised",
+      "seconds": 302.026
+    },
+    {
+      "test": "tb_ui_score_handoff",
+      "parameters": "",
+      "passed": true,
+      "checks": 275225,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 10.967
+    },
+    {
+      "test": "tb_ui_top",
+      "parameters": "LCD=1",
+      "passed": true,
+      "checks": 92234,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 11.114
+    }
+  ],
+  "picture_equivalence": {
+    "complete_pages": 8,
+    "compared_pixels": 3072000,
+    "different_pixels": 0,
+    "details": "pixel_equivalence.json"
+  },
+  "animation_storage_equivalence": {
+    "logical_pixels": 655360,
+    "different_indices": 0,
+    "HDL_checks": 1310720,
+    "idempotent_repack": true,
+    "details": "lossless_storage.json"
+  },
+  "clock_equivalence": {
+    "checks": 400686,
+    "HALF_CYCLES": [
+      1,
+      2,
+      3,
+      20
+    ],
+    "lock_stability_cycles": [
+      1,
+      255,
+      256,
+      257,
+      100000
+    ],
+    "count_and_qualification_bit_exact": true
+  },
+  "theme_and_font_bits": {
+    "before": 3747584,
+    "after": 1955368,
+    "saved": 1792216,
+    "physical_BSRAM_blocks_after": null
+  },
+  "latency": {
+    "renderer": 9,
+    "connector": 10,
+    "pixel_clock_MHz": 35
+  },
+  "sampling_rate_Hz": 48000,
+  "voice_count": 32,
+  "score_audio_checks": {
+    "events": 84,
+    "max_delivery_cycles": 517,
+    "note": "shortened startup/envelope/score timing with production I2S/render cadence; explicit behavioral PLL model"
+  },
+  "repeated_reset_checks": {
+    "runs": 3,
+    "score_on": 126,
+    "score_off": 126,
+    "manual_on": 3,
+    "manual_off": 3
+  },
+  "SDC_review": "sdc_review.json; not Gowin object matching or STA",
+  "preserved": [
+    "PLL parameters and 50/61.44/35MHz clock requirements",
+    "GPIO/CST",
+    "audio/ADSR/effect algorithms",
+    "score/default auto playback",
+    "keypad settling fix and FX bypass persistence",
+    "all theme pixels, fonts, photograph and palettes",
+    "touch hitboxes and controls",
+    "separate Bluetooth/ultrasonic branches"
+  ],
+  "source_sha256": {
+    "src/lock_guard.sv": "69949b051c7b7b86c2e7a17c3c2ff618f913235cd5b7ec504c679354f4a57089",
+    "src/ui_theme_art.sv": "ba4f3c1d68c70ed252dfd9a2c2999c6702b641d4bf8dd131a371589e2157b230",
+    "src/keyboard.sdc": "3eb011613079b02ec572c2aa9a87ef7e1b69ae16a209407ec1072a8d601e400b",
+    "src/audio_timing.sv": "4d8684ac241d1d88f3eb66fb746c765719258dcbf8e375bbd07df14486aed739",
+    "src/rgb_display.sv": "04aa4f35edeea02667204fac04bcf8e25d7b75a3f845075df8bde2eccbef0658",
+    "src/rgb_ui_renderer.sv": "138cc7ae1d5aad91674d18cd7cb2fbd8455492f0fb89def68b0e5b6029ec1722",
+    "src/rom/theme_capybara.hex": "f227b71f61272efc3888738cbe12eb7ca3f6378bec5f12c6d5f780af993d3eec",
+    "src/rom/theme_cat.hex": "07ab1738e0e1a26706784b98cd57c596d845c7551a938be16ddf789585dd5885",
+    "sim/tb_rgb_ui_renderer.sv": "41c79702ae7749c65f88fd7a016f8d4623187e76579a75f44c9db86fe226fb24",
+    "sim/tb_rgb_display.sv": "acdc8c6018bd5a70f2811ab0101c9ee7bdbdef508029bd0bbdb59aafb429f03e",
+    "sim/tb_theme_art.sv": "393980cb0d981fbee2fca275f2be75ed14b195033d982fdf88b2aa9dd838cdc7",
+    "scripts/run_sim.py": "95183f59458c51031f1ae370af7546bff7c3f8ec433b7dd7f2722369df02cab3",
+    "scripts/gen_theme_assets.py": "92d77521be058fe5e709f67cf63847748f35df33ad2be7f29da0c4bc324ca4fa",
+    "assets/theme_manifest.json": "fd7a3a40e271edae00b2ce7f84ead81b19529a73432559376eb09ba730180dd7",
+    "assets/themes/README.md": "f614be2b965a29a4858736b728fa36fda1d8e02b9f937de6b8c6281e988afbf4",
+    "README.md": "79c6f77b6741bde0e9d005cc30b72d9a4058156ff7084f4ddab6d94521b77e2d",
+    "AGENTS.md": "daaa4698b09b9b22f6632094d473142226d6d03b912fcf9b12efcd68259643c7",
+    "keyboard_adsr.gprj": "4a8f22b1fe4f1f2aecddd9e815a788c25dec8ec8c298fa3b548e84a6fe774864",
+    "src/config/theme_storage.svh": "927ceead03ab30e79e4af62ecfe5289acd41e986769eccd3da693fdb245fc581",
+    "sim/tb_clock_path_equivalence.sv": "3219f1049ac0eb60023faa04ab1497d698fef58ad0823bd36fc3ec008330a791",
+    "sim/tb_animation_storage.sv": "0376cadc0620e3772df6493b94e908f9baa4335ccced7f932f56befe7981ff4b",
+    "docs/instrument_ui.md": "d29f69111a1b8c9a4223ea2e4d804720127b5bcf7612a3d6f7ba0ed9c8723645",
+    "docs/themes.md": "eb9c20faf6078d6fa1df5a2d445a431a014cc2c09935f0832889be4975fa903e"
+  },
+  "preprocessing_two_working_directories": true,
+  "production_default_top_elaboration": true,
+  "Gowin_synthesis_PnR_STA_or_programmer_run": false,
+  "physical_new_Fmax_resource_utilization_routing_time": null,
+  "new_hardware_tested": false,
+  "required_next_step": "User performs fresh implementation, checks every SDC target/constraint including exact four reset entry pins and output lcd_pclk, provides new domain/I/O timing and resource reports before hardware acceptance."
+}

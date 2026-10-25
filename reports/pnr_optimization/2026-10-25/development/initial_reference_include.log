@@ -1,0 +1,15 @@
+sim/tb_clock_path_equivalence.sv:41: Include file config/synth_config.svh not found
+sim/tb_clock_path_equivalence.sv:12: error: Unknown module type: timing_reference
+sim/tb_clock_path_equivalence.sv:12: error: Unknown module type: timing_reference
+sim/tb_clock_path_equivalence.sv:12: error: Unknown module type: timing_reference
+sim/tb_clock_path_equivalence.sv:12: error: Unknown module type: timing_reference
+sim/tb_clock_path_equivalence.sv:19: error: Unknown module type: lock_reference
+sim/tb_clock_path_equivalence.sv:19: error: Unknown module type: lock_reference
+sim/tb_clock_path_equivalence.sv:19: error: Unknown module type: lock_reference
+sim/tb_clock_path_equivalence.sv:19: error: Unknown module type: lock_reference
+sim/tb_clock_path_equivalence.sv:19: error: Unknown module type: lock_reference
+9 error(s) during elaboration.
+*** These modules were missing:
+        lock_reference referenced 5 times.
+        timing_reference referenced 4 times.
+***

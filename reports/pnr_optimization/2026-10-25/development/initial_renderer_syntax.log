@@ -1,0 +1,111 @@
+src/rgb_ui_renderer.sv:398: syntax error
+src/gt9110_touch.sv:16: error: malformed statement
+src/gt9110_touch.sv:17: syntax error
+src/gt9110_touch.sv:18: Syntax in assignment statement l-value.
+src/gt9110_touch.sv:19: syntax error
+src/gt9110_touch.sv:19: error: malformed statement
+src/gt9110_touch.sv:20: syntax error
+src/gt9110_touch.sv:20: error: malformed statement
+src/gt9110_touch.sv:21: syntax error
+src/gt9110_touch.sv:21: error: malformed statement
+src/gt9110_touch.sv:22: syntax error
+src/gt9110_touch.sv:22: error: malformed statement
+src/gt9110_touch.sv:23: syntax error
+src/gt9110_touch.sv:23: error: malformed statement
+src/gt9110_touch.sv:24: syntax error
+src/gt9110_touch.sv:24: error: malformed statement
+src/gt9110_touch.sv:25: syntax error
+src/gt9110_touch.sv:25: error: malformed statement
+src/gt9110_touch.sv:26: syntax error
+src/gt9110_touch.sv:26: error: malformed statement
+src/gt9110_touch.sv:27: syntax error
+src/gt9110_touch.sv:27: error: malformed statement
+src/gt9110_touch.sv:28: syntax error
+src/gt9110_touch.sv:28: error: malformed statement
+src/gt9110_touch.sv:29: syntax error
+src/gt9110_touch.sv:29: error: malformed statement
+src/gt9110_touch.sv:36: syntax error
+src/gt9110_touch.sv:38: error: malformed statement
+src/gt9110_touch.sv:39: syntax error
+src/gt9110_touch.sv:39: error: malformed statement
+src/gt9110_touch.sv:41: syntax error
+src/gt9110_touch.sv:42: error: malformed statement
+src/gt9110_touch.sv:47: syntax error
+src/gt9110_touch.sv:50: Syntax in assignment statement l-value.
+src/gt9110_touch.sv:55: syntax error
+src/gt9110_touch.sv:56: error: invalid module item.
+src/gt9110_touch.sv:56: syntax error
+src/gt9110_touch.sv:56: error: Invalid module instantiation
+src/gt9110_touch.sv:58: syntax error
+src/gt9110_touch.sv:58: error: Invalid module instantiation
+src/gt9110_touch.sv:58: error: Invalid module instantiation
+src/gt9110_touch.sv:59: syntax error
+src/gt9110_touch.sv:59: error: Invalid module instantiation
+src/gt9110_touch.sv:60: syntax error
+src/gt9110_touch.sv:60: error: Invalid module instantiation
+src/gt9110_touch.sv:60: error: Invalid module instantiation
+src/gt9110_touch.sv:61: syntax error
+src/gt9110_touch.sv:61: error: Invalid module instantiation
+src/gt9110_touch.sv:62: syntax error
+src/gt9110_touch.sv:62: error: Invalid module instantiation
+src/gt9110_touch.sv:62: error: Invalid module instantiation
+src/gt9110_touch.sv:63: syntax error
+src/gt9110_touch.sv:63: error: Invalid module instantiation
+src/gt9110_touch.sv:64: warning: implicit definition of wire 'ID_WAIT'.
+src/gt9110_touch.sv:66: warning: implicit definition of wire 'ID_START'.
+src/gt9110_touch.sv:67: syntax error
+src/gt9110_touch.sv:67: error: Invalid module instantiation
+src/gt9110_touch.sv:67: error: Invalid module instantiation
+src/gt9110_touch.sv:69: warning: implicit definition of wire 'RES_WAIT'.
+src/gt9110_touch.sv:71: warning: implicit definition of wire 'RES_START'.
+src/gt9110_touch.sv:73: syntax error
+src/gt9110_touch.sv:73: error: Invalid module instantiation
+src/gt9110_touch.sv:73: error: Invalid module instantiation
+src/gt9110_touch.sv:74: error: Invalid module instantiation
+src/gt9110_touch.sv:74: error: Invalid module instantiation
+src/gt9110_touch.sv:74: error: Invalid module instantiation
+src/gt9110_touch.sv:77: warning: implicit definition of wire 'POLL_WAIT'.
+src/gt9110_touch.sv:79: warning: implicit definition of wire 'POLL_START'.
+src/gt9110_touch.sv:81: syntax error
+src/gt9110_touch.sv:81: error: Invalid module instantiation
+src/gt9110_touch.sv:81: error: Invalid module instantiation
+src/gt9110_touch.sv:81: error: Invalid module instantiation
+src/gt9110_touch.sv:83: syntax error
+src/gt9110_touch.sv:83: error: Invalid module instantiation
+src/gt9110_touch.sv:83: error: Invalid module instantiation
+src/gt9110_touch.sv:84: error: Invalid module instantiation
+src/gt9110_touch.sv:84: error: Invalid module instantiation
+src/gt9110_touch.sv:85: error: Invalid module instantiation
+src/gt9110_touch.sv:85: error: Invalid module instantiation
+src/gt9110_touch.sv:85: error: Invalid module instantiation
+src/gt9110_touch.sv:89: syntax error
+src/gt9110_touch.sv:89: error: Invalid module instantiation
+src/gt9110_touch.sv:89: error: Invalid module instantiation
+src/gt9110_touch.sv:89: error: Invalid module instantiation
+src/gt9110_touch.sv:89: error: Invalid module instantiation
+src/gt9110_touch.sv:89: error: Invalid module instantiation
+src/gt9110_touch.sv:92: warning: implicit definition of wire 'POLL_START'.
+src/gt9110_touch.sv:94: syntax error
+src/gt9110_touch.sv:94: error: Invalid module instantiation
+src/gt9110_touch.sv:94: error: Invalid module instantiation
+src/gt9110_touch.sv:94: error: Invalid module instantiation
+src/gt9110_touch.sv:95: error: Invalid module instantiation
+src/gt9110_touch.sv:96: error: Invalid module instantiation
+src/gt9110_touch.sv:97: error: Invalid module instantiation
+src/gt9110_touch.sv:98: error: Invalid module instantiation
+src/gt9110_touch.sv:98: error: Invalid module instantiation
+src/gt9110_touch.sv:99: error: Invalid module instantiation
+src/gt9110_touch.sv:99: error: Invalid module instantiation
+src/gt9110_touch.sv:99: error: Invalid module instantiation
+src/gt9110_touch.sv:102: syntax error
+src/gt9110_touch.sv:102: error: Invalid module instantiation
+src/gt9110_touch.sv:102: error: Invalid module instantiation
+src/gt9110_touch.sv:103: syntax error
+src/gt9110_touch.sv:103: error: Invalid module instantiation
+src/gt9110_touch.sv:104: syntax error
+src/gt9110_touch.sv:104: error: Invalid module instantiation
+src/gt9110_touch.sv:104: error: Invalid module instantiation
+src/gt9110_touch.sv:104: error: Invalid module instantiation
+src/gt9110_touch.sv:104: error: Invalid module instantiation
+src/gt9110_touch.sv:106: syntax error
+src/gt9110_touch.sv:110: error: invalid module item.

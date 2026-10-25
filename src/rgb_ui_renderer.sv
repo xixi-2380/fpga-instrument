@@ -1,10 +1,16 @@
 `timescale 1ns/1ps
-// Four visual themes. Eight registered pixel stages; RGB/DE/HS/VS aligned.
+// Four visual themes. Nine registered pixel stages; RGB/DE/HS/VS aligned.
 // One atomic1112-bit snapshot per frame; no framebuffer and no audio stalls.
 module rgb_ui_renderer(
  input wire pixel_clk,rst,frame_start,status_valid,input wire [1111:0] status_data,
  input wire [10:0] x,y,input wire de_in,hs_in,vs_in,
  output reg [23:0] rgb,output reg de_out,hs_out,vs_out);
+ reg [10:0] raster_x,raster_y;
+ reg raster_de,raster_hs,raster_vs;
+ always @(posedge pixel_clk)begin
+  if(rst)begin raster_x<=0;raster_y<=0;raster_de<=0;raster_hs<=0;raster_vs<=0;end
+  else begin raster_x<=x;raster_y<=y;raster_de<=de_in;raster_hs<=hs_in;raster_vs<=vs_in;end
+ end
  `include "config/ui_layout.svh"
  // Palette changes are visual only; state bits 55:54 carry the theme.
  wire [1:0] theme=state[55:54];
@@ -58,7 +64,7 @@ module rgb_ui_renderer(
  reg [25:0] animation_phase;
  reg [3:0] animation_frame;
  wire [23:0] art_pixel;
- ui_theme_art artwork(pixel_clk,theme,animation_frame,x,y,art_pixel,menu);
+ ui_theme_art artwork(pixel_clk,theme,animation_frame,raster_x,raster_y,art_pixel,menu);
  // Limit color arithmetic to ten bits, rather than signed 32-bit division.
  function automatic [7:0] blend_channel(input [7:0] a,b,input [1:0] w);
   reg [9:0] sum;
@@ -97,7 +103,7 @@ module rgb_ui_renderer(
   end
  endfunction
  always @*begin
-  px=integer'(x);py=integer'(y);base=BG;fg=CREAM;text=0;len=0;tx=0;ty=0;
+  px=integer'(raster_x);py=integer'(raster_y);base=BG;fg=CREAM;text=0;len=0;tx=0;ty=0;
   dx=0;dy=0;ci=0;i=0;k=0;left=0;top=0;note_index=0;pc=0;
   bin=0;point_y=234;previous_y=234;minimum_y=234;maximum_y=234;
   ch=0;font_addr=0;font_bit=0;text_ink=0;alpha_font=0;
@@ -297,11 +303,11 @@ module rgb_ui_renderer(
    if(px==0 || px==799 || py==0 || py==479)base=CREAM;
    text_ink=0;
   end
-  if(!de_in || px>=800 || py>=480)begin base=0;text_ink=0;end
+  if(!raster_de || px>=800 || py>=480)begin base=0;text_ink=0;end
  end
  // S1 layout; S2 relative position; S3 cell; S4 character; S5 address;
  // S6 synchronous ROM; S7 background/alpha; S8 final text blend.
- localparam integer PIXEL_LATENCY=8;
+ localparam integer PIXEL_LATENCY=9;
  reg [319:0] text_s1,text_s2,text_s3;
  reg [5:0] len_s1,len_s2,len_s3;
  reg [10:0] x_s1,y_s1,tx_s1,ty_s1;
@@ -317,6 +323,7 @@ module rgb_ui_renderer(
  reg [1:0] fonts[0:3];
  reg [5:0] background,panels,blank,tests,des,hss,vss;
  reg [1:0] themes[0:5];
+ reg [23:0] bg_s1,panel_s1;
  reg alpha_s5,alpha_s6;
  reg [23:0] resolved_s7,fg_s7;
  reg [1:0] alpha_s7;
@@ -339,7 +346,7 @@ module rgb_ui_renderer(
    for(integer q=0;q<6;q=q+1)begin bases[q]<=0;foregrounds[q]<=0;themes[q]<=0;end
    for(integer q=1;q<6;q=q+1)arts[q]<=0;
    for(integer q=0;q<4;q=q+1)begin direct_addr[q]<=0;direct_bit[q]<=0;fonts[q]<=0;end
-   rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;
+   bg_s1<=0;panel_s1<=0;rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;
   end else begin
    if(frame_start)begin
     if(status_valid)state<=status_data;
@@ -349,15 +356,17 @@ module rgb_ui_renderer(
      else animation_phase<=animation_phase+26'd6353360;
     end
    end
-   text_s1<=text;len_s1<=len;x_s1<=x;y_s1<=y;tx_s1<=tx;ty_s1<=ty;
+   text_s1<=text;len_s1<=len;x_s1<=raster_x;y_s1<=raster_y;tx_s1<=tx;ty_s1<=ty;
    direct_addr[0]<=font_addr;direct_bit[0]<=font_bit;fonts[0]<=font_theme;
    direct_ink[0]<=text_ink;direct_alpha[0]<=alpha_font;
    bases[0]<=base;foregrounds[0]<=fg;themes[0]<=theme;
-   background[0]<=base==BG;panels[0]<=base==PANEL;tests[0]<=state[19];
-   blank[0]<=!de_in || x>=800 || y>=480;des[0]<=de_in && x<800 && y<480;hss[0]<=hs_in;vss[0]<=vs_in;
+   bg_s1<=BG;panel_s1<=PANEL;background[0]<=0;panels[0]<=0;tests[0]<=state[19];
+   blank[0]<=!raster_de || raster_x>=800 || raster_y>=480;des[0]<=raster_de && raster_x<800 && raster_y<480;hss[0]<=raster_hs;vss[0]<=raster_vs;
    for(integer q=1;q<6;q=q+1)begin
     bases[q]<=bases[q-1];foregrounds[q]<=foregrounds[q-1];themes[q]<=themes[q-1];
-    background[q]<=background[q-1];panels[q]<=panels[q-1];tests[q]<=tests[q-1];blank[q]<=blank[q-1];
+    if(q==1)begin background[q]<=bases[0]==bg_s1;panels[q]<=bases[0]==panel_s1;end
+    else begin background[q]<=background[q-1];panels[q]<=panels[q-1];end
+    tests[q]<=tests[q-1];blank[q]<=blank[q-1];
     des[q]<=des[q-1];hss[q]<=hss[q-1];vss[q]<=vss[q-1];
     if(q==1)arts[q]<=art_pixel;else arts[q]<=arts[q-1];
    end

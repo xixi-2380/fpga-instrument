@@ -1,0 +1,8 @@
+{
+  "test": "tb_animation_storage",
+  "parameters": "",
+  "passed": true,
+  "checks": 1310720,
+  "pll_model": "not exercised",
+  "seconds": 8.618
+}

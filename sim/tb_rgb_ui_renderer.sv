@@ -40,7 +40,7 @@ module tb_rgb_ui_renderer;
   $fclose(fd);
  end endtask
  task spot(input integer xx,yy,input [23:0] expected,input bit visible);begin
-  @(negedge clk);x=xx;y=yy;de=1;repeat(8)@(negedge clk);
+  @(negedge clk);x=xx;y=yy;de=1;repeat(9)@(negedge clk);
   `CHECK(rgb===expected && de_out==visible,"test pattern and clipping follow same pixel pipeline")
  end endtask
  initial begin

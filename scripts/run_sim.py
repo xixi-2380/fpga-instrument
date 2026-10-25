@@ -1,5 +1,5 @@
 import sys, argparse, pathlib, subprocess, os, json, time, xml.etree.ElementTree as ET
-p=argparse.ArgumentParser();p.add_argument('--test');p.add_argument('--param',action='append',default=[]);p.add_argument('--vendor',action='store_true');p.add_argument('--behavioral-pll',action='store_true',help='Test-only clock substitute; not official PLL or STA validation');p.add_argument('--out-dir',default='reports/sim/current');a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--test');p.add_argument('--animation-reference-dir',type=pathlib.Path,help='Directory containing original b07c0d5 theme_cat.hex and theme_capybara.hex');p.add_argument('--param',action='append',default=[]);p.add_argument('--vendor',action='store_true');p.add_argument('--behavioral-pll',action='store_true',help='Test-only clock substitute; not official PLL or STA validation');p.add_argument('--out-dir',default='reports/sim/current');a=p.parse_args()
 root=pathlib.Path(__file__).resolve().parents[1];os.chdir(root)
 bin=root/'tools/mingw64/bin';env=os.environ.copy();env['PATH']=str(bin)+os.pathsep+env['PATH']
 out=pathlib.Path(a.out_dir)
@@ -9,7 +9,7 @@ sources=[root/f.get('path') for f in ET.parse(root/'keyboard_adsr.gprj').getroot
 assert sources and all(s.is_file() for s in sources),'Missing enabled project source'
 tests=sorted(root.glob('sim/tb_*.sv'))
 if a.test:tests=[t for t in tests if t.stem==a.test]
-elif not a.vendor:tests=[t for t in tests if t.stem not in ['tb_audio_restart','tb_pll_pair','tb_keyboard_top','tb_score_audio','tb_score_effects','tb_effect_button_path','tb_rgb_display','tb_ui_top','tb_ui_score_handoff','tb_british_top','tb_max98357_startup','tb_theme_top']]
+elif not a.vendor:tests=[t for t in tests if t.stem not in ['tb_animation_storage','tb_audio_restart','tb_pll_pair','tb_keyboard_top','tb_score_audio','tb_score_effects','tb_effect_button_path','tb_rgb_display','tb_ui_top','tb_ui_score_handoff','tb_british_top','tb_max98357_startup','tb_theme_top']]
 assert tests,'No matching testbench'
 assert not a.param or a.test,'--param requires --test'
 for override in a.param:
@@ -23,6 +23,11 @@ results=[]
 for t in tests:
     name=t.stem
     extra_args=[]
+    if name=='tb_animation_storage':
+        assert a.animation_reference_dir,'--animation-reference-dir is required for this test'
+        refs=a.animation_reference_dir.resolve()
+        assert all((refs/f'theme_{k}.hex').is_file() for k in ['cat','capybara'])
+        extra_args=['+CAT_REFERENCE='+(refs/'theme_cat.hex').as_posix(),'+CAPYBARA_REFERENCE='+(refs/'theme_capybara.hex').as_posix()]
     if name in ['tb_audio_effects','tb_effect_parameters']:
         vector_file=out/'effects_vectors.hex'
         generator=[sys.executable,str(root/('scripts/reference_effect_parameters.py' if name=='tb_effect_parameters' else 'scripts/reference_effects.py')),'--output',str(vector_file)]

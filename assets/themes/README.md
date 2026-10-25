@@ -16,3 +16,8 @@ Edit this exact reference photograph into a clean transparent-background cutout 
 ## 当前显示方式：静态整图
 
 本次不重新编辑或生成egg_cutout.png；其字节保持与f96aefd一致。scripts/gen_theme_assets.py --egg-only仅把同一图片等比适配到200×150、合成背景并编码为RGB565（单像素一行HEX）。显示端只有一个同步ROM读口，不做人物/脚分层、蒙版、脚部缩放或时间变换。演奏页固定2倍展示，设置页固定比例展示。上文关于蒙版、放大及32色的说明仅用于保存上一轮处理历史，当前以本段与docs/themes.md为准。
+
+
+## 2026-10-25 动画存储优化
+
+只重排小猫和卡皮巴拉的原4bit索引数据，不编辑人物/角色或生成新图。16帧逻辑循环通过9张唯一帧复用，透明边界按config/theme_storage.svh隐含为零。全部655,360个原逻辑像素逐一验证。egg_cutout.png、静态RGB565照片、英伦背景、字库与调色板字节不变；实际ROM位数见theme_manifest.json。

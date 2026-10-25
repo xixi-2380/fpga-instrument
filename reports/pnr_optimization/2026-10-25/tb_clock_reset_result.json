@@ -1,0 +1,8 @@
+{
+  "test": "tb_clock_reset",
+  "parameters": "",
+  "passed": true,
+  "checks": 6,
+  "pll_model": "not exercised",
+  "seconds": 0.021
+}

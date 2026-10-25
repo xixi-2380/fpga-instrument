@@ -1,0 +1,26 @@
+{
+  "input": "pnr(3).zip",
+  "sha256": "0489f2d19552d94c6c6e8945ff43877ec3de4c1b0bd8d8a6c0badc3f540ff792",
+  "report_time": "2026-10-25 18:06:19",
+  "user_functional_test": "passed, no observed problems",
+  "setup_violated_endpoints": 388,
+  "hold_violated_endpoints": 0,
+  "Fmax_MHz": {
+    "ref": 44.792,
+    "audio": 53.023,
+    "pixel": 32.097
+  },
+  "required_MHz": {
+    "ref": 50,
+    "audio": 61.44,
+    "pixel": 35
+  },
+  "PnR_seconds": 4131,
+  "routing_seconds": 3872,
+  "BSRAM": {
+    "used": 280,
+    "available": 340
+  },
+  "clock_warning": "PR1014 clk_d generic routing, not resolved by assuming causation",
+  "new_STA_available": false
+}

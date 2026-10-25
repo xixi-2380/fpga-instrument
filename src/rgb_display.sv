@@ -78,13 +78,25 @@ module rgb_display #(
     // Only the output pin is phase-inverted. It never clocks any internal RTL.
     // At default phase, a panel rising edge has half a pixel period of setup.
     assign lcd_clk=PCLK_INVERT ? ~pixel_clk : pixel_clk;
-    // Safe blanking must not depend on a stopped pixel clock producing another edge.
-    assign lcd_en=!pixel_reset && rendered_de;
-    assign lcd_hs=pixel_reset ? !HS_ACTIVE[0] : rendered_hs;
-    assign lcd_vs=pixel_reset ? !VS_ACTIVE[0] : rendered_vs;
-    assign lcd_r=pixel_reset ? 6'd0 : rgb[23:18];
-    assign lcd_g=pixel_reset ? 6'd0 : rgb[15:10];
-    assign lcd_b=pixel_reset ? 6'd0 : rgb[7:2];
+    // Ninth renderer stage plus one output stage. Preserve half-cycle PCLK
+    // sampling and immediate asynchronous blanking even if pixel clock stops.
+    reg [23:0] connector_rgb;
+    reg connector_de,connector_hs,connector_vs;
+    always @(posedge pixel_clk or posedge pixel_reset)begin
+        if(pixel_reset)begin
+            connector_rgb<=0;connector_de<=0;
+            connector_hs<=!HS_ACTIVE[0];connector_vs<=!VS_ACTIVE[0];
+        end else begin
+            connector_rgb<=rgb;connector_de<=rendered_de;
+            connector_hs<=rendered_hs;connector_vs<=rendered_vs;
+        end
+    end
+    assign lcd_en=connector_de;
+    assign lcd_hs=connector_hs;
+    assign lcd_vs=connector_vs;
+    assign lcd_r=connector_rgb[23:18];
+    assign lcd_g=connector_rgb[15:10];
+    assign lcd_b=connector_rgb[7:2];
 `ifndef SYNTHESIS
     initial if(VOICES<1 || VOICES>32)$fatal(1,"rgb_display supports 1..32 voices");
 `endif

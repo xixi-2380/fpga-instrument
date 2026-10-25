@@ -1,0 +1,8 @@
+{
+  "test": "tb_clock_path_equivalence",
+  "parameters": "",
+  "passed": true,
+  "checks": 400686,
+  "pll_model": "not exercised",
+  "seconds": 4.413
+}

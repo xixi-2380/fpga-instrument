@@ -1,0 +1,72 @@
+{
+  "baseline_commit": "b07c0d558cecfa3005b3b47eb08b2c6f7684af94",
+  "baseline_evidence": "reports/timing_repair/2026-10-25/pixel_equivalence.json; b07c0d5 pages matched 14a693c",
+  "pages": [
+    {
+      "theme": 0,
+      "page": "play",
+      "pixels": 384000,
+      "sha256": "5e587ebc5a100458f65b0db6c20be5342a82cc6c09d414228e020762f544004a",
+      "baseline_sha256": "5e587ebc5a100458f65b0db6c20be5342a82cc6c09d414228e020762f544004a",
+      "different_pixels": 0
+    },
+    {
+      "theme": 0,
+      "page": "settings",
+      "pixels": 384000,
+      "sha256": "c0f2161dea26accc4157c7dbec8a736e1e541f087923dee98a2bc4449f986ce0",
+      "baseline_sha256": "c0f2161dea26accc4157c7dbec8a736e1e541f087923dee98a2bc4449f986ce0",
+      "different_pixels": 0
+    },
+    {
+      "theme": 1,
+      "page": "play",
+      "pixels": 384000,
+      "sha256": "702603c6a394ca6d3fc1f6b4eb5c0268ebec98c68f5f68be243d788b59b65504",
+      "baseline_sha256": "702603c6a394ca6d3fc1f6b4eb5c0268ebec98c68f5f68be243d788b59b65504",
+      "different_pixels": 0
+    },
+    {
+      "theme": 1,
+      "page": "settings",
+      "pixels": 384000,
+      "sha256": "bc32189d0a90cdec98a47018dd9f159b1e07f036c63909630bcea1035ab086be",
+      "baseline_sha256": "bc32189d0a90cdec98a47018dd9f159b1e07f036c63909630bcea1035ab086be",
+      "different_pixels": 0
+    },
+    {
+      "theme": 2,
+      "page": "play",
+      "pixels": 384000,
+      "sha256": "92ac237d72bb68e0dc5a020602f56f53675a439cc39f4936fdb9327aaa9310ea",
+      "baseline_sha256": "92ac237d72bb68e0dc5a020602f56f53675a439cc39f4936fdb9327aaa9310ea",
+      "different_pixels": 0
+    },
+    {
+      "theme": 2,
+      "page": "settings",
+      "pixels": 384000,
+      "sha256": "b3b8b5e002ab8102067c16d72feb3670484a50609fcac12e87ad2d9c1c940633",
+      "baseline_sha256": "b3b8b5e002ab8102067c16d72feb3670484a50609fcac12e87ad2d9c1c940633",
+      "different_pixels": 0
+    },
+    {
+      "theme": 3,
+      "page": "play",
+      "pixels": 384000,
+      "sha256": "6dbda265e7e57c7d0aa0c260dba6c0cf84cb18c2eb2f2b5314c7c85de3b373f2",
+      "baseline_sha256": "6dbda265e7e57c7d0aa0c260dba6c0cf84cb18c2eb2f2b5314c7c85de3b373f2",
+      "different_pixels": 0
+    },
+    {
+      "theme": 3,
+      "page": "settings",
+      "pixels": 384000,
+      "sha256": "12b0a37dbcd50ac4c0a124f17fd889bc739677b667f761add3acf6826b2daf47",
+      "baseline_sha256": "12b0a37dbcd50ac4c0a124f17fd889bc739677b667f761add3acf6826b2daf47",
+      "different_pixels": 0
+    }
+  ],
+  "compared_pixels": 3072000,
+  "different_pixels": 0
+}
