@@ -1,0 +1,8 @@
+{
+  "test": "tb_matrix_settling",
+  "parameters": "",
+  "passed": true,
+  "checks": 36,
+  "pll_model": "not exercised",
+  "seconds": 0.059
+}

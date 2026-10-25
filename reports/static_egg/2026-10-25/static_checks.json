@@ -1,0 +1,30 @@
+{
+  "unchanged_files": [
+    "src/matrix_keypad.sv",
+    "src/keyboard_top.sv",
+    "src/synth_core.sv",
+    "src/adsr_envelope.sv",
+    "src/instrument_envelope.sv",
+    "src/audio_effects.sv",
+    "src/keyboard.cst",
+    "src/keyboard.sdc",
+    "src/pll_pair.sv",
+    "src/timbre_control.sv",
+    "src/config/ui_layout.svh",
+    "src/rom/theme_cat.hex",
+    "src/rom/theme_capybara.hex",
+    "src/rom/theme_british.hex",
+    "src/rom/theme_font.hex",
+    "assets/themes/egg_cutout.png"
+  ],
+  "static_pixels": 30000,
+  "static_bits": 480000,
+  "previous_bits": 768000,
+  "bits_saved": 288000,
+  "repeat_generation_identical": true,
+  "removed_easter_warp_mask_palette_and_timer": true,
+  "gprj_dependencies": 61,
+  "relative_includes_both_directories": true,
+  "production_top_and_theme_top_elaborate": true,
+  "PLL_models": "explicit behavioral substitutes; no Gowin or STA"
+}

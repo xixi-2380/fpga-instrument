@@ -1,0 +1,8 @@
+{
+  "test": "tb_rgb_ui_renderer",
+  "parameters": "",
+  "passed": true,
+  "checks": 3072031,
+  "pll_model": "not exercised",
+  "seconds": 113.894
+}

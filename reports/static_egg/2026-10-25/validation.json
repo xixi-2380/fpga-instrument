@@ -1,0 +1,127 @@
+{
+  "baseline_commit": "f96aefded710b055be77f6f335ea224a288e22ef",
+  "scope": "Only convert hidden Easter woman+foot theme to a single static RGB565 photograph; user confirms prior stuck-note fix works on board",
+  "image_source": "assets/themes/egg_cutout.png byte-identical to baseline",
+  "removed": "foot mask, deforming coordinates, second image read port, Easter palette, foot timer",
+  "tests": [
+    {
+      "test": "tb_egg_composition",
+      "parameters": "",
+      "passed": true,
+      "checks": 1536004,
+      "pll_model": "not exercised",
+      "seconds": 6.321
+    },
+    {
+      "test": "tb_matrix_settling",
+      "parameters": "",
+      "passed": true,
+      "checks": 36,
+      "pll_model": "not exercised",
+      "seconds": 0.059
+    },
+    {
+      "test": "tb_release_pcm",
+      "parameters": "",
+      "passed": true,
+      "checks": 1225050,
+      "pll_model": "not exercised",
+      "seconds": 15.456
+    },
+    {
+      "test": "tb_rgb_display",
+      "parameters": "THEME=3",
+      "passed": true,
+      "checks": 2793166,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 58.203
+    },
+    {
+      "test": "tb_rgb_display",
+      "parameters": "",
+      "passed": true,
+      "checks": 2793163,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 59.469
+    },
+    {
+      "test": "tb_rgb_ui_renderer",
+      "parameters": "",
+      "passed": true,
+      "checks": 3072031,
+      "pll_model": "not exercised",
+      "seconds": 113.894
+    },
+    {
+      "test": "tb_theme_art",
+      "parameters": "",
+      "passed": true,
+      "checks": 329026,
+      "pll_model": "not exercised",
+      "seconds": 1.457
+    },
+    {
+      "test": "tb_theme_controls",
+      "parameters": "",
+      "passed": true,
+      "checks": 29,
+      "pll_model": "not exercised",
+      "seconds": 0.108
+    },
+    {
+      "test": "tb_theme_pixels",
+      "parameters": "FIRST_SCENE=6",
+      "passed": true,
+      "checks": 1536013,
+      "pll_model": "not exercised",
+      "seconds": 44.041
+    },
+    {
+      "test": "tb_ui_inputs",
+      "parameters": "",
+      "passed": true,
+      "checks": 92,
+      "pll_model": "not exercised",
+      "seconds": 0.035
+    },
+    {
+      "test": "tb_ui_top",
+      "parameters": "LCD=1",
+      "passed": true,
+      "checks": 87114,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 5.04
+    }
+  ],
+  "test_configurations": 11,
+  "checks": 13371724,
+  "logical_image_bits_before": 768000,
+  "logical_image_bits_after": 480000,
+  "source_sha256": {
+    "src/rgb_ui_renderer.sv": "2204ae3aedb77e357f9caf347357c3b8d3335993e6174d24b64b026395083119",
+    "src/ui_theme_art.sv": "e082d3a7e3424cefabcd9bf01b4dd7ddd0a6f647e8f21c81d30215e886e5f034",
+    "src/rom/theme_egg.hex": "914aa843a6533f98b97971b9109742075897bbec6e421536e4c76f72e5209c72",
+    "sim/tb_theme_pixels.sv": "33a2cced7d56048f8a790f599f2841fb6da9291644d8c581802795637c4a09e6",
+    "sim/tb_theme_top.sv": "1138ed6d85f9b82054300e5301255ef7bfb2f62f39f191ece8db97cfebb3e163",
+    "sim/tb_theme_art.sv": "c3d8774a262a62c44bdd0e8cea85bd0bf42f5794cb4ec9ed5ff746c4b12d1873",
+    "sim/tb_egg_composition.sv": "7f320fd16b5498e973b9b3b12ffe047a286998d3fd22891d47009886995c2cc4",
+    "scripts/gen_theme_assets.py": "3b53706662dc7a8579546aa114e4735245ab52fdc86681592d0a0c4ca74cc850",
+    "docs/instrument_ui.md": "b0b76b241e8ae39293ecaa532cb1f31216e025df982abc9636f740756dfc37f2",
+    "docs/themes.md": "8d4b24e5dac6d7e1b61d99c2dfd1108276d39de4da36e34d3a69b69f35550881",
+    "assets/theme_manifest.json": "788699388a53cafb7411294312ee1560b24e3fd799cbb37219697464f2c4ed17",
+    "assets/themes/README.md": "078fa0ac27768ddd2f0680d6571f2b304d2f811bc8695fc73ba2ffea931a8cd3",
+    "README.md": "8e47ff6d86773517f53d025917d6811e10e5fe362e467a9d31e03b3e641c42b1",
+    "AGENTS.md": "b3b6427fd8f78f04db3e8e8f54f7cff22be904e5f6188dd6e955da7b16f3e6ac",
+    "keyboard_adsr.gprj": "8443302658cf5063780a601927188259c886dcbcbc7ed802b0f196575dcdedc4",
+    "sim/tb_rgb_display.sv": "863184150a30b1e120b2cf8063553c5062a15ab35f5503d05b1a89c31a27582b"
+  },
+  "removed_files": [
+    "src/rom/theme_egg_palette.hex"
+  ],
+  "Gowin_or_programmer_run": false,
+  "hardware_static_theme_verified": false,
+  "pll_model": "Explicit behavioral substitutes in board integration tests, not PLL/STA validation",
+  "static_checks": "static_checks.json",
+  "preview": "static_preview.png",
+  "RGB666_easter_output_check": "Full 800x480 frame includes independent face/pink-shirt/foot checks at LCD output pins in behavioral simulation, not a physical measurement"
+}

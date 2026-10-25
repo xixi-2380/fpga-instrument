@@ -7,7 +7,7 @@ module tb_theme_pixels;
  wire [23:0] rgb;wire dout,hout,vout;
  reg record=0;reg [23:0] pixels[0:383999];
  integer checks=0,n=0,fd,scene,k;reg [4095:0] outdir,filename;
- reg [1111:0] frozen;reg [3:0] frozen_animation;reg [6:0] frozen_foot;
+ reg [1111:0] frozen;reg [3:0] frozen_animation;
  reg [23:0] first_cat;reg [25:0] old_phase;
  rgb_ui_renderer dut(clk,rst,frame_start,valid,status,x,y,de,1'b1,1'b1,rgb,dout,hout,vout);
  always @(posedge clk)begin #1;
@@ -20,11 +20,11 @@ module tb_theme_pixels;
   @(negedge clk);frame_start=1;de=0;@(negedge clk);frame_start=0;repeat(3)@(negedge clk);
  end endtask
  task render(input integer which);begin
-  n=0;record=1;frozen=dut.state;frozen_animation=dut.animation_frame;frozen_foot=dut.foot_phase;
+  n=0;record=1;frozen=dut.state;frozen_animation=dut.animation_frame;
   for(integer yy=0;yy<480;yy=yy+1)for(integer xx=0;xx<800;xx=xx+1)begin
    @(negedge clk);x=xx;y=yy;de=1;
    if(yy==240 && xx==100)status=~status;
-   `CHECK(dut.state==frozen && dut.animation_frame==frozen_animation && dut.foot_phase==frozen_foot,"UI and animation never change mid-frame")
+   `CHECK(dut.state==frozen && dut.animation_frame==frozen_animation,"UI and animation never change mid-frame")
   end
   @(negedge clk);de=0;repeat(3)@(negedge clk);record=0;
   `CHECK(n==384000,"theme changes preserve complete 800x480 pipeline")
@@ -51,10 +51,12 @@ module tb_theme_pixels;
   end
   // Animation counter runs from LCD frame ticks only and loops all 16 frames.
   status[55:54]=1;snapshot;
-  `CHECK(dut.animation_frame==0 && dut.foot_phase==0,"theme entry restarts visual animation only")
+  `CHECK(dut.animation_frame==0,"theme entry restarts visual animation only")
   for(k=0;k<89;k=k+1)snapshot;
   `CHECK(dut.animation_frame==0,"16 animation frames loop after 1.6 seconds")
-  valid=0;status=0;snapshot;`CHECK(dut.state[55:54]==1,"invalid CDC snapshot cannot change theme")
+  status[55:54]=3;snapshot;repeat(120)snapshot;
+  `CHECK(dut.animation_frame==0 && dut.animation_phase==0,"Easter has no animation state changes even across 120 LCD frame ticks")
+  valid=0;status=0;snapshot;`CHECK(dut.state[55:54]==3,"invalid CDC snapshot cannot change static theme")
   rst=1;repeat(3)@(negedge clk);`CHECK(!dout && rgb==0,"reset blanks both stages")
   $display("PASS tb_theme_pixels checks=%0d frames=%0d",checks,LAST_SCENE-FIRST_SCENE+1);$finish;
  end

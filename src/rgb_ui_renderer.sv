@@ -37,10 +37,8 @@ module rgb_ui_renderer(
  initial $readmemh("src/rom/theme_font.hex",font_rom);
  reg [25:0] animation_phase;
  reg [3:0] animation_frame;
- reg [6:0] foot_phase;
- wire [5:0] foot_triangle=foot_phase[6] ? ~foot_phase[5:0] : foot_phase[5:0];
  wire [23:0] art_pixel;
- ui_theme_art artwork(pixel_clk,theme,animation_frame,foot_triangle[5:2],x,y,art_pixel,menu);
+ ui_theme_art artwork(pixel_clk,theme,animation_frame,x,y,art_pixel,menu);
  reg background_pipe,panel_pipe,blank_pipe,test_pipe;
  reg [1:0] theme_pipe;
  reg [23:0] resolved_base;
@@ -290,13 +288,12 @@ module rgb_ui_renderer(
   if(rst)begin state<=0;base_pipe<=0;fg_pipe<=0;bit_pipe<=0;ink_pipe<=0;
    de_pipe<=0;hs_pipe<=0;vs_pipe<=0;rgb<=0;
    alpha_pipe<=0;background_pipe<=0;panel_pipe<=0;blank_pipe<=1;test_pipe<=0;theme_pipe<=0;
-   animation_phase<=0;animation_frame<=0;foot_phase<=0;de_out<=0;hs_out<=0;vs_out<=0;end
+   animation_phase<=0;animation_frame<=0;de_out<=0;hs_out<=0;vs_out<=0;end
   else begin
    if(frame_start)begin
     if(status_valid)state<=status_data;
-    if(status_valid && status_data[55:54]!=theme)begin animation_phase<=0;animation_frame<=0;foot_phase<=0;end
-    else begin
-     foot_phase<=foot_phase+1'b1;
+    if(status_valid && status_data[55:54]!=theme)begin animation_phase<=0;animation_frame<=0;end
+    else if(theme==1 || theme==2)begin
      if(animation_phase>=26'd28646640)begin
       animation_phase<=animation_phase-26'd28646640;animation_frame<=animation_frame+1'b1;
      end else animation_phase<=animation_phase+26'd6353360;

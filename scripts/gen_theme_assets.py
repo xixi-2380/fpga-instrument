@@ -8,7 +8,6 @@ Compile-ready generated ROMs are committed; regeneration is optional.
 from pathlib import Path
 import argparse, hashlib, json, subprocess, math, random
 import numpy as np
-from scipy import ndimage
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -22,11 +21,11 @@ def hexfile(name, values, digits):
                                    for i in range(0,len(vals),32))+'\n')
     return len(vals)
 
-def indexed(name, frames, masks=None, foot=None):
+def indexed(name, frames, masks=None):
     # One shared 16-colour palette per clip avoids colour pumping per frame.
     sheet=Image.new('RGB',(frames[0].width,frames[0].height*len(frames)))
     for n,im in enumerate(frames):sheet.paste(im,(0,n*im.height))
-    colors=32 if foot is not None else 16
+    colors=16
     pal=sheet.quantize(colors=15 if masks else colors,method=Image.Quantize.MEDIANCUT)
     palette=pal.getpalette()[:colors*3]
     rgb=np.array(palette+[0]*(colors*3-len(palette)),dtype=np.uint8).reshape(colors,3)
@@ -35,16 +34,16 @@ def indexed(name, frames, masks=None, foot=None):
         # Index zero is transparent; 1..15 are genuine source video colours.
         data=np.where(np.concatenate(masks,axis=0),data+1,0)
         rgb=np.concatenate([np.zeros((1,3),dtype=np.uint8),rgb[:15]])
-    if foot is not None:data=data | (foot.astype(np.uint8)<<5)
-    hexfile('theme_'+name+'.hex',data.flatten(),2 if foot is not None else 1)
+    hexfile('theme_'+name+'.hex',data.flatten(),1)
     hexfile('theme_'+name+'_palette.hex',[(int(c[0])<<16)|(int(c[1])<<8)|int(c[2]) for c in rgb],6)
     return {'width':frames[0].width,'height':frames[0].height,'frames':len(frames),
-            'bits_per_pixel':8 if foot is not None else 4,'bits':data.size*(8 if foot is not None else 4)}
+            'bits_per_pixel':4,'bits':data.size*4}
 
 def movie(path,kind):
     # 0.8 seconds of actual dancing + reversed interior frames make a closed
     # 16-frame loop without an abrupt cut or duplicated turnaround endpoint.
     import cv2
+    from scipy import ndimage
     crop='crop=420:480:480:160' if kind=='cat' else 'crop=580:680:110:25'
     vf=crop+f',fps=10,scale={W}:{H}:force_original_aspect_ratio=decrease,pad={W}:{H}:(ow-iw)/2:(oh-ih)/2:color=0x00ff00'
     raw=subprocess.check_output(['ffmpeg','-hide_banner','-loglevel','error','-ss','2',
@@ -154,20 +153,18 @@ def fonts(font_dir):
     return len(words)*16
 
 def build_egg(path):
-    # A subtitle-free RGBA woman+foot cutout. Keep the complete pair in the
-    # right lower background so the left timbre cards cannot cover her face.
+    # Reuse the previous cleaned woman+foot image. Only deterministic image
+    # fitting and RGB565 conversion are performed; no generative edits here.
     photo=Image.open(path).convert('RGBA')
-    if photo.getextrema()[3][0]==255:
-        raise ValueError('Use the cleaned transparent egg_cutout.png, not the captioned original photo')
-    # Six-ROM-pixel safety margin keeps the enlarged toes inside the display.
-    photo=ImageOps.contain(photo,(148,108),Image.Resampling.LANCZOS)
-    im=Image.new('RGBA',(400,240),'#e7e5e3')
-    im.alpha_composite(photo,(220+(160-photo.width)//2,84+(120-photo.height)//2))
-    im=im.convert('RGB')
-    ar=np.array(im).astype(np.int16);yy,xx=np.mgrid[:240,:400]
-    foot=(xx>=296)&(yy>=80)&(ar[:,:,0]>ar[:,:,2]+45)&(ar[:,:,0]>ar[:,:,1]+15)&(ar[:,:,0]>110)
-    foot=ndimage.binary_fill_holes(foot)
-    return indexed('egg',[im],foot=foot)
+    photo=ImageOps.contain(photo,(184,138),Image.Resampling.LANCZOS)
+    im=Image.new('RGBA',(200,150),'#e7e5e3')
+    im.alpha_composite(photo,((200-photo.width)//2,(150-photo.height)//2))
+    rgb=np.array(im.convert('RGB'),dtype=np.uint16)
+    words=((rgb[:,:,0]>>3)<<11)|((rgb[:,:,1]>>2)<<5)|(rgb[:,:,2]>>3)
+    # A single pixel per line is deliberate for simple vendor ROM loading.
+    (ROM/'theme_egg.hex').write_text(''.join(f'{int(w):04x}\n' for w in words.flatten()))
+    return {'width':200,'height':150,'frames':1,'bits_per_pixel':16,
+            'format':'RGB565','bits':480000,'animated':False}
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--cat',type=Path)
@@ -187,8 +184,8 @@ def main():
         stats['sources']={k:{'filename':str(path.name),'sha256':hashlib.sha256(path.read_bytes()).hexdigest()} for k,path in [('cat',a.cat),('capybara',a.capybara)]}
     stats['total_bits']=sum(stats[k]['bits'] for k in ['cat','capybara','british','egg'])+stats['font_bits']
     stats.setdefault('sources',{})['egg_cutout']={'filename':'assets/themes/egg_cutout.png','sha256':hashlib.sha256(a.egg.read_bytes()).hexdigest(),'editing':'ImageGen: extract woman+foot together and remove subtitle; original photo unchanged'}
-    stats['egg_layout']={'canvas':[400,240],'box':[220,84,160,120],'foot_pivot':[338,182],'person_fixed_roi':[226,92,70,68],'safety_margin':[6,6]}
-    stats['loop']='16 frames: 0..8 then 7..1, 10 fps, no video audio'
+    stats['egg_layout']={'source':[200,150],'performance_box':[40,116,400,300],'settings_box':[440,176,320,240],'mode':'static whole photograph; no foot warp or palette'}
+    stats['loop']='Cat/capybara: 16 frames, 10 fps; Easter: one static frame; no video audio'
     manifest.write_text(json.dumps(stats,indent=2,ensure_ascii=False)+'\n')
     print(json.dumps(stats,indent=2,ensure_ascii=False))
 

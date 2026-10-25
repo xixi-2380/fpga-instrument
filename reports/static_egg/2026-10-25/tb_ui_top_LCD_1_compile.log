@@ -1,0 +1,7 @@
+sim/passive_matrix_model.svh:3: warning: timescale for passive_matrix_model inherited from another file.
+sim/tb_ui_top.sv:1: ...: The inherited timescale is here.
+src/ui_theme_art.sv:46: warning: @* is sensitive to all 16 words in array 'cat_palette'.
+src/ui_theme_art.sv:47: warning: @* is sensitive to all 16 words in array 'capybara_palette'.
+src/ui_theme_art.sv:49: warning: @* is sensitive to all 16 words in array 'british_palette'.
+src/synth_core.sv:108: warning: @* is sensitive to all 32 words in array 'voice_level'.
+src/synth_core.sv:108: warning: @* is sensitive to all 32 words in array 'voice_level'.

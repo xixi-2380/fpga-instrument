@@ -58,7 +58,7 @@ module tb_theme_top;
   `CHECK(dut.lcd_on.display_driver.pixel_status[55:54]==1,"theme bits cross existing atomic display bridge")
   frames_more(1800);
   `CHECK(dut.lcd_on.display_driver.renderer.state[55:54]==1,"LCD frame captures selected theme")
-  `CHECK(dut.lcd_on.display_driver.renderer.animation_phase!=0 && dut.lcd_on.display_driver.renderer.foot_phase!=0,"actual LCD frame cadence advances visual animation clocks")
+  `CHECK(dut.lcd_on.display_driver.renderer.animation_phase!=0,"actual LCD frame cadence advances visual animation clocks")
   pressed=0;wait(!dut.gate);frames_more(8);
   `CHECK(dut.voice_active==0 && samples>1900,"no stuck notes after theme animation and release")
   $display("PASS tb_theme_top checks=%0d samples=%0d events=%0d",checks,samples,events);$finish;

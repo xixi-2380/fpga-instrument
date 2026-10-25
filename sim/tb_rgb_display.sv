@@ -1,6 +1,7 @@
 `timescale 1ns/1ps
 `include "check.svh"
 module tb_rgb_display;
+ parameter integer THEME=0;
  reg ref_clk=0,audio_clk=0,pll_reset=1,audio_reset=1;
  always #10 ref_clk=~ref_clk;always #8.138020833 audio_clk=~audio_clk;
  reg [31:0] active=32'h8000003f,held=32'h80000003;
@@ -14,7 +15,7 @@ module tb_rgb_display;
   .score_error(1'b0),.underrun(1'b0),.ghost(1'b0),.lcd_clk(pc),.lcd_hs(hs),.lcd_vs(vs),.lcd_en(de),
   .lcd_r(r),.lcd_g(g),.lcd_b(b),.menu_mode(1'b1),.effects_enabled(1'b1),.effect_mode(2'd1),
   .echo_percent(ep),.room_percent(rp),.depth_percent(dp),.tremolo_rate_hz(hz),
-  .theme_id(2'd0),.touch_enabled(1'b0),.touch_ui_enabled(1'b0),.touch_ready_status(1'b0),.touch_error_status(1'b0));
+  .theme_id(THEME[1:0]),.touch_enabled(1'b0),.touch_ui_enabled(1'b0),.touch_ready_status(1'b0),.touch_error_status(1'b0));
  initial begin
   #200 pll_reset=0;wait(dut.pixel_lock);repeat(6)@(negedge dut.pixel_clk);
   `CHECK(!de && {r,g,b}==0,"audio reset blanks display despite locked pixel clock")
@@ -32,7 +33,12 @@ module tb_rgb_display;
    if(de)begin
     visible=visible+1;row=row+1;
     if(px==799)begin `CHECK(row==800,"800 pixels in each active row") row=0;lines=lines+1;end
-    if(px==464 && py==124)`CHECK({r,g,b}=={6'h35,6'h2e,6'h1e},"selected ROOM border reaches RGB666 output")
+    if(px==464 && py==124)`CHECK({r,g,b}==(THEME==3 ? {6'h22,6'h11,6'h14} : {6'h35,6'h2e,6'h1e}),"selected ROOM border reaches RGB666 output")
+    if(THEME==3)begin
+     if(px==516 && py==240)`CHECK(r>integer'(g)+2 && g>integer'(b)+2,"woman's face skin reaches actual RGB666 pins")
+     if(px==510 && py==285)`CHECK(r>integer'(g)+4 && b>integer'(g)+2 && r>integer'(b)+2,"woman's pink shirt is present separately from the foot on RGB pins")
+     if(px==680 && py==230)`CHECK(r>integer'(g)+2 && g>integer'(b)+2,"foreground foot reaches actual RGB666 pins")
+    end
    end else `CHECK({r,g,b}==0,"porches stay black")
    expected_de=next_de;px=nx;py=ny;
    if(i==1192*200)begin active=32'hffffffff;held=0;ep=100;rp=5;end

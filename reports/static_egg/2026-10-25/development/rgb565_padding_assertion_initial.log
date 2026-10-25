@@ -1,0 +1,3 @@
+FAIL static photograph retains its top padding at 7680016000
+FATAL: sim/tb_egg_composition.sv:27: 
+       Time: 7680016000 Scope: tb_egg_composition

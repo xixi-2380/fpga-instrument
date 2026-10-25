@@ -21,14 +21,16 @@
     "bits": 384000
   },
   "egg": {
-    "width": 400,
-    "height": 240,
+    "width": 200,
+    "height": 150,
     "frames": 1,
-    "bits_per_pixel": 8,
-    "bits": 768000
+    "bits_per_pixel": 16,
+    "format": "RGB565",
+    "bits": 480000,
+    "animated": false
   },
   "font_bits": 262144,
-  "total_bits": 4035584,
+  "total_bits": 3747584,
   "sources": {
     "cat": {
       "filename": "f6d0344fdcbeb4465513c8d285103969.mp4",
@@ -48,31 +50,24 @@
       "editing": "ImageGen: extract woman+foot together and remove subtitle; original photo unchanged"
     }
   },
-  "loop": "16 frames: 0..8 then 7..1, 10 fps, no video audio",
+  "loop": "Cat/capybara: 16 frames, 10 fps; Easter: one static frame; no video audio",
   "egg_layout": {
-    "canvas": [
+    "source": [
+      200,
+      150
+    ],
+    "performance_box": [
+      40,
+      116,
       400,
+      300
+    ],
+    "settings_box": [
+      440,
+      176,
+      320,
       240
     ],
-    "box": [
-      220,
-      84,
-      160,
-      120
-    ],
-    "foot_pivot": [
-      338,
-      182
-    ],
-    "person_fixed_roi": [
-      226,
-      92,
-      70,
-      68
-    ],
-    "safety_margin": [
-      6,
-      6
-    ]
+    "mode": "static whole photograph; no foot warp or palette"
   }
 }
