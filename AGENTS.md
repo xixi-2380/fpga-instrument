@@ -1,5 +1,14 @@
 # Local project working rules
 
+## 2026-10-24 本聊天的独立下载与响度规划（优先于下方目录记录）
+
+- 用户要求下载 GitHub 蓝牙分支最新版本且不覆盖原工程。本聊天使用独立克隆 `E:\gowin\fpga-instrument-bt-audio`，下载基点为 `8081710e107f4d32069c6f1321eefed4c422970e`，来源 `origin/codex/bluetooth-score-integration`。
+- 用户随后明确要求按 `docs/audio_output_gain_plan.md` 继续开发，授权在本独立目录实施模型、RTL、集成和回归。未经用户明确要求或实板确认不提交推送，不更新 main。
+- `E:\gowin\fpga-instrument` 保留用户指定的 bf5df57，其他已有工作树及其未提交内容也不修改。后续本聊天开发仍在此独立克隆进行，除非用户另行指定。
+- 响度方案以成熟前瞻峰值限幅为主，先冻结量化、延迟、flush 分类与验收，再实施。保留上电/USR 静音、现有单声部自动播放能力、手动32声部、七音色、UI/触摸、引脚、协议及 App。
+- 助手仍不运行 Gowin 综合、P&R、STA 或下载；后续代码提交按用户明确指令或实板确认约定执行，不能沿用下方历史自动推送 main 规则。
+- 用户追加主页右下角实时数字延迟显示及PA2122修复。LAT从音源接受On到其首个应用PCM帧左声道I²S发完，单位0.01ms，不是声学起音；21位测量追加到原1112位显示快照，原字段位置不变。RAM改为读写互斥的normal模式语义，实际Gowin映射仍由用户重跑确认。
+
 ## 2026-10-24 蓝牙重构当前约定（优先于下方历史记录）
 
 - 当前蓝牙重构工作树为 `E:\gowin\fpga-instrument-bt-score`，分支 `codex/bluetooth-score-integration`，严格以 `bf5df5792f654ee9c29a30983cdbe83a0061669e` 为基准；不更新 main、不覆盖另外两个已有工作树。

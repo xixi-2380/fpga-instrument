@@ -17,7 +17,8 @@ module rgb_display #(
     input wire menu_mode,effects_enabled,input wire [1:0] effect_mode,
     input wire [6:0] echo_percent,room_percent,depth_percent,input wire [3:0] tremolo_rate_hz,
     input wire [6:0] volume_percent,
-    input wire touch_enabled,touch_ui_enabled,touch_ready_status,touch_error_status
+    input wire touch_enabled,touch_ui_enabled,touch_ready_status,touch_error_status,
+    input wire latency_valid,input wire [19:0] latency_bcd
 );
     wire pixel_clk,pixel_lock,pixel_reset;
     wire common_reset=pll_reset || !pixel_lock || audio_reset;
@@ -60,10 +61,12 @@ module rgb_display #(
     audio_visualizer monitor(audio_clk,audio_reset,visual_sample_valid,visual_sample,waveform,peak,window_valid);
     wire [63:0] settings_status={3'd0,volume_percent,selected_timbre[2],touch_error_status,touch_ready_status,touch_ui_enabled,touch_enabled,
         tremolo_rate_hz,depth_percent,room_percent,echo_percent,effects_enabled,effect_mode,menu_mode,legacy_status};
-    wire [1111:0] source_status={waveform,peak,visual_notes,settings_status};
-    wire [1111:0] pixel_status;
+    wire [20:0] latency_status=latency_valid===1'b1 ? {1'b1,latency_bcd} : 21'd0;
+    // Preserve all original1112 bits; append a small atomic measurement field.
+    wire [1132:0] source_status={latency_status,waveform,peak,visual_notes,settings_status};
+    wire [1132:0] pixel_status;
     wire status_valid,update_pulse;
-    rgb_status_cdc #(.WIDTH(1112)) status_bridge(audio_clk,pixel_clk,common_reset,source_status,
+    rgb_status_cdc #(.WIDTH(1133)) status_bridge(audio_clk,pixel_clk,common_reset,source_status,
         pixel_status,status_valid,update_pulse);
     wire [10:0] x,y;
     wire de,hs,vs,frame_start;

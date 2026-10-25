@@ -1,0 +1,8 @@
+E:/gowin/fpga-instrument-bt-audio/sim/passive_matrix_model.svh:3: warning: timescale for passive_matrix_model inherited from another file.
+E:/gowin/fpga-instrument-bt-audio/sim/tb_bt_score_audio.sv:1: ...: The inherited timescale is here.
+E:/gowin/fpga-instrument-bt-audio/src/synth_core.sv:308: warning: @* is sensitive to all 1 words in array 'voice_level'.
+E:/gowin/fpga-instrument-bt-audio/src/synth_core.sv:308: warning: @* is sensitive to all 1 words in array 'voice_level'.
+E:/gowin/fpga-instrument-bt-audio/src/keyboard_top.sv:199: warning: Port 16 (voice_active) of module synth_core expects 1 bit(s), given 32.
+E:/gowin/fpga-instrument-bt-audio/src/keyboard_top.sv:199:        : Padding 31 high bits of the expression.
+E:/gowin/fpga-instrument-bt-audio/src/keyboard_top.sv:199: warning: Port 17 (voice_held) of module synth_core expects 1 bit(s), given 32.
+E:/gowin/fpga-instrument-bt-audio/src/keyboard_top.sv:199:        : Padding 31 high bits of the expression.

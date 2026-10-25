@@ -1,0 +1,2 @@
+PASS tb_ui_inputs checks=87 keypad_events=4 touch_events=20
+E:/gowin/fpga-instrument-bt-audio/sim/tb_ui_inputs.sv:49: $finish called at 5240000 (1ps)

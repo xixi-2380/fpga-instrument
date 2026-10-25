@@ -1,0 +1,2 @@
+PASS tb_rgb_ui_renderer checks=3072031 frames=4
+E:/gowin/fpga-instrument-bt-audio/sim/tb_rgb_ui_renderer.sv:70: $finish called at 15361120000 (1ps)

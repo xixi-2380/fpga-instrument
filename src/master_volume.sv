@@ -2,7 +2,8 @@
 // Post-effects master gain,0..100% in5% steps. 256 sample slew prevents clicks.
 // Passive display and I2S consume exactly the same registered output.
 module master_volume(input wire clk,rst,in_valid,input wire signed [15:0] in_sample,
- input wire [6:0] percent,output reg out_valid,output reg signed [15:0] out_sample);
+ input wire [6:0] percent,output reg out_valid,output reg signed [15:0] out_sample,
+ input wire clear);
  reg [8:0] gain;
  reg signed [25:0] product;
  reg product_valid;
@@ -35,6 +36,7 @@ module master_volume(input wire clk,rst,in_valid,input wire signed [15:0] in_sam
  end
  always @(posedge clk or posedge rst)begin
   if(rst)begin gain<=256;product<=0;product_valid<=0;out_valid<=0;out_sample<=0;end
+  else if(clear===1'b1)begin product<=0;product_valid<=0;out_valid<=0;out_sample<=0;end
   else begin
    product_valid<=in_valid;out_valid<=product_valid;
    if(in_valid)begin

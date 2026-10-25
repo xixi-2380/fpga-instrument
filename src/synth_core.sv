@@ -2,7 +2,8 @@
 `include "config/synth_config.svh"
 // Generic note-event synthesis; physical keyboard logic stays in its adapter.
 module synth_core #(
-    parameter integer VOICES=`VOICE_COUNT,MUTE=`MUTE_FRAMES,FADE=`FADE_FRAMES,
+    parameter integer OUTPUT_ENABLE=1,OUTPUT_GAIN=24,LIMITER_LOG2=6,
+    VOICES=`VOICE_COUNT,MUTE=`MUTE_FRAMES,FADE=`FADE_FRAMES,
     ATTACK=`ADSR_ATTACK_FRAMES,DECAY=`ADSR_DECAY_FRAMES,
     SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES,
     DELAY_SAMPLES=7200,ROOM_D0=1499,ROOM_D1=1601,ROOM_D2=1867,ROOM_D3=2053)(
@@ -14,8 +15,13 @@ module synth_core #(
     output wire visual_sample_valid,output wire signed [15:0] visual_sample,
     output reg [15:0] visual_notes,
     input wire flush,input wire velocity_valid,input wire [6:0] note_velocity,
-    input wire [6:0] volume_percent,input wire [6:0] note_pitch);
+    input wire [6:0] volume_percent,input wire [6:0] note_pitch,input wire output_flush,
+    output wire latency_valid,output wire [19:0] latency_bcd);
     wire engine_reset=rst || (flush===1'b1);
+    // Legacy standalone callers can omit output_flush; top distinguishes an
+    // On reattack from an urgent clear. Clocks/startup never use these resets.
+    wire output_reset=rst || (output_flush===1'b1) ||
+        ((output_flush!==1'b0 && output_flush!==1'b1) && (flush===1'b1));
     // Only Bluetooth ID0 has velocity; legacy score/keyboard retain unity.
     wire [8:0] velocities[0:127];
     reg [8:0] bluetooth_velocity;
@@ -207,8 +213,47 @@ module synth_core #(
         end
     end
     wire output_valid;wire signed [15:0] output_sample;
-    // Flush drops buffered audio but must not reset the user's volume ramp.
-    master_volume volume_control(clk,rst,effect_valid,effect_sample,volume_percent,output_valid,output_sample);
+    wire limited_valid;wire signed [15:0] limited_sample;
+    wire [16:0] render_tag,limited_tag;
+    reg [16:0] volume_product_tag,volume_output_tag,pending_tag,serial_tag;
+    reg tag_pending_valid;
+    audio_latency_meter #(.CLOCK_HZ(`AUDIO_HZ)) latency_meter(
+        .clk(clk),.rst(rst),.cancel(output_reset),.note_accept(note_valid && note_ready && note_on),.note_id(note_id),
+        .frame_ce(frame_ce),.voice_valid(gain_valid),.voice_id(voice_ids[sample_voice*7+:7]),
+        .serial_complete(rise_ce && bit_index==16),.serial_tag(serial_tag),
+        .render_tag(render_tag),.latency_valid(latency_valid),.latency_bcd(latency_bcd));
+    wire limiter_ready;wire [16:0] limiter_gain;wire limiter_clipped;
+    generate if(OUTPUT_ENABLE)begin: output_conditioning
+        reg signed [15:0] staged_sample;reg staged_valid;reg [16:0] staged_tag;
+        // Capture each completed render; clock the delay line at every actual
+        // sample boundary, including zero frames during a soft engine clear.
+        always @(posedge clk or posedge output_reset)begin
+            if(output_reset)begin staged_sample<=0;staged_valid<=0;staged_tag<=0;end
+            else begin
+                if(frame_ce)begin staged_valid<=0;staged_tag<=0;end
+                if(effect_valid && !engine_reset)begin staged_sample<=effect_sample;staged_valid<=1;staged_tag<=render_tag;end
+            end
+        end
+        audio_limiter #(.WINDOW_LOG2(LIMITER_LOG2),.PRE_GAIN(OUTPUT_GAIN)) limiter(
+            clk,output_reset,frame_ce,staged_valid?staged_sample:16'sd0,
+            limiter_ready,limited_valid,limited_sample,limiter_gain,limiter_clipped,staged_valid?staged_tag:17'd0,limited_tag);
+    end else begin: output_bypass
+        assign limited_valid=effect_valid;assign limited_sample=effect_sample;
+        assign limited_tag=render_tag;
+        assign limiter_ready=1;assign limiter_gain=65536;assign limiter_clipped=0;
+    end endgenerate
+    // Urgent clears cancel PCM/valid only; the user's gain/ramp survives.
+    master_volume volume_control(clk,rst,limited_valid,limited_sample,volume_percent,output_valid,output_sample,output_reset);
+    // Mirror valid/PCM timing through volume, pending frame and serializer.
+    always @(posedge clk or posedge output_reset)begin
+        if(output_reset)begin volume_product_tag<=0;volume_output_tag<=0;pending_tag<=0;serial_tag<=0;tag_pending_valid<=0;end
+        else begin
+            volume_product_tag<=limited_valid ? limited_tag : 17'd0;
+            volume_output_tag<=volume_product_tag;
+            if(frame_ce)begin serial_tag<=tag_pending_valid ? pending_tag : 17'd0;tag_pending_valid<=0;end
+            if(output_valid && ready)begin pending_tag<=volume_output_tag;tag_pending_valid<=1;end
+        end
+    end
     assign visual_sample_valid=output_valid;
     assign visual_sample=output_sample;
     audio_timing timing(clk,rst,bck,rise_ce,fall_ce,frame_ce,bit_index);
@@ -268,7 +313,7 @@ module synth_core #(
         .cfg_valid(effect_cfg_valid),.cfg_echo_wet(effect_echo_wet),.cfg_room_wet(effect_room_wet),
         .cfg_tremolo_depth(effect_tremolo_depth),.cfg_tremolo_rate_hz(effect_tremolo_rate_hz),
         .cfg_ready(effect_cfg_ready),.cfg_applied(effect_cfg_applied));
-    frame_buffer buffer(clk,engine_reset,frame_ce,output_valid,ready,output_sample,output_sample,frame_l,frame_r,underrun);
+    frame_buffer buffer(clk,OUTPUT_ENABLE?output_reset:engine_reset,frame_ce,output_valid,ready,output_sample,output_sample,frame_l,frame_r,underrun);
     i2s_tx tx(clk,rst,fall_ce,bit_index,frame_l,frame_r,ws,din);
     // synthesis translate_off
     initial if(VOICES<1 || VOICES>32 || RENDER_BUDGET>=`FRAME_CYCLES)$fatal(1,"Invalid render budget");

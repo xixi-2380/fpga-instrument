@@ -1,0 +1,5 @@
+TIMBRE_LEVEL timbre=0 positive=24552 negative=-24576
+TIMBRE_LEVEL timbre=1 positive=24552 negative=-24576
+TIMBRE_LEVEL timbre=2 positive=24552 negative=-24576
+FATAL: E:/gowin/fpga-instrument-bt-audio/sim/tb_output_gain.sv:15: each full-envelope timbre has useful single-note digital level
+       Time: 33416997158  Scope: tb_output_gain.check

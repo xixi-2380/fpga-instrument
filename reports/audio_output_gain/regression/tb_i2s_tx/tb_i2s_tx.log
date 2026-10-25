@@ -1,0 +1,2 @@
+PASS tb_i2s_tx checks=5407 words=136 half=20
+E:/gowin/fpga-instrument-bt-audio/sim/tb_i2s_tx.sv:67: $finish called at 875215000 (1ps)

@@ -1,0 +1,4 @@
+E:/gowin/fpga-instrument-bt-audio/sim/passive_matrix_model.svh:3: warning: timescale for passive_matrix_model inherited from another file.
+E:/gowin/fpga-instrument-bt-audio/sim/tb_bluetooth_top.sv:1: ...: The inherited timescale is here.
+E:/gowin/fpga-instrument-bt-audio/src/synth_core.sv:288: warning: @* is sensitive to all 32 words in array 'voice_level'.
+E:/gowin/fpga-instrument-bt-audio/src/synth_core.sv:288: warning: @* is sensitive to all 32 words in array 'voice_level'.

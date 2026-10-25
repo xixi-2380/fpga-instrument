@@ -1,0 +1,2 @@
+PASS tb_audio_visualizer checks=6141 windows=4
+E:/gowin/fpga-instrument-bt-audio/sim/tb_audio_visualizer.sv:38: $finish called at 61421000 (1ps)

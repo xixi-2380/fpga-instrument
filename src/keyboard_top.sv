@@ -2,7 +2,7 @@
 `include "config/keyboard_config.svh"
 `include "config/run_leds_config.svh"
 module keyboard_top #(
-    parameter integer BT_ENABLE=1,BT_EN_ACTIVE_HIGH=1,
+    parameter integer BT_ENABLE=1,BT_EN_ACTIVE_HIGH=1,OUTPUT_ENABLE=1,OUTPUT_GAIN=24,LIMITER_LOG2=6,
     parameter integer LCD_ENABLE=1,LCD_TEST_PATTERN=0,LCD_PCLK_INVERT=1,
     TOUCH_ENABLE=1,TOUCH_UI_ENABLE=1,TOUCH_RESET_CYCLES=1000000,TOUCH_STRAP_CYCLES=300000,
     TOUCH_BOOT_CYCLES=2500000,TOUCH_POLL_CYCLES=500000,TOUCH_I2C_HALF=250,
@@ -25,6 +25,7 @@ module keyboard_top #(
     wire synth_pa_enable;
     reg [1:0] max_clock_frames;
     wire visual_sample_valid;wire signed [15:0] visual_sample;wire [15:0] visual_notes;
+    wire latency_valid;wire [19:0] latency_bcd;
     wire [1:0] effect_mode;
     wire [2:0] selected_timbre,event_timbre,key_timbre,score_timbre;
     wire key_valid,key_on,score_valid,score_on,score_busy,score_done,score_error;
@@ -53,7 +54,7 @@ module keyboard_top #(
     wire [38:0] touch_status={touch_ready,touch_error,touch_down,touch_count,touch_x,touch_y};
     wire [70:0] touch_audio;
     wire touch_audio_valid,touch_update;
-    wire bt_inhibit,bt_valid,bt_ready,bt_flush,bt_note_on;
+    wire bt_inhibit,bt_valid,bt_ready,bt_flush,bt_output_flush,bt_note_on;
     wire [6:0] bt_note_id,bt_velocity,bt_pitch;
     wire [2:0] bt_timbre;
     wire [31:0] bt_fcw;
@@ -90,14 +91,14 @@ module keyboard_top #(
         bt_event_cdc #(.WIDTH(23)) events(clk,audio_clk,channel_reset,
             source_valid,source_ready,{source_kind,source_id,source_pitch,source_velocity},
             ev_valid,ev_ready,{kind,ident,pitch,velocity});
-        bluetooth_audio_bridge bridge(.clk(audio_clk),.rst(audio_reset),.frame_ce(frame_ce),
+        bluetooth_audio_bridge #(.DRAIN_FRAMES(OUTPUT_ENABLE ? (1<<LIMITER_LOG2)+2 : 2)) bridge(.clk(audio_clk),.rst(audio_reset),.frame_ce(frame_ce),
             .event_valid(ev_valid),.event_ready(ev_ready),.event_kind(kind),
             .event_pitch(pitch),.event_velocity(velocity),.inhibit(bt_inhibit),
             .note_valid(bt_valid),.note_ready(bt_ready),.note_on(bt_note_on),
             .note_id(bt_note_id),.note_fcw(bt_fcw),.note_velocity(bt_velocity),.flush(bt_flush),
-            .selected_timbre(selected_timbre),.note_timbre(bt_timbre),.note_pitch(bt_pitch),.audio_ready(input_ready));
+            .selected_timbre(selected_timbre),.note_timbre(bt_timbre),.note_pitch(bt_pitch),.audio_ready(input_ready),.output_flush(bt_output_flush));
     end else begin: bluetooth_off
-        assign bt_tx=1;assign bt_inhibit=0;assign bt_valid=0;assign bt_flush=0;
+        assign bt_tx=1;assign bt_inhibit=0;assign bt_valid=0;assign bt_flush=0;assign bt_output_flush=0;
         assign bt_note_on=0;assign bt_note_id=0;assign bt_fcw=0;assign bt_velocity=127;assign bt_pitch=0;assign bt_timbre=0;
     end
     assign bt_ready=note_ready && take_bt && !bt_flush;
@@ -146,6 +147,7 @@ module keyboard_top #(
             .ref_clk(clk),.pll_reset(pll1_reset),.audio_clk(audio_clk),.audio_reset(audio_reset),
             .voice_active(voice_active),.voice_held(voice_held),.selected_timbre(selected_timbre),
             .visual_sample_valid(visual_sample_valid),.visual_sample(visual_sample),.visual_notes(visual_notes),
+            .latency_valid(latency_valid),.latency_bcd(latency_bcd),
             .score_busy(local_score_busy || bt_inhibit),.audio_ready(input_ready),.score_error(score_error),
             .underrun(underrun),.ghost(ghost),.lcd_clk(lcd_clk),.lcd_hs(lcd_hs),
             .lcd_vs(lcd_vs),.lcd_en(lcd_en),.lcd_r(lcd_r),.lcd_g(lcd_g),.lcd_b(lcd_b),
@@ -192,10 +194,11 @@ module keyboard_top #(
         .note_valid(key_valid),.note_on(key_on),.note_id(key_id),.note_fcw(key_fcw),
         .gate(key_gate),.last_key(last_key),
         .selected_timbre(selected_timbre),.note_timbre(key_timbre),.inhibit_notes(inhibit_notes));
-    synth_core #(.MUTE(MUTE),.FADE(FADE),.ATTACK(ATTACK),.DECAY(DECAY),
+    synth_core #(.OUTPUT_ENABLE(OUTPUT_ENABLE),.OUTPUT_GAIN(OUTPUT_GAIN),.LIMITER_LOG2(LIMITER_LOG2),
+        .MUTE(MUTE),.FADE(FADE),.ATTACK(ATTACK),.DECAY(DECAY),
         .SUSTAIN(SUSTAIN),.RELEASE(RELEASE)) sound(
         .clk(audio_clk),.rst(audio_reset),.note_valid(note_valid),.note_on(note_on),
-        .note_pitch(take_bt ? bt_pitch : note_id),.volume_percent(volume_percent),.flush(bt_flush),.velocity_valid(take_bt),.note_velocity(bt_velocity),
+        .note_pitch(take_bt ? bt_pitch : note_id),.volume_percent(volume_percent),.flush(bt_flush),.output_flush(bt_output_flush),.velocity_valid(take_bt),.note_velocity(bt_velocity),
         .note_id(note_id),.note_fcw(note_fcw),.note_timbre(event_timbre),.effects_enable(effects_enabled),.effect_mode(effect_mode),
         .effect_cfg_valid(cfg_valid || bt_flush_d),.effect_echo_wet(echo_wet),.effect_room_wet(room_wet),
         .effect_tremolo_depth(tremolo_depth),.effect_tremolo_rate_hz(cfg_rate_hz),
@@ -203,7 +206,8 @@ module keyboard_top #(
         .bck(MAX_BCLK),.ws(MAX_LRCLK),.din(MAX_DIN),.pa_enable(synth_pa_enable),.underrun(underrun),
         .frame_ce(frame_ce),.note_ready(note_ready),.input_ready(input_ready),
         .gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(envelope_level),
-        .visual_sample_valid(visual_sample_valid),.visual_sample(visual_sample),.visual_notes(visual_notes));
+        .visual_sample_valid(visual_sample_valid),.visual_sample(visual_sample),.visual_notes(visual_notes),
+        .latency_valid(latency_valid),.latency_bcd(latency_bcd));
 endmodule
 
 

@@ -12,7 +12,9 @@ module tb_effect_parameter_path;
  integer trace,bitn=0,ch=0,word=0,current_code=0,pending_code=0;
  reg [4095:0] tracefile;
  always #5 clk=~clk;
- synth_core #(.MUTE(4),.FADE(4),.ATTACK(8),.DECAY(8),.SUSTAIN(32768),.RELEASE(16),
+ // Isolate legacy voice/effect arithmetic; production conditioned output is
+ // covered by tb_output_gain, tb_bluetooth_top and tb_bt_short_audio.
+ synth_core #(.OUTPUT_ENABLE(0),.MUTE(4),.FADE(4),.ATTACK(8),.DECAY(8),.SUSTAIN(32768),.RELEASE(16),
   .DELAY_SAMPLES(8),.ROOM_D0(3),.ROOM_D1(5),.ROOM_D2(7),.ROOM_D3(11)) sound(
   .clk(clk),.rst(rst),.note_valid(note_valid),.note_on(note_on),.note_id(note_id),.note_fcw(fcw),
   .note_timbre(2'd1),.effects_enable(en),.effect_mode(mode),.note_ready(nr),.input_ready(ir),

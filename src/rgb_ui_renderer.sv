@@ -1,15 +1,16 @@
 `timescale 1ns/1ps
 // British black/gold UI. Layout, glyph/ROM and output are three pixel stages.
-// One atomic1112-bit snapshot per frame; no framebuffer and no audio stalls.
+// One atomic1133-bit snapshot per frame; no framebuffer and no audio stalls.
 module rgb_ui_renderer(
- input wire pixel_clk,rst,frame_start,status_valid,input wire [1111:0] status_data,
+ input wire pixel_clk,rst,frame_start,status_valid,input wire [1132:0] status_data,
  input wire [10:0] x,y,input wire de_in,hs_in,vs_in,
  output reg [23:0] rgb,output reg de_out,hs_out,vs_out);
  `include "config/ui_layout.svh"
  localparam [23:0] BG=24'h101214,PANEL=24'h191c20,GOLD=24'hd6b979,
   CREAM=24'hf2e6c9,INK=24'h17191b,DIM=24'h9c987f,LINE=24'h4b4534,
   WINE=24'h67333e,GREEN=24'h8bc79b,RED=24'hef8f85;
- reg [1111:0] state;
+ reg [1132:0] state;
+ wire [19:0] latency=state[1131:1112];
  wire [2:0] timbre={state[53],state[13:12]};
  wire [1:0] fx=state[22:21];wire menu=state[20],enabled=state[23];
  wire [6:0] percent=fx==0 ? state[30:24] : fx==1 ? state[37:31] : state[44:38];
@@ -144,7 +145,7 @@ module rgb_ui_renderer(
    if(py>=138 && py<158)begin
     ty=140;fg=DIM;
     if(px<390)begin text="OUTPUT WAVEFORM";len=15;tx=32;end
-    else if(px<572)begin text="X8 DISPLAY";len=10;tx=440;end
+    else if(px<572)begin text="X1 DISPLAY";len=10;tx=440;end
     else begin text="LEVEL";len=5;tx=608;end
    end
    if(px>=608 && px<760 && py>=200 && py<224)base=(px-608)<(integer'(peak)*152>>8) ? (peak>=248 ? RED : GOLD) : BG;
@@ -202,6 +203,13 @@ module rgb_ui_renderer(
    end else begin
     text={"VOL ",volume==100 ? 8'd49 : 8'd32,volume>=10 ? digit((volume/10)%10) : 8'd32,digit(volume%10),"%"};len=8;tx=116;
    end
+  end
+  if(!menu && px>=620 && py>=440 && py<464)begin
+   fg=DIM;tx=640;ty=446;len=13;
+   if(state[1132])text={"LAT ",latency[19:16]!=0 ? digit(latency[19:16]) : 8'd32,
+       latency[19:12]!=0 ? digit(latency[15:12]) : 8'd32,digit(latency[11:8]),".",
+       digit(latency[7:4]),digit(latency[3:0])," MS"};
+   else text="LAT ---.-- MS";
   end
   dx=$signed({1'b0,x})-$signed({1'b0,tx});dy=$signed({1'b0,y})-$signed({1'b0,ty});
   if(ui_inside(px,py,24,4,384,64))fg=GOLD;

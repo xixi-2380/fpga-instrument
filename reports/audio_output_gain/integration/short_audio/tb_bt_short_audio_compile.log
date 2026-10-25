@@ -1,0 +1,2 @@
+E:/gowin/fpga-instrument-bt-audio/src/synth_core.sv:288: warning: @* is sensitive to all 32 words in array 'voice_level'.
+E:/gowin/fpga-instrument-bt-audio/src/synth_core.sv:288: warning: @* is sensitive to all 32 words in array 'voice_level'.

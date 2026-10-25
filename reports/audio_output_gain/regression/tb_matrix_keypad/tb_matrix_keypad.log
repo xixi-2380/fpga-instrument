@@ -1,0 +1,2 @@
+PASS tb_matrix_keypad checks=7183
+E:/gowin/fpga-instrument-bt-audio/sim/tb_matrix_keypad.sv:42: $finish called at 71411000 (1ps)

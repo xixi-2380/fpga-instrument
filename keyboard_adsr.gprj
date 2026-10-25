@@ -44,6 +44,8 @@
         <File path="src/frame_buffer.sv" type="file.verilog" enable="1" />
         <File path="src/keyboard_core.sv" type="file.verilog" enable="1" />
         <File path="src/synth_core.sv" type="file.verilog" enable="1" />
+        <File path="src/audio_limiter.sv" type="file.verilog" enable="1" />
+        <File path="src/audio_latency_meter.sv" type="file.verilog" enable="1" />
         <File path="src/voice_allocator.sv" type="file.verilog" enable="1" />
         <File path="src/voice_mixer.sv" type="file.verilog" enable="1" />
         <File path="src/lock_guard.sv" type="file.verilog" enable="1" />

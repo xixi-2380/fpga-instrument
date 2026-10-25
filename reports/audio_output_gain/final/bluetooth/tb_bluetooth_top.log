@@ -1,0 +1,2 @@
+PASS tb_bluetooth_top checks=874272 high_peak=12288 low_peak=3120
+E:/gowin/fpga-instrument-bt-audio/sim/tb_bluetooth_top.sv:59: $finish called at 14230888048 (1ps)

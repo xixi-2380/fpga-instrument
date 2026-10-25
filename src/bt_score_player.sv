@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 // Downloaded-record scheduler; 64-bit RAM records are NOT old score ROM words.
-// Event kind: 0=Off, 1=On, 2=Silence all AUTO voices (hard flush, not ADSR Off).
+// Internal kind: 0=Off,1=On,2=urgent silence,3=natural end (drain then silence).
 // One clock domain. A future audio-domain bridge must retain the full event.
 module bt_score_player #(
  parameter integer CLOCK_HZ=50000000,MAX_NOTES=1024,VOICES=1,
@@ -59,7 +59,7 @@ module bt_score_player #(
     ON_CHECK:if(fault_pending)state<=WAIT_TICK;
      else if(!next_valid&&pc<note_count)state<=FETCH;
      else if(next_valid&&next_record[31:0]<=position_ms)begin scan<=0;state<=FREE_SCAN;end
-     else if(pc==note_count && active==0)begin action<=3;natural_finish<=1;event_kind<=2;event_id<=0;event_pitch<=0;event_velocity<=0;state<=SILENCE;end
+     else if(pc==note_count && active==0)begin action<=3;natural_finish<=1;play_state<=0;event_kind<=3;event_id<=0;event_pitch<=0;event_velocity<=0;state<=SILENCE;end
      else state<=WAIT_TICK;
     FETCH:begin ram_address<=pc[AW-1:0];state<=FETCH_WAIT;end
     FETCH_WAIT:state<=FETCH_LATCH;

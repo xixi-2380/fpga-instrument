@@ -1,0 +1,326 @@
+{
+  "download_commit": "8081710e107f4d32069c6f1321eefed4c422970e",
+  "worktree": "E:\\gowin\\fpga-instrument-bt-audio",
+  "implementation_committed": false,
+  "all_selected_hdl_passed": true,
+  "hdl_configurations": 30,
+  "hdl_checks": 31958257,
+  "results": [
+    {
+      "test": "tb_audio_limiter",
+      "passed": true,
+      "checks": 242660,
+      "scope": "new limiter",
+      "log": "ram_mode_fix/tb_audio_limiter.log"
+    },
+    {
+      "test": "tb_audio_latency",
+      "passed": true,
+      "checks": 815390,
+      "scope": "production digital latency",
+      "log": "latency/tb_audio_latency.log"
+    },
+    {
+      "test": "tb_latency_bcd",
+      "passed": true,
+      "checks": 6,
+      "scope": "measurement arithmetic",
+      "log": "latency_bcd/tb_latency_bcd.log"
+    },
+    {
+      "test": "tb_rgb_ui_renderer",
+      "passed": true,
+      "checks": 3072031,
+      "scope": "full raster",
+      "log": "ui_latency/tb_rgb_ui_renderer.log"
+    },
+    {
+      "test": "tb_rgb_display",
+      "passed": true,
+      "checks": 2793163,
+      "scope": "1133-bit atomic display",
+      "log": "latency_display_connector/tb_rgb_display.log"
+    },
+    {
+      "test": "tb_output_gain",
+      "passed": true,
+      "checks": 6051652,
+      "scope": "production32-voice output",
+      "log": "production_output_verified/tb_output_gain.log"
+    },
+    {
+      "test": "tb_bt_short_audio",
+      "passed": true,
+      "checks": 275329,
+      "scope": "production1ms notes",
+      "log": "final/short_audio/tb_bt_short_audio.log"
+    },
+    {
+      "test": "tb_bluetooth_top",
+      "passed": true,
+      "checks": 874272,
+      "scope": "production Bluetooth bridge",
+      "log": "final/bluetooth/tb_bluetooth_top.log"
+    },
+    {
+      "test": "tb_bt_score_audio",
+      "passed": true,
+      "checks": 2442957,
+      "scope": "accelerated full protocol/audio",
+      "log": "final/protocol_audio/tb_bt_score_audio.log"
+    },
+    {
+      "test": "tb_playback_regression",
+      "passed": true,
+      "checks": 1642618,
+      "scope": "keyboard/idle/volume",
+      "log": "integration/playback/tb_playback_regression.log"
+    },
+    {
+      "test": "tb_bt_player_production",
+      "passed": true,
+      "checks": 155017,
+      "scope": "production scheduler",
+      "log": "scheduler/tb_bt_player_production.log"
+    },
+    {
+      "test": "tb_max98357_startup",
+      "passed": true,
+      "checks": 3702449,
+      "scope": "production startup with behavioral PLL",
+      "log": "regression/startup/tb_max98357_startup.log"
+    },
+    {
+      "test": "tb_british_top",
+      "passed": true,
+      "checks": 967221,
+      "scope": "seven-timbre UI",
+      "log": "regression/british/tb_british_top.log"
+    },
+    {
+      "test": "tb_synth_core",
+      "passed": true,
+      "checks": 2513903,
+      "scope": "OUTPUT_ENABLE=0 legacy arithmetic",
+      "log": "legacy_components/tb_synth_core/tb_synth_core.log"
+    },
+    {
+      "test": "tb_effects_integration",
+      "passed": true,
+      "checks": 6302595,
+      "scope": "OUTPUT_ENABLE=0 effects arithmetic",
+      "log": "legacy_components/tb_effects_integration/tb_effects_integration.log"
+    },
+    {
+      "test": "tb_master_volume",
+      "passed": true,
+      "checks": 7,
+      "scope": "volume component",
+      "log": "master_volume/tb_master_volume.log"
+    },
+    {
+      "test": "tb_audio_visualizer",
+      "passed": true,
+      "checks": 6141,
+      "scope": "X1 waveform",
+      "log": "visualizer/tb_audio_visualizer.log"
+    },
+    {
+      "test": "tb_ui_controls",
+      "passed": true,
+      "checks": 91,
+      "scope": "component",
+      "log": "regression/tb_ui_controls/tb_ui_controls.log"
+    },
+    {
+      "test": "tb_ui_inputs",
+      "passed": true,
+      "checks": 87,
+      "scope": "component",
+      "log": "regression/tb_ui_inputs/tb_ui_inputs.log"
+    },
+    {
+      "test": "tb_matrix_settling",
+      "passed": true,
+      "checks": 36,
+      "scope": "component",
+      "log": "regression/tb_matrix_settling/tb_matrix_settling.log"
+    },
+    {
+      "test": "tb_matrix_keypad",
+      "passed": true,
+      "checks": 7183,
+      "scope": "component",
+      "log": "regression/tb_matrix_keypad/tb_matrix_keypad.log"
+    },
+    {
+      "test": "tb_instrument_envelopes",
+      "passed": true,
+      "checks": 7932,
+      "scope": "component",
+      "log": "regression/tb_instrument_envelopes/tb_instrument_envelopes.log"
+    },
+    {
+      "test": "tb_voice_mixer",
+      "passed": true,
+      "checks": 65223,
+      "scope": "component",
+      "log": "regression/tb_voice_mixer/tb_voice_mixer.log"
+    },
+    {
+      "test": "tb_tone_gain",
+      "passed": true,
+      "checks": 4001,
+      "scope": "component",
+      "log": "regression/tb_tone_gain/tb_tone_gain.log"
+    },
+    {
+      "test": "tb_i2s_tx",
+      "passed": true,
+      "checks": 5407,
+      "scope": "component",
+      "log": "regression/tb_i2s_tx/tb_i2s_tx.log"
+    },
+    {
+      "test": "core_2",
+      "passed": true,
+      "checks": 3551,
+      "scope": "protocol component",
+      "parameters": {
+        "VOICES": 2
+      },
+      "log": "protocol/core_2.log"
+    },
+    {
+      "test": "core_4",
+      "passed": true,
+      "checks": 3550,
+      "scope": "protocol component",
+      "parameters": {
+        "VOICES": 4
+      },
+      "log": "protocol/core_4.log"
+    },
+    {
+      "test": "core_8",
+      "passed": true,
+      "checks": 3557,
+      "scope": "protocol component",
+      "parameters": {
+        "VOICES": 8
+      },
+      "log": "protocol/core_8.log"
+    },
+    {
+      "test": "link_9600",
+      "passed": true,
+      "checks": 114,
+      "scope": "protocol component",
+      "parameters": {
+        "BAUD": 9600
+      },
+      "log": "protocol/link_9600.log"
+    },
+    {
+      "test": "link_115200",
+      "passed": true,
+      "checks": 114,
+      "scope": "protocol component",
+      "parameters": {
+        "BAUD": 115200,
+        "CLOCK_HZ": 5000000
+      },
+      "log": "protocol/link_115200.log"
+    }
+  ],
+  "independent_production_trace": {
+    "passed": true,
+    "checks": 9188,
+    "frames": 4603,
+    "maximum_final_code": 29195,
+    "final_inflight_frames": 1,
+    "scope": "production32-voice/48kHz final PCM checked with independent Python model"
+  },
+  "model": {
+    "vector_count": 2772,
+    "candidates": [
+      {
+        "candidate": "w32_gain16",
+        "peak": 29203,
+        "rms": 11147.073759249368,
+        "matched_rms_gain": 0.1275804893408475,
+        "limited_fraction": 0.6247916666666666,
+        "minimum_gain": 0.1709136962890625,
+        "delay_samples": 31
+      },
+      {
+        "candidate": "w32_gain24",
+        "peak": 29203,
+        "rms": 13008.022467060151,
+        "matched_rms_gain": 0.10932861843718546,
+        "limited_fraction": 0.7472083333333334,
+        "minimum_gain": 0.1139373779296875,
+        "delay_samples": 31
+      },
+      {
+        "candidate": "w64_gain16",
+        "peak": 29203,
+        "rms": 11091.477122973185,
+        "matched_rms_gain": 0.1282199935279976,
+        "limited_fraction": 0.6247916666666666,
+        "minimum_gain": 0.1709136962890625,
+        "delay_samples": 63
+      },
+      {
+        "candidate": "w64_gain24",
+        "peak": 29203,
+        "rms": 12926.861382940177,
+        "matched_rms_gain": 0.11001503634907017,
+        "limited_fraction": 0.7472083333333334,
+        "minimum_gain": 0.1139373779296875,
+        "delay_samples": 63
+      }
+    ],
+    "float_comparison_max_code_error": 6.5084018692832615,
+    "selected": {
+      "window": 64,
+      "pre_gain": 24,
+      "ceiling": 29204,
+      "release_shift": 12
+    },
+    "scope": "synthetic software audition; no hardware or user listening confirmation"
+  },
+  "default": {
+    "pre_gain": 24,
+    "window": 64,
+    "audio_delay_samples": 63,
+    "added_chain_frames": 64,
+    "ceiling": 29204,
+    "release_shift": 12
+  },
+  "ram_fix": "mutually exclusive read/write; old gain read before update; no read-before-write requirement; Gowin confirmation pending",
+  "latency": {
+    "start": "accepted note On",
+    "end": "LEFT LSB on external I2S rising BCLK",
+    "resolution_ms": 0.01,
+    "example_ms": 1.37,
+    "scope": "digital pipeline including zero/muted PCM; excludes scan/UART/acoustics",
+    "snapshot_bits": 1133
+  },
+  "static_checks": [
+    "project preprocessing without config include path",
+    "CST/SDC/PLL/synth configuration byte-identical to download baseline",
+    "project dependencies, Python syntax, Markdown links, whitespace"
+  ],
+  "not_performed": [
+    "Gowin synthesis/place-route/STA",
+    "PA2122 disappearance in a new implementation",
+    "board programming or speaker listening/power measurement"
+  ],
+  "notes": [
+    "Selected tests ran across implementation stages; fresh RAM, latency, I2S/model, display and Bluetooth final tests cover current RTL.",
+    "Legacy arithmetic/effect fixtures explicitly bypass output conditioning.",
+    "Behavioral PLL results do not validate PLL or STA.",
+    "Earlier failed/superseded test attempts remain outside the selected results."
+  ]
+}

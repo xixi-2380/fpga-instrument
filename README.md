@@ -1,5 +1,7 @@
 # 蓝牙整合重构版
 
+> 本聊天独立开发目录：`E:\gowin\fpga-instrument-bt-audio`，下载提交 `8081710e107f4d32069c6f1321eefed4c422970e`。当前本地已加入24倍补偿、前瞻限幅及主页右下角 `LAT` 数字链路延迟显示；RAM读写已按用户PA2122反馈调整。见 [实现与验证说明](docs/audio_output_gain.md) 和 [开发计划](docs/audio_output_gain_plan.md)。尚未提交推送，新综合/P&R/实板验收待用户执行；其他工程保持原样。
+
 - 分支：`codex/bluetooth-score-integration`。
 - 版本基准：`bf5df5792f654ee9c29a30983cdbe83a0061669e`（main 的英伦七音色 UI、MAX98357A 与触摸整合版）。
 - 开发范围：按 `docs/bluetooth_score` 中的规划和 v1 协议重构 FPGA 蓝牙，加入设置页音量，重点验证松键后输出归零、单键识别和键位高亮，并控制组合路径、宽总线和跨时钟传递。

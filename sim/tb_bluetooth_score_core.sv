@@ -28,7 +28,7 @@ module tb_bluetooth_score_core;
   held<=!rst&&ev&&!event_ready;held_event<={kind,id,pitch,velocity};
   if(!rst&&ev&&event_ready)begin
    event_types[event_count]=kind;event_ids[event_count]=id;event_pitches[event_count]=pitch;event_times[event_count]=position;event_count++;
-   case(kind)0:off_count++;1:begin on_count++;check(velocity>=1&&velocity<=127,"event velocity preserved");end 2:silences++;default:$fatal(1,"bad event kind");endcase
+   case(kind)0:off_count++;1:begin on_count++;check(velocity>=1&&velocity<=127,"event velocity preserved");end 2,3:silences++;default:$fatal(1,"bad event kind");endcase
   end
   if(!rst&&tx_valid&&tx_ready)begin
    response_bytes[reply_count]=tx_data;reply_count++;

@@ -1,0 +1,2 @@
+PASS tb_effects_integration checks=6302595 delivery=517
+E:/gowin/fpga-instrument-bt-audio/sim/tb_effects_integration.sv:107: $finish called at 32834561498 (1ps)

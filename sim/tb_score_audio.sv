@@ -11,7 +11,9 @@ module tb_score_audio;
  wire bck,ws,din,pa,db,dw,dd,dp;wire [5:0] leds;
  integer checks=0,score_events=0,key_events=0,finished_events=0,prior_nonzero;
  reg melody_seen=0;
- keyboard_top #(.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(4),.SCORE_ENABLE(1),.SCORE_BEAT_FRAMES(8),.LED_STEP_CYCLES(4),.LOCK_N(32),
+ // Isolate legacy voice/effect arithmetic; production conditioned output is
+ // covered by tb_output_gain, tb_bluetooth_top and tb_bt_short_audio.
+ keyboard_top #(.OUTPUT_ENABLE(0),.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(4),.SCORE_ENABLE(1),.SCORE_BEAT_FRAMES(8),.LED_STEP_CYCLES(4),.LOCK_N(32),
   .SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
   .MUTE(4),.FADE(4),.ATTACK(2),.DECAY(2),.SUSTAIN(32768),.RELEASE(2))
   dut(.clk(ref_clk),.rst(ref_rst),.board_buttons_n(4'hf),.key_row(rows),.key_col(columns),

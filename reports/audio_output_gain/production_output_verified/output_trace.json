@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "checks": 9188,
+  "frames": 4603,
+  "maximum_final_code": 29195,
+  "final_inflight_frames": 1,
+  "scope": "production32-voice/48kHz final PCM checked with independent Python model"
+}

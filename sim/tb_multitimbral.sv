@@ -9,7 +9,9 @@ module tb_multitimbral;
  wire bck,ws,din,pa,u,frame_ce,note_ready,input_ready,gate;
  wire [VOICES-1:0] voice_active,voice_held;wire [16:0] level;
  integer checks=0,isolated_nonzero;
- synth_core #(.VOICES(VOICES),.MUTE(4),.FADE(4),.ATTACK(8),.DECAY(8),.SUSTAIN(32768),.RELEASE(16)) sound(
+ // Isolate legacy voice/effect arithmetic; production conditioned output is
+ // covered by tb_output_gain, tb_bluetooth_top and tb_bt_short_audio.
+ synth_core #(.OUTPUT_ENABLE(0),.VOICES(VOICES),.MUTE(4),.FADE(4),.ATTACK(8),.DECAY(8),.SUSTAIN(32768),.RELEASE(16)) sound(
  .clk(clk),.rst(rst),.note_valid(note_valid),.note_on(note_on),.note_id(note_id),.note_fcw(note_fcw),
  .note_ready(note_ready),.input_ready(input_ready),.bck(bck),.ws(ws),.din(din),.pa_enable(pa),
  .underrun(u),.frame_ce(frame_ce),.gate(gate),.voice_active(voice_active),.voice_held(voice_held),

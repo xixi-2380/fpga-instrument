@@ -1,0 +1,2 @@
+PASS tb_audio_limiter checks=242660 vectors=2772 max_cycles=102
+E:/gowin/fpga-instrument-bt-audio/sim/tb_audio_limiter.sv:31: $finish called at 2482550000 (1ps)

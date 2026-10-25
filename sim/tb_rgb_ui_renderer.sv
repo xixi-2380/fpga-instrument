@@ -2,11 +2,11 @@
 `include "check.svh"
 module tb_rgb_ui_renderer;
  reg clk=0,rst=1,frame_start=0,valid=1,de=0;always #5 clk=~clk;
- reg [1111:0] status=0;reg [10:0] x=0,y=0;
+ reg [1132:0] status=0;reg [10:0] x=0,y=0;
  wire [23:0] rgb;wire de_out,hs_out,vs_out;
  reg record=0;reg [23:0] pixels[0:383999];
  integer checks=0,n=0,fd,scene;reg [4095:0] outdir;reg [4095:0] filename;
- reg [1111:0] frozen;
+ reg [1132:0] frozen;
  rgb_ui_renderer dut(clk,rst,frame_start,valid,status,x,y,de,1'b1,1'b1,rgb,de_out,hs_out,vs_out);
  always @(posedge clk)begin #1;
   if(record && de_out)begin
@@ -47,6 +47,7 @@ module tb_rgb_ui_renderer;
   if(!$value$plusargs("SIM_OUT_DIR=%s",outdir))outdir=".";
   #12 rst=0;
   status[15]=1;status[60:54]=100;status[5:0]=3;status[64+:16]=16'h0091;status[87:80]=40;
+  status[1132]=1;status[1131:1112]=20'h00136;
   for(integer j=0;j<128;j=j+1)status[88+j*8+:8]=$rtoi(60*$sin(6.28318530718*j/32));status[11:6]=1;
   status[30:24]=25;status[37:31]=25;status[44:38]=50;status[48:45]=5;
   snapshot;render(0);

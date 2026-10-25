@@ -1,0 +1,2 @@
+PASS tb_voice_mixer checks=65223
+E:/gowin/fpga-instrument-bt-audio/sim/tb_voice_mixer.sv:38: $finish called at 642106000 (1ps)

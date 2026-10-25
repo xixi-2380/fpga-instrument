@@ -1,0 +1,2 @@
+PASS tb_matrix_settling checks=36
+E:/gowin/fpga-instrument-bt-audio/sim/tb_matrix_settling.sv:25: $finish called at 246090000 (1ps)

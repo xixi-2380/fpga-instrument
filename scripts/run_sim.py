@@ -9,7 +9,7 @@ sources=[root/f.get('path') for f in ET.parse(root/'keyboard_adsr.gprj').getroot
 assert sources and all(s.is_file() for s in sources),'Missing enabled project source'
 tests=sorted(root.glob('sim/tb_*.sv'))
 if a.test:tests=[t for t in tests if t.stem==a.test]
-elif not a.vendor:tests=[t for t in tests if t.stem not in ['tb_pll_pair','tb_keyboard_top','tb_score_audio','tb_score_effects','tb_effect_button_path','tb_rgb_display','tb_ui_top','tb_ui_score_handoff','tb_british_top','tb_max98357_startup','tb_bluetooth_top','tb_playback_regression','tb_bt_score_audio']]
+elif not a.vendor:tests=[t for t in tests if t.stem not in ['tb_pll_pair','tb_keyboard_top','tb_score_audio','tb_score_effects','tb_effect_button_path','tb_rgb_display','tb_ui_top','tb_ui_score_handoff','tb_british_top','tb_max98357_startup','tb_bluetooth_top','tb_playback_regression','tb_bt_score_audio','tb_bt_short_audio']]
 assert tests,'No matching testbench'
 assert not a.param or a.test,'--param requires --test'
 for override in a.param:
@@ -23,6 +23,10 @@ results=[]
 for t in tests:
     name=t.stem
     extra_args=[]
+    if name=='tb_audio_limiter':
+        subprocess.run([sys.executable,str(root/'scripts/reference_audio_limiter.py'),'--out-dir',str(out)],check=True,env=env)
+        extra_args=['+LIMITER_VECTORS='+(out/'limiter_vectors.hex').as_posix()]
+    if name=='tb_output_gain':extra_args=['+OUTPUT_TRACE='+(out/'output_trace.txt').as_posix()]
     if name in ['tb_audio_effects','tb_effect_parameters']:
         vector_file=out/'effects_vectors.hex'
         generator=[sys.executable,str(root/('scripts/reference_effect_parameters.py' if name=='tb_effect_parameters' else 'scripts/reference_effects.py')),'--output',str(vector_file)]
@@ -33,7 +37,7 @@ for t in tests:
     print('RUN',name,flush=True);start=time.monotonic()
     cmd=[str(bin/'iverilog.exe'),'-g2012','-Wall','-grelative-include','-Isim','-s',name,'-o',str(out/(name+'.vvp'))]+[s.as_posix() for s in sources]+[t.as_posix()]
     for override in a.param:cmd[1:1]=['-P',name+'.'+override]
-    if not a.behavioral_pll and name in ['tb_pll_pair','tb_keyboard_top','tb_score_audio','tb_score_effects','tb_effect_button_path','tb_rgb_display','tb_ui_top','tb_ui_score_handoff','tb_british_top','tb_max98357_startup','tb_bluetooth_top','tb_playback_regression','tb_bt_score_audio']:cmd+=['C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v']
+    if not a.behavioral_pll and name in ['tb_pll_pair','tb_keyboard_top','tb_score_audio','tb_score_effects','tb_effect_button_path','tb_rgb_display','tb_ui_top','tb_ui_score_handoff','tb_british_top','tb_max98357_startup','tb_bluetooth_top','tb_playback_regression','tb_bt_score_audio','tb_bt_short_audio']:cmd+=['C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v']
     c=subprocess.run(cmd,capture_output=True,text=True,encoding='utf8',errors='replace',env=env)
     (out/(name+'_compile.log')).write_text(c.stdout+c.stderr,encoding='utf8')
     if c.returncode: print('compile exit',c.returncode,c.stdout+c.stderr);raise SystemExit(1)
@@ -41,6 +45,10 @@ for t in tests:
     (out/(name+'.log')).write_text(run.stdout+run.stderr,encoding='utf8')
     print(run.stdout,flush=True)
     ok=run.returncode==0 and 'PASS '+name in run.stdout
+    if ok and name=='tb_output_gain':
+        checked=subprocess.run([sys.executable,str(root/'scripts/check_output_gain_trace.py'),str(out/'output_trace.txt')],capture_output=True,text=True,env=env)
+        (out/'output_trace_check.log').write_text(checked.stdout+checked.stderr,encoding='utf8')
+        print(checked.stdout+checked.stderr,flush=True);ok=checked.returncode==0
     if ok and name=='tb_effect_parameter_path':
         checked=subprocess.run([sys.executable,str(root/'scripts/check_effect_parameter_trace.py'),str(out/'runtime_trace.txt')],capture_output=True,text=True,encoding='utf8',env=env)
         (out/'runtime_trace_check.log').write_text(checked.stdout+checked.stderr,encoding='utf8')

@@ -1,0 +1,2 @@
+PASS tb_bluetooth_score_link checks=114 baud=115200
+E:\gowin\fpga-instrument-bt-audio\sim\tb_bluetooth_score_link.sv:34: $finish called at 313820000 (1ps)

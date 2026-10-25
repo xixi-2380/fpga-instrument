@@ -47,7 +47,7 @@ module tb_bt_score_audio;
   if(dut.bt_valid && dut.bt_ready)begin
    if(dut.bt_note_on)ons++;else offs++;
   end
-  if(dut.bluetooth_on.ev_valid && dut.bluetooth_on.ev_ready && dut.bluetooth_on.kind==2)begin
+  if(dut.bluetooth_on.ev_valid && dut.bluetooth_on.ev_ready && dut.bluetooth_on.kind>=2)begin
    clears++;check(dut.voice_held==0 && dut.voice_active==0 && dut.sound.tx.latched_l==0 && dut.sound.tx.latched_r==0,
     "protocol silence ack waits for actual zeroed synth and I2S");
   end
@@ -70,7 +70,8 @@ module tb_bt_score_audio;
   command(8'h21,5,0);held_position=dut.bluetooth_on.link.core.position_ms;
   cycles(75000);check(dut.bluetooth_on.link.core.position_ms==held_position && dut.voice_active==0,"pause freezes time and silences audio");
   command(8'h22,6,0);wait(ons==2);
-  wait(dut.bluetooth_on.link.core.play_state==0);cycles(1000);
+  wait(dut.bluetooth_on.link.core.play_state==0);
+  wait(!dut.bluetooth_on.link.core.manual_inhibit && !dut.bt_inhibit);cycles(1000);
   check(dut.bluetooth_on.link.core.position_ms==1900 && ons==4 && offs==3,"golden1900ms piece plus resume delivers exactly four On/three Off");
   check(!dut.gate && dut.voice_active==0 && dut.visual_sample==0 && clears>=3,"natural completion restores digital silence");
   command(8'h23,7,0);check(dut.bluetooth_on.link.core.position_ms==0,"STOP resets protocol position");
