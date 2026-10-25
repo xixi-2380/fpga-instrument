@@ -1,0 +1,1 @@
+PASS tb_audio_restart checks=834006 score_on=126 score_off=126 key_on=3 key_off=3

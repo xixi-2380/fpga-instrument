@@ -1,0 +1,26 @@
+{
+  "upload": "pnr.zip",
+  "sha256": "0cddc36324a656d54b2f04c8027a1a0cb79601dda5e6d549504e8520fa028c17",
+  "reported_time": "2026-10-25 12:20:15",
+  "source_commit": "14a693ce48a1d60197f4423cf306e8bd43b8adfc (user reports testing this code; report alone does not prove source identity)",
+  "setup_violated_endpoints": 3882,
+  "hold_violated_endpoints": 0,
+  "required_MHz": {
+    "ref": 50,
+    "audio": 61.44,
+    "pixel": 35
+  },
+  "estimated_Fmax_MHz": {
+    "ref": 43.874,
+    "audio": 33.308,
+    "pixel": 13.645
+  },
+  "worst_pixel_data_ns": 73.416,
+  "new_STA_available": false,
+  "input_bitstream": {
+    "file": "pnr/D2_keyboard_leds.fs",
+    "bytes": 42340843,
+    "sha256": "ff2868f8b7764e2ba134e2188bae4434be37a4533df444c997058ca65bbe40ea",
+    "note": "Identifies uploaded failing implementation only; not a newly generated bitstream"
+  }
+}

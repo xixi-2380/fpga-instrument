@@ -1,0 +1,8 @@
+{
+  "test": "tb_score_audio",
+  "parameters": "",
+  "passed": true,
+  "checks": 2802401,
+  "pll_model": "explicit behavioral substitute",
+  "seconds": 27.265
+}

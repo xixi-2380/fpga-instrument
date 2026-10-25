@@ -1,0 +1,19 @@
+{
+  "src/rgb_status_cdc.sv": "6faeb9e41ec40a7f95bbdaca9ab197a03c1290fe6cf1497be24895dabb9663bb",
+  "src/timbre_control.sv": "e44d2a49b1bab712454778ab8e2fd56f9d0ef5585e244d57816ede2195ece270",
+  "src/rgb_ui_renderer.sv": "2de7c0d3d2944de4a1cefa53cf92f10d0c584584a86f8de54ac580d0b86a89f0",
+  "src/synth_core.sv": "70eccd8d46b07a5ae58adef9ccaf012e92b138c7d70f23e6c22876e40925c52f",
+  "src/audio_visualizer.sv": "77d918ddc75e1684ae83a93aaba412d0bba3384284490f0d118568c3522f10d0",
+  "sim/tb_ui_controls.sv": "a64dd9b8ad1c188797205db7a1210bfb03998c45abd73e195ace325b807e7f52",
+  "sim/tb_rgb_display.sv": "c665f4c61d96fb4289cdb3dc5b68cec644d146bb9942e2f14a14d4998d175401",
+  "sim/tb_theme_pixels.sv": "9b99241d627642f1b1fc4096b298d7ba08c834fb796132a4eda1608ab831f20b",
+  "sim/tb_rgb_ui_renderer.sv": "fa1673b235cae6ac59633d2be2d95f98200dba71a67b8e69e5b03d1635270f33",
+  "sim/tb_ui_top.sv": "8fadc8b1cb5015dbaa3cc84d5f5f7c0c5a6606341d68f13f52af4eed296a3356",
+  "sim/tb_theme_controls.sv": "857810e3c0a0cd25d74f4a38f8350fd95951f27aa6f13f6f412cbb94df8bfa3c",
+  "scripts/run_sim.py": "6f4a64dfd4d2c08ea19bb59a3cc594870e0439c0761982a12f072713a1b4e8a3",
+  "docs/themes.md": "5c22c2fb0969383addb373ec18b6b8c0364efcf6cb8eb4ff4a212f8ec5110e7b",
+  "docs/instrument_ui.md": "4f90642e9b119609563ac06933602db493aad5e2b12e6b0ac36b13d4cac08f8d",
+  "README.md": "84fcff8142f4e814ccaabf4ef52ae89356e16d64e9698b621f3acd2e681a481e",
+  "AGENTS.md": "916189f92ad76a7340710baeba8e79f0f77a3be699d6c0bf1b33b987623c8827",
+  "sim/tb_audio_restart.sv": "58f6ee86148cd62df29813fc589aca9764bb3b4b7ff3f4e43765216648a88d67"
+}

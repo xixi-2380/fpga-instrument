@@ -9,6 +9,7 @@ module tb_rgb_display;
  wire pc,hs,vs,de;wire [5:0] r,g,b;
  reg [1111:0] frame_status;
  reg expected_de=0,next_de;integer px=0,py=0,nx,ny;
+ reg [5:0] de_history=0;integer x_history[0:5],y_history[0:5];
  integer checks=0,visible=0,lines=0,row=0;
  rgb_display dut(.ref_clk(ref_clk),.pll_reset(pll_reset),.audio_clk(audio_clk),.audio_reset(audio_reset),
   .voice_active(active),.voice_held(held),.selected_timbre(3'd1),.visual_sample_valid(1'b0),.visual_sample(16'sd0),.visual_notes(16'h0121),.score_busy(1'b0),.audio_ready(1'b1),
@@ -26,7 +27,7 @@ module tb_rgb_display;
   `CHECK(dut.renderer.state==frame_status,"frame boundary captures full1112-bit atomic snapshot")
   for(integer i=1;i<1192*533;i=i+1)begin
    @(posedge dut.pixel_clk);nx=dut.x;ny=dut.y;next_de=dut.de;#1;
-   `CHECK(de===expected_de,"two-stage pixel and DE stay aligned")
+   `CHECK(de===expected_de,"eight-stage pixel and DE stay aligned")
    `CHECK(hs && vs,"DE-only sync polarity preserved")
    `CHECK(dut.renderer.state==frame_status,"settings cannot tear current frame")
    `CHECK((^{r,g,b})!==1'bx,"all connector bits defined")
@@ -40,7 +41,9 @@ module tb_rgb_display;
      if(px==680 && py==230)`CHECK(r>integer'(g)+2 && g>integer'(b)+2,"foreground foot reaches actual RGB666 pins")
     end
    end else `CHECK({r,g,b}==0,"porches stay black")
-   expected_de=next_de;px=nx;py=ny;
+   expected_de=de_history[5];px=x_history[5];py=y_history[5];
+   for(integer q=5;q>0;q=q-1)begin de_history[q]=de_history[q-1];x_history[q]=x_history[q-1];y_history[q]=y_history[q-1];end
+   de_history[0]=next_de;x_history[0]=nx;y_history[0]=ny;
    if(i==1192*200)begin active=32'hffffffff;held=0;ep=100;rp=5;end
   end
   `CHECK(visible==800*480 && lines==480 && row==0,"one full 800x480 connector frame")

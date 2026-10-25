@@ -1,0 +1,2 @@
+src/synth_core.sv:122: warning: @* is sensitive to all 1 words in array 'voice_level'.
+src/synth_core.sv:122: warning: @* is sensitive to all 1 words in array 'voice_level'.

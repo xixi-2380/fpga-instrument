@@ -18,28 +18,25 @@ module rgb_status_cdc #(
     reg request,acknowledge;
     (* syn_preserve=1,syn_async_reg=1 *) reg [1:0] request_sync,ack_sync;
     (* syn_preserve=1 *) reg [WIDTH-1:0] held_data;
+    // All consumer flops use local async-assert/sync-release reset.
+    // The external reset drives reset synchronizers only.
     // Single-bit control synchronizers; do not synchronize payload bits separately.
-    always @(posedge source_clk or posedge async_reset)
-        if(async_reset)request_sync<=0;
-        else if(source_reset)request_sync<=0;
+    always @(posedge source_clk or posedge source_reset)
+        if(source_reset)request_sync<=0;
         else request_sync<={request_sync[0],request};
-    always @(posedge pixel_clk or posedge async_reset)
-        if(async_reset)ack_sync<=0;
-        else if(pixel_reset)ack_sync<=0;
+    always @(posedge pixel_clk or posedge pixel_reset)
+        if(pixel_reset)ack_sync<=0;
         else ack_sync<={ack_sync[0],acknowledge};
 
-    always @(posedge source_clk or posedge async_reset)begin
-        if(async_reset)begin acknowledge<=0;held_data<=0;end
-        else if(source_reset)begin acknowledge<=0;held_data<=0;end
+    always @(posedge source_clk or posedge source_reset)begin
+        if(source_reset)begin acknowledge<=0;held_data<=0;end
         else if(!acknowledge && request_sync[1])begin
             held_data<=source_data;
             acknowledge<=1;
         end else if(acknowledge && !request_sync[1])acknowledge<=0;
     end
-    always @(posedge pixel_clk or posedge async_reset)begin
-        if(async_reset)begin
-            request<=0;pixel_data<=0;pixel_valid<=0;update_pulse<=0;
-        end else if(pixel_reset)begin
+    always @(posedge pixel_clk or posedge pixel_reset)begin
+        if(pixel_reset)begin
             request<=0;pixel_data<=0;pixel_valid<=0;update_pulse<=0;
         end else begin
             update_pulse<=0;

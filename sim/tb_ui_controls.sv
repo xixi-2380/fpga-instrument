@@ -32,7 +32,7 @@ module tb_ui_controls;
   act(UI_PREV);`CHECK(timbre==6,"previous wraps seven presets")
   repeat(7)act(UI_NEXT);`CHECK(timbre==6,"full cycle preserves preset identity")
   act(UI_SINE);
-  act(UI_ECHO);repeat(30)begin act(UI_MORE);`CHECK(e==(ep*256+50)/100,"percentage lookup matches rounded arithmetic") end
+  act(UI_ECHO);act(UI_FX);repeat(30)begin act(UI_MORE);`CHECK(e==(ep*256+50)/100,"percentage lookup matches rounded arithmetic") end
   `CHECK(ep==100 && e==256 && en,"echo amount clamps at 100 percent")
   repeat(30)begin act(UI_LESS);`CHECK(e==(ep*256+50)/100,"descending percentage lookup matches rounded arithmetic") end
   `CHECK(ep==0 && e==0,"echo clamps at zero")
@@ -46,7 +46,7 @@ module tb_ui_controls;
   held={e,r,d,cfg_hz};act(UI_MORE);act(UI_MORE);
   `CHECK({e,r,d,cfg_hz}==held && ep==40,"offered tuple stable while newer targets coalesce")
   ready=1;cycles(8);`CHECK(e==102 && !cv,"latest target submitted after backpressure clears")
-  act(UI_TREMOLO);buttons=7;cycles(50);buttons=15;cycles(10);
+  act(UI_TREMOLO);act(UI_FX);buttons=7;cycles(50);buttons=15;cycles(10);
   `CHECK(fx==2 && en && dut.theme_id==3,"long S3 enters hidden theme and preserves UI-selected effect")
   `CHECK(commands>10,"parameter snapshots exercised")
   rst=1;#1;`CHECK(!menu && !en && ep==25 && e==64,"reset restores controller and packet")

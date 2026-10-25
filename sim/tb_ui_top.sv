@@ -42,7 +42,7 @@ module tb_ui_top;
   `CHECK(dut.menu_mode && !dut.gate && dut.voice_active==0,"entering menu drains held note and release tail")
   `CHECK(dut.selected_timbre==1 && dut.echo_percent==25,"held entry key is not a menu action; long S0 preserves timbre")
   pressed=0;more_frames(2);before_events=events;
-  menu_key(4);menu_key(9);
+  menu_key(4);menu_key(7);menu_key(9);
   `CHECK(dut.effects_enabled && dut.effect_mode==0 && dut.echo_percent==30 && dut.sound.effect.echo_target==77,"matrix action reaches runtime audio target")
   pressed=16'h0200;more_frames(4);`CHECK(dut.echo_percent==35,"one adjustment for held menu key")
   more_frames(4);`CHECK(dut.echo_percent==35,"no repeat while menu key held")

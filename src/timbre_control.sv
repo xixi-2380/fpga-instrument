@@ -114,9 +114,9 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
                     UI_CELLO:selected<=3;UI_PIANO:selected<=4;UI_GUITAR:selected<=5;UI_VIBES:selected<=6;
                     UI_PREV:if(selected==0)selected<=6;else selected<=selected-1'b1;
                     UI_NEXT:if(selected==6)selected<=0;else selected<=selected+1'b1;
-                    UI_ECHO:begin effect_mode<=0;effects_enabled<=1;end
-                    UI_ROOM:begin effect_mode<=1;effects_enabled<=1;end
-                    UI_TREMOLO:begin effect_mode<=2;effects_enabled<=1;end
+                    UI_ECHO:begin effect_mode<=0;end
+                    UI_ROOM:begin effect_mode<=1;end
+                    UI_TREMOLO:begin effect_mode<=2;end
                     UI_FX:effects_enabled<=!effects_enabled;
                     UI_MODE:menu_mode<=!menu_mode;
                     UI_THEME:begin theme_id<=next_theme(normal_theme);normal_theme<=next_theme(normal_theme);end

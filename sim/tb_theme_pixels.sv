@@ -17,7 +17,7 @@ module tb_theme_pixels;
   end
  end
  task snapshot;begin
-  @(negedge clk);frame_start=1;de=0;@(negedge clk);frame_start=0;repeat(3)@(negedge clk);
+  @(negedge clk);frame_start=1;de=0;@(negedge clk);frame_start=0;repeat(10)@(negedge clk);
  end endtask
  task render(input integer which);begin
   n=0;record=1;frozen=dut.state;frozen_animation=dut.animation_frame;
@@ -26,7 +26,7 @@ module tb_theme_pixels;
    if(yy==240 && xx==100)status=~status;
    `CHECK(dut.state==frozen && dut.animation_frame==frozen_animation,"UI and animation never change mid-frame")
   end
-  @(negedge clk);de=0;repeat(3)@(negedge clk);record=0;
+  @(negedge clk);de=0;repeat(10)@(negedge clk);record=0;
   `CHECK(n==384000,"theme changes preserve complete 800x480 pipeline")
   // A theme switch button must be visibly rendered and have the shared hitbox.
   `CHECK(dut.ui_hit(536,420,0,frozen[20])==19,"theme control exists on both pages")
@@ -57,7 +57,7 @@ module tb_theme_pixels;
   status[55:54]=3;snapshot;repeat(120)snapshot;
   `CHECK(dut.animation_frame==0 && dut.animation_phase==0,"Easter has no animation state changes even across 120 LCD frame ticks")
   valid=0;status=0;snapshot;`CHECK(dut.state[55:54]==3,"invalid CDC snapshot cannot change static theme")
-  rst=1;repeat(3)@(negedge clk);`CHECK(!dout && rgb==0,"reset blanks both stages")
+  rst=1;repeat(10)@(negedge clk);`CHECK(!dout && rgb==0,"reset blanks all stages")
   $display("PASS tb_theme_pixels checks=%0d frames=%0d",checks,LAST_SCENE-FIRST_SCENE+1);$finish;
  end
  initial begin #60000000;$fatal(1,"theme raster timeout");end

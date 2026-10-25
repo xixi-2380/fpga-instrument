@@ -44,15 +44,29 @@ module synth_core #(
     wire signed [`VOICE_W-1:0] gain_sample;
     wire signed [15:0] mix_sample;
     wire [15:0] frame_l,frame_r;
+    // Monitor only: register context selection before decoding the note bit.
+    // Audio rendering and allocator handshakes are not delayed.
     reg [15:0] note_scan;
-    wire [6:0] scanning_id=voice_ids[selected_voice*7+:7];
-    wire [15:0] note_bit=(voice_held[selected_voice] && scanning_id>=60 && scanning_id<76) ? (16'b1 << (scanning_id-7'd60)) : 16'd0;
+    reg note_pending,monitor_held,monitor_first,monitor_last;
+    reg [6:0] monitor_id;
+    wire [15:0] note_bit=(monitor_held && monitor_id>=60 && monitor_id<76)
+        ? (16'b1 << (monitor_id-7'd60)) : 16'd0;
     always @(posedge clk or posedge rst)begin
-        if(rst)begin note_scan<=0;visual_notes<=0;end
-        else if(dds_ce)begin
-            if(selected_voice==0)note_scan<=note_bit;
-            else note_scan<=note_scan | note_bit;
-            if(selected_voice==VOICES-1)visual_notes<=VOICES==1 ? note_bit : note_scan | note_bit;
+        if(rst)begin
+            note_scan<=0;visual_notes<=0;note_pending<=0;monitor_held<=0;
+            monitor_id<=0;monitor_first<=0;monitor_last<=0;
+        end else begin
+            note_pending<=dds_ce;
+            if(dds_ce)begin
+                monitor_id<=voice_ids[selected_voice*7+:7];
+                monitor_held<=voice_held[selected_voice];
+                monitor_first<=selected_voice==0;
+                monitor_last<=selected_voice==VOICES-1;
+            end
+            if(note_pending)begin
+                note_scan<=monitor_first ? note_bit : note_scan | note_bit;
+                if(monitor_last)visual_notes<=monitor_first ? note_bit : note_scan | note_bit;
+            end
         end
     end
     assign visual_sample_valid=effect_valid;

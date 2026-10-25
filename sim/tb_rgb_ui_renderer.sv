@@ -15,7 +15,7 @@ module tb_rgb_ui_renderer;
   end
  end
  task snapshot;begin
-  @(negedge clk);frame_start=1;de=0;@(negedge clk);frame_start=0;repeat(3)@(negedge clk);
+  @(negedge clk);frame_start=1;de=0;@(negedge clk);frame_start=0;repeat(10)@(negedge clk);
  end endtask
  task render(input integer which);begin
   n=0;record=1;frozen=dut.state;
@@ -24,7 +24,7 @@ module tb_rgb_ui_renderer;
    if(yy==240 && xx==100)status=~status;
    `CHECK(dut.state==frozen,"UI state remains atomic for entire raster")
   end
-  @(negedge clk);de=0;repeat(3)@(negedge clk);record=0;
+  @(negedge clk);de=0;repeat(10)@(negedge clk);record=0;
   `CHECK(n==384000,"exactly 800x480 rendered pixels after pipeline flush")
   `CHECK(pixels[0]==dut.artwork.british_palette[dut.artwork.british[0]],"outer celestial background")
   if(frozen[20])begin
@@ -40,7 +40,7 @@ module tb_rgb_ui_renderer;
   $fclose(fd);
  end endtask
  task spot(input integer xx,yy,input [23:0] expected,input bit visible);begin
-  @(negedge clk);x=xx;y=yy;de=1;repeat(2)@(negedge clk);
+  @(negedge clk);x=xx;y=yy;de=1;repeat(8)@(negedge clk);
   `CHECK(rgb===expected && de_out==visible,"test pattern and clipping follow same pixel pipeline")
  end endtask
  initial begin
@@ -65,7 +65,7 @@ module tb_rgb_ui_renderer;
   spot(650,200,24'h0000ff,1);spot(750,200,24'h000000,1);spot(799,200,24'hf2e6c9,1);
   spot(800,200,24'h000000,0);
   valid=0;status=0;snapshot;`CHECK(dut.state[19],"invalid snapshot cannot replace current frame state")
-  rst=1;repeat(3)@(negedge clk);`CHECK(!de_out && rgb==0,"reset blanks both pipeline stages")
+  rst=1;repeat(10)@(negedge clk);`CHECK(!de_out && rgb==0,"reset blanks all pipeline stages")
   $display("PASS tb_rgb_ui_renderer checks=%0d frames=4",checks);$finish;
  end
  initial begin #50000000;$fatal(1,"UI raster timeout");end

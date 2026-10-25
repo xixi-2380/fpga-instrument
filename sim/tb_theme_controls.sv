@@ -20,7 +20,14 @@ module tb_theme_controls;
  task unchanged;begin `CHECK({timbre,fx,en,menu,ep,rp,dp,hz}==audio_state,"themes preserve instrument, effects, page and all parameters") end endtask
  initial begin
   #12 rst=0;cycles(5);`CHECK(theme==0,"British default")
-  act(UI_CELLO);act(UI_ROOM);act(UI_MORE);act(UI_MODE);
+  // Selecting any effect must preserve bypass, including returning to ECHO.
+  act(UI_ROOM);`CHECK(!en && fx==1,"ROOM selection preserves disabled state")
+  act(UI_TREMOLO);`CHECK(!en && fx==2,"TREMOLO selection preserves disabled state")
+  act(UI_ECHO);`CHECK(!en && fx==0,"return to ECHO cannot re-enable FX")
+  act(UI_FX);`CHECK(en,"explicit FX action enables processing")
+  act(UI_ROOM);act(UI_TREMOLO);act(UI_ECHO);`CHECK(en,"effect selections also preserve enabled state")
+  act(UI_FX);act(UI_ROOM);act(UI_ECHO);`CHECK(!en,"off remains off after repeated effect selections")
+  act(UI_CELLO);act(UI_ROOM);act(UI_FX);act(UI_MORE);act(UI_MODE);
   audio_state={timbre,fx,en,menu,ep,rp,dp,hz};
   short_key(2);`CHECK(theme==1,"S2 next to cat") unchanged;
   short_key(2);`CHECK(theme==2,"S2 next to capybara") unchanged;

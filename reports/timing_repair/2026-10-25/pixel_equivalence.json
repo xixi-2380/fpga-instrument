@@ -1,0 +1,72 @@
+{
+  "baseline_commit": "14a693ce48a1d60197f4423cf306e8bd43b8adfc",
+  "pages": [
+    {
+      "theme": 0,
+      "page": "play",
+      "pixels": 384000,
+      "different_pixels": 0,
+      "baseline_sha256": "5e587ebc5a100458f65b0db6c20be5342a82cc6c09d414228e020762f544004a",
+      "updated_sha256": "5e587ebc5a100458f65b0db6c20be5342a82cc6c09d414228e020762f544004a"
+    },
+    {
+      "theme": 0,
+      "page": "settings",
+      "pixels": 384000,
+      "different_pixels": 0,
+      "baseline_sha256": "c0f2161dea26accc4157c7dbec8a736e1e541f087923dee98a2bc4449f986ce0",
+      "updated_sha256": "c0f2161dea26accc4157c7dbec8a736e1e541f087923dee98a2bc4449f986ce0"
+    },
+    {
+      "theme": 1,
+      "page": "play",
+      "pixels": 384000,
+      "different_pixels": 0,
+      "baseline_sha256": "702603c6a394ca6d3fc1f6b4eb5c0268ebec98c68f5f68be243d788b59b65504",
+      "updated_sha256": "702603c6a394ca6d3fc1f6b4eb5c0268ebec98c68f5f68be243d788b59b65504"
+    },
+    {
+      "theme": 1,
+      "page": "settings",
+      "pixels": 384000,
+      "different_pixels": 0,
+      "baseline_sha256": "bc32189d0a90cdec98a47018dd9f159b1e07f036c63909630bcea1035ab086be",
+      "updated_sha256": "bc32189d0a90cdec98a47018dd9f159b1e07f036c63909630bcea1035ab086be"
+    },
+    {
+      "theme": 2,
+      "page": "play",
+      "pixels": 384000,
+      "different_pixels": 0,
+      "baseline_sha256": "92ac237d72bb68e0dc5a020602f56f53675a439cc39f4936fdb9327aaa9310ea",
+      "updated_sha256": "92ac237d72bb68e0dc5a020602f56f53675a439cc39f4936fdb9327aaa9310ea"
+    },
+    {
+      "theme": 2,
+      "page": "settings",
+      "pixels": 384000,
+      "different_pixels": 0,
+      "baseline_sha256": "b3b8b5e002ab8102067c16d72feb3670484a50609fcac12e87ad2d9c1c940633",
+      "updated_sha256": "b3b8b5e002ab8102067c16d72feb3670484a50609fcac12e87ad2d9c1c940633"
+    },
+    {
+      "theme": 3,
+      "page": "play",
+      "pixels": 384000,
+      "different_pixels": 0,
+      "baseline_sha256": "6dbda265e7e57c7d0aa0c260dba6c0cf84cb18c2eb2f2b5314c7c85de3b373f2",
+      "updated_sha256": "6dbda265e7e57c7d0aa0c260dba6c0cf84cb18c2eb2f2b5314c7c85de3b373f2"
+    },
+    {
+      "theme": 3,
+      "page": "settings",
+      "pixels": 384000,
+      "different_pixels": 0,
+      "baseline_sha256": "12b0a37dbcd50ac4c0a124f17fd889bc739677b667f761add3acf6826b2daf47",
+      "updated_sha256": "12b0a37dbcd50ac4c0a124f17fd889bc739677b667f761add3acf6826b2daf47"
+    }
+  ],
+  "compared_pixels": 3072000,
+  "different_pixels": 0,
+  "scope": "fixed ROMs/animation index and representative atomic status; not an electrical LCD test"
+}

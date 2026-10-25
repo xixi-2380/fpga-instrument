@@ -1,5 +1,5 @@
 `timescale 1ns/1ps
-// Four visual themes. Synchronous artwork + font ROMs, two pixel stages.
+// Four visual themes. Eight registered pixel stages; RGB/DE/HS/VS aligned.
 // One atomic1112-bit snapshot per frame; no framebuffer and no audio stalls.
 module rgb_ui_renderer(
  input wire pixel_clk,rst,frame_start,status_valid,input wire [1111:0] status_data,
@@ -26,40 +26,58 @@ module rgb_ui_renderer(
  wire [3:0] rate=state[48:45];
  wire [5:0] voices=state[5:0]>32 ? 6'd32 : state[5:0];
  wire [7:0] peak=state[87:80];
- reg [23:0] base,fg,base_pipe,fg_pipe;
+ reg [14:0] peak_scaled;
+ reg [6:0] peak_percent;
+ reg [7:0] peak_hundreds,peak_tens,peak_units,amount_hundreds,amount_tens,amount_units,voice_tens,voice_units;
+ always @(posedge pixel_clk)begin
+  if(rst)begin
+   peak_scaled<=127;peak_percent<=0;
+   peak_hundreds<=32;peak_tens<=32;peak_units<=48;
+   amount_hundreds<=32;amount_tens<=32;amount_units<=48;voice_tens<=48;voice_units<=48;
+  end else begin
+   peak_scaled<=peak*15'd100+15'd127;peak_percent<=peak_scaled/15'd255;
+   peak_hundreds<=peak_percent==100 ? 8'd49 : 8'd32;
+   peak_tens<=peak_percent>=10 ? 8'd48+(peak_percent/7'd10)%7'd10 : 8'd32;
+   peak_units<=8'd48+peak_percent%7'd10;
+   amount_hundreds<=percent==100 ? 8'd49 : 8'd32;
+   amount_tens<=percent>=10 ? 8'd48+(percent/7'd10)%7'd10 : 8'd32;
+   amount_units<=8'd48+percent%7'd10;
+   voice_tens<=8'd48+voices/6'd10;voice_units<=8'd48+voices%6'd10;
+  end
+ end
+ reg [23:0] base,fg;
  reg [319:0] text;
- integer len,tx,ty,dx,dy,ci,px,py,i,k,left,top,note_index;
- integer bin,point_y,previous_y,minimum_y,maximum_y,pc;
- reg [7:0] ch;reg [13:0] font_addr;reg [3:0] font_bit,bit_pipe;
- reg alpha_font,alpha_pipe;reg [1:0] alpha;
- reg text_ink,ink_pipe,de_pipe,hs_pipe,vs_pipe;
+ reg [5:0] len;reg [10:0] tx,ty;
+ integer dx,dy,ci,px,py,i,k,left,top;reg [3:0] note_index;
+ reg [6:0] bin; integer point_y,previous_y,minimum_y,maximum_y,pc;
+ reg [7:0] ch;reg [13:0] font_addr;reg [3:0] font_bit;
+ reg alpha_font;
+ reg text_ink;
  reg [15:0] font_rom[0:16383],font_row;
  initial $readmemh("src/rom/theme_font.hex",font_rom);
  reg [25:0] animation_phase;
  reg [3:0] animation_frame;
  wire [23:0] art_pixel;
  ui_theme_art artwork(pixel_clk,theme,animation_frame,x,y,art_pixel,menu);
- reg background_pipe,panel_pipe,blank_pipe,test_pipe;
- reg [1:0] theme_pipe;
- reg [23:0] resolved_base;
- function automatic [23:0] mix_color(input [23:0] a,b,input [1:0] weight);
-  integer rr,gg,bb;
+ // Limit color arithmetic to ten bits, rather than signed 32-bit division.
+ function automatic [7:0] blend_channel(input [7:0] a,b,input [1:0] w);
+  reg [9:0] sum;
   begin
-   rr=(integer'(a[23:16])*(3-integer'(weight))+integer'(b[23:16])*integer'(weight)+1)/3;
-   gg=(integer'(a[15:8])*(3-integer'(weight))+integer'(b[15:8])*integer'(weight)+1)/3;
-   bb=(integer'(a[7:0])*(3-integer'(weight))+integer'(b[7:0])*integer'(weight)+1)/3;
-   mix_color={rr[7:0],gg[7:0],bb[7:0]};
+   case(w)
+    0:blend_channel=a;
+    3:blend_channel=b;
+    default:begin
+     sum=w==1 ? ({2'b0,a}<<1)+{2'b0,b}+10'd1
+              : {2'b0,a}+({2'b0,b}<<1)+10'd1;
+     blend_channel=sum/10'd3;
+    end
+   endcase
   end
  endfunction
- always @*begin
-  resolved_base=base_pipe;
-  if(!test_pipe)begin
-   if(background_pipe)resolved_base=art_pixel;
-   else if(panel_pipe && theme_pipe!=0)resolved_base=mix_color(base_pipe,art_pixel,2);
-  end
-  if(blank_pipe)resolved_base=0;
-  alpha=alpha_pipe ? ((font_row>>bit_pipe)&3) : (font_row[bit_pipe] ? 3 : 0);
- end
+ function automatic [23:0] mix_color(input [23:0] a,b,input [1:0] weight);
+  begin mix_color={blend_channel(a[23:16],b[23:16],weight),
+   blend_channel(a[15:8],b[15:8],weight),blend_channel(a[7:0],b[7:0],weight)};end
+ endfunction
  function automatic [7:0] digit(input integer value);
   begin digit=8'd48+value;end
  endfunction
@@ -127,7 +145,7 @@ module rgb_ui_renderer(
    if(py>=208 && py<228 && px>=308)begin
     ty=210;fg=GOLD;
     if(px<536)begin text=fx==2 ? "DEPTH" : "AMOUNT";len=fx==2 ? 5 : 6;tx=308;end
-    else begin text={(percent==100 ? 8'd49 : 8'd32),(percent>=10 ? digit((percent/10)%10) : 8'd32),digit(percent%10),"%"};len=4;tx=696;end
+    else begin text={amount_hundreds,amount_tens,amount_units,"%"};len=4;tx=696;end
    end
    if(py>=314 && py<336 && px>=308)begin
     text=fx==0 ? "DELAY TIME" : fx==1 ? "ROOM MODEL" : "RATE";len=fx==2 ? 4 : 10;tx=308;ty=316;fg=DIM;
@@ -163,11 +181,13 @@ module rgb_ui_renderer(
    if(py>=268 && py<288 && px>=480)begin text="LEVEL";len=5;tx=488;ty=270;fg=DIM;end
    if(ui_inside(px,py,488,298,256,10))base=(px-488)<integer'(peak) ? GOLD : BG;
    if(py>=268 && py<288 && px>=640)begin
-    pc=(integer'(peak)*100+127)/255;
-    text={pc==100 ? 8'd49 : 8'd32,pc>=10 ? digit((pc/10)%10) : 8'd32,digit(pc%10),"% PEAK"};len=9;tx=668;ty=270;fg=DIM;
+    pc=peak_percent;
+    text={peak_hundreds,peak_tens,peak_units,"% PEAK"};len=9;tx=668;ty=270;fg=DIM;
    end
    if(ui_inside(px,py,480,342,288,60))begin
-    note_index=((py-342)/30)*8+(px-480)/36;left=480+(note_index%8)*36;top=342+(note_index/8)*30;
+    note_index=py>=372 ? 8 : 0;left=480;top=py>=372 ? 372 : 342;
+    for(integer tile=0;tile<8;tile=tile+1)
+     if(px>=480+tile*36 && px<516+tile*36)begin note_index=note_index+tile;left=480+tile*36;end
     if(px<left+34 && py<top+28)begin
      base=state[64+note_index] ? GOLD : BG;fg=state[64+note_index] ? INK : DIM;
      case(note_index%12)
@@ -203,12 +223,14 @@ module rgb_ui_renderer(
    end
    if(px>=608 && px<760 && py>=200 && py<224)base=(px-608)<(integer'(peak)*152>>8) ? (peak>=248 ? RED : GOLD) : BG;
    if(py>=244 && py<264 && px>=608)begin
-    pc=(integer'(peak)*100+127)/255;
-    text={pc==100 ? 8'd49 : 8'd32,pc>=10 ? digit((pc/10)%10) : 8'd32,digit(pc%10),"% PEAK"};len=9;tx=608;ty=246;fg=DIM;
+    pc=peak_percent;
+    text={peak_hundreds,peak_tens,peak_units,"% PEAK"};len=9;tx=608;ty=246;fg=DIM;
    end
    if(py>=280 && py<300 && px>=608)begin text=peak>=248 ? "NEAR FULL" : "PCM OUTPUT";len=peak>=248 ? 9 : 10;tx=608;ty=282;fg=peak>=248 ? RED : DIM;end
    if(py>=348 && py<396 && px>=32 && px<768)begin
-    note_index=(px-32)/46;left=32+note_index*46;
+    note_index=0;left=32;
+    for(integer tile=0;tile<16;tile=tile+1)
+     if(px>=32+tile*46 && px<78+tile*46)begin note_index=tile;left=32+tile*46;end
     if(px<left+42)begin
      base=state[64+note_index] ? GOLD : BG;fg=state[64+note_index] ? INK : DIM;
      // Exact chromatic MIDI60..75; these are monitors, not touch piano keys.
@@ -227,7 +249,7 @@ module rgb_ui_renderer(
   end
   if(px>=420 && px<640 && py>=22 && py<62)begin
    tx=430;fg=DIM;
-   if(py<42)begin text={"VOICES ",digit(voices/10),digit(voices%10),"/32"};len=12;ty=24;end
+   if(py<42)begin text={"VOICES ",voice_tens,voice_units,"/32"};len=12;ty=24;end
    else begin text=state[15] ? "AUDIO READY" : "STARTING";len=state[15] ? 11 : 8;ty=46;fg=state[15] ? GREEN : GOLD;end
   end
   if(ui_inside(px,py,536,420,112,44))begin
@@ -251,11 +273,6 @@ module rgb_ui_renderer(
     if(state[16] || state[17] || state[18])begin text=state[18] ? "GHOST KEYS" : "AUDIO ERROR";len=state[18] ? 10 : 11;fg=RED;end
    end
   end
-  dx=px-tx;dy=py-ty;
-  if(len>0 && dx>=0 && dx<len*10 && dy>=0 && dy<16)begin
-   ci=dx/10;ch=text[(len-1-ci)*8+:8];
-   if(ch>=32 && ch<128)begin font_addr=integer'(font_theme)*1536+(ch-32)*16+dy;font_bit=15-(dx%10);text_ink=1;end
-  end
   // 2-bit antialiased whole-word script headings preserve joined strokes.
   if(theme==0 && menu)begin
    k=-1;left=308;top=98;
@@ -273,38 +290,101 @@ module rgb_ui_renderer(
    font_bit=14-((px-24)%8)*2;text_ink=1;alpha_font=1;fg=GOLD;
   end
   if(state[19])begin
-   case(px/100)
-    0:base=24'hffffff;1:base=24'hffff00;2:base=24'h00ffff;3:base=24'h00ff00;
-    4:base=24'hff00ff;5:base=24'hff0000;6:base=24'h0000ff;default:base=0;
+   case(1'b1)
+    px<100:base=24'hffffff;px<200:base=24'hffff00;px<300:base=24'h00ffff;px<400:base=24'h00ff00;
+    px<500:base=24'hff00ff;px<600:base=24'hff0000;px<700:base=24'h0000ff;default:base=0;
    endcase
    if(px==0 || px==799 || py==0 || py==479)base=CREAM;
    text_ink=0;
   end
   if(!de_in || px>=800 || py>=480)begin base=0;text_ink=0;end
  end
- // Synchronous read maps to a ROM; blanking has identical two-stage latency.
+ // S1 layout; S2 relative position; S3 cell; S4 character; S5 address;
+ // S6 synchronous ROM; S7 background/alpha; S8 final text blend.
+ localparam integer PIXEL_LATENCY=8;
+ reg [319:0] text_s1,text_s2,text_s3;
+ reg [5:0] len_s1,len_s2,len_s3;
+ reg [10:0] x_s1,y_s1,tx_s1,ty_s1;
+ reg signed [11:0] dx_s2,dy_s2;
+ reg [5:0] cell_s3;
+ reg [3:0] row_s3,normal_bit_s3,row_s4,normal_bit_s4,bit_s5,bit_s6;
+ reg normal_ink_s3,normal_ink_s4,ink_s5,ink_s6;
+ reg [7:0] char_s4;
+ reg [13:0] addr_s5;
+ reg [23:0] bases[0:5],foregrounds[0:5],arts[1:5];
+ reg [13:0] direct_addr[0:3];reg [3:0] direct_bit[0:3];
+ reg [3:0] direct_ink,direct_alpha;
+ reg [1:0] fonts[0:3];
+ reg [5:0] background,panels,blank,tests,des,hss,vss;
+ reg [1:0] themes[0:5];
+ reg alpha_s5,alpha_s6;
+ reg [23:0] resolved_s7,fg_s7;
+ reg [1:0] alpha_s7;
+ reg ink_s7,de_s7,hs_s7,vs_s7;
+ // Unconditional synchronous ROM read preserves block-memory inference.
+ always @(posedge pixel_clk)font_row<=font_rom[addr_s5];
+ wire [5:0] glyph_index=len_s3-6'd1-cell_s3;
+ wire normal_valid=dx_s2>=0 && dx_s2<({6'd0,len_s2}*12'd10) && dy_s2>=0 && dy_s2<16;
  always @(posedge pixel_clk)begin
-  font_row<=font_rom[font_addr];
-  if(rst)begin state<=0;base_pipe<=0;fg_pipe<=0;bit_pipe<=0;ink_pipe<=0;
-   de_pipe<=0;hs_pipe<=0;vs_pipe<=0;rgb<=0;
-   alpha_pipe<=0;background_pipe<=0;panel_pipe<=0;blank_pipe<=1;test_pipe<=0;theme_pipe<=0;
-   animation_phase<=0;animation_frame<=0;de_out<=0;hs_out<=0;vs_out<=0;end
-  else begin
+  if(rst)begin
+   state<=0;animation_phase<=0;animation_frame<=0;
+   text_s1<=0;text_s2<=0;text_s3<=0;len_s1<=0;len_s2<=0;len_s3<=0;
+   x_s1<=0;y_s1<=0;tx_s1<=0;ty_s1<=0;dx_s2<=0;dy_s2<=0;
+   cell_s3<=0;row_s3<=0;normal_bit_s3<=0;normal_ink_s3<=0;
+   char_s4<=0;row_s4<=0;normal_bit_s4<=0;normal_ink_s4<=0;
+   addr_s5<=0;bit_s5<=0;ink_s5<=0;alpha_s5<=0;
+   bit_s6<=0;ink_s6<=0;alpha_s6<=0;
+   resolved_s7<=0;fg_s7<=0;alpha_s7<=0;ink_s7<=0;de_s7<=0;hs_s7<=0;vs_s7<=0;
+   direct_ink<=0;direct_alpha<=0;background<=0;panels<=0;blank<=6'b111111;tests<=0;des<=0;hss<=0;vss<=0;
+   for(integer q=0;q<6;q=q+1)begin bases[q]<=0;foregrounds[q]<=0;themes[q]<=0;end
+   for(integer q=1;q<6;q=q+1)arts[q]<=0;
+   for(integer q=0;q<4;q=q+1)begin direct_addr[q]<=0;direct_bit[q]<=0;fonts[q]<=0;end
+   rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;
+  end else begin
    if(frame_start)begin
     if(status_valid)state<=status_data;
     if(status_valid && status_data[55:54]!=theme)begin animation_phase<=0;animation_frame<=0;end
     else if(theme==1 || theme==2)begin
-     if(animation_phase>=26'd28646640)begin
-      animation_phase<=animation_phase-26'd28646640;animation_frame<=animation_frame+1'b1;
-     end else animation_phase<=animation_phase+26'd6353360;
+     if(animation_phase>=26'd28646640)begin animation_phase<=animation_phase-26'd28646640;animation_frame<=animation_frame+1'b1;end
+     else animation_phase<=animation_phase+26'd6353360;
     end
    end
-   base_pipe<=base;fg_pipe<=fg;
-   alpha_pipe<=alpha_font;background_pipe<=base==BG;panel_pipe<=base==PANEL;
-   theme_pipe<=theme;test_pipe<=state[19];blank_pipe<=!de_in || x>=800 || y>=480;
-   bit_pipe<=font_bit;ink_pipe<=text_ink;de_pipe<=de_in && x<800 && y<480;hs_pipe<=hs_in;vs_pipe<=vs_in;
-   rgb<=ink_pipe ? mix_color(resolved_base,fg_pipe,alpha) : resolved_base;
-   de_out<=de_pipe;hs_out<=hs_pipe;vs_out<=vs_pipe;
+   text_s1<=text;len_s1<=len;x_s1<=x;y_s1<=y;tx_s1<=tx;ty_s1<=ty;
+   direct_addr[0]<=font_addr;direct_bit[0]<=font_bit;fonts[0]<=font_theme;
+   direct_ink[0]<=text_ink;direct_alpha[0]<=alpha_font;
+   bases[0]<=base;foregrounds[0]<=fg;themes[0]<=theme;
+   background[0]<=base==BG;panels[0]<=base==PANEL;tests[0]<=state[19];
+   blank[0]<=!de_in || x>=800 || y>=480;des[0]<=de_in && x<800 && y<480;hss[0]<=hs_in;vss[0]<=vs_in;
+   for(integer q=1;q<6;q=q+1)begin
+    bases[q]<=bases[q-1];foregrounds[q]<=foregrounds[q-1];themes[q]<=themes[q-1];
+    background[q]<=background[q-1];panels[q]<=panels[q-1];tests[q]<=tests[q-1];blank[q]<=blank[q-1];
+    des[q]<=des[q-1];hss[q]<=hss[q-1];vss[q]<=vss[q-1];
+    if(q==1)arts[q]<=art_pixel;else arts[q]<=arts[q-1];
+   end
+   for(integer q=1;q<4;q=q+1)begin
+    direct_addr[q]<=direct_addr[q-1];direct_bit[q]<=direct_bit[q-1];fonts[q]<=fonts[q-1];
+    direct_ink[q]<=direct_ink[q-1];direct_alpha[q]<=direct_alpha[q-1];
+   end
+   // Positions are bounded to the 800x480 canvas, not 32-bit signed dividers.
+   dx_s2<=$signed({1'b0,x_s1})-$signed({1'b0,tx_s1});
+   dy_s2<=$signed({1'b0,y_s1})-$signed({1'b0,ty_s1});text_s2<=text_s1;len_s2<=len_s1;
+   cell_s3<=normal_valid ? $unsigned(dx_s2)/12'd10 : 0;
+   normal_bit_s3<=15-($unsigned(dx_s2)%12'd10);row_s3<=dy_s2[3:0];normal_ink_s3<=normal_valid;
+   text_s3<=text_s2;len_s3<=len_s2;
+   char_s4<=normal_ink_s3 ? text_s3[{glyph_index,3'b000}+:8] : 8'd32;
+   row_s4<=row_s3;normal_bit_s4<=normal_bit_s3;normal_ink_s4<=normal_ink_s3;
+   addr_s5<=direct_ink[3] ? direct_addr[3] : {fonts[3],10'd0}+({fonts[3],10'd0}>>1)+(char_s4-8'd32)*14'd16+row_s4;
+   bit_s5<=direct_ink[3] ? direct_bit[3] : normal_bit_s4;
+   ink_s5<=!blank[3] && !tests[3] && (direct_ink[3] || (normal_ink_s4 && char_s4>=32 && char_s4<128));
+   alpha_s5<=direct_ink[3] && direct_alpha[3];
+   bit_s6<=bit_s5;ink_s6<=ink_s5;alpha_s6<=alpha_s5;
+   resolved_s7<=blank[5] ? 24'd0 : (!tests[5] && background[5]) ? arts[5] :
+    (!tests[5] && panels[5] && themes[5]!=0) ? mix_color(bases[5],arts[5],2) : bases[5];
+   fg_s7<=foregrounds[5];ink_s7<=ink_s6;
+   alpha_s7<=alpha_s6 ? ((font_row>>bit_s6)&3) : (font_row[bit_s6] ? 3 : 0);
+   de_s7<=des[5];hs_s7<=hss[5];vs_s7<=vss[5];
+   rgb<=ink_s7 ? mix_color(resolved_s7,fg_s7,alpha_s7) : resolved_s7;
+   de_out<=de_s7;hs_out<=hs_s7;vs_out<=vs_s7;
   end
  end
 endmodule
