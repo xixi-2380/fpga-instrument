@@ -10,7 +10,7 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
     output reg [8:0] echo_wet,room_wet,tremolo_depth,
     output reg [3:0] cfg_tremolo_rate_hz,
     output reg [6:0] echo_percent,room_percent,depth_percent,
-    output reg [3:0] tremolo_rate_hz,output reg [1:0] theme_id);
+    output reg [3:0] tremolo_rate_hz,output reg [1:0] theme_id,output reg language_zh);
     localparam integer CW=DEBOUNCE_CYCLES>1?$clog2(DEBOUNCE_CYCLES):1;
     (* async_reg="true" *) reg [3:0] sync_meta,sync_buttons;
     reg [3:0] stable_buttons,press_event,release_event;
@@ -21,11 +21,6 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
     function automatic [1:0] next_theme(input [1:0] t);
         begin next_theme=t==2 ? 0 : t+1'b1;end
     endfunction
-    function automatic [1:0] prev_theme(input [1:0] t);
-        begin prev_theme=t==0 ? 2 : t-1'b1;end
-    endfunction
-    reg [HW-1:0] menu_hold;
-    reg menu_holding,menu_fired;
     `include "config/ui_layout.svh"
     function automatic [8:0] amount(input [6:0] percent);
         begin case(percent)
@@ -65,13 +60,12 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
             end else cfg_valid<=0;
         end
     end
-    wire menu_long=menu_holding && !stable_buttons[0] && !menu_fired && menu_hold==LONG_PRESS_CYCLES-1;
     wire effect_long=holding && !stable_buttons[3] && !long_fired && hold_count==LONG_PRESS_CYCLES-1;
-    wire board_event=(|press_event) || (|release_event) || menu_long || effect_long;
+    wire board_event=press_event[3] || release_event[3] || effect_long;
     wire [6:0] current_percent=effect_mode==0?echo_percent:effect_mode==1?room_percent:depth_percent;
     always @(posedge clk or posedge rst)begin
         if(rst)begin sync_meta<=4'hf;sync_buttons<=4'hf;end
-        else begin sync_meta<=buttons_n;sync_buttons<=sync_meta;end
+        else begin sync_meta<={buttons_n[3],3'b111};sync_buttons<=sync_meta;end
     end
     for(genvar b=0;b<4;b=b+1)begin: debounce
         reg [CW-1:0] count;
@@ -89,25 +83,12 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
     end
     always @(posedge clk or posedge rst)begin
         if(rst)begin selected<=0;effects_enabled<=0;effect_mode<=0;hold_count<=0;holding<=0;long_fired<=0;
-            menu_mode<=0;menu_hold<=0;menu_holding<=0;menu_fired<=0;
+            menu_mode<=0;language_zh<=0;
             theme_id<=0;normal_theme<=0;
             echo_percent<=25;room_percent<=25;depth_percent<=50;tremolo_rate_hz<=5;
         end
         else begin
-            // S0 is a release action so a long menu press preserves timbre.
-            // Board events take priority over a simultaneous UI action.
-            if(release_event[0] && menu_holding && !menu_fired)selected<=0;
-            // S1/S2 now select visual themes only. S1 wins a simultaneous S1/S2.
-            if(press_event[1])begin theme_id<=prev_theme(normal_theme);normal_theme<=prev_theme(normal_theme);end
-            else if(press_event[2])begin theme_id<=next_theme(normal_theme);normal_theme<=next_theme(normal_theme);end
-            if(press_event[0])begin menu_holding<=1;menu_fired<=0;menu_hold<=0;end
-            else if(menu_holding)begin
-                if(release_event[0])menu_holding<=0;
-                else if(!stable_buttons[0] && !menu_fired)begin
-                    if(menu_long)begin menu_mode<=!menu_mode;menu_fired<=1;end
-                    else menu_hold<=menu_hold+1'b1;
-                end
-            end
+            // S0/S1/S2 are reserved and cannot block a touch command.
             if(ui_action_valid && !board_event)begin
                 case(ui_action)
                     UI_SINE:selected<=0;UI_FLUTE:selected<=1;UI_REED:selected<=2;
@@ -119,6 +100,7 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
                     UI_TREMOLO:begin effect_mode<=2;end
                     UI_FX:effects_enabled<=!effects_enabled;
                     UI_MODE:menu_mode<=!menu_mode;
+                    UI_LANGUAGE:language_zh<=!language_zh;
                     UI_THEME:begin theme_id<=next_theme(normal_theme);normal_theme<=next_theme(normal_theme);end
                     UI_LESS,UI_MORE:begin
                         case(effect_mode)
@@ -145,7 +127,7 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
             else if(holding)begin
                 if(release_event[3])begin
                     holding<=0;
-                    if(!long_fired)effects_enabled<=!effects_enabled;
+                    // Short S3 has no function; long S3 is the only board action.
                 end else if(!stable_buttons[3] && !long_fired)begin
                     if(hold_count==LONG_PRESS_CYCLES-1)begin
                         // Hidden theme is reachable only here, once per held S3.

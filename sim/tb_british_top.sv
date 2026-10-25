@@ -27,13 +27,16 @@ module tb_british_top;
   if(dut.lcd_on.display_driver.monitor.window_valid)windows=windows+1;
  end
  task more_frames(input integer n);integer target;begin target=frames+n;wait(frames>=target);#1;end endtask
- task toggle;begin buttons=14;repeat(256)@(negedge dut.audio_clk);buttons=15;repeat(10)@(negedge dut.audio_clk);end endtask
+ task toggle;begin
+ @(negedge dut.audio_clk);force dut.touch_action_valid=1;force dut.touch_action=6'd7;
+ @(negedge dut.audio_clk);release dut.touch_action_valid;release dut.touch_action;repeat(10)@(negedge dut.audio_clk);
+ end endtask
  task key(input integer n);begin pressed=16'b1<<n;more_frames(2);pressed=0;more_frames(2);end endtask
  initial begin
   #100 rst=0;wait(pa);more_frames(4);
   for(integer t=0;t<7;t=t+1)begin
    toggle;more_frames(2);
-   `CHECK(dut.menu_mode,"S0 enters parameter page")
+   `CHECK(dut.menu_mode,"screen command enters parameter page")
    if(t!=0)key(14);
    `CHECK(dut.selected_timbre==t,"matrix next reaches all seven identities")
    key(15);`CHECK(!dut.menu_mode,"return restores play mode")

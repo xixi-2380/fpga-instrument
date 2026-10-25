@@ -1,0 +1,2 @@
+FATAL: sim/tb_theme_pixels.sv:66: theme raster timeout
+       Time: 60000000000 Scope: tb_theme_pixels

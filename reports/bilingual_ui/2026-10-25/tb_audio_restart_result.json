@@ -1,0 +1,8 @@
+{
+  "test": "tb_audio_restart",
+  "parameters": "",
+  "passed": true,
+  "checks": 834006,
+  "pll_model": "explicit behavioral substitute",
+  "seconds": 103.088
+}

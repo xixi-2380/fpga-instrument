@@ -14,6 +14,7 @@ module rgb_ui_renderer(
  `include "config/ui_layout.svh"
  // Palette changes are visual only; state bits 55:54 carry the theme.
  wire [1:0] theme=state[55:54];
+ wire language_zh=state[56];
  wire [1:0] font_theme=theme==3 ? 0 : theme;
  wire [23:0] BG=theme==0 ? 24'h101214 : theme==1 ? 24'hf7f1e8 : theme==2 ? 24'hfff1d9 : 24'he7e5e3;
  wire [23:0] PANEL=theme==0 ? 24'h191c20 : theme==1 ? 24'heee3d4 : theme==2 ? 24'hfbe3bc : 24'heee8e1;
@@ -56,11 +57,12 @@ module rgb_ui_renderer(
  reg [5:0] len;reg [10:0] tx,ty;
  integer dx,dy,ci,px,py,i,k,left,top;reg [3:0] note_index;
  reg [6:0] bin; integer point_y,previous_y,minimum_y,maximum_y,pc;
- reg [7:0] ch;reg [13:0] font_addr;reg [3:0] font_bit;
- reg alpha_font;
+ reg [7:0] ch;reg [14:0] font_addr;reg [3:0] font_bit;
+ reg alpha_font,wide_text;
  reg text_ink;
- reg [15:0] font_rom[0:16383],font_row;
+ reg [15:0] font_rom[0:32767],font_row;
  initial $readmemh("src/rom/theme_font.hex",font_rom);
+ `include "config/ui_language.svh"
  reg [25:0] animation_phase;
  reg [3:0] animation_frame;
  wire [23:0] art_pixel;
@@ -87,14 +89,17 @@ module rgb_ui_renderer(
  function automatic [7:0] digit(input integer value);
   begin digit=8'd48+value;end
  endfunction
- function automatic [79:0] timbre_name(input [2:0] id);
+ function automatic [325:0] timbre_word(input [2:0] id);
   begin case(id)
-   1:timbre_name="FLUTE";2:timbre_name="REED";3:timbre_name="CELLO";
-   4:timbre_name="PIANO";5:timbre_name="GUITAR";6:timbre_name="VIBRAPHONE";
-   default:timbre_name="SINE";endcase end
- endfunction
- function automatic integer name_length(input [2:0] id);
-  begin case(id)1,3,4:name_length=5;2,0:name_length=4;5:name_length=6;default:name_length=10;endcase end
+   3'd0:timbre_word=ui_word(6'd0,language_zh);
+   3'd1:timbre_word=ui_word(6'd1,language_zh);
+   3'd2:timbre_word=ui_word(6'd2,language_zh);
+   3'd3:timbre_word=ui_word(6'd3,language_zh);
+   3'd4:timbre_word=ui_word(6'd4,language_zh);
+   3'd5:timbre_word=ui_word(6'd5,language_zh);
+   3'd6:timbre_word=ui_word(6'd6,language_zh);
+   default:timbre_word=ui_word(0,language_zh);
+  endcase end
  endfunction
  function [23:0] card(input integer xx,yy,l,t,w,h,input selected);
   begin
@@ -104,7 +109,7 @@ module rgb_ui_renderer(
  endfunction
  always @*begin
   px=integer'(raster_x);py=integer'(raster_y);base=BG;fg=CREAM;text=0;len=0;tx=0;ty=0;
-  dx=0;dy=0;ci=0;i=0;k=0;left=0;top=0;note_index=0;pc=0;
+  wide_text=language_zh;dx=0;dy=0;ci=0;i=0;k=0;left=0;top=0;note_index=0;pc=0;
   bin=0;point_y=234;previous_y=234;minimum_y=234;maximum_y=234;
   ch=0;font_addr=0;font_bit=0;text_ink=0;alpha_font=0;
   // Sparse faint celestial motifs. Ornament is kept outside touch controls.
@@ -121,47 +126,47 @@ module rgb_ui_renderer(
     left=timbre_x(i);top=timbre_y(i);
     if(ui_inside(px,py,left,top,112,52))begin
      base=card(px,py,left,top,112,52,timbre==i);
-     fg=timbre==i ? INK : CREAM;text=timbre_name(i);len=name_length(i);
-     tx=left+(112-len*10)/2;ty=top+18;
+     fg=timbre==i ? INK : CREAM;{len,text}=timbre_word(i);
+     tx=left+(112-len*(language_zh ? 16 : 10))/2;ty=top+18;
     end
    end
    if(ui_inside(px,py,152,324,112,52))begin
     base=card(px,py,152,324,112,52,enabled);fg=enabled ? INK : DIM;
-    text=enabled ? "FX ON" : "FX OFF";len=enabled ? 5 : 6;tx=enabled ? 183 : 178;ty=342;
+    {len,text}=enabled ? ui_word(6'd7,language_zh) : ui_word(6'd8,language_zh);tx=language_zh ? 176 : (enabled ? 183 : 178);ty=342;
    end
    for(i=0;i<3;i=i+1)begin
     left=308+156*i;
     if(ui_inside(px,py,left,124,148,48))begin
      base=card(px,py,left,124,148,48,fx==i);fg=fx==i ? INK : CREAM;
-     text=i==0 ? "ECHO" : i==1 ? "ROOM" : "TREMOLO";len=i==2 ? 7 : 4;
-     tx=left+(148-len*10)/2;ty=140;
+     {len,text}=i==0 ? ui_word(6'd9,language_zh) : i==1 ? ui_word(6'd10,language_zh) : ui_word(6'd11,language_zh);
+     tx=left+(148-len*(language_zh ? 16 : 10))/2;ty=140;
     end
    end
    if(ui_inside(px,py,308,240,52,48) || ui_inside(px,py,716,240,52,48) ||
       (fx==2 && (ui_inside(px,py,308,344,52,48) || ui_inside(px,py,716,344,52,48))))begin
     left=px<400 ? 308 : 716;top=py<300 ? 240 : 344;
-    base=card(px,py,left,top,52,48,1'b0);fg=GOLD;text=px<400 ? "-" : "+";len=1;tx=left+21;ty=top+16;
+    base=card(px,py,left,top,52,48,1'b0);fg=GOLD;{len,text}=px<400 ? ui_word(6'd47,language_zh) : ui_word(6'd48,language_zh);tx=left+21;ty=top+16;
    end
    if(px>=380 && px<680 && py>=260 && py<270)base=(px-380)<integer'(percent)*3 ? GOLD : BG;
    if(fx==2 && px>=380 && px<680 && py>=366 && py<376)base=(px-380)<integer'(rate)*30 ? WINE : BG;
    if(py>=98 && py<118)begin
-    if(px<280)begin text="Timbre";len=6;tx=32;ty=100;fg=GOLD;end
-    else begin text="Effect";len=6;tx=308;ty=100;fg=GOLD;end
+    if(px<280)begin {len,text}=ui_word(6'd12,language_zh);tx=32;ty=100;fg=GOLD;end
+    else begin {len,text}=ui_word(6'd13,language_zh);tx=308;ty=100;fg=GOLD;end
    end
    if(py>=208 && py<228 && px>=308)begin
     ty=210;fg=GOLD;
-    if(px<536)begin text=fx==2 ? "DEPTH" : "AMOUNT";len=fx==2 ? 5 : 6;tx=308;end
+    if(px<536)begin {len,text}=fx==2 ? ui_word(6'd14,language_zh) : ui_word(6'd15,language_zh);tx=308;end
     else begin text={amount_hundreds,amount_tens,amount_units,"%"};len=4;tx=696;end
    end
    if(py>=314 && py<336 && px>=308)begin
-    text=fx==0 ? "DELAY TIME" : fx==1 ? "ROOM MODEL" : "RATE";len=fx==2 ? 4 : 10;tx=308;ty=316;fg=DIM;
+    {len,text}=fx==0 ? ui_word(6'd16,language_zh) : fx==1 ? ui_word(6'd17,language_zh) : ui_word(6'd18,language_zh);tx=308;ty=316;fg=DIM;
     if(px>=656 && fx==2)begin text={rate==10 ? 8'd49 : 8'd32,digit(rate%10)," HZ"};len=5;tx=688;fg=GOLD;end
    end
    if(fx!=2 && py>=344 && py<384 && px>=380)begin
-    text=fx==0 ? "150 MS" : "SMALL ROOM";len=fx==0 ? 6 : 10;tx=fx==0 ? 510 : 490;ty=356;fg=CREAM;
+    {len,text}=fx==0 ? ui_word(6'd19,language_zh) : ui_word(6'd20,language_zh);tx=language_zh ? 500 : (fx==0 ? 510 : 490);ty=356;fg=CREAM;
    end
    if(ui_inside(px,py,664,420,116,44))begin
-    base=card(px,py,664,420,116,44,1'b0);text="RESET";len=5;tx=697;ty=434;fg=GOLD;
+    base=card(px,py,664,420,116,44,1'b0);{len,text}=ui_word(6'd21,language_zh);tx=language_zh ? 706 : 697;ty=434;fg=GOLD;
    end
   end else if(theme==3)begin
    // Easter performance page: a clear portrait at left, live monitors at
@@ -170,9 +175,9 @@ module rgb_ui_renderer(
       ui_inside(px,py,464,338,316,68))base=PANEL;
    if(py>=94 && py<114)begin
     ty=96;fg=GOLD;
-    if(px<296)begin text=timbre_name(timbre);len=name_length(timbre);tx=24;end
-    else if(px<560)begin text=enabled ? (fx==0 ? "ECHO ON" : fx==1 ? "ROOM ON" : "TREMOLO ON") : "EFFECTS OFF";len=enabled ? (fx==2 ? 10 : 7) : 11;tx=310;end
-    else begin text=state[14] ? "AUTO SCORE" : "LIVE KEYS";len=state[14] ? 10 : 9;tx=620;fg=DIM;end
+    if(px<296)begin {len,text}=timbre_word(timbre);tx=24;end
+    else if(px<560)begin {len,text}=enabled ? (fx==0 ? ui_word(6'd22,language_zh) : fx==1 ? ui_word(6'd23,language_zh) : ui_word(6'd24,language_zh)) : ui_word(6'd25,language_zh);tx=310;end
+    else begin {len,text}=state[14] ? ui_word(6'd26,language_zh) : ui_word(6'd27,language_zh);tx=620;fg=DIM;end
    end
    if(ui_inside(px,py,488,164,256,80))begin
     if((px-488)%32==0 || (py-164)%20==0)base=24'hd4d0cc;
@@ -183,12 +188,12 @@ module rgb_ui_renderer(
     maximum_y=point_y>previous_y ? point_y : previous_y;
     if(py==point_y || ((px-488)%2==0 && py>=minimum_y && py<=maximum_y))base=GOLD;
    end
-   if(py>=138 && py<158 && px>=480)begin text="OUTPUT WAVEFORM";len=15;tx=488;ty=140;fg=DIM;end
-   if(py>=268 && py<288 && px>=480)begin text="LEVEL";len=5;tx=488;ty=270;fg=DIM;end
+   if(py>=138 && py<158 && px>=480)begin {len,text}=ui_word(6'd28,language_zh);tx=488;ty=140;fg=DIM;end
+   if(py>=268 && py<288 && px>=480)begin {len,text}=ui_word(6'd29,language_zh);tx=488;ty=270;fg=DIM;end
    if(ui_inside(px,py,488,298,256,10))base=(px-488)<integer'(peak) ? GOLD : BG;
    if(py>=268 && py<288 && px>=640)begin
     pc=peak_percent;
-    text={peak_hundreds,peak_tens,peak_units,"% PEAK"};len=9;tx=668;ty=270;fg=DIM;
+    text=language_zh ? {peak_hundreds,peak_tens,peak_units,ZH_PEAK} : {peak_hundreds,peak_tens,peak_units,"% PEAK"};len=language_zh ? 6 : 9;tx=668;ty=270;fg=DIM;
    end
    if(ui_inside(px,py,480,342,288,60))begin
     note_index=py>=372 ? 8 : 0;left=480;top=py>=372 ? 372 : 342;
@@ -200,7 +205,7 @@ module rgb_ui_renderer(
       0:ch="C";1:ch="C";2:ch="D";3:ch="D";4:ch="E";5:ch="F";
       6:ch="F";7:ch="G";8:ch="G";9:ch="A";10:ch="A";default:ch="B";
      endcase
-     text={ch,(note_index%12==1 || note_index%12==3 || note_index%12==6 || note_index%12==8 || note_index%12==10) ? 8'd35 : 8'd32,digit(note_index<12 ? 4 : 5)};
+     wide_text=0;text={ch,(note_index%12==1 || note_index%12==3 || note_index%12==6 || note_index%12==8 || note_index%12==10) ? 8'd35 : 8'd32,digit(note_index<12 ? 4 : 5)};
      len=3;tx=left+2;ty=top+6;
     end
    end
@@ -208,9 +213,9 @@ module rgb_ui_renderer(
    if(ui_inside(px,py,20,128,552,196) || ui_inside(px,py,588,128,192,196) || ui_inside(px,py,20,338,760,68))base=PANEL;
    if(py>=94 && py<114)begin
     ty=96;fg=GOLD;
-    if(px<296)begin text=timbre_name(timbre);len=name_length(timbre);tx=24;end
-    else if(px<560)begin text=enabled ? (fx==0 ? "ECHO ON" : fx==1 ? "ROOM ON" : "TREMOLO ON") : "EFFECTS OFF";len=enabled ? (fx==2 ? 10 : 7) : 11;tx=310;end
-    else begin text=state[14] ? "AUTO SCORE" : "LIVE KEYS";len=state[14] ? 10 : 9;tx=620;fg=DIM;end
+    if(px<296)begin {len,text}=timbre_word(timbre);tx=24;end
+    else if(px<560)begin {len,text}=enabled ? (fx==0 ? ui_word(6'd22,language_zh) : fx==1 ? ui_word(6'd23,language_zh) : ui_word(6'd24,language_zh)) : ui_word(6'd25,language_zh);tx=310;end
+    else begin {len,text}=state[14] ? ui_word(6'd26,language_zh) : ui_word(6'd27,language_zh);tx=620;fg=DIM;end
    end
    if(ui_inside(px,py,32,164,512,140))begin
     if((px-32)%64==0 || (py-164)%35==0)base=24'h292c2c;
@@ -223,16 +228,16 @@ module rgb_ui_renderer(
    end
    if(py>=138 && py<158)begin
     ty=140;fg=DIM;
-    if(px<390)begin text="OUTPUT WAVEFORM";len=15;tx=32;end
-    else if(px<572)begin text="X8 DISPLAY";len=10;tx=440;end
-    else begin text="LEVEL";len=5;tx=608;end
+    if(px<390)begin {len,text}=ui_word(6'd28,language_zh);tx=32;end
+    else if(px<572)begin {len,text}=ui_word(6'd30,language_zh);tx=440;end
+    else begin {len,text}=ui_word(6'd29,language_zh);tx=608;end
    end
    if(px>=608 && px<760 && py>=200 && py<224)base=(px-608)<(integer'(peak)*152>>8) ? (peak>=248 ? RED : GOLD) : BG;
    if(py>=244 && py<264 && px>=608)begin
     pc=peak_percent;
-    text={peak_hundreds,peak_tens,peak_units,"% PEAK"};len=9;tx=608;ty=246;fg=DIM;
+    text=language_zh ? {peak_hundreds,peak_tens,peak_units,ZH_PEAK} : {peak_hundreds,peak_tens,peak_units,"% PEAK"};len=language_zh ? 6 : 9;tx=608;ty=246;fg=DIM;
    end
-   if(py>=280 && py<300 && px>=608)begin text=peak>=248 ? "NEAR FULL" : "PCM OUTPUT";len=peak>=248 ? 9 : 10;tx=608;ty=282;fg=peak>=248 ? RED : DIM;end
+   if(py>=280 && py<300 && px>=608)begin {len,text}=peak>=248 ? ui_word(6'd31,language_zh) : ui_word(6'd32,language_zh);tx=608;ty=282;fg=peak>=248 ? RED : DIM;end
    if(py>=348 && py<396 && px>=32 && px<768)begin
     note_index=0;left=32;
     for(integer tile=0;tile<16;tile=tile+1)
@@ -244,43 +249,42 @@ module rgb_ui_renderer(
       0:ch="C";1:ch="C";2:ch="D";3:ch="D";4:ch="E";5:ch="F";
       6:ch="F";7:ch="G";8:ch="G";9:ch="A";10:ch="A";default:ch="B";
      endcase
-     text={ch,(note_index%12==1 || note_index%12==3 || note_index%12==6 || note_index%12==8 || note_index%12==10) ? 8'd35 : 8'd32,digit(note_index<12 ? 4 : 5)};
+     wide_text=0;text={ch,(note_index%12==1 || note_index%12==3 || note_index%12==6 || note_index%12==8 || note_index%12==10) ? 8'd35 : 8'd32,digit(note_index<12 ? 4 : 5)};
      len=3;tx=left+6;ty=364;
     end
    end
   end
   // Shared header/status and mode action appear on both pages.
   if(py>=16 && py<64 && px>=648)begin
-   text=menu ? "RETURN" : "SETTINGS";len=menu ? 6 : 8;tx=menu ? 684 : 674;ty=32;fg=GOLD;
+   {len,text}=menu ? ui_word(6'd33,language_zh) : ui_word(6'd34,language_zh);tx=language_zh ? 698 : (menu ? 684 : 674);ty=32;fg=GOLD;
   end
   if(px>=420 && px<640 && py>=22 && py<62)begin
    tx=430;fg=DIM;
-   if(py<42)begin text={"VOICES ",voice_tens,voice_units,"/32"};len=12;ty=24;end
-   else begin text=state[15] ? "AUDIO READY" : "STARTING";len=state[15] ? 11 : 8;ty=46;fg=state[15] ? GREEN : GOLD;end
+   if(py<42)begin text=language_zh ? {ZH_VOICES,voice_tens,voice_units,"/32"} : {"VOICES ",voice_tens,voice_units,"/32"};len=language_zh ? 7 : 12;ty=24;end
+   else begin {len,text}=state[15] ? ui_word(6'd35,language_zh) : ui_word(6'd36,language_zh);ty=46;fg=state[15] ? GREEN : GOLD;end
   end
   if(ui_inside(px,py,536,420,112,44))begin
-   base=card(px,py,536,420,112,44,1'b0);text="THEME >";len=7;tx=557;ty=434;fg=GOLD;
+   base=card(px,py,536,420,112,44,1'b0);{len,text}=ui_word(6'd37,language_zh);tx=language_zh ? 560 : 557;ty=434;fg=GOLD;
   end
-  if(py>=420 && py<464 && px<528)begin
-   tx=24;fg=DIM;
+  if(ui_inside(px,py,400,420,120,44))begin
+   base=card(px,py,400,420,120,44,1'b0);fg=GOLD;
+   wide_text=1; text=language_zh ? "ENGLISH" : ZH_CHINESE;len=language_zh ? 7 : 2;tx=language_zh ? 404 : 450;ty=434;
+  end
+  if(py>=420 && py<464 && px<392)begin
+   tx=24;fg=DIM;ty=py<440 ? 422 : 446;
    if(py<440)begin
-    text=menu ? "R4C2 PREV / R4C3 NEXT TIMBRE" : "S0 HOLD: SETTINGS";len=menu ? 28 : 17;ty=422;
-    if(px>=336)begin
-     if(!state[49])begin text="TOUCH OFF";len=9;end
-     else if(state[52])begin text="TOUCH ERROR";len=11;fg=RED;end
-     else if(!state[51])begin text="TOUCH WAIT";len=10;end
-     else if(!state[50])begin text="TOUCH MONITOR";len=13;end
-     else begin text="TOUCH READY";len=11;fg=GREEN;end
-     tx=360;
-    end
+    if(!state[49])begin {len,text}=ui_word(6'd38,language_zh);end
+    else if(state[52])begin {len,text}=ui_word(6'd39,language_zh);fg=RED;end
+    else if(!state[51])begin {len,text}=ui_word(6'd40,language_zh);end
+    else if(!state[50])begin {len,text}=ui_word(6'd41,language_zh);end
+    else begin {len,text}=ui_word(6'd42,language_zh);fg=GREEN;end
    end else begin
-    text=menu ? "R3: AMOUNT / RATE   R4C4: RETURN" : "NOTE MONITOR C4-D#5 / 10.7 MS WINDOW";
-    len=menu ? 32 : 36;ty=446;
-    if(state[16] || state[17] || state[18])begin text=state[18] ? "GHOST KEYS" : "AUDIO ERROR";len=state[18] ? 10 : 11;fg=RED;end
+    {len,text}=menu ? ui_word(6'd46,language_zh) : ui_word(6'd45,language_zh);
+    if(state[16] || state[17] || state[18])begin {len,text}=state[18] ? ui_word(6'd43,language_zh) : ui_word(6'd44,language_zh);fg=RED;end
    end
   end
   // 2-bit antialiased whole-word script headings preserve joined strokes.
-  if(theme==0 && menu)begin
+  if(theme==0 && menu && !language_zh)begin
    k=-1;left=308;top=98;
    if(ui_inside(px,py,32,98,200,24))begin k=0;left=32;end
    else if(ui_inside(px,py,308,98,200,24))k=1;
@@ -292,7 +296,7 @@ module rgb_ui_renderer(
    end
   end
   if(ui_inside(px,py,24,4,384,64))begin
-   font_addr=4608+integer'(font_theme)*3072+(py-4)*48+((px-24)>>3);
+   font_addr=(language_zh ? ZH_TITLE_BASE : 4608)+integer'(font_theme)*3072+(py-4)*48+((px-24)>>3);
    font_bit=14-((px-24)%8)*2;text_ink=1;alpha_font=1;fg=GOLD;
   end
   if(state[19])begin
@@ -316,11 +320,15 @@ module rgb_ui_renderer(
  reg [3:0] row_s3,normal_bit_s3,row_s4,normal_bit_s4,bit_s5,bit_s6;
  reg normal_ink_s3,normal_ink_s4,ink_s5,ink_s6;
  reg [7:0] char_s4;
- reg [13:0] addr_s5;
+ reg [14:0] addr_s5;
  reg [23:0] bases[0:5],foregrounds[0:5],arts[1:5];
- reg [13:0] direct_addr[0:3];reg [3:0] direct_bit[0:3];
+ reg [14:0] direct_addr[0:3];reg [3:0] direct_bit[0:3];
  reg [3:0] direct_ink,direct_alpha;
  reg [1:0] fonts[0:3];
+ reg [14:0] zh_bases[0:3];
+ wire [14:0] zh_style_base=font_theme==0 ? ZH_GLYPH_BASE : font_theme==1 ? ZH_GLYPH_BASE+ZH_STYLE_WORDS : ZH_GLYPH_BASE+2*ZH_STYLE_WORDS;
+ wire [6:0] zh_index=char_s4[6:0];
+ reg [3:0] chinese;
  reg [5:0] background,panels,blank,tests,des,hss,vss;
  reg [1:0] themes[0:5];
  reg [23:0] bg_s1,panel_s1;
@@ -331,7 +339,7 @@ module rgb_ui_renderer(
  // Unconditional synchronous ROM read preserves block-memory inference.
  always @(posedge pixel_clk)font_row<=font_rom[addr_s5];
  wire [5:0] glyph_index=len_s3-6'd1-cell_s3;
- wire normal_valid=dx_s2>=0 && dx_s2<({6'd0,len_s2}*12'd10) && dy_s2>=0 && dy_s2<16;
+ wire normal_valid=dx_s2>=0 && dx_s2<({6'd0,len_s2}*(chinese[1] ? 12'd16 : 12'd10)) && dy_s2>=0 && dy_s2<16;
  always @(posedge pixel_clk)begin
   if(rst)begin
    state<=0;animation_phase<=0;animation_frame<=0;
@@ -345,8 +353,8 @@ module rgb_ui_renderer(
    direct_ink<=0;direct_alpha<=0;background<=0;panels<=0;blank<=6'b111111;tests<=0;des<=0;hss<=0;vss<=0;
    for(integer q=0;q<6;q=q+1)begin bases[q]<=0;foregrounds[q]<=0;themes[q]<=0;end
    for(integer q=1;q<6;q=q+1)arts[q]<=0;
-   for(integer q=0;q<4;q=q+1)begin direct_addr[q]<=0;direct_bit[q]<=0;fonts[q]<=0;end
-   bg_s1<=0;panel_s1<=0;rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;
+   for(integer q=0;q<4;q=q+1)begin direct_addr[q]<=0;direct_bit[q]<=0;fonts[q]<=0;zh_bases[q]<=0;end
+   chinese<=0;bg_s1<=0;panel_s1<=0;rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;
   end else begin
    if(frame_start)begin
     if(status_valid)state<=status_data;
@@ -357,7 +365,7 @@ module rgb_ui_renderer(
     end
    end
    text_s1<=text;len_s1<=len;x_s1<=raster_x;y_s1<=raster_y;tx_s1<=tx;ty_s1<=ty;
-   direct_addr[0]<=font_addr;direct_bit[0]<=font_bit;fonts[0]<=font_theme;
+   direct_addr[0]<=font_addr;direct_bit[0]<=font_bit;fonts[0]<=font_theme;zh_bases[0]<=zh_style_base;chinese[0]<=wide_text;
    direct_ink[0]<=text_ink;direct_alpha[0]<=alpha_font;
    bases[0]<=base;foregrounds[0]<=fg;themes[0]<=theme;
    bg_s1<=BG;panel_s1<=PANEL;background[0]<=0;panels[0]<=0;tests[0]<=state[19];
@@ -371,20 +379,20 @@ module rgb_ui_renderer(
     if(q==1)arts[q]<=art_pixel;else arts[q]<=arts[q-1];
    end
    for(integer q=1;q<4;q=q+1)begin
-    direct_addr[q]<=direct_addr[q-1];direct_bit[q]<=direct_bit[q-1];fonts[q]<=fonts[q-1];
+    direct_addr[q]<=direct_addr[q-1];direct_bit[q]<=direct_bit[q-1];fonts[q]<=fonts[q-1];zh_bases[q]<=zh_bases[q-1];chinese[q]<=chinese[q-1];
     direct_ink[q]<=direct_ink[q-1];direct_alpha[q]<=direct_alpha[q-1];
    end
    // Positions are bounded to the 800x480 canvas, not 32-bit signed dividers.
    dx_s2<=$signed({1'b0,x_s1})-$signed({1'b0,tx_s1});
    dy_s2<=$signed({1'b0,y_s1})-$signed({1'b0,ty_s1});text_s2<=text_s1;len_s2<=len_s1;
-   cell_s3<=normal_valid ? $unsigned(dx_s2)/12'd10 : 0;
-   normal_bit_s3<=15-($unsigned(dx_s2)%12'd10);row_s3<=dy_s2[3:0];normal_ink_s3<=normal_valid;
+   cell_s3<=normal_valid ? (chinese[1] ? $unsigned(dx_s2)>>4 : $unsigned(dx_s2)/12'd10) : 0;
+   normal_bit_s3<=15-(chinese[1] ? $unsigned(dx_s2)%12'd16 : $unsigned(dx_s2)%12'd10);row_s3<=dy_s2[3:0];normal_ink_s3<=normal_valid;
    text_s3<=text_s2;len_s3<=len_s2;
    char_s4<=normal_ink_s3 ? text_s3[{glyph_index,3'b000}+:8] : 8'd32;
    row_s4<=row_s3;normal_bit_s4<=normal_bit_s3;normal_ink_s4<=normal_ink_s3;
-   addr_s5<=direct_ink[3] ? direct_addr[3] : {fonts[3],10'd0}+({fonts[3],10'd0}>>1)+(char_s4-8'd32)*14'd16+row_s4;
+   addr_s5<=direct_ink[3] ? direct_addr[3] : (char_s4>=128 ? zh_bases[3]+{4'd0,zh_index,row_s4} : {fonts[3],10'd0}+({fonts[3],10'd0}>>1)+(char_s4-8'd32)*15'd16+row_s4);
    bit_s5<=direct_ink[3] ? direct_bit[3] : normal_bit_s4;
-   ink_s5<=!blank[3] && !tests[3] && (direct_ink[3] || (normal_ink_s4 && char_s4>=32 && char_s4<128));
+   ink_s5<=!blank[3] && !tests[3] && (direct_ink[3] || (normal_ink_s4 && char_s4>=32 && char_s4<128+ZH_GLYPHS));
    alpha_s5<=direct_ink[3] && direct_alpha[3];
    bit_s6<=bit_s5;ink_s6<=ink_s5;alpha_s6<=alpha_s5;
    resolved_s7<=blank[5] ? 24'd0 : (!tests[5] && background[5]) ? arts[5] :

@@ -67,6 +67,7 @@
         <File path="src/rom/theme_cat_palette.hex" type="file.other" enable="1" />
         <File path="src/rom/theme_egg.hex" type="file.other" enable="1" />
         <File path="src/rom/theme_font.hex" type="file.other" enable="1" />
+        <File path="src/config/ui_language.svh" type="file.other" enable="1" />
         <File path="src/config/theme_storage.svh" type="file.other" enable="1" />
     </FileList>
 </Project>

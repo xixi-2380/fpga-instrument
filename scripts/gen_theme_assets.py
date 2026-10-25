@@ -228,7 +228,9 @@ def main():
         for k,path in [('cat',a.cat),('capybara',a.capybara)]:
             frames,masks=movie(path,k);stats[k]=indexed(k,frames,masks)
         stats['british']=indexed('british',[british_art()])
-        stats['egg']=build_egg(a.egg);stats['font_bits']=fonts(a.font_dir)
+        stats['egg']=build_egg(a.egg);fonts(a.font_dir)
+        from gen_ui_language import main as build_language
+        build_language();stats['font_bits']=32768*16
         stats['sources']={k:{'filename':str(path.name),'sha256':hashlib.sha256(path.read_bytes()).hexdigest()} for k,path in [('cat',a.cat),('capybara',a.capybara)]}
     if all('storage' in stats[k] for k in ['cat','capybara']):storage_header(stats)
     stats['total_bits']=sum(stats[k]['bits'] for k in ['cat','capybara','british','egg'])+stats['font_bits']

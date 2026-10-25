@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 `include "check.svh"
 module tb_theme_pixels;
- parameter integer FIRST_SCENE=0,LAST_SCENE=7;
+ parameter integer FIRST_SCENE=0,LAST_SCENE=15;
  reg clk=0,rst=1,frame_start=0,valid=1,de=0;always #5 clk=~clk;
  reg [1111:0] status=0;reg [10:0] x=0,y=0;
  wire [23:0] rgb;wire dout,hout,vout;
@@ -28,6 +28,8 @@ module tb_theme_pixels;
   end
   @(negedge clk);de=0;repeat(10)@(negedge clk);record=0;
   `CHECK(n==384000,"theme changes preserve complete 800x480 pipeline")
+  `CHECK(dut.ui_hit(400,420,0,frozen[20])==20 && dut.ui_hit(519,463,0,frozen[20])==20,"language control uses full 120x44 hit rectangle")
+  `CHECK(pixels[420*800+400]!=pixels[419*800+400],"language button border visible in all themes and languages")
   // A theme switch button must be visibly rendered and have the shared hitbox.
   `CHECK(dut.ui_hit(536,420,0,frozen[20])==19,"theme control exists on both pages")
   `CHECK(pixels[420*800+536]!=pixels[419*800+536],"theme button border is visible")
@@ -45,10 +47,11 @@ module tb_theme_pixels;
   status[22:21]=1;status[23]=1;status[53]=0;status[13:12]=1;
   status[49]=1;status[50]=1;status[51]=1;
   for(scene=FIRST_SCENE;scene<=LAST_SCENE;scene=scene+1)begin
-   status[55:54]=scene/2;status[20]=scene%2;snapshot;
-   `CHECK(dut.state[55:54]==scene/2,"all four theme IDs reach renderer")
+   status[56]=scene/8;status[55:54]=(scene%8)/2;status[20]=scene%2;snapshot;
+   `CHECK(dut.state[55:54]==(scene%8)/2,"all four theme IDs reach renderer")
    render(scene);status=frozen;
   end
+  status[56]=0;
   // Animation counter runs from LCD frame ticks only and loops all 16 frames.
   status[55:54]=1;snapshot;
   `CHECK(dut.animation_frame==0,"theme entry restarts visual animation only")
@@ -60,5 +63,5 @@ module tb_theme_pixels;
   rst=1;repeat(10)@(negedge clk);`CHECK(!dout && rgb==0,"reset blanks all stages")
   $display("PASS tb_theme_pixels checks=%0d frames=%0d",checks,LAST_SCENE-FIRST_SCENE+1);$finish;
  end
- initial begin #60000000;$fatal(1,"theme raster timeout");end
+ initial begin #100000000;$fatal(1,"theme raster timeout");end
 endmodule

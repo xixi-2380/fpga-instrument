@@ -32,10 +32,11 @@ module tb_ui_inputs;
   menu=1;cycles(4);keys=16'h2000;cycles(4);`CHECK(ka==UI_PREV,"R4C2 now selects previous timbre")
   keys=0;cycles(4);keys=16'h4000;cycles(4);`CHECK(ka==UI_NEXT,"R4C3 now selects next timbre")
   keys=0;cycles(4);menu=0;
+  contact(400,420,UI_LANGUAGE);contact(519,463,UI_LANGUAGE);contact(520,463,UI_NONE);
   contact(536,420,UI_THEME);contact(647,463,UI_THEME);contact(648,463,UI_NONE);
   contact(32,140,UI_NONE); // performance page must not select timbre
   contact(664,40,UI_MODE);menu=1;
-  contact(28,132,UI_SINE);contact(152,132,UI_FLUTE);contact(28,196,UI_REED);
+  contact(450,440,UI_LANGUAGE);contact(28,132,UI_SINE);contact(152,132,UI_FLUTE);contact(28,196,UI_REED);
   contact(152,196,UI_CELLO);contact(28,260,UI_PIANO);contact(152,260,UI_GUITAR);contact(28,324,UI_VIBES);
   contact(139,183,UI_SINE);contact(140,183,UI_NONE);
   contact(308,124,UI_ECHO);contact(464,124,UI_ROOM);contact(620,124,UI_TREMOLO);

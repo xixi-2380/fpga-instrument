@@ -30,7 +30,11 @@ module tb_ui_top;
  end
  task cycles(input integer n);begin repeat(n)@(negedge dut.audio_clk);end endtask
  task more_frames(input integer n);integer target;begin target=frames+n;wait(frames>=target);#1;end endtask
- task menu_button;begin buttons=14;cycles(256);buttons=15;cycles(10);end endtask
+ task menu_button;begin
+  @(negedge dut.audio_clk);force dut.touch_action_valid=1;force dut.touch_action=6'd7;
+  @(negedge dut.audio_clk);release dut.touch_action_valid;release dut.touch_action;
+  repeat(12)@(negedge dut.audio_clk);
+ end endtask
  task menu_key(input integer k);begin pressed=16'b1<<k;more_frames(2);pressed=0;more_frames(2);end endtask
  initial begin
   #100 rst=0;wait(pa);more_frames(4);
@@ -40,7 +44,7 @@ module tb_ui_top;
   `CHECK(dut.selected_timbre==1 && $countones(dut.voice_held)==1,"flute note before menu")
   menu_button;more_frames(4);
   `CHECK(dut.menu_mode && !dut.gate && dut.voice_active==0,"entering menu drains held note and release tail")
-  `CHECK(dut.selected_timbre==1 && dut.echo_percent==25,"held entry key is not a menu action; long S0 preserves timbre")
+  `CHECK(dut.selected_timbre==1 && dut.echo_percent==25,"held entry key is not a menu action; touch mode preserves timbre")
   pressed=0;more_frames(2);before_events=events;
   menu_key(4);menu_key(7);menu_key(9);
   `CHECK(dut.effects_enabled && dut.effect_mode==0 && dut.echo_percent==30 && dut.sound.effect.echo_target==77,"matrix action reaches runtime audio target")

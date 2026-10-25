@@ -1,3 +1,19 @@
+# UI font assets
+
+Existing English fonts/ROM are preserved. Chinese additions are renamed offline subsets with the 89 glyphs needed by assets/ui_language.json:
+
+| Project subset | Upstream family | UI use | Upstream file |
+|---|---|---|---|
+| HighWaterChineseBrush.ttf | Ma Shan Zheng | British / Easter brush title and body | https://github.com/google/fonts/blob/main/ofl/mashanzheng/MaShanZheng-Regular.ttf |
+| HighWaterChineseElegant.ttf | ZCOOL XiaoWei | Elegant cat theme | https://github.com/google/fonts/blob/main/ofl/zcoolxiaowei/ZCOOLXiaoWei-Regular.ttf |
+| HighWaterChinesePlayful.ttf | ZCOOL KuaiLe | Playful capybara theme | https://github.com/google/fonts/blob/main/ofl/zcoolkuaile/ZCOOLKuaiLe-Regular.ttf |
+
+Source fonts: SIL Open Font License 1.1; original notices/licenses are committed as mashanzheng-OFL.txt, zcoolxiaowei-OFL.txt, zcoolkuaile-OFL.txt. Derived subsets use HighWaterChinese family names. Original copyright/license name records are preserved. Glyph coverage, subset hashes, ROM offsets and the unchanged English-prefix hash are recorded in assets/ui_language_manifest.json.
+
+Regenerate compact RTL/header/ROM with `python scripts/gen_ui_language.py`; Pillow and fontTools are used offline. The board loads the committed HEX only. The original English font sources and OFL notices remain in repository history/current remote tree; this Chinese subset generation does not replace them.
+
+## Preserved English font provenance
+
 # 离线字库来源
 
 三个TTF仅供可选的ROM再生成；运行FPGA不加载TTF。它们从Google Fonts上游字体制作ASCII 32..127子集，并更名为HighWaterScript、HighWaterElegant、HighWaterRound，保留各自SIL OFL许可证。正文均为英文，本轮未加入中文切换。

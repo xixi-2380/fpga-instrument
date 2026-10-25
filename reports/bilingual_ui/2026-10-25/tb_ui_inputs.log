@@ -1,0 +1,1 @@
+PASS tb_ui_inputs checks=103 keypad_events=4 touch_events=24

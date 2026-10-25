@@ -85,8 +85,8 @@
     "bits": 480000,
     "animated": false
   },
-  "font_bits": 262144,
-  "total_bits": 1955368,
+  "font_bits": 524288,
+  "total_bits": 2217512,
   "sources": {
     "cat": {
       "filename": "f6d0344fdcbeb4465513c8d285103969.mp4",

@@ -96,7 +96,8 @@ module tb_keyboard_top;
   for(integer preset=0;preset<3;preset=preset+1)begin
    stage=10+preset;
    if(preset>0)begin
-    buttons_n=4'he;repeat(260)@(negedge dut.audio_clk);buttons_n=4'hf;repeat(16)@(negedge dut.audio_clk);
+    @(negedge dut.audio_clk);force dut.touch_action_valid=1;force dut.touch_action=6'd7;
+    @(negedge dut.audio_clk);release dut.touch_action_valid;release dut.touch_action;repeat(16)@(negedge dut.audio_clk);
     pressed=16'b1<<preset;repeat(32*8)@(posedge bck);pressed=0;repeat(32*8)@(posedge bck);
     pressed=16'h8000;repeat(32*8)@(posedge bck);pressed=0;repeat(32*8)@(posedge bck);
     `CHECK(dut.selected_timbre==preset && !dut.menu_mode,"matrix menu selects requested preset")

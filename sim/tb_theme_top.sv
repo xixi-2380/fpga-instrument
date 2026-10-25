@@ -41,23 +41,29 @@ module tb_theme_top;
  end
  task cycles(input integer n);begin repeat(n)@(negedge dut.audio_clk);end endtask
  task frames_more(input integer n);integer target;begin target=frames+n;wait(frames>=target);#2;end endtask
- task short_key(input integer k);begin buttons=15^(1<<k);cycles(12);buttons=15;cycles(12);end endtask
+ task touch_action(input [5:0] command);begin
+  @(negedge dut.audio_clk);force dut.touch_action_valid=1;
+  if(command==20)force dut.touch_action=6'd20;else force dut.touch_action=6'd19;
+  @(negedge dut.audio_clk);release dut.touch_action_valid;release dut.touch_action;cycles(12);
+ end endtask
  task long3;begin buttons=7;cycles(260);buttons=15;cycles(12);end endtask
  initial begin
   #100 rst=0;wait(dut.input_ready);frames_more(4);
   `CHECK(dut.score_busy,"theme test begins during automatic score")
-  short_key(2);`CHECK(dut.theme_id==1,"cat selectable during auto score")
+  touch_action(19);`CHECK(dut.theme_id==1,"cat selectable during auto score")
   long3;`CHECK(dut.theme_id==3 && dut.score_busy,"hidden theme does not interrupt automatic playback")
   long3;`CHECK(dut.theme_id==1,"hidden exit restores preceding cat")
   wait(dut.score_done);frames_more(4);
   `CHECK(events==84,"all automatic score events survive visual controls")
   pressed=16'h0011;wait($countones(dut.voice_held)==2);frames_more(4);
-  repeat(4)begin short_key(2);short_key(1);long3;long3;end
+  repeat(4)begin touch_action(20);touch_action(19);touch_action(19);touch_action(19);long3;long3;end
   `CHECK(dut.theme_id==1 && $countones(dut.voice_held)==2,"normal and hidden cycles preserve real held chord")
   wait(dut.lcd_on.display_driver.status_valid);cycles(40);
   `CHECK(dut.lcd_on.display_driver.pixel_status[55:54]==1,"theme bits cross existing atomic display bridge")
+  touch_action(20);wait(dut.lcd_on.display_driver.pixel_status[56]);
+  `CHECK(dut.language_zh,"language state crosses real display CDC")
   frames_more(1800);
-  `CHECK(dut.lcd_on.display_driver.renderer.state[55:54]==1,"LCD frame captures selected theme")
+  `CHECK(dut.lcd_on.display_driver.renderer.state[55:54]==1 && dut.lcd_on.display_driver.renderer.state[56],"LCD frame captures selected theme")
   `CHECK(dut.lcd_on.display_driver.renderer.animation_phase!=0,"actual LCD frame cadence advances visual animation clocks")
   pressed=0;wait(!dut.gate);frames_more(8);
   `CHECK(dut.voice_active==0 && samples>1900,"no stuck notes after theme animation and release")

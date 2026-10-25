@@ -19,11 +19,9 @@ module tb_ui_controls;
  initial begin
   #12 rst=0;cycles(5);
   `CHECK(!menu && fx==0 && !en && ep==25 && rp==25 && dp==50 && hz==5,"default UI settings")
-  act(UI_FLUTE);buttons=14;cycles(50);
-  `CHECK(menu && timbre==1,"long S0 enters menu without changing timbre")
-  cycles(50);`CHECK(menu,"held S0 toggles once")
-  buttons=15;cycles(10);`CHECK(menu && timbre==1,"long release has no sine action")
-  short0;`CHECK(timbre==0 && menu,"short S0 selects sine on release")
+  act(UI_FLUTE);buttons=14;cycles(100);buttons=15;cycles(10);
+  `CHECK(!menu && timbre==1,"short and long S0 no longer change timbre/page")
+  act(UI_MODE);`CHECK(menu && timbre==1,"screen mode replaces S0")
   act(UI_CELLO);`CHECK(timbre==3,"direct cello command preserves third identity bit")
   act(UI_PIANO);`CHECK(timbre==4,"direct piano command")
   act(UI_GUITAR);`CHECK(timbre==5,"direct guitar command")

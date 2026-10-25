@@ -1,0 +1,8 @@
+{
+  "test": "tb_rgb_display",
+  "parameters": "THEME=3,LANGUAGE=1",
+  "passed": true,
+  "checks": 2793166,
+  "pll_model": "explicit behavioral substitute",
+  "seconds": 190.339
+}

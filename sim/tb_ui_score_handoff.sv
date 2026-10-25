@@ -21,7 +21,11 @@ module tb_ui_score_handoff;
   if(dut.frame_ce)frames=frames+1;
  end
  task frames_more(input integer n);integer target;begin target=frames+n;wait(frames>=target);#1;end endtask
- task toggle_menu;begin buttons=14;repeat(256)@(negedge dut.audio_clk);buttons=15;repeat(12)@(negedge dut.audio_clk);end endtask
+ task toggle_menu;begin
+  @(negedge dut.audio_clk);force dut.touch_action_valid=1;force dut.touch_action=6'd7;
+  @(negedge dut.audio_clk);release dut.touch_action_valid;release dut.touch_action;
+  repeat(12)@(negedge dut.audio_clk);
+ end endtask
  initial begin
   #100 rst=0;wait(pa);frames_more(2);toggle_menu;
   `CHECK(dut.menu_mode && dut.score_busy,"menu available during automatic demo")

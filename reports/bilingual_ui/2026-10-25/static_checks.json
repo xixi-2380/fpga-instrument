@@ -1,0 +1,7 @@
+{
+  "english_prefix_byte_identical_to_main_60c9deb": true,
+  "font_regeneration_idempotent": true,
+  "unchanged_audio_and_pin_constraints": true,
+  "theme_animation_bits": 2217512,
+  "toolchain": "pure HDL only; no Gowin/STA/programmer"
+}

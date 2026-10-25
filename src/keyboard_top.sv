@@ -19,7 +19,7 @@ module keyboard_top #(
     output wire [5:0] led_n,
     output wire lcd_clk,lcd_hs,lcd_vs,lcd_en,output wire [5:0] lcd_r,lcd_g,lcd_b,
     inout wire touch_scl,touch_sda,touch_int,touch_rst_n);
-    wire effects_enabled;
+    wire effects_enabled,language_zh;
     wire synth_pa_enable;
     reg [1:0] max_clock_frames;
     wire visual_sample_valid;wire signed [15:0] visual_sample;wire [15:0] visual_notes;
@@ -99,7 +99,7 @@ module keyboard_top #(
             .score_busy(score_busy),.audio_ready(input_ready),.score_error(score_error),
             .underrun(underrun),.ghost(ghost),.lcd_clk(lcd_clk),.lcd_hs(lcd_hs),
             .lcd_vs(lcd_vs),.lcd_en(lcd_en),.lcd_r(lcd_r),.lcd_g(lcd_g),.lcd_b(lcd_b),
-            .menu_mode(menu_mode),.theme_id(theme_id),.effects_enabled(effects_enabled),.effect_mode(effect_mode),
+            .menu_mode(menu_mode),.language_zh(language_zh),.theme_id(theme_id),.effects_enabled(effects_enabled),.effect_mode(effect_mode),
             .echo_percent(echo_percent),.room_percent(room_percent),.depth_percent(depth_percent),
             .tremolo_rate_hz(tremolo_rate_hz),.touch_enabled(TOUCH_ENABLE!=0),
             .touch_ui_enabled(TOUCH_UI_ENABLE!=0 && touch_audio_valid && touch_audio[70:55]==800 && touch_audio[54:39]==480),.touch_ready_status(touch_audio[38]),.touch_error_status(touch_audio[37]));
@@ -121,7 +121,7 @@ module keyboard_top #(
         .note_id(score_id),.note_fcw(score_fcw),.note_timbre(score_timbre),.busy(score_busy),.done(score_done),.error(score_error));
     timbre_control #(.DEBOUNCE_CYCLES(BUTTON_DEBOUNCE_CYCLES),.LONG_PRESS_CYCLES(BUTTON_LONG_PRESS_CYCLES)) timbre_buttons(
         .clk(audio_clk),.rst(audio_reset),.buttons_n(board_buttons_n),
-        .selected(selected_timbre),.theme_id(theme_id),.effects_enabled(effects_enabled),.effect_mode(effect_mode),
+        .selected(selected_timbre),.language_zh(language_zh),.theme_id(theme_id),.effects_enabled(effects_enabled),.effect_mode(effect_mode),
         .ui_action_valid(ui_action_valid),.ui_action(ui_action),.cfg_ready(cfg_ready),
         .menu_mode(menu_mode),.cfg_valid(cfg_valid),.cfg_tremolo_rate_hz(cfg_rate_hz),.echo_wet(echo_wet),.room_wet(room_wet),
         .tremolo_depth(tremolo_depth),.echo_percent(echo_percent),.room_percent(room_percent),

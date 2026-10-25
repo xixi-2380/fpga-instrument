@@ -1,0 +1,25 @@
+{
+  "glyphs": 89,
+  "glyph_order": "中主他倍值关冲出动吉启回型声复大奏小就屏山峰常幅平度延开异弦强形待恢房接提摸放效文时显木果模正毫水波流深满演琴电监盘示秒突笛等管簧绪置自色视触设输近返迟速部钢键长闭间音频题颤高鬼",
+  "english_words": 16384,
+  "english_sha256": "9192b721c739f60d926731b5fb6b768296fe94282b19f0c8a751a617f9b5dbb8",
+  "fonts": [
+    {
+      "file": "assets/fonts/HighWaterChineseBrush.ttf",
+      "sha256": "ed946992ae3c131c47ca95420a3dfa3d0a919151ae892e3324aa09a2f67d365d"
+    },
+    {
+      "file": "assets/fonts/HighWaterChineseElegant.ttf",
+      "sha256": "edcc320ef6fb37706135f7f3310a0aab10bab8c3e936c15bfb7415772c86d8d6"
+    },
+    {
+      "file": "assets/fonts/HighWaterChinesePlayful.ttf",
+      "sha256": "6015ed4713c44e8a307f452ad115b6f23148cb3f23f45af9112a2199c682b5e8"
+    }
+  ],
+  "used_words": 29872,
+  "rom_words": 32768,
+  "rom_bits": 524288,
+  "glyph_base": 16384,
+  "title_base": 20656
+}
