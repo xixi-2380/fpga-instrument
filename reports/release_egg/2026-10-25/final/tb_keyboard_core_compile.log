@@ -1,0 +1,14 @@
+sim/passive_matrix_model.svh:3: warning: timescale for passive_matrix_model inherited from another file.
+sim/tb_keyboard_core.sv:1: ...: The inherited timescale is here.
+sim/tb_keyboard_core.sv:13: warning: Instantiating module keyboard_core with dangling input port 15 (selected_timbre) floating.
+sim/tb_keyboard_core.sv:13: warning: Instantiating module keyboard_core with dangling input port 17 (inhibit_notes) floating.
+src/synth_core.sv:108: warning: @* is sensitive to all 32 words in array 'voice_level'.
+src/synth_core.sv:108: warning: @* is sensitive to all 32 words in array 'voice_level'.
+sim/tb_keyboard_core.sv:17: warning: Port 19 (note_timbre) of synth_core expects 3 bits, got 2.
+sim/tb_keyboard_core.sv:17:        : Padding 1 high bits of the port.
+sim/tb_keyboard_core.sv:17: warning: Instantiating module synth_core with dangling input port 21 (effect_mode) floating.
+sim/tb_keyboard_core.sv:17: warning: Instantiating module synth_core with dangling input port 22 (effect_cfg_valid) floating.
+sim/tb_keyboard_core.sv:17: warning: Instantiating module synth_core with dangling input port 23 (effect_echo_wet) floating.
+sim/tb_keyboard_core.sv:17: warning: Instantiating module synth_core with dangling input port 24 (effect_room_wet) floating.
+sim/tb_keyboard_core.sv:17: warning: Instantiating module synth_core with dangling input port 25 (effect_tremolo_depth) floating.
+sim/tb_keyboard_core.sv:17: warning: Instantiating module synth_core with dangling input port 26 (effect_tremolo_rate_hz) floating.

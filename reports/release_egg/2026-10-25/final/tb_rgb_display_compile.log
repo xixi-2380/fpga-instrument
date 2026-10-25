@@ -1,0 +1,5 @@
+src/ui_theme_art.sv:53: warning: @* is sensitive to all 16 words in array 'cat_palette'.
+src/ui_theme_art.sv:54: warning: @* is sensitive to all 16 words in array 'capybara_palette'.
+src/ui_theme_art.sv:55: warning: @* is sensitive to all 32 words in array 'egg_palette'.
+src/ui_theme_art.sv:55: warning: @* is sensitive to all 32 words in array 'egg_palette'.
+src/ui_theme_art.sv:56: warning: @* is sensitive to all 16 words in array 'british_palette'.

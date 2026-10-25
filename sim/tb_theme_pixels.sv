@@ -1,6 +1,7 @@
 `timescale 1ns/1ps
 `include "check.svh"
 module tb_theme_pixels;
+ parameter integer FIRST_SCENE=0,LAST_SCENE=7;
  reg clk=0,rst=1,frame_start=0,valid=1,de=0;always #5 clk=~clk;
  reg [1111:0] status=0;reg [10:0] x=0,y=0;
  wire [23:0] rgb;wire dout,hout,vout;
@@ -43,7 +44,7 @@ module tb_theme_pixels;
   status[30:24]=25;status[37:31]=70;status[44:38]=50;status[48:45]=5;
   status[22:21]=1;status[23]=1;status[53]=0;status[13:12]=1;
   status[49]=1;status[50]=1;status[51]=1;
-  for(scene=0;scene<8;scene=scene+1)begin
+  for(scene=FIRST_SCENE;scene<=LAST_SCENE;scene=scene+1)begin
    status[55:54]=scene/2;status[20]=scene%2;snapshot;
    `CHECK(dut.state[55:54]==scene/2,"all four theme IDs reach renderer")
    render(scene);status=frozen;
@@ -55,7 +56,7 @@ module tb_theme_pixels;
   `CHECK(dut.animation_frame==0,"16 animation frames loop after 1.6 seconds")
   valid=0;status=0;snapshot;`CHECK(dut.state[55:54]==1,"invalid CDC snapshot cannot change theme")
   rst=1;repeat(3)@(negedge clk);`CHECK(!dout && rgb==0,"reset blanks both stages")
-  $display("PASS tb_theme_pixels checks=%0d frames=8",checks);$finish;
+  $display("PASS tb_theme_pixels checks=%0d frames=%0d",checks,LAST_SCENE-FIRST_SCENE+1);$finish;
  end
  initial begin #60000000;$fatal(1,"theme raster timeout");end
 endmodule

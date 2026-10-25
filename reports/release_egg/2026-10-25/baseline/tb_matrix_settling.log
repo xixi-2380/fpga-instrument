@@ -1,0 +1,3 @@
+FAIL slow pull-up cannot duplicate a physical single key at 12090000
+FATAL: sim/tb_matrix_settling.sv:17: 
+       Time: 12090000 Scope: tb_matrix_settling.$ivl_for_loop13

@@ -1,0 +1,200 @@
+{
+  "baseline_commit": "da023e9ecf633118b2575dc43523170ab4a7b331",
+  "scope": "Matrix false-key recognition and complete subtitle-free Easter portrait; no Bluetooth/language/volume integration",
+  "results": [
+    {
+      "test": "tb_egg_composition",
+      "parameters": "",
+      "passed": true,
+      "checks": 489603,
+      "pll_model": "not exercised",
+      "seconds": 6.434
+    },
+    {
+      "test": "tb_i2s_tx",
+      "parameters": "",
+      "passed": true,
+      "checks": 5407,
+      "pll_model": "not exercised",
+      "seconds": 0.167
+    },
+    {
+      "test": "tb_key_note_events",
+      "parameters": "",
+      "passed": true,
+      "checks": 149,
+      "pll_model": "not exercised",
+      "seconds": 0.021
+    },
+    {
+      "test": "tb_keyboard_core",
+      "parameters": "",
+      "passed": true,
+      "checks": 4613937,
+      "pll_model": "not exercised",
+      "seconds": 51.166
+    },
+    {
+      "test": "tb_keyboard_latency",
+      "parameters": "",
+      "passed": true,
+      "checks": 638,
+      "pll_model": "not exercised",
+      "seconds": 7.961
+    },
+    {
+      "test": "tb_keyboard_top",
+      "parameters": "",
+      "passed": true,
+      "checks": 2520567,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 19.872
+    },
+    {
+      "test": "tb_matrix_keypad",
+      "parameters": "",
+      "passed": true,
+      "checks": 7183,
+      "pll_model": "not exercised",
+      "seconds": 0.134
+    },
+    {
+      "test": "tb_matrix_settling",
+      "parameters": "",
+      "passed": true,
+      "checks": 36,
+      "pll_model": "not exercised",
+      "seconds": 0.057
+    },
+    {
+      "test": "tb_release_pcm",
+      "parameters": "",
+      "passed": true,
+      "checks": 1225050,
+      "pll_model": "not exercised",
+      "seconds": 15.424
+    },
+    {
+      "test": "tb_rgb_display",
+      "parameters": "",
+      "passed": true,
+      "checks": 2793163,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 58.071
+    },
+    {
+      "test": "tb_rgb_ui_renderer",
+      "parameters": "",
+      "passed": true,
+      "checks": 3072031,
+      "pll_model": "not exercised",
+      "seconds": 113.101
+    },
+    {
+      "test": "tb_synth_core",
+      "parameters": "",
+      "passed": true,
+      "checks": 2513903,
+      "pll_model": "not exercised",
+      "seconds": 16.506
+    },
+    {
+      "test": "tb_theme_art",
+      "parameters": "",
+      "passed": true,
+      "checks": 303586,
+      "pll_model": "not exercised",
+      "seconds": 1.788
+    },
+    {
+      "test": "tb_theme_controls",
+      "parameters": "",
+      "passed": true,
+      "checks": 29,
+      "pll_model": "not exercised",
+      "seconds": 0.033
+    },
+    {
+      "test": "tb_theme_pixels",
+      "parameters": "FIRST_SCENE=6",
+      "passed": true,
+      "checks": 1536012,
+      "pll_model": "not exercised",
+      "seconds": 44.795
+    },
+    {
+      "test": "tb_ui_controls",
+      "parameters": "",
+      "passed": true,
+      "checks": 85,
+      "pll_model": "not exercised",
+      "seconds": 0.034
+    },
+    {
+      "test": "tb_ui_inputs",
+      "parameters": "",
+      "passed": true,
+      "checks": 92,
+      "pll_model": "not exercised",
+      "seconds": 0.029
+    },
+    {
+      "test": "tb_ui_top",
+      "parameters": "LCD=1",
+      "passed": true,
+      "checks": 87114,
+      "pll_model": "explicit behavioral substitute",
+      "seconds": 4.875
+    }
+  ],
+  "test_configurations": 18,
+  "checks": 19168585,
+  "baseline_results": [
+    {
+      "test": "tb_matrix_settling",
+      "parameters": "",
+      "passed": false,
+      "checks": 0,
+      "pll_model": "not exercised",
+      "seconds": 0.024
+    },
+    {
+      "test": "tb_synth_core",
+      "parameters": "",
+      "passed": true,
+      "checks": 2513903,
+      "pll_model": "not exercised",
+      "seconds": 15.776
+    }
+  ],
+  "baseline_interpretation": "Old scanner fails slow-row-return test; unmodified direct synth passes release tests. This demonstrates a candidate mechanism, not proof of the unique hardware cause.",
+  "models": "Behavioral PLL substitutes for board tests; 1-voice 64-cycle frames for long seven-timbre release test; production 32-voice cadence retained in board/core regressions.",
+  "Gowin_PnR_STA_programmer_run": false,
+  "hardware_retest_required": true,
+  "source_sha256": {
+    "src/matrix_keypad.sv": "2189051bbf161377362a117559d922e8d211eec87342e74a5ab01321b41ee5b2",
+    "src/rgb_ui_renderer.sv": "989fca8e70cbcec4b0f1931ee0bc69a1abb20930a3e041b1302aa0a94d8fbbb2",
+    "src/ui_theme_art.sv": "9fd1f0c34a245b0e63d80b8d5164986e8a4cbd51b5693410393c1a88e0afddde",
+    "src/rom/theme_egg.hex": "dd0ef498afdaa6b04ca8d408fe692606c6007017254c3552cd33515a7b7a6418",
+    "src/rom/theme_egg_palette.hex": "a6d2a4db6812f49fba8229cc6f44452bf8a5f09370d3501e2b1bc8361821691e",
+    "sim/tb_release_pcm.sv": "ab70d3626a664d5b7411390dfef5bb5196eff39e4ab04d1d62966c70323cbd95",
+    "sim/tb_theme_art.sv": "88a4ae3929436f8a5ba6f2bfcd69550babb22311e753f2d124299deca32401a7",
+    "sim/tb_egg_composition.sv": "04766becd609814fc6df55cb378df48b78533aafd8e89bed8f8db88a3917fb00",
+    "sim/tb_matrix_settling.sv": "3d1a4d10ce1b502d1c91ac2ed865ec0920177368720e6e4e21825295796de376",
+    "sim/tb_theme_pixels.sv": "edeed4bd30258322553194bd0cf8bf141154d88ec2f9b720cef3271e0b1c0420",
+    "scripts/gen_theme_assets.py": "86dc9649908b6c0e7cac0b02d9ec6c9fc05c84d044db02835595c244b099e13f",
+    "docs/instrument_ui.md": "19409859358486664417aab63c00be62d0deae9b4f36f7e5c791b4993c52a5ee",
+    "docs/themes.md": "6d58e37c7015bb5d2a36de807a3e73c83eb8cc2a2008a9e433f23b7029a5ea3c",
+    "assets/theme_manifest.json": "f6a7d221d2fb4db27e1ffdae591ed60ef1cab522096311a9a6def6cf3e7514c6",
+    "assets/themes/egg_cutout.png": "4e9c6e134780214c75cf5f5a2ab2685aeef4728e34622f107b3c5cfe2eb0beaa",
+    "assets/themes/README.md": "3be1aa0b9331feead341eab1b11a0e4a868a7f8217540a9e07a86cd614af218d",
+    "README.md": "284aab3315f4b94b7b5cf597622e5f4e1a5be4b57477a5487c35d6a862e9ed67",
+    "AGENTS.md": "eacf5f5ec380359fde6f63ac64b9284257b5380d0ce05622d9d38a8decd7fcc6"
+  },
+  "static_checks": "static_checks.json",
+  "previews": [
+    "final/egg_play.png",
+    "final/egg_settings.png",
+    "final/egg_preview.png"
+  ]
+}

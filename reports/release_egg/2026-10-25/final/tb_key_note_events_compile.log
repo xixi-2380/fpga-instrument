@@ -1,0 +1,4 @@
+sim/tb_key_note_events.sv:12: warning: Port 12 (selected_timbre) of key_note_events expects 3 bits, got 2.
+sim/tb_key_note_events.sv:12:        : Padding 1 high bits of the port.
+sim/tb_key_note_events.sv:12: warning: Port 13 (note_timbre) of key_note_events expects 3 bits, got 2.
+sim/tb_key_note_events.sv:12:        : Padding 1 high bits of the port.

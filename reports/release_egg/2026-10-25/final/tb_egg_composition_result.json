@@ -1,0 +1,8 @@
+{
+  "test": "tb_egg_composition",
+  "parameters": "",
+  "passed": true,
+  "checks": 489603,
+  "pll_model": "not exercised",
+  "seconds": 6.434
+}

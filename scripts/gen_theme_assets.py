@@ -8,7 +8,6 @@ Compile-ready generated ROMs are committed; regeneration is optional.
 from pathlib import Path
 import argparse, hashlib, json, subprocess, math, random
 import numpy as np
-import cv2
 from scipy import ndimage
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
@@ -45,6 +44,7 @@ def indexed(name, frames, masks=None, foot=None):
 def movie(path,kind):
     # 0.8 seconds of actual dancing + reversed interior frames make a closed
     # 16-frame loop without an abrupt cut or duplicated turnaround endpoint.
+    import cv2
     crop='crop=420:480:480:160' if kind=='cat' else 'crop=580:680:110:25'
     vf=crop+f',fps=10,scale={W}:{H}:force_original_aspect_ratio=decrease,pad={W}:{H}:(ow-iw)/2:(oh-ih)/2:color=0x00ff00'
     raw=subprocess.check_output(['ffmpeg','-hide_banner','-loglevel','error','-ss','2',
@@ -153,27 +153,43 @@ def fonts(font_dir):
     words += [0]*(16384-len(words));hexfile('theme_font.hex',words,4)
     return len(words)*16
 
-def main():
-    p=argparse.ArgumentParser();p.add_argument('--cat',type=Path,required=True)
-    p.add_argument('--capybara',type=Path,required=True);p.add_argument('--egg',type=Path,required=True)
-    p.add_argument('--font-dir',type=Path,required=True);a=p.parse_args()
-    stats={}
-    for k,path in [('cat',a.cat),('capybara',a.capybara)]:
-        frames,masks=movie(path,k);stats[k]=indexed(k,frames,masks)
-    stats['british']=indexed('british',[british_art()])
-    # Original photo is only fitted/quantized. The foot is transformed in RTL,
-    # from its masked texture; the person/background coordinates remain fixed.
-    photo=Image.open(a.egg).convert('RGB');photo=ImageOps.contain(photo,(400,240),Image.Resampling.LANCZOS)
-    im=Image.new('RGB',(400,240),'#e7e5e3');im.paste(photo,((400-photo.width)//2,0))
+def build_egg(path):
+    # A subtitle-free RGBA woman+foot cutout. Keep the complete pair in the
+    # right lower background so the left timbre cards cannot cover her face.
+    photo=Image.open(path).convert('RGBA')
+    if photo.getextrema()[3][0]==255:
+        raise ValueError('Use the cleaned transparent egg_cutout.png, not the captioned original photo')
+    # Six-ROM-pixel safety margin keeps the enlarged toes inside the display.
+    photo=ImageOps.contain(photo,(148,108),Image.Resampling.LANCZOS)
+    im=Image.new('RGBA',(400,240),'#e7e5e3')
+    im.alpha_composite(photo,(220+(160-photo.width)//2,84+(120-photo.height)//2))
+    im=im.convert('RGB')
     ar=np.array(im).astype(np.int16);yy,xx=np.mgrid[:240,:400]
-    foot=(xx>=198)&(ar[:,:,0]>ar[:,:,2]+45)&(ar[:,:,0]>ar[:,:,1]+15)&(ar[:,:,0]>110)
+    foot=(xx>=296)&(yy>=80)&(ar[:,:,0]>ar[:,:,2]+45)&(ar[:,:,0]>ar[:,:,1]+15)&(ar[:,:,0]>110)
     foot=ndimage.binary_fill_holes(foot)
-    stats['egg']=indexed('egg',[im],foot=foot)
-    stats['font_bits']=fonts(a.font_dir)
-    stats['total_bits']=sum(x['bits'] for x in stats.values() if isinstance(x,dict))+stats['font_bits']
-    stats['sources']={k:{'filename':str(path.name),'sha256':hashlib.sha256(path.read_bytes()).hexdigest()} for k,path in [('cat',a.cat),('capybara',a.capybara),('egg',a.egg)]}
+    return indexed('egg',[im],foot=foot)
+
+def main():
+    p=argparse.ArgumentParser();p.add_argument('--cat',type=Path)
+    p.add_argument('--capybara',type=Path);p.add_argument('--egg',type=Path,default=ROOT/'assets/themes/egg_cutout.png')
+    p.add_argument('--font-dir',type=Path);p.add_argument('--egg-only',action='store_true');a=p.parse_args()
+    manifest=ROOT/'assets/theme_manifest.json'
+    if a.egg_only:
+        stats=json.loads(manifest.read_text())
+        stats['egg']=build_egg(a.egg)
+    else:
+        if not a.cat or not a.capybara or not a.font_dir:p.error('full build requires --cat, --capybara and --font-dir')
+        stats={}
+        for k,path in [('cat',a.cat),('capybara',a.capybara)]:
+            frames,masks=movie(path,k);stats[k]=indexed(k,frames,masks)
+        stats['british']=indexed('british',[british_art()])
+        stats['egg']=build_egg(a.egg);stats['font_bits']=fonts(a.font_dir)
+        stats['sources']={k:{'filename':str(path.name),'sha256':hashlib.sha256(path.read_bytes()).hexdigest()} for k,path in [('cat',a.cat),('capybara',a.capybara)]}
+    stats['total_bits']=sum(stats[k]['bits'] for k in ['cat','capybara','british','egg'])+stats['font_bits']
+    stats.setdefault('sources',{})['egg_cutout']={'filename':'assets/themes/egg_cutout.png','sha256':hashlib.sha256(a.egg.read_bytes()).hexdigest(),'editing':'ImageGen: extract woman+foot together and remove subtitle; original photo unchanged'}
+    stats['egg_layout']={'canvas':[400,240],'box':[220,84,160,120],'foot_pivot':[338,182],'person_fixed_roi':[226,92,70,68],'safety_margin':[6,6]}
     stats['loop']='16 frames: 0..8 then 7..1, 10 fps, no video audio'
-    (ROOT/'assets/theme_manifest.json').write_text(json.dumps(stats,indent=2,ensure_ascii=False)+'\n')
+    manifest.write_text(json.dumps(stats,indent=2,ensure_ascii=False)+'\n')
     print(json.dumps(stats,indent=2,ensure_ascii=False))
 
 if __name__=='__main__':main()

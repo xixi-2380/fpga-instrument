@@ -1,0 +1,3 @@
+FAIL person and left background remain fixed while foot grows at 2088886000
+FATAL: sim/tb_theme_art.sv:34: 
+       Time: 2088886000 Scope: tb_theme_art

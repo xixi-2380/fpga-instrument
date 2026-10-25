@@ -40,7 +40,7 @@ module rgb_ui_renderer(
  reg [6:0] foot_phase;
  wire [5:0] foot_triangle=foot_phase[6] ? ~foot_phase[5:0] : foot_phase[5:0];
  wire [23:0] art_pixel;
- ui_theme_art artwork(pixel_clk,theme,animation_frame,foot_triangle[5:2],x,y,art_pixel);
+ ui_theme_art artwork(pixel_clk,theme,animation_frame,foot_triangle[5:2],x,y,art_pixel,menu);
  reg background_pipe,panel_pipe,blank_pipe,test_pipe;
  reg [1:0] theme_pipe;
  reg [23:0] resolved_base;
@@ -140,6 +140,45 @@ module rgb_ui_renderer(
    end
    if(ui_inside(px,py,664,420,116,44))begin
     base=card(px,py,664,420,116,44,1'b0);text="RESET";len=5;tx=697;ty=434;fg=GOLD;
+   end
+  end else if(theme==3)begin
+   // Easter performance page: a clear portrait at left, live monitors at
+   // right. No waveform, card or held-note tile may cover the woman's face.
+   if(ui_inside(px,py,464,128,316,124) || ui_inside(px,py,464,260,316,70) ||
+      ui_inside(px,py,464,338,316,68))base=PANEL;
+   if(py>=94 && py<114)begin
+    ty=96;fg=GOLD;
+    if(px<296)begin text=timbre_name(timbre);len=name_length(timbre);tx=24;end
+    else if(px<560)begin text=enabled ? (fx==0 ? "ECHO ON" : fx==1 ? "ROOM ON" : "TREMOLO ON") : "EFFECTS OFF";len=enabled ? (fx==2 ? 10 : 7) : 11;tx=310;end
+    else begin text=state[14] ? "AUTO SCORE" : "LIVE KEYS";len=state[14] ? 10 : 9;tx=620;fg=DIM;end
+   end
+   if(ui_inside(px,py,488,164,256,80))begin
+    if((px-488)%32==0 || (py-164)%20==0)base=24'hd4d0cc;
+    bin=(px-488)>>1;
+    point_y=204-($signed(state[88+bin*8+:8])>>>2);
+    previous_y=bin>0 ? 204-($signed(state[88+(bin-1)*8+:8])>>>2) : point_y;
+    minimum_y=point_y<previous_y ? point_y : previous_y;
+    maximum_y=point_y>previous_y ? point_y : previous_y;
+    if(py==point_y || ((px-488)%2==0 && py>=minimum_y && py<=maximum_y))base=GOLD;
+   end
+   if(py>=138 && py<158 && px>=480)begin text="OUTPUT WAVEFORM";len=15;tx=488;ty=140;fg=DIM;end
+   if(py>=268 && py<288 && px>=480)begin text="LEVEL";len=5;tx=488;ty=270;fg=DIM;end
+   if(ui_inside(px,py,488,298,256,10))base=(px-488)<integer'(peak) ? GOLD : BG;
+   if(py>=268 && py<288 && px>=640)begin
+    pc=(integer'(peak)*100+127)/255;
+    text={pc==100 ? 8'd49 : 8'd32,pc>=10 ? digit((pc/10)%10) : 8'd32,digit(pc%10),"% PEAK"};len=9;tx=668;ty=270;fg=DIM;
+   end
+   if(ui_inside(px,py,480,342,288,60))begin
+    note_index=((py-342)/30)*8+(px-480)/36;left=480+(note_index%8)*36;top=342+(note_index/8)*30;
+    if(px<left+34 && py<top+28)begin
+     base=state[64+note_index] ? GOLD : BG;fg=state[64+note_index] ? INK : DIM;
+     case(note_index%12)
+      0:ch="C";1:ch="C";2:ch="D";3:ch="D";4:ch="E";5:ch="F";
+      6:ch="F";7:ch="G";8:ch="G";9:ch="A";10:ch="A";default:ch="B";
+     endcase
+     text={ch,(note_index%12==1 || note_index%12==3 || note_index%12==6 || note_index%12==8 || note_index%12==10) ? 8'd35 : 8'd32,digit(note_index<12 ? 4 : 5)};
+     len=3;tx=left+2;ty=top+6;
+    end
    end
   end else begin
    if(ui_inside(px,py,20,128,552,196) || ui_inside(px,py,588,128,192,196) || ui_inside(px,py,20,338,760,68))base=PANEL;

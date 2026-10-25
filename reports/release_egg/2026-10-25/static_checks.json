@@ -1,0 +1,26 @@
+{
+  "protected_files_byte_identical_to_main": [
+    "src/synth_core.sv",
+    "src/adsr_envelope.sv",
+    "src/instrument_envelope.sv",
+    "src/audio_effects.sv",
+    "src/voice_allocator.sv",
+    "src/keyboard.cst",
+    "src/keyboard.sdc",
+    "src/pll_pair.sv",
+    "src/keyboard_top.sv",
+    "src/timbre_control.sv",
+    "src/config/ui_layout.svh",
+    "src/rom/theme_cat.hex",
+    "src/rom/theme_capybara.hex",
+    "src/rom/theme_british.hex",
+    "src/rom/theme_font.hex",
+    "keyboard_adsr.gprj"
+  ],
+  "egg_regeneration_identical_and_other_themes_unchanged": true,
+  "relative_includes_from_both_directories": true,
+  "default_production_top_elaboration_with_explicit_behavioral_PLL": true,
+  "asset_bits_unchanged": 4035584,
+  "original_photo_sha256": "4a1ac7d87230d187a03205d17a93e452f2e8e2739795d392cf4ae0b774320e87",
+  "clean_asset_sha256": "4e9c6e134780214c75cf5f5a2ab2685aeef4728e34622f107b3c5cfe2eb0beaa"
+}

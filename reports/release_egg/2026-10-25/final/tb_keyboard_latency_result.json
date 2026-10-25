@@ -1,0 +1,8 @@
+{
+  "test": "tb_keyboard_latency",
+  "parameters": "",
+  "passed": true,
+  "checks": 638,
+  "pll_model": "not exercised",
+  "seconds": 7.961
+}

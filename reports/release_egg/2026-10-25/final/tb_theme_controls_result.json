@@ -1,0 +1,8 @@
+{
+  "test": "tb_theme_controls",
+  "parameters": "",
+  "passed": true,
+  "checks": 29,
+  "pll_model": "not exercised",
+  "seconds": 0.033
+}
