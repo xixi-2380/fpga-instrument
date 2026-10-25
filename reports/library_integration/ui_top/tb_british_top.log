@@ -1,0 +1,3 @@
+FAIL return restores play mode at 293400000
+FATAL: E:/gowin/fpga-instrument-bt-score/sim/tb_british_top.sv:39: 
+       Time: 293400314  Scope: tb_british_top.$ivl_for_loop27

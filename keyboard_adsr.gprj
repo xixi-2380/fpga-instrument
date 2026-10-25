@@ -44,6 +44,14 @@
         <File path="src/frame_buffer.sv" type="file.verilog" enable="1" />
         <File path="src/keyboard_core.sv" type="file.verilog" enable="1" />
         <File path="src/synth_core.sv" type="file.verilog" enable="1" />
+        <File path="src/ui_more_actions.sv" type="file.verilog" enable="1" />
+        <File path="src/score_services.sv" type="file.verilog" enable="1" />
+        <File path="src/score_library_protocol.sv" type="file.verilog" enable="1" />
+        <File path="src/flash_song_library.sv" type="file.verilog" enable="1" />
+        <File path="src/spi_byte_master.sv" type="file.verilog" enable="1" />
+        <File path="src/spi_nor_flash.sv" type="file.verilog" enable="1" />
+        <File path="src/local_score_control.sv" type="file.verilog" enable="1" />
+        <File path="src/score_validator.sv" type="file.verilog" enable="1" />
         <File path="src/voice_allocator.sv" type="file.verilog" enable="1" />
         <File path="src/voice_mixer.sv" type="file.verilog" enable="1" />
         <File path="src/lock_guard.sv" type="file.verilog" enable="1" />

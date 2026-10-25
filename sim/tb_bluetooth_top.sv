@@ -30,6 +30,7 @@ module tb_bluetooth_top;
  initial begin
   force dut.bluetooth_on.ev_valid=ev;
   force dut.bluetooth_on.kind=kind;
+  force dut.bluetooth_on.ident=7'd0;
   force dut.bluetooth_on.pitch=pitch;
   force dut.bluetooth_on.velocity=velocity;
   force dut.bt_inhibit=inh;

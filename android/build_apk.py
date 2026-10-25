@@ -27,13 +27,13 @@ tree=ET.parse(root/'app/src/main/AndroidManifest.xml');tree.getroot().set('packa
 tree.find('application').set('{http://schemas.android.com/apk/res/android}debuggable','true')
 manifest=out/'AndroidManifest.xml';tree.write(manifest,encoding='utf-8',xml_declaration=True)
 unsigned=out/'unsigned.apk'
-run('aapt2',[tools/('aapt2'+suffix),'link','-o',unsigned,'-I',platform,'--manifest',manifest,'--min-sdk-version','26','--target-sdk-version','35','--version-code','2','--version-name','0.2-dev'])
+run('aapt2',[tools/('aapt2'+suffix),'link','-o',unsigned,'-I',platform,'--manifest',manifest,'--min-sdk-version','26','--target-sdk-version','35','--version-code','3','--version-name','0.3-dev'])
 with zipfile.ZipFile(unsigned,'a',zipfile.ZIP_DEFLATED) as z:
  for d in sorted(dex.glob('*.dex')):z.write(d,d.name)
 aligned=out/'aligned.apk';run('zipalign',[tools/('zipalign'+suffix),'-f','-p','4',unsigned,aligned])
 key=out/'debug.keystore'
 if not key.exists():run('keygen',['keytool','-genkeypair','-keystore',key,'-storepass','android','-keypass','android','-alias','androiddebugkey','-keyalg','RSA','-keysize','2048','-validity','3650','-dname','CN=Gaoshan Development, OU=FPGA, O=Student Project, C=CN'])
-apk=out/'GaoshanScore-0.2-dev.apk';signer=['java','-jar',tools/'lib/apksigner.jar']
+apk=out/'GaoshanScore-0.3-dev.apk';signer=['java','-jar',tools/'lib/apksigner.jar']
 run('sign',signer+['sign','--ks',key,'--ks-key-alias','androiddebugkey','--ks-pass','pass:android','--key-pass','pass:android','--out',apk,aligned])
 run('verify',signer+['verify','--verbose','--print-certs',apk])
 run('manifest',[tools/('aapt2'+suffix),'dump','badging',apk])

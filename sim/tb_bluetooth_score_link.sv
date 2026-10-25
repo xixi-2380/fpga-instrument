@@ -5,7 +5,11 @@ module tb_bluetooth_score_link;
  reg clk=0,rst=1,rx=1;wire tx,ev,song,upload,inhibit,overflow,framing,bad,fault;
  wire [1:0] kind,play;wire [6:0] id,pitch,velocity;wire [31:0] position;wire [7:0] error_code;wire [15:0] received,total;
  always #5 clk=~clk;
- bluetooth_score_link #(.CLOCK_HZ(CLOCK_HZ),.BAUD(BAUD)) dut(clk,rst,rx,tx,ev,1'b1,kind,id,pitch,velocity,song,upload,play,position,inhibit,error_code,received,total,overflow,framing,bad,fault);
+ bluetooth_score_link #(.CLOCK_HZ(CLOCK_HZ),.BAUD(BAUD)) dut(.clk(clk),.rst(rst),.uart_rx_pin(rx),.uart_tx_pin(tx),
+ .event_valid(ev),.event_ready(1'b1),.event_kind(kind),.event_id(id),.event_pitch(pitch),.event_velocity(velocity),
+ .song_valid(song),.upload_active(upload),.play_state(play),.position_ms(position),.manual_inhibit(inhibit),.last_error(error_code),
+ .received_notes(received),.total_notes(total),.overflow(overflow),.framing_fault(framing),.bad_frame(bad),.scheduler_fault(fault),
+ .local_valid(1'b0),.local_command(2'd0),.storage_lock(1'b0));
  integer checks=0,count=0,goal=0,responses=0;reg [7:0] bytes[0:63];
  function automatic [15:0] crc_byte(input [15:0] c,input [7:0] b);
  reg [15:0] x;begin x=c^{b,8'b0};for(integer k=0;k<8;k++)x=(x<<1)^(x[15]?16'h1021:0);crc_byte=x;end endfunction

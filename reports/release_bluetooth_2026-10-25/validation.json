@@ -1,0 +1,123 @@
+{
+  "date": "2026-10-25",
+  "branch": "codex/bluetooth-score-integration",
+  "base_commit": "bf5df5792f654ee9c29a30983cdbe83a0061669e",
+  "starting_checkpoint": "8081710e107f4d32069c6f1321eefed4c422970e",
+  "remote_main_before": "f96aefded710b055be77f6f335ea224a288e22ef",
+  "release_type": "development checkpoint; timing failed",
+  "artifacts": {
+    "date": "2026-10-25",
+    "branch": "codex/bluetooth-score-integration",
+    "base_commit": "bf5df5792f654ee9c29a30983cdbe83a0061669e",
+    "origin": "Existing user-generated Gowin outputs, not rebuilt by assistant",
+    "timing_passed": false,
+    "board_tested": false,
+    "source_to_bitstream_identity": "No contemporaneous source signature; report and output hashes identify archived files only",
+    "artifacts": [
+      {
+        "file": "D2_keyboard_leds.fs",
+        "source": "impl/pnr/D2_keyboard_leds.fs",
+        "bytes": 38920075,
+        "modified_local": "2026-10-25T11:27:37",
+        "sha256": "45f583852d0c21c29122c3646889ff7e791e7023b449e7a3040c0341aa623a0f"
+      },
+      {
+        "file": "D2_keyboard_leds.bin",
+        "source": "impl/pnr/D2_keyboard_leds.bin",
+        "bytes": 4857340,
+        "modified_local": "2026-10-25T11:27:38",
+        "sha256": "621b5e6050aac858d462612012939643e3642b9ef3621c00da76ac31f0fc6325"
+      },
+      {
+        "file": "D2_keyboard_leds.binx",
+        "source": "impl/pnr/D2_keyboard_leds.binx",
+        "bytes": 4857966,
+        "modified_local": "2026-10-25T11:27:38",
+        "sha256": "45f66ebeda5490463db0100e4bd7fd35236035d19bed95a42666171dbf51f1c4"
+      }
+    ],
+    "archive": {
+      "file": "D2_keyboard_leds_outputs.zip",
+      "bytes": 5623201,
+      "sha256": "a0add4e35bb256de7e3d01374df8733b7fd89b4dd188aec0a6542f72fba16756"
+    }
+  },
+  "reports": [
+    {
+      "source": "impl/gwsynthesis/D2_keyboard_leds_syn.rpt.html",
+      "snapshot": "reports/release_bluetooth_2026-10-25/gowin/synthesis_report.html",
+      "sha256": "17ebad1467fcedd2d872b1ea5f889bb64b51a7a612a26b1dc255a38fc7c0f244"
+    },
+    {
+      "source": "impl/gwsynthesis/D2_keyboard_leds.log",
+      "snapshot": "reports/release_bluetooth_2026-10-25/gowin/synthesis.log",
+      "sha256": "0510bdd0769c70035ddb8c5b53eb2b321b97f7341f54e115436b517544c46e0a"
+    },
+    {
+      "source": "impl/pnr/D2_keyboard_leds.rpt.txt",
+      "snapshot": "reports/release_bluetooth_2026-10-25/gowin/pnr_report.txt",
+      "sha256": "b72bb3169d2179e51c484706bfc4c4dca91cfb8bb40a6efb82d3bdfc328897ad"
+    },
+    {
+      "source": "impl/pnr/D2_keyboard_leds.tr",
+      "snapshot": "reports/release_bluetooth_2026-10-25/gowin/timing_report.tr",
+      "sha256": "ed0b222447d0e2bd5ef898d072e1e125ad50d1ea085c9b0ca55d0bb78d46c11e"
+    },
+    {
+      "source": "impl/pnr/D2_keyboard_leds.log",
+      "snapshot": "reports/release_bluetooth_2026-10-25/gowin/pnr.log",
+      "sha256": "0a45579e35b42b3fb553583ef3c5769d5009629f2d8f4e400bfd9c0555c25fd0"
+    }
+  ],
+  "software_evidence": {
+    "hdl_configurations": 29,
+    "hdl_checks": 17302346,
+    "hdl_rerun": false,
+    "original_source_manifest_entries": 101,
+    "changed_since_hdl_evidence": [
+      "scripts/generate_bluetooth_examples.py"
+    ],
+    "midi_source_manifest_entries": 10,
+    "midi_hashes_match": true,
+    "java_checks": 36108,
+    "java_retested": true,
+    "demo_checks": 1462,
+    "demo_report": "reports/midi_capability_demo/parser_validation.json"
+  },
+  "build": {
+    "synthesis_elapsed_seconds": 303,
+    "placement_elapsed_seconds": 328,
+    "routing_elapsed_seconds": 599,
+    "output_elapsed_seconds": 11,
+    "pnr_elapsed_seconds": 938,
+    "combined_elapsed_seconds": 1241,
+    "timing_passed": false,
+    "fmax_mhz": {
+      "ref_clk": 43.703,
+      "audio_clk": 40.291,
+      "pixel_clk": 25.897
+    },
+    "target_mhz": {
+      "ref_clk": 50,
+      "audio_clk": 61.44,
+      "pixel_clk": 35
+    },
+    "setup_violating_endpoints": {
+      "ref_clk": 32,
+      "audio_clk": 347,
+      "pixel_clk": 102
+    }
+  },
+  "current_ide_settings": {
+    "INCREMENTAL_PLACE_AND_ROUTING": "auto",
+    "Retiming_Resource": "none",
+    "used_for_archived_build": "not established"
+  },
+  "apk_sha256": "83324cb3c7926715f27c64566bd455537a40b5fca1ae79c55cbbd073985c9895",
+  "not_performed_by_assistant": [
+    "Gowin synthesis/P&R/STA execution",
+    "FPGA programming",
+    "physical U7 or Android0.3 or audio acceptance"
+  ],
+  "historical_reports": "Earlier reports retained unchanged; their Git/EDA status fields describe generation time, not this publication."
+}

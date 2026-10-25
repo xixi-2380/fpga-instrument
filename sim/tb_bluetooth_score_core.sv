@@ -8,7 +8,11 @@ module tb_bluetooth_score_core;
  wire ev,song,upload,inhibit,bad_frame,fault;wire [1:0] kind,play;wire [6:0] id,pitch,velocity;wire [31:0] position;wire [7:0] error_code;wire [15:0] received,total;
  always #5 clk=~clk;
  bluetooth_score_core #(.CLOCK_HZ(CLOCK_HZ),.MAX_NOTES(MAX_NOTES),.MAX_VOICES(VOICES),.UPLOAD_TIMEOUT_MS(20),.GAP_TIMEOUT_MS(2),.FRAME_TIMEOUT_MS(10)) dut(
-  clk,rst,rx_valid,rx_data,rx_ready,rx_fault,tx_valid,tx_data,tx_ready,ev,event_ready,kind,id,pitch,velocity,song,upload,play,position,inhibit,error_code,received,total,bad_frame,fault);
+  .clk(clk),.rst(rst),.rx_valid(rx_valid),.rx_data(rx_data),.rx_ready(rx_ready),.rx_fault(rx_fault),
+  .tx_valid(tx_valid),.tx_data(tx_data),.tx_ready(tx_ready),.event_valid(ev),.event_ready(event_ready),
+  .event_kind(kind),.event_id(id),.event_pitch(pitch),.event_velocity(velocity),.song_valid(song),.upload_active(upload),
+  .play_state(play),.position_ms(position),.manual_inhibit(inhibit),.last_error(error_code),.received_notes(received),.total_notes(total),
+  .bad_frame(bad_frame),.scheduler_fault(fault),.local_valid(1'b0),.local_command(2'd0),.storage_lock(1'b0));
  integer checks=0,responses=0,reply_count=0,reply_goal=0,on_count=0,off_count=0,silences=0,faults=0;
  reg [7:0] response_bytes[0:63],response_payload[0:19];reg [7:0] response_cmd;reg [15:0] response_seq;integer response_len;
  reg [1:0] event_types[0:4095];reg [6:0] event_ids[0:4095],event_pitches[0:4095];reg [31:0] event_times[0:4095];integer event_count=0;
@@ -45,7 +49,7 @@ module tb_bluetooth_score_core;
   end
  end
  task clocks(input integer n);repeat(n)@(negedge clk);endtask
- reg [7:0] request_payload[0:255];reg [7:0] records[0:8191];integer record_bytes;
+ reg [7:0] request_payload[0:255];reg [7:0] records[0:MAX_NOTES*8-1];integer record_bytes;
  function automatic [31:0] record_crc(input integer n);
   reg [31:0] c;begin c=32'hffffffff;for(integer k=0;k<n*8;k++)c=crc32_byte(c,records[k]);record_crc=c^32'hffffffff;end
  endfunction
@@ -143,6 +147,8 @@ module tb_bluetooth_score_core;
   exchange(8'h20,4,0,0);clocks(30); // Start event may already have passed; stall the due Off.
   event_ready=0;clocks(13*MS);event_ready=1;clocks(2*MS);check(faults>0&&play==0&&error_code==8'h0d,"backpressure deadline fault flushes and stops");
   rst=1;clocks(3);rst=0;clocks(10);check(!song&&!upload&&play==0&&error_code==0,"reset invalidates RAM metadata");
+  exchange(1,0,0,0);exchange(8'h40,1,0,1);exchange(8'h30,2,0,0);
+  check(dut.expected_seq==3,"bare v1 core rejects absent extension and keeps session usable");
   $display("PASS tb_bluetooth_score_core checks=%0d responses=%0d events=%0d max_wait_cycles=%0d",checks,responses,event_count,max_wait_cycles);$finish;
  end
  function automatic [31:0] duration_value;duration_value={response_payload[4],response_payload[3],response_payload[2],response_payload[1]};endfunction

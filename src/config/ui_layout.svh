@@ -2,7 +2,10 @@
 localparam [5:0] UI_SINE=0,UI_FLUTE=1,UI_REED=2,UI_ECHO=3,UI_ROOM=4,
  UI_TREMOLO=5,UI_FX=6,UI_MODE=7,UI_LESS=8,UI_MORE=9,
  UI_SLOWER=10,UI_FASTER=11,UI_DEFAULTS=12,UI_CELLO=13,UI_PIANO=14,
- UI_GUITAR=15,UI_VIBES=16,UI_PREV=17,UI_NEXT=18,UI_VOLUME_DOWN=19,UI_VOLUME_UP=20,UI_NONE=63;
+ UI_GUITAR=15,UI_VIBES=16,UI_PREV=17,UI_NEXT=18,UI_VOLUME_DOWN=19,UI_VOLUME_UP=20,
+ UI_OPEN_MORE=21,UI_MORE_BACK=22,UI_SONG_PREV=23,UI_SONG_NEXT=24,UI_SONG_PLAY=25,
+ UI_SONG_PAUSE=26,UI_SONG_RESUME=27,UI_SONG_STOP=28,UI_SONG_LOAD=29,UI_SONG_SAVE=30,
+ UI_SONG_DELETE=31,UI_FLASH_INFO=32,UI_NONE=63;
 function automatic ui_inside(input integer px,py,left,top,width,height);
  begin ui_inside=px>=left && px<left+width && py>=top && py<top+height;end
 endfunction
@@ -37,6 +40,23 @@ function automatic [5:0] ui_hit(input integer px,py,input [1:0] fx,input menu);
    if(ui_inside(px,py,24,420,44,44))ui_hit=UI_VOLUME_DOWN;
    if(ui_inside(px,py,272,420,44,44))ui_hit=UI_VOLUME_UP;
    if(ui_inside(px,py,664,420,116,44))ui_hit=UI_DEFAULTS;
+   if(ui_inside(px,py,550,420,104,44))ui_hit=UI_OPEN_MORE;
   end
+ end
+endfunction
+function automatic [5:0] more_hit(input integer px,py);
+ begin
+  more_hit=UI_NONE;
+  if(ui_inside(px,py,648,16,132,48))more_hit=UI_MORE_BACK;
+  if(ui_inside(px,py,24,200,160,40))more_hit=UI_SONG_PREV;
+  if(ui_inside(px,py,204,200,160,40))more_hit=UI_SONG_NEXT;
+  if(ui_inside(px,py,384,200,160,40))more_hit=UI_SONG_LOAD;
+  if(ui_inside(px,py,564,200,160,40))more_hit=UI_SONG_PLAY;
+  if(ui_inside(px,py,24,252,160,40))more_hit=UI_SONG_PAUSE;
+  if(ui_inside(px,py,204,252,160,40))more_hit=UI_SONG_RESUME;
+  if(ui_inside(px,py,384,252,160,40))more_hit=UI_SONG_STOP;
+  if(ui_inside(px,py,24,304,160,40))more_hit=UI_SONG_SAVE;
+  if(ui_inside(px,py,204,304,160,40))more_hit=UI_SONG_DELETE;
+  if(ui_inside(px,py,384,304,160,40))more_hit=UI_FLASH_INFO;
  end
 endfunction

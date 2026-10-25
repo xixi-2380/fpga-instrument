@@ -1,0 +1,2 @@
+PASS tb_bt_library_link checks=336 programs=13 erases=3
+E:/gowin/fpga-instrument-bt-score/sim/tb_bt_library_link.sv:90: $finish called at 13263410056 (1ps)

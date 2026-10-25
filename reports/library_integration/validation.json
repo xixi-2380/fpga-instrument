@@ -1,0 +1,279 @@
+{
+  "date": "2026-10-25",
+  "base_commit": "bf5df5792f654ee9c29a30983cdbe83a0061669e",
+  "starting_checkpoint": "8081710e107f4d32069c6f1321eefed4c422970e",
+  "branch": "codex/bluetooth-score-integration",
+  "scope": "Local implementation of stages A-G and software/HDL part of H; board/timing acceptance pending",
+  "production": {
+    "automatic_voices": 16,
+    "physical_synth_voices": 32,
+    "max_notes": 4096,
+    "library_entries": 32,
+    "physical_slots": 33,
+    "default_autoplay": false,
+    "flash_region": "U7 0x000000..0x21FFFF",
+    "writable_profile": "EF4018 compatible only"
+  },
+  "all_selected_hdl_passed": true,
+  "hdl_configurations": 29,
+  "hdl_checks": 17302346,
+  "hdl_results": [
+    {
+      "test": "tb_bluetooth_score_core",
+      "log": "capacity_fallback_delivery/tb_bluetooth_score_core.log",
+      "passed": true,
+      "checks": 4337
+    },
+    {
+      "test": "tb_bt_polyphony",
+      "log": "poly_echo/tb_bt_polyphony.log",
+      "passed": true,
+      "checks": 266746
+    },
+    {
+      "test": "tb_bt_polyphony",
+      "log": "poly_room/tb_bt_polyphony.log",
+      "passed": true,
+      "checks": 266746
+    },
+    {
+      "test": "tb_bt_polyphony",
+      "log": "poly_tremolo/tb_bt_polyphony.log",
+      "passed": true,
+      "checks": 266746
+    },
+    {
+      "test": "tb_frame_boundary",
+      "log": "boundary1/tb_frame_boundary.log",
+      "passed": true,
+      "checks": 282
+    },
+    {
+      "test": "tb_frame_boundary",
+      "log": "boundary2/tb_frame_boundary.log",
+      "passed": true,
+      "checks": 562
+    },
+    {
+      "test": "tb_frame_boundary",
+      "log": "boundary20/tb_frame_boundary.log",
+      "passed": true,
+      "checks": 5602
+    },
+    {
+      "test": "tb_spi_nor_flash",
+      "log": "flash_delivery/tb_spi_nor_flash.log",
+      "passed": true,
+      "checks": 275
+    },
+    {
+      "test": "tb_flash_song_library",
+      "log": "library_final/tb_flash_song_library.log",
+      "passed": true,
+      "checks": 90
+    },
+    {
+      "test": "tb_score_library_protocol",
+      "log": "extension_unit/tb_score_library_protocol.log",
+      "passed": true,
+      "checks": 19
+    },
+    {
+      "test": "tb_ui_more",
+      "log": "more_inputs_final/tb_ui_more.log",
+      "passed": true,
+      "checks": 21
+    },
+    {
+      "test": "tb_ui_inputs",
+      "log": "ui_inputs/tb_ui_inputs.log",
+      "passed": true,
+      "checks": 87
+    },
+    {
+      "test": "tb_ui_top",
+      "log": "menu_top/tb_ui_top.log",
+      "passed": true,
+      "checks": 74274
+    },
+    {
+      "test": "tb_british_top",
+      "log": "ui_top_final/tb_british_top.log",
+      "passed": true,
+      "checks": 967221
+    },
+    {
+      "test": "tb_rgb_ui_renderer",
+      "log": "display_delivery/tb_rgb_ui_renderer.log",
+      "passed": true,
+      "checks": 4608035
+    },
+    {
+      "test": "tb_synth_core",
+      "log": "synth/tb_synth_core.log",
+      "passed": true,
+      "checks": 2513900
+    },
+    {
+      "test": "tb_playback_regression",
+      "log": "manual/tb_playback_regression.log",
+      "passed": true,
+      "checks": 1473658
+    },
+    {
+      "test": "tb_max98357_startup",
+      "log": "startup/tb_max98357_startup.log",
+      "passed": true,
+      "checks": 3702449
+    },
+    {
+      "test": "tb_bt_library_link",
+      "log": "chain_delivery/tb_bt_library_link.log",
+      "passed": true,
+      "checks": 336
+    },
+    {
+      "test": "tb_bt_score_audio",
+      "log": "legacy_audio_delivery/tb_bt_score_audio.log",
+      "passed": true,
+      "checks": 2433997
+    },
+    {
+      "test": "tb_bluetooth_top",
+      "log": "top/tb_bluetooth_top.log",
+      "passed": true,
+      "checks": 692512
+    },
+    {
+      "test": "tb_audio_timing",
+      "log": "timing_ce/tb_audio_timing.log",
+      "passed": true,
+      "checks": 9996
+    },
+    {
+      "test": "tb_local_score",
+      "log": "../local_control/ram/tb_local_score.log",
+      "passed": true,
+      "checks": 8
+    },
+    {
+      "test": "core_2",
+      "log": "protocol_final/core_2.log",
+      "passed": true,
+      "checks": 3556,
+      "parameters": {
+        "VOICES": 2
+      }
+    },
+    {
+      "test": "core_4",
+      "log": "protocol_final/core_4.log",
+      "passed": true,
+      "checks": 3553,
+      "parameters": {
+        "VOICES": 4
+      }
+    },
+    {
+      "test": "core_8",
+      "log": "protocol_final/core_8.log",
+      "passed": true,
+      "checks": 3558,
+      "parameters": {
+        "VOICES": 8
+      }
+    },
+    {
+      "test": "core_16",
+      "log": "protocol_final/core_16.log",
+      "passed": true,
+      "checks": 3552,
+      "parameters": {
+        "VOICES": 16
+      }
+    },
+    {
+      "test": "link_9600",
+      "log": "protocol_final/link_9600.log",
+      "passed": true,
+      "checks": 114,
+      "parameters": {
+        "BAUD": 9600
+      }
+    },
+    {
+      "test": "link_115200",
+      "log": "protocol_final/link_115200.log",
+      "passed": true,
+      "checks": 114,
+      "parameters": {
+        "BAUD": 115200,
+        "CLOCK_HZ": 5000000
+      }
+    }
+  ],
+  "java_tests": [
+    {
+      "test": "CoreTests",
+      "passed": true,
+      "output": "PASS core: 36043 checks; wire/MIDI/session/upload/cancel/retry; software only\n"
+    },
+    {
+      "test": "ConnectionTests",
+      "passed": true,
+      "output": "PASS connection: 32 checks; no phone/radio validation\n"
+    },
+    {
+      "test": "LibraryTests",
+      "passed": true,
+      "output": "PASS library: 33 checks; protocol mock only, no Flash/phone verification\n"
+    }
+  ],
+  "java_checks": 36108,
+  "java_passed": true,
+  "static": {
+    "passed": true,
+    "enabled_dependencies": 70,
+    "enabled_hdl": 53,
+    "constrained_ports": 66,
+    "unique_pin_assignments": true,
+    "default_no_autoplay": true,
+    "flat_sdc": true,
+    "python_syntax": true,
+    "project_preprocess": true,
+    "scope": "Static/preprocess only; no Gowin synthesis/P&R/STA"
+  },
+  "offline_flash_image": {
+    "songs": 32,
+    "notes": 4189,
+    "validated": true,
+    "sha256": "ddf74283014908a70a762adb0aeaacf2d30bbd47fa9e4362d0a9d3e29f06ddd3",
+    "report": "library_final/image_validation.json"
+  },
+  "measurements": {
+    "dense_16_off_16_on_us": 81.58,
+    "render_delivery_cycles": 519,
+    "render_budget_cycles": 544,
+    "effects_pcm_peak_max_observed": 14733
+  },
+  "apk": {
+    "path": "E:\\gowin\\fpga-instrument-bt-score\\android\\dist\\GaoshanScore-0.3-dev.apk",
+    "sha256": "83324cb3c7926715f27c64566bd455537a40b5fca1ae79c55cbbd073985c9895",
+    "bytes": 53651,
+    "signer_sha256": "5ea59e70b900f2bedb9fbc0bf071d74d111f69ad18d29c9fa6a26f27fb6b8f8f",
+    "same_signer_as_02": true,
+    "build_and_signature_passed": true,
+    "android_runtime_tested": false
+  },
+  "source_manifest": "source_manifest.json",
+  "intermediate_failures": "Earlier iteration logs remain; only selected paths above are final evidence.",
+  "not_performed": [
+    "Gowin synthesis/P&R/STA",
+    "bitstream download or programming",
+    "real U7 JEDEC/protection/read/write/power-loss verification",
+    "Android phone/runtime/RF verification for0.3",
+    "board audio quality and long-duration acceptance"
+  ],
+  "timing_limitation": "Previous audio/pixel setup violations were not declared closed; registered frame CE and metadata pipelines require new user STA.",
+  "git_state": "Local new implementation not committed/pushed; main not updated. Existing IDE process-config line-ending change preserved."
+}

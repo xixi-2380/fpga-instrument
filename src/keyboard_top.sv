@@ -2,7 +2,7 @@
 `include "config/keyboard_config.svh"
 `include "config/run_leds_config.svh"
 module keyboard_top #(
-    parameter integer BT_ENABLE=1,BT_EN_ACTIVE_HIGH=1,
+    parameter integer BT_ENABLE=1,BT_EN_ACTIVE_HIGH=1,FLASH_WRITES=1,
     parameter integer LCD_ENABLE=1,LCD_TEST_PATTERN=0,LCD_PCLK_INVERT=1,
     TOUCH_ENABLE=1,TOUCH_UI_ENABLE=1,TOUCH_RESET_CYCLES=1000000,TOUCH_STRAP_CYCLES=300000,
     TOUCH_BOOT_CYCLES=2500000,TOUCH_POLL_CYCLES=500000,TOUCH_I2C_HALF=250,
@@ -18,9 +18,10 @@ module keyboard_top #(
     input wire clk,rst,input wire [3:0] board_buttons_n,input wire [3:0] key_row,inout wire [3:0] key_col,
     output wire HP_BCK,HP_WS,HP_DIN,PA_EN,DBG_BCK,DBG_WS,DBG_DIN,DBG_PA_EN,
     output wire MAX_BCLK,MAX_LRCLK,MAX_DIN,MAX_SD_MODE,
-    output wire [5:0] led_n,
+    output wire [4:0] led_n,
     output wire lcd_clk,lcd_hs,lcd_vs,lcd_en,output wire [5:0] lcd_r,lcd_g,lcd_b,
-    inout wire touch_scl,touch_sda,touch_int,touch_rst_n);
+    inout wire touch_scl,touch_sda,touch_int,touch_rst_n,
+    output wire flash_cs_n,flash_sck,flash_mosi,input wire flash_miso,output wire flash_wp_n,flash_hold_n);
     wire effects_enabled;
     wire synth_pa_enable;
     reg [1:0] max_clock_frames;
@@ -46,6 +47,11 @@ module keyboard_top #(
     wire [5:0] matrix_action,touch_action;
     wire ui_action_valid=matrix_action_valid || touch_action_valid;
     wire [5:0] ui_action=matrix_action_valid?matrix_action:touch_action;
+    wire more_open,delete_confirm,more_command_valid,more_command_ready,more_info;
+    wire [3:0] more_command;
+    wire [79:0] service_status,service_audio;wire service_audio_valid,service_update;
+    ui_more_actions more_controls(audio_clk,audio_reset,menu_mode,ui_action_valid,ui_action,
+        more_open,delete_confirm,more_command_valid,more_command_ready,more_command,more_info);
     wire touch_ready,touch_error,touch_down,touch_report;
     wire [3:0] touch_count;
     wire [15:0] touch_x,touch_y,touch_size,touch_resolution_x,touch_resolution_y;
@@ -74,6 +80,16 @@ module keyboard_top #(
         wire [6:0] ident,pitch,velocity;
         wire source_valid,source_ready,source_inhibit,source_reset;
         wire [1:0] source_kind;wire [6:0] source_id,source_pitch,source_velocity;
+        wire song_valid,upload_active;wire [1:0] play_state;wire [15:0] total_notes;
+        wire [31:0] song_duration,song_crc;
+        wire local_valid,local_ready,local_done;wire [1:0] local_command;wire [7:0] local_error;
+        wire storage_lock,storage_ready,storage_write,storage_invalidate,storage_import,storage_done;
+        wire [11:0] storage_address;wire [63:0] storage_wdata,storage_rdata;
+        wire [15:0] storage_count;wire [31:0] storage_crc;wire [7:0] storage_error;
+        wire extension_valid,extension_ready,extension_response_valid,extension_response_ready;
+        wire [7:0] extension_command;wire [8:0] extension_length;wire [63:0] extension_payload;
+        wire [4:0] extension_response_length;wire [159:0] extension_response;
+        wire action_valid,action_ready;wire [3:0] action;
         wire channel_reset=pll1_reset || audio_reset;
         reset_sync bt_reset(clk,channel_reset,source_reset);
         (* syn_async_reg=1, async_reg="true" *) reg inhibit_meta,inhibit_sync;
@@ -82,24 +98,45 @@ module keyboard_top #(
             else begin inhibit_meta<=source_inhibit;inhibit_sync<=inhibit_meta;end
         end
         assign bt_inhibit=inhibit_sync;
-        bluetooth_score_link #(.CLOCK_HZ(`REF_HZ),.MAX_VOICES(1)) link(
+        bluetooth_score_link #(.CLOCK_HZ(`REF_HZ),.MAX_NOTES(4096),.MAX_VOICES(16),.LIBRARY_EXTENSION(1)) link(
             .clk(clk),.rst(source_reset),.uart_rx_pin(bt_rx),.uart_tx_pin(bt_tx),
             .event_valid(source_valid),.event_ready(source_ready),.event_kind(source_kind),.event_id(source_id),
-            .event_pitch(source_pitch),.event_velocity(source_velocity),.manual_inhibit(source_inhibit));
-        // event_id remains in the atomic payload; one-voice capability only.
+            .event_pitch(source_pitch),.event_velocity(source_velocity),.manual_inhibit(source_inhibit),
+            .song_valid(song_valid),.upload_active(upload_active),.play_state(play_state),.total_notes(total_notes),.song_duration(song_duration),.song_crc(song_crc),
+            .local_valid(local_valid),.local_ready(local_ready),.local_command(local_command),.local_done(local_done),.local_error(local_error),
+            .storage_lock(storage_lock),.storage_ready(storage_ready),.storage_write(storage_write),.storage_invalidate(storage_invalidate),
+            .storage_address(storage_address),.storage_wdata(storage_wdata),.storage_rdata(storage_rdata),
+            .storage_import(storage_import),.storage_count(storage_count),.storage_crc(storage_crc),.storage_done(storage_done),.storage_error(storage_error),
+            .extension_valid(extension_valid),.extension_ready(extension_ready),.extension_command(extension_command),.extension_length(extension_length),.extension_payload(extension_payload),
+            .extension_response_valid(extension_response_valid),.extension_response_ready(extension_response_ready),.extension_response_length(extension_response_length),.extension_response(extension_response));
+        bt_event_cdc #(.WIDTH(4)) local_actions(audio_clk,clk,channel_reset,more_command_valid,more_command_ready,more_command,action_valid,action_ready,action);
+        score_services #(.FLASH_WRITES(FLASH_WRITES)) services(.clk(clk),.rst(source_reset),.action_valid(action_valid),.action_ready(action_ready),.action(action),.status(service_status),
+            .song_valid(song_valid),.upload_active(upload_active),.play_state(play_state),.total_notes(total_notes),.song_duration(song_duration),.song_crc(song_crc),
+            .local_valid(local_valid),.local_ready(local_ready),.local_command(local_command),.local_done(local_done),.local_error(local_error),
+            .storage_lock(storage_lock),.storage_ready(storage_ready),.storage_write(storage_write),.storage_invalidate(storage_invalidate),
+            .storage_address(storage_address),.storage_wdata(storage_wdata),.storage_rdata(storage_rdata),
+            .storage_import(storage_import),.storage_count(storage_count),.storage_crc(storage_crc),.storage_done(storage_done),.storage_error(storage_error),
+            .extension_valid(extension_valid),.extension_ready(extension_ready),.extension_command(extension_command),.extension_length(extension_length),.extension_payload(extension_payload),
+            .extension_response_valid(extension_response_valid),.extension_response_ready(extension_response_ready),.extension_response_length(extension_response_length),.extension_response(extension_response),
+            .flash_cs_n(flash_cs_n),.flash_sck(flash_sck),.flash_mosi(flash_mosi),.flash_miso(flash_miso),.flash_wp_n(flash_wp_n),.flash_hold_n(flash_hold_n));
+        // Automatic IDs 0..15; manual keyboard IDs 60..75 remain separate.
         bt_event_cdc #(.WIDTH(23)) events(clk,audio_clk,channel_reset,
             source_valid,source_ready,{source_kind,source_id,source_pitch,source_velocity},
             ev_valid,ev_ready,{kind,ident,pitch,velocity});
         bluetooth_audio_bridge bridge(.clk(audio_clk),.rst(audio_reset),.frame_ce(frame_ce),
             .event_valid(ev_valid),.event_ready(ev_ready),.event_kind(kind),
-            .event_pitch(pitch),.event_velocity(velocity),.inhibit(bt_inhibit),
+            .event_id(ident),.event_pitch(pitch),.event_velocity(velocity),.inhibit(bt_inhibit),
             .note_valid(bt_valid),.note_ready(bt_ready),.note_on(bt_note_on),
             .note_id(bt_note_id),.note_fcw(bt_fcw),.note_velocity(bt_velocity),.flush(bt_flush),
             .selected_timbre(selected_timbre),.note_timbre(bt_timbre),.note_pitch(bt_pitch),.audio_ready(input_ready));
     end else begin: bluetooth_off
         assign bt_tx=1;assign bt_inhibit=0;assign bt_valid=0;assign bt_flush=0;
         assign bt_note_on=0;assign bt_note_id=0;assign bt_fcw=0;assign bt_velocity=127;assign bt_pitch=0;assign bt_timbre=0;
+        assign service_status=0;assign more_command_ready=1;
+        assign flash_cs_n=1;assign flash_sck=0;assign flash_mosi=0;assign flash_wp_n=1;assign flash_hold_n=1;
     end
+    rgb_status_cdc #(.WIDTH(80)) service_bridge(clk,audio_clk,pll1_reset || audio_reset,
+        service_status,service_audio,service_audio_valid,service_update);
     assign bt_ready=note_ready && take_bt && !bt_flush;
     // Start the external amplifier only after I2S clocks have crossed two
     // frame boundaries. The existing production mute interval then supplies
@@ -136,10 +173,10 @@ module keyboard_top #(
         .ready(touch_audio[38]),.error(touch_audio[37]),.down(touch_audio[36]),.count(touch_audio[35:32]),
         .x(touch_audio[31:16]),.y(touch_audio[15:0]),.resolution_x(touch_audio[70:55]),
         .resolution_y(touch_audio[54:39]),.effect_mode(effect_mode),.menu_mode(menu_mode),
-        .action_valid(touch_action_valid),.action(touch_action));
+        .action_valid(touch_action_valid),.action(touch_action),.more_mode(more_open));
     ui_keypad_router #(.RELEASE_CYCLES(SLOT_CYCLES*4*(DEBOUNCE_SCANS+1))) menu_keys(.clk(audio_clk),.rst(audio_reset),.menu_mode(menu_mode || take_bt),
         .ghost(ghost),.keys(keys),.inhibit_notes(inhibit_notes),
-        .action_valid(matrix_action_valid),.action(matrix_action));
+        .action_valid(matrix_action_valid),.action(matrix_action),.more_mode(more_open));
     if(LCD_ENABLE)begin: lcd_on
         rgb_display #(.VOICES(`VOICE_COUNT),.TEST_PATTERN(LCD_TEST_PATTERN),
             .PCLK_INVERT(LCD_PCLK_INVERT)) display_driver(
@@ -152,7 +189,8 @@ module keyboard_top #(
             .menu_mode(menu_mode),.effects_enabled(effects_enabled),.effect_mode(effect_mode),
             .echo_percent(echo_percent),.room_percent(room_percent),.depth_percent(depth_percent),
             .volume_percent(volume_percent),.tremolo_rate_hz(tremolo_rate_hz),.touch_enabled(TOUCH_ENABLE!=0),
-            .touch_ui_enabled(TOUCH_UI_ENABLE!=0 && touch_audio_valid && touch_audio[70:55]==800 && touch_audio[54:39]==480),.touch_ready_status(touch_audio[38]),.touch_error_status(touch_audio[37]));
+            .touch_ui_enabled(TOUCH_UI_ENABLE!=0 && touch_audio_valid && touch_audio[70:55]==800 && touch_audio[54:39]==480),.touch_ready_status(touch_audio[38]),.touch_error_status(touch_audio[37]),
+            .more_status({more_open,delete_confirm,more_info,service_audio[78:0]}));
     end else begin: lcd_off
         assign lcd_clk=0;assign lcd_hs=1;assign lcd_vs=1;assign lcd_en=0;
         assign lcd_r=0;assign lcd_g=0;assign lcd_b=0;
@@ -176,9 +214,11 @@ module keyboard_top #(
         .menu_mode(menu_mode),.cfg_valid(cfg_valid),.cfg_tremolo_rate_hz(cfg_rate_hz),.echo_wet(echo_wet),.room_wet(room_wet),
         .tremolo_depth(tremolo_depth),.echo_percent(echo_percent),.room_percent(room_percent),
         .depth_percent(depth_percent),.tremolo_rate_hz(tremolo_rate_hz),.volume_percent(volume_percent));
+    wire [5:0] diagnostic_leds;
+    assign led_n={diagnostic_leds[5],diagnostic_leds[3:0]};
     run_leds #(.STEP_CYCLES(LED_STEP_CYCLES),.DIAG_STEPS(LED_DIAG_STEPS)) status_leds(
         .clk(clk),.audio_ready_async(!audio_reset),.key_active_async(gate),
-        .pll1_lock_async(lock1),.pll2_lock_async(lock2),.reset_active_async(rst),.led_n(led_n));
+        .pll1_lock_async(lock1),.pll2_lock_async(lock2),.reset_active_async(rst),.led_n(diagnostic_leds));
     pll_pair clocks(clk,pll1_reset,pll2_reset,mid_clk,audio_clk,lock1,lock2);
     clock_reset #(.LOCK_N(LOCK_N)) reset_control(clk,rst,lock1,lock2,audio_clk,
         pll1_reset,pll2_reset,audio_reset);

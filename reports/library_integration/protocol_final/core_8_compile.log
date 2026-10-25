@@ -1,0 +1,11 @@
+E:\gowin\fpga-instrument-bt-score\sim\tb_bluetooth_score_core.sv:10: warning: Instantiating module bluetooth_score_core with dangling input port 33 (storage_write) floating.
+E:\gowin\fpga-instrument-bt-score\sim\tb_bluetooth_score_core.sv:10: warning: Instantiating module bluetooth_score_core with dangling input port 34 (storage_invalidate) floating.
+E:\gowin\fpga-instrument-bt-score\sim\tb_bluetooth_score_core.sv:10: warning: Instantiating module bluetooth_score_core with dangling input port 35 (storage_address) floating.
+E:\gowin\fpga-instrument-bt-score\sim\tb_bluetooth_score_core.sv:10: warning: Instantiating module bluetooth_score_core with dangling input port 36 (storage_wdata) floating.
+E:\gowin\fpga-instrument-bt-score\sim\tb_bluetooth_score_core.sv:10: warning: Instantiating module bluetooth_score_core with dangling input port 38 (storage_import) floating.
+E:\gowin\fpga-instrument-bt-score\sim\tb_bluetooth_score_core.sv:10: warning: Instantiating module bluetooth_score_core with dangling input port 39 (storage_count) floating.
+E:\gowin\fpga-instrument-bt-score\sim\tb_bluetooth_score_core.sv:10: warning: Instantiating module bluetooth_score_core with dangling input port 40 (storage_crc) floating.
+E:\gowin\fpga-instrument-bt-score\sim\tb_bluetooth_score_core.sv:10: warning: Instantiating module bluetooth_score_core with dangling input port 46 (extension_ready) floating.
+E:\gowin\fpga-instrument-bt-score\sim\tb_bluetooth_score_core.sv:10: warning: Instantiating module bluetooth_score_core with dangling input port 50 (extension_response_valid) floating.
+E:\gowin\fpga-instrument-bt-score\sim\tb_bluetooth_score_core.sv:10: warning: Instantiating module bluetooth_score_core with dangling input port 52 (extension_response_length) floating.
+E:\gowin\fpga-instrument-bt-score\sim\tb_bluetooth_score_core.sv:10: warning: Instantiating module bluetooth_score_core with dangling input port 53 (extension_response) floating.

@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-25",
+  "branch": "codex/bluetooth-score-integration",
+  "base_commit": "bf5df5792f654ee9c29a30983cdbe83a0061669e",
+  "origin": "Existing user-generated Gowin outputs, not rebuilt by assistant",
+  "timing_passed": false,
+  "board_tested": false,
+  "source_to_bitstream_identity": "No contemporaneous source signature; report and output hashes identify archived files only",
+  "artifacts": [
+    {
+      "file": "D2_keyboard_leds.fs",
+      "source": "impl/pnr/D2_keyboard_leds.fs",
+      "bytes": 38920075,
+      "modified_local": "2026-10-25T11:27:37",
+      "sha256": "45f583852d0c21c29122c3646889ff7e791e7023b449e7a3040c0341aa623a0f"
+    },
+    {
+      "file": "D2_keyboard_leds.bin",
+      "source": "impl/pnr/D2_keyboard_leds.bin",
+      "bytes": 4857340,
+      "modified_local": "2026-10-25T11:27:38",
+      "sha256": "621b5e6050aac858d462612012939643e3642b9ef3621c00da76ac31f0fc6325"
+    },
+    {
+      "file": "D2_keyboard_leds.binx",
+      "source": "impl/pnr/D2_keyboard_leds.binx",
+      "bytes": 4857966,
+      "modified_local": "2026-10-25T11:27:38",
+      "sha256": "45f66ebeda5490463db0100e4bd7fd35236035d19bed95a42666171dbf51f1c4"
+    }
+  ],
+  "archive": {
+    "file": "D2_keyboard_leds_outputs.zip",
+    "bytes": 5623201,
+    "sha256": "a0add4e35bb256de7e3d01374df8733b7fd89b4dd188aec0a6542f72fba16756"
+  }
+}

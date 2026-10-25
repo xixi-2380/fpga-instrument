@@ -10,8 +10,8 @@ cmd=compiler+['-encoding','UTF-8','-d',str(classes)]+[str(s) for s in sources]
 c=subprocess.run(cmd,capture_output=True,text=True);(out/'compile.log').write_text(c.stdout+c.stderr)
 if c.returncode:raise SystemExit(c.stderr)
 results=[]
-for name in ['CoreTests','ConnectionTests']:
- r=subprocess.run(['java','-cp',str(classes),'cn.whu.gaoshan.core.'+name],capture_output=True,text=True,timeout=120)
+for name in ['CoreTests','ConnectionTests','LibraryTests']:
+ r=subprocess.run(['java','-cp',str(classes),'cn.whu.gaoshan.core.'+name,str(root/'examples')],capture_output=True,text=True,timeout=120)
  (out/(name+'.log')).write_text(r.stdout+r.stderr,encoding='utf-8');print(r.stdout+r.stderr)
  results.append({'test':name,'passed':r.returncode==0,'output':r.stdout})
 (out/'summary.json').write_text(json.dumps({'passed':all(r['passed'] for r in results),'scope':'Java core and fake connection lifecycle; not Android/BT/FPGA','results':results},indent=2),encoding='utf-8')

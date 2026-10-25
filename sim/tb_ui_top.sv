@@ -6,7 +6,7 @@ module tb_ui_top;
  reg clk=0,rst=1;always #10 clk=~clk;
  reg [3:0] buttons=15;reg [15:0] pressed=0;
  tri [3:0] columns;wire [3:0] rows,selected;
- tri scl,sda,tint,trst;wire bck,ws,din,pa;wire [5:0] leds;
+ tri scl,sda,tint,trst;wire bck,ws,din,pa;wire [4:0] leds;
  integer checks=0,events=0,frames=0,before_events;
  keyboard_top #(.LCD_ENABLE(LCD),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.SCORE_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(2),.BUTTON_LONG_PRESS_CYCLES(128),
   .LOCK_N(16),.SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
@@ -52,7 +52,7 @@ module tb_ui_top;
   `CHECK(events==before_events && !dut.gate,"menu navigation never generates note events")
   buttons=7;cycles(256);buttons=15;cycles(10);
   `CHECK(dut.effect_mode==0,"S3 cycles from current UI state")
-  pressed=16'h8000;more_frames(3);
+  pressed=16'h0008;more_frames(3);
   `CHECK(!dut.menu_mode && dut.inhibit_notes && !dut.gate,"exit key cannot sound while held")
   pressed=0;more_frames(2);pressed=16'h0200;wait(dut.gate);more_frames(2);
   `CHECK(dut.sound.voice_timbres[1:0]==1,"play resumes with selected timbre after release")

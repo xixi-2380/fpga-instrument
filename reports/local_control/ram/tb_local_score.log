@@ -1,0 +1,2 @@
+PASS tb_local_score checks=8
+E:/gowin/fpga-instrument-bt-score/sim/tb_local_score.sv:36: $finish called at 5460000 (1ps)

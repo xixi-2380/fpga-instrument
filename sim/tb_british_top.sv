@@ -36,7 +36,7 @@ module tb_british_top;
    `CHECK(dut.menu_mode,"S0 enters parameter page")
    if(t!=0)key(14);
    `CHECK(dut.selected_timbre==t,"matrix next reaches all seven identities")
-   key(15);`CHECK(!dut.menu_mode,"return restores play mode")
+   key(3);`CHECK(!dut.menu_mode,"R1C4 return restores play mode; R4C4 is more")
    pressed=16'h0001;wait(dut.gate);more_frames(8);
    for(integer v=0;v<32;v=v+1)if(dut.voice_held[v])begin
     `CHECK(dut.sound.voice_timbres[v*3+:3]==t,"new timbre crosses note/allocator interfaces")

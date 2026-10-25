@@ -1,0 +1,68 @@
+{
+  "results": [
+    {
+      "name": "core_2",
+      "top": "tb_bluetooth_score_core",
+      "parameters": {
+        "VOICES": 2
+      },
+      "passed": true,
+      "checks": 3550,
+      "output": "PASS tb_bluetooth_score_core checks=3550 responses=117 events=29 max_wait_cycles=15387\nE:\\gowin\\fpga-instrument-bt-score\\sim\\tb_bluetooth_score_core.sv:150: $finish called at 7370420000 (1ps)\n"
+    },
+    {
+      "name": "core_4",
+      "top": "tb_bluetooth_score_core",
+      "parameters": {
+        "VOICES": 4
+      },
+      "passed": true,
+      "checks": 3550,
+      "output": "PASS tb_bluetooth_score_core checks=3550 responses=117 events=29 max_wait_cycles=17430\nE:\\gowin\\fpga-instrument-bt-score\\sim\\tb_bluetooth_score_core.sv:150: $finish called at 7391660000 (1ps)\n"
+    },
+    {
+      "name": "core_8",
+      "top": "tb_bluetooth_score_core",
+      "parameters": {
+        "VOICES": 8
+      },
+      "passed": true,
+      "checks": 3552,
+      "output": "PASS tb_bluetooth_score_core checks=3552 responses=117 events=29 max_wait_cycles=21530\nE:\\gowin\\fpga-instrument-bt-score\\sim\\tb_bluetooth_score_core.sv:150: $finish called at 7436460000 (1ps)\n"
+    },
+    {
+      "name": "core_16",
+      "top": "tb_bluetooth_score_core",
+      "parameters": {
+        "VOICES": 16
+      },
+      "passed": true,
+      "checks": 3551,
+      "output": "PASS tb_bluetooth_score_core checks=3551 responses=117 events=29 max_wait_cycles=29727\nE:\\gowin\\fpga-instrument-bt-score\\sim\\tb_bluetooth_score_core.sv:150: $finish called at 7527420000 (1ps)\n"
+    },
+    {
+      "name": "link_9600",
+      "top": "tb_bluetooth_score_link",
+      "parameters": {
+        "BAUD": 9600
+      },
+      "passed": true,
+      "checks": 114,
+      "output": "PASS tb_bluetooth_score_link checks=114 baud=9600\nE:\\gowin\\fpga-instrument-bt-score\\sim\\tb_bluetooth_score_link.sv:38: $finish called at 757920000 (1ps)\n"
+    },
+    {
+      "name": "link_115200",
+      "top": "tb_bluetooth_score_link",
+      "parameters": {
+        "BAUD": 115200,
+        "CLOCK_HZ": 5000000
+      },
+      "passed": true,
+      "checks": 114,
+      "output": "PASS tb_bluetooth_score_link checks=114 baud=115200\nE:\\gowin\\fpga-instrument-bt-score\\sim\\tb_bluetooth_score_link.sv:38: $finish called at 313820000 (1ps)\n"
+    }
+  ],
+  "all_passed": true,
+  "total_checks": 14431,
+  "scope": "HDL simulation only; no Gowin synthesis, timing, board, phone or audio verification"
+}

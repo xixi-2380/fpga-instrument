@@ -1,0 +1,8 @@
+[
+  {
+    "test": "tb_synth_core",
+    "passed": true,
+    "pll_model": "project/vendor when required",
+    "seconds": 16.862
+  }
+]

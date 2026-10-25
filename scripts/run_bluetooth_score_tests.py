@@ -2,8 +2,8 @@
 import argparse,json,pathlib,subprocess,re
 p=argparse.ArgumentParser();p.add_argument('--iverilog',default='iverilog');p.add_argument('--vvp',default='vvp');p.add_argument('--ivl-base');p.add_argument('--out-dir',required=True);a=p.parse_args()
 r=pathlib.Path(__file__).resolve().parents[1];out=pathlib.Path(a.out_dir).resolve();out.mkdir(parents=True,exist_ok=True)
-sources=['uart_rx','uart_tx','bt_frame_rx','bt_frame_tx','bt_score_player','bluetooth_score_core','bluetooth_score_link']
-configs=[('core_2','tb_bluetooth_score_core',{'VOICES':2}),('core_4','tb_bluetooth_score_core',{'VOICES':4}),('core_8','tb_bluetooth_score_core',{'VOICES':8}),('link_9600','tb_bluetooth_score_link',{'BAUD':9600}),('link_115200','tb_bluetooth_score_link',{'BAUD':115200,'CLOCK_HZ':5000000})]
+sources=['uart_rx','uart_tx','bt_frame_rx','bt_frame_tx','bt_score_player','score_validator','bluetooth_score_core','bluetooth_score_link']
+configs=[('core_2','tb_bluetooth_score_core',{'VOICES':2}),('core_4','tb_bluetooth_score_core',{'VOICES':4}),('core_8','tb_bluetooth_score_core',{'VOICES':8}),('core_16','tb_bluetooth_score_core',{'VOICES':16}),('link_9600','tb_bluetooth_score_link',{'BAUD':9600}),('link_115200','tb_bluetooth_score_link',{'BAUD':115200,'CLOCK_HZ':5000000})]
 results=[]
 for name,top,params in configs:
  binary=out/(name+'.vvp');cmd=[a.iverilog,'-g2012','-Wall','-s',top,'-o',str(binary)]

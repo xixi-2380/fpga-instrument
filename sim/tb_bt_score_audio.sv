@@ -15,6 +15,8 @@ module tb_bt_score_audio;
  .LOCK_N(16),.MUTE(4),.FADE(4),.ATTACK(2),.DECAY(2),.RELEASE(2)) dut(
  .clk(clk),.rst(rst),.bt_rx(1'b1),.board_buttons_n(4'hf),.key_row(rows),.key_col(columns));
  defparam dut.bluetooth_on.link.CLOCK_HZ=1000000;
+ // Keep this accelerated single-voice fixture; production polyphony has its own test.
+ defparam dut.bluetooth_on.link.MAX_VOICES=1;
  defparam dut.sound.VOICES=1;
  defparam dut.sound.timing.HALF_CYCLES=2;
  assign rr=dut.bluetooth_on.link.core.rx_ready;

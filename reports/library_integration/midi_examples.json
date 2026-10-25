@@ -1,0 +1,18 @@
+[
+  {
+    "file": "twinkle_polyphonic.mid",
+    "notes": 78,
+    "duration_ms": 23750,
+    "polyphony": 4,
+    "crc32": "CA72FDDA",
+    "sha256": "a30a24b01c58ed7ce2c1515be7cc59b6f6952f1e6114015d58af20e9e1ad37ee"
+  },
+  {
+    "file": "poly16_boundary_12ms.mid",
+    "notes": 48,
+    "duration_ms": 12,
+    "polyphony": 16,
+    "crc32": "1DBDB753",
+    "sha256": "20c3264ff0b9f6a3f25bac8a4b56a5e7c33604fa01dd11d3b76f48020d232274"
+  }
+]

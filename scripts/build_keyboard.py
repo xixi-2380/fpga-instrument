@@ -9,7 +9,7 @@ touch_enabled=int(re.search(r'TOUCH_ENABLE=(\d+)',(root/'src/keyboard_top.sv').r
 out=root/'reports/keyboard/current';out.mkdir(parents=True,exist_ok=True)
 sim_dir=pathlib.Path(a.sim_dir)
 if not sim_dir.is_absolute():sim_dir=root/sim_dir
-tests=['tb_bt_event_cdc','tb_bt_player_production','tb_bt_score_audio','tb_playback_regression','tb_matrix_settling','tb_master_volume','tb_bluetooth_top','tb_bluetooth_score_core','tb_bluetooth_score_link','tb_british_top','tb_instrument_envelopes','tb_audio_visualizer','tb_score_seven_timbres','tb_timbres','tb_ui_controls','tb_ui_inputs','tb_ui_top','tb_ui_score_handoff','tb_audio_delay','tb_audio_effects','tb_effect_parameters','tb_effect_parameter_path','tb_effects_integration','tb_timbre_control','tb_effect_button_path','tb_i2s_tx','tb_max98357_startup','tb_i2c_register_master','tb_gt9110_boot','tb_gt9110_touch','tb_rgb_ui_renderer','tb_rgb_scan_timing','tb_rgb_status_cdc','tb_rgb_display','tb_score_articulation','tb_score_player','tb_score_audio','tb_dds_sine','tb_tone_gain','tb_sine_rom','tb_audio_timing','tb_matrix_keypad','tb_key_note_events','tb_adsr_envelope','tb_adsr_production','tb_keyboard_core','tb_keyboard_top','tb_keyboard_latency','tb_run_leds','tb_synth_core','tb_voice_allocator','tb_voice_mixer']
+tests=['tb_score_library_protocol','tb_ui_more','tb_frame_boundary','tb_local_score','tb_spi_nor_flash','tb_flash_song_library','tb_bt_polyphony','tb_bt_library_link','tb_bt_event_cdc','tb_bt_player_production','tb_bt_score_audio','tb_playback_regression','tb_matrix_settling','tb_master_volume','tb_bluetooth_top','tb_bluetooth_score_core','tb_bluetooth_score_link','tb_british_top','tb_instrument_envelopes','tb_audio_visualizer','tb_score_seven_timbres','tb_timbres','tb_ui_controls','tb_ui_inputs','tb_ui_top','tb_ui_score_handoff','tb_audio_delay','tb_audio_effects','tb_effect_parameters','tb_effect_parameter_path','tb_effects_integration','tb_timbre_control','tb_effect_button_path','tb_i2s_tx','tb_max98357_startup','tb_i2c_register_master','tb_gt9110_boot','tb_gt9110_touch','tb_rgb_ui_renderer','tb_rgb_scan_timing','tb_rgb_status_cdc','tb_rgb_display','tb_score_articulation','tb_score_player','tb_score_audio','tb_dds_sine','tb_tone_gain','tb_sine_rom','tb_audio_timing','tb_matrix_keypad','tb_key_note_events','tb_adsr_envelope','tb_adsr_production','tb_keyboard_core','tb_keyboard_top','tb_keyboard_latency','tb_run_leds','tb_synth_core','tb_voice_allocator','tb_voice_mixer']
 if a.stage!='build':
     for name in tests:
         log=(sim_dir/(name+'.log')).read_text(encoding='utf8')
@@ -41,7 +41,8 @@ if bt_enabled:expected.update({'bt_rx':'P24','bt_tx':'P23','bt_en':'P21'})
 expected.update({'MAX_BCLK':'V22','MAX_LRCLK':'W19','MAX_DIN':'Y20','MAX_SD_MODE':'V26'})
 expected.update({'key_col['+str(i)+']':v for i,v in enumerate(['W25','M24','Y25','AA24'])})
 expected.update({'key_row['+str(i)+']':v for i,v in enumerate(['W26','L22','Y26','AA25'])})
-expected.update({'led_n['+str(i)+']':v for i,v in enumerate(['R26','J14','L20','M25','N21','N23'])})
+expected.update({'led_n['+str(i)+']':v for i,v in enumerate(['R26','J14','L20','M25','N23'])})
+expected.update({'flash_cs_n':'L25','flash_sck':'P20','flash_mosi':'N21','flash_miso':'T22','flash_wp_n':'R22','flash_hold_n':'R20'})
 expected.update({'board_buttons_n['+str(i)+']':v for i,v in enumerate(['K16','F15','G15','G16'])})
 if lcd_enabled:
     expected.update({'lcd_clk':'H21','lcd_hs':'H22','lcd_vs':'A23','lcd_en':'A24'})

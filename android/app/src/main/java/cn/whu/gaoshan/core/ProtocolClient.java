@@ -36,6 +36,40 @@ public final class ProtocolClient {
             songValid=b[1]!=0;uploading=b[2]!=0;state=b[3]&255;received=Wire.u16(b,4);total=Wire.u16(b,6);position=Wire.u32(b,8);lastError=b[12]&255;
         }
     }
+    public static final class LibraryCapabilities {
+        public final boolean initialized,supported,writable;public final int entries,voices,status1,status2,status3,lastError,latestJobId;public final long jedecId,activeCrc;
+        LibraryCapabilities(byte[] b)throws IOException{
+            if(b.length!=20||b[1]!=1||(b[2]&0xe0)!=0||(b[3]&255)!=32||Wire.u16(b,4)!=4096||(b[6]&255)!=16)throw new IOException("曲库扩展能力不兼容");
+            initialized=(b[2]&1)!=0;supported=(b[2]&2)!=0;writable=(b[2]&4)!=0;entries=b[3]&255;voices=b[6]&255;
+            jedecId=(b[7]&255L)|((b[8]&255L)<<8)|((b[9]&255L)<<16);status1=b[10]&255;status2=b[11]&255;status3=b[12]&255;lastError=b[15]&255;latestJobId=Wire.u16(b,13);activeCrc=Wire.u32(b,16);
+        }
+    }
+    public static final class LibraryEntry {
+        public final int index,count;public final boolean exists;public final long duration,crc;public final String name;
+        LibraryEntry(byte[] b)throws IOException{
+            if(b.length!=20||(b[1]&255)>=32||(b[2]&255)>1)throw new IOException("曲目元数据非法");
+            index=b[1]&255;exists=b[2]!=0;count=Wire.u16(b,3);duration=Wire.u32(b,5);crc=Wire.u32(b,9);
+            StringBuilder text=new StringBuilder();for(int i=13;i<20;i++){int ch=b[i]&255;if(ch==0)break;if(ch<32||ch>126)throw new IOException("曲名不是ASCII");text.append((char)ch);}name=text.toString();
+            if(exists&&(count<1||count>4096||duration<1||duration>3600000))throw new IOException("曲目容量/时长非法");
+        }
+    }
+    /** Includes an operation/slot/CRC fingerprint, not only a reused job number. */
+    public static final class LibraryJob {
+        public final int id,operation,index;public final long crc;
+        public LibraryJob(int id,int operation,int index,long crc){
+            if(id<0||id>65535||operation<0||operation>2||index<0||index>=32||crc<0||crc>0xffffffffL)throw new IllegalArgumentException("invalid library job");
+            this.id=id;this.operation=operation;this.index=index;this.crc=crc;
+        }
+        byte[] token(){byte[] p=new byte[8];Wire.put16(p,0,id);p[2]=(byte)operation;p[3]=(byte)index;Wire.put32(p,4,crc);return p;}
+    }
+    public static final class LibraryJobStatus {
+        public final int state,error;public final boolean persisted;
+        LibraryJobStatus(byte[] b,LibraryJob job)throws IOException{
+            if(b.length!=20||Wire.u16(b,1)!=job.id||(b[5]&255)!=job.operation||(b[6]&255)!=job.index||Wire.u32(b,7)!=job.crc||(b[3]&255)<1||(b[3]&255)>3||(b[11]&255)>1)throw new IOException("任务应答不匹配");
+            state=b[3]&255;error=b[4]&255;persisted=b[11]!=0;
+            if((persisted&&(state!=2||job.operation!=0))||(state==2&&error!=0))throw new IOException("任务持久状态矛盾");
+        }
+    }
     private final Transport link;private final Clock clock;private final int timeoutMs;
     private final Wire.Decoder decoder=new Wire.Decoder();private int seq=1;private boolean session=false;
     private Capabilities capabilities;private long lastStatus=-1;
@@ -62,7 +96,7 @@ public final class ProtocolClient {
                 return f.payload;
             }
         }
-        throw new IOException("响应超时，已发送4次相同请求；若模块仍已连接，请重新验证FPGA通信；若链路断开，请重连。未完成上传需重新开始。");
+        throw new IOException(cmd>=0x42&&cmd<=0x44?"任务启动应答超时，结果未知；勿重复发起擦写。重新验证后查询保留任务或曲目目录/CRC。":"响应超时，已发送4次相同请求；若模块仍已连接，请重新验证FPGA通信；若链路断开，请重连。未完成RAM上传需重新开始。");
     }
     private byte[] request(int cmd,byte[] payload,int expected)throws IOException{
         if(!session)throw new IOException("请先连接并完成HELLO");
@@ -80,6 +114,23 @@ public final class ProtocolClient {
         if(delay>0)try{Thread.sleep(delay);}catch(InterruptedException e){Thread.currentThread().interrupt();throw new IOException("状态查询中断",e);}
         lastStatus=clock.ms();return new Status(request(0x30,new byte[0],13));
     }
+    /** null is the explicit old-v1 fallback; other failures stay visible. */
+    public LibraryCapabilities libraryCapabilities()throws IOException{
+        try{return new LibraryCapabilities(request(0x40,new byte[0],20));}
+        catch(DeviceError e){if(e.code==1)return null;throw e;}
+    }
+    public LibraryEntry libraryEntry(int index)throws IOException{
+        if(index<0||index>=32)throw new IllegalArgumentException("invalid slot");
+        LibraryEntry entry=new LibraryEntry(request(0x41,new byte[]{(byte)index},20));
+        if(entry.index!=index)throw new IOException("曲目编号不匹配");return entry;
+    }
+    public LibraryJob startLibraryJob(int operation,int index,String shortName,long scoreCrc)throws IOException{
+        if(operation<0||operation>2||index<0||index>=32)throw new IllegalArgumentException("invalid job");
+        byte[] p=new byte[operation==0?8:1];p[0]=(byte)index;
+        if(operation==0&&shortName!=null){if(shortName.length()>7)throw new IOException("琴端短名最多7个ASCII字符");for(int i=0;i<shortName.length();i++){char ch=shortName.charAt(i);if(ch<32||ch>126)throw new IOException("琴端短名仅支持ASCII");p[i+1]=(byte)ch;}}
+        return new LibraryJob(Wire.u16(request(0x42+operation,p,3),1),operation,index,operation==0?scoreCrc:0);
+    }
+    public LibraryJobStatus libraryJob(LibraryJob job)throws IOException{return new LibraryJobStatus(request(0x45,job.token(),20),job);}
     public long upload(Score score,AtomicBoolean cancel,Progress progress)throws IOException{
         if(capabilities==null||!session)throw new IOException("尚未握手");score.validate(capabilities);
         if(cancel.get())throw new IOException("上传已取消");
@@ -108,6 +159,7 @@ public final class ProtocolClient {
     }
     public void close(){session=false;try{link.close();}catch(IOException ignored){}}
     public static String errorText(int code){
+        switch(code){case 0x21:return "Flash型号不支持、只读或受保护";case 0x22:return "Flash忙等待超时";case 0x23:return "Flash地址/页边界非法";case 0x24:return "Flash或曲库错误";case 0x25:return "Flash仍忙";case 0x28:return "任务结果未知或已被替代；请核对曲目目录/CRC";default:break;}
         switch(code){case 1:return "未知命令";case 2:return "协议版本错误";case 3:return "载荷长度错误";case 5:return "状态不允许";case 6:return "参数或音符非法";case 7:return "上传索引错误";case 8:return "容量不足";case 9:return "整曲CRC错误";case 10:return "整曲声部等约束不满足";case 11:return "序号冲突，需要重新HELLO";case 12:return "上传事务超时";case 13:return "内部错误";case 14:return "没有有效曲谱";default:return "未定义错误";}
     }
 }

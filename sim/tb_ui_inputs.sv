@@ -7,8 +7,8 @@ module tb_ui_inputs;
  reg enabled=1,valid=1,ready=1,error=0,down=0;reg [3:0] count=0;
  reg [15:0] x=0,y=0,rx=800,ry=480;reg [1:0] fx=0;
  wire tv;wire [5:0] ta;integer checks=0,kevents=0,tevents=0;
- ui_keypad_router #(.RELEASE_CYCLES(2)) k(clk,rst,menu,ghost,keys,inhibit,kv,ka);
- ui_touch_actions t(clk,rst,enabled,valid,ready,error,down,count,x,y,rx,ry,fx,menu,tv,ta);
+ ui_keypad_router #(.RELEASE_CYCLES(2)) k(clk,rst,menu,ghost,keys,inhibit,kv,ka,1'b0);
+ ui_touch_actions t(clk,rst,enabled,valid,ready,error,down,count,x,y,rx,ry,fx,menu,tv,ta,1'b0);
  always @(posedge clk)begin if(kv)kevents=kevents+1;if(tv)tevents=tevents+1;end
  task cycles(input integer n);begin repeat(n)@(negedge clk);end endtask
  task contact(input integer px,py,input [5:0] expected);integer before_events;begin
@@ -26,7 +26,7 @@ module tb_ui_inputs;
   keys=0;cycles(3);keys=16'h0003;cycles(4);`CHECK(kevents==1,"multi-key menu input is ignored")
   ghost=1;keys=0;cycles(3);ghost=0;cycles(1);keys=16'h0200;cycles(4);
   `CHECK(kevents==1,"ghost recovery cannot treat transient zero keys as full release")
-  keys=0;cycles(3);keys=16'h8000;cycles(4);`CHECK(ka==UI_MODE && kevents==2,"R4C4 exits menu")
+  keys=0;cycles(3);keys=16'h8000;cycles(4);`CHECK(ka==UI_OPEN_MORE && kevents==2,"R4C4 opens more")
   menu=0;cycles(3);`CHECK(inhibit,"exit key cannot become a played note")
   keys=0;cycles(3);`CHECK(!inhibit,"all keys released rearms notes")
   menu=1;cycles(4);keys=16'h2000;cycles(4);`CHECK(ka==UI_PREV,"R4C2 now selects previous timbre")

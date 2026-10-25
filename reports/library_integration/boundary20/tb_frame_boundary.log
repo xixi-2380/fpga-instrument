@@ -1,0 +1,2 @@
+PASS tb_frame_boundary checks=5602 HALF=20
+E:/gowin/fpga-instrument-bt-score/sim/tb_frame_boundary.sv:15: $finish called at 56020000 (1ps)

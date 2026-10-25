@@ -17,7 +17,8 @@ module rgb_display #(
     input wire menu_mode,effects_enabled,input wire [1:0] effect_mode,
     input wire [6:0] echo_percent,room_percent,depth_percent,input wire [3:0] tremolo_rate_hz,
     input wire [6:0] volume_percent,
-    input wire touch_enabled,touch_ui_enabled,touch_ready_status,touch_error_status
+    input wire touch_enabled,touch_ui_enabled,touch_ready_status,touch_error_status,
+    input wire [81:0] more_status
 );
     wire pixel_clk,pixel_lock,pixel_reset;
     wire common_reset=pll_reset || !pixel_lock || audio_reset;
@@ -72,9 +73,11 @@ module rgb_display #(
         .HS_ACTIVE(HS_ACTIVE),.VS_ACTIVE(VS_ACTIVE),.DE_ONLY(DE_ONLY))
         scan(pixel_clk,pixel_reset,x,y,de,hs,vs,frame_start);
     wire [23:0] rgb;
+    wire [81:0] pixel_more;wire more_valid,more_update;
+    rgb_status_cdc #(.WIDTH(82)) more_bridge(audio_clk,pixel_clk,common_reset,more_status,pixel_more,more_valid,more_update);
     wire rendered_de,rendered_hs,rendered_vs;
     rgb_ui_renderer renderer(pixel_clk,pixel_reset,frame_start,status_valid,pixel_status,
-        x,y,de,hs,vs,rgb,rendered_de,rendered_hs,rendered_vs);
+        x,y,de,hs,vs,rgb,rendered_de,rendered_hs,rendered_vs,pixel_more);
     // Only the output pin is phase-inverted. It never clocks any internal RTL.
     // At default phase, a panel rising edge has half a pixel period of setup.
     assign lcd_clk=PCLK_INVERT ? ~pixel_clk : pixel_clk;

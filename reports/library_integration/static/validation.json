@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "enabled_dependencies": 70,
+  "enabled_hdl": 53,
+  "constrained_ports": 66,
+  "unique_pin_assignments": true,
+  "default_no_autoplay": true,
+  "flat_sdc": true,
+  "python_syntax": true,
+  "project_preprocess": true,
+  "scope": "Static/preprocess only; no Gowin synthesis/P&R/STA"
+}

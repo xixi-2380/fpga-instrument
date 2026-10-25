@@ -1,0 +1,2 @@
+PASS tb_rgb_ui_renderer checks=3840033 frames=5
+E:/gowin/fpga-instrument-bt-score/sim/tb_rgb_ui_renderer.sv:72: $finish called at 19201210000 (1ps)

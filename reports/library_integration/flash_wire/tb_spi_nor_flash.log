@@ -1,0 +1,2 @@
+PASS tb_spi_nor_flash checks=275 programs=1 erases=2
+E:/gowin/fpga-instrument-bt-score/sim/tb_spi_nor_flash.sv:35: $finish called at 1898600000 (1ps)

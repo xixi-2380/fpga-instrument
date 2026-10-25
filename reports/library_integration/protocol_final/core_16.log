@@ -1,0 +1,2 @@
+PASS tb_bluetooth_score_core checks=3552 responses=117 events=29 max_wait_cycles=29718
+E:\gowin\fpga-instrument-bt-score\sim\tb_bluetooth_score_core.sv:150: $finish called at 7531130000 (1ps)

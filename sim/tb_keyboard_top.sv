@@ -7,7 +7,9 @@ module tb_keyboard_top;
  tri [3:0] columns;
  wire [3:0] selected,rows;
  wire bck,ws,din,pa,db,dw,dd,dp;
- wire [5:0] leds;
+ // Internal diagnostic bits retain the old semantic checks; N21 physical
+ // ready LED was reassigned to U7, and the physical vector now has five pads.
+ wire [5:0] leds=dut.diagnostic_leds;
  wire [3:0] flow_on=~leds[3:0];
  reg [3:0] previous_flow=4'b1110;
  integer flow_moves=0,reset_flow_moves=0,idle_edge_start,diag_heartbeat,stage=0;
@@ -22,7 +24,7 @@ module tb_keyboard_top;
   dut(.clk(clk),.rst(rst),.board_buttons_n(buttons_n),.key_row(rows),.key_col(columns),
    .MAX_BCLK(bck),.MAX_LRCLK(ws),.MAX_DIN(din),.MAX_SD_MODE(),
    .HP_BCK(),.HP_WS(),.HP_DIN(),.PA_EN(),
-   .DBG_BCK(db),.DBG_WS(dw),.DBG_DIN(dd),.DBG_PA_EN(dp),.led_n(leds));
+   .DBG_BCK(db),.DBG_WS(dw),.DBG_DIN(dd),.DBG_PA_EN(dp));
  assign pa=dut.input_ready;
  always @(negedge clk)begin
   if(!dut.status_leds.diagnostic_active)begin

@@ -16,12 +16,9 @@ module synth_core #(
     input wire flush,input wire velocity_valid,input wire [6:0] note_velocity,
     input wire [6:0] volume_percent,input wire [6:0] note_pitch);
     wire engine_reset=rst || (flush===1'b1);
-    // Only Bluetooth ID0 has velocity; legacy score/keyboard retain unity.
-    wire [8:0] velocities[0:127];
-    reg [8:0] bluetooth_velocity;
-    reg [6:0] bluetooth_pitch;
-    assign velocities[0]=bluetooth_velocity;
-    for(genvar n=1;n<128;n=n+1)assign velocities[n]=9'd256;
+    // Bounded automatic context table; manual/legacy MIDI identities use unity.
+    reg [8:0] velocities[0:15];
+    reg [6:0] automatic_pitch[0:15];
     reg [8:0] velocity_scale;
     function automatic [8:0] velocity_gain(input [6:0] value);
     begin case(value)
@@ -156,10 +153,13 @@ module synth_core #(
         default:velocity_gain=256;
     endcase end endfunction
     always @(posedge clk or posedge engine_reset)begin
-        if(engine_reset)begin bluetooth_velocity<=256;bluetooth_pitch<=0;end
-        else if(note_valid && note_ready && note_on && note_id==0)begin
-            bluetooth_velocity<=velocity_valid===1'b1 ? velocity_gain(note_velocity) : 9'd256;
-            bluetooth_pitch<=velocity_valid===1'b1 ? note_pitch : 7'd0;
+        if(engine_reset)begin
+            for(integer a=0;a<16;a=a+1)begin velocities[a]<=256;automatic_pitch[a]<=a;end
+        end else if(note_valid && note_ready && note_on && note_id<16)begin
+            for(integer a=0;a<16;a=a+1)if(note_id==a)begin
+                velocities[a]<=velocity_valid===1'b1 ? velocity_gain(note_velocity) : 9'd256;
+                automatic_pitch[a]<=velocity_valid===1'b1 ? note_pitch : note_id;
+            end
         end
     end
     localparam integer INDEX_W=VOICES>1?$clog2(VOICES):1;
@@ -195,15 +195,23 @@ module synth_core #(
     wire signed [15:0] mix_sample;
     wire [15:0] frame_l,frame_r;
     reg [15:0] note_scan;
-    wire [6:0] scanning_id=voice_ids[selected_voice*7+:7];
-    wire [6:0] scanning_pitch=scanning_id==0 ? bluetooth_pitch : scanning_id;
-    wire [15:0] note_bit=(voice_held[selected_voice] && scanning_pitch>=60 && scanning_pitch<76) ? (16'b1 << (scanning_pitch-7'd60)) : 16'd0;
+    // Metadata read, automatic lookup, then bitmap update occupy separate clocks.
+    // Avoid a render-counter -> context mux -> dynamic shift -> bitmap path.
+    reg [6:0] scanning_id,scanning_pitch;
+    reg scanning_held,scanning_first,scanning_last;
+    wire [15:0] note_bit=(scanning_held && scanning_pitch>=60 && scanning_pitch<76) ? (16'b1 << (scanning_pitch-7'd60)) : 16'd0;
     always @(posedge clk or posedge engine_reset)begin
-        if(engine_reset)begin note_scan<=0;visual_notes<=0;end
-        else if(dds_ce)begin
-            if(selected_voice==0)note_scan<=note_bit;
-            else note_scan<=note_scan | note_bit;
-            if(selected_voice==VOICES-1)visual_notes<=VOICES==1 ? note_bit : note_scan | note_bit;
+        if(engine_reset)begin note_scan<=0;visual_notes<=0;scanning_id<=0;scanning_pitch<=0;scanning_held<=0;scanning_first<=0;scanning_last<=0;end
+        else begin
+            if(dds_ce)begin
+                scanning_id<=voice_ids[selected_voice*7+:7];scanning_held<=voice_held[selected_voice];
+                scanning_first<=selected_voice==0;scanning_last<=selected_voice==VOICES-1;
+            end
+            if(in_slots && render_cycle[3:0]==1)scanning_pitch<=scanning_id<16 ? automatic_pitch[scanning_id[3:0]] : scanning_id;
+            if(in_slots && render_cycle[3:0]==2)begin
+                if(scanning_first)note_scan<=note_bit;else note_scan<=note_scan | note_bit;
+                if(scanning_last)visual_notes<=scanning_first ? note_bit : note_scan | note_bit;
+            end
         end
     end
     wire output_valid;wire signed [15:0] output_sample;
@@ -237,8 +245,8 @@ module synth_core #(
             level_product<=0;combined_level<=0;gain_request<=0;
             first_sample<=0;last_sample<=0;sample_voice<=0;velocity_scale<=256;
         end else begin
-            gain_request<=raw_valid;
-            if(raw_valid)combined_level<=scaled_level[24:8];
+            gain_request<=in_slots && render_cycle[3:0]==3;
+            if(in_slots && render_cycle[3:0]==2)combined_level<=scaled_level[24:8];
             if(frame_ce)begin
                 render_busy<=1;render_cycle<=0;
                 frame_fcw<=voice_fcw;frame_restart<=voice_restart;frame_timbres<=voice_timbres;
@@ -248,11 +256,11 @@ module synth_core #(
             end
             if(dds_ce)begin
                 level_product<=voice_level[selected_voice]*startup_level;
-                velocity_scale<=velocities[voice_ids[selected_voice*7+:7]];
                 sample_voice<=selected_voice;
                 first_sample<=selected_voice==0;
                 last_sample<=selected_voice==VOICES-1;
             end
+            if(in_slots && render_cycle[3:0]==1)velocity_scale<=scanning_id<16 ? velocities[scanning_id[3:0]] : 9'd256;
         end
     end
     tone_gain #(.OUTPUT_W(`VOICE_W)) gain(clk,engine_reset,gain_request,raw_sample,combined_level,gain_valid,gain_sample);

@@ -24,8 +24,12 @@ set_max_delay -from [get_clocks {audio_clk}] -to [get_ports {key_col[0] key_col[
 set_min_delay -from [get_clocks {audio_clk}] -to [get_ports {key_col[0] key_col[1] key_col[2] key_col[3]}] 0.000
 
 # Human-visible LEDs: deliberate 100ns output-route budget, no audio timing exception.
-set_max_delay -from [get_clocks {ref_clk}] -to [get_ports {led_n[0] led_n[1] led_n[2] led_n[3] led_n[4] led_n[5]}] 100.000
-set_min_delay -from [get_clocks {ref_clk}] -to [get_ports {led_n[0] led_n[1] led_n[2] led_n[3] led_n[4] led_n[5]}] 0.000
+set_max_delay -from [get_clocks {ref_clk}] -to [get_ports {led_n[0] led_n[1] led_n[2] led_n[3] led_n[4]}] 100.000
+set_min_delay -from [get_clocks {ref_clk}] -to [get_ports {led_n[0] led_n[1] led_n[2] led_n[3] led_n[4]}] 0.000
+# U7 SPI is registered ref-clock data with a 500ns half-period at default1MHz.
+# 100ns is a bounded output-route budget; no internal audio/memory path exception.
+set_max_delay -from [get_clocks {ref_clk}] -to [get_ports {flash_cs_n flash_sck flash_mosi flash_wp_n flash_hold_n}] 100.000
+set_min_delay -from [get_clocks {ref_clk}] -to [get_ports {flash_cs_n flash_sck flash_mosi flash_wp_n flash_hold_n}] 0.000
 
 # Independent 35 MHz trial LCD PLL, from Sipeed's Pro 800x480 example.
 # This does not alter either existing audio PLL or relax audio paths.

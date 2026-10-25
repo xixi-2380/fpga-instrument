@@ -33,7 +33,7 @@
     "HOTBOOT": false,
     "I2C": false,
     "I2C_SLAVE_ADDR": "00",
-    "INCREMENTAL_PLACE_AND_ROUTING": "0",
+    "INCREMENTAL_PLACE_AND_ROUTING": "auto",
     "INCREMENTAL_PLACE_ONLY": "0",
     "IncludePath": [
         "src",
@@ -75,7 +75,7 @@
     "Ram_RW_Check": false,
     "Replicate_Resources": false,
     "Report_Auto-Placed_Io_Information": false,
-    "Retiming_Resource": "None",
+    "Retiming_Resource": "none",
     "Route_Maxfan": "23",
     "Route_Option": "2",
     "Run_Timing_Driven": true,

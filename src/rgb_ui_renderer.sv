@@ -4,12 +4,13 @@
 module rgb_ui_renderer(
  input wire pixel_clk,rst,frame_start,status_valid,input wire [1111:0] status_data,
  input wire [10:0] x,y,input wire de_in,hs_in,vs_in,
- output reg [23:0] rgb,output reg de_out,hs_out,vs_out);
+ output reg [23:0] rgb,output reg de_out,hs_out,vs_out,input wire [81:0] more_data);
  `include "config/ui_layout.svh"
  localparam [23:0] BG=24'h101214,PANEL=24'h191c20,GOLD=24'hd6b979,
   CREAM=24'hf2e6c9,INK=24'h17191b,DIM=24'h9c987f,LINE=24'h4b4534,
   WINE=24'h67333e,GREEN=24'h8bc79b,RED=24'hef8f85;
  reg [1111:0] state;
+ reg [81:0] more_state;
  wire [2:0] timbre={state[53],state[13:12]};
  wire [1:0] fx=state[22:21];wire menu=state[20],enabled=state[23];
  wire [6:0] percent=fx==0 ? state[30:24] : fx==1 ? state[37:31] : state[44:38];
@@ -47,6 +48,9 @@ module rgb_ui_renderer(
  initial $readmemh("src/rom/british_font.hex",font_rom);
  function automatic [7:0] digit(input integer value);
   begin digit=8'd48+value;end
+ endfunction
+ function automatic [7:0] hex_digit(input [3:0] value);
+  begin hex_digit=value<10?8'd48+value:8'd65+value-8'd10;end
  endfunction
  function automatic [79:0] timbre_name(input [2:0] id);
   begin case(id)
@@ -203,6 +207,38 @@ module rgb_ui_renderer(
     text={"VOL ",volume==100 ? 8'd49 : 8'd32,volume>=10 ? digit((volume/10)%10) : 8'd32,digit(volume%10),"%"};len=8;tx=116;
    end
   end
+  if(menu && ui_inside(px,py,550,420,104,44))begin
+   base=card(px,py,550,420,104,44,0);fg=GOLD;text="more";len=4;tx=582;ty=434;
+  end
+  // Minimal fixed character rows; original two pages retain their layout.
+  if(menu && more_state[81])begin
+   base=BG;fg=CREAM;text=0;len=0;tx=24;ty=32;
+   if(py<80)begin
+    if(px<648)begin text="MORE";len=4;end else begin text="BACK";len=4;tx=680;fg=GOLD;end
+   end else if(py<124)begin text="BT  16 VOICES / 4096 NOTES";len=26;ty=100;end
+   else if(py<180)begin
+    text={"SONG S",digit((integer'(more_state[4:0])+1)/100),digit(((integer'(more_state[4:0])+1)/10)%10),digit((integer'(more_state[4:0])+1)%10),more_state[5]?" VALID":" EMPTY"};len=15;ty=148;
+   end else if(py>=200 && py<240)begin
+    i=px<204?0:px<384?1:px<564?2:3;tx=24+i*180;ty=212;
+    case(i)0:begin text="PREV";len=4;end 1:begin text="NEXT";len=4;end 2:begin text="LOAD";len=4;end default:begin text="PLAY";len=4;end endcase
+   end else if(py>=252 && py<292)begin
+    i=px<204?0:px<384?1:2;tx=24+i*180;ty=264;
+    case(i)0:begin text="PAUSE";len=5;end 1:begin text="RESUME";len=6;end default:begin text="STOP";len=4;end endcase
+   end else if(py>=304 && py<344)begin
+    i=px<204?0:px<384?1:2;tx=24+i*180;ty=316;fg=GOLD;
+    case(i)0:begin text="SAVE";len=4;end 1:begin text="DELETE";len=6;end default:begin text="FLASH INFO";len=10;end endcase
+   end else if(py>=356 && py<388)begin
+    text={more_state[6]?"BUSY ":"READY"," ID ",hex_digit(more_state[57:54]),hex_digit(more_state[53:50]),hex_digit(more_state[49:46]),hex_digit(more_state[45:42]),hex_digit(more_state[41:38]),hex_digit(more_state[37:34])};len=15;ty=364;
+    if(!more_state[58])begin text="FLASH UNKNOWN / READ ONLY";len=25;fg=GOLD;end
+    if(more_state[79])begin
+     text={"JOB ",hex_digit(more_state[76:73]),hex_digit(more_state[72:69]),hex_digit(more_state[68:65]),hex_digit(more_state[64:61])," NOTES ",hex_digit(more_state[33:30]),hex_digit(more_state[29:26]),hex_digit(more_state[25:22]),hex_digit(more_state[21:18])};len=19;fg=GOLD;
+    end
+   end else if(py>=400 && py<428)begin
+    text={"ERROR ",hex_digit(more_state[15:12]),hex_digit(more_state[11:8]),"   ",more_state[17:16]==1?"PLAYING":more_state[17:16]==2?"PAUSED ":"STOPPED"};len=18;ty=406;fg=more_state[15:8]!=0?RED:DIM;
+   end else if(py>=436 && py<468)begin
+    text=more_state[80]?"DELETE AGAIN TO CONFIRM / BACK CANCEL":"R4C4 BACK / S0 HOLD EXIT";len=more_state[80]?37:24;ty=442;fg=GOLD;
+   end
+  end
   dx=$signed({1'b0,x})-$signed({1'b0,tx});dy=$signed({1'b0,y})-$signed({1'b0,ty});
   if(ui_inside(px,py,24,4,384,64))fg=GOLD;
   if(state[19])begin
@@ -219,12 +255,12 @@ module rgb_ui_renderer(
   font_row<=font_rom[font_addr];
   if(rst)begin glyph_text<=0;glyph_len<=0;glyph_dx<=0;glyph_dy<=0;glyph_title<=0;glyph_allow<=0;
    title_address<=0;title_bit<=0;base_layout<=0;fg_layout<=0;de_layout<=0;hs_layout<=0;vs_layout<=0;state<=0;base_pipe<=0;fg_pipe<=0;bit_pipe<=0;ink_pipe<=0;
-   de_pipe<=0;hs_pipe<=0;vs_pipe<=0;rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;end
+   de_pipe<=0;hs_pipe<=0;vs_pipe<=0;rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;more_state<=0;end
   else begin
-   if(frame_start && status_valid)state<=status_data;
+   if(frame_start && status_valid)begin state<=status_data;more_state<=more_data[81]===1'b1 ? more_data : 82'd0;end
    glyph_text<=text;glyph_len<=len;glyph_dx<=dx;glyph_dy<=dy;
    glyph_allow<=de_in && x<800 && y<480 && !state[19];
-   glyph_title<=de_in && !state[19] && ui_inside(px,py,24,4,384,64);
+   glyph_title<=de_in && !state[19] && !(menu && more_state[81]) && ui_inside(px,py,24,4,384,64);
    title_address<=1536+(py-4)*24+((px-24)>>4);title_bit<=15-((px-24)%16);
    base_layout<=base;fg_layout<=fg;de_layout<=de_in && x<800 && y<480;hs_layout<=hs_in;vs_layout<=vs_in;
    base_pipe<=base_layout;fg_pipe<=fg_layout;

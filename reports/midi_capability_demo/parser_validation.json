@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "checks": 1462,
+  "notes": 362,
+  "duration_ms": 82000,
+  "polyphony": 16,
+  "crc32": "911C00A0",
+  "scope": "Production Android MIDI parser, exact records, section polyphony, rests and simulated upload. No physical phone, Bluetooth or FPGA playback verification."
+}

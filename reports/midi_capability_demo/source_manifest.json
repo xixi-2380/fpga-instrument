@@ -1,0 +1,19 @@
+{
+  "historical_fixtures_byte_identical": [
+    "twinkle_polyphonic.mid",
+    "poly16_boundary_12ms.mid"
+  ],
+  "sha256": {
+    "scripts/generate_bluetooth_examples.py": "bfa5d630bfff6dd892689e48defc5d05c9f4e69e96f9eb1c76136a1d205b77e5",
+    "android/examples/twinkle_capability_demo.mid": "5730c0a5a5e8cfd150463a754a4d9d243fcd32b57031e9dd66f49e507df3eb0a",
+    "android/examples/README.md": "bf9d67e308adc8a04620dbfb7c999a7fb1ac2c6d0467d7d916f73c7feb7de29e",
+    "android/tests/cn/whu/gaoshan/core/DemoMidiTests.java": "70a5e082ef80e970a10f28a80becc31b1ce5478456052ed7b7dfdd709cda6c51",
+    "android/app/src/main/java/cn/whu/gaoshan/core/MidiFile.java": "f85ce45cfed6e6952bf77066ad81e4636fef9828ece71e6af8dfe5a0f5a4784d",
+    "android/app/src/main/java/cn/whu/gaoshan/core/ModuleConnection.java": "bf7def9120ede6c034d5c4bf114c07005a83770638d52a1c4b0820a63594109d",
+    "android/app/src/main/java/cn/whu/gaoshan/core/ProtocolClient.java": "8b3c61d1635efa94076ef17d10fbd11fad50cf5617ae92e5b0bd5eec5cb92038",
+    "android/app/src/main/java/cn/whu/gaoshan/core/Score.java": "3d890c6022361034f686880fd08a492a64342d37d4c2a37d0013035e1da0cfdf",
+    "android/app/src/main/java/cn/whu/gaoshan/core/SimulatedDevice.java": "c8e4012d520edf5d14afa0f9df6288f21adc60ed218e54bac20a8edf69dd3b1c",
+    "android/app/src/main/java/cn/whu/gaoshan/core/Wire.java": "cb9332cb7dd54d9e9211ef3e79b5659a9df5fe4e70b29d9ac920ea21e7b09671"
+  },
+  "scope": "MIDI generation and current Java parser evidence only; no RTL changes or physical playback verification"
+}

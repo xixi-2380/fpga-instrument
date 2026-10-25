@@ -1,0 +1,59 @@
+{
+  "file": "twinkle_capability_demo.mid",
+  "notes": 362,
+  "duration_ms": 82000,
+  "polyphony": 16,
+  "min_pitch": 48,
+  "max_pitch": 83,
+  "crc32": "911C00A0",
+  "sha256": "5730c0a5a5e8cfd150463a754a4d9d243fcd32b57031e9dd66f49e507df3eb0a",
+  "format": 0,
+  "ppqn": 480,
+  "bpm": 120,
+  "sections": [
+    {
+      "label": "melody",
+      "start_ms": 0,
+      "end_ms": 24000,
+      "expected_polyphony": 1,
+      "notes": 42
+    },
+    {
+      "label": "chord accompaniment",
+      "start_ms": 26000,
+      "end_ms": 50000,
+      "expected_polyphony": 4,
+      "notes": 78
+    },
+    {
+      "label": "bass chords pad arpeggio",
+      "start_ms": 52000,
+      "end_ms": 76000,
+      "expected_polyphony": 8,
+      "notes": 210
+    },
+    {
+      "label": "16 voice ending",
+      "start_ms": 78000,
+      "end_ms": 82000,
+      "expected_polyphony": 16,
+      "notes": 32
+    }
+  ],
+  "rests_ms": [
+    [
+      24000,
+      26000
+    ],
+    [
+      50000,
+      52000
+    ],
+    [
+      76000,
+      78000
+    ]
+  ],
+  "record_bytes": 2896,
+  "scope": "Generated arrangement; Android parser verification is separate. Hardware playback pending."
+}

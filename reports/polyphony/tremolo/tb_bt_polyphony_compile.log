@@ -1,0 +1,6 @@
+E:/gowin/fpga-instrument-bt-score/src/synth_core.sv:271: warning: @* is sensitive to all 32 words in array 'voice_level'.
+E:/gowin/fpga-instrument-bt-score/src/synth_core.sv:271: warning: @* is sensitive to all 32 words in array 'voice_level'.
+E:/gowin/fpga-instrument-bt-score/sim/tb_bt_polyphony.sv:33: warning: Instantiating module synth_core with dangling input port 23 (effect_echo_wet) floating.
+E:/gowin/fpga-instrument-bt-score/sim/tb_bt_polyphony.sv:33: warning: Instantiating module synth_core with dangling input port 24 (effect_room_wet) floating.
+E:/gowin/fpga-instrument-bt-score/sim/tb_bt_polyphony.sv:33: warning: Instantiating module synth_core with dangling input port 25 (effect_tremolo_depth) floating.
+E:/gowin/fpga-instrument-bt-score/sim/tb_bt_polyphony.sv:33: warning: Instantiating module synth_core with dangling input port 26 (effect_tremolo_rate_hz) floating.

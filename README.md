@@ -3,10 +3,12 @@
 - 分支：`codex/bluetooth-score-integration`。
 - 版本基准：`bf5df5792f654ee9c29a30983cdbe83a0061669e`（main 的英伦七音色 UI、MAX98357A 与触摸整合版）。
 - 开发范围：按 `docs/bluetooth_score` 中的规划和 v1 协议重构 FPGA 蓝牙，加入设置页音量，重点验证松键后输出归零、单键识别和键位高亮，并控制组合路径、宽总线和跨时钟传递。
-- 当前发布：蓝牙单声部 RAM 曲谱版本，包含 FPGA v1 协议、App 0.2、设置页音量，以及键盘扫描和音频归零回归。用户已确认连接、通信、MIDI 下载播放、暂停和停止正常；不将该反馈扩大为全功能或时序验收。
-- 操作和验证边界见 [蓝牙实施说明](docs/bluetooth_score/实施说明.md)。安装包：[GaoshanScore-0.2-dev.apk](android/dist/GaoshanScore-0.2-dev.apk)；文件读取示例：[小星星 MIDI](android/examples/twinkle_single_voice.mid)。
-- 当前生产能力为 1024 条音符、1 个自动声部；手动音源仍为 32 声部。16 自动声部、4096 条音符、Flash 曲库与设置页 `more` 入口尚未实现，后续按[八阶段计划](docs/bluetooth_score/多声部与Flash曲库开发计划.md)推进。
-- 最新已有实现报告仍存在音频/像素域 Setup 违例，未宣称时序闭合；取消上电自动播放的最新改动已通过 HDL 仿真，尚待用户重新实现与实板确认。助手未运行 Gowin 综合、布局布线或烧录。
+- 当前发布：2026-10-25蓝牙整合**开发检查点（时序未达标）**，接入16自动声部、4096条、32首U7 Flash曲库、本地控制、App 0.3及设置页 `more` 字符入口；手动音源仍为32物理声部。原七音色、三效果器、触摸、MAX98357A与设置音量保留。
+- 安装包：[GaoshanScore-0.3-dev.apk](android/dist/GaoshanScore-0.3-dev.apk)；[小星星能力演示 MIDI](android/examples/twinkle_capability_demo.mid)为82秒、362条、分段1/4/8/16声部，导入选择全部轨道/全部通道/移调0。文件说明见[示例目录](android/examples/README.md)。
+- 用户现有编译产物：[FPGA位流压缩包（.fs/.bin/.binx）](dist/fpga/2026-10-25/D2_keyboard_leds_outputs.zip)。本次仅归档已有输出，没有重新启动EDA或下载烧录；文件哈希、报告和限制见[发布记录](docs/bluetooth_score/发布记录_2026-10-25.md)。
+- `8081710` 仍为1024条/1自动声部的历史可用检查点，原App 0.2及单旋律文件保留。用户对旧版连接、通信、下载播放、暂停和停止的确认，不扩大为本次新功能验收；本次仅发布蓝牙分支，不合入main。
+- 操作、引脚及实板验收见[曲库上板操作](docs/bluetooth_score/曲库上板操作.md)，线协议及磁盘格式见[曲库扩展协议](docs/bluetooth_score/曲库扩展协议.md)。[八阶段计划](docs/bluetooth_score/多声部与Flash曲库开发计划.md)的A～G已接入实现，H软件联调已有证据；真实Flash、手机0.3运行、音质及长期验收仍待完成。
+- 用户2026-10-25 11:27构建的报告：综合5分03秒，P&R15分38秒；实际Fmax为参考43.703/目标50、音频40.291/目标61.44、像素25.897/目标35MHz，三域均有Setup违例，**不作为时序通过或稳定可用版**。当前IDE配置为自动增量P&R，该设置是否用于上述构建未核实，耗时不作为全量编译保证。
 - 用户已取消上电《小星星》自动播放：当前蓝牙整合工程默认 `SCORE_ENABLE=0`，上电及USR复位后静音待机，曲谱由用户主动播放。下方基准版的上电播放描述属于历史记录。
 - 下方内容为基准版本记录；不能将基准版的历史测试视为本分支新功能已通过。
 
