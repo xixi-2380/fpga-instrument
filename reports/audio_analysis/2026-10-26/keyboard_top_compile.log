@@ -1,0 +1,5 @@
+/workspace/scratch/6579ba30d432/fpga-integration/src/ui_theme_art.sv:54: warning: @* is sensitive to all 16 words in array 'cat_palette'.
+/workspace/scratch/6579ba30d432/fpga-integration/src/ui_theme_art.sv:55: warning: @* is sensitive to all 16 words in array 'capybara_palette'.
+/workspace/scratch/6579ba30d432/fpga-integration/src/ui_theme_art.sv:57: warning: @* is sensitive to all 16 words in array 'british_palette'.
+/workspace/scratch/6579ba30d432/fpga-integration/src/synth_core.sv:122: warning: @* is sensitive to all 32 words in array 'voice_level'.
+/workspace/scratch/6579ba30d432/fpga-integration/src/synth_core.sv:122: warning: @* is sensitive to all 32 words in array 'voice_level'.

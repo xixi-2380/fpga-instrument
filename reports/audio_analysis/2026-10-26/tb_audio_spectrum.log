@@ -1,0 +1,9 @@
+FFT_FRAME 0 analysis_cycles=93439
+FFT_FRAME 1 analysis_cycles=93439
+FFT_FRAME 2 analysis_cycles=93439
+FFT_FRAME 3 analysis_cycles=93439
+FFT_FRAME 4 analysis_cycles=93439
+FFT_FRAME 5 analysis_cycles=93439
+FFT_FRAME 6 analysis_cycles=93439
+FFT_FRAME 7 analysis_cycles=93439
+PASS tb_audio_spectrum checks=747539

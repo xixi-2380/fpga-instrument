@@ -53,3 +53,5 @@ run_sim.py自动生成参考输入并在FFT后运行独立数值核对。scripts
 3. 分析运行时小星星、快速按松、和弦、USR仍正常，无新增持续音或缺音。
 4. 彩蛋人物和脚完整，S0/S1/S2无功能，S3短按无功能、长按正常。
 5. 提供新资源、P&R耗时及完整STA；本次不预先保证时序收敛或耗时。
+
+软件渲染预览：[六界面对照](../reports/audio_analysis/2026-10-26/analysis_overview.png)，[英伦频谱](../reports/audio_analysis/2026-10-26/analysis_0.png)，[中文XY](../reports/audio_analysis/2026-10-26/analysis_1.png)。

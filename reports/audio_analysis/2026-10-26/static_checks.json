@@ -1,0 +1,10 @@
+{
+  "unchanged_sound_effects_keypad_clocks_cst_and_art": true,
+  "table_and_font_generation_idempotent": true,
+  "dependencies": 68,
+  "all_project_files_present": true,
+  "default_top": "behavioral PLL elaboration only",
+  "preprocess": "project and other CWD, relative includes without extra config search path",
+  "CDC": "1112 UI plus separate513 FFT; XY pixel domain only",
+  "SDC": "2 additional exact async reset PRESET entry endpoints only; actual Gowin names and timing pending"
+}
