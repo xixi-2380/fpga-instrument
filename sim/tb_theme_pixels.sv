@@ -9,7 +9,7 @@ module tb_theme_pixels;
  integer checks=0,n=0,fd,scene,k;reg [4095:0] outdir,filename;
  reg [1111:0] frozen;reg [3:0] frozen_animation;
  reg [23:0] first_cat;reg [25:0] old_phase;
- rgb_ui_renderer dut(clk,rst,frame_start,valid,status,x,y,de,1'b1,1'b1,rgb,dout,hout,vout);
+ rgb_ui_renderer dut(clk,rst,frame_start,valid,status,x,y,de,1'b1,1'b1,rgb,dout,hout,vout,513'd0,1'b0);
  always @(posedge clk)begin #1;
   if(record && dout)begin
    `CHECK(n<384000 && (^rgb)!==1'bx,"defined theme pixel within full raster")

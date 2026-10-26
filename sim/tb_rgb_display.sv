@@ -16,7 +16,7 @@ module tb_rgb_display;
   .score_error(1'b0),.underrun(1'b0),.ghost(1'b0),.lcd_clk(pc),.lcd_hs(hs),.lcd_vs(vs),.lcd_en(de),
   .lcd_r(r),.lcd_g(g),.lcd_b(b),.menu_mode(1'b1),.effects_enabled(1'b1),.effect_mode(2'd1),
   .echo_percent(ep),.room_percent(rp),.depth_percent(dp),.tremolo_rate_hz(hz),
-  .theme_id(THEME[1:0]),.language_zh(LANGUAGE[0]),.touch_enabled(1'b0),.touch_ui_enabled(1'b0),.touch_ready_status(1'b0),.touch_error_status(1'b0));
+  .view_mode(2'd0),.theme_id(THEME[1:0]),.language_zh(LANGUAGE[0]),.touch_enabled(1'b0),.touch_ui_enabled(1'b0),.touch_ready_status(1'b0),.touch_error_status(1'b0));
  initial begin
   #200 pll_reset=0;wait(dut.pixel_lock);repeat(6)@(negedge dut.pixel_clk);
   `CHECK(!de && {r,g,b}==0,"audio reset blanks display despite locked pixel clock")

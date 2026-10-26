@@ -1,10 +1,11 @@
 `timescale 1ns/1ps
 // Four visual themes. Nine registered pixel stages; RGB/DE/HS/VS aligned.
-// One atomic1112-bit snapshot per frame; no framebuffer and no audio stalls.
+// Atomic1112-bit UI/wave and513-bit FFT snapshots; passive audio analysis.
 module rgb_ui_renderer(
  input wire pixel_clk,rst,frame_start,status_valid,input wire [1111:0] status_data,
  input wire [10:0] x,y,input wire de_in,hs_in,vs_in,
- output reg [23:0] rgb,output reg de_out,hs_out,vs_out);
+ output reg [23:0] rgb,output reg de_out,hs_out,vs_out,
+ input wire [512:0] analysis_data,input wire analysis_valid);
  reg [10:0] raster_x,raster_y;
  reg raster_de,raster_hs,raster_vs;
  always @(posedge pixel_clk)begin
@@ -15,6 +16,8 @@ module rgb_ui_renderer(
  // Palette changes are visual only; state bits 55:54 carry the theme.
  wire [1:0] theme=state[55:54];
  wire language_zh=state[56];
+ wire [1:0] view_mode=state[58:57];
+ reg [511:0] spectrum_state;reg spectrum_ready_state;
  wire [1:0] font_theme=theme==3 ? 0 : theme;
  wire [23:0] BG=theme==0 ? 24'h101214 : theme==1 ? 24'hf7f1e8 : theme==2 ? 24'hfff1d9 : 24'he7e5e3;
  wire [23:0] PANEL=theme==0 ? 24'h191c20 : theme==1 ? 24'heee3d4 : theme==2 ? 24'hfbe3bc : 24'heee8e1;
@@ -56,6 +59,7 @@ module rgb_ui_renderer(
  reg [319:0] text;
  reg [5:0] len;reg [10:0] tx,ty;
  integer dx,dy,ci,px,py,i,k,left,top;reg [3:0] note_index;
+ reg [5:0] spectrum_bin;reg [7:0] spectrum_level;
  reg [6:0] bin; integer point_y,previous_y,minimum_y,maximum_y,pc;
  reg [7:0] ch;reg [14:0] font_addr;reg [3:0] font_bit;
  reg alpha_font,wide_text;
@@ -67,6 +71,15 @@ module rgb_ui_renderer(
  reg [3:0] animation_frame;
  wire [23:0] art_pixel;
  ui_theme_art artwork(pixel_clk,theme,animation_frame,raster_x,raster_y,art_pixel,menu);
+ wire xy_region=!menu && view_mode==2 && !state[19] && raster_de &&
+  (theme==3 ? (raster_x>=680 && raster_x<744 && raster_y>=172 && raster_y<236) :
+              (raster_x>=376 && raster_x<504 && raster_y>=170 && raster_y<298));
+ wire [5:0] xy_x=theme==3 ? raster_x-11'd680 : (raster_x-11'd376)>>1;
+ wire [5:0] xy_y=theme==3 ? raster_y-11'd172 : (raster_y-11'd170)>>1;
+ wire xy_pixel,xy_ready;
+ lissajous_plot phase_plot(pixel_clk,rst,frame_start,
+  frame_start && status_valid && !status_data[20] && status_data[58:57]==2,
+  status_data[1111:88],xy_region,xy_x,xy_y,xy_pixel,xy_ready);
  // Limit color arithmetic to ten bits, rather than signed 32-bit division.
  function automatic [7:0] blend_channel(input [7:0] a,b,input [1:0] w);
   reg [9:0] sum;
@@ -110,7 +123,7 @@ module rgb_ui_renderer(
  always @*begin
   px=integer'(raster_x);py=integer'(raster_y);base=BG;fg=CREAM;text=0;len=0;tx=0;ty=0;
   wide_text=language_zh;dx=0;dy=0;ci=0;i=0;k=0;left=0;top=0;note_index=0;pc=0;
-  bin=0;point_y=234;previous_y=234;minimum_y=234;maximum_y=234;
+  spectrum_bin=0;spectrum_level=0;bin=0;point_y=234;previous_y=234;minimum_y=234;maximum_y=234;
   ch=0;font_addr=0;font_bit=0;text_ink=0;alpha_font=0;
   // Sparse faint celestial motifs. Ornament is kept outside touch controls.
   if((py==78 && px>=20 && px<780) || (py==410 && px>=20 && px<780))base=LINE;
@@ -179,7 +192,7 @@ module rgb_ui_renderer(
     else if(px<560)begin {len,text}=enabled ? (fx==0 ? ui_word(6'd22,language_zh) : fx==1 ? ui_word(6'd23,language_zh) : ui_word(6'd24,language_zh)) : ui_word(6'd25,language_zh);tx=310;end
     else begin {len,text}=state[14] ? ui_word(6'd26,language_zh) : ui_word(6'd27,language_zh);tx=620;fg=DIM;end
    end
-   if(ui_inside(px,py,488,164,256,80))begin
+   if(view_mode==0 && ui_inside(px,py,488,164,256,80))begin
     if((px-488)%32==0 || (py-164)%20==0)base=24'hd4d0cc;
     bin=(px-488)>>1;
     point_y=204-($signed(state[88+bin*8+:8])>>>2);
@@ -188,7 +201,7 @@ module rgb_ui_renderer(
     maximum_y=point_y>previous_y ? point_y : previous_y;
     if(py==point_y || ((px-488)%2==0 && py>=minimum_y && py<=maximum_y))base=GOLD;
    end
-   if(py>=138 && py<158 && px>=480)begin {len,text}=ui_word(6'd28,language_zh);tx=488;ty=140;fg=DIM;end
+   if(py>=138 && py<158 && px>=480)begin {len,text}=ui_word(view_mode==0?6'd28:view_mode==1?(spectrum_ready_state?6'd57:6'd55):6'd50,language_zh);tx=488;ty=140;fg=DIM;end
    if(py>=268 && py<288 && px>=480)begin {len,text}=ui_word(6'd29,language_zh);tx=488;ty=270;fg=DIM;end
    if(ui_inside(px,py,488,298,256,10))base=(px-488)<integer'(peak) ? GOLD : BG;
    if(py>=268 && py<288 && px>=640)begin
@@ -217,7 +230,7 @@ module rgb_ui_renderer(
     else if(px<560)begin {len,text}=enabled ? (fx==0 ? ui_word(6'd22,language_zh) : fx==1 ? ui_word(6'd23,language_zh) : ui_word(6'd24,language_zh)) : ui_word(6'd25,language_zh);tx=310;end
     else begin {len,text}=state[14] ? ui_word(6'd26,language_zh) : ui_word(6'd27,language_zh);tx=620;fg=DIM;end
    end
-   if(ui_inside(px,py,32,164,512,140))begin
+   if(view_mode==0 && ui_inside(px,py,32,164,512,140))begin
     if((px-32)%64==0 || (py-164)%35==0)base=24'h292c2c;
     bin=(px-32)>>2;
     point_y=234-($signed(state[88+bin*8+:8])>>>1);
@@ -228,8 +241,8 @@ module rgb_ui_renderer(
    end
    if(py>=138 && py<158)begin
     ty=140;fg=DIM;
-    if(px<390)begin {len,text}=ui_word(6'd28,language_zh);tx=32;end
-    else if(px<572)begin {len,text}=ui_word(6'd30,language_zh);tx=440;end
+    if(px<390)begin {len,text}=ui_word(view_mode==0?6'd28:view_mode==1?(spectrum_ready_state?6'd49:6'd55):6'd50,language_zh);tx=32;end
+    else if(px<572)begin {len,text}=ui_word(view_mode==1?6'd52:6'd30,language_zh);tx=440;end
     else begin {len,text}=ui_word(6'd29,language_zh);tx=608;end
    end
    if(px>=608 && px<760 && py>=200 && py<224)base=(px-608)<(integer'(peak)*152>>8) ? (peak>=248 ? RED : GOLD) : BG;
@@ -254,6 +267,37 @@ module rgb_ui_renderer(
     end
    end
   end
+  if(!menu && view_mode==1)begin
+   left=theme==3 ? 488 : 32;top=164;
+   if(ui_inside(px,py,left,top,theme==3 ? 256 : 512,theme==3 ? 80 : 140))begin
+    if((px-left)%(theme==3 ? 32 : 64)==0 || (py-top)%20==0)base=LINE;
+    spectrum_bin=(px-left)>>(theme==3 ? 2 : 3);spectrum_level=spectrum_state[spectrum_bin*8+:8];
+    if(spectrum_ready_state && (px-left)%(theme==3 ? 4 : 8)<(theme==3 ? 3 : 6) &&
+       py<(theme==3 ? 244 : 300) && py>=(theme==3 ? 244-(spectrum_level>>1) : 300-spectrum_level))base=GOLD;
+   end
+   if(theme==3 && py>=138 && py<158 && px>=648)begin {len,text}=ui_word(6'd52,language_zh);tx=648;ty=140;fg=DIM;end
+   if(theme!=3 && py>=306 && py<322 && px>=32 && px<572)begin
+    wide_text=0;fg=DIM;ty=306;
+    if(px<56)begin text="0";len=1;tx=32;end
+    else if(px<168)begin {len,text}=ui_word(6'd54,language_zh);tx=64;wide_text=language_zh;end
+    else if(px<264)begin text="500";len=3;tx=188;end
+    else if(px<360)begin text="1K";len=2;tx=300;end
+    else if(px<470)begin text="4K";len=2;tx=394;end
+    else begin text="24K";len=3;tx=514;end
+   end
+  end
+  if(!menu && view_mode==2)begin
+   left=theme==3 ? 680 : 376;top=theme==3 ? 172 : 170;
+   if(ui_inside(px,py,left,top,theme==3 ? 64 : 128,theme==3 ? 64 : 128))begin
+    fg=GOLD;if((px-left)%(theme==3 ? 8 : 16)==0 || (py-top)%(theme==3 ? 8 : 16)==0)base=LINE;
+   end
+   if(px<(theme==3 ? 664 : 280) && px>=(theme==3 ? 488 : 32) && py>=180 && py<196)begin
+    {len,text}=ui_word(6'd56,language_zh);tx=theme==3 ? 488 : 32;ty=180;fg=DIM;
+   end
+   if(px<(theme==3 ? 664 : 280) && px>=(theme==3 ? 488 : 32) && py>=212 && py<228)begin
+    {len,text}=ui_word(6'd53,language_zh);tx=theme==3 ? 488 : 32;ty=212;fg=DIM;
+   end
+  end
   // Shared header/status and mode action appear on both pages.
   if(py>=16 && py<64 && px>=648)begin
    {len,text}=menu ? ui_word(6'd33,language_zh) : ui_word(6'd34,language_zh);tx=language_zh ? 698 : (menu ? 684 : 674);ty=32;fg=GOLD;
@@ -266,11 +310,15 @@ module rgb_ui_renderer(
   if(ui_inside(px,py,536,420,112,44))begin
    base=card(px,py,536,420,112,44,1'b0);{len,text}=ui_word(6'd37,language_zh);tx=language_zh ? 560 : 557;ty=434;fg=GOLD;
   end
+  if(ui_inside(px,py,264,420,120,44))begin
+   base=card(px,py,264,420,120,44,1'b0);fg=GOLD;
+   {len,text}=ui_word(6'd51,language_zh);tx=language_zh ? 292 : 294;ty=434;
+  end
   if(ui_inside(px,py,400,420,120,44))begin
    base=card(px,py,400,420,120,44,1'b0);fg=GOLD;
    wide_text=1; text=language_zh ? "ENGLISH" : ZH_CHINESE;len=language_zh ? 7 : 2;tx=language_zh ? 404 : 450;ty=434;
   end
-  if(py>=420 && py<464 && px<392)begin
+  if(py>=420 && py<464 && px<248)begin
    tx=24;fg=DIM;ty=py<440 ? 422 : 446;
    if(py<440)begin
     if(!state[49])begin {len,text}=ui_word(6'd38,language_zh);end
@@ -342,7 +390,7 @@ module rgb_ui_renderer(
  wire normal_valid=dx_s2>=0 && dx_s2<({6'd0,len_s2}*(chinese[1] ? 12'd16 : 12'd10)) && dy_s2>=0 && dy_s2<16;
  always @(posedge pixel_clk)begin
   if(rst)begin
-   state<=0;animation_phase<=0;animation_frame<=0;
+   state<=0;spectrum_state<=0;spectrum_ready_state<=0;animation_phase<=0;animation_frame<=0;
    text_s1<=0;text_s2<=0;text_s3<=0;len_s1<=0;len_s2<=0;len_s3<=0;
    x_s1<=0;y_s1<=0;tx_s1<=0;ty_s1<=0;dx_s2<=0;dy_s2<=0;
    cell_s3<=0;row_s3<=0;normal_bit_s3<=0;normal_ink_s3<=0;
@@ -357,6 +405,7 @@ module rgb_ui_renderer(
    chinese<=0;bg_s1<=0;panel_s1<=0;rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;
   end else begin
    if(frame_start)begin
+    if(analysis_valid)begin spectrum_state<=analysis_data[511:0];spectrum_ready_state<=analysis_data[512];end
     if(status_valid)state<=status_data;
     if(status_valid && status_data[55:54]!=theme)begin animation_phase<=0;animation_frame<=0;end
     else if(theme==1 || theme==2)begin
@@ -372,7 +421,10 @@ module rgb_ui_renderer(
    blank[0]<=!raster_de || raster_x>=800 || raster_y>=480;des[0]<=raster_de && raster_x<800 && raster_y<480;hss[0]<=raster_hs;vss[0]<=raster_vs;
    for(integer q=1;q<6;q=q+1)begin
     bases[q]<=bases[q-1];foregrounds[q]<=foregrounds[q-1];themes[q]<=themes[q-1];
-    if(q==1)begin background[q]<=bases[0]==bg_s1;panels[q]<=bases[0]==panel_s1;end
+    if(q==1)begin
+     if(xy_pixel)bases[q]<=foregrounds[0];
+     background[q]<=!xy_pixel && bases[0]==bg_s1;panels[q]<=!xy_pixel && bases[0]==panel_s1;
+    end
     else begin background[q]<=background[q-1];panels[q]<=panels[q-1];end
     tests[q]<=tests[q-1];blank[q]<=blank[q-1];
     des[q]<=des[q-1];hss[q]<=hss[q-1];vss[q]<=vss[q-1];

@@ -54,6 +54,9 @@ set_min_delay -from [get_clocks {ref_clk}] -to [get_ports {touch_scl touch_sda t
 # Do not replace with whole-register/whole-clock false paths.
 set_false_path -to [get_pins {lcd_on.display_driver/pixel_reset_sync/pipe_0_s0/PRESET lcd_on.display_driver/pixel_reset_sync/pipe_1_s0/PRESET lcd_on.display_driver/status_bridge/pixel_reset_sync/pipe_0_s0/PRESET lcd_on.display_driver/status_bridge/pixel_reset_sync/pipe_1_s0/PRESET}]
 
+# New spectrum CDC: true asynchronous reset ENTRY pins only; verify both names in the new netlist.
+set_false_path -to [get_pins {lcd_on.display_driver/analysis_bridge/pixel_reset_sync/pipe_0_s0/PRESET lcd_on.display_driver/analysis_bridge/pixel_reset_sync/pipe_1_s0/PRESET}]
+
 # Keep each internal domain visible even when global worst paths are I/O.
 report_timing -setup -from [get_clocks {ref_clk}] -to [get_clocks {ref_clk}] -max_paths 10
 report_timing -setup -from [get_clocks {audio_clk}] -to [get_clocks {audio_clk}] -max_paths 10

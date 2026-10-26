@@ -5,13 +5,13 @@ module tb_theme_controls;
  parameter integer N=3,L=32;
  reg clk=0,rst=1;always #5 clk=~clk;
  reg [3:0] buttons=15;reg valid=0;reg [5:0] action=UI_NONE;
- wire [2:0] timbre;wire [1:0] theme,fx;wire en,menu,zh;
+ wire [2:0] timbre;wire [1:0] theme,fx;wire en,menu,zh;wire [1:0] view;
  wire [6:0] ep,rp,dp;wire [3:0] hz;
  integer checks=0;reg [38:0] audio_state;
  timbre_control #(.DEBOUNCE_CYCLES(N),.LONG_PRESS_CYCLES(L)) dut(
   .clk(clk),.rst(rst),.buttons_n(buttons),.selected(timbre),.effects_enabled(en),.effect_mode(fx),
   .ui_action_valid(valid),.ui_action(action),.cfg_ready(1'b1),.menu_mode(menu),
-  .echo_percent(ep),.room_percent(rp),.depth_percent(dp),.tremolo_rate_hz(hz),.theme_id(theme),.language_zh(zh));
+  .echo_percent(ep),.room_percent(rp),.depth_percent(dp),.tremolo_rate_hz(hz),.theme_id(theme),.language_zh(zh),.view_mode(view));
  task cycles(input integer n);begin repeat(n)@(negedge clk);end endtask
  task act(input [5:0] a);begin @(negedge clk);valid=1;action=a;cycles(1);valid=0;cycles(4);end endtask
  task short_key(input integer k);begin buttons=15^(1<<k);cycles(N+7);buttons=15;cycles(N+7);end endtask
@@ -60,6 +60,10 @@ module tb_theme_controls;
    act(UI_LANGUAGE);`CHECK(!zh,"second language touch returns English") unchanged;
    act(UI_THEME);
   end
+  for(integer m=0;m<6;m=m+1)begin
+   `CHECK(view==m%3,"wave FFT XY three-state view cycle") act(UI_VIEW);unchanged;
+  end
+  `CHECK(view==0,"view returns to waveform")
   // Inactive physical input cannot suppress a simultaneous language command.
   buttons=8;act(UI_LANGUAGE);`CHECK(zh,"S0..S2 held never block touch")
   buttons=15;cycles(N+7);

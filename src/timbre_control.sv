@@ -10,7 +10,7 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
     output reg [8:0] echo_wet,room_wet,tremolo_depth,
     output reg [3:0] cfg_tremolo_rate_hz,
     output reg [6:0] echo_percent,room_percent,depth_percent,
-    output reg [3:0] tremolo_rate_hz,output reg [1:0] theme_id,output reg language_zh);
+    output reg [3:0] tremolo_rate_hz,output reg [1:0] theme_id,output reg language_zh,output reg [1:0] view_mode);
     localparam integer CW=DEBOUNCE_CYCLES>1?$clog2(DEBOUNCE_CYCLES):1;
     (* async_reg="true" *) reg [3:0] sync_meta,sync_buttons;
     reg [3:0] stable_buttons,press_event,release_event;
@@ -83,7 +83,7 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
     end
     always @(posedge clk or posedge rst)begin
         if(rst)begin selected<=0;effects_enabled<=0;effect_mode<=0;hold_count<=0;holding<=0;long_fired<=0;
-            menu_mode<=0;language_zh<=0;
+            menu_mode<=0;language_zh<=0;view_mode<=0;
             theme_id<=0;normal_theme<=0;
             echo_percent<=25;room_percent<=25;depth_percent<=50;tremolo_rate_hz<=5;
         end
@@ -101,6 +101,7 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
                     UI_FX:effects_enabled<=!effects_enabled;
                     UI_MODE:menu_mode<=!menu_mode;
                     UI_LANGUAGE:language_zh<=!language_zh;
+                    UI_VIEW:view_mode<=view_mode==2?0:view_mode+1'b1;
                     UI_THEME:begin theme_id<=next_theme(normal_theme);normal_theme<=next_theme(normal_theme);end
                     UI_LESS,UI_MORE:begin
                         case(effect_mode)

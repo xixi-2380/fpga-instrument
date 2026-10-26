@@ -17,7 +17,7 @@ module rgb_display #(
     input wire menu_mode,effects_enabled,input wire [1:0] effect_mode,
     input wire [6:0] echo_percent,room_percent,depth_percent,input wire [3:0] tremolo_rate_hz,
     input wire touch_enabled,touch_ui_enabled,touch_ready_status,touch_error_status,
-    input wire language_zh,input wire [1:0] theme_id
+    input wire [1:0] view_mode,input wire language_zh,input wire [1:0] theme_id
 );
     wire pixel_clk,pixel_lock,pixel_reset;
     wire common_reset=pll_reset || !pixel_lock || audio_reset;
@@ -58,9 +58,14 @@ module rgb_display #(
         score_busy,selected_timbre[1:0],count_voices(held_map),count_voices(active_map)};
     wire [1023:0] waveform;wire [7:0] peak;wire window_valid;
     audio_visualizer monitor(audio_clk,audio_reset,visual_sample_valid,visual_sample,waveform,peak,window_valid);
-    wire [63:0] settings_status={7'd0,language_zh,theme_id,selected_timbre[2],touch_error_status,touch_ready_status,touch_ui_enabled,touch_enabled,
+    wire [63:0] settings_status={5'd0,view_mode,language_zh,theme_id,selected_timbre[2],touch_error_status,touch_ready_status,touch_ui_enabled,touch_enabled,
         tremolo_rate_hz,depth_percent,room_percent,echo_percent,effects_enabled,effect_mode,menu_mode,legacy_status};
     wire [1111:0] source_status={waveform,peak,visual_notes,settings_status};
+    wire [511:0] spectrum;wire spectrum_ready,spectrum_update;
+    audio_spectrum analyzer(audio_clk,audio_reset,visual_sample_valid,visual_sample,spectrum,spectrum_ready,spectrum_update);
+    wire [512:0] analysis_status;wire analysis_valid,analysis_update;
+    rgb_status_cdc #(.WIDTH(513)) analysis_bridge(audio_clk,pixel_clk,common_reset,
+        {spectrum_ready,spectrum},analysis_status,analysis_valid,analysis_update);
     wire [1111:0] pixel_status;
     wire status_valid,update_pulse;
     rgb_status_cdc #(.WIDTH(1112)) status_bridge(audio_clk,pixel_clk,common_reset,source_status,
@@ -74,7 +79,7 @@ module rgb_display #(
     wire [23:0] rgb;
     wire rendered_de,rendered_hs,rendered_vs;
     rgb_ui_renderer renderer(pixel_clk,pixel_reset,frame_start,status_valid,pixel_status,
-        x,y,de,hs,vs,rgb,rendered_de,rendered_hs,rendered_vs);
+        x,y,de,hs,vs,rgb,rendered_de,rendered_hs,rendered_vs,analysis_status,analysis_valid);
     // Only the output pin is phase-inverted. It never clocks any internal RTL.
     // At default phase, a panel rising edge has half a pixel period of setup.
     assign lcd_clk=PCLK_INVERT ? ~pixel_clk : pixel_clk;

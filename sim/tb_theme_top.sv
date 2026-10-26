@@ -43,7 +43,7 @@ module tb_theme_top;
  task frames_more(input integer n);integer target;begin target=frames+n;wait(frames>=target);#2;end endtask
  task touch_action(input [5:0] command);begin
   @(negedge dut.audio_clk);force dut.touch_action_valid=1;
-  if(command==20)force dut.touch_action=6'd20;else force dut.touch_action=6'd19;
+  if(command==20)force dut.touch_action=6'd20;else if(command==21)force dut.touch_action=6'd21;else force dut.touch_action=6'd19;
   @(negedge dut.audio_clk);release dut.touch_action_valid;release dut.touch_action;cycles(12);
  end endtask
  task long3;begin buttons=7;cycles(260);buttons=15;cycles(12);end endtask
@@ -56,17 +56,23 @@ module tb_theme_top;
   wait(dut.score_done);frames_more(4);
   `CHECK(events==84,"all automatic score events survive visual controls")
   pressed=16'h0011;wait($countones(dut.voice_held)==2);frames_more(4);
-  repeat(4)begin touch_action(20);touch_action(19);touch_action(19);touch_action(19);long3;long3;end
+  repeat(4)begin touch_action(21);touch_action(20);touch_action(19);touch_action(19);touch_action(19);long3;long3;end
   `CHECK(dut.theme_id==1 && $countones(dut.voice_held)==2,"normal and hidden cycles preserve real held chord")
   wait(dut.lcd_on.display_driver.status_valid);cycles(40);
   `CHECK(dut.lcd_on.display_driver.pixel_status[55:54]==1,"theme bits cross existing atomic display bridge")
   touch_action(20);wait(dut.lcd_on.display_driver.pixel_status[56]);
   `CHECK(dut.language_zh,"language state crosses real display CDC")
-  frames_more(1800);
+  touch_action(21);touch_action(21);
+  // Exercise visual control changes while the real transform is calculating.
+  wait(dut.lcd_on.display_driver.analyzer.state==6);
+  repeat(3)touch_action(21);touch_action(20);touch_action(20);
+  frames_more(500);
+  `CHECK(dut.lcd_on.display_driver.analyzer.ready && dut.lcd_on.display_driver.analysis_status[512],"real PCM FFT published through dedicated CDC")
+  `CHECK(dut.lcd_on.display_driver.analyzer.spectrum!=0,"held chord has measured FFT energy")
   `CHECK(dut.lcd_on.display_driver.renderer.state[55:54]==1 && dut.lcd_on.display_driver.renderer.state[56],"LCD frame captures selected theme")
   `CHECK(dut.lcd_on.display_driver.renderer.animation_phase!=0,"actual LCD frame cadence advances visual animation clocks")
   pressed=0;wait(!dut.gate);frames_more(8);
-  `CHECK(dut.voice_active==0 && samples>1900,"no stuck notes after theme animation and release")
+  `CHECK(dut.voice_active==0 && samples>2400,"no stuck notes after theme animation and release")
   $display("PASS tb_theme_top checks=%0d samples=%0d events=%0d",checks,samples,events);$finish;
  end
  initial begin #60000000;$fatal(1,"theme top timeout");end

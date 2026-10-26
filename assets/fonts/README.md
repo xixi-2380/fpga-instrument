@@ -1,6 +1,6 @@
 # UI font assets
 
-Existing English fonts/ROM are preserved. Chinese additions are renamed offline subsets with the 89 glyphs needed by assets/ui_language.json:
+Existing English fonts/ROM are preserved. Chinese additions are renamed offline subsets with the 105 glyphs needed by assets/ui_language.json:
 
 | Project subset | Upstream family | UI use | Upstream file |
 |---|---|---|---|

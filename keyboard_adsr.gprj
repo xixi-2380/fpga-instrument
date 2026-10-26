@@ -6,6 +6,8 @@
     <Device name="GW5AST-138C" pn="GW5AST-LV138FPG676AC1/I0">gw5ast138c-003</Device>
     <FileList>
         <File path="src/instrument_envelope.sv" type="file.verilog" enable="1" />
+        <File path="src/audio_spectrum.sv" type="file.verilog" enable="1" />
+        <File path="src/lissajous_plot.sv" type="file.verilog" enable="1" />
         <File path="src/audio_visualizer.sv" type="file.verilog" enable="1" />
         <File path="src/ui_keypad_router.sv" type="file.verilog" enable="1" />
         <File path="src/ui_touch_actions.sv" type="file.verilog" enable="1" />
@@ -66,6 +68,9 @@
         <File path="src/rom/theme_cat.hex" type="file.other" enable="1" />
         <File path="src/rom/theme_cat_palette.hex" type="file.other" enable="1" />
         <File path="src/rom/theme_egg.hex" type="file.other" enable="1" />
+        <File path="src/rom/fft_window.hex" type="file.other" enable="1" />
+        <File path="src/rom/fft_twiddle.hex" type="file.other" enable="1" />
+        <File path="src/rom/fft_bands.hex" type="file.other" enable="1" />
         <File path="src/rom/theme_font.hex" type="file.other" enable="1" />
         <File path="src/config/ui_language.svh" type="file.other" enable="1" />
         <File path="src/config/theme_storage.svh" type="file.other" enable="1" />

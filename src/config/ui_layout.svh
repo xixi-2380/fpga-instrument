@@ -2,7 +2,7 @@
 localparam [5:0] UI_SINE=0,UI_FLUTE=1,UI_REED=2,UI_ECHO=3,UI_ROOM=4,
  UI_TREMOLO=5,UI_FX=6,UI_MODE=7,UI_LESS=8,UI_MORE=9,
  UI_SLOWER=10,UI_FASTER=11,UI_DEFAULTS=12,UI_CELLO=13,UI_PIANO=14,
- UI_GUITAR=15,UI_VIBES=16,UI_PREV=17,UI_NEXT=18,UI_THEME=19,UI_LANGUAGE=20,UI_NONE=63;
+ UI_GUITAR=15,UI_VIBES=16,UI_PREV=17,UI_NEXT=18,UI_THEME=19,UI_LANGUAGE=20,UI_VIEW=21,UI_NONE=63;
 function automatic ui_inside(input integer px,py,left,top,width,height);
  begin ui_inside=px>=left && px<left+width && py>=top && py<top+height;end
 endfunction
@@ -25,6 +25,7 @@ function automatic [5:0] ui_hit(input integer px,py,input [1:0] fx,input menu);
   if(ui_inside(px,py,648,16,132,48))ui_hit=UI_MODE;
   else if(ui_inside(px,py,536,420,112,44))ui_hit=UI_THEME;
   else if(ui_inside(px,py,400,420,120,44))ui_hit=UI_LANGUAGE;
+  else if(ui_inside(px,py,264,420,120,44))ui_hit=UI_VIEW;
   else if(menu)begin
    for(i=0;i<7;i=i+1)
     if(ui_inside(px,py,timbre_x(i),timbre_y(i),112,52))ui_hit=timbre_action(i);

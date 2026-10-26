@@ -28,6 +28,8 @@ for t in tests:
         refs=a.animation_reference_dir.resolve()
         assert all((refs/f'theme_{k}.hex').is_file() for k in ['cat','capybara'])
         extra_args=['+CAT_REFERENCE='+(refs/'theme_cat.hex').as_posix(),'+CAPYBARA_REFERENCE='+(refs/'theme_capybara.hex').as_posix()]
+    if name in ['tb_audio_spectrum','tb_lissajous_plot','tb_analysis_renderer']:
+        subprocess.run([sys.executable,str(root/'scripts/reference_audio_analysis.py'),'--out-dir',str(out)],check=True,env=env)
     if name in ['tb_audio_effects','tb_effect_parameters']:
         vector_file=out/'effects_vectors.hex'
         generator=[sys.executable,str(root/('scripts/reference_effect_parameters.py' if name=='tb_effect_parameters' else 'scripts/reference_effects.py')),'--output',str(vector_file)]
@@ -46,6 +48,10 @@ for t in tests:
     (out/(name+'.log')).write_text(run.stdout+run.stderr,encoding='utf8')
     print(run.stdout,flush=True)
     ok=run.returncode==0 and 'PASS '+name in run.stdout
+    if ok and name=='tb_audio_spectrum':
+        checked=subprocess.run([sys.executable,str(root/'scripts/check_spectrum_fft.py'),str(out)],capture_output=True,text=True,encoding='utf8',env=env)
+        (out/'fft_numeric_check.log').write_text(checked.stdout+checked.stderr,encoding='utf8')
+        print(checked.stdout+checked.stderr,flush=True);ok=checked.returncode==0
     if ok and name=='tb_effect_parameter_path':
         checked=subprocess.run([sys.executable,str(root/'scripts/check_effect_parameter_trace.py'),str(out/'runtime_trace.txt')],capture_output=True,text=True,encoding='utf8',env=env)
         (out/'runtime_trace_check.log').write_text(checked.stdout+checked.stderr,encoding='utf8')
