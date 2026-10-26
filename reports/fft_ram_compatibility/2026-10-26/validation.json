@@ -1,0 +1,32 @@
+{
+  "status": "pure_hdl_passed_gowin_mapping_and_sta_pending",
+  "base_commit": "3f8efd6bd736a76ff21d28d8883c1502d568af06",
+  "error": "PA2122 DPB WRITE_MODE0/1=2'b10 unsupported",
+  "fix": "Independent synchronous RAM ports: write or read, hold own-port output during write (normal mode intent). No RAM/reset/control/FFT arithmetic changes.",
+  "hdl_checks": 1295379,
+  "baseline_checks": 747539,
+  "independent_numeric": {
+    "passed": true,
+    "checks": 16936,
+    "frames": 8,
+    "fft_component_max_error_lsb": 8.002360750941934,
+    "resolution_hz": 23.4375,
+    "polyphony_fft_peaks_verified": 32,
+    "limits": "Grouped high-frequency bands can merge peaks; relative L1 magnitude, not calibrated dBFS."
+  },
+  "baseline_fixed_dump_identical": true,
+  "dump_lines": 8704,
+  "dump_sha256": "6819e4c8a66928d0735340d074221bb7c9adfd881ff201266045fa0907d7f53c",
+  "analysis_cycles_each_frame": 93439,
+  "source_sha256": {
+    "src/audio_spectrum.sv": "b216f21a3a948a4d5b625c38cafd83c51c3799d994ab94852b1dd554863e21ef",
+    "sim/tb_audio_spectrum.sv": "fb0046426c001cb27e99d63b77d31b945c5a5ed62af5354061313e953adc23d8"
+  },
+  "not_run": [
+    "Gowin synthesis",
+    "Gowin P&R",
+    "STA",
+    "Programmer",
+    "hardware"
+  ]
+}

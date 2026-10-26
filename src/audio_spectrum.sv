@@ -48,13 +48,33 @@ module audio_spectrum(input wire clk,rst,sample_valid,input wire signed [15:0] s
  wire analyzing=state==BRD||state==BMAG||state==BACC;
  wire [10:0] addr_a=pending?pending_addr:analyzing?bin_index:fft_a;
  wire [10:0] addr_b=fft_b;wire write_fft=state==WR;
- // No array reset: preserve block RAM inference; overwrite full window first.
+ // Explicit normal/no-change dual-port RAM: hold each read register on
+ // writes to its own port. Unconditional reads here infer read-before-write
+ // (DPB WRITE_MODE=2'b10), rejected by this device with PA2122.
+ // The FSM reads in RD/BRD after WR; write-cycle outputs are never consumed.
+ // No array/read-register reset; a full capture overwrites RAM before use.
+ wire write_a=pending||write_fft;
+ wire signed [15:0] data_ar=pending?(window_product>>>15):out_ar;
+ wire signed [15:0] data_ai=pending?16'sd0:out_ai;
  always @(posedge clk)begin
  window_q<=window_rom[captured];twiddle_q<=twiddle_rom[tw_index];
- qa_r<=real_mem[addr_a];qa_i<=imag_mem[addr_a];qb_r<=real_mem[addr_b];qb_i<=imag_mem[addr_b];
- if(pending)begin real_mem[addr_a]<=window_product>>>15;imag_mem[addr_a]<=0;end
- else if(write_fft)begin real_mem[addr_a]<=out_ar;imag_mem[addr_a]<=out_ai;end
- if(write_fft)begin real_mem[addr_b]<=out_br;imag_mem[addr_b]<=out_bi;end
+ end
+ // One synchronous process per physical RAM port, conventional inference.
+ always @(posedge clk)begin
+ if(write_a)real_mem[addr_a]<=data_ar;
+ else qa_r<=real_mem[addr_a];
+ end
+ always @(posedge clk)begin
+ if(write_fft)real_mem[addr_b]<=out_br;
+ else qb_r<=real_mem[addr_b];
+ end
+ always @(posedge clk)begin
+ if(write_a)imag_mem[addr_a]<=data_ai;
+ else qa_i<=imag_mem[addr_a];
+ end
+ always @(posedge clk)begin
+ if(write_fft)imag_mem[addr_b]<=out_bi;
+ else qb_i<=imag_mem[addr_b];
  end
  reg [511:0] working;reg [16:0] magnitude,band_peak;
  wire [16:0] final_peak=magnitude>band_peak?magnitude:band_peak;

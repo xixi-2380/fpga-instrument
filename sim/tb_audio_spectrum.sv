@@ -5,6 +5,26 @@ module tb_audio_spectrum;
  reg signed [15:0] pcm=0;wire [511:0] spectrum;wire ready,update;
  reg [15:0] inputs[0:16383];reg [511:0] old;reg [4095:0] outdir,path;integer checks=0,fd,elapsed;
  audio_spectrum dut(clk,rst,valid,pcm,spectrum,ready,update);
+ // Port contract: synchronous reads, and own-port output held on writes.
+ // Simultaneous FFT writes must target distinct addresses.
+ reg [15:0] before_ar,before_ai,before_br,before_bi;
+ reg [10:0] sampled_a,sampled_b;reg wa,wb,check_ports;reg [15:0] sampled_ar,sampled_ai,sampled_br,sampled_bi;
+ always @(posedge clk)begin
+ before_ar=dut.qa_r;before_ai=dut.qa_i;before_br=dut.qb_r;before_bi=dut.qb_i;
+ sampled_a=dut.addr_a;sampled_b=dut.addr_b;wa=dut.write_a;wb=dut.write_fft;
+ sampled_ar=dut.data_ar;sampled_ai=dut.data_ai;sampled_br=dut.out_br;sampled_bi=dut.out_bi;
+ check_ports=!rst&&(wa||wb);
+ #1;
+ if(check_ports)begin
+ if(wa)begin
+ `CHECK(dut.qa_r===before_ar&&dut.qa_i===before_ai,"port A holds read output while writing")
+ `CHECK(dut.real_mem[sampled_a]===sampled_ar&&dut.imag_mem[sampled_a]===sampled_ai,"port A store completes")
+ end
+ if(wb)`CHECK(dut.real_mem[sampled_b]===sampled_br&&dut.imag_mem[sampled_b]===sampled_bi,"port B store completes")
+ if(wb)`CHECK(dut.qb_r===before_br&&dut.qb_i===before_bi,"port B holds read output while writing")
+ if(wb)`CHECK(sampled_a!=sampled_b,"FFT simultaneous writes target distinct addresses")
+ end
+ end
  task capture(input integer which);begin
  for(integer n=0;n<2048;n=n+1)begin
  @(negedge clk);pcm=which<0?0:inputs[which*2048+n];valid=1;
