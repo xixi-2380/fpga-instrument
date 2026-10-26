@@ -1,0 +1,17 @@
+// Tang Mega 138K Pro + Dock. Only constrain ports used by this test.
+IO_LOC "clk" P16;
+IO_PORT "clk" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "rst_n" K16;
+IO_PORT "rst_n" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+
+// User-confirmed mapping: SDA=U16, SCL=V16, INT=U15.
+IO_LOC "touch_sda" U16;
+IO_LOC "touch_scl" V16;
+IO_LOC "touch_int_n" U15;
+IO_PORT "touch_sda" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=4 BANK_VCCIO=3.3;
+IO_PORT "touch_scl" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=4 BANK_VCCIO=3.3;
+IO_PORT "touch_int_n" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+
+// Physical Dock LED1 (called led[0] in the supplied reference CST).
+IO_LOC "led_n" R26;
+IO_PORT "led_n" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;

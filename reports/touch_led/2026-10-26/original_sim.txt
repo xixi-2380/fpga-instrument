@@ -1,0 +1,6 @@
+PASS: 25 writes/readbacks, repeated START, final NACK, INT filtering, press/hold/release
+PASS: missing device/NACK leaves LED off and releases bus
+PASS: readback mismatch rejected
+PASS: stuck SCL terminates with timeout, LED stays off
+ALL TESTS PASSED
+sim/tb_touch_led.v:144: $finish called at 6903740000 (1ps)
