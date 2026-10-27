@@ -1,0 +1,3 @@
+FAIL both channels reach exact digital mute at 39800525000
+FATAL: /workspace/scratch/6579ba30d432/bt-stereo/sim/tb_stereo_audio.sv:87: 
+       Time: 39800524738  Scope: tb_stereo_audio

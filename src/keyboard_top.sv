@@ -3,7 +3,7 @@
 `include "config/run_leds_config.svh"
 module keyboard_top #(
     parameter integer BT_ENABLE=1,BT_EN_ACTIVE_HIGH=1,FLASH_WRITES=1,
-    parameter integer LCD_ENABLE=1,LCD_TEST_PATTERN=0,LCD_PCLK_INVERT=1,
+    parameter integer STEREO_ENABLE=1,LCD_ENABLE=1,LCD_TEST_PATTERN=0,LCD_PCLK_INVERT=1,
     TOUCH_ENABLE=1,TOUCH_UI_ENABLE=1,TOUCH_RESET_CYCLES=1000000,TOUCH_STRAP_CYCLES=300000,
     TOUCH_BOOT_CYCLES=2500000,TOUCH_POLL_CYCLES=500000,TOUCH_I2C_HALF=250,
     parameter SCORE_FILE="src/scores/twinkle.hex",
@@ -232,7 +232,7 @@ module keyboard_top #(
         .note_valid(key_valid),.note_on(key_on),.note_id(key_id),.note_fcw(key_fcw),
         .gate(key_gate),.last_key(last_key),
         .selected_timbre(selected_timbre),.note_timbre(key_timbre),.inhibit_notes(inhibit_notes));
-    synth_core #(.MUTE(MUTE),.FADE(FADE),.ATTACK(ATTACK),.DECAY(DECAY),
+    synth_core #(.STEREO_ENABLE(STEREO_ENABLE),.MUTE(MUTE),.FADE(FADE),.ATTACK(ATTACK),.DECAY(DECAY),
         .SUSTAIN(SUSTAIN),.RELEASE(RELEASE)) sound(
         .clk(audio_clk),.rst(audio_reset),.note_valid(note_valid),.note_on(note_on),
         .note_pitch(take_bt ? bt_pitch : note_id),.volume_percent(volume_percent),.flush(bt_flush),.velocity_valid(take_bt),.note_velocity(bt_velocity),

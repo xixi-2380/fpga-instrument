@@ -1,0 +1,9 @@
+{
+  "test": "tb_max98357_startup",
+  "tag": "startup_stereo",
+  "parameters": [],
+  "passed": true,
+  "checks": 3702449,
+  "seconds": 84.299,
+  "pll": "explicit behavioral models when needed; not STA"
+}

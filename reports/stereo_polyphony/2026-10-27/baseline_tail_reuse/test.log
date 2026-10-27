@@ -1,0 +1,3 @@
+FAIL reused scheduler identity must not retune the old release tail at 375406000
+FATAL: /workspace/scratch/6579ba30d432/bt-stereo/sim/tb_bt_tail_reuse.sv:26: 
+       Time: 375405940  Scope: tb_bt_tail_reuse

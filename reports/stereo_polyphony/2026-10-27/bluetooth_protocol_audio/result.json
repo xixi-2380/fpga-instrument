@@ -1,0 +1,9 @@
+{
+  "test": "tb_bt_score_audio",
+  "tag": "bluetooth_protocol_audio",
+  "parameters": [],
+  "passed": true,
+  "checks": 2433997,
+  "seconds": 172.259,
+  "pll": "explicit behavioral models when needed; not STA"
+}

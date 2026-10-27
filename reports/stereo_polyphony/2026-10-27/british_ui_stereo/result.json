@@ -1,0 +1,9 @@
+{
+  "test": "tb_british_top",
+  "tag": "british_ui_stereo",
+  "parameters": [],
+  "passed": true,
+  "checks": 967221,
+  "seconds": 90.06,
+  "pll": "explicit behavioral models when needed; not STA"
+}

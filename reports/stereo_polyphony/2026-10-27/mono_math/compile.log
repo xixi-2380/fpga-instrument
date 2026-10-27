@@ -1,0 +1,2 @@
+/workspace/scratch/6579ba30d432/bt-stereo/sim/tb_synth_core.sv:14: warning: Port 19 (note_timbre) of synth_core expects 3 bits, got 2.
+/workspace/scratch/6579ba30d432/bt-stereo/sim/tb_synth_core.sv:14:        : Padding 1 high bits of the port.

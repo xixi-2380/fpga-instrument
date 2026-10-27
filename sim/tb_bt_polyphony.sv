@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 // Production clock rates/frame cadence, real 32-voice synthesis and async CDC.
 module tb_bt_polyphony;
- parameter integer EFFECT=0;
+ parameter integer EFFECT=0,STEREO=0;
  reg refclk=0,audio=0,rst=1,cv=0;reg [1:0] cmd=0;
  always #10 refclk=~refclk;always #8.138020833 audio=~audio;
  wire cr,done,sv,sr,av,ar,nv,nr,no,flush,frame,ready,underrun,vs;
@@ -30,7 +30,7 @@ module tb_bt_polyphony;
  .event_kind(ak),.event_id(ai),.event_pitch(ap),.event_velocity(avl),.inhibit(play!=0 || busy),
  .note_valid(nv),.note_ready(nr),.note_on(no),.note_id(ni),.note_fcw(fcw),.note_velocity(nvel),
  .flush(flush),.selected_timbre(3'd0),.note_timbre(nt),.note_pitch(np),.audio_ready(ready));
- synth_core #(.MUTE(1),.FADE(1),.ATTACK(2),.DECAY(2),.SUSTAIN(65536),.RELEASE(3)) synth(
+ synth_core #(.STEREO_ENABLE(STEREO),.MUTE(1),.FADE(1),.ATTACK(2),.DECAY(2),.SUSTAIN(65536),.RELEASE(3)) synth(
  .clk(audio),.rst(rst),.note_valid(nv),.note_ready(nr),.note_on(no),.note_id(ni),.note_fcw(fcw),
  .note_timbre(nt),.flush(flush),.velocity_valid(1'b1),.note_velocity(nvel),.note_pitch(np),.volume_percent(7'd100),
  .input_ready(ready),.frame_ce(frame),.voice_active(active),.voice_held(held),.underrun(underrun),

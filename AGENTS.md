@@ -1,3 +1,11 @@
+## 2026-10-27 当前双声道/复音修正授权（优先于历史）
+
+- 王开册明确要求以codex/bluetooth-score-integration为基础改为两块MAX98357A双声道，并同时排查修复蓝牙多声部电音。继续更新本分支，不合入main/超声波/触摸指引分支；本轮完成对应检查后上传供用户重新综合验证。
+- 顶层STEREO_ENABLE=1：现有I²S独立L/R样本，两块功放需各选左/右SD模式；不猜新增球位，不改变PLL/CST/SDC。synth_core默认0为旧调用兼容。按固定音区声像，不冒充MIDI轨道PAN。
+- 自动ID复用时，已释放旧尾音不再匹配；力度/音高存于物理声部，Off只匹配当前held/pending自动所有者。32物理容量及原满额替换语义保留，手动重触发兼容。
+- 只运行纯HDL与数值检查。原11:27报告三域时序未达标，修复逻辑缺陷不等于实板杂音根因唯一或STA通过。综合/P&R/STA/Programmer由用户执行；不恢复上电小星星，不改U7写入边界或App协议。
+- 说明与验收入口docs/bluetooth_score/双声道与复音修正.md；证据reports/stereo_polyphony/2026-10-27。
+
 # Local project working rules
 
 ## 2026-10-24 蓝牙重构当前约定（优先于下方历史记录）

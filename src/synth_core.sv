@@ -2,7 +2,7 @@
 `include "config/synth_config.svh"
 // Generic note-event synthesis; physical keyboard logic stays in its adapter.
 module synth_core #(
-    parameter integer VOICES=`VOICE_COUNT,MUTE=`MUTE_FRAMES,FADE=`FADE_FRAMES,
+    parameter integer STEREO_ENABLE=0,VOICES=`VOICE_COUNT,MUTE=`MUTE_FRAMES,FADE=`FADE_FRAMES,
     ATTACK=`ADSR_ATTACK_FRAMES,DECAY=`ADSR_DECAY_FRAMES,
     SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES,
     DELAY_SAMPLES=7200,ROOM_D0=1499,ROOM_D1=1601,ROOM_D2=1867,ROOM_D3=2053)(
@@ -16,7 +16,8 @@ module synth_core #(
     input wire flush,input wire velocity_valid,input wire [6:0] note_velocity,
     input wire [6:0] volume_percent,input wire [6:0] note_pitch);
     wire engine_reset=rst || (flush===1'b1);
-    // Bounded automatic context table; manual/legacy MIDI identities use unity.
+    // Last-source diagnostics only. Rendering uses immutable per-physical-voice
+    // metadata, so reusing one of16 scheduler IDs cannot alter a release tail.
     reg [8:0] velocities[0:15];
     reg [6:0] automatic_pitch[0:15];
     reg [8:0] velocity_scale;
@@ -170,7 +171,8 @@ module synth_core #(
     wire [16:0] startup_level;
     wire [VOICES-1:0] voice_start,voice_stop,voice_restart;
     wire [VOICES*32-1:0] voice_fcw;
-    wire [VOICES*7-1:0] voice_ids;
+    wire [VOICES*7-1:0] voice_ids,voice_pitches;
+    wire [VOICES*9-1:0] voice_gains;
     wire [16:0] voice_level[0:VOICES-1];
     wire [VOICES*3-1:0] voice_timbres;
     reg [VOICES*3-1:0] frame_timbres;
@@ -198,27 +200,32 @@ module synth_core #(
     // Metadata read, automatic lookup, then bitmap update occupy separate clocks.
     // Avoid a render-counter -> context mux -> dynamic shift -> bitmap path.
     reg [6:0] scanning_id,scanning_pitch;
-    reg scanning_held,scanning_first,scanning_last;
+    reg scanning_held,scanning_first,scanning_last;reg [6:0] slot_pitch;
     wire [15:0] note_bit=(scanning_held && scanning_pitch>=60 && scanning_pitch<76) ? (16'b1 << (scanning_pitch-7'd60)) : 16'd0;
     always @(posedge clk or posedge engine_reset)begin
-        if(engine_reset)begin note_scan<=0;visual_notes<=0;scanning_id<=0;scanning_pitch<=0;scanning_held<=0;scanning_first<=0;scanning_last<=0;end
+        if(engine_reset)begin note_scan<=0;visual_notes<=0;scanning_id<=0;scanning_pitch<=0;scanning_held<=0;scanning_first<=0;scanning_last<=0;slot_pitch<=0;end
         else begin
             if(dds_ce)begin
-                scanning_id<=voice_ids[selected_voice*7+:7];scanning_held<=voice_held[selected_voice];
+                scanning_id<=voice_ids[selected_voice*7+:7];slot_pitch<=voice_pitches[selected_voice*7+:7];scanning_held<=voice_held[selected_voice];
                 scanning_first<=selected_voice==0;scanning_last<=selected_voice==VOICES-1;
             end
-            if(in_slots && render_cycle[3:0]==1)scanning_pitch<=scanning_id<16 ? automatic_pitch[scanning_id[3:0]] : scanning_id;
+            if(in_slots && render_cycle[3:0]==1)scanning_pitch<=slot_pitch;
             if(in_slots && render_cycle[3:0]==2)begin
                 if(scanning_first)note_scan<=note_bit;else note_scan<=note_scan | note_bit;
                 if(scanning_last)visual_notes<=scanning_first ? note_bit : note_scan | note_bit;
             end
         end
     end
-    wire output_valid;wire signed [15:0] output_sample;
+    wire output_valid,output_valid_r;wire signed [15:0] output_sample,output_sample_r;
+    wire stereo_mix_valid,stereo_mix_valid_r;
+    wire signed [15:0] stereo_mix_l,stereo_mix_r;
+    wire effect_ready_r,effect_valid_r;wire signed [15:0] effect_sample_r;
+    wire cfg_ready_r,cfg_applied_r;
+    wire signed [16:0] visual_sum={output_sample[15],output_sample}+{output_sample_r[15],output_sample_r};
     // Flush drops buffered audio but must not reset the user's volume ramp.
     master_volume volume_control(clk,rst,effect_valid,effect_sample,volume_percent,output_valid,output_sample);
     assign visual_sample_valid=output_valid;
-    assign visual_sample=output_sample;
+    assign visual_sample=STEREO_ENABLE ? (visual_sum>>>1) : output_sample;
     audio_timing timing(clk,rst,bck,rise_ce,fall_ce,frame_ce,bit_index);
     startup_envelope #(.MUTE(MUTE),.FADE(FADE)) startup(clk,rst,frame_ce,input_ready,startup_level);
     assign pa_enable=input_ready;
@@ -230,7 +237,9 @@ module synth_core #(
         .voice_active(voice_active),.note_ready(note_ready),.voice_start(voice_start),
         .voice_stop(voice_stop),.voice_restart(voice_restart),.voice_held(voice_held),
         .voice_fcw(voice_fcw),.voice_ids(voice_ids),
-        .note_timbre(note_timbre),.voice_timbres(voice_timbres));
+        .note_timbre(note_timbre),.voice_timbres(voice_timbres),
+        .note_independent(velocity_valid===1'b1),.note_gain(velocity_gain(note_velocity)),.note_pitch(note_pitch),
+        .voice_gains(voice_gains),.voice_pitches(voice_pitches));
     for(genvar v=0;v<VOICES;v=v+1)begin: voices
         instrument_envelope #(.ATTACK(ATTACK),.DECAY(DECAY),.SUSTAIN(SUSTAIN),.RELEASE(RELEASE)) envelope(
             .clk(clk),.rst(engine_reset),.sample_ce(frame_ce),.note_on(voice_start[v]),.note_off(voice_stop[v]),
@@ -260,29 +269,60 @@ module synth_core #(
                 first_sample<=selected_voice==0;
                 last_sample<=selected_voice==VOICES-1;
             end
-            if(in_slots && render_cycle[3:0]==1)velocity_scale<=scanning_id<16 ? velocities[scanning_id[3:0]] : 9'd256;
+            if(in_slots && render_cycle[3:0]==1)velocity_scale<=voice_gains[selected_voice*9+:9];
         end
     end
     tone_gain #(.OUTPUT_W(`VOICE_W)) gain(clk,engine_reset,gain_request,raw_sample,combined_level,gain_valid,gain_sample);
     voice_mixer mixer(clk,engine_reset,gain_valid,gain_sample,first_sample,last_sample,mix_valid,mix_sample);
-    always @* begin
-        envelope_level=0;
-        for(integer v=0;v<VOICES;v=v+1)
-            if(voice_level[v]>envelope_level)envelope_level=voice_level[v];
+    // Explicit balanced peak tree, rather than a 32-comparator serial chain.
+    localparam integer PEAK_LEAVES=1<<INDEX_W;
+    wire [16:0] peak_tree[1:2*PEAK_LEAVES-1];
+    for(genvar p=0;p<PEAK_LEAVES;p=p+1)begin: peak_leaves
+        if(p<VOICES)assign peak_tree[PEAK_LEAVES+p]=voice_level[p];
+        else assign peak_tree[PEAK_LEAVES+p]=0;
+    end
+    for(genvar p=1;p<PEAK_LEAVES;p=p+1)begin: peak_nodes
+        assign peak_tree[p]=peak_tree[p*2]>peak_tree[p*2+1]?peak_tree[p*2]:peak_tree[p*2+1];
+    end
+    always @* envelope_level=peak_tree[1];
+    // Fixed pitch zones spread voices without gain boosts or dynamic pan jumps.
+    // Each physical voice keeps its pitch/pan through release. Mono remains an
+    // exact compatibility path for standalone callers; board enables stereo.
+    wire signed [`VOICE_W-1:0] pan_left=slot_pitch<60 ? gain_sample-(gain_sample>>>2) :
+        slot_pitch<66 ? gain_sample : slot_pitch<72 ? (gain_sample>>>1) : (gain_sample>>>2);
+    wire signed [`VOICE_W-1:0] pan_right=slot_pitch<60 ? (gain_sample>>>2) :
+        slot_pitch<66 ? (gain_sample>>>1) : slot_pitch<72 ? gain_sample : gain_sample-(gain_sample>>>2);
+    if(STEREO_ENABLE)begin: stereo_on
+        voice_mixer left_mixer(clk,engine_reset,gain_valid,pan_left,first_sample,last_sample,stereo_mix_valid,stereo_mix_l);
+        voice_mixer right_mixer(clk,engine_reset,gain_valid,pan_right,first_sample,last_sample,stereo_mix_valid_r,stereo_mix_r);
+        audio_effects #(.DELAY_SAMPLES(DELAY_SAMPLES),.D0(ROOM_D0),.D1(ROOM_D1),.D2(ROOM_D2),.D3(ROOM_D3)) right_effect(
+            .clk(clk),.rst(engine_reset),.enable(effects_enable),.mode(effect_mode),.in_valid(stereo_mix_valid_r),.in_sample(stereo_mix_r),
+            .in_ready(effect_ready_r),.out_valid(effect_valid_r),.out_sample(effect_sample_r),
+            .cfg_valid(effect_cfg_valid),.cfg_echo_wet(effect_echo_wet),.cfg_room_wet(effect_room_wet),
+            .cfg_tremolo_depth(effect_tremolo_depth),.cfg_tremolo_rate_hz(effect_tremolo_rate_hz),
+            .cfg_ready(cfg_ready_r),.cfg_applied(cfg_applied_r));
+        master_volume right_volume(clk,rst,effect_valid_r,effect_sample_r,volume_percent,output_valid_r,output_sample_r);
+    end else begin: mono_on
+        assign stereo_mix_valid=mix_valid;assign stereo_mix_valid_r=mix_valid;
+        assign stereo_mix_l=mix_sample;assign stereo_mix_r=mix_sample;
+        assign effect_ready_r=effect_ready;assign effect_valid_r=effect_valid;assign effect_sample_r=effect_sample;
+        assign cfg_ready_r=effect_cfg_ready;assign cfg_applied_r=effect_cfg_applied;
+        assign output_valid_r=output_valid;assign output_sample_r=output_sample;
     end
     audio_effects #(.DELAY_SAMPLES(DELAY_SAMPLES),.D0(ROOM_D0),.D1(ROOM_D1),.D2(ROOM_D2),.D3(ROOM_D3)) effect(
-        .clk(clk),.rst(engine_reset),.enable(effects_enable),.mode(effect_mode),.in_valid(mix_valid),.in_sample(mix_sample),
+        .clk(clk),.rst(engine_reset),.enable(effects_enable),.mode(effect_mode),.in_valid(stereo_mix_valid),.in_sample(stereo_mix_l),
         .in_ready(effect_ready),.out_valid(effect_valid),.out_sample(effect_sample),
         .cfg_valid(effect_cfg_valid),.cfg_echo_wet(effect_echo_wet),.cfg_room_wet(effect_room_wet),
         .cfg_tremolo_depth(effect_tremolo_depth),.cfg_tremolo_rate_hz(effect_tremolo_rate_hz),
         .cfg_ready(effect_cfg_ready),.cfg_applied(effect_cfg_applied));
-    frame_buffer buffer(clk,engine_reset,frame_ce,output_valid,ready,output_sample,output_sample,frame_l,frame_r,underrun);
+    frame_buffer buffer(clk,engine_reset,frame_ce,output_valid,ready,output_sample,output_sample_r,frame_l,frame_r,underrun);
     i2s_tx tx(clk,rst,fall_ce,bit_index,frame_l,frame_r,ws,din);
     // synthesis translate_off
     initial if(VOICES<1 || VOICES>32 || RENDER_BUDGET>=`FRAME_CYCLES)$fatal(1,"Invalid render budget");
     always @(posedge clk)if(!rst)begin
         if(frame_ce && render_busy)$fatal(1,"Frame renderer missed deadline");
-        if(mix_valid && !effect_ready)$fatal(1,"Effect rejected render result");
+        if(STEREO_ENABLE && (stereo_mix_valid!==stereo_mix_valid_r || effect_valid!==effect_valid_r || output_valid!==output_valid_r || effect_cfg_ready!==cfg_ready_r || effect_cfg_applied!==cfg_applied_r))$fatal(1,"Stereo channel pipeline mismatch");
+        if(mix_valid && (!effect_ready || !effect_ready_r))$fatal(1,"Effect rejected render result");
         if(output_valid && !ready)$fatal(1,"Frame buffer rejected effect result");
     end
     // synthesis translate_on

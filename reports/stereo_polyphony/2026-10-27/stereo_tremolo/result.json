@@ -1,0 +1,12 @@
+{
+  "test": "tb_bt_polyphony",
+  "tag": "stereo_tremolo",
+  "parameters": [
+    "EFFECT=2",
+    "STEREO=1"
+  ],
+  "passed": true,
+  "checks": 266746,
+  "seconds": 9.691,
+  "pll": "explicit behavioral models when needed; not STA"
+}

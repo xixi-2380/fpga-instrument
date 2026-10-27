@@ -1,0 +1,9 @@
+{
+  "test": "tb_playback_regression",
+  "tag": "manual_volume_release",
+  "parameters": [],
+  "passed": true,
+  "checks": 1473658,
+  "seconds": 120.747,
+  "pll": "explicit behavioral models when needed; not STA"
+}

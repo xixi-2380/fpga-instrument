@@ -1,0 +1,2 @@
+PASS tb_playback_regression checks=1473658
+/workspace/scratch/6579ba30d432/bt-stereo/sim/tb_playback_regression.sv:47: $finish called at 23980839674 (1ps)
