@@ -6,12 +6,17 @@ module tb_ui_controls;
  reg [3:0] buttons=15;reg v=0,ready=1;reg [5:0] action=UI_NONE;
  wire [2:0] timbre;wire [1:0] fx;wire en,menu,cv;wire [8:0] e,r,d;
  wire [6:0] ep,rp,dp;wire [3:0] hz,cfg_hz;
+ reg av=0;reg [7:0] aver=0;reg [6:0] atarget=0;
+ wire upage,uen;wire [2:0] sens;wire [6:0] umin,umax;wire [7:0] uver;
  integer checks=0,commands=0;reg [30:0] held;
- timbre_control #(.DEBOUNCE_CYCLES(2),.LONG_PRESS_CYCLES(32)) dut(
+ timbre_control #(.DEBOUNCE_CYCLES(2),.LONG_PRESS_CYCLES(32),.ULTRA_SLEW_CYCLES(3)) dut(
   .clk(clk),.rst(rst),.buttons_n(buttons),.selected(timbre),.effects_enabled(en),.effect_mode(fx),
   .ui_action_valid(v),.ui_action(action),.cfg_ready(ready),.cfg_valid(cv),.menu_mode(menu),
   .echo_wet(e),.room_wet(r),.tremolo_depth(d),.cfg_tremolo_rate_hz(cfg_hz),
-  .echo_percent(ep),.room_percent(rp),.depth_percent(dp),.tremolo_rate_hz(hz));
+  .echo_percent(ep),.room_percent(rp),.depth_percent(dp),.tremolo_rate_hz(hz),
+  .ultrasonic_page(upage),.ultrasonic_enabled(uen),.ultrasonic_sensitivity(sens),
+  .ultrasonic_min(umin),.ultrasonic_max(umax),.ultrasonic_version(uver),
+  .auto_valid(av),.auto_version(aver),.auto_target(atarget));
  task cycles(input integer n);begin repeat(n)@(negedge clk);end endtask
  task act(input [5:0] a);begin @(negedge clk);v=1;action=a;@(negedge clk);v=0;cycles(4);end endtask
  task short0;begin buttons=14;cycles(10);buttons=15;cycles(10);end endtask
@@ -61,6 +66,28 @@ module tb_ui_controls;
   `CHECK(dut.volume_percent==95 && timbre==0,"S1 in settings lowers volume without selecting flute")
   buttons=11;cycles(10);buttons=15;cycles(10);
   `CHECK(dut.volume_percent==100 && timbre==0,"S2 in settings raises volume without selecting reed")
+  act(UI_ULTRA_OPEN);`CHECK(upage && menu && !uen && sens==1 && umin==0 && umax==100,"sensor settings entry and defaults")
+  repeat(9)act(UI_SENS_UP);`CHECK(sens==5,"sensitivity clamps at five")
+  repeat(9)act(UI_SENS_DOWN);`CHECK(sens==1,"sensitivity clamps at one")
+  repeat(4)act(UI_MAX_DOWN);repeat(4)act(UI_MIN_UP);
+  `CHECK(umin==20 && umax==80,"independent min/max settings")
+  repeat(20)act(UI_MIN_UP);`CHECK(umin==umax && umax==80,"minimum never exceeds maximum")
+  act(UI_MAX_DOWN);`CHECK(umin==80 && umax==80,"maximum never drops below minimum")
+  repeat(12)act(UI_MIN_DOWN);
+  act(UI_ULTRA_TOGGLE);`CHECK(uen && dut.volume_percent==100,"enabling holds current volume until matching result")
+  av=1;aver=uver-1;atarget=43;cycles(12);
+  `CHECK(dut.volume_percent==100,"old session target cannot change volume")
+  aver=uver;cycles(9);`CHECK(dut.volume_percent==97,"auto slew is one percent per three test cycles")
+  act(UI_VOLUME_DOWN);`CHECK(dut.volume_percent>90,"manual command cannot decrement five while auto owns volume")
+  cycles(200);`CHECK(dut.volume_percent==43,"automatic target reached smoothly at a non-five-percent value")
+  buttons=13;cycles(10);buttons=15;cycles(10);
+  `CHECK(dut.volume_percent==43,"S1 cannot override automatic ownership")
+  buttons=11;cycles(10);buttons=15;cycles(10);
+  `CHECK(dut.volume_percent==43,"S2 cannot override automatic ownership")
+  act(UI_ULTRA_TOGGLE);`CHECK(!uen && dut.volume_percent==43,"disabling retains exact current volume")
+  act(UI_VOLUME_DOWN);`CHECK(dut.volume_percent==38,"manual takes over from retained auto level")
+  act(UI_ULTRA_BACK);`CHECK(menu && !upage,"subpage back returns to original settings")
+  act(UI_DEFAULTS);`CHECK(!uen && sens==1 && umin==0 && umax==100 && dut.volume_percent==100,"reset restores all control defaults")
   $display("PASS tb_ui_controls checks=%0d commands=%0d",checks,commands);$finish;
  end
 endmodule

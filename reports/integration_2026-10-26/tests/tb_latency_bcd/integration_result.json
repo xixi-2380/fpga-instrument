@@ -1,0 +1,8 @@
+{
+  "configuration": "tb_latency_bcd",
+  "test": "tb_latency_bcd",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 0.421
+}

@@ -1,0 +1,4 @@
+RUN tb_rgb_status_cdc
+PASS tb_rgb_status_cdc checks=5302 updates=229 width=20
+E:/gowin/fpga-instrument-integrated/sim/tb_rgb_status_cdc.sv:69: $finish called at 44209000 (1ps)
+

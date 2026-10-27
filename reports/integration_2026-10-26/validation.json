@@ -1,0 +1,464 @@
+{
+  "started_date": "2026-10-26",
+  "completed_date": "2026-10-27",
+  "directory": "E:\\gowin\\fpga-instrument-integrated",
+  "project": "keyboard_adsr.gprj",
+  "branch": "codex/integrated-instrument",
+  "all_selected_regressions_passed": true,
+  "hdl_configurations": 35,
+  "hdl_checks": 29991981,
+  "hdl_results": [
+    {
+      "configuration": "polyphony_effect_0",
+      "test": "tb_bt_polyphony",
+      "params": [
+        "EFFECT=0"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 22.534,
+      "checks": 266747
+    },
+    {
+      "configuration": "polyphony_effect_1",
+      "test": "tb_bt_polyphony",
+      "params": [
+        "EFFECT=1"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 22.529,
+      "checks": 266747
+    },
+    {
+      "configuration": "polyphony_effect_2",
+      "test": "tb_bt_polyphony",
+      "params": [
+        "EFFECT=2"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 22.538,
+      "checks": 266747
+    },
+    {
+      "configuration": "tb_adsr_envelope",
+      "test": "tb_adsr_envelope",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 0.443,
+      "checks": 69
+    },
+    {
+      "configuration": "tb_adsr_production",
+      "test": "tb_adsr_production",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 0.545,
+      "checks": 14881
+    },
+    {
+      "configuration": "tb_audio_latency",
+      "test": "tb_audio_latency",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 76.951,
+      "checks": 815390
+    },
+    {
+      "configuration": "tb_audio_limiter",
+      "test": "tb_audio_limiter",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 2.951,
+      "checks": 242660
+    },
+    {
+      "configuration": "tb_audio_timing",
+      "test": "tb_audio_timing",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 0.627,
+      "checks": 9996
+    },
+    {
+      "configuration": "tb_bluetooth_score_core",
+      "test": "tb_bluetooth_score_core",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 9.69,
+      "checks": 3569
+    },
+    {
+      "configuration": "tb_bluetooth_score_link",
+      "test": "tb_bluetooth_score_link",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 1.26,
+      "checks": 114
+    },
+    {
+      "configuration": "tb_bluetooth_top",
+      "test": "tb_bluetooth_top",
+      "params": [],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 125.516,
+      "checks": 866592
+    },
+    {
+      "configuration": "tb_bt_articulation",
+      "test": "tb_bt_articulation",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 1.023,
+      "checks": 22027
+    },
+    {
+      "configuration": "tb_bt_counter",
+      "test": "tb_bt_counter",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 0.531,
+      "checks": 2041
+    },
+    {
+      "configuration": "tb_bt_identity",
+      "test": "tb_bt_identity",
+      "params": [],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 145.55,
+      "checks": 28964
+    },
+    {
+      "configuration": "tb_bt_library_link",
+      "test": "tb_bt_library_link",
+      "params": [],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 119.189,
+      "checks": 336
+    },
+    {
+      "configuration": "tb_bt_short_audio",
+      "test": "tb_bt_short_audio",
+      "params": [],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 51.805,
+      "checks": 275335
+    },
+    {
+      "configuration": "tb_effects_integration",
+      "test": "tb_effects_integration",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 161.728,
+      "checks": 6302589
+    },
+    {
+      "configuration": "tb_flash_song_library",
+      "test": "tb_flash_song_library",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 44.049,
+      "checks": 90
+    },
+    {
+      "configuration": "tb_instrument_envelopes",
+      "test": "tb_instrument_envelopes",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 0.572,
+      "checks": 7932
+    },
+    {
+      "configuration": "tb_keyboard_top",
+      "test": "tb_keyboard_top",
+      "params": [],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 52.715,
+      "checks": 2112305
+    },
+    {
+      "configuration": "tb_latency_bcd",
+      "test": "tb_latency_bcd",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 0.421,
+      "checks": 6
+    },
+    {
+      "configuration": "tb_master_volume",
+      "test": "tb_master_volume",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 0.466,
+      "checks": 108
+    },
+    {
+      "configuration": "tb_output_gain",
+      "test": "tb_output_gain",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 519.886,
+      "checks": 6051652
+    },
+    {
+      "configuration": "tb_rgb_display",
+      "test": "tb_rgb_display",
+      "params": [],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 90.139,
+      "checks": 2793165
+    },
+    {
+      "configuration": "tb_rgb_status_cdc",
+      "test": "tb_rgb_status_cdc",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 0.437,
+      "checks": 5302
+    },
+    {
+      "configuration": "tb_rgb_ui_renderer",
+      "test": "tb_rgb_ui_renderer",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 141.051,
+      "checks": 5376043
+    },
+    {
+      "configuration": "tb_score_library_protocol",
+      "test": "tb_score_library_protocol",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 0.521,
+      "checks": 19
+    },
+    {
+      "configuration": "tb_spi_nor_flash",
+      "test": "tb_spi_nor_flash",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 1.031,
+      "checks": 275
+    },
+    {
+      "configuration": "tb_synth_core",
+      "test": "tb_synth_core",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 62.988,
+      "checks": 2513900
+    },
+    {
+      "configuration": "tb_ui_controls",
+      "test": "tb_ui_controls",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 0.413,
+      "checks": 108
+    },
+    {
+      "configuration": "tb_ui_inputs",
+      "test": "tb_ui_inputs",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 0.443,
+      "checks": 123
+    },
+    {
+      "configuration": "tb_ui_more",
+      "test": "tb_ui_more",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 0.435,
+      "checks": 21
+    },
+    {
+      "configuration": "tb_ultrasonic_range",
+      "test": "tb_ultrasonic_range",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 1.243,
+      "checks": 26
+    },
+    {
+      "configuration": "tb_ultrasonic_top",
+      "test": "tb_ultrasonic_top",
+      "params": [],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 131.651,
+      "checks": 1744327
+    },
+    {
+      "configuration": "tb_ultrasonic_volume",
+      "test": "tb_ultrasonic_volume",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 1.691,
+      "checks": 1775
+    }
+  ],
+  "output_model": {
+    "passed": true,
+    "checks": 9188,
+    "frames": 4603,
+    "maximum_final_code": 29195,
+    "final_inflight_frames": 1,
+    "scope": "production32-voice/48kHz final PCM checked with independent Python model"
+  },
+  "android_software_checks": 36108,
+  "android": {
+    "passed": true,
+    "scope": "Java core and fake connection lifecycle; not Android/BT/FPGA",
+    "results": [
+      {
+        "test": "CoreTests",
+        "passed": true,
+        "output": "PASS core: 36043 checks; wire/MIDI/session/upload/cancel/retry; software only\n"
+      },
+      {
+        "test": "ConnectionTests",
+        "passed": true,
+        "output": "PASS connection: 32 checks; no phone/radio validation\n"
+      },
+      {
+        "test": "LibraryTests",
+        "passed": true,
+        "output": "PASS library: 33 checks; protocol mock only, no Flash/phone verification\n"
+      }
+    ]
+  },
+  "static": {
+    "dependencies": 75,
+    "hdl": 58,
+    "cst_ports": 67,
+    "duplicate_balls": 0,
+    "production_vendor_syntax_passed": true,
+    "eda_run": false,
+    "pins": {
+      "clk": "P16",
+      "rst": "U4",
+      "HP_BCK": "E22",
+      "HP_WS": "F24",
+      "HP_DIN": "G24",
+      "PA_EN": "H17",
+      "DBG_BCK": "U22",
+      "DBG_WS": "V19",
+      "DBG_DIN": "W20",
+      "DBG_PA_EN": "U26",
+      "MAX_BCLK": "V22",
+      "MAX_LRCLK": "W19",
+      "MAX_DIN": "Y20",
+      "MAX_SD_MODE": "V26",
+      "key_col[0]": "W25",
+      "key_col[1]": "M24",
+      "key_col[2]": "Y25",
+      "key_col[3]": "AA24",
+      "key_row[0]": "W26",
+      "key_row[1]": "L22",
+      "key_row[2]": "Y26",
+      "key_row[3]": "AA25",
+      "led_n[0]": "R26",
+      "led_n[1]": "J14",
+      "led_n[2]": "L20",
+      "led_n[3]": "M25",
+      "led_n[4]": "N23",
+      "board_buttons_n[0]": "K16",
+      "board_buttons_n[1]": "F15",
+      "board_buttons_n[2]": "G15",
+      "board_buttons_n[3]": "G16",
+      "lcd_clk": "H21",
+      "lcd_hs": "H22",
+      "lcd_vs": "A23",
+      "lcd_en": "A24",
+      "lcd_g[5]": "J16",
+      "lcd_g[4]": "K15",
+      "lcd_g[3]": "F22",
+      "lcd_g[2]": "G22",
+      "lcd_g[1]": "G21",
+      "lcd_g[0]": "G20",
+      "lcd_b[5]": "F20",
+      "lcd_b[4]": "G19",
+      "lcd_b[3]": "F19",
+      "lcd_b[2]": "F18",
+      "lcd_b[1]": "M17",
+      "lcd_b[0]": "M16",
+      "lcd_r[5]": "H19",
+      "lcd_r[4]": "J19",
+      "lcd_r[3]": "G25",
+      "lcd_r[2]": "H18",
+      "lcd_r[1]": "J18",
+      "lcd_r[0]": "K17",
+      "touch_scl": "AB26",
+      "touch_sda": "U25",
+      "touch_int": "V23",
+      "touch_rst_n": "R23",
+      "bt_rx": "P24",
+      "bt_tx": "P23",
+      "flash_cs_n": "L25",
+      "flash_sck": "P20",
+      "flash_mosi": "R21",
+      "flash_miso": "T22",
+      "flash_wp_n": "R22",
+      "flash_hold_n": "R20",
+      "ultrasonic_trig": "P21",
+      "ultrasonic_echo": "U17"
+    }
+  },
+  "source_preservation": {
+    "score": {
+      "files_compared": 258,
+      "changed_since_merge_snapshot": [],
+      "matches_snapshot": true
+    },
+    "audio": {
+      "files_compared": 238,
+      "changed_since_merge_snapshot": [],
+      "matches_snapshot": true
+    }
+  },
+  "source_sha256_manifest": "final_source_manifest.json",
+  "compiled_non_pll_testbench_count": 78,
+  "rendered_pages": 7,
+  "previews": "tests/tb_rgb_ui_renderer/",
+  "synthesis_run": false,
+  "pnr_run": false,
+  "new_bitstream_generated": false,
+  "hardware_programmed": false,
+  "git_committed": false,
+  "git_pushed": false,
+  "scope": "Current merged source checked by Icarus, independent audio model, Java core, pin/project static checks and raster preview. Source score STA is historical; no STA/hardware/audio stability claim for merged project.",
+  "repaired_test_fixture": "sim/data/bt_identity_notes.hex (29 exact source records); initial missing-file failure retained separately."
+}

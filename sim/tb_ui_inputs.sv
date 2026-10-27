@@ -5,12 +5,18 @@ module tb_ui_inputs;
  reg clk=0,rst=1,menu=0,ghost=0;always #5 clk=~clk;
  reg [15:0] keys=0;wire inhibit,kv;wire [5:0] ka;
  reg enabled=1,valid=1,ready=1,error=0,down=0;reg [3:0] count=0;
+ reg sensor_page=0;
  reg [15:0] x=0,y=0,rx=800,ry=480;reg [1:0] fx=0;
  wire tv;wire [5:0] ta;integer checks=0,kevents=0,tevents=0;
- ui_keypad_router #(.RELEASE_CYCLES(2)) k(clk,rst,menu,ghost,keys,inhibit,kv,ka,1'b0);
- ui_touch_actions t(clk,rst,enabled,valid,ready,error,down,count,x,y,rx,ry,fx,menu,tv,ta,1'b0);
+ ui_keypad_router #(.RELEASE_CYCLES(2)) k(clk,rst,menu,ghost,keys,inhibit,kv,ka,1'b0,sensor_page);
+ ui_touch_actions t(clk,rst,enabled,valid,ready,error,down,count,x,y,rx,ry,fx,menu,tv,ta,1'b0,sensor_page);
  always @(posedge clk)begin if(kv)kevents=kevents+1;if(tv)tevents=tevents+1;end
  task cycles(input integer n);begin repeat(n)@(negedge clk);end endtask
+ task matrix_contact(input integer index,input [5:0] expected);integer previous_events;begin
+  keys=0;cycles(4);previous_events=kevents;keys=16'b1<<index;cycles(4);
+  `CHECK(ka==expected && kevents==previous_events+1,"matrix sensor action matches its dedicated subpage")
+  keys=0;cycles(4);
+ end endtask
  task contact(input integer px,py,input [5:0] expected);integer before_events;begin
   down=0;count=0;cycles(3);before_events=tevents;x=px;y=py;down=1;count=1;cycles(5);
   `CHECK(tevents==before_events+(expected!=UI_NONE),"touch hit count and bounds")
@@ -31,7 +37,10 @@ module tb_ui_inputs;
   keys=0;cycles(3);`CHECK(!inhibit,"all keys released rearms notes")
   menu=1;cycles(4);keys=16'h2000;cycles(4);`CHECK(ka==UI_PREV,"R4C2 now selects previous timbre")
   keys=0;cycles(4);keys=16'h4000;cycles(4);`CHECK(ka==UI_NEXT,"R4C3 now selects next timbre")
-  keys=0;cycles(4);menu=0;
+  keys=0;cycles(4);matrix_contact(3,UI_ULTRA_OPEN);sensor_page=1;
+  matrix_contact(0,UI_ULTRA_TOGGLE);matrix_contact(4,UI_SENS_DOWN);matrix_contact(5,UI_SENS_UP);
+  matrix_contact(8,UI_MIN_DOWN);matrix_contact(9,UI_MIN_UP);matrix_contact(12,UI_MAX_DOWN);matrix_contact(13,UI_MAX_UP);
+  matrix_contact(15,UI_ULTRA_BACK);sensor_page=0;menu=0;
   contact(32,140,UI_NONE); // performance page must not select timbre
   contact(664,40,UI_MODE);menu=1;
   contact(28,132,UI_SINE);contact(152,132,UI_FLUTE);contact(28,196,UI_REED);
@@ -41,6 +50,11 @@ module tb_ui_inputs;
   contact(152,324,UI_FX);contact(308,240,UI_LESS);contact(767,287,UI_MORE);contact(768,287,UI_NONE);
   contact(308,344,UI_NONE);fx=2;contact(308,344,UI_SLOWER);contact(716,344,UI_FASTER);
   contact(24,420,UI_VOLUME_DOWN);contact(272,420,UI_VOLUME_UP);
+  contact(340,420,UI_ULTRA_OPEN);sensor_page=1;
+  contact(500,100,UI_ULTRA_TOGGLE);contact(500,180,UI_SENS_DOWN);contact(684,180,UI_SENS_UP);
+  contact(500,252,UI_MIN_DOWN);contact(684,252,UI_MIN_UP);
+  contact(500,324,UI_MAX_DOWN);contact(684,324,UI_MAX_UP);
+  contact(664,40,UI_ULTRA_BACK);sensor_page=0;
   contact(664,420,UI_DEFAULTS);contact(800,0,UI_NONE);
   down=0;count=0;cycles(3);error=1;down=1;count=1;cycles(3);error=0;cycles(3);
   `CHECK(!tv,"error recovery cannot fire an already held touch")

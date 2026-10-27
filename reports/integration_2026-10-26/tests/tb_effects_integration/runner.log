@@ -1,0 +1,4 @@
+RUN tb_effects_integration
+PASS tb_effects_integration checks=6302589 delivery=520
+E:/gowin/fpga-instrument-integrated/sim/tb_effects_integration.sv:107: $finish called at 32834561498 (1ps)
+

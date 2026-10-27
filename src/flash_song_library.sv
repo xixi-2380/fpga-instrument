@@ -33,6 +33,19 @@ module flash_song_library #(parameter integer MAX_NOTES=4096,AW=(MAX_NOTES>1?$cl
  reg [7:0] directory[0:DIR_BYTES-1],directory_data;
  reg [4:0] meta_index;reg [5:0] meta_byte;reg [10:0] offset;
  reg [31:0] generation,candidate_generation,crc,stored_crc,magic,marker;
+ reg [31:0] writing_generation;
+ (* syn_keep=1 *) wire [2:0] generation_carry;
+ assign generation_carry={(&generation[23:0]),(&generation[15:0]),(&generation[7:0])};
+ // Prepare the generation independently of header-byte selection and CRC.
+ always @(posedge clk or posedge rst)begin
+  if(rst)writing_generation<=1;
+  else begin
+   writing_generation[7:0]<=generation[7:0]+8'd1;
+   writing_generation[15:8]<=generation[15:8]+generation_carry[0];
+   writing_generation[23:16]<=generation[23:16]+generation_carry[1];
+   writing_generation[31:24]<=generation[31:24]+generation_carry[2];
+  end
+ end
  reg [31:0] candidate_entries;reg [32:0] used_slots;reg [5:0] slot;
  reg active_bank,have_directory,scan_bank,verify_directory,boot_failed,bad_directory,bank_nonblank,any_nonblank;
  reg [7:0] format,entry_limit;reg [15:0] record_no;reg [63:0] word_shift;
@@ -158,8 +171,8 @@ module flash_song_library #(parameter integer MAX_NOTES=4096,AW=(MAX_NOTES>1?$cl
      else begin storage_invalidate<=1;finish(storage_error==0?8'd9:storage_error);end
     end
     BUILD_HEADER:begin
-     directory[offset]<=header_byte(offset[4:0],generation+1'b1);
-     if(!skip_crc)crc<=crc_byte(crc,header_byte(offset[4:0],generation+1'b1));
+     directory[offset]<=header_byte(offset[4:0],writing_generation);
+     if(!skip_crc)crc<=crc_byte(crc,header_byte(offset[4:0],writing_generation));
      if(offset==31)begin meta_index<=0;state<=BUILD_META;end else offset<=offset+1'b1;
     end
     BUILD_META:state<=BUILD_META_WAIT;

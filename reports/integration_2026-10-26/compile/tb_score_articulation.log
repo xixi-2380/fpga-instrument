@@ -1,0 +1,6 @@
+E:/gowin/fpga-instrument-integrated/sim/tb_score_articulation.sv:24: warning: Port 10 (note_timbre) of module score_player expects 3 bit(s), given 2.
+E:/gowin/fpga-instrument-integrated/sim/tb_score_articulation.sv:24:        : Padding 1 high bits of the port.
+E:/gowin/fpga-instrument-integrated/sim/tb_score_articulation.sv:26: warning: Port 17 (note_timbre) of module voice_allocator expects 3 bit(s), given 2.
+E:/gowin/fpga-instrument-integrated/sim/tb_score_articulation.sv:26:        : Padding 1 high bits of the port.
+E:/gowin/fpga-instrument-integrated/sim/tb_score_articulation.sv:32: warning: Port 10 (timbre) of module dds_sine expects 3 bit(s), given 2.
+E:/gowin/fpga-instrument-integrated/sim/tb_score_articulation.sv:32:        : Padding 1 high bits of the port.

@@ -11,7 +11,7 @@ module audio_visualizer(
  reg [7:0] peak_work;
  wire [15:0] magnitude=sample[15] ? (~sample+16'd1) : sample;
  wire [7:0] amplitude=magnitude[15] ? 8'd255 : magnitude[14:7];
- wire [7:0] display_sample=sample>16'sd4095 ? 8'h7f : sample < -16'sd4096 ? 8'h80 : sample[12:5];
+ wire [7:0] display_sample=sample[15:8];
  wire [7:0] max_peak=amplitude>peak_work ? amplitude : peak_work;
  always @(posedge clk or posedge rst)begin
   if(rst)begin waveform<=0;working<=0;peak<=0;window_valid<=0;index<=0;decimate<=0;peak_work<=0;end

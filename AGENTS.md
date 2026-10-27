@@ -1,12 +1,70 @@
 # Local project working rules
 
+## 2026-10-27 GitHub提交授权（最新）
+
+- 用户明确要求“提交”并补充“github”，授权将已完成并验证的合并工程提交并推送到origin的`codex/integrated-instrument`分支。仅本次改动，不更新main、不强推、不修改两个来源目录；EDA及烧录仍未授权。
+- 下方合并阶段“不提交推送”描述是当时范围，已被本次明确授权覆盖。新功能仍须另获任务授权。
+
+## 2026-10-26 两工程合并（优先于下方全部来源历史）
+
+- 本目录为用户要求的新工程 `E:\gowin\fpga-instrument-integrated`，主工程keyboard_adsr.gprj、顶层keyboard_top、Device Version C，输出D2_keyboard_leds。来源bt-score与bt-audio均只读保留。输入包含两边未提交修改，哈希和状态见reports/integration_2026-10-26/source_inputs.json。
+- 当前仅授权本地合并、源码/约束/文档调整、软件/HDL验证、读取GitHub。没有授权本轮Gowin综合/P&R/STA/烧录、Git提交推送或更新main。下方score当次EDA导出授权及历史自动推送规则不扩展至本轮。
+- 保留score的16自动声部、4096条RAM、32首U7曲库、App0.3、尾音/力度/Flash修复及较新时序结构，接入audio的24倍补偿/64采样前瞻限幅、LAT及超声波控音量。保留32物理声部、七音色、三效果器、触摸和MAX98357A。上电/USR静音待机，SCORE_ENABLE=0，超声波默认OFF。
+- BT RX=P24/TX=P23，删除BT EN；P21=超声波Trig、U17=Echo，U7 MOSI=R21。矩阵设置页R1C4=超声波、R4C4=more；曲库动作21..32、超声波33..41。低1112位显示字段保留，追加LAT/超声波至1167位，曲库146位仍独立快照。
+- 只维护src一套模块，references和原始照片只读；保留50/61.44/35MHz、音频CE及原子CDC，不降低频率或放宽普通路径掩盖问题。来源STA和位流不是合并版验收；本轮无新的.fs，dist/fpga内仅来源历史归档。
+- 仿真读取同一GPRJ，用-grelative-include及独立out-dir。OUTPUT_ENABLE=0的数学组件测试仅为明确旁路，生产默认启用限幅；行为PLL只做逻辑验证。必要检查完成后停止，不自动提交推送。完整合并说明见docs/integration_2026-10-26.md。
+- 下方内容为来源score历史；其原AGENTS及audio原AGENTS另存reports/integration_2026-10-26，仅供追溯。
+
+## 2026-10-26 20:17最终构建与导出（最新）
+
+- 用户授权的综合/P&R已完成；最终报告final_pnr_reset为Setup/Hold0/0，ref/audio/pixel Fmax67.367/62.069/35.058MHz，最终完整P&R22分04秒。源码、ROM、GPRJ与attempt6_syn网表哈希一致，没有降低原50/61.44/35MHz频率。
+- 异步入口例外最终为3个pixel_reset_sync实例的6个明确PRESET引脚：display_driver本身及status_bridge/more_bridge；D/Q、级间和下游仍计时。普通数据无false path/multicycle。
+- PCLK报告无独立数据路径，SDF缺少时钟反相器/OBUF弧。按同配置OBUF及0..1ns反相LUT预算估算7.978..16.195ns，落在7.5..20ns源延迟预算内；是明确替代条件下的工程核查，不能称完整PCLK路径或面板/板级测量已签核。PR1014 clk_d是参考输入IBUF网，实际延迟纳入STA。详见本轮编译与导出记录及clock_forwarding_audit.json。
+- 交付目标E:\gowin\outfiless\fpga-instrument-bt-score_2026-10-26；唯一当前烧录入口impl/pnr/D2_keyboard_leds.fs，保留既有v1.0及其他工程。副本IDE IncludePath指向副本；来源HEAD2d86834加本地修改。仿真23配置16516831检查通过，另2304000像素等价。未硬件烧录、Git提交推送或合main；实板杂音和U7识别待下载验证。
+- 后续“构建中/仅4个PRESET/尚未运行EDA”均是历史阶段，当前事实以本节及最终manifest为准。
+
+## 2026-10-26 实际构建后的时序修正状态（晚间最新）
+
+- 本轮仍按用户明确授权运行EDA并准备复制工程，未执行硬件编程、Git提交/推送或main更新。当前后端运行目录reports/build_2026-10-26/final_pnr_clock，完成前保持HDL/约束冻结。
+- 已接入原ADSR的可选PRECALC（默认0保持旧单拍接口，生产音源启用1），用采样间隔三拍精确准备商/余数，要求CE间隔≥4拍，当前1280拍。全合法电平与原算法逐样本819357项对照通过；不改变包络曲线或音色算法。
+- 新增显式分段进位及参数限定位宽，覆盖播放器完整32位时间、SPI/触摸/I2C等待、按钮长按及消抖；目录generation+1预寄存后送CRC。计时值、触摸波形、协议、CRC和COW格式保持。原模块内优化，不创建第二套音源。
+- 18:45P&R内部ref/audio/pixel已达63.897/61.733/35.025MHz，普通内部建立/保持0违例；总25个未通过点为4个异步复位入口及21个LCD IO。该轮不能视作完整STA通过，产物与报告已保存，不用于最终合格交付。
+- SDC已不是早期“只加报告”版本：lcd_pclk在真实转发输出上定义反相像素时钟；输出保留建立预留8.286ns与保持预留0ns。工具外部采样时钟默认零延迟，现显式声明源延迟早7.5ns/晚20ns，并约束/报告转发PCLK绝对最大20ns。早边界低于本慢角PLL5.383+pad2.528=7.911ns，晚边界需用实际报告核查；均属工程模型，不宣称面板/板级测量通过。
+- 仅对status_bridge/more_bridge内pixel_reset_sync两级共4个具体PRESET引脚添加异步入口false path。其D/Q、级间及所有下游路径继续检查；没有全域异步组或普通数据路径例外。CLI和IDE允许输出IOB寄存；HS/VS分别syn_preserve避免等价合并到单个远端寄存器。
+- 构建脚本支持syn与带网表/源输入哈希校验的pnr分步，完整build模式仍可用；超时7200秒，DSP资源解析支持110.5这类半DSP计数。一次快照增量尝试读取过慢已取消，当前明确inc_pnr0，保留相关失败/中断证据。
+- 最终是否可导出须看本轮实际STA、完整位流生成标志、产物时间/哈希；E:\gowin\outfiless既有v1.0不得覆盖。当前源码标记仍ID CHECK 02，不能仅据UI字样区分修订，应以最终manifest为准。过程说明见docs/bluetooth_score/编译与导出记录_2026-10-26.md。
+
+## 2026-10-26 本次EDA与导出授权（最新）
+
+- 用户明确要求优化后编译综合、布局布线，并将最终包含下载产物的完整工程复制到E:\gowin\outfiless。本次允许助手运行Gowin综合/P&R/STA及必要的修正重跑；不授权Programmer/JTAG/硬件烧录，不提交推送或合入main。
+- 原有“EDA由用户执行”分工在本次构建与导出范围内被此明确授权覆盖。保留旧日志与产物快照，构建输入SHA256与新报告分别保存；未闭合时序不得标成稳定可烧录验收通过。
+
+## 2026-10-26 时序结构优化（最新）
+
+- 用户明确要求优化时序。保留当前蓝牙整合工作树及前次MOSI R21、自动尾音/力度修复，不合main、不提交推送、不运行Gowin或下载烧录。
+- 依据已有2026-10-25 20:59报告：像素hpos→glyph坐标/文字路径约32ns，原跨域原始复位→1112位数据CLEAR出现恢复违例；参考/音频域只见Fmax汇总，原全局25条建立路径未覆盖两域内部细节，不能声称已定位其具体物理最坏路径。
+- rgb_status_cdc改用各自域异步置位/同步释放的local reset。rgb_ui_renderer拆为4级，固定键列及格线用有界比较替代运行时有符号除法/取模；rgb_display再加1级输出寄存，RGB/DE/HS/VS统一共5级，保留停钟异步消隐和PCLK相位。声部统计两级寄存，不给音源加背压。
+- synth_core把声部包络选择与乘法拆拍，力度/舍入/音量/效果器算法不改；当前32声部交付520拍≤544预算。参考域player/validator把宽上下文读和时间比较拆拍，记录结束时间先寄存再判定；毫秒及上传超时计数器缩至其参数范围所需位宽，协议和毫秒乐谱时间不变。
+- SDC仅追加3个report_timing分域报告命令，按本机SUG940-2.0.5E第74～75页语法；已有create_clock/set_max_delay/set_min_delay逐字节保留，没有加false path/multicycle或改变频率。IO预算可能仍违例，需要新STA核验，禁止把功能仿真称为时序闭合。
+- 原IDE过程配置/缓存/现有综合布局布线产物不改。具体变更与验证见docs/bluetooth_score/时序优化说明_2026-10-26.md、reports/timing_2026-10-26；此前诊断页ID CHECK 02保留，此标记单独不能区分今天两次本地修订，应以源码哈希和新构建时间为准。
+
+## 2026-10-26 杂音与Flash本地修复（最新）
+
+- 用户反馈第一段也有轻微杂音、Flash仍无法识别。已修正U7 MOSI约束N21→R21（两份核心板原理图第7页），其余SPI信号不变。旧报告中的N21归属错误不再作为接线依据。
+- 复用原voice_allocator，在synth_core配置AUTOMATIC_IDS=16：自动0..15身份只匹配仍按住的实例，Off后的旧尾音继续保持原频率，新On走原空闲/释放/抢占分配规则。手动60..75身份保留同音重触发行为。每个物理声部保留自己的力度，不让调度编号复用修改旧尾音。
+- 蓝牙桥先寄存FCW再发valid；力度转换用全128值等价的移位/比较表达式替代长case。DDS/包络/混音/效果器/I2S/PLL算法保持复用；渲染逐声部力度仍共享查找和既有时序拍位，不增加并行音源。
+- more→FLASH INFO标记ID CHECK 02，直接显示6位原始JEDEC和JOB，以及SRC/RX/H，未知型号也能看到ID。不扩展写白名单、不自动清保护。
+- 本轮只修改源码/约束/文档并运行离线仿真，不启动EDA/下载/烧录，不提交推送。已有2026-10-25 20:59位流仍是修复前版本；该报告ref/audio/pixel Fmax=46.073/50.734/31.173MHz，目标50/61.44/35MHz，不能当时序通过。物理识别和杂音是否消除尚待新构建验证。入口见docs/bluetooth_score/杂音与Flash修复说明_2026-10-26.md。
+
 ## 2026-10-24 蓝牙重构当前约定（优先于下方历史记录）
+
+- 2026-10-25身份专项：用户反馈82秒曲第一遍正常，26秒多声部后杂音、实屏计数始终1，要求重点排查身份。实际上传/CDC/顶层/音源/显示仿真分别出现1/4/8/16独立身份，但不能排除实板身份坍缩。后续本地新增独立被动bt_identity_monitor和more INFO的SRC/RX/H字符诊断（ID CHECK 01），原分配/音频/时钟/引脚不改；新增四音10秒MIDI。尚未确认根因或完成实板修复，诊断位流由用户自行重新编译/下载，既有2d86834及归档位流不含该诊断。详情见docs/bluetooth_score/多声部身份排查.md；不自动推送这次待验证修改。
 
 - 2026-10-25最新发布授权：用户明确要求将当前16声部/曲库/App0.3开发版、小星星能力演示MIDI及已有编译产物一起提交推送至codex/bluetooth-score-integration；本次不合入main。原8081710保留为历史可用检查点。本次11:27现有构建三域Fmax为43.703/40.291/25.897MHz，目标50/61.44/35MHz，明确时序未达标；用户当前IDE配置已改自动增量P&R并保留，不把本次归档当重新运行EDA或实板验收。发布入口见docs/bluetooth_score/发布记录_2026-10-25.md。
 
 - 2026-10-25扩展开发：当前工作树仍为蓝牙分支，已在8081710后本地接入16自动声部、4096条活动RAM、32首U7曲库、共同校验/播放器、本地控制、App0.3和more字符页。详细状态见docs/bluetooth_score/曲库上板操作.md与扩展接口与阶段验收.md；软件实现/仿真不等于物理Flash、手机运行或STA通过，不自动覆盖main或将未验收实现当可用版推送。
 - 用户明确授权第二颗U7全部可用于曲库；本实现仅划定0x000000..0x21FFFF，默认只读扫描、用户保存/删除才写，U4配置Flash不接管。仅EF4018兼容配置开放写入，未知型号/保护/边界错误均拒绝，不自动清保护或整片擦除。FLASH_WRITES=0可保留只读。
-- U7球位：CS=L25、CLK=P20、MOSI=N21、MISO=T22、WP=R22、HOLD=R20。N21不再作ready诊断LED；N23按键LED不改球位，顶层由led_n[5]改为led_n[4]，流水四灯保持。more为新动作21，原UI_MORE=9仍为效果加量；设置R4C4进入more，R1C4仍退出设置。
+- U7球位（2026-10-26按4071/4072原理图第7页纠正）：CS=L25、CLK=P20、MOSI=R21、MISO=T22、WP=R22、HOLD=R20。N21是独立USR_LED1，当前继续闲置，不是Flash信号；N23按键LED不改球位，顶层由led_n[5]改为led_n[4]，流水四灯保持。more为新动作21，原UI_MORE=9仍为效果加量；设置R4C4进入more，R1C4仍退出设置。
 
 - 当前蓝牙重构工作树为 `E:\gowin\fpga-instrument-bt-score`，分支 `codex/bluetooth-score-integration`，严格以 `bf5df5792f654ee9c29a30983cdbe83a0061669e` 为基准；不更新 main、不覆盖另外两个已有工作树。
 - 用户授权按 `docs/bluetooth_score` 规划实现蓝牙下载/播放，保留基准英伦 UI、七音色、MAX98357A、触摸，加入设置页音量，并排查松键不归零和单键双识别。

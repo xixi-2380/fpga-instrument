@@ -1,0 +1,8 @@
+{
+  "configuration": "tb_effects_integration",
+  "test": "tb_effects_integration",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 161.728
+}

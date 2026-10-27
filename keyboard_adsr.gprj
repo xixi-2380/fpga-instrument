@@ -5,7 +5,10 @@
     <Version>5</Version>
     <Device name="GW5AST-138C" pn="GW5AST-LV138FPG676AC1/I0">gw5ast138c-003</Device>
     <FileList>
+        <File path="src/ultrasonic_range.sv" type="file.verilog" enable="1" />
+        <File path="src/ultrasonic_volume.sv" type="file.verilog" enable="1" />
         <File path="src/bt_event_cdc.sv" type="file.verilog" enable="1" />
+        <File path="src/bt_identity_monitor.sv" type="file.verilog" enable="1" />
         <File path="src/master_volume.sv" type="file.verilog" enable="1" />
         <File path="src/uart_rx.sv" type="file.verilog" enable="1" />
         <File path="src/uart_tx.sv" type="file.verilog" enable="1" />
@@ -52,6 +55,8 @@
         <File path="src/spi_nor_flash.sv" type="file.verilog" enable="1" />
         <File path="src/local_score_control.sv" type="file.verilog" enable="1" />
         <File path="src/score_validator.sv" type="file.verilog" enable="1" />
+        <File path="src/audio_limiter.sv" type="file.verilog" enable="1" />
+        <File path="src/audio_latency_meter.sv" type="file.verilog" enable="1" />
         <File path="src/voice_allocator.sv" type="file.verilog" enable="1" />
         <File path="src/voice_mixer.sv" type="file.verilog" enable="1" />
         <File path="src/lock_guard.sv" type="file.verilog" enable="1" />

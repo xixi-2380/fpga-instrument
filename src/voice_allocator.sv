@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 // Keyboard-independent ownership and pending frame commands. Rank is a
 // bounded permutation, avoiding the wraparound of timestamp-based stealing.
-module voice_allocator #(parameter integer VOICES=4)(
+module voice_allocator #(parameter integer VOICES=4,AUTOMATIC_IDS=0)(
     input wire clk,rst,enabled,frame_ce,note_valid,note_on,
     input wire [6:0] note_id,input wire [31:0] note_fcw,
     input wire [VOICES-1:0] voice_active,
@@ -59,7 +59,11 @@ module voice_allocator #(parameter integer VOICES=4)(
             end
             READ_CONTEXT:begin
                 scan_rank<=rank[scan_slot];
-                scan_match<=owned[scan_slot] && ids[scan_slot]==event_id;
+                // Automatic IDs are live scheduler handles. After Off, the
+                // old release retains its context but no longer matches this
+                // handle. Manual pitch identities keep their retrigger rule.
+                scan_match<=owned[scan_slot] && ids[scan_slot]==event_id &&
+                    (event_id>=AUTOMATIC_IDS || voice_held[scan_slot]);
                 scan_free<=!owned[scan_slot] ||
                     (!voice_active[scan_slot] && !voice_held[scan_slot] &&
                      !pending_start[scan_slot] && !committed_gate[scan_slot]);

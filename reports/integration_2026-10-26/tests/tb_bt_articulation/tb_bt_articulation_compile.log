@@ -1,0 +1,7 @@
+E:/gowin/fpga-instrument-integrated/src/synth_core.sv:201: warning: @* is sensitive to all 4 words in array 'voice_level'.
+E:/gowin/fpga-instrument-integrated/src/synth_core.sv:201: warning: @* is sensitive to all 4 words in array 'voice_level'.
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_articulation.sv:10: warning: Instantiating module synth_core with dangling input port 23 (effect_echo_wet) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_articulation.sv:10: warning: Instantiating module synth_core with dangling input port 24 (effect_room_wet) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_articulation.sv:10: warning: Instantiating module synth_core with dangling input port 25 (effect_tremolo_depth) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_articulation.sv:10: warning: Instantiating module synth_core with dangling input port 26 (effect_tremolo_rate_hz) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_articulation.sv:10: warning: Instantiating module synth_core with dangling input port 37 (output_flush) floating.

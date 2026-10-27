@@ -1,0 +1,8 @@
+{
+  "configuration": "tb_ultrasonic_range",
+  "test": "tb_ultrasonic_range",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 1.243
+}

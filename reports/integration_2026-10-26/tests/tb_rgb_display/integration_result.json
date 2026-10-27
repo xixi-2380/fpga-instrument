@@ -1,0 +1,8 @@
+{
+  "configuration": "tb_rgb_display",
+  "test": "tb_rgb_display",
+  "params": [],
+  "behavioral_pll": true,
+  "passed": true,
+  "seconds": 90.139
+}

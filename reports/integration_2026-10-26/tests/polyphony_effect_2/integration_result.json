@@ -1,0 +1,10 @@
+{
+  "configuration": "polyphony_effect_2",
+  "test": "tb_bt_polyphony",
+  "params": [
+    "EFFECT=2"
+  ],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 22.538
+}

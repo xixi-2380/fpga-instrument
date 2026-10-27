@@ -20,7 +20,16 @@ module i2c_register_master #(
         MACK_LOW=12,MACK_RISE=13,MACK_HIGH=14,RE_LOW=15,RE_RISE=16,RE_HIGH=17,
         STOP_LOW=18,STOP_RISE=19,STOP_HIGH=20,STOP_FREE=21;
     reg [4:0] state;
-    reg [31:0] timer,timeout_count;
+    localparam integer TW=HALF_CYCLES>1?$clog2(HALF_CYCLES):1;
+    localparam integer CW=TIMEOUT_CYCLES>1?$clog2(TIMEOUT_CYCLES):1;
+    reg [TW-1:0] timer;reg [CW-1:0] timeout_count;
+    wire [CW-1:0] timeout_next;
+    for(genvar c=0;c<CW;c=c+8)begin: timeout_bytes
+        localparam integer W=CW-c<8?CW-c:8;
+        (* syn_keep=1 *) wire carry;
+        if(c==0)assign carry=1;else assign carry=&timeout_count[c-1:0];
+        assign timeout_next[c+:W]=timeout_count[c+:W]+carry;
+    end
     reg [15:0] address;
     reg [7:0] tx,rx,write_byte;
     reg [3:0] length,byte_index;
@@ -70,7 +79,7 @@ module i2c_register_master #(
                 FREE:begin
                     if(timeout_count==TIMEOUT_CYCLES-1)abort_bus();
                     else begin
-                        timeout_count<=timeout_count+1'b1;
+                        timeout_count<=timeout_next;
                         if(scl_sync[1] && sda_sync[1])begin
                             if(timer==0)begin sda_low<=1;timer<=HALF_CYCLES-1;state<=START_HOLD;end
                             else timer<=timer-1'b1;
@@ -101,7 +110,7 @@ module i2c_register_master #(
                             RE_RISE:state<=RE_HIGH;STOP_RISE:state<=STOP_HIGH;
                         endcase
                     end else if(timeout_count==TIMEOUT_CYCLES-1)abort_bus();
-                    else timeout_count<=timeout_count+1'b1;
+                    else timeout_count<=timeout_next;
                 end
                 TX_HIGH:if(timer!=0)timer<=timer-1'b1;
                     else begin

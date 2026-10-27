@@ -1,0 +1,2 @@
+PASS tb_score_library_protocol checks=19
+E:/gowin/fpga-instrument-integrated/sim/tb_score_library_protocol.sv:36: $finish called at 560000 (1ps)

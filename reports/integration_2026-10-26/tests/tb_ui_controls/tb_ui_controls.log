@@ -1,0 +1,2 @@
+PASS tb_ui_controls checks=108 commands=67
+E:/gowin/fpga-instrument-integrated/sim/tb_ui_controls.sv:91: $finish called at 20190000 (1ps)

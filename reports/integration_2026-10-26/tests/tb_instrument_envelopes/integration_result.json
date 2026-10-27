@@ -1,0 +1,8 @@
+{
+  "configuration": "tb_instrument_envelopes",
+  "test": "tb_instrument_envelopes",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 0.572
+}

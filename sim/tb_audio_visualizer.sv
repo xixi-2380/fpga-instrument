@@ -22,7 +22,7 @@ module tb_audio_visualizer;
     val=$signed(sample);mag=val<0 ? -val : val;
     if(mag/128>expected_peak)expected_peak=mag/128>255 ? 255 : mag/128;
     if(n%4==3)begin
-     scaled=val>4095 ? 127 : val < -4096 ? -128 : (val>>>5);
+     scaled=val>>>8;
      reference[(n/4)*8+:8]=scaled;
     end
     @(posedge clk);#1;

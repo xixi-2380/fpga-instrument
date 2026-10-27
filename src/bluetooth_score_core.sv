@@ -27,14 +27,16 @@ module bluetooth_score_core #(
  input wire extension_response_valid,output wire extension_response_ready,
  input wire [4:0] extension_response_length,input wire [159:0] extension_response);
  localparam integer MS_CYCLES=CLOCK_HZ/1000;
+ localparam integer MS_W=MS_CYCLES>1?$clog2(MS_CYCLES):1;
+ localparam integer AGE_W=UPLOAD_TIMEOUT_MS>0?$clog2(UPLOAD_TIMEOUT_MS+1):1;
  localparam [32:0] MAX_END_MS=MAX_SONG_MS;
  localparam [4:0] IDLE=0,DISPATCH=1,EXECUTE=2,DATA_CHECK=3,DATA_WRITE=5,
  COMMIT_FETCH=6,COMMIT_WAIT=7,COMMIT_LATCH=8,COMMIT_SCAN=9,COMMIT_EVAL=10,
  PLAYER_SEND=11,PLAYER_WAIT=12,REPLY=13,
  HEADER_ADDR=14,HEADER_WAIT=15,HEADER_LATCH=16,DUP_ADDR=17,DUP_WAIT=18,DUP_CHECK=19,
- RECORD_ADDR=20,RECORD_WAIT=21,RECORD_LATCH=22,RELEASE_FRAME=23,EXT_SEND=24,EXT_WAIT=25;
+ RECORD_ADDR=20,RECORD_WAIT=21,RECORD_LATCH=22,RELEASE_FRAME=23,EXT_SEND=24,EXT_WAIT=25,DATA_END=26;
  reg [4:0] state;
- reg [31:0] ms_div,upload_age;wire ms_ce=ms_div==MS_CYCLES-1;
+ reg [MS_W-1:0] ms_div;reg [AGE_W-1:0] upload_age;wire ms_ce=ms_div==MS_CYCLES-1;
  wire frame_valid,frame_ready;wire [7:0] frame_version,frame_command;wire [15:0] frame_seq,frame_length;wire [7:0] payload_data,cached_data;
  reg [7:0] payload_address;reg parser_commit;
  reg [8:0] byte_cursor;reg [2:0] field_index;reg duplicate_mismatch,write_phase;
@@ -57,7 +59,7 @@ module bluetooth_score_core #(
  assign extension_valid=state==EXT_SEND;assign extension_command=cmd;assign extension_length=len;assign extension_payload=small_payload;
  assign extension_response_ready=state==EXT_WAIT;
  reg [63:0] current_record;
- wire [32:0] current_end={1'b0,current_record[31:0]}+{17'b0,current_record[63:48]};
+ reg [32:0] current_end;
  wire player_ready,player_done,player_busy;reg [1:0] player_command;
  assign storage_ready=!rst && !upload_active && play_state==0 && !player_busy && !committing && state!=PLAYER_SEND && state!=PLAYER_WAIT;
  wire player_valid=state==PLAYER_SEND;
@@ -95,7 +97,7 @@ module bluetooth_score_core #(
  always @(posedge clk or posedge rst)begin
   if(rst)begin
    state<=IDLE;ms_div<=0;upload_age<=0;cmd<=0;seq<=0;len<=0;ver<=0;small_payload<=0;payload_address<=0;parser_commit<=0;byte_cursor<=0;field_index<=0;duplicate_mismatch<=0;write_phase<=0;current_record<=0;session<=0;cache_valid<=0;consume_seq<=0;expected_seq<=1;
-   cached_cmd<=0;cached_seq<=0;cached_len<=0;cached_reply_len<=0;cached_reply<=0;reply_len<=0;reply<=0;
+   cached_cmd<=0;cached_seq<=0;cached_len<=0;cached_reply_len<=0;cached_reply<=0;reply_len<=0;reply<=0;current_end<=0;
    song_valid<=0;upload_active<=0;last_error<=0;received_notes<=0;total_notes<=0;score_crc<=32'hffffffff;expected_crc<=0;duration_ms<=0;last_start<=0;
    packet_last<=0;packet_max<=0;crc_work<=0;packet_count<=0;record_index<=0;
    committing<=0;validation_start<=0;player_command<=0;local_transaction<=0;storage_transaction<=0;
@@ -144,7 +146,7 @@ module bluetooth_score_core #(
      current_record<={payload_data,current_record[63:8]};
      if(!write_phase)crc_work<=crc32_byte(crc_work,payload_data);
      byte_cursor<=byte_cursor+1'b1;
-     if(field_index==7)begin field_index<=0;state<=write_phase ? DATA_WRITE : DATA_CHECK;end
+     if(field_index==7)begin field_index<=0;state<=write_phase ? DATA_WRITE : DATA_END;end
      else begin field_index<=field_index+1'b1;state<=RECORD_ADDR;end
     end
     DISPATCH:if(cmd[7])state<=RELEASE_FRAME;
@@ -198,6 +200,7 @@ module bluetooth_score_core #(
       8'h40,8'h41,8'h42,8'h43,8'h44,8'h45:state<=EXT_SEND;
       default:respond(1);
      endcase
+    DATA_END:begin current_end<={1'b0,current_record[31:0]}+{17'b0,current_record[63:48]};state<=DATA_CHECK;end
     DATA_CHECK:if(current_record[39:32]<NOTE_MIN || current_record[39:32]>NOTE_MAX || current_record[47:40]<1 || current_record[47:40]>127 || current_record[63:48]==0 || current_end>MAX_END_MS || current_record[31:0]<packet_last)respond(6);
      else begin
       packet_last<=current_record[31:0];if(current_end[31:0]>packet_max)packet_max<=current_end[31:0];

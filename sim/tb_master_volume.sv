@@ -14,6 +14,10 @@ module tb_master_volume;
   percent=100;samples(260);sample=-32768;samples(4);
   `CHECK(result==-32768,"full-scale negative remains exact")
   sample=32767;samples(4);`CHECK(result==32767,"full-scale positive remains exact")
+  for(integer i=0;i<=100;i=i+1)begin
+   percent=i;samples(260);
+   `CHECK(dut.gain==(i*256+50)/100 && result==((32767*((i*256+50)/100))>>>8),"all 101 percent values reach exact rounded gain and matching PCM")
+  end
   v=0;samples(4);`CHECK(!ov,"valid is delayed with the matching PCM")
   $display("PASS tb_master_volume checks=%0d",checks);$finish;
  end

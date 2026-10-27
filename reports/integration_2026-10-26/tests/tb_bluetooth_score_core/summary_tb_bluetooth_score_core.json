@@ -1,0 +1,8 @@
+[
+  {
+    "test": "tb_bluetooth_score_core",
+    "passed": true,
+    "pll_model": "project/vendor when required",
+    "seconds": 9.453
+  }
+]

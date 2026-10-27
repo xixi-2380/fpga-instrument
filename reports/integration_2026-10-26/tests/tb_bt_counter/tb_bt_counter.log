@@ -1,0 +1,2 @@
+PASS tb_bt_counter checks=2041
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_counter.sv:62: $finish called at 20286000 (1ps)

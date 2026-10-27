@@ -15,7 +15,18 @@ module spi_nor_flash #(
  localparam [5:0] BOOT=0,IDLE=1,ID=2,ID_DONE=3,SR1=4,SR1_DONE=5,SR2=6,SR2_DONE=7,SR3=8,SR3_DONE=9,
   DISPATCH=10,WREN=11,WREN_DONE=12,WEL=13,WEL_DONE=14,EXEC=15,EXEC_DONE=16,POLL=17,POLL_DONE=18,
   X_PREP=20,X_SEND=21,X_WAIT=22,X_END=23,FINISH=24,BOOT_STATUS=25,BOOT_STATUS_DONE=26,BOOT_POLL=27;
- reg [5:0] state,return_state;reg [31:0] delay_count,timeout_count;
+ localparam integer MAX_WAIT0=BOOT_CYCLES>POLL_CYCLES?BOOT_CYCLES:POLL_CYCLES;
+ localparam integer MAX_WAIT=MAX_WAIT0>HALF_CYCLES*2?MAX_WAIT0:HALF_CYCLES*2;
+ localparam integer DW=MAX_WAIT>0?$clog2(MAX_WAIT+1):1;
+ localparam integer TW=TIMEOUT_CYCLES>0?$clog2(TIMEOUT_CYCLES+1):1;
+ reg [5:0] state,return_state;reg [DW-1:0] delay_count;reg [TW-1:0] timeout_count;
+ wire [TW-1:0] timeout_next;
+ for(genvar b=0;b<TW;b=b+8)begin: timeout_bytes
+  localparam integer W=TW-b<8?TW-b:8;
+  (* syn_keep=1 *) wire carry;
+  if(b==0)assign carry=1'b1;else assign carry=&timeout_count[b-1:0];
+  assign timeout_next[b+:W]=timeout_count[b+:W]+carry;
+ end
  reg [1:0] op;reg [23:0] location;reg [8:0] size;
  reg [7:0] opcode,spi_tx,received,program_byte;reg [9:0] index,total,capture_first;
  reg with_address;reg [7:0] buffer[0:255];
@@ -44,7 +55,7 @@ module spi_nor_flash #(
    done<=0;error<=0;jedec_id<=0;status1<=0;status2<=0;status3<=0;cs_n<=1;
    op<=0;location<=0;size<=0;opcode<=0;received<=0;index<=0;total<=0;capture_first<=0;with_address<=0;end
   else begin done<=0;
-   if(state!=IDLE && state!=BOOT && timeout_count<TIMEOUT_CYCLES)timeout_count<=timeout_count+1'b1;
+   if(state!=IDLE && state!=BOOT && timeout_count<TIMEOUT_CYCLES)timeout_count<=timeout_next;
    if(state!=IDLE && state!=BOOT && state!=FINISH && timeout_count>=TIMEOUT_CYCLES && state!=X_SEND && state!=X_WAIT && state!=X_PREP && state!=X_END)fail(8'h22);
    else case(state)
     // USR resets FPGA logic, not the external NOR. Wait for an in-flight

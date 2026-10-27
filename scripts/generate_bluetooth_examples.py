@@ -79,8 +79,23 @@ def fixtures():
     report=root/'reports/library_integration/midi_examples.json';report.parent.mkdir(parents=True,exist_ok=True);report.write_text(json.dumps(info,indent=2)+'\n',encoding='utf-8')
     print(json.dumps(info,indent=2))
 
+def identity():
+    # Four distinct simultaneous notes, then one Off every two seconds.
+    # This keeps a stable first chord long enough to open the FPGA INFO page.
+    notes=[(0,pitch,80,beats*480) for pitch,beats in zip((60,64,67,72),(8,12,16,20))]
+    info,records=save('identity_four_notes.mid',notes,480)
+    info['expected_masks']=[dict(start_ms=start,end_ms=end,ids=mask) for start,end,mask in
+        [(0,4000,'000F'),(4000,6000,'000E'),(6000,8000,'000C'),(8000,10000,'0008')]]
+    info['scope']='Identity diagnosis only; physical behavior still requires board observation.'
+    report=root/'reports/bt_identity';report.mkdir(parents=True,exist_ok=True)
+    (report/'four_note_generated.json').write_text(json.dumps(info,indent=2)+'\n',encoding='utf-8')
+    (report/'four_note_records.bin').write_bytes(records)
+    print(json.dumps(info,indent=2))
+
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--demo',action='store_true',help='Generate the staged musical demonstration without rewriting historical fixtures/reports')
+    mode=parser.add_mutually_exclusive_group()
+    mode.add_argument('--demo',action='store_true',help='Generate the staged musical demonstration without rewriting historical fixtures/reports')
+    mode.add_argument('--identity',action='store_true',help='Generate a four-note held-identity diagnostic MIDI')
     args=parser.parse_args()
-    demo() if args.demo else fixtures()
+    identity() if args.identity else demo() if args.demo else fixtures()

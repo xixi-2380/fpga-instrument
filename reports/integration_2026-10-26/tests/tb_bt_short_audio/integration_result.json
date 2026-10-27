@@ -1,0 +1,8 @@
+{
+  "configuration": "tb_bt_short_audio",
+  "test": "tb_bt_short_audio",
+  "params": [],
+  "behavioral_pll": true,
+  "passed": true,
+  "seconds": 51.805
+}

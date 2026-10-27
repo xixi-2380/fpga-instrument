@@ -1,0 +1,4 @@
+RUN tb_ultrasonic_top
+PASS tb_ultrasonic_top checks=1744327 frames=731
+E:/gowin/fpga-instrument-integrated/sim/tb_ultrasonic_top.sv:62: $finish called at 15219948016 (1ps)
+

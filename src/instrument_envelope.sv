@@ -4,7 +4,7 @@
 // and bounded linear release, never variable division or generated clocks.
 module instrument_envelope #(
  parameter integer ATTACK=`ADSR_ATTACK_FRAMES,DECAY=`ADSR_DECAY_FRAMES,
- SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES)(
+ SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES,PRECALC=0)(
  input wire clk,rst,sample_ce,note_on,note_off,restart,input wire [2:0] timbre,
  output wire [16:0] level,output wire active);
  wire [16:0] legacy_level;wire legacy_active;
@@ -18,7 +18,7 @@ module instrument_envelope #(
  wire [16:0] release_amount=profile==5 ? (musical_level>>9)+17'd1 : profile==4 ? (musical_level>>10)+17'd1 : (musical_level>>11)+17'd1;
  assign level=profile==0 ? legacy_level : musical_level;
  assign active=profile==0 ? legacy_active : state!=0;
- adsr_envelope #(.ATTACK(ATTACK),.DECAY(DECAY),.SUSTAIN(SUSTAIN),.RELEASE(RELEASE)) legacy(
+ adsr_envelope #(.ATTACK(ATTACK),.DECAY(DECAY),.SUSTAIN(SUSTAIN),.RELEASE(RELEASE),.PRECALC(PRECALC)) legacy(
   .clk(clk),.rst(rst),.sample_ce(sample_ce),.note_on(note_on && !new_profile),
   .note_off(note_off && profile==0),.restart(restart && !new_profile),
   .level(legacy_level),.active(legacy_active),.seed_valid(profile!=0),.seed_level(musical_level));

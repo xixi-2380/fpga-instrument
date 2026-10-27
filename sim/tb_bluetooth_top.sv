@@ -35,12 +35,12 @@ module tb_bluetooth_top;
   force dut.bluetooth_on.velocity=velocity;
   force dut.bt_inhibit=inh;
   #100 rst=0;wait(dut.input_ready);more(4);
-  `CHECK(dut.local_score_busy && dut.bt_en,"preloaded score and configured high EN")
+  `CHECK(dut.local_score_busy && !dut.ultrasonic_trig,"preloaded score and ultrasonic trigger off by default")
   pressed=16'h0200;inh=1;event_send(2,0);more(3);
   `CHECK(dut.score_cancelled && !dut.gate && dut.inhibit_notes,"Bluetooth takes ownership and clears existing audio")
-  event_send(1,127);more(12);peak=0;more(100);hi=peak;
+  event_send(1,127);more(80);peak=0;more(100);hi=peak;
   `CHECK(dut.gate && hi>0 && dut.sound.velocities[0]==256,"full velocity reaches real synth")
-  event_send(1,32);more(12);peak=0;more(100);lo=peak;
+  event_send(1,32);more(80);peak=0;more(100);lo=peak;
   `CHECK(lo>0 && lo<hi/2 && lo>hi/8,"velocity changes actual PCM amplitude")
   event_send(0,0);more(5);
   `CHECK(!dut.gate,"Bluetooth Off reaches allocator")

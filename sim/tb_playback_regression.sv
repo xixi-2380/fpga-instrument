@@ -37,13 +37,13 @@ module tb_playback_regression;
    `CHECK($countones(dut.voice_held)==4 && dut.visual_notes==(16'h1111<<c),"four physical columns retain distinct matching four-note sets")
    pressed=0;more(8);
   end
-  idle_check=1;more(100);idle_check=0;
+  more(66);idle_check=1;more(100);idle_check=0;
   pressed=16'h0200;more(8);repeat(20)act(19);more(270);
   `CHECK(dut.volume_percent==0 && dut.gate,"volume mute leaves note ownership intact")
   idle_check=1;more(20);idle_check=0;
   repeat(20)act(20);more(270);
   `CHECK(dut.volume_percent==100 && dut.gate,"volume returns to unity without retrigger")
-  pressed=0;more(10);idle_check=1;more(100);
+  pressed=0;more(76);idle_check=1;more(100);
   $display("PASS tb_playback_regression checks=%0d",checks);$finish;
  end
  initial begin #40000000;$fatal(1,"playback regression timeout");end

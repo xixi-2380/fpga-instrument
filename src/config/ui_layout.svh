@@ -5,7 +5,8 @@ localparam [5:0] UI_SINE=0,UI_FLUTE=1,UI_REED=2,UI_ECHO=3,UI_ROOM=4,
  UI_GUITAR=15,UI_VIBES=16,UI_PREV=17,UI_NEXT=18,UI_VOLUME_DOWN=19,UI_VOLUME_UP=20,
  UI_OPEN_MORE=21,UI_MORE_BACK=22,UI_SONG_PREV=23,UI_SONG_NEXT=24,UI_SONG_PLAY=25,
  UI_SONG_PAUSE=26,UI_SONG_RESUME=27,UI_SONG_STOP=28,UI_SONG_LOAD=29,UI_SONG_SAVE=30,
- UI_SONG_DELETE=31,UI_FLASH_INFO=32,UI_NONE=63;
+ UI_SONG_DELETE=31,UI_FLASH_INFO=32,UI_ULTRA_OPEN=33,UI_ULTRA_TOGGLE=34,UI_SENS_DOWN=35,UI_SENS_UP=36,
+ UI_MIN_DOWN=37,UI_MIN_UP=38,UI_MAX_DOWN=39,UI_MAX_UP=40,UI_ULTRA_BACK=41,UI_NONE=63;
 function automatic ui_inside(input integer px,py,left,top,width,height);
  begin ui_inside=px>=left && px<left+width && py>=top && py<top+height;end
 endfunction
@@ -41,6 +42,7 @@ function automatic [5:0] ui_hit(input integer px,py,input [1:0] fx,input menu);
    if(ui_inside(px,py,272,420,44,44))ui_hit=UI_VOLUME_UP;
    if(ui_inside(px,py,664,420,116,44))ui_hit=UI_DEFAULTS;
    if(ui_inside(px,py,550,420,104,44))ui_hit=UI_OPEN_MORE;
+   if(ui_inside(px,py,340,420,200,44))ui_hit=UI_ULTRA_OPEN;
   end
  end
 endfunction
@@ -58,5 +60,18 @@ function automatic [5:0] more_hit(input integer px,py);
   if(ui_inside(px,py,24,304,160,40))more_hit=UI_SONG_SAVE;
   if(ui_inside(px,py,204,304,160,40))more_hit=UI_SONG_DELETE;
   if(ui_inside(px,py,384,304,160,40))more_hit=UI_FLASH_INFO;
+ end
+endfunction
+function automatic [5:0] ultrasonic_hit(input integer px,py);
+ begin
+  ultrasonic_hit=UI_NONE;
+  if(ui_inside(px,py,648,16,132,48))ultrasonic_hit=UI_ULTRA_BACK;
+  else if(ui_inside(px,py,500,100,248,52))ultrasonic_hit=UI_ULTRA_TOGGLE;
+  else if(ui_inside(px,py,500,180,64,48))ultrasonic_hit=UI_SENS_DOWN;
+  else if(ui_inside(px,py,684,180,64,48))ultrasonic_hit=UI_SENS_UP;
+  else if(ui_inside(px,py,500,252,64,48))ultrasonic_hit=UI_MIN_DOWN;
+  else if(ui_inside(px,py,684,252,64,48))ultrasonic_hit=UI_MIN_UP;
+  else if(ui_inside(px,py,500,324,64,48))ultrasonic_hit=UI_MAX_DOWN;
+  else if(ui_inside(px,py,684,324,64,48))ultrasonic_hit=UI_MAX_UP;
  end
 endfunction

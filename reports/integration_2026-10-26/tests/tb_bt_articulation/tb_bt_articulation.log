@@ -1,0 +1,2 @@
+PASS tb_bt_articulation checks=22027
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_articulation.sv:55: $finish called at 356363020 (1ps)

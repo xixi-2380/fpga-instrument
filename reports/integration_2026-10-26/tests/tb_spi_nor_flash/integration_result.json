@@ -1,0 +1,8 @@
+{
+  "configuration": "tb_spi_nor_flash",
+  "test": "tb_spi_nor_flash",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 1.031
+}

@@ -1,0 +1,6 @@
+RUN tb_bt_identity
+ERROR: E:/gowin/fpga-instrument-integrated/sim/tb_bt_identity.sv:109: $readmemh: Unable to open reports/bt_identity/notes.hex for reading.
+FATAL: E:/gowin/fpga-instrument-integrated/sim/tb_bt_identity.sv:27: actual framed command accepted ons=0 offs=0
+       Time: 2024260000  Scope: tb_bt_identity.check
+
+

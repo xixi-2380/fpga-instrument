@@ -1,0 +1,4 @@
+E:/gowin/fpga-instrument-integrated/src/synth_core.sv:201: warning: @* is sensitive to all 32 words in array 'voice_level'.
+E:/gowin/fpga-instrument-integrated/src/synth_core.sv:201: warning: @* is sensitive to all 32 words in array 'voice_level'.
+E:/gowin/fpga-instrument-integrated/sim/tb_max98357_startup.sv:7: warning: Instantiating module keyboard_top with dangling input port 3 (ultrasonic_echo) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_max98357_startup.sv:7: warning: Instantiating module keyboard_top with dangling input port 37 (flash_miso) floating.

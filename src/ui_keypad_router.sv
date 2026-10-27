@@ -3,7 +3,7 @@
 // Sending zero keys to the note adapter drains Note Off instead of freezing it.
 module ui_keypad_router #(parameter integer RELEASE_CYCLES=1)(
  input wire clk,rst,menu_mode,ghost,input wire [15:0] keys,
- output wire inhibit_notes,output reg action_valid,output reg [5:0] action,input wire more_mode);
+ output wire inhibit_notes,output reg action_valid,output reg [5:0] action,input wire more_mode,ultrasonic_page);
  `include "config/ui_layout.svh"
  localparam integer RW=$clog2(RELEASE_CYCLES+1);
  reg [RW-1:0] release_count;
@@ -38,8 +38,15 @@ module ui_keypad_router #(parameter integer RELEASE_CYCLES=1)(
       4:action<=UI_SONG_PAUSE;5:action<=UI_SONG_RESUME;6:action<=UI_SONG_STOP;7:action<=UI_SONG_SAVE;
       8:action<=UI_SONG_DELETE;9,15:action<=UI_MORE_BACK;10:action<=UI_FLASH_INFO;
       default:begin action<=UI_NONE;action_valid<=0;end
-     endcase else case(index)
-      0:action<=UI_SINE;1:action<=UI_FLUTE;2:action<=UI_REED;3:action<=UI_MODE;
+     endcase else if(ultrasonic_page===1'b1)case(index)
+      0:action<=UI_ULTRA_TOGGLE;3,15:action<=UI_ULTRA_BACK;
+      4:action<=UI_SENS_DOWN;5:action<=UI_SENS_UP;
+      8:action<=UI_MIN_DOWN;9:action<=UI_MIN_UP;
+      12:action<=UI_MAX_DOWN;13:action<=UI_MAX_UP;
+      default:begin action<=UI_NONE;action_valid<=0;end
+     endcase
+     else case(index)
+      0:action<=UI_SINE;1:action<=UI_FLUTE;2:action<=UI_REED;3:action<=UI_ULTRA_OPEN;
       4:action<=UI_ECHO;5:action<=UI_ROOM;6:action<=UI_TREMOLO;7:action<=UI_FX;
       8:action<=UI_LESS;9:action<=UI_MORE;10:action<=UI_SLOWER;11:action<=UI_FASTER;
       12:action<=UI_DEFAULTS;13:action<=UI_PREV;14:action<=UI_NEXT;15:action<=UI_OPEN_MORE;

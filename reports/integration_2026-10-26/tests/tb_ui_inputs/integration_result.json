@@ -1,0 +1,8 @@
+{
+  "configuration": "tb_ui_inputs",
+  "test": "tb_ui_inputs",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 0.443
+}

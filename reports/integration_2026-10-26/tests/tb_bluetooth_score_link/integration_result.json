@@ -1,0 +1,8 @@
+{
+  "configuration": "tb_bluetooth_score_link",
+  "test": "tb_bluetooth_score_link",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 1.26
+}

@@ -1,0 +1,20 @@
+E:/gowin/fpga-instrument-integrated/sim/passive_matrix_model.svh:3: warning: timescale for passive_matrix_model inherited from another file.
+E:/gowin/fpga-instrument-integrated/sim/tb_keyboard_latency.sv:1: ...: The inherited timescale is here.
+E:/gowin/fpga-instrument-integrated/sim/tb_keyboard_latency.sv:15: warning: Instantiating module keyboard_core with dangling input port 15 (selected_timbre) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_keyboard_latency.sv:15: warning: Instantiating module keyboard_core with dangling input port 17 (inhibit_notes) floating.
+E:/gowin/fpga-instrument-integrated/src/synth_core.sv:201: warning: @* is sensitive to all 32 words in array 'voice_level'.
+E:/gowin/fpga-instrument-integrated/src/synth_core.sv:201: warning: @* is sensitive to all 32 words in array 'voice_level'.
+E:/gowin/fpga-instrument-integrated/sim/tb_keyboard_latency.sv:18: warning: Port 19 (note_timbre) of module synth_core expects 3 bit(s), given 2.
+E:/gowin/fpga-instrument-integrated/sim/tb_keyboard_latency.sv:18:        : Padding 1 high bits of the port.
+E:/gowin/fpga-instrument-integrated/sim/tb_keyboard_latency.sv:18: warning: Instantiating module synth_core with dangling input port 21 (effect_mode) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_keyboard_latency.sv:18: warning: Instantiating module synth_core with dangling input port 22 (effect_cfg_valid) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_keyboard_latency.sv:18: warning: Instantiating module synth_core with dangling input port 23 (effect_echo_wet) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_keyboard_latency.sv:18: warning: Instantiating module synth_core with dangling input port 24 (effect_room_wet) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_keyboard_latency.sv:18: warning: Instantiating module synth_core with dangling input port 25 (effect_tremolo_depth) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_keyboard_latency.sv:18: warning: Instantiating module synth_core with dangling input port 26 (effect_tremolo_rate_hz) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_keyboard_latency.sv:18: warning: Instantiating module synth_core with dangling input port 32 (flush) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_keyboard_latency.sv:18: warning: Instantiating module synth_core with dangling input port 33 (velocity_valid) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_keyboard_latency.sv:18: warning: Instantiating module synth_core with dangling input port 34 (note_velocity) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_keyboard_latency.sv:18: warning: Instantiating module synth_core with dangling input port 35 (volume_percent) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_keyboard_latency.sv:18: warning: Instantiating module synth_core with dangling input port 36 (note_pitch) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_keyboard_latency.sv:18: warning: Instantiating module synth_core with dangling input port 37 (output_flush) floating.

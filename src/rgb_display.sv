@@ -12,13 +12,16 @@ module rgb_display #(
     input wire [2:0] selected_timbre,
     input wire visual_sample_valid,input wire signed [15:0] visual_sample,input wire [15:0] visual_notes,
     input wire score_busy,audio_ready,score_error,underrun,ghost,
-    output wire lcd_clk,lcd_hs,lcd_vs,lcd_en,
-    output wire [5:0] lcd_r,lcd_g,lcd_b,
+    output wire lcd_clk,
+    (* syn_preserve=1 *) output reg lcd_hs,lcd_vs,
+    output reg lcd_en,
+    output reg [5:0] lcd_r,lcd_g,lcd_b,
     input wire menu_mode,effects_enabled,input wire [1:0] effect_mode,
     input wire [6:0] echo_percent,room_percent,depth_percent,input wire [3:0] tremolo_rate_hz,
     input wire [6:0] volume_percent,
     input wire touch_enabled,touch_ui_enabled,touch_ready_status,touch_error_status,
-    input wire [81:0] more_status
+    input wire [145:0] more_status,
+    input wire latency_valid,input wire [19:0] latency_bcd,input wire [33:0] ultrasonic_status
 );
     wire pixel_clk,pixel_lock,pixel_reset;
     wire common_reset=pll_reset || !pixel_lock || audio_reset;
@@ -55,16 +58,50 @@ module rgb_display #(
         end
     endfunction
     wire [31:0] active_map=voice_active,held_map=voice_held;
+    function automatic [3:0] count_octet(input [7:0] bitmap);
+        reg [1:0] p0,p1,p2,p3;reg [2:0] q0,q1;
+        begin
+            p0={1'b0,bitmap[0]}+{1'b0,bitmap[1]};p1={1'b0,bitmap[2]}+{1'b0,bitmap[3]};
+            p2={1'b0,bitmap[4]}+{1'b0,bitmap[5]};p3={1'b0,bitmap[6]}+{1'b0,bitmap[7]};
+            q0={1'b0,p0}+{1'b0,p1};q1={1'b0,p2}+{1'b0,p3};
+            count_octet={1'b0,q0}+{1'b0,q1};
+        end
+    endfunction
+    wire [15:0] active_groups,held_groups;
+    for(genvar j=0;j<4;j=j+1)begin: count_groups
+        assign active_groups[j*4+:4]=count_octet(active_map[j*8+:8]);
+        assign held_groups[j*4+:4]=count_octet(held_map[j*8+:8]);
+    end
+    reg [3:0] active_oct[0:3],held_oct[0:3];
+    reg [5:0] active_count,held_count;
+    // Passive statistics need not traverse all reduction levels before the
+    // snapshot capture. Two audio clocks do not stall the note/audio path.
+    always @(posedge audio_clk or posedge audio_reset)begin
+        if(audio_reset)begin
+            active_count<=0;held_count<=0;
+            for(integer j=0;j<4;j=j+1)begin active_oct[j]<=0;held_oct[j]<=0;end
+        end else begin
+            for(integer j=0;j<4;j=j+1)begin
+                active_oct[j]<=active_groups[j*4+:4];
+                held_oct[j]<=held_groups[j*4+:4];
+            end
+            active_count<=({2'd0,active_oct[0]}+{2'd0,active_oct[1]})+({2'd0,active_oct[2]}+{2'd0,active_oct[3]});
+            held_count<=({2'd0,held_oct[0]}+{2'd0,held_oct[1]})+({2'd0,held_oct[2]}+{2'd0,held_oct[3]});
+        end
+    end
     wire [19:0] legacy_status={TEST_PATTERN!=0,ghost,underrun,score_error,audio_ready,
-        score_busy,selected_timbre[1:0],count_voices(held_map),count_voices(active_map)};
+        score_busy,selected_timbre[1:0],held_count,active_count};
     wire [1023:0] waveform;wire [7:0] peak;wire window_valid;
     audio_visualizer monitor(audio_clk,audio_reset,visual_sample_valid,visual_sample,waveform,peak,window_valid);
     wire [63:0] settings_status={3'd0,volume_percent,selected_timbre[2],touch_error_status,touch_ready_status,touch_ui_enabled,touch_enabled,
         tremolo_rate_hz,depth_percent,room_percent,echo_percent,effects_enabled,effect_mode,menu_mode,legacy_status};
-    wire [1111:0] source_status={waveform,peak,visual_notes,settings_status};
-    wire [1111:0] pixel_status;
+    wire [20:0] latency_status=latency_valid===1'b1 ? {1'b1,latency_bcd} : 21'd0;
+    // Preserve all original1112 bits; append a small atomic measurement field.
+    wire [33:0] sensor_status=(ultrasonic_status[33]===1'b0 || ultrasonic_status[33]===1'b1) ? ultrasonic_status : 34'd0;
+    wire [1166:0] source_status={sensor_status,latency_status,waveform,peak,visual_notes,settings_status};
+    wire [1166:0] pixel_status;
     wire status_valid,update_pulse;
-    rgb_status_cdc #(.WIDTH(1112)) status_bridge(audio_clk,pixel_clk,common_reset,source_status,
+    rgb_status_cdc #(.WIDTH(1167)) status_bridge(audio_clk,pixel_clk,common_reset,source_status,
         pixel_status,status_valid,update_pulse);
     wire [10:0] x,y;
     wire de,hs,vs,frame_start;
@@ -73,21 +110,25 @@ module rgb_display #(
         .HS_ACTIVE(HS_ACTIVE),.VS_ACTIVE(VS_ACTIVE),.DE_ONLY(DE_ONLY))
         scan(pixel_clk,pixel_reset,x,y,de,hs,vs,frame_start);
     wire [23:0] rgb;
-    wire [81:0] pixel_more;wire more_valid,more_update;
-    rgb_status_cdc #(.WIDTH(82)) more_bridge(audio_clk,pixel_clk,common_reset,more_status,pixel_more,more_valid,more_update);
+    wire [145:0] pixel_more;wire more_valid,more_update;
+    rgb_status_cdc #(.WIDTH(146)) more_bridge(audio_clk,pixel_clk,common_reset,more_status,pixel_more,more_valid,more_update);
     wire rendered_de,rendered_hs,rendered_vs;
     rgb_ui_renderer renderer(pixel_clk,pixel_reset,frame_start,status_valid,pixel_status,
         x,y,de,hs,vs,rgb,rendered_de,rendered_hs,rendered_vs,pixel_more);
     // Only the output pin is phase-inverted. It never clocks any internal RTL.
     // At default phase, a panel rising edge has half a pixel period of setup.
     assign lcd_clk=PCLK_INVERT ? ~pixel_clk : pixel_clk;
-    // Safe blanking must not depend on a stopped pixel clock producing another edge.
-    assign lcd_en=!pixel_reset && rendered_de;
-    assign lcd_hs=pixel_reset ? !HS_ACTIVE[0] : rendered_hs;
-    assign lcd_vs=pixel_reset ? !VS_ACTIVE[0] : rendered_vs;
-    assign lcd_r=pixel_reset ? 6'd0 : rgb[23:18];
-    assign lcd_g=pixel_reset ? 6'd0 : rgb[15:10];
-    assign lcd_b=pixel_reset ? 6'd0 : rgb[7:2];
+    // Final connector registers remove combinational reset muxes at the pads.
+    // Async assertion still blanks safely when the pixel clock stops.
+    always @(posedge pixel_clk or posedge pixel_reset)begin
+        if(pixel_reset)begin
+            lcd_en<=0;lcd_hs<=!HS_ACTIVE[0];lcd_vs<=!VS_ACTIVE[0];
+            lcd_r<=0;lcd_g<=0;lcd_b<=0;
+        end else begin
+            lcd_en<=rendered_de;lcd_hs<=rendered_hs;lcd_vs<=rendered_vs;
+            lcd_r<=rgb[23:18];lcd_g<=rgb[15:10];lcd_b<=rgb[7:2];
+        end
+    end
 `ifndef SYNTHESIS
     initial if(VOICES<1 || VOICES>32)$fatal(1,"rgb_display supports 1..32 voices");
 `endif

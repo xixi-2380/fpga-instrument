@@ -1,0 +1,4 @@
+RUN tb_audio_timing
+PASS tb_audio_timing checks=9996
+E:/gowin/fpga-instrument-integrated/sim/tb_audio_timing.sv:27: $finish called at 1318825000 (1ps)
+

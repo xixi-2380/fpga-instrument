@@ -1,0 +1,4 @@
+RUN tb_ultrasonic_range
+PASS tb_ultrasonic_range checks=26 triggers=8
+E:/gowin/fpga-instrument-integrated/sim/tb_ultrasonic_range.sv:33: $finish called at 451132001000 (1ps)
+

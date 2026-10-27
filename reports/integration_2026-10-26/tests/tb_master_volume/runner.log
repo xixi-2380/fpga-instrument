@@ -1,0 +1,4 @@
+RUN tb_master_volume
+PASS tb_master_volume checks=108
+E:/gowin/fpga-instrument-integrated/sim/tb_master_volume.sv:22: $finish called at 270610000 (1ps)
+

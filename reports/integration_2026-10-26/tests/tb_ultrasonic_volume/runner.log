@@ -1,0 +1,4 @@
+RUN tb_ultrasonic_volume
+PASS tb_ultrasonic_volume checks=1775 lost_ms=20
+E:/gowin/fpga-instrument-integrated/sim/tb_ultrasonic_volume.sv:48: $finish called at 612795001000 (1ps)
+

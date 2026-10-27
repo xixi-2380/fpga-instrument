@@ -1,0 +1,4 @@
+RUN tb_latency_bcd
+PASS tb_latency_bcd checks=6
+E:/gowin/fpga-instrument-integrated/sim/tb_latency_bcd.sv:20: $finish called at 1170000 (1ps)
+

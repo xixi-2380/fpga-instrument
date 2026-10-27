@@ -1,0 +1,10 @@
+E:/gowin/fpga-instrument-integrated/src/synth_core.sv:201: warning: @* is sensitive to all 32 words in array 'voice_level'.
+E:/gowin/fpga-instrument-integrated/src/synth_core.sv:201: warning: @* is sensitive to all 32 words in array 'voice_level'.
+E:/gowin/fpga-instrument-integrated/sim/tb_effect_parameter_path.sv:18: warning: Port 19 (note_timbre) of module synth_core expects 3 bit(s), given 2.
+E:/gowin/fpga-instrument-integrated/sim/tb_effect_parameter_path.sv:18:        : Padding 1 high bits of the port.
+E:/gowin/fpga-instrument-integrated/sim/tb_effect_parameter_path.sv:18: warning: Instantiating module synth_core with dangling input port 32 (flush) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_effect_parameter_path.sv:18: warning: Instantiating module synth_core with dangling input port 33 (velocity_valid) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_effect_parameter_path.sv:18: warning: Instantiating module synth_core with dangling input port 34 (note_velocity) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_effect_parameter_path.sv:18: warning: Instantiating module synth_core with dangling input port 35 (volume_percent) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_effect_parameter_path.sv:18: warning: Instantiating module synth_core with dangling input port 36 (note_pitch) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_effect_parameter_path.sv:18: warning: Instantiating module synth_core with dangling input port 37 (output_flush) floating.

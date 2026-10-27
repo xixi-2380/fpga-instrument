@@ -1,6 +1,29 @@
-# 蓝牙整合重构版
+# FPGA电子乐器合并工程（2026-10-26）
+
+当前工程：`E:\gowin\fpga-instrument-integrated\keyboard_adsr.gprj`，顶层keyboard_top、Device Version C、输出D2_keyboard_leds。合并两个本地工程的当前源码及未提交修改；两个原工程保持原样。用户2026-10-27授权将已验证结果提交推送至`codex/integrated-instrument`，不更新main。
+
+| 保留部分 | 来源 |
+| --- | --- |
+| 16自动声部、4096条RAM、32首Flash曲库、App0.3、more控制 | score最新版 |
+| 自动身份尾音/力度修复、MOSI=R21、包络预计算、较新时序结构 | score本地2026-10-26修订 |
+| 24倍响度补偿、64采样前瞻限幅、LAT数字延迟 | audio版 |
+| 超声波音量、灵敏度、上下限与平滑控制，默认OFF | audio本地修订 |
+| 32物理声部、七音色、三效果器、触摸、矩阵、MAX98357A | 两版共同保留 |
+
+上电/USR静音待机，不自动播放小星星。设置页R1C4进入超声波、R4C4进入more曲库，触摸页也有分开的两个入口。BT RX=P24、TX=P23；删除BT EN，P21用于超声波Trig、U17用于Echo。
+
+**本合并工程尚未进行新的综合/P&R/烧录，不能使用来源旧位流替代。** 下方原score的时序闭合与导出路径只属于原工程；dist/fpga/2026-10-25仅历史归档。打开本目录工程后需重新实现。完整选择依据与使用说明见[合并说明](docs/integration_2026-10-26.md)，本轮验证见reports/integration_2026-10-26/validation.json。
+
+---
+
+# 来源score历史记录（不代表合并版验收）
+
+- 2026-10-26 20:17实际综合/P&R完成：参考/音频/像素Fmax为67.367/62.069/35.058MHz，当前SDC下Setup/Hold违例均0。最终全量P&R22分04秒。交付工程为`E:\gowin\outfiless\fpga-instrument-bt-score_2026-10-26`，当前烧录文件为`impl/pnr/D2_keyboard_leds.fs`；下方2026-10-25位流和“尚未运行EDA”条目均为历史。LCD仍采用工程时序预算，PCLK缺失单元延迟采用明确替代估算，不作为面板/板级实测通过。详见[本轮构建记录](docs/bluetooth_score/编译与导出记录_2026-10-26.md)。未执行硬件烧录或Git推送。
+
+- 2026-10-26本地时序优化：拆分显示布局/坐标、音频包络选择/乘法和曲谱时间比较；跨域状态改为各域同步释放复位。时钟和原约束保持，SDC追加分域报告。尚未运行新综合/P&R，不能视为时序通过；见[时序优化说明](docs/bluetooth_score/时序优化说明_2026-10-26.md)。
 
 - 分支：`codex/bluetooth-score-integration`。
+- 本地后续排查：用户反馈多声部段杂音且屏幕计数始终1。已增加被动SRC/RX/H身份诊断及[四音测试MIDI](android/examples/identity_four_notes.mid)，入口为more→FLASH INFO，标记现已升级ID CHECK 02。2026-10-26已本地修正MOSI球位R21、自动身份尾音与力度衔接，并将FCW寄存；实际杂音原因及消除情况仍待实板确认，详见[修复与验证说明](docs/bluetooth_score/杂音与Flash修复说明_2026-10-26.md)。当前源码需重新编译下载；下方已上传位流不含该改动。步骤见[身份排查](docs/bluetooth_score/多声部身份排查.md)。
 - 版本基准：`bf5df5792f654ee9c29a30983cdbe83a0061669e`（main 的英伦七音色 UI、MAX98357A 与触摸整合版）。
 - 开发范围：按 `docs/bluetooth_score` 中的规划和 v1 协议重构 FPGA 蓝牙，加入设置页音量，重点验证松键后输出归零、单键识别和键位高亮，并控制组合路径、宽总线和跨时钟传递。
 - 当前发布：2026-10-25蓝牙整合**开发检查点（时序未达标）**，接入16自动声部、4096条、32首U7 Flash曲库、本地控制、App 0.3及设置页 `more` 字符入口；手动音源仍为32物理声部。原七音色、三效果器、触摸、MAX98357A与设置音量保留。

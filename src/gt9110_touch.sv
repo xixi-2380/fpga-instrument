@@ -17,7 +17,17 @@ module gt9110_touch #(
     localparam RESET=0,STRAP=1,BOOT=2,ID_START=3,ID_WAIT=4,RES_START=5,RES_WAIT=6,
         POLL_START=7,POLL_WAIT=8,CLEAR_START=9,CLEAR_WAIT=10,DELAY=11;
     reg [3:0] state,retry_state;
-    reg [31:0] counter;
+    localparam integer M0=RESET_CYCLES>STRAP_CYCLES?RESET_CYCLES:STRAP_CYCLES;
+    localparam integer M1=BOOT_CYCLES>POLL_CYCLES?BOOT_CYCLES:POLL_CYCLES;
+    localparam integer MAX_DELAY=M0>M1?M0:M1;
+    localparam integer CW=MAX_DELAY>1?$clog2(MAX_DELAY):1;
+    reg [CW-1:0] counter;wire [CW-1:0] counter_next;
+    for(genvar c=0;c<CW;c=c+8)begin: delay_bytes
+        localparam integer W=CW-c<8?CW-c:8;
+        (* syn_keep=1 *) wire carry;
+        if(c==0)assign carry=1;else assign carry=&counter[c-1:0];
+        assign counter_next[c+:W]=counter[c+:W]+carry;
+    end
     reg start,read_request;
     reg [15:0] address;
     reg [3:0] length;
@@ -56,11 +66,11 @@ module gt9110_touch #(
             start<=0;report_pulse<=0;
             case(state)
                 RESET:if(counter==RESET_CYCLES-1)begin counter<=0;state<=STRAP;end
-                    else counter<=counter+1'b1;
+                    else counter<=counter_next;
                 STRAP:if(counter==STRAP_CYCLES-1)begin counter<=0;state<=BOOT;end
-                    else counter<=counter+1'b1;
+                    else counter<=counter_next;
                 BOOT:if(counter==BOOT_CYCLES-1)begin counter<=0;state<=ID_START;end
-                    else counter<=counter+1'b1;
+                    else counter<=counter_next;
                 ID_START:if(!busy)begin_read(16'h8140,4,ID_WAIT);
                 ID_WAIT:if(done)begin
                     if(bus_error)failed(ID_START);
@@ -100,7 +110,7 @@ module gt9110_touch #(
                     end
                 end
                 DELAY:if(counter==POLL_CYCLES-1)begin counter<=0;state<=retry_state;end
-                    else counter<=counter+1'b1;
+                    else counter<=counter_next;
                 default:begin state<=RESET;counter<=0;ready<=0;touch_down<=0;end
             endcase
         end

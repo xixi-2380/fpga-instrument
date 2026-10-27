@@ -1,0 +1,282 @@
+[
+  {
+    "path": "src/adsr_envelope.sv",
+    "result": "conflict",
+    "conflicts": 3
+  },
+  {
+    "path": "src/audio_latency_meter.sv",
+    "result": "audio-only copied"
+  },
+  {
+    "path": "src/audio_limiter.sv",
+    "result": "audio-only copied"
+  },
+  {
+    "path": "src/audio_timing.sv",
+    "result": "conflict",
+    "conflicts": 1
+  },
+  {
+    "path": "src/audio_visualizer.sv",
+    "result": "audio: score unchanged from base"
+  },
+  {
+    "path": "src/bluetooth_audio_bridge.sv",
+    "result": "conflict",
+    "conflicts": 4
+  },
+  {
+    "path": "src/bluetooth_score_core.sv",
+    "result": "score: audio unchanged from base"
+  },
+  {
+    "path": "src/bluetooth_score_link.sv",
+    "result": "score: audio unchanged from base"
+  },
+  {
+    "path": "src/bt_score_player.sv",
+    "result": "three-way merged",
+    "conflicts": 0
+  },
+  {
+    "path": "src/gt9110_touch.sv",
+    "result": "score: audio unchanged from base"
+  },
+  {
+    "path": "src/i2c_register_master.sv",
+    "result": "score: audio unchanged from base"
+  },
+  {
+    "path": "src/instrument_envelope.sv",
+    "result": "score: audio unchanged from base"
+  },
+  {
+    "path": "src/keyboard.cst",
+    "result": "conflict",
+    "conflicts": 1
+  },
+  {
+    "path": "src/keyboard.sdc",
+    "result": "conflict",
+    "conflicts": 2
+  },
+  {
+    "path": "src/keyboard_top.sv",
+    "result": "conflict",
+    "conflicts": 4
+  },
+  {
+    "path": "src/master_volume.sv",
+    "result": "audio: score unchanged from base"
+  },
+  {
+    "path": "src/rgb_display.sv",
+    "result": "conflict",
+    "conflicts": 2
+  },
+  {
+    "path": "src/rgb_status_cdc.sv",
+    "result": "conflict",
+    "conflicts": 2
+  },
+  {
+    "path": "src/rgb_ui_renderer.sv",
+    "result": "conflict",
+    "conflicts": 8
+  },
+  {
+    "path": "src/synth_core.sv",
+    "result": "conflict",
+    "conflicts": 1
+  },
+  {
+    "path": "src/timbre_control.sv",
+    "result": "conflict",
+    "conflicts": 1
+  },
+  {
+    "path": "src/ui_keypad_router.sv",
+    "result": "conflict",
+    "conflicts": 2
+  },
+  {
+    "path": "src/ui_touch_actions.sv",
+    "result": "conflict",
+    "conflicts": 2
+  },
+  {
+    "path": "src/ultrasonic_range.sv",
+    "result": "audio-only copied"
+  },
+  {
+    "path": "src/ultrasonic_volume.sv",
+    "result": "audio-only copied"
+  },
+  {
+    "path": "src/voice_allocator.sv",
+    "result": "score: audio unchanged from base"
+  },
+  {
+    "path": "src/config/ui_layout.svh",
+    "result": "conflict",
+    "conflicts": 2
+  },
+  {
+    "path": "sim/tb_audio_latency.sv",
+    "result": "audio-only copied"
+  },
+  {
+    "path": "sim/tb_audio_limiter.sv",
+    "result": "audio-only copied"
+  },
+  {
+    "path": "sim/tb_audio_visualizer.sv",
+    "result": "audio: score unchanged from base"
+  },
+  {
+    "path": "sim/tb_bluetooth_score_core.sv",
+    "result": "three-way merged",
+    "conflicts": 0
+  },
+  {
+    "path": "sim/tb_bluetooth_score_link.sv",
+    "result": "score: audio unchanged from base"
+  },
+  {
+    "path": "sim/tb_bluetooth_top.sv",
+    "result": "three-way merged",
+    "conflicts": 0
+  },
+  {
+    "path": "sim/tb_british_top.sv",
+    "result": "score: audio unchanged from base"
+  },
+  {
+    "path": "sim/tb_bt_score_audio.sv",
+    "result": "three-way merged",
+    "conflicts": 0
+  },
+  {
+    "path": "sim/tb_bt_short_audio.sv",
+    "result": "audio-only copied"
+  },
+  {
+    "path": "sim/tb_effects_integration.sv",
+    "result": "audio: score unchanged from base"
+  },
+  {
+    "path": "sim/tb_effect_parameter_path.sv",
+    "result": "audio: score unchanged from base"
+  },
+  {
+    "path": "sim/tb_keyboard_core.sv",
+    "result": "audio: score unchanged from base"
+  },
+  {
+    "path": "sim/tb_keyboard_top.sv",
+    "result": "score: audio unchanged from base"
+  },
+  {
+    "path": "sim/tb_latency_bcd.sv",
+    "result": "audio-only copied"
+  },
+  {
+    "path": "sim/tb_master_volume.sv",
+    "result": "audio: score unchanged from base"
+  },
+  {
+    "path": "sim/tb_multitimbral.sv",
+    "result": "audio: score unchanged from base"
+  },
+  {
+    "path": "sim/tb_output_gain.sv",
+    "result": "audio-only copied"
+  },
+  {
+    "path": "sim/tb_playback_regression.sv",
+    "result": "audio: score unchanged from base"
+  },
+  {
+    "path": "sim/tb_rgb_display.sv",
+    "result": "conflict",
+    "conflicts": 3
+  },
+  {
+    "path": "sim/tb_rgb_ui_renderer.sv",
+    "result": "conflict",
+    "conflicts": 3
+  },
+  {
+    "path": "sim/tb_score_audio.sv",
+    "result": "audio: score unchanged from base"
+  },
+  {
+    "path": "sim/tb_score_effects.sv",
+    "result": "audio: score unchanged from base"
+  },
+  {
+    "path": "sim/tb_synth_core.sv",
+    "result": "audio: score unchanged from base"
+  },
+  {
+    "path": "sim/tb_ui_controls.sv",
+    "result": "audio: score unchanged from base"
+  },
+  {
+    "path": "sim/tb_ui_inputs.sv",
+    "result": "conflict",
+    "conflicts": 1
+  },
+  {
+    "path": "sim/tb_ui_top.sv",
+    "result": "score: audio unchanged from base"
+  },
+  {
+    "path": "sim/tb_ultrasonic_range.sv",
+    "result": "audio-only copied"
+  },
+  {
+    "path": "sim/tb_ultrasonic_top.sv",
+    "result": "audio-only copied"
+  },
+  {
+    "path": "sim/tb_ultrasonic_volume.sv",
+    "result": "audio-only copied"
+  },
+  {
+    "path": "scripts/build_keyboard.py",
+    "result": "conflict",
+    "conflicts": 1
+  },
+  {
+    "path": "scripts/build_keyboard.tcl",
+    "result": "score: audio unchanged from base"
+  },
+  {
+    "path": "scripts/check_output_gain_trace.py",
+    "result": "audio-only copied"
+  },
+  {
+    "path": "scripts/check_timing_equivalence.py",
+    "result": "audio-only copied"
+  },
+  {
+    "path": "scripts/reference_audio_limiter.py",
+    "result": "audio-only copied"
+  },
+  {
+    "path": "scripts/run_bluetooth_score_tests.py",
+    "result": "score: audio unchanged from base"
+  },
+  {
+    "path": "scripts/run_sim.py",
+    "result": "conflict",
+    "conflicts": 2
+  },
+  {
+    "path": "keyboard_adsr.gprj",
+    "result": "conflict",
+    "conflicts": 1
+  }
+]

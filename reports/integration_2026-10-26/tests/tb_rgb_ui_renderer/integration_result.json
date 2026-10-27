@@ -1,0 +1,8 @@
+{
+  "configuration": "tb_rgb_ui_renderer",
+  "test": "tb_rgb_ui_renderer",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 141.051
+}

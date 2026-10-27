@@ -1,0 +1,8 @@
+{
+  "configuration": "tb_bt_counter",
+  "test": "tb_bt_counter",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 0.531
+}
