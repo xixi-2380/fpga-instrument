@@ -11,7 +11,7 @@ module allocator_case #(parameter integer N=4)(output reg done=0,output integer 
  reg [2:0] model_timbre[0:N-1];integer age[0:N-1];reg [6:0] owner[0:N-1];reg [31:0] frequency[0:N-1];
  reg [N-1:0] owned=0,model_held=0,pending=0,reset_pending=0,committed=0;
  reg [N-1:0] expected_start,expected_stop,expected_restart;
- voice_allocator #(.VOICES(N)) dut(clk,rst,enabled,ce,valid,on,id,fcw,active,ready,start,stop,restart,held,words,ids,timbre,voice_timbres);
+ voice_allocator #(.VOICES(N)) dut(clk,rst,enabled,ce,valid,on,id,fcw,active,ready,start,stop,restart,held,words,ids,timbre,voice_timbres,1'b0,9'd256,id,,);
  task model_reset;begin
   serial=0;owned=0;model_held=0;pending=0;reset_pending=0;committed=0;
   for(integer i=0;i<N;i=i+1)begin age[i]=0;owner[i]=0;frequency[i]=0;model_timbre[i]=0;end

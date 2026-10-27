@@ -1,0 +1,9 @@
+{
+  "test": "tb_voice_allocator",
+  "tag": "allocator",
+  "parameters": [],
+  "passed": true,
+  "checks": 1747726,
+  "seconds": 3.289,
+  "pll": "explicit behavioral models when needed; not STA"
+}

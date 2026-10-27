@@ -1,0 +1,10 @@
+{
+  "configuration": "tail_mono",
+  "test": "tb_bt_tail_reuse",
+  "params": [
+    "STEREO=0"
+  ],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 1.974
+}

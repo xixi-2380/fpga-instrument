@@ -1,0 +1,9 @@
+{
+  "test": "tb_stereo_audio",
+  "tag": "numeric_stereo",
+  "parameters": {},
+  "passed": true,
+  "checks": 5977704,
+  "seconds": 119.931,
+  "pll": "explicit behavioral models, not vendor/STA"
+}

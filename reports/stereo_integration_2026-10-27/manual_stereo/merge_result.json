@@ -1,0 +1,8 @@
+{
+  "configuration": "manual_stereo",
+  "test": "tb_playback_regression",
+  "params": [],
+  "behavioral_pll": true,
+  "passed": true,
+  "seconds": 211.003
+}

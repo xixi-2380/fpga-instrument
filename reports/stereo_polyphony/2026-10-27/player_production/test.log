@@ -1,0 +1,2 @@
+PASS tb_bt_player_production checks=157518
+/workspace/scratch/6579ba30d432/bt-stereo/sim/tb_bt_player_production.sv:34: $finish called at 3150320000 (1ps)

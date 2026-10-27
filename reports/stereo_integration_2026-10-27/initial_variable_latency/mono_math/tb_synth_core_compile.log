@@ -1,0 +1,15 @@
+E:/gowin/fpga-instrument-integrated/src/synth_core.sv:207: warning: @* is sensitive to all 63 words in array 'peak_tree'.
+E:/gowin/fpga-instrument-integrated/sim/tb_synth_core.sv:16: warning: Port 19 (note_timbre) of module synth_core expects 3 bit(s), given 2.
+E:/gowin/fpga-instrument-integrated/sim/tb_synth_core.sv:16:        : Padding 1 high bits of the port.
+E:/gowin/fpga-instrument-integrated/sim/tb_synth_core.sv:16: warning: Instantiating module synth_core with dangling input port 21 (effect_mode) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_synth_core.sv:16: warning: Instantiating module synth_core with dangling input port 22 (effect_cfg_valid) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_synth_core.sv:16: warning: Instantiating module synth_core with dangling input port 23 (effect_echo_wet) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_synth_core.sv:16: warning: Instantiating module synth_core with dangling input port 24 (effect_room_wet) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_synth_core.sv:16: warning: Instantiating module synth_core with dangling input port 25 (effect_tremolo_depth) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_synth_core.sv:16: warning: Instantiating module synth_core with dangling input port 26 (effect_tremolo_rate_hz) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_synth_core.sv:16: warning: Instantiating module synth_core with dangling input port 32 (flush) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_synth_core.sv:16: warning: Instantiating module synth_core with dangling input port 33 (velocity_valid) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_synth_core.sv:16: warning: Instantiating module synth_core with dangling input port 34 (note_velocity) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_synth_core.sv:16: warning: Instantiating module synth_core with dangling input port 35 (volume_percent) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_synth_core.sv:16: warning: Instantiating module synth_core with dangling input port 36 (note_pitch) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_synth_core.sv:16: warning: Instantiating module synth_core with dangling input port 37 (output_flush) floating.

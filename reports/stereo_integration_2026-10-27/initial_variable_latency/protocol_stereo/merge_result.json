@@ -1,0 +1,8 @@
+{
+  "configuration": "protocol_stereo",
+  "test": "tb_bt_score_audio",
+  "params": [],
+  "behavioral_pll": true,
+  "passed": true,
+  "seconds": 193.866
+}

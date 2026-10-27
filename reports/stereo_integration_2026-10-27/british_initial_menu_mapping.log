@@ -1,0 +1,6 @@
+RUN tb_british_top
+FAIL R1C4 return restores play mode; R4C4 is more at 293400000
+FATAL: E:/gowin/fpga-instrument-integrated/sim/tb_british_top.sv:39: 
+       Time: 293400314  Scope: tb_british_top.$ivl_for_loop31
+
+

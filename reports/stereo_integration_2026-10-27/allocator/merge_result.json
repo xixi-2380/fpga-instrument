@@ -1,0 +1,8 @@
+{
+  "configuration": "allocator",
+  "test": "tb_voice_allocator",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 2.537
+}

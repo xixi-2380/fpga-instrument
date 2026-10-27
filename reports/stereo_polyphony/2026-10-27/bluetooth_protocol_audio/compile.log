@@ -1,0 +1,4 @@
+/workspace/scratch/6579ba30d432/bt-stereo/src/keyboard_top.sv:236: warning: Port 16 (voice_active) of synth_core expects 1 bits, got 32.
+/workspace/scratch/6579ba30d432/bt-stereo/src/keyboard_top.sv:236:        : Padding 31 high bits of the expression.
+/workspace/scratch/6579ba30d432/bt-stereo/src/keyboard_top.sv:236: warning: Port 17 (voice_held) of synth_core expects 1 bits, got 32.
+/workspace/scratch/6579ba30d432/bt-stereo/src/keyboard_top.sv:236:        : Padding 31 high bits of the expression.

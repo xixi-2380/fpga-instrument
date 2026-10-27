@@ -1,0 +1,9 @@
+{
+  "test": "tb_i2s_tx",
+  "tag": "i2s_words",
+  "parameters": [],
+  "passed": true,
+  "checks": 5407,
+  "seconds": 0.246,
+  "pll": "explicit behavioral models when needed; not STA"
+}

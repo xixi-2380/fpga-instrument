@@ -1,13 +1,14 @@
 `timescale 1ns/1ps
 // End-to-end timestamp checked from accepted On and external I2S bit edges.
 module tb_audio_latency;
+ parameter integer STEREO=0;
  reg clk=0,rst=1,nv=0,on=1,flush=0,hard=0;always #8.138020833 clk=~clk;
  reg [6:0] id=60,volume=100;wire nr,ir,bck,ws,din,pa,u,frame_ce,gate,valid;
  wire [31:0] active,held;wire [16:0] level;wire [19:0] bcd;
  integer checks=0,frames=0,bitn=0,channel=0,measured,reference_units;
  reg synced=0,previous_ws=1,waiting=0,finished=0;reg [15:0] expected_epoch;
  realtime accepted_at=0,completed_at=0;
- synth_core #(.MUTE(4),.FADE(4),.ATTACK(2),.DECAY(2),.RELEASE(2)) sound(
+ synth_core #(.STEREO_ENABLE(STEREO),.MUTE(4),.FADE(4),.ATTACK(2),.DECAY(2),.RELEASE(2)) sound(
  .clk(clk),.rst(rst),.note_valid(nv),.note_on(on),.note_id(id),.note_fcw(32'd23409859),.note_timbre(3'd0),
  .note_ready(nr),.input_ready(ir),.bck(bck),.ws(ws),.din(din),.pa_enable(pa),.underrun(u),
  .frame_ce(frame_ce),.gate(gate),.voice_active(active),.voice_held(held),.envelope_level(level),

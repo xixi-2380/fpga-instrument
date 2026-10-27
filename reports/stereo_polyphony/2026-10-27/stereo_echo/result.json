@@ -1,0 +1,12 @@
+{
+  "test": "tb_bt_polyphony",
+  "tag": "stereo_echo",
+  "parameters": [
+    "EFFECT=0",
+    "STEREO=1"
+  ],
+  "passed": true,
+  "checks": 266746,
+  "seconds": 9.379,
+  "pll": "explicit behavioral models when needed; not STA"
+}

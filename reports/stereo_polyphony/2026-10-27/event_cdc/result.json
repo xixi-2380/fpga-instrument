@@ -1,0 +1,9 @@
+{
+  "test": "tb_bt_event_cdc",
+  "tag": "event_cdc",
+  "parameters": [],
+  "passed": true,
+  "checks": 131,
+  "seconds": 0.054,
+  "pll": "explicit behavioral models when needed; not STA"
+}

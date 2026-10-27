@@ -1,0 +1,612 @@
+{
+  "date": "2026-10-27",
+  "base": "f12258d7c47cb422d2bfc4d432858df98199460d",
+  "merged_commit": "8f100596a8958c271ea2a7b70c4b26d2a81220ec",
+  "branch": "codex/integrated-instrument",
+  "all_passed": true,
+  "configurations": 23,
+  "checks": 32310863,
+  "results": [
+    {
+      "configuration": "allocator",
+      "test": "tb_voice_allocator",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 2.537,
+      "checks": 1747726
+    },
+    {
+      "configuration": "articulation",
+      "test": "tb_bt_articulation",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 0.71,
+      "checks": 22027
+    },
+    {
+      "configuration": "bluetooth_stereo",
+      "test": "tb_bluetooth_top",
+      "params": [],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 100.781,
+      "checks": 866592
+    },
+    {
+      "configuration": "british_stereo",
+      "test": "tb_british_top",
+      "params": [],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 163.588,
+      "checks": 1031288
+    },
+    {
+      "configuration": "identity_stereo",
+      "test": "tb_bt_identity",
+      "params": [],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 200.661,
+      "checks": 28964
+    },
+    {
+      "configuration": "keyboard_mono",
+      "test": "tb_keyboard_top",
+      "params": [],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 48.171,
+      "checks": 2112305
+    },
+    {
+      "configuration": "latency_stereo",
+      "test": "tb_audio_latency",
+      "params": [
+        "STEREO=1"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 60.326,
+      "checks": 815390
+    },
+    {
+      "configuration": "library_stereo",
+      "test": "tb_bt_library_link",
+      "params": [],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 111.82,
+      "checks": 336
+    },
+    {
+      "configuration": "limiter_fixed",
+      "test": "tb_audio_limiter",
+      "params": [
+        "FIXED=1"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 3.106,
+      "checks": 288292
+    },
+    {
+      "configuration": "limiter_variable",
+      "test": "tb_audio_limiter",
+      "params": [
+        "FIXED=0"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 2.876,
+      "checks": 242660
+    },
+    {
+      "configuration": "manual_stereo",
+      "test": "tb_playback_regression",
+      "params": [],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 211.003,
+      "checks": 1642618
+    },
+    {
+      "configuration": "mono_math",
+      "test": "tb_synth_core",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 46.776,
+      "checks": 2513900
+    },
+    {
+      "configuration": "numeric_stereo",
+      "test": "tb_stereo_audio",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 218.425,
+      "checks": 5977704
+    },
+    {
+      "configuration": "output_stereo",
+      "test": "tb_output_gain",
+      "params": [
+        "STEREO=1"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 440.855,
+      "checks": 6056248
+    },
+    {
+      "configuration": "poly_stereo_0",
+      "test": "tb_bt_polyphony",
+      "params": [
+        "STEREO=1",
+        "EFFECT=0"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 26.339,
+      "checks": 266747
+    },
+    {
+      "configuration": "poly_stereo_1",
+      "test": "tb_bt_polyphony",
+      "params": [
+        "STEREO=1",
+        "EFFECT=1"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 24.116,
+      "checks": 266747
+    },
+    {
+      "configuration": "poly_stereo_2",
+      "test": "tb_bt_polyphony",
+      "params": [
+        "STEREO=1",
+        "EFFECT=2"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 26.303,
+      "checks": 266747
+    },
+    {
+      "configuration": "protocol_stereo",
+      "test": "tb_bt_score_audio",
+      "params": [],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 167.437,
+      "checks": 2442445
+    },
+    {
+      "configuration": "short_stereo",
+      "test": "tb_bt_short_audio",
+      "params": [],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 38.213,
+      "checks": 275335
+    },
+    {
+      "configuration": "startup_stereo",
+      "test": "tb_max98357_startup",
+      "params": [],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 141.907,
+      "checks": 3702449
+    },
+    {
+      "configuration": "tail_mono",
+      "test": "tb_bt_tail_reuse",
+      "params": [
+        "STEREO=0"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 1.927,
+      "checks": 8
+    },
+    {
+      "configuration": "tail_stereo",
+      "test": "tb_bt_tail_reuse",
+      "params": [
+        "STEREO=1"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 2.108,
+      "checks": 8
+    },
+    {
+      "configuration": "ultrasonic_stereo",
+      "test": "tb_ultrasonic_top",
+      "params": [],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 124.173,
+      "checks": 1744327
+    }
+  ],
+  "static": {
+    "dependencies": 75,
+    "hdl": 58,
+    "pins": 67,
+    "duplicate_balls": 0,
+    "unchanged_from_f12258d": {
+      "src/keyboard.cst": true,
+      "src/keyboard.sdc": true,
+      "src/pll_pair.sv": true,
+      "keyboard_adsr.gprj": true
+    }
+  },
+  "compile": {
+    "tests": [
+      {
+        "test": "tb_adsr_envelope",
+        "passed": true
+      },
+      {
+        "test": "tb_adsr_production",
+        "passed": true
+      },
+      {
+        "test": "tb_audio_delay",
+        "passed": true
+      },
+      {
+        "test": "tb_audio_effects",
+        "passed": true
+      },
+      {
+        "test": "tb_audio_latency",
+        "passed": true
+      },
+      {
+        "test": "tb_audio_limiter",
+        "passed": true
+      },
+      {
+        "test": "tb_audio_timing",
+        "passed": true
+      },
+      {
+        "test": "tb_audio_visualizer",
+        "passed": true
+      },
+      {
+        "test": "tb_bluetooth_score_core",
+        "passed": true
+      },
+      {
+        "test": "tb_bluetooth_score_link",
+        "passed": true
+      },
+      {
+        "test": "tb_bluetooth_top",
+        "passed": true
+      },
+      {
+        "test": "tb_british_top",
+        "passed": true
+      },
+      {
+        "test": "tb_bt_articulation",
+        "passed": true
+      },
+      {
+        "test": "tb_bt_counter",
+        "passed": true
+      },
+      {
+        "test": "tb_bt_event_cdc",
+        "passed": true
+      },
+      {
+        "test": "tb_bt_identity",
+        "passed": true
+      },
+      {
+        "test": "tb_bt_library_link",
+        "passed": true
+      },
+      {
+        "test": "tb_bt_player_production",
+        "passed": true
+      },
+      {
+        "test": "tb_bt_polyphony",
+        "passed": true
+      },
+      {
+        "test": "tb_bt_score_audio",
+        "passed": true
+      },
+      {
+        "test": "tb_bt_short_audio",
+        "passed": true
+      },
+      {
+        "test": "tb_bt_tail_reuse",
+        "passed": true
+      },
+      {
+        "test": "tb_clock_reset",
+        "passed": true
+      },
+      {
+        "test": "tb_dds_sine",
+        "passed": true
+      },
+      {
+        "test": "tb_effect_button_path",
+        "passed": true
+      },
+      {
+        "test": "tb_effect_parameter_path",
+        "passed": true
+      },
+      {
+        "test": "tb_effect_parameters",
+        "passed": true
+      },
+      {
+        "test": "tb_effects_integration",
+        "passed": true
+      },
+      {
+        "test": "tb_flash_song_library",
+        "passed": true
+      },
+      {
+        "test": "tb_frame_boundary",
+        "passed": true
+      },
+      {
+        "test": "tb_frame_buffer",
+        "passed": true
+      },
+      {
+        "test": "tb_gt9110_boot",
+        "passed": true
+      },
+      {
+        "test": "tb_gt9110_touch",
+        "passed": true
+      },
+      {
+        "test": "tb_i2c_register_master",
+        "passed": true
+      },
+      {
+        "test": "tb_i2s_tx",
+        "passed": true
+      },
+      {
+        "test": "tb_instrument_envelopes",
+        "passed": true
+      },
+      {
+        "test": "tb_key_note_events",
+        "passed": true
+      },
+      {
+        "test": "tb_keyboard_core",
+        "passed": true
+      },
+      {
+        "test": "tb_keyboard_latency",
+        "passed": true
+      },
+      {
+        "test": "tb_keyboard_top",
+        "passed": true
+      },
+      {
+        "test": "tb_latency_bcd",
+        "passed": true
+      },
+      {
+        "test": "tb_local_score",
+        "passed": true
+      },
+      {
+        "test": "tb_lock_guard",
+        "passed": true
+      },
+      {
+        "test": "tb_master_volume",
+        "passed": true
+      },
+      {
+        "test": "tb_matrix_keypad",
+        "passed": true
+      },
+      {
+        "test": "tb_matrix_settling",
+        "passed": true
+      },
+      {
+        "test": "tb_max98357_startup",
+        "passed": true
+      },
+      {
+        "test": "tb_multitimbral",
+        "passed": true
+      },
+      {
+        "test": "tb_output_gain",
+        "passed": true
+      },
+      {
+        "test": "tb_playback_regression",
+        "passed": true
+      },
+      {
+        "test": "tb_reset_sync",
+        "passed": true
+      },
+      {
+        "test": "tb_rgb_display",
+        "passed": true
+      },
+      {
+        "test": "tb_rgb_scan_timing",
+        "passed": true
+      },
+      {
+        "test": "tb_rgb_status_cdc",
+        "passed": true
+      },
+      {
+        "test": "tb_rgb_ui_renderer",
+        "passed": true
+      },
+      {
+        "test": "tb_run_leds",
+        "passed": true
+      },
+      {
+        "test": "tb_score_articulation",
+        "passed": true
+      },
+      {
+        "test": "tb_score_audio",
+        "passed": true
+      },
+      {
+        "test": "tb_score_effects",
+        "passed": true
+      },
+      {
+        "test": "tb_score_library_protocol",
+        "passed": true
+      },
+      {
+        "test": "tb_score_player",
+        "passed": true
+      },
+      {
+        "test": "tb_score_seven_timbres",
+        "passed": true
+      },
+      {
+        "test": "tb_sine_rom",
+        "passed": true
+      },
+      {
+        "test": "tb_spi_nor_flash",
+        "passed": true
+      },
+      {
+        "test": "tb_startup_envelope",
+        "passed": true
+      },
+      {
+        "test": "tb_stereo_audio",
+        "passed": true
+      },
+      {
+        "test": "tb_synth_core",
+        "passed": true
+      },
+      {
+        "test": "tb_timbre_control",
+        "passed": true
+      },
+      {
+        "test": "tb_timbres",
+        "passed": true
+      },
+      {
+        "test": "tb_tone_gain",
+        "passed": true
+      },
+      {
+        "test": "tb_ui_controls",
+        "passed": true
+      },
+      {
+        "test": "tb_ui_inputs",
+        "passed": true
+      },
+      {
+        "test": "tb_ui_more",
+        "passed": true
+      },
+      {
+        "test": "tb_ui_score_handoff",
+        "passed": true
+      },
+      {
+        "test": "tb_ui_top",
+        "passed": true
+      },
+      {
+        "test": "tb_ultrasonic_range",
+        "passed": true
+      },
+      {
+        "test": "tb_ultrasonic_top",
+        "passed": true
+      },
+      {
+        "test": "tb_ultrasonic_volume",
+        "passed": true
+      },
+      {
+        "test": "tb_voice_allocator",
+        "passed": true
+      },
+      {
+        "test": "tb_voice_mixer",
+        "passed": true
+      }
+    ],
+    "all_passed": true,
+    "vendor_top_syntax_passed": true
+  },
+  "output_model": {
+    "passed": true,
+    "checks": 18376,
+    "frames": 4603,
+    "maximum_final_code": 29203,
+    "final_inflight_frames": 1,
+    "channels": {
+      "L": {
+        "checks": 9188,
+        "frames": 4603,
+        "maximum": 29203
+      },
+      "R": {
+        "checks": 9188,
+        "frames": 4603,
+        "maximum": 29203
+      }
+    },
+    "scope": "production32-voice/48kHz PCM checked with independent Python model per channel"
+  },
+  "synthesis_run": false,
+  "pnr_run": false,
+  "sta_run": false,
+  "hardware_programmed": false,
+  "scope": "Pure HDL with explicit behavioral PLL for board integration, independent per-channel Python PCM models and static project/pin checks. No new timing or analog/audio board acceptance.",
+  "corrections": [
+    "Per-physical-voice expression metadata; manual IDs retain reattack semantics",
+    "Fixed limiter latency enabled for stereo to align different per-channel peaks",
+    "Upstream UI fixture updated for preserved ultrasound/library menu mappings"
+  ],
+  "initial_failures_retained": [
+    "initial_variable_latency",
+    "initial_manual_id_scope.log",
+    "british_initial_menu_mapping.log"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "configuration": "poly_stereo_0",
+  "test": "tb_bt_polyphony",
+  "params": [
+    "STEREO=1",
+    "EFFECT=0"
+  ],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 26.339
+}

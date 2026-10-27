@@ -1,0 +1,4 @@
+Captured initial tool output before the regression folder was reused:
+RUN tb_bt_articulation
+FATAL: E:/gowin/fpga-instrument-integrated/sim/tb_bt_articulation.sv:16: manual same-pitch retrigger semantics remain intact
+       Time: 335725052  Scope: tb_bt_articulation.check

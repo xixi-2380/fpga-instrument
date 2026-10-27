@@ -1,0 +1,4 @@
+E:/gowin/fpga-instrument-integrated/src/synth_core.sv:207: warning: @* is sensitive to all 63 words in array 'peak_tree'.
+E:/gowin/fpga-instrument-integrated/sim/tb_stereo_audio.sv:25: warning: Instantiating module synth_core with dangling input port 37 (output_flush) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_stereo_audio.sv:42: warning: Instantiating module master_volume with dangling input port 8 (clear) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_stereo_audio.sv:43: warning: Instantiating module master_volume with dangling input port 8 (clear) floating.

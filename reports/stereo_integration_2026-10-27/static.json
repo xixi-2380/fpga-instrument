@@ -1,0 +1,12 @@
+{
+  "dependencies": 75,
+  "hdl": 58,
+  "pins": 67,
+  "duplicate_balls": 0,
+  "unchanged_from_f12258d": {
+    "src/keyboard.cst": true,
+    "src/keyboard.sdc": true,
+    "src/pll_pair.sv": true,
+    "keyboard_adsr.gprj": true
+  }
+}

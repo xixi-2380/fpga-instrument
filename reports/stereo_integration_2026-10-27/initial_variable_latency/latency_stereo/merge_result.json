@@ -1,0 +1,10 @@
+{
+  "configuration": "latency_stereo",
+  "test": "tb_audio_latency",
+  "params": [
+    "STEREO=1"
+  ],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 70.391
+}

@@ -1,5 +1,12 @@
 # Local project working rules
 
+## 2026-10-27 合入8f10059立体声（最新）
+
+- 用户明确要求将`8f100596a8958c271ea2a7b70c4b26d2a81220ec`合入当前工程。继续`codex/integrated-instrument`，保留此前超声波、曲库、限幅、LAT、时序结构和引脚；验证后完成合并提交并推送本分支，不更新main，不触碰来源目录，不运行EDA/烧录。
+- 生产keyboard_top默认STEREO_ENABLE=1，synth_core默认0兼容旧调用。按固定音区声像，左右独立混音、效果历史、前瞻限幅与音量，经原frame_buffer原子提交I²S；显示取实际左右PCM平均，LAT仍测接受On到对应左声道字完成。
+- 自动ID0..15独立持有释放尾音，力度/音高由分配器按物理声部保存；手动ID60..75保持同音重触发。保留当前PRECALC、上下文/乘法拆拍、复位同步、MOSI=R21和P21/U17超声波约束。CST/SDC/PLL不从上游旧版本回退。
+- 合并验证目录为reports/stereo_integration_2026-10-27。来自8f10059的reports/stereo_polyphony仅是上游历史，不代表本合并版；此前integration_2026-10-26报告仍属f12258d基线。双功放需各选择左/右SD模式，不能以I²S双声道推定模块接线已通过。
+
 ## 2026-10-27 GitHub提交授权（最新）
 
 - 用户明确要求“提交”并补充“github”，授权将已完成并验证的合并工程提交并推送到origin的`codex/integrated-instrument`分支。仅本次改动，不更新main、不强推、不修改两个来源目录；EDA及烧录仍未授权。

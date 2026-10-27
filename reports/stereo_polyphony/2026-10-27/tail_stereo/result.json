@@ -1,0 +1,11 @@
+{
+  "test": "tb_bt_tail_reuse",
+  "tag": "tail_stereo",
+  "parameters": [
+    "STEREO=1"
+  ],
+  "passed": true,
+  "checks": 8,
+  "seconds": 0.923,
+  "pll": "explicit behavioral models when needed; not STA"
+}

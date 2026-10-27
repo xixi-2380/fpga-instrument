@@ -1,0 +1,2 @@
+PASS tb_stereo_audio checks=5977704 frames=2223 serial_words=4440 differing_pairs=2175 max_delivery=525
+/workspace/scratch/6579ba30d432/bt-stereo/sim/tb_stereo_audio.sv:155: $finish called at 46271528680 (1ps)

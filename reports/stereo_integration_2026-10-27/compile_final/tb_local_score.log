@@ -1,0 +1,4 @@
+E:/gowin/fpga-instrument-integrated/sim/tb_local_score.sv:9: warning: Instantiating module bluetooth_score_core with dangling input port 46 (extension_ready) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_local_score.sv:9: warning: Instantiating module bluetooth_score_core with dangling input port 50 (extension_response_valid) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_local_score.sv:9: warning: Instantiating module bluetooth_score_core with dangling input port 52 (extension_response_length) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_local_score.sv:9: warning: Instantiating module bluetooth_score_core with dangling input port 53 (extension_response) floating.

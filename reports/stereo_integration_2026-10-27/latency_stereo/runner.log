@@ -1,0 +1,7 @@
+RUN tb_audio_latency
+MEASURED_LATENCY units10us=137 edge_reference=137
+MEASURED_LATENCY units10us=137 edge_reference=137
+MEASURED_LATENCY units10us=137 edge_reference=137
+PASS tb_audio_latency checks=815390
+E:/gowin/fpga-instrument-integrated/sim/tb_audio_latency.sv:57: $finish called at 13271215398 (1ps)
+

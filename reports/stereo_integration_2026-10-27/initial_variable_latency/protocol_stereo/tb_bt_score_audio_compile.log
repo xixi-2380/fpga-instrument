@@ -1,0 +1,9 @@
+E:/gowin/fpga-instrument-integrated/sim/passive_matrix_model.svh:3: warning: timescale for passive_matrix_model inherited from another file.
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_score_audio.sv:1: ...: The inherited timescale is here.
+E:/gowin/fpga-instrument-integrated/src/synth_core.sv:207: warning: @* is sensitive to all 3 words in array 'peak_tree'.
+E:/gowin/fpga-instrument-integrated/src/keyboard_top.sv:284: warning: Port 16 (voice_active) of module synth_core expects 1 bit(s), given 32.
+E:/gowin/fpga-instrument-integrated/src/keyboard_top.sv:284:        : Padding 31 high bits of the expression.
+E:/gowin/fpga-instrument-integrated/src/keyboard_top.sv:284: warning: Port 17 (voice_held) of module synth_core expects 1 bit(s), given 32.
+E:/gowin/fpga-instrument-integrated/src/keyboard_top.sv:284:        : Padding 31 high bits of the expression.
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_score_audio.sv:15: warning: Instantiating module keyboard_top with dangling input port 3 (ultrasonic_echo) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_score_audio.sv:15: warning: Instantiating module keyboard_top with dangling input port 37 (flash_miso) floating.

@@ -1,0 +1,4 @@
+RUN tb_bt_polyphony
+PASS tb_bt_polyphony checks=266747 effect=2 worst_cluster_us=81.580000 peak=29202
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_polyphony.sv:75: $finish called at 4336414680 (1ps)
+

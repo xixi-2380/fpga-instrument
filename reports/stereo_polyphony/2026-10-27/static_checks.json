@@ -1,0 +1,31 @@
+{
+  "default_top_stereo": true,
+  "top_elaborated": true,
+  "pll": "explicit behavioral substitutes; not vendor or STA",
+  "preprocess_two_cwds": true,
+  "config_include_search_path_added": false,
+  "unchanged_source_paths": [
+    "src/keyboard.cst",
+    "src/keyboard.sdc",
+    "keyboard_adsr.gprj",
+    "src/bt_score_player.sv",
+    "src/bluetooth_audio_bridge.sv",
+    "src/bt_event_cdc.sv",
+    "src/score_services.sv",
+    "src/flash_song_library.sv",
+    "src/audio_timing.sv",
+    "src/i2s_tx.sv",
+    "src/frame_buffer.sv",
+    "src/audio_effects.sv",
+    "src/audio_delay.sv",
+    "src/audio_reverb.sv",
+    "src/master_volume.sv",
+    "src/config/synth_config.svh",
+    "src/matrix_keypad.sv",
+    "src/timbre_control.sv",
+    "src/rgb_ui_renderer.sv",
+    "src/gt9110_touch.sv"
+  ],
+  "gprj_dependencies": 70,
+  "no_gowin_or_programmer_run": true
+}

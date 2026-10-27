@@ -1,0 +1,2 @@
+PASS tb_bluetooth_top checks=692512 high_peak=384 low_peak=98
+/workspace/scratch/6579ba30d432/bt-stereo/sim/tb_bluetooth_top.sv:60: $finish called at 11272562288 (1ps)

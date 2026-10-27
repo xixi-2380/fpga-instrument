@@ -1,0 +1,1 @@
+E:/gowin/fpga-instrument-integrated/sim/tb_audio_limiter.sv:7: warning: Instantiating module audio_limiter with dangling input port 10 (in_tag) floating.

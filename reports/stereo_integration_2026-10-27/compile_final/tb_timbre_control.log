@@ -1,0 +1,5 @@
+E:/gowin/fpga-instrument-integrated/sim/tb_timbre_control.sv:8: warning: Port 4 (selected) of module timbre_control expects 3 bit(s), given 2.
+E:/gowin/fpga-instrument-integrated/sim/tb_timbre_control.sv:8:        : Padding 1 high bits of the port.
+E:/gowin/fpga-instrument-integrated/sim/tb_timbre_control.sv:8: warning: Instantiating module timbre_control with dangling input port 27 (auto_valid) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_timbre_control.sv:8: warning: Instantiating module timbre_control with dangling input port 28 (auto_version) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_timbre_control.sv:8: warning: Instantiating module timbre_control with dangling input port 29 (auto_target) floating.

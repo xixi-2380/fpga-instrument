@@ -4,7 +4,7 @@
 // For delayed x[n-W+1], every gain in the averaging window is <= its bound.
 // One synchronous RAM scan and a 31-step restoring divider; no combinational /.
 module audio_limiter #(
- parameter integer WINDOW_LOG2=6,PRE_GAIN=24,CEILING=29204,RELEASE_SHIFT=12,
+ parameter integer WINDOW_LOG2=6,PRE_GAIN=24,CEILING=29204,RELEASE_SHIFT=12,FIXED_LATENCY=0,
  parameter integer W=(1<<WINDOW_LOG2))(
  input wire clk,rst,in_valid,input wire signed [15:0] in_sample,
  output wire in_ready,output reg out_valid,output reg signed [15:0] out_sample,
@@ -74,8 +74,14 @@ module audio_limiter #(
      scan_address<=scan_address+1'b1;read_address<=read_address+1'b1;
      if(scan_count==W-2)state<=DIV_INIT;else scan_count<=scan_count+1'b1;
     end
-    DIV_INIT:if(peak<=CEILING)begin target<=65536;state<=RELEASE_GAIN;end
-     else begin numerator<=CEILING*65536;remainder<=0;quotient<=0;bits_left<=31;state<=DIVIDE;end
+    // Stereo lanes must emit together even when only one exceeds the ceiling.
+    // The optional fixed path spends the same divider cycles below ceiling;
+    // its quotient is ignored and the unity target is retained in that case.
+    DIV_INIT:if(peak<=CEILING && !FIXED_LATENCY)begin target<=65536;state<=RELEASE_GAIN;end
+     else begin
+      if(peak<=CEILING)target<=65536;
+      numerator<=CEILING*65536;remainder<=0;quotient<=0;bits_left<=31;state<=DIVIDE;
+     end
     DIVIDE:begin
      numerator<=numerator<<1;bits_left<=bits_left-1'b1;
      if(trial>={1'b0,peak})begin remainder<=trial-{1'b0,peak};quotient<={quotient[15:0],1'b1};end
@@ -84,7 +90,10 @@ module audio_limiter #(
      // target captures the final quotient on the next state, not a stale bit.
     end
     RELEASE_GAIN:begin
-     if(peak>CEILING)begin target<=quotient;state<=GAIN_READY;end
+     if(peak>CEILING || FIXED_LATENCY)begin
+      if(peak>CEILING)target<=quotient;
+      state<=GAIN_READY;
+     end
      else begin
       released<=next_release;new_gain<=next_release;state<=AVERAGE;
       release_error<=target<release_candidate ? 0 : recovery_total[RELEASE_SHIFT-1:0];

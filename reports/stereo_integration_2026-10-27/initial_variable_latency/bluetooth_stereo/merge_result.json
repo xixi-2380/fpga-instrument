@@ -1,0 +1,8 @@
+{
+  "configuration": "bluetooth_stereo",
+  "test": "tb_bluetooth_top",
+  "params": [],
+  "behavioral_pll": true,
+  "passed": true,
+  "seconds": 118.25
+}

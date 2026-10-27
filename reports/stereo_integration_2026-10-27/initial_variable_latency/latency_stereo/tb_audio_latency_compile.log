@@ -1,0 +1,5 @@
+E:/gowin/fpga-instrument-integrated/src/synth_core.sv:207: warning: @* is sensitive to all 63 words in array 'peak_tree'.
+E:/gowin/fpga-instrument-integrated/sim/tb_audio_latency.sv:11: warning: Instantiating module synth_core with dangling input port 23 (effect_echo_wet) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_audio_latency.sv:11: warning: Instantiating module synth_core with dangling input port 24 (effect_room_wet) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_audio_latency.sv:11: warning: Instantiating module synth_core with dangling input port 25 (effect_tremolo_depth) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_audio_latency.sv:11: warning: Instantiating module synth_core with dangling input port 26 (effect_tremolo_rate_hz) floating.

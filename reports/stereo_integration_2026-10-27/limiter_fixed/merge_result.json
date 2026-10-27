@@ -1,0 +1,10 @@
+{
+  "configuration": "limiter_fixed",
+  "test": "tb_audio_limiter",
+  "params": [
+    "FIXED=1"
+  ],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 3.106
+}

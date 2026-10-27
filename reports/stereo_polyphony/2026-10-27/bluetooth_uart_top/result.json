@@ -1,0 +1,9 @@
+{
+  "test": "tb_bluetooth_top",
+  "tag": "bluetooth_uart_top",
+  "parameters": [],
+  "passed": true,
+  "checks": 692512,
+  "seconds": 55.458,
+  "pll": "explicit behavioral models when needed; not STA"
+}

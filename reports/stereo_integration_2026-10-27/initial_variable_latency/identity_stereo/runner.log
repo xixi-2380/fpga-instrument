@@ -1,0 +1,7 @@
+RUN tb_bt_identity
+IDENTITY_GROUP voices=1 ids=0001 ons=1
+IDENTITY_GROUP voices=4 ids=000f ons=5
+FATAL: E:/gowin/fpga-instrument-integrated/src/synth_core.sv:264: Stereo channel pipeline mismatch
+       Time: 5857056946  Scope: tb_bt_identity.dut.sound
+
+

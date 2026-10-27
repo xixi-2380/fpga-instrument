@@ -1,0 +1,9 @@
+{
+  "test": "tb_synth_core",
+  "tag": "mono_math",
+  "parameters": [],
+  "passed": true,
+  "checks": 2513900,
+  "seconds": 25.198,
+  "pll": "explicit behavioral models when needed; not STA"
+}

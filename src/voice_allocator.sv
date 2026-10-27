@@ -9,13 +9,17 @@ module voice_allocator #(parameter integer VOICES=4,AUTOMATIC_IDS=0)(
     output reg [VOICES-1:0] voice_held,
     output wire [VOICES*32-1:0] voice_fcw,
     output wire [VOICES*7-1:0] voice_ids,input wire [2:0] note_timbre,
-    output wire [VOICES*3-1:0] voice_timbres);
+    output wire [VOICES*3-1:0] voice_timbres,
+    // Automatic scheduler IDs describe held notes, not release-tail ownership.
+    input wire note_independent,input wire [8:0] note_gain,input wire [6:0] note_pitch,
+    output wire [VOICES*9-1:0] voice_gains,output wire [VOICES*7-1:0] voice_pitches);
     localparam integer RW=VOICES>1?$clog2(VOICES):1;
     reg [VOICES-1:0] owned,pending_start,pending_restart,committed_gate;
     reg [6:0] ids [0:VOICES-1];
     reg [31:0] frequencies [0:VOICES-1];
     reg [RW-1:0] rank [0:VOICES-1];
     reg [2:0] timbres[0:VOICES-1];
+    reg [8:0] gains[0:VOICES-1];reg [6:0] pitches[0:VOICES-1];
     // Read one context, then compare its registered metadata. No candidate
     // index feeds another context read in the same cycle. The producer holds
     // the event until OFFER; ownership still changes on its handshake edge.
@@ -27,7 +31,7 @@ module voice_allocator #(parameter integer VOICES=4,AUTOMATIC_IDS=0)(
     reg [RW-1:0] match_slot,free_slot,released_slot,oldest_slot,target;
     reg [RW-1:0] match_rank,free_rank,released_rank,oldest_rank,target_rank;
     reg target_matched;
-    reg event_on;
+    reg event_on,event_independent;reg [8:0] event_gain;reg [6:0] event_pitch;
     reg [6:0] event_id;
     reg [31:0] event_fcw;
     reg [2:0] event_timbre;
@@ -39,7 +43,7 @@ module voice_allocator #(parameter integer VOICES=4,AUTOMATIC_IDS=0)(
             match_found<=0;free_found<=0;released_found<=0;oldest_found<=0;
             match_slot<=0;free_slot<=0;released_slot<=0;oldest_slot<=0;target<=0;
             match_rank<=0;free_rank<=0;released_rank<=0;oldest_rank<=0;target_rank<=0;
-            target_matched<=0;event_on<=0;event_id<=0;event_fcw<=0;event_timbre<=0;
+            target_matched<=0;event_independent<=0;event_gain<=256;event_pitch<=0;event_on<=0;event_id<=0;event_fcw<=0;event_timbre<=0;
         end else if(frame_ce || !enabled)begin
             // A frame can retire an ownership or change active flags. Cancel
             // the unacknowledged search and retry against the new snapshot.
@@ -47,6 +51,9 @@ module voice_allocator #(parameter integer VOICES=4,AUTOMATIC_IDS=0)(
         end else case(search_state)
             IDLE:if(note_valid)begin
                 event_on<=note_on;event_id<=note_id;event_fcw<=note_fcw;
+                event_independent<=note_independent===1'b1;
+                event_gain<=note_independent===1'b1 ? note_gain : 9'd256;
+                event_pitch<=note_independent===1'b1 ? note_pitch : note_id;
                 case(note_timbre)
                     3'd1:event_timbre<=1;
                     3'd2:event_timbre<=2;
@@ -59,11 +66,11 @@ module voice_allocator #(parameter integer VOICES=4,AUTOMATIC_IDS=0)(
             end
             READ_CONTEXT:begin
                 scan_rank<=rank[scan_slot];
-                // Automatic IDs are live scheduler handles. After Off, the
-                // old release retains its context but no longer matches this
-                // handle. Manual pitch identities keep their retrigger rule.
+                // A released automatic ID may be reused immediately by the score.
+                // Never retune that release tail: match only its held/pending
+                // owner; the new On allocates a free or oldest released slot.
                 scan_match<=owned[scan_slot] && ids[scan_slot]==event_id &&
-                    (event_id>=AUTOMATIC_IDS || voice_held[scan_slot]);
+                    ((!event_independent && event_id>=AUTOMATIC_IDS) || voice_held[scan_slot] || pending_start[scan_slot]);
                 scan_free<=!owned[scan_slot] ||
                     (!voice_active[scan_slot] && !voice_held[scan_slot] &&
                      !pending_start[scan_slot] && !committed_gate[scan_slot]);
@@ -102,6 +109,7 @@ module voice_allocator #(parameter integer VOICES=4,AUTOMATIC_IDS=0)(
         assign voice_fcw[v*32+:32]=frequencies[v];
         assign voice_ids[v*7+:7]=ids[v];
         assign voice_timbres[v*3+:3]=timbres[v];
+        assign voice_gains[v*9+:9]=gains[v];assign voice_pitches[v*7+:7]=pitches[v];
         assign voice_start[v]=!rst && frame_ce && pending_start[v];
         assign voice_restart[v]=voice_start[v] && pending_restart[v];
         assign voice_stop[v]=!rst && frame_ce && !pending_start[v] && committed_gate[v] && !voice_held[v];
@@ -109,7 +117,7 @@ module voice_allocator #(parameter integer VOICES=4,AUTOMATIC_IDS=0)(
     always @(posedge clk or posedge rst)begin
         if(rst)begin
             owned<=0;voice_held<=0;pending_start<=0;pending_restart<=0;committed_gate<=0;
-            for(integer i=0;i<VOICES;i=i+1)begin ids[i]<=0;frequencies[i]<=0;rank[i]<=i;timbres[i]<=0;end
+            for(integer i=0;i<VOICES;i=i+1)begin ids[i]<=0;frequencies[i]<=0;rank[i]<=i;timbres[i]<=0;gains[i]<=256;pitches[i]<=0;end
         end else if(frame_ce)begin
             for(integer i=0;i<VOICES;i=i+1)begin
                 if(pending_start[i])begin
@@ -124,7 +132,7 @@ module voice_allocator #(parameter integer VOICES=4,AUTOMATIC_IDS=0)(
                 if(event_on)begin
                     if(target==i)begin
                         owned[i]<=1;voice_held[i]<=1;ids[i]<=event_id;
-                        frequencies[i]<=event_fcw;timbres[i]<=event_timbre;
+                        frequencies[i]<=event_fcw;timbres[i]<=event_timbre;gains[i]<=event_gain;pitches[i]<=event_pitch;
                         pending_start[i]<=1;
                         if(!target_matched)pending_restart[i]<=1;
                         rank[i]<=VOICES-1;

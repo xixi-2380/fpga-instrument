@@ -1,5 +1,9 @@
 # FPGA电子乐器合并工程（2026-10-26）
 
+2026-10-27继续合入`8f10059`双MAX98357A立体声与物理声部元数据修正，保留超声波、限幅、LAT和现有时序结构。生产默认STEREO_ENABLE=1，左右独立效果/限幅/音量，现有I²S和引脚不变；两块模块需各配置左/右SD模式。详见[立体声合并说明](docs/stereo_integration_2026-10-27.md)。本轮仍仅HDL/软件验证，需用户重新综合/P&R/STA与实板验收。
+
+本轮23个配置共32,310,863次HDL检查通过，双侧独立Python模型18,376项比对通过；80个测试编译及真实vendor库顶层语法检查通过。修正左右限幅计算耗时不同造成的错帧风险，保留单声道默认行为。结果见reports/stereo_integration_2026-10-27/validation.json。
+
 当前工程：`E:\gowin\fpga-instrument-integrated\keyboard_adsr.gprj`，顶层keyboard_top、Device Version C、输出D2_keyboard_leds。合并两个本地工程的当前源码及未提交修改；两个原工程保持原样。用户2026-10-27授权将已验证结果提交推送至`codex/integrated-instrument`，不更新main。
 
 | 保留部分 | 来源 |

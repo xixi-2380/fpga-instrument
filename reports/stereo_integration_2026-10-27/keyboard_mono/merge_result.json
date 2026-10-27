@@ -1,0 +1,8 @@
+{
+  "configuration": "keyboard_mono",
+  "test": "tb_keyboard_top",
+  "params": [],
+  "behavioral_pll": true,
+  "passed": true,
+  "seconds": 48.171
+}

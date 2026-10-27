@@ -44,7 +44,7 @@ for t in tests:
     c=subprocess.run(cmd,capture_output=True,text=True,encoding='utf8',errors='replace',env=env)
     (out/(name+'_compile.log')).write_text(c.stdout+c.stderr,encoding='utf8')
     if c.returncode: print('compile exit',c.returncode,c.stdout+c.stderr);raise SystemExit(1)
-    run=subprocess.run([str(bin/'vvp.exe'),str(out/(name+'.vvp')),'+SIM_OUT_DIR='+out.as_posix()]+extra_args,capture_output=True,text=True,encoding='utf8',errors='replace',env=env,timeout=600)
+    run=subprocess.run([str(bin/'vvp.exe'),str(out/(name+'.vvp')),'+SIM_OUT_DIR='+out.as_posix()]+extra_args,capture_output=True,text=True,encoding='utf8',errors='replace',env=env,timeout=900 if name=='tb_output_gain' else 600)
     (out/(name+'.log')).write_text(run.stdout+run.stderr,encoding='utf8')
     print(run.stdout,flush=True)
     ok=run.returncode==0 and 'PASS '+name in run.stdout

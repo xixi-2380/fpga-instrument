@@ -1,0 +1,4 @@
+E:/gowin/fpga-instrument-integrated/sim/tb_dds_sine.sv:9: warning: Port 10 (timbre) of module dds_sine expects 3 bit(s), given 2.
+E:/gowin/fpga-instrument-integrated/sim/tb_dds_sine.sv:9:        : Padding 1 high bits of the port.
+E:/gowin/fpga-instrument-integrated/sim/tb_dds_sine.sv:11: warning: Port 10 (timbre) of module dds_sine expects 3 bit(s), given 2.
+E:/gowin/fpga-instrument-integrated/sim/tb_dds_sine.sv:11:        : Padding 1 high bits of the port.

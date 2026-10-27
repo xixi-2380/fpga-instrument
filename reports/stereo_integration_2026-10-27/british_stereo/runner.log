@@ -1,0 +1,4 @@
+RUN tb_british_top
+PASS tb_british_top checks=1031288 notes=9 windows=1
+E:/gowin/fpga-instrument-integrated/sim/tb_british_top.sv:61: $finish called at 16772524794 (1ps)
+

@@ -1,0 +1,5 @@
+RUN tb_synth_core
+RENDER_METRICS voices=32 max_delivery_cycles=520 budget=544
+PASS tb_synth_core checks=2513900
+E:/gowin/fpga-instrument-integrated/sim/tb_synth_core.sv:99: $finish called at 12772210514 (1ps)
+

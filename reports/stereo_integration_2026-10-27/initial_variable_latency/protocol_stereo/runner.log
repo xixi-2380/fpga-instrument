@@ -1,0 +1,4 @@
+RUN tb_bt_score_audio
+PASS tb_bt_score_audio checks=2442445 ons=4 offs=3
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_score_audio.sv:83: $finish called at 39754268346 (1ps)
+

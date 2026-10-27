@@ -1,0 +1,4 @@
+E:/gowin/fpga-instrument-integrated/sim/tb_key_note_events.sv:12: warning: Port 12 (selected_timbre) of module key_note_events expects 3 bit(s), given 2.
+E:/gowin/fpga-instrument-integrated/sim/tb_key_note_events.sv:12:        : Padding 1 high bits of the port.
+E:/gowin/fpga-instrument-integrated/sim/tb_key_note_events.sv:12: warning: Port 13 (note_timbre) of module key_note_events expects 3 bit(s), given 2.
+E:/gowin/fpga-instrument-integrated/sim/tb_key_note_events.sv:12:        : Padding 1 high bits of the port.

@@ -1,0 +1,222 @@
+{
+  "status": "pure_hdl_numeric_stereo_passed_hardware_sta_pending",
+  "base_commit": "2d86834782dcdd82b6ab2c5c81940da5506340ec",
+  "branch": "codex/bluetooth-score-integration",
+  "configs": 16,
+  "total_checks": 20472477,
+  "results": [
+    {
+      "test": "tb_voice_allocator",
+      "tag": "allocator",
+      "parameters": [],
+      "passed": true,
+      "checks": 1747726,
+      "seconds": 3.289,
+      "pll": "explicit behavioral models when needed; not STA"
+    },
+    {
+      "test": "tb_bt_tail_reuse",
+      "tag": "tail_stereo",
+      "parameters": [
+        "STEREO=1"
+      ],
+      "passed": true,
+      "checks": 8,
+      "seconds": 0.923,
+      "pll": "explicit behavioral models when needed; not STA"
+    },
+    {
+      "test": "tb_synth_core",
+      "tag": "mono_math",
+      "parameters": [],
+      "passed": true,
+      "checks": 2513900,
+      "seconds": 25.198,
+      "pll": "explicit behavioral models when needed; not STA"
+    },
+    {
+      "test": "tb_i2s_tx",
+      "tag": "i2s_words",
+      "parameters": [],
+      "passed": true,
+      "checks": 5407,
+      "seconds": 0.246,
+      "pll": "explicit behavioral models when needed; not STA"
+    },
+    {
+      "test": "tb_bt_event_cdc",
+      "tag": "event_cdc",
+      "parameters": [],
+      "passed": true,
+      "checks": 131,
+      "seconds": 0.054,
+      "pll": "explicit behavioral models when needed; not STA"
+    },
+    {
+      "test": "tb_bt_player_production",
+      "tag": "player_production",
+      "parameters": [],
+      "passed": true,
+      "checks": 157518,
+      "seconds": 0.653,
+      "pll": "explicit behavioral models when needed; not STA"
+    },
+    {
+      "test": "tb_bt_score_audio",
+      "tag": "bluetooth_protocol_audio",
+      "parameters": [],
+      "passed": true,
+      "checks": 2433997,
+      "seconds": 172.259,
+      "pll": "explicit behavioral models when needed; not STA"
+    },
+    {
+      "test": "tb_bluetooth_top",
+      "tag": "bluetooth_uart_top",
+      "parameters": [],
+      "passed": true,
+      "checks": 692512,
+      "seconds": 55.458,
+      "pll": "explicit behavioral models when needed; not STA"
+    },
+    {
+      "test": "tb_playback_regression",
+      "tag": "manual_volume_release",
+      "parameters": [],
+      "passed": true,
+      "checks": 1473658,
+      "seconds": 120.747,
+      "pll": "explicit behavioral models when needed; not STA"
+    },
+    {
+      "test": "tb_british_top",
+      "tag": "british_ui_stereo",
+      "parameters": [],
+      "passed": true,
+      "checks": 967221,
+      "seconds": 90.06,
+      "pll": "explicit behavioral models when needed; not STA"
+    },
+    {
+      "test": "tb_max98357_startup",
+      "tag": "startup_stereo",
+      "parameters": [],
+      "passed": true,
+      "checks": 3702449,
+      "seconds": 84.299,
+      "pll": "explicit behavioral models when needed; not STA"
+    },
+    {
+      "test": "tb_bt_polyphony",
+      "tag": "stereo_echo",
+      "parameters": [
+        "EFFECT=0",
+        "STEREO=1"
+      ],
+      "passed": true,
+      "checks": 266746,
+      "seconds": 9.379,
+      "pll": "explicit behavioral models when needed; not STA"
+    },
+    {
+      "test": "tb_bt_polyphony",
+      "tag": "stereo_room",
+      "parameters": [
+        "EFFECT=1",
+        "STEREO=1"
+      ],
+      "passed": true,
+      "checks": 266746,
+      "seconds": 9.431,
+      "pll": "explicit behavioral models when needed; not STA"
+    },
+    {
+      "test": "tb_bt_polyphony",
+      "tag": "stereo_tremolo",
+      "parameters": [
+        "EFFECT=2",
+        "STEREO=1"
+      ],
+      "passed": true,
+      "checks": 266746,
+      "seconds": 9.691,
+      "pll": "explicit behavioral models when needed; not STA"
+    },
+    {
+      "test": "tb_bt_tail_reuse",
+      "tag": "tail_mono",
+      "parameters": {
+        "STEREO": 0
+      },
+      "passed": true,
+      "checks": 8,
+      "seconds": 0.792,
+      "pll": "explicit behavioral models, not vendor/STA"
+    },
+    {
+      "test": "tb_stereo_audio",
+      "tag": "numeric_stereo",
+      "parameters": {},
+      "passed": true,
+      "checks": 5977704,
+      "seconds": 119.931,
+      "pll": "explicit behavioral models, not vendor/STA"
+    }
+  ],
+  "source_sha256": {
+    "README.md": "fd68c07be7dd27e9b5ad860bc090cf8c49ca520a45cc004789f6fa91cc7baf78",
+    "AGENTS.md": "577c5db33c4b30ad9cd26ca8840795f0fcb18ff1eeff71ea2905791e5eea7737",
+    "src/keyboard_top.sv": "56e0bb9d262114836665ef46cbdbdbf2e53782e122853c0bd7ce2499c80bab2a",
+    "src/voice_allocator.sv": "bf71f4bf78f1fdb20500bbf01a0cae862338c669655c5233772c0243c590719c",
+    "src/synth_core.sv": "3c23afce51a8537cbb34904de07e6aff6e175dce7b776fd9a68ebf6c77c756a6",
+    "sim/tb_bt_polyphony.sv": "8be23244dc4bbbd2254b3388eaec0d7e6549701405accf23378a99f11ea320be",
+    "sim/tb_voice_allocator.sv": "5eb80ee0dcd9852d501f1e25e4545c7aa7176c78135d85192a33395d38a9a64b",
+    "sim/tb_british_top.sv": "d74f05e93c50bd8b0f0173d1061097a8712ba39de2081d2a0d96b503ffb9a123",
+    "docs/max98357.md": "f97dc1f574a880bc742ab0d0dd12d666aede55ca36a1c19d83c0cec82aa99715",
+    "sim/tb_bt_tail_reuse.sv": "803134954e93c43516c66c28a2606faf2c5fea302f828b73fc1c09df26bc9ad8",
+    "sim/tb_stereo_audio.sv": "32c993daffc7d089ad969faf97f12227218294b1364e10ad73c9fbd643c5eb41",
+    "scripts/run_stereo_tests.py": "18d16d651e6ff9f06ddbcb106ac3e448da07e22722b8ea975eb10cf2822a160c",
+    "docs/bluetooth_score/双声道与复音修正.md": "0da5119e301fa1c55bed81046ca83b7f54155de0f73253deaf801a3dab69cdcc"
+  },
+  "baseline_red_test": "baseline_tail_reuse/test.log",
+  "baseline_red_expected": true,
+  "numeric_scope": {
+    "seven_timbres": true,
+    "independent_signed_voice_math": true,
+    "reused_identity_velocity_pitch_metadata": true,
+    "physical_voices": 32,
+    "scheduler_voices": 16,
+    "stereo_effect_reference": "Existing audio_effects/master_volume RTL fed independent mathematical channel sums; algorithms unchanged, not a new independent implementation of effects.",
+    "audio_clock_hz": 61440000,
+    "sample_rate": 48000,
+    "numeric_effect_delay_samples": 17,
+    "numeric_room_delays": [
+      3,
+      5,
+      7,
+      11
+    ],
+    "production_effects_polyphony_configs": 3,
+    "frames": 2223,
+    "i2s_channel_words": 4440,
+    "different_channel_pairs": 2175,
+    "pcm_delivery_cycles": 525,
+    "budget_cycles": 544
+  },
+  "known_limits": [
+    "Original branch has failed 50/61.44/35MHz STA; new STA not run. Logic root cause reproduced and fixed, not proof that every physical noise source is gone.",
+    "Two physical MAX98357A SD/MODE networks must select L and R; generic module bias needs hardware confirmation.",
+    "Pitch-zone fixed pan, no MIDI track PAN protocol.",
+    "32 physical voices; oldest released tail may be stolen at capacity.",
+    "Flash/App hardware acceptance and old dist bitstreams are not current validation."
+  ],
+  "not_run": [
+    "Gowin synthesis",
+    "P&R",
+    "STA",
+    "Programmer",
+    "hardware",
+    "phone App",
+    "physical U7 writes"
+  ]
+}

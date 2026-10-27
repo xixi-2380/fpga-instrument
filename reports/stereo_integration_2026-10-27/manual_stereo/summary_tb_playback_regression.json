@@ -1,0 +1,8 @@
+[
+  {
+    "test": "tb_playback_regression",
+    "passed": true,
+    "pll_model": "behavioral substitute",
+    "seconds": 210.834
+  }
+]

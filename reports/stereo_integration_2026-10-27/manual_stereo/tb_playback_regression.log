@@ -1,0 +1,2 @@
+PASS tb_playback_regression checks=1642618
+E:/gowin/fpga-instrument-integrated/sim/tb_playback_regression.sv:47: $finish called at 26730832634 (1ps)

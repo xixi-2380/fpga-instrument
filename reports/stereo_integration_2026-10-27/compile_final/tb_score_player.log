@@ -1,0 +1,2 @@
+E:/gowin/fpga-instrument-integrated/sim/tb_score_player.sv:27: warning: Port 10 (note_timbre) of module score_player expects 3 bit(s), given 2.
+E:/gowin/fpga-instrument-integrated/sim/tb_score_player.sv:27:        : Padding 1 high bits of the port.
