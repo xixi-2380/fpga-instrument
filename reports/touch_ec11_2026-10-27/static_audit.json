@@ -1,0 +1,30 @@
+{
+  "project_files": 78,
+  "hdl_files": 61,
+  "unique_pins": 73,
+  "new_pins": {
+    "keypad_sda[0]": "AB25",
+    "keypad_sda[1]": "L22",
+    "keypad_sda[2]": "W20",
+    "keypad_scl[0]": "AA25",
+    "keypad_scl[1]": "W26",
+    "keypad_scl[2]": "V19",
+    "keypad_int_n[0]": "Y26",
+    "keypad_int_n[1]": "U26",
+    "keypad_int_n[2]": "U22",
+    "ec11_a[0]": "V16",
+    "ec11_a[1]": "U16",
+    "ec11_a[2]": "T23",
+    "ec11_b[0]": "Y21",
+    "ec11_b[1]": "U15",
+    "ec11_b[2]": "R25",
+    "ec11_sw_n[0]": "V17",
+    "ec11_sw_n[1]": "W21",
+    "ec11_sw_n[2]": "W25"
+  },
+  "unchanged_existing_pins": true,
+  "original_clock_and_timing_constraints_retained": true,
+  "pll_audio_timing_allocator_limiter_envelope_unchanged": true,
+  "production_top_compiles_with_official_vendor_library": true,
+  "eda_run": false
+}

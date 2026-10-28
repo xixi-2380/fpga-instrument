@@ -1,0 +1,8 @@
+{
+  "configuration": "top",
+  "test": "tb_touch_ec11_top",
+  "params": [],
+  "behavioral_pll": true,
+  "passed": true,
+  "seconds": 186.7
+}

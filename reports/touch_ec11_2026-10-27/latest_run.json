@@ -1,0 +1,10 @@
+[
+  {
+    "configuration": "router",
+    "test": "tb_touch_keyboard_router",
+    "params": [],
+    "behavioral_pll": false,
+    "passed": true,
+    "seconds": 0.336
+  }
+]

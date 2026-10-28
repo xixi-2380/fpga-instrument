@@ -1,0 +1,2 @@
+PASS tb_flash_write_permissions checks=60 programs=8 erases=8
+E:/gowin/fpga-instrument-integrated/sim/tb_flash_write_permissions.sv:34: $finish called at 756160000 (1ps)

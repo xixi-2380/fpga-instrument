@@ -1,0 +1,2 @@
+E:/gowin/fpga-instrument-integrated/src/synth_core.sv:208: warning: @* is sensitive to all 63 words in array 'peak_tree'.
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_library_link.sv:12: warning: Instantiating module keyboard_top with dangling input port 3 (ultrasonic_echo) floating.

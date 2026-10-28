@@ -1,0 +1,5 @@
+AVERAGE visual=x left=x right=x sum=x vs=1
+DSP mask=xxx levels=  x,  x,  x used=  x,  x,  x dry=     0 history=     0 echo=     x room=     x trem=        x phase=000da740
+FAIL display is signed stereo average at 29907000
+FATAL: E:/gowin/fpga-instrument-integrated/sim/tb_stereo_audio.sv:88: 
+       Time: 29907150  Scope: tb_stereo_audio

@@ -2,6 +2,7 @@
 // Byte-framed phone -> actual core/services -> wire-level U7 -> reset recovery
 // -> actual more-action CDC/local controller -> same player/32-voice engine.
 module tb_bt_library_link;
+ parameter integer REGISTER_LOCKS=0;
  reg clk=0,rst=1,rv=0,ui_valid=0;reg [7:0] rb=0;reg [5:0] ui_action=63;
  always #10 clk=~clk;
  wire rr,cs,sck,mosi,miso;integer programs,erases;
@@ -9,7 +10,7 @@ module tb_bt_library_link;
  reg [7:0] response[0:31],payload[0:255];reg [31:0] crc32;
  keyboard_top #(.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.LOCK_N(16),
  .MUTE(1),.FADE(1),.ATTACK(2),.DECAY(2),.RELEASE(2)) dut(
- .clk(clk),.rst(rst),.bt_rx(1'b1),.board_buttons_n(4'hf),.key_row(4'hf),
+ .clk(clk),.rst(rst),.bt_rx(1'b1),.board_buttons_n(4'hf),.keypad_int_n(3'b111),.ec11_a(3'b111),.ec11_b(3'b111),.ec11_sw_n(3'b111),
  .flash_cs_n(cs),.flash_sck(sck),.flash_mosi(mosi),.flash_miso(miso));
  defparam dut.bluetooth_on.services.flash.HALF_CYCLES=4;
  defparam dut.bluetooth_on.services.flash.BOOT_CYCLES=8;
@@ -46,6 +47,7 @@ module tb_bt_library_link;
   if(goal>0 && n==goal)begin replies++;n=0;goal=0;end
  end
  initial begin
+  if(REGISTER_LOCKS)begin chip.sr1_flags=8'he0;chip.sr2_flags=8'h3b;chip.sr3_flags=8'h60;end
   force dut.bluetooth_on.link.core.rx_valid=rv;force dut.bluetooth_on.link.core.rx_data=rb;force dut.bluetooth_on.link.core.tx_ready=1'b1;
   force dut.ui_action_valid=ui_valid;force dut.ui_action=ui_action;
   #100 rst=0;wait(dut.input_ready && dut.bluetooth_on.services.library_init);cycles(20);

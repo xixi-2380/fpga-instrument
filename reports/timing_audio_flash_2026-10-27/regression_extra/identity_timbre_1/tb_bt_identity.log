@@ -1,0 +1,6 @@
+IDENTITY_GROUP voices=1 ids=0001 ons=1
+IDENTITY_GROUP voices=4 ids=000f ons=5
+IDENTITY_GROUP voices=8 ids=00ff ons=13
+IDENTITY_GROUP voices=16 ids=ffff ons=29
+PASS tb_bt_identity checks=37382 timbre=1 ons=29 offs=29 peak=5291
+E:/gowin/fpga-instrument-timing-audio-fix/sim/tb_bt_identity.sv:138: $finish called at 19689280650 (1ps)

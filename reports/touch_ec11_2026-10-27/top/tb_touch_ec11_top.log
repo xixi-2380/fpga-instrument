@@ -1,0 +1,2 @@
+PASS tb_touch_ec11_top checks=1338680 frames=1046 max_delivery=530
+E:/gowin/fpga-instrument-integrated/sim/tb_touch_ec11_top.sv:59: $finish called at 21772511994 (1ps)

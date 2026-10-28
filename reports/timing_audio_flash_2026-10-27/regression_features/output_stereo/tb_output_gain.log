@@ -1,0 +1,9 @@
+TIMBRE_LEVEL timbre=0 positive=24552 negative=-24576
+TIMBRE_LEVEL timbre=1 positive=24552 negative=-24576
+TIMBRE_LEVEL timbre=2 positive=24552 negative=-24576
+TIMBRE_LEVEL timbre=3 positive=2328 negative=-2064
+TIMBRE_LEVEL timbre=4 positive=24192 negative=-24312
+TIMBRE_LEVEL timbre=5 positive=23640 negative=-23808
+TIMBRE_LEVEL timbre=6 positive=12216 negative=-12120
+PASS tb_output_gain checks=6056248 frames=4603
+E:/gowin/fpga-instrument-timing-audio-fix/sim/tb_output_gain.sv:95: $finish called at 95875170598 (1ps)

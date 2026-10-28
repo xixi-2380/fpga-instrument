@@ -1,0 +1,5 @@
+PASS limiter window-bound model; 2772 bit-exact vectors; 4 audition candidates
+RUN tb_audio_limiter
+PASS tb_audio_limiter checks=293836 vectors=2772 max_cycles=104
+E:/gowin/fpga-instrument-timing-audio-fix/sim/tb_audio_limiter.sv:32: $finish called at 2994310000 (1ps)
+

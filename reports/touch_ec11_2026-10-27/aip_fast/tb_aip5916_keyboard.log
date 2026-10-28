@@ -1,0 +1,2 @@
+PASS tb_aip5916_keyboard checks=234406 reports=28 half=4
+E:/gowin/fpga-instrument-integrated/sim/tb_aip5916_keyboard.sv:44: $finish called at 2343820000 (1ps)

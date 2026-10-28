@@ -1,0 +1,3 @@
+PASS pixel_equivalence comparisons=2688186
+PASS tb_rgb_ui_renderer checks=5376045 frames=7
+E:/gowin/fpga-instrument-timing-audio-fix/reports/timing_audio_flash_2026-10-27/renderer_equivalence/tb_equivalence.sv:95: $finish called at 26881860000 (1ps)

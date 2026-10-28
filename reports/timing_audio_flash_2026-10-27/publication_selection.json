@@ -1,0 +1,7 @@
+{
+  "remote": "https://github.com/xixi-2380/fpga-instrument.git",
+  "target_branch": "codex/integrated-instrument",
+  "curated_report_files": 840,
+  "excluded": "local SDK, signing keys, simulator executables, intermediate physical databases, raw audition data",
+  "burn_file": "dist/timing-audio-fix/D2_keyboard_leds.fs"
+}

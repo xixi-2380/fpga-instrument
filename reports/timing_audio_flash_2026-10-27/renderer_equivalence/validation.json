@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "renderer_sha256": "fe9d99c69a3dbf85fd55ba6ca3a832a3fd4a20c9db9836a68673ae0a56b13de3",
+  "baseline_sha256": "023e33c39591921bee1328326c8fe4c546410f723adf6bba8611506df7df20c9",
+  "output": "PASS pixel_equivalence comparisons=2688186\nPASS tb_rgb_ui_renderer checks=5376045 frames=7\nE:/gowin/fpga-instrument-timing-audio-fix/reports/timing_audio_flash_2026-10-27/renderer_equivalence/tb_equivalence.sv:95: $finish called at 26881860000 (1ps)\n"
+}

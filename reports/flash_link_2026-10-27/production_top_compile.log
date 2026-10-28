@@ -1,0 +1,28 @@
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:997: warning: implicit definition of wire 'I_hs'.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:13072: warning: implicit definition of wire 'cnt_reset'.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:13835: warning: implicit definition of wire 'rst'.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14524: warning: implicit definition of wire 'clk2_dt_dir'.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:15635: warning: implicit definition of wire 'rst'.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:16324: warning: implicit definition of wire 'clk2_dt_dir'.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14421: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14657: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14752: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14847: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14942: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:15028: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:15114: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14421: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14657: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14752: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14847: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14942: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:15028: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:15114: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14421: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14657: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14752: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14847: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:14942: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:15028: warning: @* found no sensitivities so it will never trigger.
+C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v:15114: warning: @* found no sensitivities so it will never trigger.
+src/synth_core.sv:208: warning: @* is sensitive to all 63 words in array 'peak_tree'.

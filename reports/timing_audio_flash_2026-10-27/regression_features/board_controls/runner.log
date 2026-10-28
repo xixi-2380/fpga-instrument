@@ -1,0 +1,4 @@
+RUN tb_timbre_control
+PASS tb_timbre_control checks=21 debounce_cycles=4 long_cycles=100
+E:/gowin/fpga-instrument-timing-audio-fix/sim/tb_timbre_control.sv:51: $finish called at 12548796 (1ps)
+

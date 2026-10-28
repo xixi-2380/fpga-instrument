@@ -13,6 +13,7 @@ module score_services #(parameter integer FLASH_WRITES=1)(
  input wire extension_valid,output wire extension_ready,input wire [7:0] extension_command,input wire [8:0] extension_length,input wire [63:0] extension_payload,
  output wire extension_response_valid,input wire extension_response_ready,output wire [4:0] extension_response_length,output wire [159:0] extension_response,
  output wire flash_cs_n,flash_sck,flash_mosi,input wire flash_miso,output wire flash_wp_n,flash_hold_n);
+ `include "config/flash_profile.svh"
  wire library_ready,library_busy,library_init,library_done,loaded_valid;
  wire [4:0] selected,loaded_index;wire [31:0] entries;
  wire [15:0] job_id;wire [1:0] job_state;wire [7:0] library_error,control_error;
@@ -25,7 +26,7 @@ module score_services #(parameter integer FLASH_WRITES=1)(
  reg [4:0] previous_lookup,selected_meta_index;reg [159:0] selected_meta;
  wire fr,fv,fd,fi,fs,bw;wire [1:0] fo;wire [23:0] fa,jedec;wire [8:0] fl;
  wire [7:0] fe,bi,bd,ri,rd,s1,s2,s3;
- wire writable=FLASH_WRITES!=0 && fs && s1[7:2]==0 && !s1[0] && !s2[6] && !s2[0] && !s2[7] && !s3[2];
+ wire writable=FLASH_WRITES!=0 && fs && w25q128_array_writable(s1,s2,s3);
  assign action_ready=!control_busy && !remote_pending;
  assign status={3'd0,job_id,job_state,fs,jedec,(selected_meta_index==selected?selected_meta[31:16]:16'd0),play_state,
   (control_error!=0?control_error:library_error),library_init,library_busy,entries[selected],selected};

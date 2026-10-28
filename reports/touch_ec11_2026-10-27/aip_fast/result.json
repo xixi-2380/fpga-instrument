@@ -1,0 +1,8 @@
+{
+  "configuration": "aip_fast",
+  "test": "tb_aip5916_keyboard",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 1.114
+}

@@ -1,0 +1,297 @@
+{
+  "valid": true,
+  "active_bank": 1,
+  "generation": 36,
+  "song_count": 32,
+  "total_notes": 4189,
+  "songs": [
+    {
+      "index": 1,
+      "slot": 32,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S001",
+      "polyphony": 3
+    },
+    {
+      "index": 2,
+      "slot": 2,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S002",
+      "polyphony": 3
+    },
+    {
+      "index": 3,
+      "slot": 0,
+      "count": 4096,
+      "duration_ms": 8191,
+      "crc32": "B096FCD2",
+      "name": "S003",
+      "polyphony": 1
+    },
+    {
+      "index": 4,
+      "slot": 3,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S004",
+      "polyphony": 3
+    },
+    {
+      "index": 5,
+      "slot": 4,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S005",
+      "polyphony": 3
+    },
+    {
+      "index": 6,
+      "slot": 5,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S006",
+      "polyphony": 3
+    },
+    {
+      "index": 7,
+      "slot": 6,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S007",
+      "polyphony": 3
+    },
+    {
+      "index": 8,
+      "slot": 7,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S008",
+      "polyphony": 3
+    },
+    {
+      "index": 9,
+      "slot": 8,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S009",
+      "polyphony": 3
+    },
+    {
+      "index": 10,
+      "slot": 9,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S010",
+      "polyphony": 3
+    },
+    {
+      "index": 11,
+      "slot": 10,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S011",
+      "polyphony": 3
+    },
+    {
+      "index": 12,
+      "slot": 11,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S012",
+      "polyphony": 3
+    },
+    {
+      "index": 13,
+      "slot": 12,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S013",
+      "polyphony": 3
+    },
+    {
+      "index": 14,
+      "slot": 13,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S014",
+      "polyphony": 3
+    },
+    {
+      "index": 15,
+      "slot": 14,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S015",
+      "polyphony": 3
+    },
+    {
+      "index": 16,
+      "slot": 15,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S016",
+      "polyphony": 3
+    },
+    {
+      "index": 17,
+      "slot": 16,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S017",
+      "polyphony": 3
+    },
+    {
+      "index": 18,
+      "slot": 17,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S018",
+      "polyphony": 3
+    },
+    {
+      "index": 19,
+      "slot": 18,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S019",
+      "polyphony": 3
+    },
+    {
+      "index": 20,
+      "slot": 19,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S020",
+      "polyphony": 3
+    },
+    {
+      "index": 21,
+      "slot": 20,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S021",
+      "polyphony": 3
+    },
+    {
+      "index": 22,
+      "slot": 21,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S022",
+      "polyphony": 3
+    },
+    {
+      "index": 23,
+      "slot": 22,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S023",
+      "polyphony": 3
+    },
+    {
+      "index": 24,
+      "slot": 23,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S024",
+      "polyphony": 3
+    },
+    {
+      "index": 25,
+      "slot": 24,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S025",
+      "polyphony": 3
+    },
+    {
+      "index": 26,
+      "slot": 25,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S026",
+      "polyphony": 3
+    },
+    {
+      "index": 27,
+      "slot": 26,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S027",
+      "polyphony": 3
+    },
+    {
+      "index": 28,
+      "slot": 27,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S028",
+      "polyphony": 3
+    },
+    {
+      "index": 29,
+      "slot": 28,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S029",
+      "polyphony": 3
+    },
+    {
+      "index": 30,
+      "slot": 29,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S030",
+      "polyphony": 3
+    },
+    {
+      "index": 31,
+      "slot": 30,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S031",
+      "polyphony": 3
+    },
+    {
+      "index": 32,
+      "slot": 31,
+      "count": 3,
+      "duration_ms": 5,
+      "crc32": "422CFBE3",
+      "name": "S032",
+      "polyphony": 3
+    }
+  ]
+}

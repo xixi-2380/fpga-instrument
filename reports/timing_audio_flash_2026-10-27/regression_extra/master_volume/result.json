@@ -1,0 +1,8 @@
+{
+  "configuration": "master_volume",
+  "test": "tb_master_volume",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 0.45
+}

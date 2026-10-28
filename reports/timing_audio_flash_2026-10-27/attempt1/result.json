@@ -1,0 +1,77 @@
+{
+  "name": "attempt1",
+  "exit_code": 0,
+  "seconds": 1316.46,
+  "sources_unchanged": true,
+  "setup_hold_violations": {
+    "Setup": 5,
+    "Hold": 0
+  },
+  "fmax_mhz": {
+    "ref_clk": {
+      "target": 50.0,
+      "actual": 57.476
+    },
+    "audio_clk": {
+      "target": 61.44,
+      "actual": 58.668
+    },
+    "pixel_clk": {
+      "target": 35.0,
+      "actual": 36.786
+    }
+  },
+  "bitstream_sha256": "87cee03c7b02e7470440fd1fa4611fd817d987a46256ac119d672a630373b004",
+  "warnings": [
+    "WARN  (EX3791) : Expression size 6 truncated to fit in target size 4(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\ui_more_actions.sv\":16)",
+    "WARN  (EX3791) : Expression size 16 truncated to fit in target size 9(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\bluetooth_score_core.sv\":59)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 2(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\local_score_control.sv\":27)",
+    "WARN  (EX3791) : Expression size 16 truncated to fit in target size 9(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\flash_song_library.sv\":149)",
+    "WARN  (EX3045) : Case equality operator always evaluates to false due to comparison with 'x' or 'z'(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\rgb_display.sv\":102)",
+    "WARN  (EX3045) : Case equality operator always evaluates to false due to comparison with 'x' or 'z'(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\rgb_display.sv\":103)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 11(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\rgb_scan_timing.sv\":20)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 11(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\rgb_scan_timing.sv\":21)",
+    "WARN  (EX3791) : Expression size 9 truncated to fit in target size 4(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\rgb_ui_renderer.sv\":59)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 11(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\rgb_ui_renderer.sv\":180)",
+    "WARN  (EX3791) : Expression size 31 truncated to fit in target size 7(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\rgb_ui_renderer.sv\":237)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 8(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\rgb_ui_renderer.sv\":72)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 11(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\rgb_ui_renderer.sv\":322)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 11(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\rgb_ui_renderer.sv\":325)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 11(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\rgb_ui_renderer.sv\":328)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 12(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\rgb_ui_renderer.sv\":384)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 4(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\rgb_ui_renderer.sv\":384)",
+    "WARN  (EX1998) : Net 'instruction[63]' does not have a driver(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\score_player.sv\":20)",
+    "WARN  (EX3791) : Expression size 3 truncated to fit in target size 2(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\timbre_control.sv\":340)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 8(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\aip5916_keyboard.sv\":35)",
+    "WARN  (EX3791) : Expression size 10 truncated to fit in target size 5(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\synth_core.sv\":63)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 12(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\audio_latency_meter.sv\":31)",
+    "WARN  (EX3791) : Expression size 30 truncated to fit in target size 24(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\audio_limiter.sv\":32)",
+    "WARN  (EX3791) : Expression size 18 truncated to fit in target size 17(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\audio_limiter.sv\":38)",
+    "WARN  (EX3791) : Expression size 18 truncated to fit in target size 17(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\audio_limiter.sv\":43)",
+    "WARN  (EX3791) : Expression size 18 truncated to fit in target size 16(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\master_volume.sv\":126)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 14(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\adsr_envelope.sv\":52)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 14(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\adsr_envelope.sv\":52)",
+    "WARN  (EX3791) : Expression size 15 truncated to fit in target size 14(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\adsr_envelope.sv\":100)",
+    "WARN  (EX3791) : Expression size 18 truncated to fit in target size 17(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\adsr_envelope.sv\":101)",
+    "WARN  (EX3791) : Expression size 18 truncated to fit in target size 17(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\adsr_envelope.sv\":101)",
+    "WARN  (EX3045) : Case equality operator always evaluates to false due to comparison with 'x' or 'z'(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\audio_effects.sv\":49)",
+    "WARN  (EX3045) : Case inequality operator always evaluates to true due to comparison with 'x' or 'z'(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\audio_effects.sv\":59)",
+    "WARN  (EX3045) : Case equality operator always evaluates to false due to comparison with 'x' or 'z'(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\audio_delay.sv\":18)",
+    "WARN  (EX3791) : Expression size 16 truncated to fit in target size 15(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\audio_delay.sv\":23)",
+    "WARN  (EX3791) : Expression size 20 truncated to fit in target size 16(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\audio_delay.sv\":58)",
+    "WARN  (EX3791) : Expression size 24 truncated to fit in target size 16(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\audio_delay.sv\":60)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 16(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\audio_reverb.sv\":15)",
+    "WARN  (EX3791) : Expression size 12 truncated to fit in target size 11(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\audio_reverb.sv\":37)",
+    "WARN  (EX3791) : Expression size 30 truncated to fit in target size 16(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\audio_reverb.sv\":53)",
+    "WARN  (EX3791) : Expression size 20 truncated to fit in target size 16(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\audio_effects.sv\":94)",
+    "WARN  (EX3791) : Expression size 20 truncated to fit in target size 16(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\audio_effects.sv\":96)",
+    "WARN  (EX3791) : Expression size 19 truncated to fit in target size 16(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\audio_effects.sv\":98)",
+    "WARN  (NL0002) : The module \"voice_mixer\" instantiated to \"mixer\" is swept in optimizing(\"E:\\gowin\\fpga-instrument-timing-audio-fix\\src\\synth_core.sv\":197)",
+    "WARN  (CK3000) : Can't calculate clocks' relationship between: \"clk\" and \"clocks/pll2/CLKOUT0.default_gen_clk\"",
+    "WARN  (CK3000) : Can't calculate clocks' relationship between: \"clocks/pll2/CLKOUT0.default_gen_clk\" and \"clk\"",
+    "WARN  (CK3000) : Can't calculate clocks' relationship between: \"clocks/pll2/CLKOUT0.default_gen_clk\" and \"lcd_on.display_driver/pixel_pll/CLKOUT0.default_gen_clk\"",
+    "WARN  (CK3000) : Can't calculate clocks' relationship between: \"lcd_on.display_driver/pixel_pll/CLKOUT0.default_gen_clk\" and \"clocks/pll2/CLKOUT0.default_gen_clk\"",
+    "WARN  (PR1014) : Generic routing resource will be used to clock signal 'clk_d' by the specified constraint. And then it may lead to the excessive delay or skew"
+  ],
+  "errors": []
+}

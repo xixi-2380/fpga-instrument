@@ -1,0 +1,8 @@
+E:/gowin/fpga-instrument-integrated/src/synth_core.sv:208: warning: @* is sensitive to all 63 words in array 'peak_tree'.
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_tail_reuse.sv:10: warning: Instantiating module synth_core with dangling input port 23 (effect_echo_wet) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_tail_reuse.sv:10: warning: Instantiating module synth_core with dangling input port 24 (effect_room_wet) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_tail_reuse.sv:10: warning: Instantiating module synth_core with dangling input port 25 (effect_tremolo_depth) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_tail_reuse.sv:10: warning: Instantiating module synth_core with dangling input port 26 (effect_tremolo_rate_hz) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_tail_reuse.sv:10: warning: Instantiating module synth_core with dangling input port 37 (output_flush) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_tail_reuse.sv:10: warning: Instantiating module synth_core with dangling input port 40 (effect_mask) floating.
+E:/gowin/fpga-instrument-integrated/sim/tb_bt_tail_reuse.sv:10: warning: Instantiating module synth_core with dangling input port 41 (effect_echo_samples) floating.

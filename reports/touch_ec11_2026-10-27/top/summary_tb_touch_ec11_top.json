@@ -1,0 +1,8 @@
+[
+  {
+    "test": "tb_touch_ec11_top",
+    "passed": true,
+    "pll_model": "behavioral substitute",
+    "seconds": 186.7
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "configuration": "flash_permissions_1mhz",
+  "test": "tb_flash_write_permissions",
+  "params": [
+    "HALF=25"
+  ],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 1.784
+}

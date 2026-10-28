@@ -1,0 +1,6 @@
+RUN tb_stereo_audio
+FAIL display is signed stereo average at 29907000
+FATAL: E:/gowin/fpga-instrument-integrated/sim/tb_stereo_audio.sv:86: 
+       Time: 29907150  Scope: tb_stereo_audio
+
+

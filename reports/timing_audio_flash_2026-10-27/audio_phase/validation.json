@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "baseline_sha256": "9378cdf638d93afc967e8cf0570f626fa86ed1b92f1547ab59ae5339f656e90e",
+  "actual_sha256": "0a25682a60f20823b5741e204aa6b298783410dd70d4842f535ade1f3ea3d8bb",
+  "output": "PASS audio timing phase checks=5007520 HALF=1,2,4,20,31\nE:/gowin/fpga-instrument-timing-audio-fix/reports/timing_audio_flash_2026-10-27/audio_phase/tb_phase.sv:21: $finish called at 5007522000 (1ps)\n"
+}

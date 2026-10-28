@@ -1,0 +1,6 @@
+E:/gowin/fpga-instrument-integrated/sim/aip5916_model.svh:4: warning: timescale for aip5916_model inherited from another file.
+E:/gowin/fpga-instrument-integrated/sim/tb_touch_ec11_top.sv:1: ...: The inherited timescale is here.
+E:/gowin/fpga-instrument-integrated/sim/touch_keyboard_fixture.svh:4: warning: timescale for touch_keyboard_fixture inherited from another file.
+E:/gowin/fpga-instrument-integrated/sim/tb_touch_ec11_top.sv:1: ...: The inherited timescale is here.
+E:/gowin/fpga-instrument-integrated/src/synth_core.sv:208: warning: @* is sensitive to all 63 words in array 'peak_tree'.
+E:/gowin/fpga-instrument-integrated/sim/tb_touch_ec11_top.sv:12: warning: Instantiating module keyboard_top with dangling input port 37 (flash_miso) floating.

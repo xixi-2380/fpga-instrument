@@ -11,6 +11,7 @@ module spi_nor_flash #(
  input wire buffer_write,input wire [7:0] buffer_index,input wire [7:0] buffer_wdata,
  input wire [7:0] read_index,output reg [7:0] read_data,
  output reg cs_n,output wire sck,mosi,input wire miso,output wire wp_n,hold_n);
+ `include "config/flash_profile.svh"
  // operation:0 probe,1 read,2 page program,3 sector erase.
  localparam [5:0] BOOT=0,IDLE=1,ID=2,ID_DONE=3,SR1=4,SR1_DONE=5,SR2=6,SR2_DONE=7,SR3=8,SR3_DONE=9,
   DISPATCH=10,WREN=11,WREN_DONE=12,WEL=13,WEL_DONE=14,EXEC=15,EXEC_DONE=16,POLL=17,POLL_DONE=18,
@@ -32,7 +33,7 @@ module spi_nor_flash #(
  reg with_address;reg [7:0] buffer[0:255];
  (* async_reg="true" *) reg miso_meta,miso_sync;
  wire byte_ready,byte_done;wire [7:0] spi_rx;
- wire write_ok=writes_enabled && supported && status1[7:2]==0 && !status1[0] && !status2[6] && !status2[0] && !status2[7] && !status3[2];
+ wire write_ok=writes_enabled && supported && w25q128_array_writable(status1,status2,status3);
  wire [24:0] last_address={1'b0,location}+{16'd0,size}-1'b1;
  assign supported=jedec_id==24'hef4018;
  assign request_ready=state==IDLE && initialized && !rst;
@@ -87,7 +88,7 @@ module spi_nor_flash #(
     WREN:transfer(8'h06,0,0,WREN_DONE);
     WREN_DONE:state<=WEL;
     WEL:transfer(8'h05,0,1,WEL_DONE);
-    WEL_DONE:if(received[1] && !received[0] && received[7:2]==0)state<=EXEC;else fail(8'h21);
+    WEL_DONE:if(received[1] && !received[0] && received[4:2]==0)state<=EXEC;else fail(8'h21);
     EXEC:if(op==1)transfer(8'h03,1,size,EXEC_DONE);
      else if(op==2)transfer(8'h02,1,size,EXEC_DONE);
      else transfer(8'h20,1,0,EXEC_DONE);

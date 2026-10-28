@@ -1,0 +1,10 @@
+{
+  "configuration": "auto_manual_timbre_2",
+  "test": "tb_auto_manual_equivalence",
+  "params": [
+    "TIMBRE=2"
+  ],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 404.447
+}

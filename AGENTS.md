@@ -1,4 +1,38 @@
+# Current publication authorization — 2026-10-28
+
+- User now explicitly requests: “把最终版本编译之后推送到原分支并提交，同时把可烧录文件也一起推送”. The original project branch was read and confirmed as codex/integrated-instrument, remote https://github.com/xixi-2380/fpga-instrument.git. After the final matching build/regression/package, commit from this new copy and push to that remote branch, including the canonical matching .fs (force-add only this intended ignored burn file). Do not push main or force-push. Preserve the original source directory and do not program hardware.
+- This supersedes the older no-commit/no-push instructions below. Publish source, diagnostic APK, matching burn file and compact validation/build evidence; retain intermediate databases, simulator executables, local SDK/signing keys and large temporary traces locally.
+
+# Current acceptance update — 2026-10-28
+
+- After being told attempt4 has zero setup/hold violations and TNS=0, with ref/audio/pixel internal WNS3.695/0.157/1.538ns and the original0.5ns audio margin target still unmet, the user replied: “好的，已经达到预期目标了”. Treat this as acceptance of the disclosed result and finish the already-running attempt5 build/regression/package. Do not add further structural timing optimizations merely to pursue0.5ns. Report the actual margins and whether the original0.5ns target was achieved; never label an unmet target as met.
+- Package with scripts/package_timing_audio_fix.py --implementation attempt5 --accept-zero-violation only if all setup/hold/recovery/removal/pulse checks and TNS pass, functional regression passes and artifact/source hashes match. Original source remains read-only. No hardware programming. Git publication follows the latest explicit authorization above.
+
+# Current task authorization — 2026-10-27 timing/audio/Flash copy
+
+- User explicitly requested this independent copy, source fixes, simulations, full Gowin synthesis/P&R/STA and matching new bitstream. Do not program hardware, commit, push, or alter the source E:/gowin/fpga-instrument-integrated or other source projects. No further questions; use approved defaults.
+- Preserve 73 pins, 32 physical voices/16 automatic IDs, 36 touch keys/12 AUX, EC11, stereo, Flash/App, ultrasonic and 50/61.44/35MHz clocks. Target setup/hold/recovery/removal/pulse-width violations=0, TNS=0; internal setup WNS>=0.5ns in ref/audio/pixel. No clock reduction or ordinary path false-path/multicycle relaxation.
+- Noise report: only Bluetooth polyphony, distortion increases with voice count, manual playing is normal. Audio quality prioritized; retain single-note loudness and sample latency, permit smooth polyphonic overload attenuation. Add 240-sample (5ms) release hold only if trace/model measurements support it.
+- All new outputs belong to this directory. Copied old products are historical, archived under reports/timing_audio_flash_2026-10-27/source_build_history. Source integrity manifest is source_project_snapshot.json. Baseline means full build of copied CURRENT disk contents, including uncommitted/untracked files, not Git HEAD.
+- Inherited instructions below are historical when they conflict with this authorization. No agents were requested; do not delegate.
+
 # Local project working rules
+
+## 2026-10-27 U7 Flash 保存故障检查（最新）
+
+- 用户报告Flash可识别但下载失败，并确认是App的RAM下载/校验后保存U7失败；实板ID和错误码暂未知。仅本地检查/修正与仿真，没有EDA/Programmer/实板擦写或提交推送授权。前一轮三板键盘/EC11未提交修改保留，来源目录只读。
+- 修复已复现的错误21：原判断将SRP/SRL、SEC/TB与真正的数据保护混淆。新config/flash_profile.svh统一services能力与driver写权限；BP=000、CMP=0、WPS=0且非BUSY/SUS才可写已支持型号，WEL实读仍要求1。EF4018白名单、地址、SPI1MHz、引脚不变，不发状态写入/解锁/整片擦除。不能把此复现直接等同于实板根因。
+- App0.3.1-flashdiag versionCode4显示只读Flash诊断，保留RAM已校验的阶段事实，Flash任务错误含数字代码；新APK在android/dist，与原0.3同签名，未安装或手机实测。FPGA修改仍需用户重新实现后生效。文档docs/flash_link_2026-10-27.md，证据reports/flash_link_2026-10-27，旧三板25配置报告是此前源码的历史结果，不覆盖此次Flash变动。
+
+
+## 2026-10-27 三块触摸琴键与 EC11（最新，覆盖下方矩阵及单选效果）
+
+- 用户授权在当前 integrated 项目替换矩阵为三块 AiP5916，并从只读来源 `E:\gowin\outfiless\ec11-effects-timing-2026-10-26` 移植 EC11。第三块 INT 冲突已由用户明确选择 U22；MAX_BCLK 保留 V22。只改本项目源码/约束/文档及运行 HDL/软件检查，不运行 EDA/烧录，不自动提交推送。
+- 三板 SDA/SCL/INT：AB25/AA25/Y26，L22/W26/U26，W20/V19/U22；EC11 A/B/SW：V16/Y21/V17，U16/U15/W21，T23/R25/W25。旧 key_row/key_col 与 DBG 四路物理端口及约束移除，73 个球位互不重复。PCB 供电 3.3V，共地，三总线都访问 0x56，不并线。
+- 36 琴键 C4..B6；12 AUX 独立设置控制。物理声部仍 32、自动身份仍 16。每板逐项配置回读，单字节读取 34/35 两遍取一致快照，轮询不依赖 INT 边沿；连续三轮失败松开该板琴键并重试。恢复连接/退出菜单/结束蓝牙后按逐键松开再重按的规则恢复。
+- EC11 保留来源独立双击开关、编辑模式、20..500ms 回声抽头交叉淡化和三效果串联；用户所称延音指回声间隔，没有改 ADSR Release。双声道独立效果和既有固定延迟限幅、原子 I²S、LAT 保留；不复制来源旧单声部 synth 或 EDA/LCD 时序结构。
+- 主显示快照 1207 位：低 1167 位保持，17 位旋钮、20 位高音、3 位在线状态追加；曲库 146 位保持。当前操作文档为 docs/touch_keyboard_ec11_2026-10-27.md；回归脚本 scripts/run_touch_ec11_tests.py，报告 reports/touch_ec11_2026-10-27。旧矩阵顶层和单选效果夹具仅为历史，不作为本版通过记录。50/61.44/35MHz 和普通时序路径预算未放宽；新实现与实板验收仍待用户执行。 最终本轮25配置、41,657,447次HDL检查通过；双侧独立输出模型18,376项、独立串联效果112,372向量、7幅全屏通过，官方库生产顶层语法检查通过。效果交付530拍，旁路限幅数学夹具后音量532拍，预算544；数字LAT1.37ms。见validation.json，不能据此声称STA通过。
+
 
 ## 2026-10-27 合入8f10059立体声（最新）
 

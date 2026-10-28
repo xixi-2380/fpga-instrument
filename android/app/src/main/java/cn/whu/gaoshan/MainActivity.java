@@ -34,9 +34,12 @@ public final class MainActivity extends Activity {
     private final List<Button> lockedButtons=new ArrayList<>();private final List<Button> connectedButtons=new ArrayList<>();
     private int ink=Color.rgb(228,236,239),muted=Color.rgb(164,183,191),accent=Color.rgb(104,219,193);
     private interface Job {void run()throws Exception;}
+    private static final class FlashSaveFailure extends IOException {
+        FlashSaveFailure(IOException cause){super("RAM下载与校验已完成；Flash保存未确认："+cause.getMessage(),cause);}
+    }
     @Override public void onCreate(Bundle saved){super.onCreate(saved);getWindow().setStatusBarColor(Color.rgb(13,26,34));getWindow().setNavigationBarColor(Color.rgb(13,26,34));
         ScrollView scroll=new ScrollView(this);page=new LinearLayout(this);page.setOrientation(LinearLayout.VERTICAL);page.setPadding(dp(20),dp(28),dp(20),dp(32));page.setBackgroundColor(Color.rgb(13,26,34));scroll.addView(page);scroll.setOnApplyWindowInsetsListener((v,insets)->{page.setPadding(dp(20)+insets.getSystemWindowInsetLeft(),dp(20)+insets.getSystemWindowInsetTop(),dp(20)+insets.getSystemWindowInsetRight(),dp(24)+insets.getSystemWindowInsetBottom());return insets;});setContentView(scroll);
-        label("高山流水",30,ink);label("曲谱传送 · 开发版 0.3 · 多声部与琴端曲库",14,accent);
+        label("高山流水",30,ink);label("曲谱传送 · 开发版 0.3.1 · Flash链路诊断",14,accent);
         label("连接电子琴",20,ink);status=label("未连接设备",15,accent);capacity=label("先在系统蓝牙设置中配对模块。此 App 只列出已配对的经典蓝牙设备。",13,muted);
         label("第一步：仅连接蓝牙模块",15,ink);
         connectionMode=new Spinner(this);setItems(connectionMode,new String[]{"自动兼容：安全失败后尝试 insecure","仅安全 RFCOMM","仅兼容 insecure RFCOMM"});page.addView(connectionMode);
@@ -60,11 +63,12 @@ public final class MainActivity extends Activity {
         page.addView(button("刷新设备状态",this::refreshStatus,true));position=label("进度由设备状态返回，不在手机端猜测。",13,muted);
         label("琴端曲库",20,ink);librarySlots=new Spinner(this);String[] slots=new String[32];for(int i=0;i<32;i++)slots[i]=String.format(Locale.ROOT,"S%03d",i+1);setItems(librarySlots,slots);page.addView(librarySlots);
         libraryInfo=label("下载校验后，如支持可写曲库，将自动保存到选定编号；旧RAM固件仍只下载到RAM。",13,muted);
+        page.addView(button("读取Flash诊断",this::readFlashDiagnostics,true));
         row(button("刷新曲库目录",this::refreshLibrary,true),button("查询未完成任务",this::queryPendingJob,true));
         row(button("保存当前RAM",()->libraryAction(0),true),button("加载选中曲谱",()->libraryAction(1),true));
         page.addView(button("删除选中曲谱",()->{int index=librarySlots.getSelectedItemPosition();new AlertDialog.Builder(this).setMessage(String.format(Locale.ROOT,"删除琴端 S%03d？",index+1)).setNegativeButton("取消",null).setPositiveButton("确认删除",(d,w)->runLibraryAction(2,index)).show();},true));
         label("连接记录",20,ink);log=label("等待操作。离线演示不使用蓝牙，也不驱动扬声器。",12,muted);
-        Button copy=button("复制诊断记录",()->{android.content.ClipboardManager clipboard=(android.content.ClipboardManager)getSystemService(CLIPBOARD_SERVICE);clipboard.setPrimaryClip(ClipData.newPlainText("蓝牙诊断","高山流水 0.3-dev\n设备："+deviceLabel+"\n状态："+module.state()+"\n"+log.getText()));Toast.makeText(this,"诊断记录已复制",Toast.LENGTH_SHORT).show();},false);lockedButtons.remove(copy);page.addView(copy);render();
+        Button copy=button("复制诊断记录",()->{android.content.ClipboardManager clipboard=(android.content.ClipboardManager)getSystemService(CLIPBOARD_SERVICE);clipboard.setPrimaryClip(ClipData.newPlainText("蓝牙诊断","高山流水 0.3.1-flashdiag\n设备："+deviceLabel+"\n状态："+module.state()+"\n"+log.getText()));Toast.makeText(this,"诊断记录已复制",Toast.LENGTH_SHORT).show();},false);lockedButtons.remove(copy);page.addView(copy);render();
     }
     private int dp(int n){return (int)(getResources().getDisplayMetrics().density*n+.5f);}
     private TextView label(String text,int size,int color){TextView v=new TextView(this);v.setText(text);v.setTextSize(size);v.setTextColor(color);v.setPadding(0,dp(10),0,dp(6));page.addView(v);return v;}
@@ -90,7 +94,7 @@ public final class MainActivity extends Activity {
     private void ui(Runnable r){runOnUiThread(()->{if(!dead)r.run();});}
     private void task(String name,Job job){if(busy)return;busy=true;render();int epoch=generation;append(name+"…");worker.execute(()->{
         try{if(epoch!=generation)return;job.run();}
-        catch(Exception e){ui(()->{if(epoch==generation){append(name+"失败："+e.getMessage());if(name.equals("上传曲谱"))progressText.setText("上传未完成："+e.getMessage());if(client!=null&&!client.sessionReady()){caps=null;if(!demo)module.protocolFailed();}new AlertDialog.Builder(this).setTitle(name+"未完成").setMessage(e.getMessage()).setPositiveButton("知道了",null).show();}});}
+        catch(Exception e){ui(()->{if(epoch==generation){append(name+"失败："+e.getMessage());if(name.equals("上传曲谱"))progressText.setText(e instanceof FlashSaveFailure?e.getMessage():"RAM下载未完成："+e.getMessage());if(client!=null&&!client.sessionReady()){caps=null;if(!demo)module.protocolFailed();}new AlertDialog.Builder(this).setTitle(name+"未完成").setMessage(e.getMessage()).setPositiveButton("知道了",null).show();}});}
         finally{ui(()->{if(epoch==generation){busy=false;render();}});}
     });}
     private boolean permission(){if(Build.VERSION.SDK_INT>=31&&(checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT)!=PackageManager.PERMISSION_GRANTED||(!askedScanPermission&&checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN)!=PackageManager.PERMISSION_GRANTED))){askedScanPermission=true;requestPermissions(new String[]{Manifest.permission.BLUETOOTH_CONNECT,Manifest.permission.BLUETOOTH_SCAN},7);return false;}return true;}
@@ -134,14 +138,34 @@ public final class MainActivity extends Activity {
         String text=(demo?"【离线模拟，无真实设备】\n":"")+songName+"\n"+s.notes.size()+" 条音符，"+s.duration+" ms。\n开始上传后会替换琴上RAM原曲。"+(libraryCaps!=null&&libraryCaps.writable?String.format(Locale.ROOT,"校验后自动保存到 S%03d，并替换该编号已有曲谱。",librarySlots.getSelectedItemPosition()+1):"当前仅保存RAM，断电丢失。")+(s.warnings.isEmpty()?"":"\n\n将按简化方式演奏：\n"+String.join("\n",s.warnings));
         new AlertDialog.Builder(this).setTitle("确认下载曲谱").setMessage(text).setNegativeButton("取消",null).setPositiveButton("确认下载",(dialog,which)->upload(s)).show();
     }
-    private void upload(Score s){cancel.set(false);int epoch=generation,index=librarySlots.getSelectedItemPosition();task("上传曲谱",()->{ProtocolClient c=client;if(c==null)throw new IOException("连接已断开");c.upload(s,cancel,(n,total)->ui(()->{if(epoch==generation){progress.setProgress((int)(n*1000L/total));progressText.setText("已确认 "+n+" / "+total+" 条；等待RAM校验");}}));ui(()->{if(epoch==generation)progressText.setText("RAM已校验；尚未持久保存");});ProtocolClient.LibraryCapabilities ext=c.libraryCapabilities();if(ext!=null&&ext.initialized&&ext.writable){ProtocolClient.LibraryJob job=startTrackedJob(c,0,index,Wire.crc32(s.bytes()));waitLibraryJob(c,job,epoch);}else ui(()->{if(epoch==generation)progressText.setText("RAM下载完成；当前Flash不可写或固件不支持曲库，断电不保留");});});}
+    private void upload(Score s){
+        cancel.set(false);int epoch=generation,index=librarySlots.getSelectedItemPosition();
+        task("上传曲谱",()->{
+            ProtocolClient c=client;if(c==null)throw new IOException("连接已断开");
+            c.upload(s,cancel,(n,total)->ui(()->{if(epoch==generation){progress.setProgress((int)(n*1000L/total));progressText.setText("已确认 "+n+" / "+total+" 条；等待RAM校验");}}));
+            ui(()->{if(epoch==generation){progressText.setText("RAM已校验；尚未持久保存");append("RAM下载与校验已完成。进入Flash保存阶段。");}});
+            try{
+                ProtocolClient.LibraryCapabilities ext=c.libraryCapabilities();
+                ui(()->{if(epoch==generation){libraryCaps=ext;showLibraryCapabilities(ext);append(ProtocolClient.flashDiagnostic(ext));}});
+                if(ext!=null&&ext.initialized&&ext.writable){
+                    ProtocolClient.LibraryJob job=startTrackedJob(c,0,index,Wire.crc32(s.bytes()));waitLibraryJob(c,job,epoch);
+                }else ui(()->{if(epoch==generation)progressText.setText("RAM下载完成；Flash尚不可写，断电不保留。请查看Flash诊断。");});
+            }catch(IOException e){throw new FlashSaveFailure(e);}
+        });
+    }
+    private void readFlashDiagnostics(){
+        int epoch=generation;task("读取Flash诊断",()->{
+            ProtocolClient.LibraryCapabilities ext=client.libraryCapabilities();
+            ui(()->{if(epoch==generation){libraryCaps=ext;showLibraryCapabilities(ext);String text=ProtocolClient.flashDiagnostic(ext);append(text);new AlertDialog.Builder(this).setTitle("Flash诊断").setMessage(text+"\n可点“复制诊断记录”发送此结果。").setPositiveButton("知道了",null).show();}});
+        });
+    }
     private void showLibraryCapabilities(ProtocolClient.LibraryCapabilities ext){libraryInfo.setText(ext==null?"旧版RAM固件：不支持Flash曲库。":String.format(Locale.ROOT,"Flash ID %06X · %s · 32首\nRAM下载与Flash保存为两个独立阶段。",ext.jedecId,ext.writable?"可写":ext.supported?"只读/忙/受保护":"未知型号，只读"));}
     private void refreshLibrary(){int epoch=generation;task("读取曲库",()->{ProtocolClient c=client;ProtocolClient.LibraryCapabilities ext=c.libraryCapabilities();if(ext==null)throw new IOException("当前固件不支持曲库");String[] names=new String[32];for(int i=0;i<32;i++){ProtocolClient.LibraryEntry e=c.libraryEntry(i);names[i]=String.format(Locale.ROOT,"S%03d · %s",i+1,e.exists?e.name+" / "+e.count+"音符":"空");}ui(()->{if(epoch==generation){int selection=librarySlots.getSelectedItemPosition();setItems(librarySlots,names);librarySlots.setSelection(selection);libraryCaps=ext;showLibraryCapabilities(ext);}});});}
     private void libraryAction(int op){int index=librarySlots.getSelectedItemPosition();if(op==0)new AlertDialog.Builder(this).setMessage(String.format(Locale.ROOT,"将当前RAM保存到 S%03d，替换该编号已有曲谱？",index+1)).setNegativeButton("取消",null).setPositiveButton("确认保存",(d,w)->runLibraryAction(op,index)).show();else runLibraryAction(op,index);}
     private void runLibraryAction(int op,int index){cancel.set(false);int epoch=generation;task("曲库操作",()->{ProtocolClient c=client;ProtocolClient.LibraryCapabilities ext=c.libraryCapabilities();if(ext==null)throw new IOException("当前固件不支持曲库");ProtocolClient.LibraryJob job=startTrackedJob(c,op,index,op==0?ext.activeCrc:0);waitLibraryJob(c,job,epoch);});}
     private ProtocolClient.LibraryJob startTrackedJob(ProtocolClient c,int op,int index,long crc)throws IOException{
         if(!getSharedPreferences("libraryJob",MODE_PRIVATE).edit().putBoolean("pending",true).putString("device",deviceLabel).putInt("id",-1).putInt("op",op).putInt("index",index).putLong("crc",crc).commit())throw new IOException("无法保留任务意图，未发起Flash任务");
-        try{ProtocolClient.LibraryJob job=c.startLibraryJob(op,index,"",crc);rememberJob(job);return job;}
+        try{ProtocolClient.LibraryJob job=c.startLibraryJob(op,index,"",crc);rememberJob(job);ui(()->append(String.format(Locale.ROOT,"Flash任务 JOB=%04X OP=%d SLOT=S%03d CRC=%08X",job.id,job.operation,job.index+1,job.crc)));return job;}
         catch(ProtocolClient.DeviceError e){getSharedPreferences("libraryJob",MODE_PRIVATE).edit().clear().apply();throw e;}
     }
     private void rememberJob(ProtocolClient.LibraryJob job)throws IOException{boolean saved=getSharedPreferences("libraryJob",MODE_PRIVATE).edit().putBoolean("pending",true).putString("device",deviceLabel).putInt("id",job.id).putInt("op",job.operation).putInt("index",job.index).putLong("crc",job.crc).commit();if(!saved)throw new IOException("任务已启动，但手机未能保存任务编号，请核对曲库状态");}
@@ -151,7 +175,7 @@ public final class MainActivity extends Activity {
         while(SystemClock.elapsedRealtime()<deadline){
             if(epoch!=generation||cancel.get())throw new IOException("已停止等待；琴端任务可能仍在运行。重连原模块后查询未完成任务。");
             ProtocolClient.LibraryJobStatus state=c.libraryJob(job);
-            if(state.state==3){getSharedPreferences("libraryJob",MODE_PRIVATE).edit().clear().apply();throw new IOException("曲库操作失败："+ProtocolClient.errorText(state.error)+"；未宣称持久保存。");}
+            if(state.state==3){getSharedPreferences("libraryJob",MODE_PRIVATE).edit().clear().apply();throw new IOException("曲库操作失败："+ProtocolClient.flashJobError(state.error)+"；未宣称持久保存。");}
             if(state.state==2){if(job.operation==0&&!state.persisted)throw new IOException("任务完成但未确认持久保存，请核对目录");getSharedPreferences("libraryJob",MODE_PRIVATE).edit().clear().apply();ui(()->{if(epoch==generation){String text=(demo?"模拟结果：":"")+(job.operation==0?"已持久保存":job.operation==1?"已加载到RAM，未自动播放":"已删除")+String.format(Locale.ROOT," S%03d",job.index+1);libraryInfo.setText(text);progressText.setText(text);append(text);}});return;}
             ui(()->{if(epoch==generation){String text=job.operation==0?"正在保存Flash；尚未持久确认":"曲库任务进行中";libraryInfo.setText(text);progressText.setText(text);}});Thread.sleep(500);
         }

@@ -1,0 +1,8 @@
+{
+  "configuration": "british_top",
+  "test": "tb_british_top",
+  "params": [],
+  "behavioral_pll": true,
+  "passed": true,
+  "seconds": 368.66
+}

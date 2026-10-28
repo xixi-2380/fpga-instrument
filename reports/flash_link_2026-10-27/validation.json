@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-27",
+  "base_commit": "55ccf7c83b7b532c97442b5c678dfcc90b03e973",
+  "reported_failure": "RAM upload/commit succeeds, U7 persistence fails; actual JEDEC/status/error not yet supplied",
+  "confirmed_reproduction": "EF4018/SR1=00/SR2=3B/SR3=60 was rejected with 21 by original gate",
+  "hardware_root_cause_confirmed": false,
+  "hdl_checks": 840,
+  "java_checks": 36114,
+  "results": [
+    {
+      "configuration": "fixed_permissions",
+      "test": "tb_flash_write_permissions",
+      "passed": true,
+      "checks": 60,
+      "seconds": 0.409
+    },
+    {
+      "configuration": "permissions_1mhz",
+      "test": "tb_flash_write_permissions",
+      "passed": true,
+      "checks": 60,
+      "seconds": 1.144
+    },
+    {
+      "configuration": "driver_regression",
+      "test": "tb_spi_nor_flash",
+      "passed": true,
+      "checks": 275,
+      "seconds": 0.701
+    },
+    {
+      "configuration": "baseline_library",
+      "test": "tb_flash_song_library",
+      "passed": true,
+      "checks": 90,
+      "seconds": 28.017
+    },
+    {
+      "configuration": "phone_register_locks",
+      "test": "tb_bt_library_link",
+      "passed": true,
+      "checks": 336,
+      "seconds": 126.141
+    },
+    {
+      "configuration": "protocol",
+      "test": "tb_score_library_protocol",
+      "passed": true,
+      "checks": 19,
+      "seconds": 0.153
+    }
+  ],
+  "production_vendor_library_compile": true,
+  "unique_pins": 73,
+  "prior_keyboard_audio_display_sources_unchanged": true,
+  "changed_from_touch_manifest": [
+    "src/score_services.sv",
+    "src/spi_nor_flash.sv",
+    "keyboard_adsr.gprj"
+  ],
+  "apk_version": "0.3.1-flashdiag",
+  "apk_code": 4,
+  "apk_same_certificate_as_0_3": true,
+  "legacy_apk_unchanged": true,
+  "eda_run": false,
+  "hardware_access": false,
+  "phone_run": false,
+  "git_commit_or_push": false,
+  "primary_references": [
+    "https://winbond.com/hq/support/online-learning/articles-item/safeguarding-boot-code-and-other-critical-data.html?__locale=en",
+    "https://datasheet.lcsc.com/datasheet/pdf/cf3e7cd7501b4484ab05b628ac6261a9.pdf?productCode=C111478"
+  ]
+}

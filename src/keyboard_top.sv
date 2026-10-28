@@ -2,8 +2,13 @@
 `include "config/keyboard_config.svh"
 `include "config/run_leds_config.svh"
 module keyboard_top #(
-    parameter integer BT_ENABLE=1,FLASH_WRITES=1,OUTPUT_ENABLE=1,OUTPUT_GAIN=24,LIMITER_LOG2=6,
+    parameter integer BT_ENABLE=1,FLASH_WRITES=1,OUTPUT_ENABLE=1,OUTPUT_GAIN=24,LIMITER_LOG2=6,LIMITER_HOLD_SAMPLES=240,
     ULTRA_PERIOD_US=60000,ULTRA_TIMEOUT_US=30000,ULTRA_LOST_MS=1000,ULTRA_SLEW_CYCLES=(`AUDIO_HZ/500),
+    parameter integer KEYPAD_BOOT_CYCLES=500000,KEYPAD_POLL_CYCLES=150000,KEYPAD_I2C_HALF=250,
+    KEYPAD_TIMEOUT_CYCLES=50000,KEYPAD_RETRY_CYCLES=500000,
+    EC11_MS_CYCLES=(`AUDIO_HZ/1000),EC11_FILTER_CYCLES=(`AUDIO_HZ/20000),
+    EC11_DEBOUNCE_MS=10,EC11_DOUBLE_MS=250,EC11_LONG_MS=600,EC11_STEPS=4,
+    parameter [2:0] EC11_REVERSE=3'b000,
     parameter integer STEREO_ENABLE=1,LCD_ENABLE=1,LCD_TEST_PATTERN=0,LCD_PCLK_INVERT=1,
     TOUCH_ENABLE=1,TOUCH_UI_ENABLE=1,TOUCH_RESET_CYCLES=1000000,TOUCH_STRAP_CYCLES=300000,
     TOUCH_BOOT_CYCLES=2500000,TOUCH_POLL_CYCLES=500000,TOUCH_I2C_HALF=250,
@@ -11,13 +16,13 @@ module keyboard_top #(
     parameter integer SCORE_WORDS=512,SCORE_ENABLE=0,SCORE_BEAT_FRAMES=(`SAMPLE_HZ/2),
     BUTTON_DEBOUNCE_CYCLES=(`AUDIO_HZ/100),BUTTON_LONG_PRESS_CYCLES=(`AUDIO_HZ*4/5),
     LED_STEP_CYCLES=`RUN_LED_STEP_CYCLES,LED_DIAG_STEPS=`RUN_LED_DIAG_STEPS,
-    LOCK_N=`LOCK_CYCLES,SLOT_CYCLES=`KEY_SLOT_CYCLES,
-    SETTLE_CYCLES=`KEY_SETTLE_CYCLES,DEBOUNCE_SCANS=`KEY_DEBOUNCE_SCANS,
+    LOCK_N=`LOCK_CYCLES,
     MUTE=`MUTE_FRAMES,FADE=`FADE_FRAMES,ATTACK=`ADSR_ATTACK_FRAMES,
     DECAY=`ADSR_DECAY_FRAMES,SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES)(
     input wire bt_rx,output wire bt_tx,input wire ultrasonic_echo,output wire ultrasonic_trig,
-    input wire clk,rst,input wire [3:0] board_buttons_n,input wire [3:0] key_row,inout wire [3:0] key_col,
-    output wire HP_BCK,HP_WS,HP_DIN,PA_EN,DBG_BCK,DBG_WS,DBG_DIN,DBG_PA_EN,
+    input wire clk,rst,input wire [3:0] board_buttons_n,inout wire [2:0] keypad_sda,keypad_scl,input wire [2:0] keypad_int_n,
+    input wire [2:0] ec11_a,ec11_b,ec11_sw_n,
+    output wire HP_BCK,HP_WS,HP_DIN,PA_EN,
     output wire MAX_BCLK,MAX_LRCLK,MAX_DIN,MAX_SD_MODE,
     output wire [4:0] led_n,
     output wire lcd_clk,lcd_hs,lcd_vs,lcd_en,output wire [5:0] lcd_r,lcd_g,lcd_b,
@@ -26,7 +31,7 @@ module keyboard_top #(
     wire effects_enabled;
     wire synth_pa_enable;
     reg [1:0] max_clock_frames;
-    wire visual_sample_valid;wire signed [15:0] visual_sample;wire [15:0] visual_notes;
+    wire visual_sample_valid;wire signed [15:0] visual_sample;wire [35:0] visual_notes;
     wire latency_valid;wire [19:0] latency_bcd;
     wire [1:0] effect_mode;
     wire [2:0] selected_timbre,event_timbre,key_timbre,score_timbre;
@@ -34,14 +39,18 @@ module keyboard_top #(
     wire [6:0] key_id,score_id;
     wire [31:0] key_fcw,score_fcw;
     wire mid_clk,audio_clk,lock1,lock2,pll1_reset,pll2_reset,audio_reset;
-    wire [3:0] col_enable,last_key;
-    wire [15:0] keys;
+    wire [5:0] last_key;
+    wire [35:0] keys,note_keys;
+    wire [11:0] auxiliary_keys;
+    wire [2:0] keypad_online;
+    wire keypad_snapshot_valid,keypad_snapshot_update;
     wire [16:0] envelope_level;
-    wire underrun,ghost,gate,key_gate,frame_ce,input_ready,note_ready,note_valid,note_on;
+    wire ghost=1'b0;
+    wire underrun,gate,key_gate,frame_ce,input_ready,note_ready,note_valid,note_on;
     wire [6:0] note_id;
     wire [31:0] note_fcw;
     wire [`VOICE_COUNT-1:0] voice_active,voice_held;
-    wire menu_mode,inhibit_notes,cfg_valid,cfg_ready,cfg_applied;
+    wire menu_mode,cfg_valid,cfg_ready,cfg_applied;
     wire [8:0] echo_wet,room_wet,tremolo_depth;
     wire [6:0] echo_percent,room_percent,depth_percent,volume_percent;
     wire ultrasonic_page,ultrasonic_enabled;
@@ -77,10 +86,39 @@ module keyboard_top #(
     wire [33:0] ultrasonic_ui={ultrasonic_page,ultrasonic_enabled,ultrasonic_sensitivity,
         ultrasonic_min,ultrasonic_max,ultrasonic_ui_state,ultrasonic_result[11:0]};
     wire [3:0] tremolo_rate_hz,cfg_rate_hz;
-    wire matrix_action_valid,touch_action_valid;
-    wire [5:0] matrix_action,touch_action;
-    wire ui_action_valid=matrix_action_valid || touch_action_valid;
-    wire [5:0] ui_action=matrix_action_valid?matrix_action:touch_action;
+    wire [2:0] effect_mask,cfg_effect_mask,encoder_up,encoder_down,encoder_single,encoder_double;
+    wire echo_edit_strength,tremolo_edit_rate;wire [8:0] echo_time_ms;
+    wire [11:0] echo_time_bcd;wire [14:0] cfg_echo_samples;
+    localparam integer ECW=EC11_MS_CYCLES>1?$clog2(EC11_MS_CYCLES):1;
+    reg [ECW-1:0] encoder_ms_count;
+    wire encoder_ms_ce=encoder_ms_count==EC11_MS_CYCLES-1;
+    wire encoder_ms_pre_ce=EC11_MS_CYCLES==1 || encoder_ms_count==EC11_MS_CYCLES-2;
+    wire [2:0] encoder_ms_ticks;
+    always @(posedge audio_clk or posedge audio_reset)
+        if(audio_reset)encoder_ms_count<=0;
+        else if(encoder_ms_ce)encoder_ms_count<=0;else encoder_ms_count<=encoder_ms_count+1'b1;
+    for(genvar e=0;e<3;e=e+1)begin: encoders
+        // Register the same tick in each controller's neighborhood, one count
+        // ahead. No comparator/long timer chain follows the counter in one clk.
+        (* syn_preserve=1, syn_keep=1 *) reg ms_tick;
+        always @(posedge audio_clk or posedge audio_reset)begin
+            if(audio_reset)ms_tick<=EC11_MS_CYCLES==1;
+            else ms_tick<=encoder_ms_pre_ce;
+        end
+        assign encoder_ms_ticks[e]=ms_tick;
+        ec11_encoder #(.FILTER_CYCLES(EC11_FILTER_CYCLES),.DEBOUNCE_MS(EC11_DEBOUNCE_MS),
+            .DOUBLE_MS(EC11_DOUBLE_MS),.LONG_MS(EC11_LONG_MS),.STEPS_PER_DETENT(EC11_STEPS),.REVERSE(EC11_REVERSE[e])) control(
+            .clk(audio_clk),.rst(audio_reset),.ms_ce(ms_tick),.a(ec11_a[e]),.b(ec11_b[e]),.sw_n(ec11_sw_n[e]),
+            .step_up(encoder_up[e]),.step_down(encoder_down[e]),.single_click(encoder_single[e]),.double_click(encoder_double[e]));
+    end
+    // synthesis translate_off
+    always @(posedge audio_clk)if(!audio_reset && encoder_ms_ticks!=={3{encoder_ms_ce}})
+        $fatal(1,"Distributed EC11 tick changed millisecond phase");
+    // synthesis translate_on
+    wire aux_action_valid,touch_action_valid;
+    wire [5:0] aux_action,touch_action;
+    wire ui_action_valid=aux_action_valid || touch_action_valid;
+    wire [5:0] ui_action=aux_action_valid?aux_action:touch_action;
     wire more_open,delete_confirm,more_command_valid,more_command_ready,more_info;
     wire [3:0] more_command;
     wire [79:0] service_status,service_audio;wire service_audio_valid,service_update;
@@ -154,7 +192,7 @@ module keyboard_top #(
             .extension_valid(extension_valid),.extension_ready(extension_ready),.extension_command(extension_command),.extension_length(extension_length),.extension_payload(extension_payload),
             .extension_response_valid(extension_response_valid),.extension_response_ready(extension_response_ready),.extension_response_length(extension_response_length),.extension_response(extension_response),
             .flash_cs_n(flash_cs_n),.flash_sck(flash_sck),.flash_mosi(flash_mosi),.flash_miso(flash_miso),.flash_wp_n(flash_wp_n),.flash_hold_n(flash_hold_n));
-        // Automatic IDs 0..15; manual keyboard IDs 60..75 remain separate.
+        // Automatic IDs 0..15; manual keyboard IDs 60..95 remain separate.
         bt_event_cdc #(.WIDTH(23)) events(clk,audio_clk,channel_reset,
             source_valid,source_ready,{source_kind,source_id,source_pitch,source_velocity},
             ev_valid,ev_ready,{kind,ident,pitch,velocity});
@@ -186,9 +224,10 @@ module keyboard_top #(
         else if(frame_ce && max_clock_frames!=2)max_clock_frames<=max_clock_frames+1'b1;
     end
     assign MAX_SD_MODE=!audio_reset && max_clock_frames==2;
-    // Retired onboard PT8211/PA and scope-mirror pads remain parked low.
+    // Retired onboard PT8211/PA pads remain parked low; former debug pads
+    // are reassigned to keypad buses and interrupts.
     assign HP_BCK=0;assign HP_WS=0;assign HP_DIN=0;assign PA_EN=0;
-    assign DBG_BCK=0;assign DBG_WS=0;assign DBG_DIN=0;assign DBG_PA_EN=0;
+
     if(TOUCH_ENABLE)begin: touch_on
         gt9110_touch #(.RESET_CYCLES(TOUCH_RESET_CYCLES),.STRAP_CYCLES(TOUCH_STRAP_CYCLES),
             .BOOT_CYCLES(TOUCH_BOOT_CYCLES),.POLL_CYCLES(TOUCH_POLL_CYCLES),
@@ -214,9 +253,11 @@ module keyboard_top #(
         .x(touch_audio[31:16]),.y(touch_audio[15:0]),.resolution_x(touch_audio[70:55]),
         .resolution_y(touch_audio[54:39]),.effect_mode(effect_mode),.menu_mode(menu_mode),
         .action_valid(touch_action_valid),.action(touch_action),.more_mode(more_open),.ultrasonic_page(ultrasonic_page));
-    ui_keypad_router #(.RELEASE_CYCLES(SLOT_CYCLES*4*(DEBOUNCE_SCANS+1))) menu_keys(.clk(audio_clk),.rst(audio_reset),.menu_mode(menu_mode || take_bt),
-        .ghost(ghost),.keys(keys),.inhibit_notes(inhibit_notes),
-        .action_valid(matrix_action_valid),.action(matrix_action),.more_mode(more_open),.ultrasonic_page(ultrasonic_page));
+    touch_keyboard_router menu_keys(.clk(audio_clk),.rst(audio_reset),
+        .blocked(menu_mode || take_bt || local_score_busy),.menu_mode(menu_mode),
+        .more_mode(more_open),.ultrasonic_page(ultrasonic_page),.snapshot_valid(keypad_snapshot_valid),
+        .piano(keys),.aux(auxiliary_keys),.online(keypad_online),.note_keys(note_keys),
+        .action_valid(aux_action_valid),.action(aux_action));
     if(LCD_ENABLE)begin: lcd_on
         rgb_display #(.VOICES(`VOICE_COUNT),.TEST_PATTERN(LCD_TEST_PATTERN),
             .PCLK_INVERT(LCD_PCLK_INVERT)) display_driver(
@@ -225,6 +266,7 @@ module keyboard_top #(
             .visual_sample_valid(visual_sample_valid),.visual_sample(visual_sample),.visual_notes(visual_notes),
             .latency_valid(latency_valid),.latency_bcd(latency_bcd),
             .ultrasonic_status(ultrasonic_ui),
+            .encoder_status({echo_time_bcd,tremolo_edit_rate,echo_edit_strength,effect_mask}),.keypad_online(keypad_online),
             .score_busy(local_score_busy || bt_inhibit),.audio_ready(input_ready),.score_error(score_error),
             .underrun(underrun),.ghost(ghost),.lcd_clk(lcd_clk),.lcd_hs(lcd_hs),
             .lcd_vs(lcd_vs),.lcd_en(lcd_en),.lcd_r(lcd_r),.lcd_g(lcd_g),.lcd_b(lcd_b),
@@ -252,6 +294,10 @@ module keyboard_top #(
     timbre_control #(.DEBOUNCE_CYCLES(BUTTON_DEBOUNCE_CYCLES),.LONG_PRESS_CYCLES(BUTTON_LONG_PRESS_CYCLES),
         .ULTRA_SLEW_CYCLES(ULTRA_SLEW_CYCLES)) timbre_buttons(
         .clk(audio_clk),.rst(audio_reset),.buttons_n(board_buttons_n),
+        .encoder_up(encoder_up),.encoder_down(encoder_down),.encoder_single(encoder_single),.encoder_double(encoder_double),
+        .effect_mask(effect_mask),.cfg_effect_mask(cfg_effect_mask),.cfg_echo_samples(cfg_echo_samples),
+        .echo_edit_strength(echo_edit_strength),.tremolo_edit_rate(tremolo_edit_rate),
+        .echo_time_ms(echo_time_ms),.echo_time_bcd(echo_time_bcd),
         .selected(selected_timbre),.effects_enabled(effects_enabled),.effect_mode(effect_mode),
         .ui_action_valid(ui_action_valid),.ui_action(ui_action),.cfg_ready(cfg_ready),
         .menu_mode(menu_mode),.cfg_valid(cfg_valid),.cfg_tremolo_rate_hz(cfg_rate_hz),.echo_wet(echo_wet),.room_wet(room_wet),
@@ -269,22 +315,35 @@ module keyboard_top #(
     pll_pair clocks(clk,pll1_reset,pll2_reset,mid_clk,audio_clk,lock1,lock2);
     clock_reset #(.LOCK_N(LOCK_N)) reset_control(clk,rst,lock1,lock2,audio_clk,
         pll1_reset,pll2_reset,audio_reset);
-    for(genvar c=0;c<4;c=c+1)begin: columns
-        assign key_col[c]=col_enable[c]?1'b0:1'bz;
+    wire [47:0] keypad_ref_keys;
+    wire [2:0] keypad_ref_online,keypad_fault,keypad_report;
+    wire [50:0] keypad_snapshot;
+    for(genvar b=0;b<3;b=b+1)begin: touch_keyboards
+        aip5916_keyboard #(.BOOT_CYCLES(KEYPAD_BOOT_CYCLES),.POLL_CYCLES(KEYPAD_POLL_CYCLES),
+            .I2C_HALF_CYCLES(KEYPAD_I2C_HALF),.TIMEOUT_CYCLES(KEYPAD_TIMEOUT_CYCLES),
+            .RETRY_CYCLES(KEYPAD_RETRY_CYCLES)) reader(
+            .clk(clk),.rst(ultrasonic_ref_reset),.intr_n(keypad_int_n[b]),
+            .scl(keypad_scl[b]),.sda(keypad_sda[b]),.keys(keypad_ref_keys[b*16+:16]),
+            .online(keypad_ref_online[b]),.report(keypad_report[b]),.fault(keypad_fault[b]));
+        assign keys[b*12+:12]=keypad_snapshot[b*16+:12];
+        assign auxiliary_keys[b*4+:4]=keypad_snapshot[b*16+12+:4];
     end
-    keyboard_core #(.SLOT_CYCLES(SLOT_CYCLES),.SETTLE_CYCLES(SETTLE_CYCLES),
-        .DEBOUNCE_SCANS(DEBOUNCE_SCANS)) core(
-        .clk(audio_clk),.rst(audio_reset),.input_ready(input_ready && !local_score_busy && !take_bt),.note_ready(note_ready && !local_score_busy && !take_bt),
-        .key_row(key_row),.col_enable(col_enable),.keys(keys),.ghost(ghost),
+    rgb_status_cdc #(.WIDTH(51)) keypad_bridge(clk,audio_clk,ultrasonic_reset,
+        {keypad_ref_online,keypad_ref_keys},keypad_snapshot,keypad_snapshot_valid,keypad_snapshot_update);
+    assign keypad_online=keypad_snapshot[50:48];
+    key_note_events #(.KEYS(36)) key_events(
+        .clk(audio_clk),.rst(audio_reset || take_bt || local_score_busy),
+        .enabled(input_ready && !take_bt && !local_score_busy),.keys(note_keys),
+        .note_ready(note_ready && !take_bt && !local_score_busy),
         .note_valid(key_valid),.note_on(key_on),.note_id(key_id),.note_fcw(key_fcw),
-        .gate(key_gate),.last_key(last_key),
-        .selected_timbre(selected_timbre),.note_timbre(key_timbre),.inhibit_notes(inhibit_notes));
-    synth_core #(.STEREO_ENABLE(STEREO_ENABLE),.OUTPUT_ENABLE(OUTPUT_ENABLE),.OUTPUT_GAIN(OUTPUT_GAIN),.LIMITER_LOG2(LIMITER_LOG2),
+        .gate(key_gate),.last_key(last_key),.selected_timbre(selected_timbre),.note_timbre(key_timbre));
+    synth_core #(.STEREO_ENABLE(STEREO_ENABLE),.VISUAL_KEYS(36),.OUTPUT_ENABLE(OUTPUT_ENABLE),.OUTPUT_GAIN(OUTPUT_GAIN),.LIMITER_LOG2(LIMITER_LOG2),.LIMITER_HOLD_SAMPLES(LIMITER_HOLD_SAMPLES),
         .MUTE(MUTE),.FADE(FADE),.ATTACK(ATTACK),.DECAY(DECAY),
         .SUSTAIN(SUSTAIN),.RELEASE(RELEASE)) sound(
         .clk(audio_clk),.rst(audio_reset),.note_valid(note_valid),.note_on(note_on),
         .note_pitch(take_bt ? bt_pitch : note_id),.volume_percent(volume_percent),.flush(bt_flush),.output_flush(bt_output_flush),.velocity_valid(take_bt),.note_velocity(bt_velocity),
         .note_id(note_id),.note_fcw(note_fcw),.note_timbre(event_timbre),.effects_enable(effects_enabled),.effect_mode(effect_mode),
+        .effect_mask(cfg_effect_mask),.effect_echo_samples(cfg_echo_samples),
         .effect_cfg_valid(cfg_valid || bt_flush_d),.effect_echo_wet(echo_wet),.effect_room_wet(room_wet),
         .effect_tremolo_depth(tremolo_depth),.effect_tremolo_rate_hz(cfg_rate_hz),
         .effect_cfg_ready(cfg_ready),.effect_cfg_applied(cfg_applied),

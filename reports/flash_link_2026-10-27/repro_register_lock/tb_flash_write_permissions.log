@@ -1,0 +1,2 @@
+FATAL: E:/gowin/fpga-instrument-integrated/sim/tb_flash_write_permissions.sv:13: array permission follows BP/CMP/WPS/SUS, not register-lock bits error=21 SR=00/3b/60
+       Time: 40610000  Scope: tb_flash_write_permissions.check

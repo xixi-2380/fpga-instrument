@@ -1,0 +1,153 @@
+{
+  "sample_rate": 48000,
+  "window": 64,
+  "pre_gain": 24,
+  "hold_samples": 240,
+  "rows": [
+    {
+      "kind": "unison",
+      "voices": 1,
+      "before": {
+        "peak": 17208,
+        "rms": 12158.506730680376,
+        "relative_nonlinear_residual": 0.0,
+        "gain_ripple_q16": 0,
+        "gain_recoveries": 0
+      },
+      "after_hold_5ms": {
+        "peak": 17208,
+        "rms": 12158.506730680376,
+        "relative_nonlinear_residual": 0.0,
+        "gain_ripple_q16": 0,
+        "gain_recoveries": 0
+      }
+    },
+    {
+      "kind": "unison",
+      "voices": 4,
+      "before": {
+        "peak": 29203,
+        "rms": 20752.557548218603,
+        "relative_nonlinear_residual": 0.00646100294820168,
+        "gain_ripple_q16": 685,
+        "gain_recoveries": 13680
+      },
+      "after_hold_5ms": {
+        "peak": 29203,
+        "rms": 20633.535447479062,
+        "relative_nonlinear_residual": 1.7383761819048616e-05,
+        "gain_ripple_q16": 0,
+        "gain_recoveries": 0
+      }
+    },
+    {
+      "kind": "unison",
+      "voices": 8,
+      "before": {
+        "peak": 29202,
+        "rms": 20894.62292804858,
+        "relative_nonlinear_residual": 0.014836171971855848,
+        "gain_ripple_q16": 845,
+        "gain_recoveries": 13126
+      },
+      "after_hold_5ms": {
+        "peak": 29202,
+        "rms": 20632.793715338415,
+        "relative_nonlinear_residual": 1.7332532152758514e-05,
+        "gain_ripple_q16": 0,
+        "gain_recoveries": 0
+      }
+    },
+    {
+      "kind": "unison",
+      "voices": 16,
+      "before": {
+        "peak": 29202,
+        "rms": 21085.25771948555,
+        "relative_nonlinear_residual": 0.026831875188974227,
+        "gain_ripple_q16": 827,
+        "gain_recoveries": 12277
+      },
+      "after_hold_5ms": {
+        "peak": 29202,
+        "rms": 20632.793715338415,
+        "relative_nonlinear_residual": 1.7332532152758514e-05,
+        "gain_ripple_q16": 0,
+        "gain_recoveries": 0
+      }
+    },
+    {
+      "kind": "chord",
+      "voices": 1,
+      "before": {
+        "peak": 17208,
+        "rms": 12158.506730680376,
+        "relative_nonlinear_residual": 0.0,
+        "gain_ripple_q16": 0,
+        "gain_recoveries": 0
+      },
+      "after_hold_5ms": {
+        "peak": 17208,
+        "rms": 12158.506730680376,
+        "relative_nonlinear_residual": 0.0,
+        "gain_ripple_q16": 0,
+        "gain_recoveries": 0
+      }
+    },
+    {
+      "kind": "chord",
+      "voices": 4,
+      "before": {
+        "peak": 29203,
+        "rms": 14093.370439799583,
+        "relative_nonlinear_residual": 0.09724802487408828,
+        "gain_ripple_q16": 15046,
+        "gain_recoveries": 21898
+      },
+      "after_hold_5ms": {
+        "peak": 29203,
+        "rms": 13734.323808505282,
+        "relative_nonlinear_residual": 0.09653451666721141,
+        "gain_ripple_q16": 14207,
+        "gain_recoveries": 17331
+      }
+    },
+    {
+      "kind": "chord",
+      "voices": 8,
+      "before": {
+        "peak": 29203,
+        "rms": 14032.954175015442,
+        "relative_nonlinear_residual": 0.10482295388548173,
+        "gain_ripple_q16": 14543,
+        "gain_recoveries": 20331
+      },
+      "after_hold_5ms": {
+        "peak": 29203,
+        "rms": 13453.195826303689,
+        "relative_nonlinear_residual": 0.10234553410045759,
+        "gain_ripple_q16": 12735,
+        "gain_recoveries": 14148
+      }
+    },
+    {
+      "kind": "chord",
+      "voices": 16,
+      "before": {
+        "peak": 29203,
+        "rms": 13191.758507380342,
+        "relative_nonlinear_residual": 0.14197928453000924,
+        "gain_ripple_q16": 13777,
+        "gain_recoveries": 18908
+      },
+      "after_hold_5ms": {
+        "peak": 29203,
+        "rms": 12390.59874675487,
+        "relative_nonlinear_residual": 0.14535792427313926,
+        "gain_ripple_q16": 12592,
+        "gain_recoveries": 10759
+      }
+    }
+  ],
+  "scope": "Controlled synthetic PCM isolates limiter-added distortion, not proof of physical noise cause"
+}

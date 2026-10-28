@@ -3,7 +3,7 @@ module tb_frame_boundary;
  parameter integer HALF=20;
  reg clk=0,rst=1;always #5 clk=~clk;
  wire bck,rise,fall,frame;wire [4:0] bit_no;integer checks=0,frames=0;
- audio_timing #(.HALF_CYCLES(HALF)) dut(clk,rst,bck,rise,fall,frame,bit_no);
+ audio_timing #(.HALF_CYCLES(HALF)) dut(clk,rst,bck,rise,fall,frame,bit_no,);
  always @(negedge clk)begin
   checks++;if(frame!==(!rst && fall && bit_no==0))$fatal(1,"registered boundary shifted serial frame");
   if(frame)frames++;

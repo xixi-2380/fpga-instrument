@@ -1,21 +1,19 @@
 `timescale 1ns/1ps
 `include "check.svh"
-`include "passive_matrix_model.svh"
+`include "touch_keyboard_fixture.svh"
 module tb_ultrasonic_top;
  `include "../src/config/ui_layout.svh"
  reg clk=0,rst=1,echo=0,respond=1;always #10 clk=~clk;
- reg [15:0] pressed=0;tri [3:0] columns;wire [3:0] rows,selected;
+ reg [15:0] pressed=0;reg [11:0] auxiliary=0;tri1 [2:0] scl,sda;wire [2:0] int_n;
  reg command_valid=0;reg [5:0] command=UI_NONE;
  integer checks=0,echo_width_us=725,frames=0,prior_volume=100;
  wire trig;
- keyboard_top #(.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.LOCK_N(16),
+ keyboard_top #(.KEYPAD_BOOT_CYCLES(20),.KEYPAD_POLL_CYCLES(1600),.KEYPAD_I2C_HALF(4),.KEYPAD_TIMEOUT_CYCLES(100),.KEYPAD_RETRY_CYCLES(32),.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.LOCK_N(16),
   .MUTE(2),.FADE(2),.ATTACK(2),.DECAY(2),.SUSTAIN(32768),.RELEASE(2),
-  .SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
   .ULTRA_PERIOD_US(1000),.ULTRA_TIMEOUT_US(800),.ULTRA_LOST_MS(4),.ULTRA_SLEW_CYCLES(1229)) dut(
-  .clk(clk),.rst(rst),.bt_rx(1'b1),.board_buttons_n(4'hf),.key_row(rows),.key_col(columns),
+  .clk(clk),.rst(rst),.bt_rx(1'b1),.board_buttons_n(4'hf),.keypad_scl(scl),.keypad_sda(sda),.keypad_int_n(int_n),.ec11_a(3'b111),.ec11_b(3'b111),.ec11_sw_n(3'b111),
   .ultrasonic_echo(echo),.ultrasonic_trig(trig));
- for(genvar k=0;k<4;k=k+1)assign selected[k]=(columns[k]===1'b0);
- passive_matrix_model keyboard(pressed,selected,rows);
+ touch_keyboard_fixture keyboard(rst,{20'd0,pressed},auxiliary,3'b111,scl,sda,int_n);
  always @(negedge trig)if(!rst && respond)begin
   #20000;echo=1;#(echo_width_us*1000);echo=0;
  end
@@ -41,7 +39,7 @@ module tb_ultrasonic_top;
  end endtask
  initial begin
   force dut.ui_action_valid=command_valid;force dut.ui_action=command;
-  #100;rst=0;wait(dut.input_ready);cycles(100);
+  #100;rst=0;wait(dut.input_ready && dut.keypad_online==7);cycles(100);
   `CHECK(!trig && !dut.ultrasonic_enabled && dut.volume_percent==100,"power-on manual defaults keep sensor off")
   act(UI_MODE);act(UI_ULTRA_OPEN);
   repeat(4)act(UI_MAX_DOWN);repeat(4)act(UI_MIN_UP);repeat(4)act(UI_SENS_UP);

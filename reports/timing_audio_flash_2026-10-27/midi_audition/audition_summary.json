@@ -1,0 +1,651 @@
+{
+  "scope": "same project MIDI, sample-domain audition model; not a physical or RTL recording",
+  "sample_rate": 48000,
+  "segments": [
+    [
+      0,
+      4000,
+      1
+    ],
+    [
+      25900,
+      29900,
+      4
+    ],
+    [
+      51900,
+      55900,
+      8
+    ],
+    [
+      77900,
+      81900,
+      16
+    ]
+  ],
+  "tables": [
+    {
+      "timbre": "sine",
+      "segments": [
+        {
+          "voices": 1,
+          "source_ms": [
+            0,
+            4000
+          ],
+          "before_peak": 22776,
+          "after_peak": 22776,
+          "before_rms": 7160.519285394042,
+          "after_rms": 7160.519285394042,
+          "before_gain_q16": [
+            65536,
+            65536
+          ],
+          "after_gain_q16": [
+            65536,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 4,
+          "source_ms": [
+            25900,
+            29900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 8963.932248804877,
+          "after_rms": 8960.457798526215,
+          "before_gain_q16": [
+            47924,
+            65536
+          ],
+          "after_gain_q16": [
+            47924,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 8,
+          "source_ms": [
+            51900,
+            55900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 11831.957483055512,
+          "after_rms": 11793.551760915727,
+          "before_gain_q16": [
+            35728,
+            65536
+          ],
+          "after_gain_q16": [
+            35728,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 16,
+          "source_ms": [
+            77900,
+            81900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 12677.52311714239,
+          "after_rms": 12488.41193661377,
+          "before_gain_q16": [
+            23926,
+            65536
+          ],
+          "after_gain_q16": [
+            23926,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        }
+      ]
+    },
+    {
+      "timbre": "flute",
+      "segments": [
+        {
+          "voices": 1,
+          "source_ms": [
+            0,
+            4000
+          ],
+          "before_peak": 22776,
+          "after_peak": 22776,
+          "before_rms": 7038.579872744217,
+          "after_rms": 7038.579872744217,
+          "before_gain_q16": [
+            65536,
+            65536
+          ],
+          "after_gain_q16": [
+            65536,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 4,
+          "source_ms": [
+            25900,
+            29900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 8999.916623053752,
+          "after_rms": 8995.636656240566,
+          "before_gain_q16": [
+            47048,
+            65536
+          ],
+          "after_gain_q16": [
+            47048,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 8,
+          "source_ms": [
+            51900,
+            55900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 11756.378408760776,
+          "after_rms": 11706.701155886725,
+          "before_gain_q16": [
+            33662,
+            65536
+          ],
+          "after_gain_q16": [
+            33662,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 16,
+          "source_ms": [
+            77900,
+            81900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 12776.309456721916,
+          "after_rms": 12547.275428639503,
+          "before_gain_q16": [
+            21529,
+            65536
+          ],
+          "after_gain_q16": [
+            21529,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        }
+      ]
+    },
+    {
+      "timbre": "reed",
+      "segments": [
+        {
+          "voices": 1,
+          "source_ms": [
+            0,
+            4000
+          ],
+          "before_peak": 22848,
+          "after_peak": 22848,
+          "before_rms": 6824.8999284971205,
+          "after_rms": 6824.8999284971205,
+          "before_gain_q16": [
+            65536,
+            65536
+          ],
+          "after_gain_q16": [
+            65536,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 4,
+          "source_ms": [
+            25900,
+            29900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 8366.786100969572,
+          "after_rms": 8363.904282562802,
+          "before_gain_q16": [
+            48448,
+            65536
+          ],
+          "after_gain_q16": [
+            48448,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 8,
+          "source_ms": [
+            51900,
+            55900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 10794.44249676934,
+          "after_rms": 10739.852151047975,
+          "before_gain_q16": [
+            33577,
+            65536
+          ],
+          "after_gain_q16": [
+            33577,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 16,
+          "source_ms": [
+            77900,
+            81900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 11506.66464301708,
+          "after_rms": 11298.013369115082,
+          "before_gain_q16": [
+            20011,
+            65536
+          ],
+          "after_gain_q16": [
+            20011,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        }
+      ]
+    },
+    {
+      "timbre": "cello",
+      "segments": [
+        {
+          "voices": 1,
+          "source_ms": [
+            0,
+            4000
+          ],
+          "before_peak": 18576,
+          "after_peak": 18576,
+          "before_rms": 4961.849798966107,
+          "after_rms": 4961.849798966107,
+          "before_gain_q16": [
+            65536,
+            65536
+          ],
+          "after_gain_q16": [
+            65536,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 4,
+          "source_ms": [
+            25900,
+            29900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 6684.528596130934,
+          "after_rms": 6681.352318496429,
+          "before_gain_q16": [
+            51817,
+            65536
+          ],
+          "after_gain_q16": [
+            51817,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 8,
+          "source_ms": [
+            51900,
+            55900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 9148.523307543785,
+          "after_rms": 9117.88804939125,
+          "before_gain_q16": [
+            36100,
+            65536
+          ],
+          "after_gain_q16": [
+            36100,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 16,
+          "source_ms": [
+            77900,
+            81900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 11404.079310759082,
+          "after_rms": 11195.340595549183,
+          "before_gain_q16": [
+            29318,
+            65536
+          ],
+          "after_gain_q16": [
+            29318,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        }
+      ]
+    },
+    {
+      "timbre": "piano",
+      "segments": [
+        {
+          "voices": 1,
+          "source_ms": [
+            0,
+            4000
+          ],
+          "before_peak": 18552,
+          "after_peak": 18552,
+          "before_rms": 3734.572831596674,
+          "after_rms": 3734.572831596674,
+          "before_gain_q16": [
+            65536,
+            65536
+          ],
+          "after_gain_q16": [
+            65536,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 4,
+          "source_ms": [
+            25900,
+            29900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 4077.89888014847,
+          "after_rms": 4074.9477290531745,
+          "before_gain_q16": [
+            51682,
+            65536
+          ],
+          "after_gain_q16": [
+            51682,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 8,
+          "source_ms": [
+            51900,
+            55900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 5345.029810015631,
+          "after_rms": 5332.984244847013,
+          "before_gain_q16": [
+            34808,
+            65536
+          ],
+          "after_gain_q16": [
+            34808,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 16,
+          "source_ms": [
+            77900,
+            81900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 4145.196655943202,
+          "after_rms": 4080.480428035175,
+          "before_gain_q16": [
+            25791,
+            65536
+          ],
+          "after_gain_q16": [
+            25791,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        }
+      ]
+    },
+    {
+      "timbre": "guitar",
+      "segments": [
+        {
+          "voices": 1,
+          "source_ms": [
+            0,
+            4000
+          ],
+          "before_peak": 18336,
+          "after_peak": 18336,
+          "before_rms": 2510.256962643466,
+          "after_rms": 2510.256962643466,
+          "before_gain_q16": [
+            65536,
+            65536
+          ],
+          "after_gain_q16": [
+            65536,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 4,
+          "source_ms": [
+            25900,
+            29900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 2703.2406648987026,
+          "after_rms": 2700.204780042926,
+          "before_gain_q16": [
+            51716,
+            65536
+          ],
+          "after_gain_q16": [
+            51716,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 8,
+          "source_ms": [
+            51900,
+            55900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 3617.605007832933,
+          "after_rms": 3604.2348504423553,
+          "before_gain_q16": [
+            38321,
+            65536
+          ],
+          "after_gain_q16": [
+            38321,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 16,
+          "source_ms": [
+            77900,
+            81900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 2406.3032875549825,
+          "after_rms": 2353.983774784337,
+          "before_gain_q16": [
+            29286,
+            65536
+          ],
+          "after_gain_q16": [
+            29286,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        }
+      ]
+    },
+    {
+      "timbre": "vibraphone",
+      "segments": [
+        {
+          "voices": 1,
+          "source_ms": [
+            0,
+            4000
+          ],
+          "before_peak": 18576,
+          "after_peak": 18576,
+          "before_rms": 4901.180290246422,
+          "after_rms": 4901.180290246422,
+          "before_gain_q16": [
+            65536,
+            65536
+          ],
+          "after_gain_q16": [
+            65536,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 4,
+          "source_ms": [
+            25900,
+            29900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 5332.669613834867,
+          "after_rms": 5330.779789529946,
+          "before_gain_q16": [
+            55727,
+            65536
+          ],
+          "after_gain_q16": [
+            55727,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 8,
+          "source_ms": [
+            51900,
+            55900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 6781.885278407411,
+          "after_rms": 6769.729695441018,
+          "before_gain_q16": [
+            41405,
+            65536
+          ],
+          "after_gain_q16": [
+            41405,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        },
+        {
+          "voices": 16,
+          "source_ms": [
+            77900,
+            81900
+          ],
+          "before_peak": 29203,
+          "after_peak": 29203,
+          "before_rms": 5671.222385407294,
+          "after_rms": 5624.502481494567,
+          "before_gain_q16": [
+            34225,
+            65536
+          ],
+          "after_gain_q16": [
+            34225,
+            65536
+          ],
+          "before_hard_clips": 0,
+          "after_hard_clips": 0
+        }
+      ]
+    }
+  ]
+}

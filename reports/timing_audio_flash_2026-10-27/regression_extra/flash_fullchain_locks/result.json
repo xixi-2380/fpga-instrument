@@ -1,0 +1,10 @@
+{
+  "configuration": "flash_fullchain_locks",
+  "test": "tb_bt_library_link",
+  "params": [
+    "REGISTER_LOCKS=1"
+  ],
+  "behavioral_pll": true,
+  "passed": true,
+  "seconds": 233.353
+}

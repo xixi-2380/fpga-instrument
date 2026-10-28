@@ -3,21 +3,27 @@ import argparse, collections, json, math, pathlib, random, struct, wave
 
 
 class Limiter:
-    def __init__(self, window=64, pre_gain=24, ceiling=29204, release_shift=12):
+    def __init__(self, window=64, pre_gain=24, ceiling=29204, release_shift=12, release_hold=0):
         self.w, self.pre, self.ceiling, self.shift = window, pre_gain, ceiling, release_shift
         self.audio = collections.deque([0] * (window - 1), maxlen=window)
         self.gains = collections.deque([65536] * window, maxlen=window)
         self.release = 65536
         self.error = 0
+        self.hold = release_hold; self.remaining = 0
 
     def step(self, sample):
         self.audio.append(sample * self.pre)
         peak = max(abs(x) for x in self.audio)
         allowed = min(65536, (self.ceiling * 65536) // max(1, peak))
-        total = 65536 - self.release + self.error
-        recovery = total >> self.shift
-        self.error = 0 if allowed < self.release + recovery else total % (1 << self.shift)
-        self.release = min(allowed, self.release + recovery)
+        if self.hold and allowed <= self.release:
+            self.release = allowed; self.error = 0; self.remaining = self.hold
+        elif self.remaining:
+            self.remaining -= 1
+        else:
+            total = 65536 - self.release + self.error
+            recovery = total >> self.shift
+            self.error = 0 if allowed < self.release + recovery else total % (1 << self.shift)
+            self.release = min(allowed, self.release + recovery)
         self.gains.append(self.release)
         gain = sum(self.gains) // self.w
         product = self.audio[0] * gain
@@ -35,6 +41,7 @@ def write_wav(path, samples):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument('--out-dir', required=True)
+    p.add_argument('--hold-samples',type=int,default=0)
     a = p.parse_args()
     out = pathlib.Path(a.out_dir); out.mkdir(parents=True, exist_ok=True)
     rng = random.Random(71423)
@@ -42,10 +49,11 @@ def main():
     values += [int(1023 * math.sin(i * 2 * math.pi / 367)) for i in range(1100)]
     values += [rng.randrange(-32768, 32768) for _ in range(900)]
     values += [0] * 180
-    model = Limiter(); packed = []
+    if a.hold_samples: values += [0]*(a.hold_samples+300)
+    model = Limiter(release_hold=a.hold_samples); packed = []
     for i, value in enumerate(values):
         reset = i == 0 or i in (323, 1000, 1800)
-        if reset: model = Limiter()
+        if reset: model = Limiter(release_hold=a.hold_samples)
         result, gain = model.step(value)
         packed.append((int(reset) << 49) | ((value & 65535) << 33) | (gain << 16) | (result & 65535))
     (out / 'limiter_vectors.hex').write_text(f'{len(packed):016x}\n' + ''.join(f'{x:016x}\n' for x in packed), encoding='ascii')

@@ -1,0 +1,1 @@
+E:/gowin/fpga-instrument-timing-audio-fix/sim/tb_master_volume.sv:7: warning: Instantiating module master_volume with dangling input port 8 (clear) floating.

@@ -1,0 +1,8 @@
+[
+  {
+    "test": "tb_bluetooth_top",
+    "passed": true,
+    "pll_model": "behavioral substitute",
+    "seconds": 129.75
+  }
+]

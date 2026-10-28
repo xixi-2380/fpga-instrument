@@ -33,10 +33,11 @@
     "HOTBOOT": false,
     "I2C": false,
     "I2C_SLAVE_ADDR": "00",
-    "INCREMENTAL_PLACE_AND_ROUTING": "",
+    "INCREMENTAL_PLACE_AND_ROUTING": "0",
     "INCREMENTAL_PLACE_ONLY": "0",
     "IncludePath": [
-        "E:/gowin/fpga-instrument-integrated/src E:/gowin/fpga-instrument-integrated/src/config"
+        "E:/gowin/fpga-instrument-timing-audio-fix/src",
+        "E:/gowin/fpga-instrument-timing-audio-fix/src/config"
     ],
     "Incremental_Compile": "",
     "Initialize_Primitives": false,

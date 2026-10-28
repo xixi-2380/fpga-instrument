@@ -1,0 +1,2 @@
+PASS tb_i2c_register_master checks=430
+E:/gowin/fpga-instrument-timing-audio-fix/sim/tb_i2c_register_master.sv:58: $finish called at 8345000 (1ps)

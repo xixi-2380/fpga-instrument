@@ -1,0 +1,20 @@
+{
+  "source": "E:\\gowin\\outfiless\\ec11-effects-timing-2026-10-26",
+  "files": {
+    "src/ec11_encoder.sv": "6e2996f73a76509359852559df0a17f66af9b363bbcc7e6281ebab3ffcf89ea3",
+    "src/audio_delay.sv": "ffaa8545d3eeb079cbbeb6b5c1c118150ff4f2238f79359c29fe68155eca930a",
+    "src/audio_effects.sv": "f01e1f81126075629b5bd5c794794ca9452182aed869fb5766cebdab5ca1e3cf",
+    "src/timbre_control.sv": "0e6c3336abdac115c28590f154a5b93e5e1824a199b996b9cb06c179751a2466",
+    "src/rgb_ui_renderer.sv": "1ec955c078da0610cbbaa7f29db4ae6caf755b6e808292b6967b34dd1a418fb7",
+    "src/rgb_display.sv": "0bd249380def31f8d2543c927fe99e6faf2e6ed989403c99ee547e8d187ae3dc",
+    "sim/tb_ec11_encoder.sv": "9717e281661b5f7aed987b027baf3f6134fae6c23632b5dc9a5dc71b24839c12",
+    "sim/tb_ec11_controls.sv": "5058119d20e53de8a5d3fed63c28330544c0ba4e68bb8a35a4e336d093bb9c21",
+    "sim/tb_stacked_effects.sv": "9b8ab375c8ba7e645128b54ddf8629f6acf0316eb032bb87c11ebc0f177977bf",
+    "scripts/reference_stacked_effects.py": "fd986a5a55d42cd024a0c5e8e7d1b9c31646d769b2ede81aaa18de95d6420941"
+  },
+  "pcb_guide": {
+    "path": "E:\\FPGA竞赛\\开发板资料\\电容触摸电子琴PCB_FPGA使用说明.md",
+    "sha256": "10a7897c19e466e001eb3624eee1ab37583105a35800621c1e0e71d7f25d3f6e"
+  },
+  "verified_source_unchanged": true
+}

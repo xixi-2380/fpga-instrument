@@ -1,0 +1,2 @@
+PASS tb_rgb_display checks=2793166 visible=384000
+E:/gowin/fpga-instrument-timing-audio-fix/sim/tb_rgb_display.sv:56: $finish called at 36306401542 (1ps)

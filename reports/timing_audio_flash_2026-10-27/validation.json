@@ -1,0 +1,559 @@
+{
+  "implementation": "attempt5",
+  "branch": "codex/timing-audio-flash-fix",
+  "source_original_unchanged": true,
+  "source_original_files_checked": 229,
+  "pin_count": 73,
+  "pins": {
+    "clk": "P16",
+    "rst": "U4",
+    "HP_BCK": "E22",
+    "HP_WS": "F24",
+    "HP_DIN": "G24",
+    "PA_EN": "H17",
+    "MAX_BCLK": "V22",
+    "MAX_LRCLK": "W19",
+    "MAX_DIN": "Y20",
+    "MAX_SD_MODE": "V26",
+    "led_n[0]": "R26",
+    "led_n[1]": "J14",
+    "led_n[2]": "L20",
+    "led_n[3]": "M25",
+    "led_n[4]": "N23",
+    "board_buttons_n[0]": "K16",
+    "board_buttons_n[1]": "F15",
+    "board_buttons_n[2]": "G15",
+    "board_buttons_n[3]": "G16",
+    "lcd_clk": "H21",
+    "lcd_hs": "H22",
+    "lcd_vs": "A23",
+    "lcd_en": "A24",
+    "lcd_g[5]": "J16",
+    "lcd_g[4]": "K15",
+    "lcd_g[3]": "F22",
+    "lcd_g[2]": "G22",
+    "lcd_g[1]": "G21",
+    "lcd_g[0]": "G20",
+    "lcd_b[5]": "F20",
+    "lcd_b[4]": "G19",
+    "lcd_b[3]": "F19",
+    "lcd_b[2]": "F18",
+    "lcd_b[1]": "M17",
+    "lcd_b[0]": "M16",
+    "lcd_r[5]": "H19",
+    "lcd_r[4]": "J19",
+    "lcd_r[3]": "G25",
+    "lcd_r[2]": "H18",
+    "lcd_r[1]": "J18",
+    "lcd_r[0]": "K17",
+    "touch_scl": "AB26",
+    "touch_sda": "U25",
+    "touch_int": "V23",
+    "touch_rst_n": "R23",
+    "bt_rx": "P24",
+    "bt_tx": "P23",
+    "flash_cs_n": "L25",
+    "flash_sck": "P20",
+    "flash_mosi": "R21",
+    "flash_miso": "T22",
+    "flash_wp_n": "R22",
+    "flash_hold_n": "R20",
+    "ultrasonic_trig": "P21",
+    "ultrasonic_echo": "U17",
+    "keypad_sda[0]": "AB25",
+    "keypad_sda[1]": "L22",
+    "keypad_sda[2]": "W20",
+    "keypad_scl[0]": "AA25",
+    "keypad_scl[1]": "W26",
+    "keypad_scl[2]": "V19",
+    "keypad_int_n[0]": "Y26",
+    "keypad_int_n[1]": "U26",
+    "keypad_int_n[2]": "U22",
+    "ec11_a[0]": "V16",
+    "ec11_a[1]": "U16",
+    "ec11_a[2]": "T23",
+    "ec11_b[0]": "Y21",
+    "ec11_b[1]": "U15",
+    "ec11_b[2]": "R25",
+    "ec11_sw_n[0]": "V17",
+    "ec11_sw_n[1]": "W21",
+    "ec11_sw_n[2]": "W25"
+  },
+  "clocks_mhz": {
+    "ref": 50,
+    "audio": 61.44,
+    "pixel": 35
+  },
+  "voices": 32,
+  "automatic_ids": 16,
+  "distributed_envelope_ce_registers": 32,
+  "limiter_window": 64,
+  "limiter_hold_samples": 240,
+  "internal_wns_ns": {
+    "ref_clk": 2.305,
+    "audio_clk": 0.059,
+    "pixel_clk": 1.395
+  },
+  "tns_zero": true,
+  "timing_passed": true,
+  "lcd_clock_physical_bounds": {
+    "passed": true,
+    "source_latency_ns": 6.0,
+    "hold_forward_allocation_ns": 5.0,
+    "slow_clk_ns": [
+      8.362
+    ],
+    "fast_clk_ns": [
+      3.719
+    ],
+    "oddr_clk_q0_ns": 0.0,
+    "q0_obuf_wire_ns": 0.0,
+    "obuf_ns": 2.737,
+    "clk_to_pin_max_ns": 2.737,
+    "sdf_sha256": "2a19d27a2e54aae280770b17a313b26df549cf2ea257b7b254ca35f73fd43566"
+  },
+  "resources": {
+    "Logic": {
+      "used": 47256.0,
+      "available": 138240
+    },
+    "Register": {
+      "used": 24716.0,
+      "available": 139140
+    },
+    "BSRAM": {
+      "used": 169.0,
+      "available": 340
+    },
+    "DSP": {
+      "used": 123.5,
+      "available": 298
+    },
+    "PLL": {
+      "used": 3.0,
+      "available": 12
+    }
+  },
+  "hdl_configurations": 58,
+  "hdl_checks": 75350315,
+  "tests": [
+    {
+      "configuration": "aip_fast",
+      "test": "tb_aip5916_keyboard",
+      "checks": 234406,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\aip_fast\\tb_aip5916_keyboard.log"
+    },
+    {
+      "configuration": "aip_100k",
+      "test": "tb_aip5916_keyboard",
+      "checks": 11700318,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\aip_100k\\tb_aip5916_keyboard.log"
+    },
+    {
+      "configuration": "encoder",
+      "test": "tb_ec11_encoder",
+      "checks": 957,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\encoder\\tb_ec11_encoder.log"
+    },
+    {
+      "configuration": "ec11_controls",
+      "test": "tb_ec11_controls",
+      "checks": 64,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\ec11_controls\\tb_ec11_controls.log"
+    },
+    {
+      "configuration": "events36",
+      "test": "tb_key_note_events",
+      "checks": 269,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\events36\\tb_key_note_events.log"
+    },
+    {
+      "configuration": "router",
+      "test": "tb_touch_keyboard_router",
+      "checks": 29,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\router\\tb_touch_keyboard_router.log"
+    },
+    {
+      "configuration": "stacked_small",
+      "test": "tb_stacked_effects",
+      "checks": 57642,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\stacked_small\\tb_stacked_effects.log"
+    },
+    {
+      "configuration": "stacked_production",
+      "test": "tb_stacked_effects",
+      "checks": 504202,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\stacked_production\\tb_stacked_effects.log"
+    },
+    {
+      "configuration": "top",
+      "test": "tb_touch_ec11_top",
+      "checks": 1338680,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\top\\tb_touch_ec11_top.log"
+    },
+    {
+      "configuration": "stereo_math",
+      "test": "tb_stereo_audio",
+      "checks": 5977704,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\stereo_math\\tb_stereo_audio.log"
+    },
+    {
+      "configuration": "latency",
+      "test": "tb_audio_latency",
+      "checks": 815390,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\latency\\tb_audio_latency.log"
+    },
+    {
+      "configuration": "output_stereo",
+      "test": "tb_output_gain",
+      "checks": 6056248,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\output_stereo\\tb_output_gain.log"
+    },
+    {
+      "configuration": "bluetooth",
+      "test": "tb_bluetooth_top",
+      "checks": 892192,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\bluetooth\\tb_bluetooth_top.log"
+    },
+    {
+      "configuration": "identity",
+      "test": "tb_bt_identity",
+      "checks": 37382,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\identity\\tb_bt_identity.log"
+    },
+    {
+      "configuration": "short",
+      "test": "tb_bt_short_audio",
+      "checks": 275335,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\short\\tb_bt_short_audio.log"
+    },
+    {
+      "configuration": "library",
+      "test": "tb_bt_library_link",
+      "checks": 336,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\library\\tb_bt_library_link.log"
+    },
+    {
+      "configuration": "startup",
+      "test": "tb_max98357_startup",
+      "checks": 3702449,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\startup\\tb_max98357_startup.log"
+    },
+    {
+      "configuration": "ultrasonic",
+      "test": "tb_ultrasonic_top",
+      "checks": 1721906,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\ultrasonic\\tb_ultrasonic_top.log"
+    },
+    {
+      "configuration": "british_top",
+      "test": "tb_british_top",
+      "checks": 1196537,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\british_top\\tb_british_top.log"
+    },
+    {
+      "configuration": "ui",
+      "test": "tb_rgb_ui_renderer",
+      "checks": 5376045,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\ui\\tb_rgb_ui_renderer.log"
+    },
+    {
+      "configuration": "touch_panel",
+      "test": "tb_gt9110_touch",
+      "checks": 29591,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\touch_panel\\tb_gt9110_touch.log"
+    },
+    {
+      "configuration": "i2c_legacy",
+      "test": "tb_i2c_register_master",
+      "checks": 430,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\i2c_legacy\\tb_i2c_register_master.log"
+    },
+    {
+      "configuration": "board_controls",
+      "test": "tb_timbre_control",
+      "checks": 21,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\board_controls\\tb_timbre_control.log"
+    },
+    {
+      "configuration": "allocator",
+      "test": "tb_voice_allocator",
+      "checks": 1747726,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\allocator\\tb_voice_allocator.log"
+    },
+    {
+      "configuration": "tail_stereo",
+      "test": "tb_bt_tail_reuse",
+      "checks": 8,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_features\\tail_stereo\\tb_bt_tail_reuse.log"
+    },
+    {
+      "configuration": "limiter_legacy",
+      "test": "tb_audio_limiter",
+      "checks": 248204,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\limiter_legacy\\tb_audio_limiter.log"
+    },
+    {
+      "configuration": "limiter_fixed",
+      "test": "tb_audio_limiter",
+      "checks": 293836,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\limiter_fixed\\tb_audio_limiter.log"
+    },
+    {
+      "configuration": "limiter_hold",
+      "test": "tb_audio_limiter",
+      "checks": 351076,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\limiter_hold\\tb_audio_limiter.log"
+    },
+    {
+      "configuration": "flash_driver",
+      "test": "tb_spi_nor_flash",
+      "checks": 275,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\flash_driver\\tb_spi_nor_flash.log"
+    },
+    {
+      "configuration": "flash_permissions_fast",
+      "test": "tb_flash_write_permissions",
+      "checks": 60,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\flash_permissions_fast\\tb_flash_write_permissions.log"
+    },
+    {
+      "configuration": "flash_permissions_1mhz",
+      "test": "tb_flash_write_permissions",
+      "checks": 60,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\flash_permissions_1mhz\\tb_flash_write_permissions.log"
+    },
+    {
+      "configuration": "flash_library",
+      "test": "tb_flash_song_library",
+      "checks": 90,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\flash_library\\tb_flash_song_library.log"
+    },
+    {
+      "configuration": "flash_protocol",
+      "test": "tb_score_library_protocol",
+      "checks": 19,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\flash_protocol\\tb_score_library_protocol.log"
+    },
+    {
+      "configuration": "flash_fullchain_locks",
+      "test": "tb_bt_library_link",
+      "checks": 336,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\flash_fullchain_locks\\tb_bt_library_link.log"
+    },
+    {
+      "configuration": "display_connector",
+      "test": "tb_rgb_display",
+      "checks": 2793166,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\display_connector\\tb_rgb_display.log"
+    },
+    {
+      "configuration": "envelope_production",
+      "test": "tb_adsr_production",
+      "checks": 14881,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\envelope_production\\tb_adsr_production.log"
+    },
+    {
+      "configuration": "envelopes_seven",
+      "test": "tb_instrument_envelopes",
+      "checks": 7932,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\envelopes_seven\\tb_instrument_envelopes.log"
+    },
+    {
+      "configuration": "audio_timing",
+      "test": "tb_audio_timing",
+      "checks": 9996,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\audio_timing\\tb_audio_timing.log"
+    },
+    {
+      "configuration": "master_volume",
+      "test": "tb_master_volume",
+      "checks": 108,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\master_volume\\tb_master_volume.log"
+    },
+    {
+      "configuration": "audio_articulation",
+      "test": "tb_bt_articulation",
+      "checks": 22027,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\audio_articulation\\tb_bt_articulation.log"
+    },
+    {
+      "configuration": "display_cdc",
+      "test": "tb_rgb_status_cdc",
+      "checks": 5302,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\display_cdc\\tb_rgb_status_cdc.log"
+    },
+    {
+      "configuration": "polyphony_stereo_0",
+      "test": "tb_bt_polyphony",
+      "checks": 266747,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\polyphony_stereo_0\\tb_bt_polyphony.log"
+    },
+    {
+      "configuration": "polyphony_stereo_1",
+      "test": "tb_bt_polyphony",
+      "checks": 266747,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\polyphony_stereo_1\\tb_bt_polyphony.log"
+    },
+    {
+      "configuration": "polyphony_stereo_2",
+      "test": "tb_bt_polyphony",
+      "checks": 266747,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\polyphony_stereo_2\\tb_bt_polyphony.log"
+    },
+    {
+      "configuration": "identity_timbre_0",
+      "test": "tb_bt_identity",
+      "checks": 37382,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\identity_timbre_0\\tb_bt_identity.log"
+    },
+    {
+      "configuration": "identity_timbre_1",
+      "test": "tb_bt_identity",
+      "checks": 37382,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\identity_timbre_1\\tb_bt_identity.log"
+    },
+    {
+      "configuration": "identity_timbre_2",
+      "test": "tb_bt_identity",
+      "checks": 37382,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\identity_timbre_2\\tb_bt_identity.log"
+    },
+    {
+      "configuration": "identity_timbre_3",
+      "test": "tb_bt_identity",
+      "checks": 46476,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\identity_timbre_3\\tb_bt_identity.log"
+    },
+    {
+      "configuration": "identity_timbre_4",
+      "test": "tb_bt_identity",
+      "checks": 46476,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\identity_timbre_4\\tb_bt_identity.log"
+    },
+    {
+      "configuration": "identity_timbre_5",
+      "test": "tb_bt_identity",
+      "checks": 46056,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\identity_timbre_5\\tb_bt_identity.log"
+    },
+    {
+      "configuration": "identity_timbre_6",
+      "test": "tb_bt_identity",
+      "checks": 46476,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\identity_timbre_6\\tb_bt_identity.log"
+    },
+    {
+      "configuration": "auto_manual_timbre_0",
+      "test": "tb_auto_manual_equivalence",
+      "checks": 4119887,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\auto_manual_timbre_0\\tb_auto_manual_equivalence.log"
+    },
+    {
+      "configuration": "auto_manual_timbre_1",
+      "test": "tb_auto_manual_equivalence",
+      "checks": 4119887,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\auto_manual_timbre_1\\tb_auto_manual_equivalence.log"
+    },
+    {
+      "configuration": "auto_manual_timbre_2",
+      "test": "tb_auto_manual_equivalence",
+      "checks": 4119887,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\auto_manual_timbre_2\\tb_auto_manual_equivalence.log"
+    },
+    {
+      "configuration": "auto_manual_timbre_3",
+      "test": "tb_auto_manual_equivalence",
+      "checks": 4119887,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\auto_manual_timbre_3\\tb_auto_manual_equivalence.log"
+    },
+    {
+      "configuration": "auto_manual_timbre_4",
+      "test": "tb_auto_manual_equivalence",
+      "checks": 4119887,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\auto_manual_timbre_4\\tb_auto_manual_equivalence.log"
+    },
+    {
+      "configuration": "auto_manual_timbre_5",
+      "test": "tb_auto_manual_equivalence",
+      "checks": 4119887,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\auto_manual_timbre_5\\tb_auto_manual_equivalence.log"
+    },
+    {
+      "configuration": "auto_manual_timbre_6",
+      "test": "tb_auto_manual_equivalence",
+      "checks": 4119887,
+      "log": "reports\\timing_audio_flash_2026-10-27\\regression_extra\\auto_manual_timbre_6\\tb_auto_manual_equivalence.log"
+    }
+  ],
+  "java_checks": 36114,
+  "supplemental": {
+    "audio_phase": {
+      "passed": true,
+      "baseline_sha256": "9378cdf638d93afc967e8cf0570f626fa86ed1b92f1547ab59ae5339f656e90e",
+      "actual_sha256": "0a25682a60f20823b5741e204aa6b298783410dd70d4842f535ade1f3ea3d8bb",
+      "output": "PASS audio timing phase checks=5007520 HALF=1,2,4,20,31\nE:/gowin/fpga-instrument-timing-audio-fix/reports/timing_audio_flash_2026-10-27/audio_phase/tb_phase.sv:21: $finish called at 5007522000 (1ps)\n"
+    },
+    "renderer_equivalence": {
+      "passed": true,
+      "renderer_sha256": "fe9d99c69a3dbf85fd55ba6ca3a832a3fd4a20c9db9836a68673ae0a56b13de3",
+      "baseline_sha256": "023e33c39591921bee1328326c8fe4c546410f723adf6bba8611506df7df20c9",
+      "output": "PASS pixel_equivalence comparisons=2688186\nPASS tb_rgb_ui_renderer checks=5376045 frames=7\nE:/gowin/fpga-instrument-timing-audio-fix/reports/timing_audio_flash_2026-10-27/renderer_equivalence/tb_equivalence.sv:95: $finish called at 26881860000 (1ps)\n"
+    },
+    "bt_traces": {
+      "0": {
+        "passed": true,
+        "timbre": 0,
+        "records": {
+          "LIMIT": 935,
+          "PCM": 935,
+          "MIX": 868,
+          "FX": 868,
+          "I2S": 1889,
+          "SRC": 61,
+          "NOTE": 58,
+          "VOICE": 4222
+        },
+        "behavioral_pll": true,
+        "scope": "passive trace of full RTL byte-upload chain; not a board capture",
+        "trace_sha256": "57c89159f62be935998197f23371979a02d40577f8246b724f9aa5b8216fc218",
+        "identical_to_stage2": true
+      },
+      "3": {
+        "passed": true,
+        "timbre": 3,
+        "records": {
+          "LIMIT": 935,
+          "PCM": 935,
+          "MIX": 868,
+          "FX": 868,
+          "I2S": 1889,
+          "SRC": 61,
+          "NOTE": 58,
+          "VOICE": 8756
+        },
+        "behavioral_pll": true,
+        "scope": "passive trace of full RTL byte-upload chain; not a board capture",
+        "trace_sha256": "eb030776f69583a7d9fa9657961d27ac8bd6658d80450882be63db1b70e9adff",
+        "identical_to_stage2": true
+      }
+    }
+  },
+  "programmed_hardware": false,
+  "board_flash_phone_and_listening_verified": false,
+  "audition_scope": "same project MIDI rendered by sample-domain model; not RTL or board recording",
+  "acceptance": {
+    "zero_violations_required": true,
+    "tns_zero_required": true,
+    "original_internal_setup_target_ns": 0.5,
+    "original_margin_target_met": false,
+    "user_accepted_zero_violation_result": true
+  },
+  "distributed_envelope_reset_registers": 32,
+  "distributed_encoder_tick_registers": 3,
+  "git_publication": {
+    "target_branch": "codex/integrated-instrument",
+    "state": "artifact_packaging_before_commit",
+    "requested_by_user": true
+  }
+}

@@ -1,11 +1,11 @@
 `timescale 1ns/1ps
 module tb_audio_limiter;
- parameter integer FIXED=0;
+ parameter integer FIXED=0,HOLD=0;
  reg clk=0,rst=1,valid=0;always #5 clk=~clk;
  reg signed [15:0] sample=0;
  wire ready,ov,clipped;wire signed [15:0] result;wire [16:0] gain;
  integer checks=0,elapsed=0,max_cycles=0,fd,scanned;reg [63:0] vectors[0:9999];reg [4095:0] file;
- audio_limiter #(.FIXED_LATENCY(FIXED)) dut(clk,rst,valid,sample,ready,ov,result,gain,clipped);
+ audio_limiter #(.FIXED_LATENCY(FIXED),.HOLD_SAMPLES(HOLD)) dut(clk,rst,valid,sample,ready,ov,result,gain,clipped);
  task check(input bit yes,input string why);begin checks++;if(!yes)$fatal(1,"%s",why);end endtask
  initial begin
   if(!$value$plusargs("LIMITER_VECTORS=%s",file))$fatal(1,"Missing limiter vectors");

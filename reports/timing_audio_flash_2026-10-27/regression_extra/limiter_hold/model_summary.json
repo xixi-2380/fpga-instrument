@@ -1,0 +1,49 @@
+{
+  "vector_count": 3312,
+  "candidates": [
+    {
+      "candidate": "w32_gain16",
+      "peak": 29203,
+      "rms": 11147.073759249368,
+      "matched_rms_gain": 0.1275804893408475,
+      "limited_fraction": 0.6247916666666666,
+      "minimum_gain": 0.1709136962890625,
+      "delay_samples": 31
+    },
+    {
+      "candidate": "w32_gain24",
+      "peak": 29203,
+      "rms": 13008.022467060151,
+      "matched_rms_gain": 0.10932861843718546,
+      "limited_fraction": 0.7472083333333334,
+      "minimum_gain": 0.1139373779296875,
+      "delay_samples": 31
+    },
+    {
+      "candidate": "w64_gain16",
+      "peak": 29203,
+      "rms": 11091.477122973185,
+      "matched_rms_gain": 0.1282199935279976,
+      "limited_fraction": 0.6247916666666666,
+      "minimum_gain": 0.1709136962890625,
+      "delay_samples": 63
+    },
+    {
+      "candidate": "w64_gain24",
+      "peak": 29203,
+      "rms": 12926.861382940177,
+      "matched_rms_gain": 0.11001503634907017,
+      "limited_fraction": 0.7472083333333334,
+      "minimum_gain": 0.1139373779296875,
+      "delay_samples": 63
+    }
+  ],
+  "float_comparison_max_code_error": 6.5084018692832615,
+  "selected": {
+    "window": 64,
+    "pre_gain": 24,
+    "ceiling": 29204,
+    "release_shift": 12
+  },
+  "scope": "synthetic software audition; no hardware or user listening confirmation"
+}

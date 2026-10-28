@@ -2,12 +2,12 @@
 import collections,json,pathlib,sys
 from reference_audio_limiter import Limiter
 p=pathlib.Path(sys.argv[1]); target=256
-lanes={k:dict(model=Limiter(),limited=collections.deque(),final=collections.deque(),gain=256,checks=0,frames=0,maximum=0) for k in ['L','R']}
+lanes={k:dict(model=Limiter(release_hold=240),limited=collections.deque(),final=collections.deque(),gain=256,checks=0,frames=0,maximum=0) for k in ['L','R']}
 for line in p.read_text().splitlines():
  parts=line.split(); kind=parts[0]
  if kind=='P': target=round(int(parts[1])*256/100);continue
  if kind=='C':
-  for lane in lanes.values():lane['model']=Limiter();lane['limited'].clear();lane['final'].clear()
+  for lane in lanes.values():lane['model']=Limiter(release_hold=240);lane['limited'].clear();lane['final'].clear()
   continue
  lane=lanes['R' if kind.endswith('R') else 'L'];op=kind[0]
  if op=='F':lane['limited'].append(lane['model'].step(int(parts[1])));lane['frames']+=1

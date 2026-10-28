@@ -1,0 +1,2 @@
+PASS tb_ec11_encoder checks=957 up=3 down=2 single=1 double=2
+E:/gowin/fpga-instrument-timing-audio-fix/sim/tb_ec11_encoder.sv:37: $finish called at 9451000 (1ps)

@@ -1,0 +1,2 @@
+PASS tb_stacked_effects checks=57642 vectors=11530 max_cycles=9 production=0
+E:/gowin/fpga-instrument-integrated/sim/tb_stacked_effects.sv:47: $finish called at 1383416000 (1ps)

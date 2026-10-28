@@ -13,7 +13,7 @@ module tb_bt_score_audio;
  keyboard_top #(.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.SCORE_ENABLE(0),
  .SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
  .LOCK_N(16),.MUTE(4),.FADE(4),.ATTACK(2),.DECAY(2),.RELEASE(2)) dut(
- .clk(clk),.rst(rst),.bt_rx(1'b1),.board_buttons_n(4'hf),.key_row(rows),.key_col(columns));
+ .clk(clk),.rst(rst),.bt_rx(1'b1),.board_buttons_n(4'hf),.keypad_int_n(3'b111),.ec11_a(3'b111),.ec11_b(3'b111),.ec11_sw_n(3'b111),);
  defparam dut.bluetooth_on.link.CLOCK_HZ=1000000;
  // Keep this accelerated single-voice fixture; production polyphony has its own test.
  defparam dut.bluetooth_on.link.MAX_VOICES=1;

@@ -1,0 +1,8 @@
+{
+  "configuration": "audio_timing",
+  "test": "tb_audio_timing",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 0.593
+}

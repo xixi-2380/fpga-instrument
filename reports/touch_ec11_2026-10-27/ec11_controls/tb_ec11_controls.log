@@ -1,0 +1,2 @@
+PASS tb_ec11_controls checks=64
+E:/gowin/fpga-instrument-integrated/sim/tb_ec11_controls.sv:44: $finish called at 19790000 (1ps)

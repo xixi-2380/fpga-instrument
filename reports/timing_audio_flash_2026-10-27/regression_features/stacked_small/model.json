@@ -1,0 +1,11 @@
+{
+  "production": false,
+  "vectors": 11530,
+  "capacity": 32,
+  "combs": [
+    3,
+    5,
+    7,
+    11
+  ]
+}

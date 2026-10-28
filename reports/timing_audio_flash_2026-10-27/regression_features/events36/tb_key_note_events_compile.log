@@ -1,0 +1,1 @@
+E:/gowin/fpga-instrument-timing-audio-fix/src/key_note_events.sv:43: warning: @* is sensitive to all 6 words in array 'group_key'.

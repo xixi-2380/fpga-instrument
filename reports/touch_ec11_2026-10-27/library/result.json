@@ -1,0 +1,8 @@
+{
+  "configuration": "library",
+  "test": "tb_bt_library_link",
+  "params": [],
+  "behavioral_pll": true,
+  "passed": true,
+  "seconds": 118.577
+}

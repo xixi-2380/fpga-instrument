@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "source_latency_ns": 6.0,
+  "hold_forward_allocation_ns": 5.0,
+  "slow_clk_ns": [
+    8.362
+  ],
+  "fast_clk_ns": [
+    3.719
+  ],
+  "oddr_clk_q0_ns": 0.0,
+  "q0_obuf_wire_ns": 0.0,
+  "obuf_ns": 2.737,
+  "clk_to_pin_max_ns": 2.737,
+  "sdf_sha256": "fabdb024ea1ceb13420f996eb1dd2cb3a18236fcbbaac974034ab72d772c4693"
+}

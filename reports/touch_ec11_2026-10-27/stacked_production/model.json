@@ -1,0 +1,11 @@
+{
+  "production": true,
+  "vectors": 100842,
+  "capacity": 24000,
+  "combs": [
+    1499,
+    1601,
+    1867,
+    2053
+  ]
+}

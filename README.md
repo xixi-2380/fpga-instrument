@@ -1,8 +1,26 @@
-# FPGA电子乐器合并工程（2026-10-26）
+# FPGA 电子乐器：时序、Flash 与多声部音频修复副本
+
+当前工程为 `E:\gowin\fpga-instrument-timing-audio-fix\keyboard_adsr.gprj`，本地开发分支 `codex/timing-audio-flash-fix`。从 integrated 当前磁盘状态独立复制，原工程只读保留。按用户后续授权，将最终源码、诊断APK、报告和可烧录文件提交并推送至原分支 **`codex/integrated-instrument`**；不更新main、不强推、不烧录硬件。
+
+本轮说明与实板操作步骤见 [修复与验证说明](docs/timing_audio_flash_fix_2026-10-28.md)。新报告位于 `reports/timing_audio_flash_2026-10-27`；只有严格检查通过后生成的 `dist/timing-audio-fix/manifest.json` 及其匹配位流构成本轮验收交付。保持 73 个引脚、32 个物理声部、16 个自动身份和 50／61.44／35MHz。
+
+最终构建 **attempt5**：Setup／Hold违例均为0、TNS=0；参考／音频／像素内部余量为 **2.305／0.059／1.395ns**。音频尚未达到最初0.5ns余量目标，按用户已认可的零违例结果收尾。58项HDL配置共75,350,315次检查、左右独立模型18,376项、Java36,114项通过；数字链路延迟仍为1.37ms。实板Flash保存和听感未验证。
+
+烧录入口：[D2_keyboard_leds.fs](dist/timing-audio-fix/D2_keyboard_leds.fs)；[交付校验清单](dist/timing-audio-fix/manifest.json)；[诊断APK](android/dist/GaoshanScore-0.3.1-flashdiag.apk)。型号、引脚和操作以本轮说明为准。
+
+以下为复制保留的合并与功能历史，其中“未运行 EDA”“允许提交推送”等只描述对应历史阶段，不能作为本轮状态或授权。
+
+# FPGA电子乐器合并工程（2026-10-26，历史）
+
+2026-10-27 Flash保存故障检查：修正一处把状态寄存器锁定误认为数据区保护、导致已识别芯片仍返回21的判断；增加App0.3.1只读Flash诊断，并保留“RAM已下载成功”的阶段结果。实板ID/错误码尚待确认，未运行EDA或硬件擦写。入口见[Flash检查记录](docs/flash_link_2026-10-27.md)，安装包为[0.3.1-flashdiag](android/dist/GaoshanScore-0.3.1-flashdiag.apk)。
+
+
+2026-10-27 最新：矩阵键盘已替换为三块 AiP5916（36 琴键＋12 AUX），移植三路 EC11 和可叠加回声／混响／颤音，保留现有双声道。第三块键盘 INT 经用户确认改为 **U22**，音频 BCLK 保留 **V22**。接线及操作以[三板键盘与 EC11 说明](docs/touch_keyboard_ec11_2026-10-27.md)为准；下方矩阵菜单键位及旧单选效果属于历史。此功能尚未综合/P&R/烧录或提交推送。 本轮 25 个配置、41,657,447 次 HDL 检查全部通过，73 个引脚无重复；详见 reports/touch_ec11_2026-10-27/validation.json。
+
 
 2026-10-27继续合入`8f10059`双MAX98357A立体声与物理声部元数据修正，保留超声波、限幅、LAT和现有时序结构。生产默认STEREO_ENABLE=1，左右独立效果/限幅/音量，现有I²S和引脚不变；两块模块需各配置左/右SD模式。详见[立体声合并说明](docs/stereo_integration_2026-10-27.md)。本轮仍仅HDL/软件验证，需用户重新综合/P&R/STA与实板验收。
 
-本轮23个配置共32,310,863次HDL检查通过，双侧独立Python模型18,376项比对通过；80个测试编译及真实vendor库顶层语法检查通过。修正左右限幅计算耗时不同造成的错帧风险，保留单声道默认行为。结果见reports/stereo_integration_2026-10-27/validation.json。
+此前立体声合并版23个配置共32,310,863次HDL检查通过，双侧独立Python模型18,376项比对通过；80个测试编译及真实vendor库顶层语法检查通过。修正左右限幅计算耗时不同造成的错帧风险，保留单声道默认行为。结果见reports/stereo_integration_2026-10-27/validation.json。
 
 当前工程：`E:\gowin\fpga-instrument-integrated\keyboard_adsr.gprj`，顶层keyboard_top、Device Version C、输出D2_keyboard_leds。合并两个本地工程的当前源码及未提交修改；两个原工程保持原样。用户2026-10-27授权将已验证结果提交推送至`codex/integrated-instrument`，不更新main。
 
@@ -12,9 +30,9 @@
 | 自动身份尾音/力度修复、MOSI=R21、包络预计算、较新时序结构 | score本地2026-10-26修订 |
 | 24倍响度补偿、64采样前瞻限幅、LAT数字延迟 | audio版 |
 | 超声波音量、灵敏度、上下限与平滑控制，默认OFF | audio本地修订 |
-| 32物理声部、七音色、三效果器、触摸、矩阵、MAX98357A | 两版共同保留 |
+| 32物理声部、七音色、触摸、MAX98357A | 两版共同保留；矩阵现已替换为三板琴键 |
 
-上电/USR静音待机，不自动播放小星星。设置页R1C4进入超声波、R4C4进入more曲库，触摸页也有分开的两个入口。BT RX=P24、TX=P23；删除BT EN，P21用于超声波Trig、U17用于Echo。
+上电/USR静音待机，不自动播放小星星。设置页 AUX10 进入超声波、AUX11 进入 more 曲库，触摸页也有分开的两个入口。BT RX=P24、TX=P23；删除BT EN，P21用于超声波Trig、U17用于Echo。
 
 **本合并工程尚未进行新的综合/P&R/烧录，不能使用来源旧位流替代。** 下方原score的时序闭合与导出路径只属于原工程；dist/fpga/2026-10-25仅历史归档。打开本目录工程后需重新实现。完整选择依据与使用说明见[合并说明](docs/integration_2026-10-26.md)，本轮验证见reports/integration_2026-10-26/validation.json。
 

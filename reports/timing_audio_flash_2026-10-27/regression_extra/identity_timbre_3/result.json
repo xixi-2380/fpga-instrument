@@ -1,0 +1,10 @@
+{
+  "configuration": "identity_timbre_3",
+  "test": "tb_bt_identity",
+  "params": [
+    "TIMBRE=3"
+  ],
+  "behavioral_pll": true,
+  "passed": true,
+  "seconds": 423.783
+}

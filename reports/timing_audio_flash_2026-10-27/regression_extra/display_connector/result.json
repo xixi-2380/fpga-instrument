@@ -1,0 +1,8 @@
+{
+  "configuration": "display_connector",
+  "test": "tb_rgb_display",
+  "params": [],
+  "behavioral_pll": true,
+  "passed": true,
+  "seconds": 116.991
+}

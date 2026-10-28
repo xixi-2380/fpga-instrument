@@ -2,7 +2,7 @@
 `include "config/synth_config.svh"
 // Generic note-event synthesis; physical keyboard logic stays in its adapter.
 module synth_core #(
-    parameter integer STEREO_ENABLE=0,OUTPUT_ENABLE=1,OUTPUT_GAIN=24,LIMITER_LOG2=6,
+    parameter integer STEREO_ENABLE=0,VISUAL_KEYS=16,LIMITER_HOLD_SAMPLES=240,OUTPUT_ENABLE=1,OUTPUT_GAIN=24,LIMITER_LOG2=6,
     VOICES=`VOICE_COUNT,MUTE=`MUTE_FRAMES,FADE=`FADE_FRAMES,
     ATTACK=`ADSR_ATTACK_FRAMES,DECAY=`ADSR_DECAY_FRAMES,
     SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES,
@@ -13,11 +13,20 @@ module synth_core #(
     input wire effect_cfg_valid,input wire [8:0] effect_echo_wet,effect_room_wet,effect_tremolo_depth,
     input wire [3:0] effect_tremolo_rate_hz,output wire effect_cfg_ready,effect_cfg_applied,
     output wire visual_sample_valid,output wire signed [15:0] visual_sample,
-    output reg [15:0] visual_notes,
+    output reg [VISUAL_KEYS-1:0] visual_notes,
     input wire flush,input wire velocity_valid,input wire [6:0] note_velocity,
     input wire [6:0] volume_percent,input wire [6:0] note_pitch,input wire output_flush,
-    output wire latency_valid,output wire [19:0] latency_bcd);
-    wire engine_reset=rst || (flush===1'b1);
+    output wire latency_valid,output wire [19:0] latency_bcd,
+    input wire [2:0] effect_mask,input wire [14:0] effect_echo_samples);
+    // Register the soft engine clear before its wide envelope/RAM fanout.
+    // Button assertion stays asynchronous; serial urgent-clear remains separate.
+    // One clk of control staging is far below a sample and cancels work before
+    // a new render can complete. No PCM sample boundary or startup clock moves.
+    reg engine_reset;
+    always @(posedge clk or posedge rst)begin
+        if(rst)engine_reset<=1'b1;
+        else engine_reset<=flush===1'b1;
+    end
     // Legacy standalone callers can omit output_flush; top distinguishes an
     // Natural end drains before urgent output clear. Clocks/startup never use these resets.
     wire output_reset=rst || (output_flush===1'b1) ||
@@ -72,15 +81,17 @@ module synth_core #(
     reg [16:0] combined_level;
     reg gain_request,first_sample,last_sample;
     reg [INDEX_W-1:0] sample_voice;
+    reg [INDEX_W-1:0] prepared_voice;
+    reg [31:0] slot_fcw;reg slot_restart;reg [2:0] slot_timbre;
     wire signed [`VOICE_W-1:0] gain_sample;
     wire signed [15:0] mix_sample;
     wire [15:0] frame_l,frame_r;
-    reg [15:0] note_scan;
+    reg [VISUAL_KEYS-1:0] note_scan;
     // Metadata read, automatic lookup, then bitmap update occupy separate clocks.
     // Avoid a render-counter -> context mux -> dynamic shift -> bitmap path.
     reg [6:0] scanning_id,scanning_pitch;
     reg scanning_held,scanning_first,scanning_last;reg [6:0] slot_pitch;
-    wire [15:0] note_bit=(scanning_held && scanning_pitch>=60 && scanning_pitch<76) ? (16'b1 << (scanning_pitch-7'd60)) : 16'd0;
+    wire [VISUAL_KEYS-1:0] note_bit=(scanning_held && scanning_pitch>=60 && scanning_pitch<60+VISUAL_KEYS) ? ( {{(VISUAL_KEYS-1){1'b0}},1'b1} << (scanning_pitch-7'd60)) : {VISUAL_KEYS{1'b0}};
     always @(posedge clk or posedge engine_reset)begin
         if(engine_reset)begin note_scan<=0;visual_notes<=0;scanning_id<=0;scanning_pitch<=0;scanning_held<=0;scanning_first<=0;scanning_last<=0;slot_pitch<=0;end
         else begin
@@ -122,7 +133,7 @@ module synth_core #(
                 if(effect_valid && !engine_reset)begin staged_sample<=effect_sample;staged_valid<=1;staged_tag<=render_tag;end
             end
         end
-        audio_limiter #(.WINDOW_LOG2(LIMITER_LOG2),.PRE_GAIN(OUTPUT_GAIN),.FIXED_LATENCY(STEREO_ENABLE)) limiter(
+        audio_limiter #(.WINDOW_LOG2(LIMITER_LOG2),.PRE_GAIN(OUTPUT_GAIN),.HOLD_SAMPLES(LIMITER_HOLD_SAMPLES),.FIXED_LATENCY(STEREO_ENABLE)) limiter(
             clk,output_reset,frame_ce,staged_valid?staged_sample:16'sd0,
             limiter_ready,limited_valid,limited_sample,limiter_gain,limiter_clipped,staged_valid?staged_tag:17'd0,limited_tag);
     end else begin: output_bypass
@@ -144,7 +155,8 @@ module synth_core #(
     end
     assign visual_sample_valid=output_valid;
     assign visual_sample=STEREO_ENABLE ? (visual_sum>>>1) : output_sample;
-    audio_timing timing(clk,rst,bck,rise_ce,fall_ce,frame_ce,bit_index);
+    wire frame_pre_ce;wire [VOICES-1:0] envelope_enables,envelope_resets;
+    audio_timing timing(clk,rst,bck,rise_ce,fall_ce,frame_ce,bit_index,frame_pre_ce);
     startup_envelope #(.MUTE(MUTE),.FADE(FADE)) startup(clk,rst,frame_ce,input_ready,startup_level);
     assign pa_enable=input_ready;
     assign gate=|voice_held;
@@ -159,19 +171,44 @@ module synth_core #(
         .note_independent(velocity_valid===1'b1 && note_id<16),.note_gain(velocity_gain(note_velocity)),.note_pitch(note_pitch),
         .voice_gains(voice_gains),.voice_pitches(voice_pitches));
     for(genvar v=0;v<VOICES;v=v+1)begin: voices
+        // Same predictor and reset as the main boundary FF: no added cycle.
+        // Preserve local copies so each envelope has a nearby, bounded CE net.
+        (* syn_preserve=1, syn_keep=1 *) reg envelope_ce;
+        (* syn_preserve=1, syn_keep=1 *) reg envelope_reset;
+        always @(posedge clk or posedge rst)begin
+            if(rst)envelope_ce<=`BCK_HALF_CYCLES==1;
+            else envelope_ce<=frame_pre_ce;
+        end
+        // Identical phase to engine_reset, but without its global reset fanout.
+        always @(posedge clk or posedge rst)begin
+            if(rst)envelope_reset<=1'b1;
+            else envelope_reset<=flush===1'b1;
+        end
+        assign envelope_resets[v]=envelope_reset;
+        assign envelope_enables[v]=`BCK_HALF_CYCLES==1 ? (!rst && envelope_ce) : envelope_ce;
         instrument_envelope #(.ATTACK(ATTACK),.DECAY(DECAY),.SUSTAIN(SUSTAIN),.RELEASE(RELEASE),.PRECALC(1)) envelope(
-            .clk(clk),.rst(engine_reset),.sample_ce(frame_ce),.note_on(voice_start[v]),.note_off(voice_stop[v]),
+            .clk(clk),.rst(envelope_reset),.sample_ce(envelope_enables[v]),.note_on(voice_start[v]),.note_off(voice_stop[v]),
             .level(voice_level[v]),.active(voice_active[v]),.restart(voice_restart[v]),.timbre(voice_timbres[v*3+:3]));
     end
     dds_sine #(.VOICES(VOICES)) dds(.clk(clk),.rst(engine_reset),.sample_ce(dds_ce),
-        .fcw(frame_fcw[selected_voice*32+:32]),.sample(raw_sample),.valid(raw_valid),
-        .phase(phase),.restart(frame_restart[selected_voice]),.voice_index(selected_voice),.timbre(frame_timbres[selected_voice*3+:3]));
+        .fcw(slot_fcw),.sample(raw_sample),.valid(raw_valid),
+        .phase(phase),.restart(slot_restart),.voice_index(prepared_voice),.timbre(slot_timbre));
     always @(posedge clk or posedge engine_reset)begin
         if(engine_reset)begin
             render_busy<=0;render_cycle<=0;frame_fcw<=0;frame_restart<=0;frame_timbres<=0;
             selected_level<=0;selected_startup<=0;level_product<=0;combined_level<=0;gain_request<=0;
             first_sample<=0;last_sample<=0;sample_voice<=0;velocity_scale<=256;
+            prepared_voice<=0;slot_fcw<=0;slot_restart<=0;slot_timbre<=0;
         end else begin
+            // Prepare the next voice during its two preceding idle clocks.
+            // DDS still samples on slot0: context mux and phase addition no
+            // longer share the render-counter path, with no extra audio cycle.
+            if(render_busy && render_cycle<16*VOICES && render_cycle[3:0]==14)
+                prepared_voice<=render_cycle>>4;
+            if(render_busy && render_cycle<16*VOICES && render_cycle[3:0]==15)begin
+                slot_fcw<=frame_fcw[prepared_voice*32+:32];
+                slot_restart<=frame_restart[prepared_voice];slot_timbre<=frame_timbres[prepared_voice*3+:3];
+            end
             // Context selection and multiplication occupy separate clocks.
             gain_request<=in_slots && render_cycle[3:0]==4;
             if(in_slots && render_cycle[3:0]==1)level_product<=selected_level*selected_startup;
@@ -218,6 +255,7 @@ module synth_core #(
         audio_effects #(.DELAY_SAMPLES(DELAY_SAMPLES),.D0(ROOM_D0),.D1(ROOM_D1),.D2(ROOM_D2),.D3(ROOM_D3)) right_effect(
             .clk(clk),.rst(engine_reset),.enable(effects_enable),.mode(effect_mode),.in_valid(stereo_mix_valid_r),.in_sample(stereo_mix_r),
             .in_ready(effect_ready_r),.out_valid(effect_valid_r),.out_sample(effect_sample_r),
+            .effect_mask(effect_mask),.cfg_echo_samples(effect_echo_samples),
             .cfg_valid(effect_cfg_valid),.cfg_echo_wet(effect_echo_wet),.cfg_room_wet(effect_room_wet),
             .cfg_tremolo_depth(effect_tremolo_depth),.cfg_tremolo_rate_hz(effect_tremolo_rate_hz),
             .cfg_ready(cfg_ready_r),.cfg_applied(cfg_applied_r));
@@ -232,7 +270,7 @@ module synth_core #(
                     if(effect_valid_r && !engine_reset)begin staged_sample<=effect_sample_r;staged_valid<=1;staged_tag<=render_tag;end
                 end
             end
-            audio_limiter #(.WINDOW_LOG2(LIMITER_LOG2),.PRE_GAIN(OUTPUT_GAIN),.FIXED_LATENCY(1)) limiter(
+            audio_limiter #(.WINDOW_LOG2(LIMITER_LOG2),.PRE_GAIN(OUTPUT_GAIN),.HOLD_SAMPLES(LIMITER_HOLD_SAMPLES),.FIXED_LATENCY(1)) limiter(
                 clk,output_reset,frame_ce,staged_valid?staged_sample:16'sd0,
                 right_limiter_ready,right_limited_valid,right_limited_sample,right_limiter_gain,right_limiter_clipped,
                 staged_valid?staged_tag:17'd0,right_limited_tag);
@@ -252,7 +290,8 @@ module synth_core #(
     audio_effects #(.DELAY_SAMPLES(DELAY_SAMPLES),.D0(ROOM_D0),.D1(ROOM_D1),.D2(ROOM_D2),.D3(ROOM_D3)) effect(
         .clk(clk),.rst(engine_reset),.enable(effects_enable),.mode(effect_mode),.in_valid(stereo_mix_valid),.in_sample(stereo_mix_l),
         .in_ready(effect_ready),.out_valid(effect_valid),.out_sample(effect_sample),
-        .cfg_valid(effect_cfg_valid),.cfg_echo_wet(effect_echo_wet),.cfg_room_wet(effect_room_wet),
+        .effect_mask(effect_mask),.cfg_echo_samples(effect_echo_samples),
+            .cfg_valid(effect_cfg_valid),.cfg_echo_wet(effect_echo_wet),.cfg_room_wet(effect_room_wet),
         .cfg_tremolo_depth(effect_tremolo_depth),.cfg_tremolo_rate_hz(effect_tremolo_rate_hz),
         .cfg_ready(effect_cfg_ready),.cfg_applied(effect_cfg_applied));
     frame_buffer buffer(clk,OUTPUT_ENABLE?output_reset:engine_reset,frame_ce,output_valid,ready,output_sample,output_sample_r,frame_l,frame_r,underrun);
@@ -260,6 +299,11 @@ module synth_core #(
     // synthesis translate_off
     initial if(VOICES<1 || VOICES>32 || RENDER_BUDGET>=`FRAME_CYCLES)$fatal(1,"Invalid render budget");
     always @(posedge clk)if(!rst)begin
+        if(envelope_enables!=={VOICES{frame_ce}})$fatal(1,"Distributed envelope CE changed sample boundary");
+        if(envelope_resets!=={VOICES{engine_reset}})$fatal(1,"Distributed envelope reset changed clear phase");
+        if(dds_ce && (prepared_voice!==selected_voice ||
+           {slot_fcw,slot_restart,slot_timbre}!=={frame_fcw[selected_voice*32+:32],frame_restart[selected_voice],frame_timbres[selected_voice*3+:3]}))
+            $fatal(1,"Prepared DDS context differs at the original sample edge");
         if(frame_ce && render_busy)$fatal(1,"Frame renderer missed deadline");
         if(STEREO_ENABLE && (stereo_mix_valid!==stereo_mix_valid_r || effect_valid!==effect_valid_r || output_valid!==output_valid_r || effect_cfg_ready!==cfg_ready_r || effect_cfg_applied!==cfg_applied_r))$fatal(1,"Stereo channel pipeline mismatch");
         if(mix_valid && (!effect_ready || !effect_ready_r))$fatal(1,"Effect rejected render result");

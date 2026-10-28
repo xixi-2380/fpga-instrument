@@ -1,0 +1,10 @@
+{
+  "configuration": "aip_100k",
+  "test": "tb_aip5916_keyboard",
+  "params": [
+    "HALF=250"
+  ],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 40.414
+}

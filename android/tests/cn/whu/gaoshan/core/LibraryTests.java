@@ -14,6 +14,15 @@ public final class LibraryTests {
         state=c.libraryJob(key);check(state.state==2&&state.persisted==persisted,"final job state matches operation");
     }
     public static void main(String[] args)throws Exception{
+        byte[] diag=new byte[20];diag[1]=1;diag[2]=3;diag[3]=32;Wire.put16(diag,4,4096);diag[6]=16;
+        diag[7]=0x18;diag[8]=0x40;diag[9]=(byte)0xef;diag[10]=(byte)0xe0;diag[11]=0x3b;diag[12]=0x60;
+        String diagnostic=ProtocolClient.flashDiagnostic(new ProtocolClient.LibraryCapabilities(diag));
+        check(diagnostic.contains("ID=EF4018 SR1=E0 SR2=3B SR3=60"),"real raw status bytes are available for hardware diagnosis");
+        check(diagnostic.contains("需核对固件")&&!diagnostic.contains("数据区保护已启用"),"register locks alone are not reported as array protection");
+        diag[10]=4;check(ProtocolClient.flashDiagnostic(new ProtocolClient.LibraryCapabilities(diag)).contains("数据区保护已启用"),"actual BP flag explained");
+        diag[10]=0;diag[12]=4;check(ProtocolClient.flashDiagnostic(new ProtocolClient.LibraryCapabilities(diag)).contains("独立块保护模式"),"WPS remains distinct");
+        check(ProtocolClient.flashJobError(9).contains("0x09")&&ProtocolClient.flashJobError(9).contains("Flash读回"),"Flash CRC failure includes exact code and context");
+        check(ProtocolClient.flashJobError(0x21).contains("0x21"),"write rejection code stays visible");
         SimulatedDevice device=new SimulatedDevice(true);ProtocolClient client=new ProtocolClient(device,()->System.nanoTime()/1000000L,10);
         ProtocolClient.Capabilities caps=client.hello();check(caps.maxNotes==4096&&caps.voices==16&&caps.features==5,"actual poly capacity, RAM feature semantics unchanged");
         ProtocolClient.LibraryCapabilities ext=client.libraryCapabilities();check(ext.writable&&ext.initialized&&ext.jedecId==0xef4018,"extension profile");

@@ -1,0 +1,5 @@
+Generated 100842 independent stacked-effect vectors, production=True
+RUN tb_stacked_effects
+PASS tb_stacked_effects checks=504202 vectors=100842 max_cycles=9 production=1
+E:/gowin/fpga-instrument-timing-audio-fix/sim/tb_stacked_effects.sv:47: $finish called at 12100856000 (1ps)
+

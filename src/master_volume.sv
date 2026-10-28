@@ -115,13 +115,20 @@ module master_volume(input wire clk,rst,in_valid,input wire signed [15:0] in_sam
   endcase
  end
  always @(posedge clk or posedge rst)begin
-  if(rst)begin gain<=256;product<=0;product_valid<=0;out_valid<=0;out_sample<=0;end
-  else if(clear===1'b1)begin product<=0;product_valid<=0;out_valid<=0;out_sample<=0;end
+  if(rst)gain<=256;
+  else if(clear!==1'b1 && in_valid)begin
+   if(gain<target)gain<=gain+1'b1;else if(gain>target)gain<=gain-1'b1;
+  end
+ end
+ // Urgent PCM clear uses reset pins instead of a long clear->data mux.
+ // The gain register above deliberately retains the user's ramp and mute.
+ wire pcm_clear=rst || (clear===1'b1);
+ always @(posedge clk or posedge pcm_clear)begin
+  if(pcm_clear)begin product<=0;product_valid<=0;out_valid<=0;out_sample<=0;end
   else begin
    product_valid<=in_valid;out_valid<=product_valid;
    if(in_valid)begin
     product<=in_sample*$signed({1'b0,gain});
-    if(gain<target)gain<=gain+1'b1;else if(gain>target)gain<=gain-1'b1;
    end
    if(product_valid)out_sample<=product>>>8;
   end

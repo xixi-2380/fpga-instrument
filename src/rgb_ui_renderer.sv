@@ -1,15 +1,20 @@
 `timescale 1ns/1ps
 // British black/gold UI. Layout, coordinates, glyph/ROM and output: four stages.
-// One atomic1167-bit snapshot per frame; no framebuffer and no audio stalls.
+// One atomic1207-bit snapshot per frame; no framebuffer and no audio stalls.
 module rgb_ui_renderer(
- input wire pixel_clk,rst,frame_start,status_valid,input wire [1166:0] status_data,
+ input wire pixel_clk,rst,frame_start,status_valid,input wire [1206:0] status_data,
  input wire [10:0] x,y,input wire de_in,hs_in,vs_in,
  output reg [23:0] rgb,output reg de_out,hs_out,vs_out,input wire [145:0] more_data);
  `include "config/ui_layout.svh"
  localparam [23:0] BG=24'h101214,PANEL=24'h191c20,GOLD=24'hd6b979,
   CREAM=24'hf2e6c9,INK=24'h17191b,DIM=24'h9c987f,LINE=24'h4b4534,
   WINE=24'h67333e,GREEN=24'h8bc79b,RED=24'hef8f85;
- reg [1166:0] state;
+ reg [1206:0] state;
+ wire [2:0] effect_bits=state[1169:1167];
+ wire echo_amount_edit=state[1170],tremolo_rate_edit=state[1171];
+ wire [11:0] echo_ms_bcd=state[1183:1172];
+ wire [35:0] piano_notes={state[1203:1184],state[79:64]};
+ wire [2:0] keyboard_online=state[1206:1204];
  wire sensor_page=state[1166],sensor_enabled=state[1165];
  wire [2:0] sensor_sensitivity=state[1164:1162],sensor_state=state[1147:1145];
  wire [6:0] sensor_min=state[1161:1155],sensor_max=state[1154:1148];
@@ -35,7 +40,20 @@ module rgb_ui_renderer(
  reg de_glyph,hs_glyph,vs_glyph;
  integer px,py,i,k,left,top,note_index;
  reg [6:0] bin;
- integer point_y,previous_y,minimum_y,maximum_y;
+ // Signed8 waveform samples map exactly to Y171..298; ten bits suffice.
+ reg signed [9:0] point_y,previous_y,minimum_y,maximum_y;
+ wire piano_row_hit=(y>=346 && y<362)||(y>=364 && y<380)||(y>=382 && y<398);
+ wire [11:0] piano_row_notes=y<364 ? piano_notes[11:0] : y<382 ? piano_notes[23:12] : piano_notes[35:24];
+ wire [11:0] piano_column_hit;
+ for(genvar pcx=0;pcx<12;pcx=pcx+1)begin: piano_columns
+  assign piano_column_hit[pcx]=x>=32+pcx*61 && x<91+pcx*61;
+ end
+ reg [3:0] piano_column;reg [10:0] piano_text_x;
+ always @*begin
+  piano_column=0;piano_text_x=38;
+  for(integer c=0;c<12;c=c+1)if(piano_column_hit[c])begin piano_column=c;piano_text_x=38+c*61;end
+ end
+ wire piano_down=piano_row_notes[piano_column];
  reg [6:0] pc;
  reg [7:0] ch;reg [11:0] font_addr;reg [3:0] font_bit,bit_pipe;
  reg text_ink,ink_pipe,de_pipe,hs_pipe,vs_pipe;
@@ -49,14 +67,15 @@ module rgb_ui_renderer(
  reg de_layout,hs_layout,vs_layout;
  // A valid glyph is inside <=40 ten-pixel cells: X is 0..399, never signed.
  // Bound the arithmetic before the variable character lookup.
- wire [5:0] glyph_cell=glyph_dx[8:0]/9'd10;
- wire [3:0] glyph_column=glyph_dx[8:0]%9'd10;
+ wire [16:0] glyph_tenths=glyph_dx[8:0]*8'd205;
+ wire [5:0] glyph_cell=glyph_tenths[16:11];
+ wire [3:0] glyph_column=glyph_dx[8:0]-glyph_cell*9'd10;
  wire [5:0] glyph_index=glyph_len-6'd1-glyph_cell;
  always @*begin
   font_addr=0;font_bit=0;text_ink=0;ci=0;glyph_char=0;
   if(glyph_allow && glyph_len>0 && glyph_dx>=0 && glyph_dx<glyph_len*12'd10 && glyph_dy>=0 && glyph_dy<16)begin
    ci=glyph_cell;glyph_char=glyph_text[{glyph_index,3'b000}+:8];
-   if(glyph_char>=32 && glyph_char<128)begin font_addr=(glyph_char-8'd32)*12'd16+glyph_dy;font_bit=4'd15-glyph_column;text_ink=1;end
+   if(glyph_char>=32 && glyph_char<128)begin font_addr={glyph_char-8'd32,4'b0000}+glyph_dy[3:0];font_bit=4'd15-glyph_column;text_ink=1;end
   end
   if(glyph_title)begin font_addr=title_address;font_bit=title_bit;text_ink=1;end
  end
@@ -168,7 +187,9 @@ module rgb_ui_renderer(
     left=308+156*i;
     if(ui_inside(px,py,left,124,148,48))begin
      base=card(px,py,left,124,148,48,fx==i);fg=fx==i ? INK : CREAM;
-     text=i==0 ? "ECHO" : i==1 ? "ROOM" : "TREMOLO";len=i==2 ? 7 : 4;
+     text=i==0 ? (effect_bits[0]?"ECHO ON":"ECHO OFF") :
+          i==1 ? (effect_bits[1]?"ROOM ON":"ROOM OFF") : (effect_bits[2]?"TREM ON":"TREM OFF");
+     len=effect_bits[i]?7:8;
      tx=left+(148-len*10)/2;ty=140;
     end
    end
@@ -193,7 +214,13 @@ module rgb_ui_renderer(
     if(px>=656 && fx==2)begin text={rate==10 ? 8'd49 : 8'd32,digit(rate%10)," HZ"};len=5;tx=688;fg=GOLD;end
    end
    if(fx!=2 && py>=344 && py<384 && px>=380)begin
-    text=fx==0 ? "150 MS" : "SMALL ROOM";len=fx==0 ? 6 : 10;tx=fx==0 ? 510 : 490;ty=356;fg=CREAM;
+    text=fx==0 ? {digit(echo_ms_bcd[11:8]),digit(echo_ms_bcd[7:4]),digit(echo_ms_bcd[3:0])," MS"} : "SMALL ROOM";len=fx==0 ? 6 : 10;tx=fx==0 ? 510 : 490;ty=356;fg=CREAM;
+   end
+   if(px>=380 && py>=382 && py<402)begin
+    text=fx==0 ? (echo_amount_edit ? "KNOB: AMOUNT" : "KNOB: TIME") :
+         fx==1 ? "KNOB: AMOUNT" : (tremolo_rate_edit ? "KNOB: RATE" : "KNOB: DEPTH");
+    len=fx==1 || (fx==0 && echo_amount_edit) ? 12 : fx==2 && !tremolo_rate_edit ? 11 : 10;
+    tx=490;ty=384;fg=DIM;
    end
    if(ui_inside(px,py,664,420,116,44))begin
     base=card(px,py,664,420,116,44,1'b0);text="RESET";len=5;tx=697;ty=434;fg=GOLD;
@@ -203,7 +230,19 @@ module rgb_ui_renderer(
    if(py>=94 && py<114)begin
     ty=96;fg=GOLD;
     if(px<296)begin text=timbre_name(timbre);len=name_length(timbre);tx=24;end
-    else if(px<560)begin text=enabled ? (fx==0 ? "ECHO ON" : fx==1 ? "ROOM ON" : "TREMOLO ON") : "EFFECTS OFF";len=enabled ? (fx==2 ? 10 : 7) : 11;tx=310;end
+    else if(px<560)begin
+     case(effect_bits)
+      1:begin text="ECHO ON";len=7;end
+      2:begin text="ROOM ON";len=7;end
+      3:begin text="ECHO+ROOM";len=9;end
+      4:begin text="TREMOLO ON";len=10;end
+      5:begin text="ECHO+TREM";len=9;end
+      6:begin text="ROOM+TREM";len=9;end
+      7:begin text="ECHO+ROOM+TREM";len=14;end
+      default:begin text="EFFECTS OFF";len=11;end
+     endcase
+     tx=310;
+    end
     else begin text=state[14] ? "AUTO SCORE" : "LIVE KEYS";len=state[14] ? 10 : 9;tx=620;fg=DIM;end
    end
    if(ui_inside(px,py,32,164,512,140))begin
@@ -227,17 +266,20 @@ module rgb_ui_renderer(
     text={pc==100 ? 8'd49 : 8'd32,pc>=10 ? digit((pc/10)%10) : 8'd32,digit(pc%10),"% PEAK"};len=9;tx=608;ty=246;fg=DIM;
    end
    if(py>=280 && py<300 && px>=608)begin text=peak>=248 ? "NEAR FULL" : "PCM OUTPUT";len=peak>=248 ? 9 : 10;tx=608;ty=282;fg=peak>=248 ? RED : DIM;end
-   // Fixed key columns: parallel bounded comparisons, no signed /46 or %12.
-   for(k=0;k<16;k=k+1)begin
-    if(py>=348 && py<396 && px>=32+k*46 && px<74+k*46)begin
-     base=state[64+k] ? GOLD : BG;fg=state[64+k] ? INK : DIM;
-     case(k%12)
+   // Three chromatic octaves, matching the three PCB connector orders.
+   // Decode a column and row once; avoid36 serial RGB priority muxes.
+   if(piano_row_hit && (|piano_column_hit))begin
+     base=piano_down ? GOLD : BG;fg=piano_down ? INK : DIM;
+     case(piano_column)
       0,1:ch="C";2,3:ch="D";4:ch="E";5,6:ch="F";
       7,8:ch="G";9,10:ch="A";default:ch="B";
      endcase
-     text={ch,(k%12==1 || k%12==3 || k%12==6 || k%12==8 || k%12==10) ? 8'd35 : 8'd32,digit(k<12 ? 4 : 5)};
-     len=3;tx=38+k*46;ty=364;
-    end
+     text={ch,(piano_column==1 || piano_column==3 || piano_column==6 || piano_column==8 || piano_column==10) ? 8'd35 : 8'd32,y<364 ? 8'd52 : y<382 ? 8'd53 : 8'd54};
+     len=3;tx=piano_text_x;ty=y<364 ? 346 : y<382 ? 364 : 382;
+   end
+   if(py>=306 && py<324 && px<560)begin
+    text={"PCB 1:",keyboard_online[0]?"ON ":"OFF"," 2:",keyboard_online[1]?"ON ":"OFF"," 3:",keyboard_online[2]?"ON ":"OFF"};
+    len=21;tx=32;ty=306;fg=DIM;
    end
   end
   // Shared header/status and mode action appear on both pages.
@@ -253,7 +295,7 @@ module rgb_ui_renderer(
   if(py>=420 && py<464 && px<648 && !(menu && px<336) && !(menu && sensor_page))begin
    tx=24;fg=DIM;
    if(py<440)begin
-    text=menu ? "R4C2 PREV / R4C3 NEXT TIMBRE" : "S0 HOLD: SETTINGS";len=menu ? 28 : 17;ty=422;
+    text=menu ? "AUX1 PREV / AUX2 NEXT" : "S0 HOLD: SETTINGS";len=menu ? 21 : 17;ty=422;
     if(px>=336)begin
      if(!state[49])begin text="TOUCH OFF";len=9;end
      else if(state[52])begin text="TOUCH ERROR";len=11;fg=RED;end
@@ -263,8 +305,8 @@ module rgb_ui_renderer(
      tx=360;
     end
    end else begin
-    text=menu ? "S1-/S2+ VOLUME" : "NOTE MONITOR C4-D#5 / 10.7 MS WINDOW";
-    len=menu ? 14 : 36;ty=446;if(menu)tx=360;
+    text=menu ? "S1-/S2+ VOLUME" : "NOTE MONITOR C4-B6 / 10.7 MS WINDOW";
+    len=menu ? 14 : 35;ty=446;if(menu)tx=360;
     if(state[16] || state[17] || state[18])begin text=state[18] ? "GHOST KEYS" : "AUDIO ERROR";len=state[18] ? 10 : 11;fg=RED;end
    end
   end
@@ -309,7 +351,7 @@ module rgb_ui_renderer(
      text={"SRC ",hex16(more_state[97:82])," RX ",hex16(more_state[113:98])," H ",hex16(more_state[145:130]),hex16(more_state[129:114])};len=27;fg=GOLD;
     end
    end else if(py>=436 && py<468)begin
-    text=more_state[80]?"DELETE AGAIN TO CONFIRM / BACK CANCEL":"R4C4 BACK / S0 HOLD EXIT";len=more_state[80]?37:24;ty=442;fg=GOLD;
+    text=more_state[80]?"DELETE AGAIN TO CONFIRM / BACK CANCEL":"AUX12 BACK / S0 HOLD EXIT";len=more_state[80]?37:25;ty=442;fg=GOLD;
    end
   end
   if(menu && !sensor_page && !more_state[81] && ui_inside(px,py,340,420,200,44))begin

@@ -1,0 +1,322 @@
+*** GOWIN Tcl Command Line Console  *** 
+Open project E:/gowin/fpga-instrument-timing-audio-fix/keyboard_adsr.gprj finished
+current device: GW5AST-138C  GW5AST-LV138FPG676AC1/I0
+GowinSynthesis start
+Running parser ...
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\ultrasonic_range.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\ultrasonic_volume.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\bt_event_cdc.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\bt_identity_monitor.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\master_volume.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\uart_rx.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\uart_tx.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\bt_frame_rx.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\bt_frame_tx.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\bt_score_player.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\bluetooth_score_core.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\bluetooth_score_link.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\bluetooth_audio_bridge.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\instrument_envelope.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\synth_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\instrument_envelope.sv":2)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\instrument_envelope.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\instrument_envelope.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\audio_visualizer.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\ui_keypad_router.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\ui_layout.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\ui_keypad_router.sv":7)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\ui_keypad_router.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\ui_keypad_router.sv":7)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\ui_touch_actions.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\ui_layout.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\ui_touch_actions.sv":8)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\ui_touch_actions.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\ui_touch_actions.sv":8)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_display.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_status_cdc.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_scan_timing.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_ui_renderer.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\ui_layout.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_ui_renderer.sv":8)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_ui_renderer.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_ui_renderer.sv":8)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\gt9110_touch.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\i2c_register_master.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\audio_effects.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\audio_reverb.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\score_player.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\synth_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\score_player.sv":2)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\score_player.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\score_player.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\audio_delay.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\timbre_control.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\synth_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\timbre_control.sv":2)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\timbre_control.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\timbre_control.sv":2)
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\ui_layout.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\timbre_control.sv":40)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\timbre_control.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\timbre_control.sv":40)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\ec11_encoder.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\aip5916_keyboard.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\touch_keyboard_router.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\ui_layout.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\touch_keyboard_router.sv":9)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\touch_keyboard_router.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\touch_keyboard_router.sv":9)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\keyboard_top.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\keyboard_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\keyboard_top.sv":2)
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\synth_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\config\keyboard_config.svh":3)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\keyboard_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\config\keyboard_config.svh":3)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\keyboard_top.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\keyboard_top.sv":2)
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\run_leds_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\keyboard_top.sv":3)
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\synth_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\config\run_leds_config.svh":3)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\run_leds_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\config\run_leds_config.svh":3)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\keyboard_top.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\keyboard_top.sv":3)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\adsr_envelope.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\synth_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\adsr_envelope.sv":2)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\adsr_envelope.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\adsr_envelope.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\audio_timing.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\synth_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_timing.sv":2)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\audio_timing.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_timing.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\clock_reset.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\synth_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\clock_reset.sv":2)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\clock_reset.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\clock_reset.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\dds_sine.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\synth_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\dds_sine.sv":2)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\dds_sine.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\dds_sine.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\frame_buffer.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\keyboard_core.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\keyboard_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\keyboard_core.sv":2)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\keyboard_core.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\keyboard_core.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\synth_core.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\synth_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\synth_core.sv":2)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\synth_core.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\synth_core.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\ui_more_actions.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\ui_layout.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\ui_more_actions.sv":6)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\ui_more_actions.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\ui_more_actions.sv":6)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\score_services.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\flash_profile.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\score_services.sv":16)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\score_services.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\score_services.sv":16)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\score_library_protocol.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\flash_song_library.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\spi_byte_master.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\spi_nor_flash.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\flash_profile.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\spi_nor_flash.sv":14)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\spi_nor_flash.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\spi_nor_flash.sv":14)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\local_score_control.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\score_validator.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\audio_limiter.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\audio_latency_meter.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\voice_allocator.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\voice_mixer.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\synth_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\voice_mixer.sv":2)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\voice_mixer.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\voice_mixer.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\lock_guard.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\synth_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\lock_guard.sv":2)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\lock_guard.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\lock_guard.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\matrix_keypad.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\keyboard_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\matrix_keypad.sv":2)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\matrix_keypad.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\matrix_keypad.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\key_note_events.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\keyboard_notes.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\key_note_events.sv":9)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\key_note_events.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\key_note_events.sv":9)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\pll_pair.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\synth_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\pll_pair.sv":2)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\pll_pair.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\pll_pair.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\i2s_tx.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\reset_sync.sv'
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\run_leds.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\run_leds_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\run_leds.sv":2)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\run_leds.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\run_leds.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\sine_rom.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\synth_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\sine_rom.sv":2)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\sine_rom.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\sine_rom.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\startup_envelope.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\synth_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\startup_envelope.sv":2)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\startup_envelope.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\startup_envelope.sv":2)
+Analyzing Verilog file 'E:\gowin\fpga-instrument-timing-audio-fix\src\tone_gain.sv'
+Analyzing included file 'E:\gowin\fpga-instrument-timing-audio-fix\src\config\synth_config.svh'("E:\gowin\fpga-instrument-timing-audio-fix\src\tone_gain.sv":2)
+Back to file 'E:\gowin\fpga-instrument-timing-audio-fix\src\tone_gain.sv'("E:\gowin\fpga-instrument-timing-audio-fix\src\tone_gain.sv":2)
+Compiling module 'keyboard_top'("E:\gowin\fpga-instrument-timing-audio-fix\src\keyboard_top.sv":4)
+Compiling module 'reset_sync'("E:\gowin\fpga-instrument-timing-audio-fix\src\reset_sync.sv":2)
+Compiling module 'rgb_status_cdc(WIDTH=33)'("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_status_cdc.sv":6)
+Compiling module 'ultrasonic_range'("E:\gowin\fpga-instrument-timing-audio-fix\src\ultrasonic_range.sv":4)
+Compiling module 'ultrasonic_volume'("E:\gowin\fpga-instrument-timing-audio-fix\src\ultrasonic_volume.sv":5)
+Compiling module 'rgb_status_cdc(WIDTH=30)'("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_status_cdc.sv":6)
+Compiling module 'ec11_encoder(REVERSE=32'b00000000000000000000000000000000)'("E:\gowin\fpga-instrument-timing-audio-fix\src\ec11_encoder.sv":4)
+Compiling module 'ui_more_actions'("E:\gowin\fpga-instrument-timing-audio-fix\src\ui_more_actions.sv":3)
+WARN  (EX3791) : Expression size 6 truncated to fit in target size 4("E:\gowin\fpga-instrument-timing-audio-fix\src\ui_more_actions.sv":16)
+Compiling module 'bluetooth_score_link(MAX_NOTES=4096,MAX_VOICES=16,LIBRARY_EXTENSION=1)'("E:\gowin\fpga-instrument-timing-audio-fix\src\bluetooth_score_link.sv":3)
+Extracting RAM for identifier 'fifo'("E:\gowin\fpga-instrument-timing-audio-fix\src\bluetooth_score_link.sv":23)
+Compiling module 'uart_rx'("E:\gowin\fpga-instrument-timing-audio-fix\src\uart_rx.sv":3)
+Compiling module 'uart_tx'("E:\gowin\fpga-instrument-timing-audio-fix\src\uart_tx.sv":3)
+Compiling module 'bluetooth_score_core(MAX_NOTES=4096,MAX_VOICES=16,LIBRARY_EXTENSION=1)'("E:\gowin\fpga-instrument-timing-audio-fix\src\bluetooth_score_core.sv":5)
+Extracting RAM for identifier 'score_ram'("E:\gowin\fpga-instrument-timing-audio-fix\src\bluetooth_score_core.sv":54)
+WARN  (EX3791) : Expression size 16 truncated to fit in target size 9("E:\gowin\fpga-instrument-timing-audio-fix\src\bluetooth_score_core.sv":59)
+Compiling module 'bt_frame_rx'("E:\gowin\fpga-instrument-timing-audio-fix\src\bt_frame_rx.sv":3)
+Extracting RAM for identifier 'bank0'("E:\gowin\fpga-instrument-timing-audio-fix\src\bt_frame_rx.sv":12)
+Extracting RAM for identifier 'bank1'("E:\gowin\fpga-instrument-timing-audio-fix\src\bt_frame_rx.sv":12)
+Compiling module 'bt_frame_tx'("E:\gowin\fpga-instrument-timing-audio-fix\src\bt_frame_tx.sv":3)
+Compiling module 'bt_score_player(MAX_NOTES=4096,VOICES=16)'("E:\gowin\fpga-instrument-timing-audio-fix\src\bt_score_player.sv":5)
+Compiling module 'score_validator'("E:\gowin\fpga-instrument-timing-audio-fix\src\score_validator.sv":4)
+Compiling module 'bt_event_cdc(WIDTH=4)'("E:\gowin\fpga-instrument-timing-audio-fix\src\bt_event_cdc.sv":4)
+Compiling module 'score_services'("E:\gowin\fpga-instrument-timing-audio-fix\src\score_services.sv":4)
+Compiling module 'local_score_control'("E:\gowin\fpga-instrument-timing-audio-fix\src\local_score_control.sv":4)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 2("E:\gowin\fpga-instrument-timing-audio-fix\src\local_score_control.sv":27)
+Compiling module 'score_library_protocol'("E:\gowin\fpga-instrument-timing-audio-fix\src\score_library_protocol.sv":3)
+Compiling module 'flash_song_library'("E:\gowin\fpga-instrument-timing-audio-fix\src\flash_song_library.sv":4)
+Extracting RAM for identifier 'catalog'("E:\gowin\fpga-instrument-timing-audio-fix\src\flash_song_library.sv":32)
+Extracting RAM for identifier 'candidates'("E:\gowin\fpga-instrument-timing-audio-fix\src\flash_song_library.sv":32)
+Extracting RAM for identifier 'directory'("E:\gowin\fpga-instrument-timing-audio-fix\src\flash_song_library.sv":33)
+WARN  (EX3791) : Expression size 16 truncated to fit in target size 9("E:\gowin\fpga-instrument-timing-audio-fix\src\flash_song_library.sv":149)
+Compiling module 'spi_nor_flash'("E:\gowin\fpga-instrument-timing-audio-fix\src\spi_nor_flash.sv":4)
+Extracting RAM for identifier 'buffer'("E:\gowin\fpga-instrument-timing-audio-fix\src\spi_nor_flash.sv":33)
+Compiling module 'spi_byte_master'("E:\gowin\fpga-instrument-timing-audio-fix\src\spi_byte_master.sv":3)
+Compiling module 'bt_event_cdc'("E:\gowin\fpga-instrument-timing-audio-fix\src\bt_event_cdc.sv":4)
+Compiling module 'bt_identity_monitor'("E:\gowin\fpga-instrument-timing-audio-fix\src\bt_identity_monitor.sv":4)
+Compiling module 'bluetooth_audio_bridge'("E:\gowin\fpga-instrument-timing-audio-fix\src\bluetooth_audio_bridge.sv":4)
+Compiling module 'rgb_status_cdc(WIDTH=96)'("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_status_cdc.sv":6)
+Compiling module 'gt9110_touch'("E:\gowin\fpga-instrument-timing-audio-fix\src\gt9110_touch.sv":4)
+Compiling module 'i2c_register_master'("E:\gowin\fpga-instrument-timing-audio-fix\src\i2c_register_master.sv":5)
+Compiling module 'rgb_status_cdc(WIDTH=71)'("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_status_cdc.sv":6)
+Compiling module 'ui_touch_actions'("E:\gowin\fpga-instrument-timing-audio-fix\src\ui_touch_actions.sv":4)
+Compiling module 'touch_keyboard_router'("E:\gowin\fpga-instrument-timing-audio-fix\src\touch_keyboard_router.sv":4)
+Compiling module 'rgb_display'("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_display.sv":5)
+Compiling module 'audio_visualizer'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_visualizer.sv":5)
+WARN  (EX3045) : Case equality operator always evaluates to false due to comparison with 'x' or 'z'("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_display.sv":102)
+WARN  (EX3045) : Case equality operator always evaluates to false due to comparison with 'x' or 'z'("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_display.sv":103)
+Compiling module 'rgb_status_cdc(WIDTH=1207)'("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_status_cdc.sv":6)
+Compiling module 'rgb_scan_timing(H_BACK=182,H_FRONT=210,V_BACK=8,V_FRONT=45,DE_ONLY=1)'("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_scan_timing.sv":4)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 11("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_scan_timing.sv":20)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 11("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_scan_timing.sv":21)
+Compiling module 'rgb_status_cdc(WIDTH=146)'("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_status_cdc.sv":6)
+Compiling module 'rgb_ui_renderer'("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_ui_renderer.sv":4)
+Extracting RAM for identifier 'font_rom'("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_ui_renderer.sv":69)
+WARN  (EX3791) : Expression size 9 truncated to fit in target size 4("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_ui_renderer.sv":59)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 11("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_ui_renderer.sv":180)
+WARN  (EX3791) : Expression size 31 truncated to fit in target size 7("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_ui_renderer.sv":237)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 8("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_ui_renderer.sv":72)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 11("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_ui_renderer.sv":322)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 11("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_ui_renderer.sv":325)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 11("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_ui_renderer.sv":328)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 12("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_ui_renderer.sv":384)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 4("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_ui_renderer.sv":384)
+Compiling module 'score_player(ENABLE=0,BEAT_FRAMES=24000,TAIL_FRAMES=9604)'("E:\gowin\fpga-instrument-timing-audio-fix\src\score_player.sv":5)
+Extracting RAM for identifier 'rom'("E:\gowin\fpga-instrument-timing-audio-fix\src\score_player.sv":19)
+WARN  (EX1998) : Net 'instruction[63]' does not have a driver("E:\gowin\fpga-instrument-timing-audio-fix\src\score_player.sv":20)
+Compiling module 'timbre_control(DEBOUNCE_CYCLES=614400,LONG_PRESS_CYCLES=49152000,ULTRA_SLEW_CYCLES=122880)'("E:\gowin\fpga-instrument-timing-audio-fix\src\timbre_control.sv":4)
+WARN  (EX3791) : Expression size 3 truncated to fit in target size 2("E:\gowin\fpga-instrument-timing-audio-fix\src\timbre_control.sv":340)
+Compiling module 'run_leds(STEP_CYCLES=12500000)'("E:\gowin\fpga-instrument-timing-audio-fix\src\run_leds.sv":3)
+Compiling module 'pll_pair'("E:\gowin\fpga-instrument-timing-audio-fix\src\pll_pair.sv":5)
+Compiling module 'clock_reset(LOCK_N=100000)'("E:\gowin\fpga-instrument-timing-audio-fix\src\clock_reset.sv":3)
+Compiling module 'lock_guard(STABLE_CYCLES=100000)'("E:\gowin\fpga-instrument-timing-audio-fix\src\lock_guard.sv":3)
+Compiling module 'aip5916_keyboard'("E:\gowin\fpga-instrument-timing-audio-fix\src\aip5916_keyboard.sv":4)
+Compiling module 'i2c_register_master(REGISTER_BYTES=1,DEVICE_ADDR=7'h56)'("E:\gowin\fpga-instrument-timing-audio-fix\src\i2c_register_master.sv":5)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 8("E:\gowin\fpga-instrument-timing-audio-fix\src\aip5916_keyboard.sv":35)
+Compiling module 'rgb_status_cdc(WIDTH=51)'("E:\gowin\fpga-instrument-timing-audio-fix\src\rgb_status_cdc.sv":6)
+Compiling module 'key_note_events(KEYS=36)'("E:\gowin\fpga-instrument-timing-audio-fix\src\key_note_events.sv":4)
+Compiling module 'synth_core(STEREO_ENABLE=1,VISUAL_KEYS=36,ATTACK=480,DECAY=4800,SUSTAIN=45875,RELEASE=9600)'("E:\gowin\fpga-instrument-timing-audio-fix\src\synth_core.sv":4)
+WARN  (EX3791) : Expression size 10 truncated to fit in target size 5("E:\gowin\fpga-instrument-timing-audio-fix\src\synth_core.sv":63)
+Compiling module 'audio_latency_meter'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_latency_meter.sv":5)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 12("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_latency_meter.sv":31)
+Compiling module 'audio_limiter(FIXED_LATENCY=1,HOLD_SAMPLES=240)'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_limiter.sv":7)
+Extracting RAM for identifier 'audio_ram'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_limiter.sv":17)
+Extracting RAM for identifier 'gain_ram'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_limiter.sv":17)
+WARN  (EX3791) : Expression size 30 truncated to fit in target size 24("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_limiter.sv":32)
+WARN  (EX3791) : Expression size 18 truncated to fit in target size 17("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_limiter.sv":38)
+WARN  (EX3791) : Expression size 18 truncated to fit in target size 17("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_limiter.sv":43)
+Compiling module 'master_volume'("E:\gowin\fpga-instrument-timing-audio-fix\src\master_volume.sv":4)
+WARN  (EX3791) : Expression size 18 truncated to fit in target size 16("E:\gowin\fpga-instrument-timing-audio-fix\src\master_volume.sv":126)
+Compiling module 'audio_timing'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_timing.sv":3)
+Compiling module 'startup_envelope'("E:\gowin\fpga-instrument-timing-audio-fix\src\startup_envelope.sv":3)
+Compiling module 'voice_allocator(VOICES=32,AUTOMATIC_IDS=16)'("E:\gowin\fpga-instrument-timing-audio-fix\src\voice_allocator.sv":4)
+Compiling module 'instrument_envelope(ATTACK=480,DECAY=4800,SUSTAIN=45875,RELEASE=9600,PRECALC=1)'("E:\gowin\fpga-instrument-timing-audio-fix\src\instrument_envelope.sv":5)
+Compiling module 'adsr_envelope(ATTACK=480,DECAY=4800,SUSTAIN=45875,RELEASE=9600,PRECALC=1)'("E:\gowin\fpga-instrument-timing-audio-fix\src\adsr_envelope.sv":3)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 14("E:\gowin\fpga-instrument-timing-audio-fix\src\adsr_envelope.sv":52)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 14("E:\gowin\fpga-instrument-timing-audio-fix\src\adsr_envelope.sv":52)
+WARN  (EX3791) : Expression size 15 truncated to fit in target size 14("E:\gowin\fpga-instrument-timing-audio-fix\src\adsr_envelope.sv":100)
+WARN  (EX3791) : Expression size 18 truncated to fit in target size 17("E:\gowin\fpga-instrument-timing-audio-fix\src\adsr_envelope.sv":101)
+WARN  (EX3791) : Expression size 18 truncated to fit in target size 17("E:\gowin\fpga-instrument-timing-audio-fix\src\adsr_envelope.sv":101)
+Compiling module 'dds_sine(VOICES=32)'("E:\gowin\fpga-instrument-timing-audio-fix\src\dds_sine.sv":4)
+Compiling module 'sine_rom(ROM_FILE="src\rom\flute4096.hex")'("E:\gowin\fpga-instrument-timing-audio-fix\src\sine_rom.sv":3)
+Extracting RAM for identifier 'mem'("E:\gowin\fpga-instrument-timing-audio-fix\src\sine_rom.sv":6)
+Compiling module 'sine_rom(ROM_FILE="src\rom\reed4096.hex")'("E:\gowin\fpga-instrument-timing-audio-fix\src\sine_rom.sv":3)
+Extracting RAM for identifier 'mem'("E:\gowin\fpga-instrument-timing-audio-fix\src\sine_rom.sv":6)
+Compiling module 'sine_rom(ROM_FILE="src\rom\cello4096.hex")'("E:\gowin\fpga-instrument-timing-audio-fix\src\sine_rom.sv":3)
+Extracting RAM for identifier 'mem'("E:\gowin\fpga-instrument-timing-audio-fix\src\sine_rom.sv":6)
+Compiling module 'sine_rom(ROM_FILE="src\rom\piano4096.hex")'("E:\gowin\fpga-instrument-timing-audio-fix\src\sine_rom.sv":3)
+Extracting RAM for identifier 'mem'("E:\gowin\fpga-instrument-timing-audio-fix\src\sine_rom.sv":6)
+Compiling module 'sine_rom(ROM_FILE="src\rom\guitar4096.hex")'("E:\gowin\fpga-instrument-timing-audio-fix\src\sine_rom.sv":3)
+Extracting RAM for identifier 'mem'("E:\gowin\fpga-instrument-timing-audio-fix\src\sine_rom.sv":6)
+Compiling module 'sine_rom(ROM_FILE="src\rom\vibraphone4096.hex")'("E:\gowin\fpga-instrument-timing-audio-fix\src\sine_rom.sv":3)
+Extracting RAM for identifier 'mem'("E:\gowin\fpga-instrument-timing-audio-fix\src\sine_rom.sv":6)
+Compiling module 'sine_rom'("E:\gowin\fpga-instrument-timing-audio-fix\src\sine_rom.sv":3)
+Extracting RAM for identifier 'mem'("E:\gowin\fpga-instrument-timing-audio-fix\src\sine_rom.sv":6)
+Compiling module 'tone_gain(OUTPUT_W=24)'("E:\gowin\fpga-instrument-timing-audio-fix\src\tone_gain.sv":3)
+Compiling module 'voice_mixer'("E:\gowin\fpga-instrument-timing-audio-fix\src\voice_mixer.sv":5)
+Compiling module 'audio_effects'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_effects.sv":4)
+WARN  (EX3045) : Case equality operator always evaluates to false due to comparison with 'x' or 'z'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_effects.sv":49)
+WARN  (EX3045) : Case inequality operator always evaluates to true due to comparison with 'x' or 'z'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_effects.sv":59)
+Compiling module 'audio_delay(MAX_SAMPLES=24000)'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_delay.sv":4)
+Extracting RAM for identifier 'memory'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_delay.sv":9)
+WARN  (EX3045) : Case equality operator always evaluates to false due to comparison with 'x' or 'z'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_delay.sv":18)
+WARN  (EX3791) : Expression size 16 truncated to fit in target size 15("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_delay.sv":23)
+WARN  (EX3791) : Expression size 20 truncated to fit in target size 16("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_delay.sv":58)
+WARN  (EX3791) : Expression size 24 truncated to fit in target size 16("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_delay.sv":60)
+Compiling module 'audio_reverb'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_reverb.sv":5)
+Extracting RAM for identifier 'memory'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_reverb.sv":20)
+Extracting RAM for identifier 'memory'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_reverb.sv":20)
+Extracting RAM for identifier 'memory'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_reverb.sv":20)
+Extracting RAM for identifier 'memory'("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_reverb.sv":20)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 16("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_reverb.sv":15)
+WARN  (EX3791) : Expression size 12 truncated to fit in target size 11("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_reverb.sv":37)
+WARN  (EX3791) : Expression size 30 truncated to fit in target size 16("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_reverb.sv":53)
+WARN  (EX3791) : Expression size 20 truncated to fit in target size 16("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_effects.sv":94)
+WARN  (EX3791) : Expression size 20 truncated to fit in target size 16("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_effects.sv":96)
+WARN  (EX3791) : Expression size 19 truncated to fit in target size 16("E:\gowin\fpga-instrument-timing-audio-fix\src\audio_effects.sv":98)
+Compiling module 'frame_buffer'("E:\gowin\fpga-instrument-timing-audio-fix\src\frame_buffer.sv":2)
+Compiling module 'i2s_tx'("E:\gowin\fpga-instrument-timing-audio-fix\src\i2s_tx.sv":5)
+NOTE  (EX0101) : Current top module is "keyboard_top"
+[5%] Running netlist conversion ...
+Running device independent optimization ...
+[10%] Optimizing Phase 0 completed
+[15%] Optimizing Phase 1 completed
+[25%] Optimizing Phase 2 completed
+Running inference ...
+[30%] Inferring Phase 0 completed
+[40%] Inferring Phase 1 completed
+[50%] Inferring Phase 2 completed
+[55%] Inferring Phase 3 completed
+Running technical mapping ...
+[60%] Tech-Mapping Phase 0 completed
+[65%] Tech-Mapping Phase 1 completed
+[75%] Tech-Mapping Phase 2 completed
+[80%] Tech-Mapping Phase 3 completed
+[90%] Tech-Mapping Phase 4 completed
+WARN  (NL0002) : The module "voice_mixer" instantiated to "mixer" is swept in optimizing("E:\gowin\fpga-instrument-timing-audio-fix\src\synth_core.sv":197)
+[95%] Generate netlist file "E:\gowin\fpga-instrument-timing-audio-fix\impl\gwsynthesis\D2_keyboard_leds.vg" completed
+WARN  (CK3000) : Can't calculate clocks' relationship between: "clk" and "clocks/pll2/CLKOUT0.default_gen_clk"
+WARN  (CK3000) : Can't calculate clocks' relationship between: "clocks/pll2/CLKOUT0.default_gen_clk" and "clk"
+WARN  (CK3000) : Can't calculate clocks' relationship between: "clocks/pll2/CLKOUT0.default_gen_clk" and "lcd_on.display_driver/pixel_pll/CLKOUT0.default_gen_clk"
+WARN  (CK3000) : Can't calculate clocks' relationship between: "lcd_on.display_driver/pixel_pll/CLKOUT0.default_gen_clk" and "clocks/pll2/CLKOUT0.default_gen_clk"
+[100%] Generate report file "E:\gowin\fpga-instrument-timing-audio-fix\impl\gwsynthesis\D2_keyboard_leds_syn.rpt.html" completed
+GowinSynthesis finish
+Reading netlist file: "E:\gowin\fpga-instrument-timing-audio-fix\impl\gwsynthesis\D2_keyboard_leds.vg"
+Parsing netlist file "E:\gowin\fpga-instrument-timing-audio-fix\impl\gwsynthesis\D2_keyboard_leds.vg" completed
+Processing netlist completed
+Reading constraint file: "E:\gowin\fpga-instrument-timing-audio-fix\src\keyboard.cst"
+Physical Constraint parsed completed
+Running placement......
+[10%] Placement Phase 0 completed
+[20%] Placement Phase 1 completed
+[30%] Placement Phase 2 completed
+[50%] Placement Phase 3 completed
+Running routing......
+[60%] Routing Phase 0 completed
+[70%] Routing Phase 1 completed
+[80%] Routing Phase 2 completed
+WARN  (PR1014) : Generic routing resource will be used to clock signal 'clk_d' by the specified constraint. And then it may lead to the excessive delay or skew
+[90%] Routing Phase 3 completed
+Running timing analysis......
+[95%] Timing analysis completed
+Placement and routing completed
+Bitstream generation in progress......
+Bitstream generation completed
+Running power analysis......
+[100%] Power analysis completed
+Generate file "E:\gowin\fpga-instrument-timing-audio-fix\impl\pnr\D2_keyboard_leds.power.html" completed
+Generate file "E:\gowin\fpga-instrument-timing-audio-fix\impl\pnr\D2_keyboard_leds.pin.html" completed
+Generate file "E:\gowin\fpga-instrument-timing-audio-fix\impl\pnr\D2_keyboard_leds.rpt.html" completed
+Generate file "E:\gowin\fpga-instrument-timing-audio-fix\impl\pnr\D2_keyboard_leds.rpt.txt" completed
+Generate file "E:\gowin\fpga-instrument-timing-audio-fix\impl\pnr\D2_keyboard_leds.sdf" completed
+Generate file "E:\gowin\fpga-instrument-timing-audio-fix\impl\pnr\D2_keyboard_leds.tr.html" completed
+Generate file "E:\gowin\fpga-instrument-timing-audio-fix\impl\pnr\D2_keyboard_leds.tr" completed
+Wed Oct 28 10:46:18 2026
+

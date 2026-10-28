@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "timbre": 0,
+  "records": {
+    "LIMIT": 935,
+    "PCM": 935,
+    "MIX": 868,
+    "FX": 868,
+    "I2S": 1889,
+    "SRC": 61,
+    "NOTE": 58,
+    "VOICE": 4222
+  },
+  "behavioral_pll": true,
+  "scope": "passive trace of full RTL byte-upload chain; not a board capture",
+  "trace_sha256": "57c89159f62be935998197f23371979a02d40577f8246b724f9aa5b8216fc218"
+}

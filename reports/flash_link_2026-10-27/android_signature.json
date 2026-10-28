@@ -1,0 +1,8 @@
+{
+  "same_certificate_as_0_3": true,
+  "certificate_sha256": "5ea59e70b900f2bedb9fbc0bf071d74d111f69ad18d29c9fa6a26f27fb6b8f8f",
+  "apk_sha256": "cea646997530f6f04d95dfd28ffa96558bd907b80ad11431863229cba18afdb5",
+  "version": "0.3.1-flashdiag",
+  "version_code": 4,
+  "phone_run": false
+}

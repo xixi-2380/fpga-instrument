@@ -1,0 +1,2 @@
+PASS tb_auto_manual_equivalence checks=4119887 stereo_frames=1072 scenes=2 timbre=0
+E:/gowin/fpga-instrument-timing-audio-fix/sim/tb_auto_manual_equivalence.sv:59: $finish called at 22334057408 (1ps)

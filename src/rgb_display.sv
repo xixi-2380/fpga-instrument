@@ -10,7 +10,7 @@ module rgb_display #(
     input wire ref_clk,pll_reset,audio_clk,audio_reset,
     input wire [VOICES-1:0] voice_active,voice_held,
     input wire [2:0] selected_timbre,
-    input wire visual_sample_valid,input wire signed [15:0] visual_sample,input wire [15:0] visual_notes,
+    input wire visual_sample_valid,input wire signed [15:0] visual_sample,input wire [35:0] visual_notes,
     input wire score_busy,audio_ready,score_error,underrun,ghost,
     output wire lcd_clk,
     (* syn_preserve=1 *) output reg lcd_hs,lcd_vs,
@@ -21,7 +21,8 @@ module rgb_display #(
     input wire [6:0] volume_percent,
     input wire touch_enabled,touch_ui_enabled,touch_ready_status,touch_error_status,
     input wire [145:0] more_status,
-    input wire latency_valid,input wire [19:0] latency_bcd,input wire [33:0] ultrasonic_status
+    input wire latency_valid,input wire [19:0] latency_bcd,input wire [33:0] ultrasonic_status,
+    input wire [16:0] encoder_status,input wire [2:0] keypad_online
 );
     wire pixel_clk,pixel_lock,pixel_reset;
     wire common_reset=pll_reset || !pixel_lock || audio_reset;
@@ -98,10 +99,12 @@ module rgb_display #(
     wire [20:0] latency_status=latency_valid===1'b1 ? {1'b1,latency_bcd} : 21'd0;
     // Preserve all original1112 bits; append a small atomic measurement field.
     wire [33:0] sensor_status=(ultrasonic_status[33]===1'b0 || ultrasonic_status[33]===1'b1) ? ultrasonic_status : 34'd0;
-    wire [1166:0] source_status={sensor_status,latency_status,waveform,peak,visual_notes,settings_status};
-    wire [1166:0] pixel_status;
+    wire [16:0] knobs=(^encoder_status===1'bx)?{12'h150,5'd0}:encoder_status;
+    wire [2:0] online=(^keypad_online===1'bx)?3'd0:keypad_online;
+    wire [1206:0] source_status={online,visual_notes[35:16],knobs,sensor_status,latency_status,waveform,peak,visual_notes[15:0],settings_status};
+    wire [1206:0] pixel_status;
     wire status_valid,update_pulse;
-    rgb_status_cdc #(.WIDTH(1167)) status_bridge(audio_clk,pixel_clk,common_reset,source_status,
+    rgb_status_cdc #(.WIDTH(1207)) status_bridge(audio_clk,pixel_clk,common_reset,source_status,
         pixel_status,status_valid,update_pulse);
     wire [10:0] x,y;
     wire de,hs,vs,frame_start;
@@ -113,11 +116,21 @@ module rgb_display #(
     wire [145:0] pixel_more;wire more_valid,more_update;
     rgb_status_cdc #(.WIDTH(146)) more_bridge(audio_clk,pixel_clk,common_reset,more_status,pixel_more,more_valid,more_update);
     wire rendered_de,rendered_hs,rendered_vs;
-    rgb_ui_renderer renderer(pixel_clk,pixel_reset,frame_start,status_valid,pixel_status,
-        x,y,de,hs,vs,rgb,rendered_de,rendered_hs,rendered_vs,pixel_more);
+    reg [10:0] render_x,render_y;
+    reg render_de,render_hs,render_vs,render_frame_start;
+    always @(posedge pixel_clk)begin
+        if(pixel_reset)begin render_x<=0;render_y<=0;render_de<=0;render_hs<=!HS_ACTIVE[0];render_vs<=!VS_ACTIVE[0];render_frame_start<=0;end
+        else begin render_x<=x;render_y<=y;render_de<=de;render_hs<=hs;render_vs<=vs;render_frame_start<=frame_start;end
+    end
+    rgb_ui_renderer renderer(pixel_clk,pixel_reset,render_frame_start,status_valid,pixel_status,
+        render_x,render_y,render_de,render_hs,render_vs,rgb,rendered_de,rendered_hs,rendered_vs,pixel_more);
     // Only the output pin is phase-inverted. It never clocks any internal RTL.
     // At default phase, a panel rising edge has half a pixel period of setup.
-    assign lcd_clk=PCLK_INVERT ? ~pixel_clk : pixel_clk;
+    ODDR pixel_clock_forward(.Q0(lcd_clk),.Q1(),.D0(!PCLK_INVERT[0] && !pixel_reset),
+        .D1(PCLK_INVERT[0] && !pixel_reset),.TX(1'b0),.CLK(pixel_clk));
+    // synthesis translate_off
+    GSR GSR(1'b1);
+    // synthesis translate_on
     // Final connector registers remove combinational reset muxes at the pads.
     // Async assertion still blanks safely when the pixel clock stops.
     always @(posedge pixel_clk or posedge pixel_reset)begin

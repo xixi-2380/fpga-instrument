@@ -1,0 +1,8 @@
+{
+  "configuration": "encoder",
+  "test": "tb_ec11_encoder",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 0.559
+}

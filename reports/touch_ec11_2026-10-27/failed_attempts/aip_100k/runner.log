@@ -1,0 +1,5 @@
+RUN tb_aip5916_keyboard
+FATAL: E:/gowin/fpga-instrument-integrated/sim/tb_aip5916_keyboard.sv:46: AiP keyboard timeout
+       Time: 100000000000  Scope: tb_aip5916_keyboard
+
+

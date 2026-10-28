@@ -44,6 +44,18 @@ public final class ProtocolClient {
             jedecId=(b[7]&255L)|((b[8]&255L)<<8)|((b[9]&255L)<<16);status1=b[10]&255;status2=b[11]&255;status3=b[12]&255;lastError=b[15]&255;latestJobId=Wire.u16(b,13);activeCrc=Wire.u32(b,16);
         }
     }
+    public static String flashDiagnostic(LibraryCapabilities c){
+        if(c==null)return "旧版RAM固件，不支持Flash曲库诊断";
+        String reason=!c.initialized?"曲库尚未初始化":!c.supported?"型号未开放写入":
+            (c.status1&1)!=0?"Flash正在擦写":(c.status2&0x80)!=0?"Flash处于挂起状态":
+            (c.status3&4)!=0?"独立块保护模式":((c.status1&0x1c)!=0||(c.status2&0x40)!=0)?"数据区保护已启用":
+            c.writable?"可写":"设备未开放写入，需核对固件";
+        return String.format(Locale.ROOT,"Flash ID=%06X SR1=%02X SR2=%02X SR3=%02X\nINIT=%d SUPPORTED=%d WRITE=%d JOB=%04X ERROR=%02X CRC=%08X\n%s",
+            c.jedecId,c.status1,c.status2,c.status3,c.initialized?1:0,c.supported?1:0,c.writable?1:0,c.latestJobId,c.lastError,c.activeCrc,reason);
+    }
+    public static String flashJobError(int code){
+        return String.format(Locale.ROOT,"0x%02X：%s",code,code==9?"Flash读回校验失败（曲谱或目录）":errorText(code));
+    }
     public static final class LibraryEntry {
         public final int index,count;public final boolean exists;public final long duration,crc;public final String name;
         LibraryEntry(byte[] b)throws IOException{

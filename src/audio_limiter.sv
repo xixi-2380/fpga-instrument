@@ -2,16 +2,17 @@
 // Lookahead limiter: peak window -> conservative Q16 gain -> release -> box
 // smoothing. Both windows contain W samples; audio delay is exactly W-1.
 // For delayed x[n-W+1], every gain in the averaging window is <= its bound.
-// One synchronous RAM scan and a 31-step restoring divider; no combinational /.
+// Registered magnitude before peak comparison; a drain cycle preserves all W samples.
+// A release hold delays recovery only; attack remains immediate. Audio delay is unchanged.
 module audio_limiter #(
- parameter integer WINDOW_LOG2=6,PRE_GAIN=24,CEILING=29204,RELEASE_SHIFT=12,FIXED_LATENCY=0,
+ parameter integer WINDOW_LOG2=6,PRE_GAIN=24,CEILING=29204,RELEASE_SHIFT=12,FIXED_LATENCY=0,HOLD_SAMPLES=0,
  parameter integer W=(1<<WINDOW_LOG2))(
  input wire clk,rst,in_valid,input wire signed [15:0] in_sample,
  output wire in_ready,output reg out_valid,output reg signed [15:0] out_sample,
  output reg [16:0] applied_gain,output reg clipped,
  input wire [16:0] in_tag,output reg [16:0] out_tag);
  localparam [3:0] IDLE=0,WAIT_RAM=1,SCAN=2,DIV_INIT=3,DIVIDE=4,
-  RELEASE_GAIN=5,AVERAGE=6,MULTIPLY=7,EMIT=8,GAIN_READY=9;
+  RELEASE_GAIN=5,AVERAGE=6,MULTIPLY=7,EMIT=8,GAIN_READY=9,SCAN_DRAIN=10,SUM_ADD=11;
  reg [3:0] state;
  reg [40:0] audio_ram[0:W-1];reg [16:0] gain_ram[0:W-1];
  reg [40:0] audio_word;wire signed [23:0] audio_q=audio_word[23:0];
@@ -20,8 +21,10 @@ module audio_limiter #(
  reg [RELEASE_SHIFT-1:0] release_error;
  reg [WINDOW_LOG2-1:0] pointer,read_address,scan_address;
  reg [WINDOW_LOG2:0] filled,scan_count;
- reg [WINDOW_LOG2+17:0] gain_sum,updated_sum;
- reg [23:0] peak;
+ reg [WINDOW_LOG2+17:0] gain_sum,updated_sum,added_sum;
+ reg [23:0] peak,magnitude_q;reg magnitude_valid;
+ localparam integer HW=HOLD_SAMPLES>0?$clog2(HOLD_SAMPLES+1):1;
+ reg [HW-1:0] hold_count;
  reg [30:0] numerator;reg [24:0] remainder;
  reg [16:0] quotient;reg [5:0] bits_left;
  reg signed [41:0] product;
@@ -36,7 +39,7 @@ module audio_limiter #(
  wire [17:0] release_candidate={1'b0,released}+release_step;
  wire [16:0] next_release=target<release_candidate ? target : release_candidate[16:0];
  wire [16:0] old_gain=filled<W ? 17'd65536 : gain_q;
- wire [WINDOW_LOG2+17:0] next_sum=gain_sum+new_gain-old_gain;
+ wire [WINDOW_LOG2+17:0] next_sum=added_sum-old_gain;
  wire [16:0] average_gain=updated_sum>>WINDOW_LOG2;
  wire [41:0] magnitude_product=product[41] ? -product : product;
  wire signed [25:0] converted=product[41] ? -$signed({1'b0,magnitude_product[40:16]}) : $signed({1'b0,magnitude_product[40:16]});
@@ -51,10 +54,22 @@ module audio_limiter #(
   if(!rst && state==AVERAGE)gain_ram[pointer]<=new_gain;
   else gain_q<=gain_ram[pointer];
  end
+ task update_release;
+ begin
+  if(HOLD_SAMPLES>0 && target<=released)begin
+   released<=target;new_gain<=target;release_error<=0;hold_count<=HOLD_SAMPLES;
+  end else if(HOLD_SAMPLES>0 && hold_count!=0)begin
+   new_gain<=released;hold_count<=hold_count-1'b1;
+  end else begin
+   released<=next_release;new_gain<=next_release;hold_count<=0;
+   release_error<=target<release_candidate ? 0 : recovery_total[RELEASE_SHIFT-1:0];
+  end
+ end
+ endtask
  always @(posedge clk or posedge rst)begin
   if(rst)begin
    state<=IDLE;pointer<=0;read_address<=0;scan_address<=0;filled<=0;scan_count<=0;
-   peak<=0;delayed<=0;released<=65536;new_gain<=65536;target<=65536;
+   peak<=0;magnitude_q<=0;magnitude_valid<=0;hold_count<=0;added_sum<=0;delayed<=0;released<=65536;new_gain<=65536;target<=65536;
    gain_sum<=W*65536;updated_sum<=W*65536;numerator<=0;remainder<=0;quotient<=0;bits_left<=0;
    product<=0;out_valid<=0;out_sample<=0;applied_gain<=65536;clipped<=0;release_error<=0;delayed_tag<=0;out_tag<=0;
   end else begin
@@ -62,7 +77,7 @@ module audio_limiter #(
    case(state)
     IDLE:if(in_valid)begin
      peak<=input_mag;read_address<=pointer+1'b1;scan_address<=pointer+1'b1;
-     scan_count<=0;state<=WAIT_RAM;
+     scan_count<=0;magnitude_valid<=0;state<=WAIT_RAM;
     end
     WAIT_RAM:begin read_address<=read_address+1'b1;state<=SCAN;end
     SCAN:begin
@@ -70,9 +85,14 @@ module audio_limiter #(
       delayed<=filled>=W-1 ? audio_q : 24'sd0;
       delayed_tag<=filled>=W-1 ? audio_word[40:24] : 17'd0;
      end
-     if(read_initialized && read_mag>peak)peak<=read_mag;
+     magnitude_q<=read_mag;magnitude_valid<=read_initialized;
+     if(magnitude_valid && magnitude_q>peak)peak<=magnitude_q;
      scan_address<=scan_address+1'b1;read_address<=read_address+1'b1;
-     if(scan_count==W-2)state<=DIV_INIT;else scan_count<=scan_count+1'b1;
+     if(scan_count==W-2)state<=SCAN_DRAIN;else scan_count<=scan_count+1'b1;
+    end
+    SCAN_DRAIN:begin
+     if(magnitude_valid && magnitude_q>peak)peak<=magnitude_q;
+     magnitude_valid<=0;state<=DIV_INIT;
     end
     // Stereo lanes must emit together even when only one exceeds the ceiling.
     // The optional fixed path spends the same divider cycles below ceiling;
@@ -95,14 +115,13 @@ module audio_limiter #(
       state<=GAIN_READY;
      end
      else begin
-      released<=next_release;new_gain<=next_release;state<=AVERAGE;
-      release_error<=target<release_candidate ? 0 : recovery_total[RELEASE_SHIFT-1:0];
+      update_release();state<=SUM_ADD;
      end
     end
     GAIN_READY:begin
-     released<=next_release;new_gain<=next_release;state<=AVERAGE;
-     release_error<=target<release_candidate ? 0 : recovery_total[RELEASE_SHIFT-1:0];
+     update_release();state<=SUM_ADD;
     end
+    SUM_ADD:begin added_sum<=gain_sum+new_gain;state<=AVERAGE;end
     AVERAGE:begin updated_sum<=next_sum;gain_sum<=next_sum;state<=MULTIPLY;end
     MULTIPLY:begin product<=delayed*$signed({1'b0,average_gain});applied_gain<=average_gain;state<=EMIT;end
     EMIT:begin
@@ -117,7 +136,7 @@ module audio_limiter #(
   end
  end
  // synthesis translate_off
- initial if(WINDOW_LOG2<2 || WINDOW_LOG2>6 || PRE_GAIN<1 || PRE_GAIN>32 || CEILING<1 || CEILING>32767 || RELEASE_SHIFT<1 || RELEASE_SHIFT>15)
+ initial if(WINDOW_LOG2<2 || WINDOW_LOG2>6 || PRE_GAIN<1 || PRE_GAIN>32 || CEILING<1 || CEILING>32767 || RELEASE_SHIFT<1 || RELEASE_SHIFT>15 || HOLD_SAMPLES<0 || HOLD_SAMPLES>48000)
   $fatal(1,"Invalid limiter parameters");
  always @(posedge clk)if(!rst && in_valid && !in_ready)$fatal(1,"Limiter input exceeded bounded processing budget");
  // synthesis translate_on

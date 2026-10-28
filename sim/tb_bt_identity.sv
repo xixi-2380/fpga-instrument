@@ -7,11 +7,12 @@ module tb_bt_identity;
  always #10 clk=~clk;
  keyboard_top #(.LCD_ENABLE(1),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.LOCK_N(16),
  .MUTE(1),.FADE(1),.ATTACK(2),.DECAY(2),.SUSTAIN(65536),.RELEASE(2)) dut(
- .clk(clk),.rst(rst),.bt_rx(1'b1),.board_buttons_n(4'hf),.key_row(4'hf),.flash_miso(1'b1));
+ .clk(clk),.rst(rst),.bt_rx(1'b1),.board_buttons_n(4'hf),.keypad_int_n(3'b111),.ec11_a(3'b111),.ec11_b(3'b111),.ec11_sw_n(3'b111),.flash_miso(1'b1));
  reg [63:0] records[0:28];reg signed [15:0] wave[0:4095];
  reg [7:0] payload[0:255],response[0:31];reg [31:0] crc32;
  reg [15:0] logical_held=0;reg [6:0] pitches[0:15],velocities[0:15];
  reg [31:0] phase[0:31];reg signed [63:0] expected[0:31],term,total;
+ reg [8:0] physical_gain[0:31];reg [6:0] physical_pitch[0:31];
  integer checks=0,ons=0,offs=0,replies=0,rxn=0,goal=0,terms=0,peak=0;
  reg [31:0] phase_now;reg signed [15:0] expected_mix;
  string directory,notes_file;
@@ -47,7 +48,7 @@ module tb_bt_identity;
  end
  always @(posedge dut.audio_clk)begin
   if(dut.audio_reset || dut.bt_flush)begin
-   logical_held=0;for(integer i=0;i<32;i++)phase[i]=0;
+   logical_held=0;for(integer i=0;i<32;i++)begin phase[i]=0;physical_gain[i]=256;physical_pitch[i]=0;end
    for(integer i=0;i<16;i++)begin velocities[i]=127;pitches[i]=0;end
    expected_mix=0;terms=0;
   end else begin
@@ -72,13 +73,23 @@ module tb_bt_identity;
    end
    if(dut.frame_ce)begin
     terms=0;total=0;
+    // Bind accepted logical metadata at each physical start. A reused logical
+    // ID must never change an older voice's release-tail reference gain.
+    for(integer v=0;v<32;v++)if(dut.sound.voice_start[v])begin
+     physical_gain[v]=(velocities[dut.sound.voice_ids[v*7+:7]]*256+63)/127;
+     physical_pitch[v]=pitches[dut.sound.voice_ids[v*7+:7]];
+    end
     // Ownership is frozen during render. ADSR updates on this frame edge.
     #0.001;
     for(integer v=0;v<32;v++)begin
      phase_now=dut.sound.frame_restart[v]?0:phase[v];
      phase[v]=phase_now+dut.sound.frame_fcw[v*32+:32];
      term=dut.sound.voice_level[v];term=(term*dut.sound.startup_level)>>>16;
-     term=(term*((velocities[dut.sound.voice_ids[v*7+:7]]*256+63)/127))>>>8;
+     if(dut.voice_active[v] || dut.voice_held[v])begin
+      check(dut.sound.voice_gains[v*9+:9]==physical_gain[v] && dut.sound.voice_pitches[v*7+:7]==physical_pitch[v],"physical gain/pitch remain immutable through release and identity reuse");
+      check(dut.sound.frame_fcw[v*32+:32]==frequency(physical_pitch[v]),"release tail retains its independently recorded frequency");
+     end
+     term=(term*physical_gain[v])>>>8;
      term=(term*$signed(wave[phase_now[31:20]]))>>>13;
      expected[v]=term;total=total+term;
     end
@@ -96,7 +107,7 @@ module tb_bt_identity;
   end
   check($countones(dut.voice_held)==count && seen==logical_held,"all simultaneous notes occupy independent physical voices");
   check(dut.lcd_on.display_driver.count_voices(dut.voice_held)==count,"display popcount retains the full physical voice count");
-  check(dut.lcd_on.display_driver.pixel_status[11:6]==count && dut.lcd_on.display_driver.pixel_status[5:0]==count,"both displayed HOLD and ACTIVE counts cross CDC without truncation");
+  check(dut.lcd_on.display_driver.pixel_status[11:6]==count && dut.lcd_on.display_driver.pixel_status[5:0]==$countones(dut.voice_active),"display HOLD counts held notes; ACTIVE independently includes native release tails");
   check(dut.bt_source_ids==logical_held && dut.bt_audio_ids==logical_held,"passive source/audio monitors agree with independent event scoreboard");
   check(dut.lcd_on.display_driver.pixel_more[97:82]==logical_held && dut.lcd_on.display_driver.pixel_more[113:98]==logical_held,
     "source and receiver identity masks reach more INFO atomically");

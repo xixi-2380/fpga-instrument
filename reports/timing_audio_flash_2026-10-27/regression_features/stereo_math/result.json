@@ -1,0 +1,8 @@
+{
+  "configuration": "stereo_math",
+  "test": "tb_stereo_audio",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 442.401
+}

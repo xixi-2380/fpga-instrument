@@ -1,0 +1,3 @@
+E:/gowin/fpga-instrument-timing-audio-fix/src/key_note_events.sv:43: warning: @* is sensitive to all 6 words in array 'group_key'.
+E:/gowin/fpga-instrument-timing-audio-fix/src/synth_core.sv:244: warning: @* is sensitive to all 63 words in array 'peak_tree'.
+E:/gowin/fpga-instrument-timing-audio-fix/sim/tb_bt_library_link.sv:12: warning: Instantiating module keyboard_top with dangling input port 3 (ultrasonic_echo) floating.

@@ -1,10 +1,10 @@
 `timescale 1ns/1ps
-// Single-master, open-drain I2C register transactions: 16-bit register address,
+// Single-master, open-drain I2C: 8/16-bit register address (REGISTER_BYTES),
 // one-byte writes or 1..9-byte reads, repeated START, clock stretching, timeout.
 // All state uses clk + counters; SCL is never an internal clock.
 module i2c_register_master #(
     parameter integer HALF_CYCLES=250,TIMEOUT_CYCLES=50000,
-    DATA_HOLD_CYCLES=(HALF_CYCLES+9)/10,
+    DATA_HOLD_CYCLES=(HALF_CYCLES+9)/10,REGISTER_BYTES=2,
     parameter [6:0] DEVICE_ADDR=7'h5d
 )(
     input wire clk,rst,start,read_request,
@@ -121,7 +121,7 @@ module i2c_register_master #(
                 ACK_HIGH:if(timer!=0)timer<=timer-1'b1;
                     else if(sda_sync[1]!==1'b0)begin error<=1;stop_bus();end
                     else case(stage)
-                        0:send_byte(address[15:8],1);
+                        0:if(REGISTER_BYTES==1)send_byte(address[7:0],2);else send_byte(address[15:8],1);
                         1:send_byte(address[7:0],2);
                         2:if(reading)begin
                             low_phase(1'b0,RE_LOW);
@@ -159,7 +159,7 @@ module i2c_register_master #(
         end
     end
 `ifndef SYNTHESIS
-    initial if(HALF_CYCLES<4 || TIMEOUT_CYCLES<HALF_CYCLES*2 ||
+    initial if((REGISTER_BYTES!=1 && REGISTER_BYTES!=2) || HALF_CYCLES<4 || TIMEOUT_CYCLES<HALF_CYCLES*2 ||
         DATA_HOLD_CYCLES<1 || DATA_HOLD_CYCLES>=HALF_CYCLES-1)
         $fatal(1,"I2C half period must cover input synchronization and timeout must allow bus settling");
 `endif

@@ -8,7 +8,7 @@ module tb_bt_short_audio;
  integer tag_queue[0:62],heard[0:3];realtime started=0;
  keyboard_top #(.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.LOCK_N(16),
  .MUTE(4),.FADE(4),.ATTACK(0),.DECAY(0),.SUSTAIN(65536),.RELEASE(0)) dut(
- .clk(clk),.rst(rst),.bt_rx(1'b1),.board_buttons_n(4'hf),.key_row(4'hf),.key_col(columns));
+ .clk(clk),.rst(rst),.bt_rx(1'b1),.board_buttons_n(4'hf),.keypad_int_n(3'b111),.ec11_a(3'b111),.ec11_b(3'b111),.ec11_sw_n(3'b111));
  task check(input bit ok,input string why);begin checks++;if(!ok)$fatal(1,"%s",why);end endtask
  always @(posedge clk)case(dut.bluetooth_on.link.core.player_address)
   0:ram<={16'd1,8'd127,8'd60,32'd0};

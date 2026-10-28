@@ -1,0 +1,4 @@
+RUN tb_key_note_events
+PASS tb_key_note_events checks=269
+E:/gowin/fpga-instrument-timing-audio-fix/sim/tb_key_note_events.sv:55: $finish called at 3660000 (1ps)
+

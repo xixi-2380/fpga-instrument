@@ -1,0 +1,2 @@
+PASS tb_british_top checks=1196537 notes=9 windows=1
+E:/gowin/fpga-instrument-timing-audio-fix/sim/tb_british_top.sv:60: $finish called at 19460017914 (1ps)

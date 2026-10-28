@@ -1,0 +1,2 @@
+PASS tb_flash_write_permissions checks=60 programs=8 erases=8
+E:/gowin/fpga-instrument-timing-audio-fix/sim/tb_flash_write_permissions.sv:35: $finish called at 4163800000 (1ps)

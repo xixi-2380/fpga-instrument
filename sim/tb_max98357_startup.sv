@@ -2,15 +2,14 @@
 `include "check.svh"
 module tb_max98357_startup;
  reg clk=0,rst=1;always #10 clk=~clk;
- wire bck,lrclk,din,sd;wire [7:0] old_audio;tri [3:0] columns;
+ wire bck,lrclk,din,sd;wire [3:0] old_audio;tri [3:0] columns;
  integer checks=0,frames=0;realtime enabled_at=0,ready_at=0;
  keyboard_top #(.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.LOCK_N(32)) dut(
-  .clk(clk),.rst(rst),.bt_rx(1'b1),.board_buttons_n(4'hf),.key_row(4'hf),.key_col(columns),
+  .clk(clk),.rst(rst),.bt_rx(1'b1),.board_buttons_n(4'hf),.keypad_int_n(3'b111),.ec11_a(3'b111),.ec11_b(3'b111),.ec11_sw_n(3'b111),
   .MAX_BCLK(bck),.MAX_LRCLK(lrclk),.MAX_DIN(din),.MAX_SD_MODE(sd),
-  .HP_BCK(old_audio[0]),.HP_WS(old_audio[1]),.HP_DIN(old_audio[2]),.PA_EN(old_audio[3]),
-  .DBG_BCK(old_audio[4]),.DBG_WS(old_audio[5]),.DBG_DIN(old_audio[6]),.DBG_PA_EN(old_audio[7]));
+  .HP_BCK(old_audio[0]),.HP_WS(old_audio[1]),.HP_DIN(old_audio[2]),.PA_EN(old_audio[3]));
  always @(posedge dut.audio_clk)if(dut.audio_reset)frames=0;else begin
-  `CHECK(old_audio==0,"board DAC, PA and old debug pads are disabled")
+  `CHECK(old_audio==0,"board DAC and PA outputs are disabled")
   `CHECK(dut.touch_scl===1'bz && dut.touch_sda===1'bz && dut.touch_int===1'bz && dut.touch_rst_n===1'bz,
     "touch-disabled test configuration remains high impedance")
   if(dut.frame_ce)frames=frames+1;

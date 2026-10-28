@@ -1,0 +1,9 @@
+RUN tb_voice_allocator
+ALLOCATOR_CASE voices=1 checks=11265
+ALLOCATOR_CASE voices=3 checks=28858
+ALLOCATOR_CASE voices=4 checks=40403
+ALLOCATOR_CASE voices=17 checks=360619
+ALLOCATOR_CASE voices=32 checks=1131129
+PASS tb_voice_allocator checks=1747726
+E:/gowin/fpga-instrument-timing-audio-fix/sim/tb_voice_allocator.sv:147: $finish called at 576800000 (1ps)
+
