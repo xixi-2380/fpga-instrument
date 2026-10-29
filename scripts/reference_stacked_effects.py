@@ -26,7 +26,7 @@ class StackedEffects:
     def configure(self, delay, echo, room, depth, hz):
         self.delay = min(self.capacity, max(1, delay))
         self.targets = [min(256, x) for x in (echo, room, depth)]
-        hz = min(10, max(1, hz))
+        hz = min(20, max(1, hz))
         self.step = (hz * 2**32 + 24000) // 48000
 
     def sample(self, x, mask):

@@ -1,0 +1,8 @@
+{
+  "configuration": "board_controls",
+  "test": "tb_timbre_control",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 0.51
+}

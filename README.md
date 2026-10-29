@@ -1,12 +1,16 @@
 # 当前PCB / Flash专项副本
 
-当前版本检查点：[2026-10-29 提交范围与待办](docs/版本检查点_2026-10-29.md)。本次为源码/诊断App检查点，尚无匹配W23改动的新位流。
+最新功能：[延音与新版PCB设置说明](docs/延音与新版PCB界面_2026-10-29.md)。第一效果改为20～2000ms松键延音，颤音1～20Hz；PCB默认页使用文字/十进制并支持按住−/+调节。构建标识26102902，52项配置回归通过。
+
+本版文件入口：[可烧录FS](dist/sustain-ui-2026-10-29/D2_keyboard_leds.fs)、[验收与文件说明](dist/sustain-ui-2026-10-29/验收与文件说明.md)、[哈希清单](dist/sustain-ui-2026-10-29/manifest.json)。该目录集中保存本次匹配构建、诊断APK、操作说明、界面示例和前后对照WAV。按用户要求不做时序收敛，实际STA见验收说明；未烧录或实板试听。
+
+修改前的6960804检查点见[2026-10-29提交范围与待办](docs/版本检查点_2026-10-29.md)，其中的待办属于历史状态。
 
 操作入口：[操作说明（PCB专项版）](docs/操作说明_PCB专项版.md)。 [PCB DEBUG界面详细说明](docs/PCBDEBUG界面详细说明.md)。
 
-主工程：`E:/gowin/fpga-instrument-pcb-flash-debug/keyboard_adsr.gprj`。实际测试来源为integrated，原目录保持只读。操作说明：[PCB与Flash修复](docs/PCB与Flash修复_2026-10-28.md)，问题追踪：[键盘与旋钮](docs/keyboard_knob_issues_2026-10-28.md)。本轮最终产物入口为`dist/pcb-flash-debug`；仅在manifest标记验收完成后使用该目录的.fs与APK，其他旧产物为历史。
+主工程：`E:/gowin/fpga-instrument-pcb-flash-debug/keyboard_adsr.gprj`。实际测试来源为integrated，原目录保持只读。此前修复记录：[PCB与Flash修复](docs/PCB与Flash修复_2026-10-28.md)，问题追踪：[键盘与旋钮](docs/keyboard_knob_issues_2026-10-28.md)。`dist/pcb-flash-debug`及其他旧产物属于此前版本，本次使用上方sustain-ui目录。
 
-2026-10-29：颤音旋钮 A/B/SW 为 **T23/R25/W23**（SW从W25移出）。按用户要求停止后续时序优化，诊断页暂保留、以后删除。本次引脚变更尚未生成新位流。
+颤音旋钮 A/B/SW 为 **T23/R25/W23**（SW从W25移出）。诊断页现在保留；之后删除属于后续任务。
 
 板载按键/复位与旋钮原功能保留，12个AUX控制默认关闭；PCB页触摸调参、运行时参数、始终静音。硬件烧录和实物验收由用户执行。
 

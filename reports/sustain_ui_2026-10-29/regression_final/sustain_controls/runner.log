@@ -1,0 +1,4 @@
+RUN tb_sustain_controls
+PASS tb_sustain_controls checks=5
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_sustain_controls.sv:25: $finish called at 35450000 (1ps)
+

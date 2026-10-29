@@ -1,0 +1,4 @@
+E:/gowin/fpga-instrument-pcb-flash-debug/reports/sustain_ui_2026-10-29/audio_ab2/tb_audio_ab.sv:10: warning: Port 26 (effect_tremolo_rate_hz) of module synth_core expects 4 bit(s), given 5.
+E:/gowin/fpga-instrument-pcb-flash-debug/reports/sustain_ui_2026-10-29/audio_ab2/tb_audio_ab.sv:10:        : Pruning 1 high bits of the expression.
+E:/gowin/fpga-instrument-pcb-flash-debug/reports/sustain_ui_2026-10-29/audio_ab2/tb_audio_ab.sv:10: warning: Port 41 (effect_echo_samples) of module synth_core expects 15 bit(s), given 17.
+E:/gowin/fpga-instrument-pcb-flash-debug/reports/sustain_ui_2026-10-29/audio_ab2/tb_audio_ab.sv:10:        : Pruning 2 high bits of the expression.

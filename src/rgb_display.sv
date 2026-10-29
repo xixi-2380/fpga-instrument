@@ -17,12 +17,12 @@ module rgb_display #(
     output reg lcd_en,
     output reg [5:0] lcd_r,lcd_g,lcd_b,
     input wire menu_mode,effects_enabled,input wire [1:0] effect_mode,
-    input wire [6:0] echo_percent,room_percent,depth_percent,input wire [3:0] tremolo_rate_hz,
+    input wire [6:0] echo_percent,room_percent,depth_percent,input wire [4:0] tremolo_rate_hz,
     input wire [6:0] volume_percent,
     input wire touch_enabled,touch_ui_enabled,touch_ready_status,touch_error_status,
     input wire [145:0] more_status,
     input wire latency_valid,input wire [19:0] latency_bcd,input wire [33:0] ultrasonic_status,
-    input wire [16:0] encoder_status,input wire [2:0] keypad_online,input wire [2591:0] pcb_status,output wire pcb_visible
+    input wire [16:0] encoder_status,input wire [2:0] keypad_online,input wire [2591:0] pcb_status,output wire pcb_visible,input wire [3:0] sustain_time_thousands
 );
     wire pixel_clk,pixel_lock,pixel_reset;
     wire common_reset=pll_reset || !pixel_lock || audio_reset;
@@ -94,8 +94,8 @@ module rgb_display #(
         score_busy,selected_timbre[1:0],held_count,active_count};
     wire [1023:0] waveform;wire [7:0] peak;wire window_valid;
     audio_visualizer monitor(audio_clk,audio_reset,visual_sample_valid,visual_sample,waveform,peak,window_valid);
-    wire [63:0] settings_status={3'd0,volume_percent,selected_timbre[2],touch_error_status,touch_ready_status,touch_ui_enabled,touch_enabled,
-        tremolo_rate_hz,depth_percent,room_percent,echo_percent,effects_enabled,effect_mode,menu_mode,legacy_status};
+    wire [63:0] settings_status={sustain_time_thousands[1:0],tremolo_rate_hz[4],volume_percent,selected_timbre[2],touch_error_status,touch_ready_status,touch_ui_enabled,touch_enabled,
+        tremolo_rate_hz[3:0],depth_percent,room_percent,echo_percent,effects_enabled,effect_mode,menu_mode,legacy_status};
     wire [20:0] latency_status=latency_valid===1'b1 ? {1'b1,latency_bcd} : 21'd0;
     // Preserve all original1112 bits; append a small atomic measurement field.
     wire [33:0] sensor_status=(ultrasonic_status[33]===1'b0 || ultrasonic_status[33]===1'b1) ? ultrasonic_status : 34'd0;

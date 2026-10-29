@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "cases": 199,
+  "range_ms": [
+    20,
+    2000
+  ],
+  "step_ms": 10,
+  "identity": "step*duration+remainder=2^24",
+  "source_sha256": "61732cefd5dec9707dce791163727d474dad2f9b8a7fa90e8e5f5b9f04575fc7"
+}

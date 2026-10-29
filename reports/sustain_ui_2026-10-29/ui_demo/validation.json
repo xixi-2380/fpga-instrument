@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "scope": "actual RTL rendered examples with synthetic known register values; not a board capture",
+  "sustain_ms": 2000,
+  "tremolo_hz": 20,
+  "frames": 5
+}

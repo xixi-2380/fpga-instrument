@@ -1,0 +1,3 @@
+ONSET_FRAME 512
+PASS tb_audio_ab first_sound_frame=581 total=17992
+E:/gowin/fpga-instrument-pcb-flash-debug/reports/sustain_ui_2026-10-29/audio_ab_final/tb_audio_ab.sv:32: $finish called at 374853532560 (1ps)

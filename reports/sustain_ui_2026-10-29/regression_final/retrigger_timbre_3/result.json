@@ -1,0 +1,9 @@
+{
+  "name": "retrigger_timbre_3",
+  "test": "tb_sustain_retrigger",
+  "parameters": [
+    "TIMBRE=3"
+  ],
+  "passed": true,
+  "seconds": 31.642
+}

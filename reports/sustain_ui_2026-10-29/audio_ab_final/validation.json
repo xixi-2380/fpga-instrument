@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "baseline_commit": "6960804a9a62c6a73287cea9c3a0856788922f4f",
+  "scope": "RTL frame-buffer PCM,48kHz sample rate with accelerated test-only audio clock; not a board recording or production latency test",
+  "results": [
+    {
+      "name": "before",
+      "samples": 17992,
+      "first_nonzero_sample": 7781,
+      "peak": 14712,
+      "seconds": 8.888,
+      "first_output_after_request_ms": 151.4375
+    },
+    {
+      "name": "after",
+      "samples": 17992,
+      "first_nonzero_sample": 581,
+      "peak": 18864,
+      "seconds": 586.147,
+      "first_output_after_request_ms": 1.4375
+    }
+  ],
+  "baseline_reused_from_verified_git_snapshot": true
+}

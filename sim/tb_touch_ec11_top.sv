@@ -47,9 +47,9 @@ module tb_touch_ec11_top;
   sw[0]=0;cycles(32);turn(0);sw[0]=1;cycles(200);
   `CHECK(dut.echo_edit_strength && dut.echo_percent==27,"turning a pressed physical knob cannot cause a click mode change")
   pressed=1;wait(dut.gate);more(330);
-  `CHECK($countones(dut.voice_held)==1 && dut.visual_notes==1 && dut.sound.effect.echo_level==69 && dut.sound.effect.room_level==67,"stacked stages and one-key ownership both active")
+  `CHECK($countones(dut.voice_held)==1 && dut.visual_notes==1 && dut.sound.release_strength==69 && dut.sound.effect.echo_level==0 && dut.sound.effect.room_level==67,"stacked stages and one-key ownership both active")
   `CHECK(dut.sound.effect.depth_level==131 && dut.sound.effect.phase_step==536871,"independent tremolo depth/rate reach running DSP")
-  two(1);more(300);`CHECK(dut.effect_mask==5 && dut.sound.effect.room_level==0 && dut.sound.effect.echo_level==69,"disabling room preserves other running effects")
+  two(1);more(300);`CHECK(dut.effect_mask==5 && dut.sound.effect.room_level==0 && dut.sound.release_strength==69 && dut.sound.effect.echo_level==0,"disabling room preserves other running effects")
   // Three independent buses deliver simultaneous chords and the highest B6.
   pressed=(36'd1<<0)|(36'd1<<12)|(36'd1<<35);wait($countones(dut.voice_held)==3);more(4);
   `CHECK(dut.visual_notes==pressed,"all three boards and B6 reach physical voice metadata and display")

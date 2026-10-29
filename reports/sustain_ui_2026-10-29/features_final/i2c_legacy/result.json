@@ -1,0 +1,8 @@
+{
+  "configuration": "i2c_legacy",
+  "test": "tb_i2c_register_master",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 0.474
+}

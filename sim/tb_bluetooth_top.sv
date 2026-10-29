@@ -43,7 +43,7 @@ module tb_bluetooth_top;
   event_send(0,0);more(5);
   `CHECK(!dut.gate,"Bluetooth Off reaches allocator")
   event_send(2,0);
-  `CHECK(dut.voice_active==0 && dut.sound.effect.echo.filled==0,"pause/stop flushes voices and echo history before acknowledgement")
+  `CHECK(dut.voice_active==0 && dut.voice_held==0,"pause/stop flushes voices and sustain tails before acknowledgement")
   `CHECK(dut.sound.tx.latched_l==0 && dut.sound.tx.latched_r==0 && dut.MAX_DIN==0,"clear acknowledgement follows serial silence on both channels")
   more(3);
   inh=0;more(4);

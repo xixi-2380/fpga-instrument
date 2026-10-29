@@ -1,0 +1,2 @@
+PASS tb_pcb_config_deadline checks=4
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_pcb_config_deadline.sv:22: $finish called at 2771000 (1ps)

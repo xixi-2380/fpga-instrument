@@ -1,0 +1,1 @@
+E:/gowin/fpga-instrument-pcb-flash-debug/src/synth_core.sv:270: warning: @* is sensitive to all 15 words in array 'peak_tree'.

@@ -28,7 +28,8 @@ module rgb_ui_renderer(
  wire [2:0] timbre={state[53],state[13:12]};
  wire [1:0] fx=state[22:21];wire menu=state[20],enabled=state[23];
  wire [6:0] percent=fx==0 ? state[30:24] : fx==1 ? state[37:31] : state[44:38];
- wire [3:0] rate=state[48:45];
+ wire [4:0] rate={state[61],state[48:45]};
+ wire [15:0] sustain_ms_bcd={2'd0,state[63:62],echo_ms_bcd};
  wire [6:0] volume=state[60:54];
  wire [5:0] voices=state[5:0]>32 ? 6'd32 : state[5:0];
  wire [7:0] peak=state[87:80];
@@ -191,7 +192,7 @@ module rgb_ui_renderer(
     left=308+156*i;
     if(ui_inside(px,py,left,124,148,48))begin
      base=card(px,py,left,124,148,48,fx==i);fg=fx==i ? INK : CREAM;
-     text=i==0 ? (effect_bits[0]?"ECHO ON":"ECHO OFF") :
+     text=i==0 ? (effect_bits[0]?"SUST ON":"SUST OFF") :
           i==1 ? (effect_bits[1]?"ROOM ON":"ROOM OFF") : (effect_bits[2]?"TREM ON":"TREM OFF");
      len=effect_bits[i]?7:8;
      tx=left+(148-len*10)/2;ty=140;
@@ -203,7 +204,7 @@ module rgb_ui_renderer(
     base=card(px,py,left,top,52,48,1'b0);fg=GOLD;text=px<400 ? "-" : "+";len=1;tx=left+21;ty=top+16;
    end
    if(px>=380 && px<680 && py>=260 && py<270)base=(px-380)<integer'(percent)*3 ? GOLD : BG;
-   if(fx==2 && px>=380 && px<680 && py>=366 && py<376)base=(px-380)<integer'(rate)*30 ? WINE : BG;
+   if(fx==2 && px>=380 && px<680 && py>=366 && py<376)base=(px-380)<integer'(rate)*15 ? WINE : BG;
    if(py>=98 && py<118)begin
     if(px<280)begin text="Timbre";len=6;tx=32;ty=100;fg=GOLD;end
     else begin text="Effect";len=6;tx=308;ty=100;fg=GOLD;end
@@ -214,11 +215,11 @@ module rgb_ui_renderer(
     else begin text={(percent==100 ? 8'd49 : 8'd32),(percent>=10 ? digit((percent/10)%10) : 8'd32),digit(percent%10),"%"};len=4;tx=696;end
    end
    if(py>=314 && py<336 && px>=308)begin
-    text=fx==0 ? "DELAY TIME" : fx==1 ? "ROOM MODEL" : "RATE";len=fx==2 ? 4 : 10;tx=308;ty=316;fg=DIM;
-    if(px>=656 && fx==2)begin text={rate==10 ? 8'd49 : 8'd32,digit(rate%10)," HZ"};len=5;tx=688;fg=GOLD;end
+    text=fx==0 ? "TAIL TIME " : fx==1 ? "ROOM MODEL" : "RATE";len=fx==2 ? 4 : 10;tx=308;ty=316;fg=DIM;
+    if(px>=656 && fx==2)begin text={rate>=10 ? digit(rate/10) : 8'd32,digit(rate%10)," HZ"};len=5;tx=688;fg=GOLD;end
    end
    if(fx!=2 && py>=344 && py<384 && px>=380)begin
-    text=fx==0 ? {digit(echo_ms_bcd[11:8]),digit(echo_ms_bcd[7:4]),digit(echo_ms_bcd[3:0])," MS"} : "SMALL ROOM";len=fx==0 ? 6 : 10;tx=fx==0 ? 510 : 490;ty=356;fg=CREAM;
+    text=fx==0 ? {digit(sustain_ms_bcd[15:12]),digit(echo_ms_bcd[11:8]),digit(echo_ms_bcd[7:4]),digit(echo_ms_bcd[3:0])," MS"} : "SMALL ROOM";len=fx==0 ? 7 : 10;tx=fx==0 ? 510 : 490;ty=356;fg=CREAM;
    end
    if(px>=380 && py>=382 && py<402)begin
     text=fx==0 ? (echo_amount_edit ? "KNOB: AMOUNT" : "KNOB: TIME") :
@@ -236,13 +237,13 @@ module rgb_ui_renderer(
     if(px<296)begin text=timbre_name(timbre);len=name_length(timbre);tx=24;end
     else if(px<560)begin
      case(effect_bits)
-      1:begin text="ECHO ON";len=7;end
+      1:begin text="SUST ON";len=7;end
       2:begin text="ROOM ON";len=7;end
-      3:begin text="ECHO+ROOM";len=9;end
+      3:begin text="SUST+ROOM";len=9;end
       4:begin text="TREMOLO ON";len=10;end
-      5:begin text="ECHO+TREM";len=9;end
+      5:begin text="SUST+TREM";len=9;end
       6:begin text="ROOM+TREM";len=9;end
-      7:begin text="ECHO+ROOM+TREM";len=14;end
+      7:begin text="SUST+ROOM+TREM";len=14;end
       default:begin text="EFFECTS OFF";len=11;end
      endcase
      tx=310;
@@ -384,21 +385,21 @@ module rgb_ui_renderer(
    base=BG;fg=CREAM;text=0;len=0;tx=24;ty=32;
    if(py<72)begin
     if(px<648)begin
-     text="PCB DEBUG / MUTED";len=17;fg=GOLD;
-     if(px>=400)begin text={"BUILD ",hex16(PCB_BUILD_ID[31:16]),hex16(PCB_BUILD_ID[15:0])};len=14;tx=420;end
+     text="KEYBOARD SETUP / MUTED";len=22;fg=GOLD;
+     if(px>=400)begin text={"BUILD ",hex16(PCB_BUILD_ID[31:16]),hex16(PCB_BUILD_ID[15:0])};len=14;tx=430;end
     end
     else begin if(ui_inside(px,py,648,16,132,48))base=card(px,py,648,16,132,48,0);text="BACK";len=4;tx=690;fg=GOLD;end
    end else if(py>=80 && py<120)begin
     i=px<176?0:px<328?1:px<480?2:px<632?3:4;
     left=24+i*152;tx=left+12;ty=92;len=8;
     if(ui_inside(px,py,left,80,144,40))base=card(px,py,left,80,144,40,pcb_tab==i);fg=pcb_tab==i?INK:GOLD;
-    case(i)0:text="OVERVIEW";1:text="SENSE   ";2:text="BUS     ";3:text="KEYS    ";default:text="EC11    ";endcase
+    case(i)0:text="OVERVIEW";1:begin text="SENSITIVITY";len=11;end 2:text="I2C LINK";3:text="KEY TEST";default:text="KNOBS   ";endcase
    end else if(py>=134 && py<178)begin
     ty=148;fg=GOLD;
     if(px<244)begin left=px<132?24:132;text=px<132?"PCB -":"PCB +";len=5;end
     else if(px<464)begin left=px<352?244:352;text=px<352?"CH -":"CH +";len=4;end
-    else if(px<576)begin left=464;text=pcb_gsr?"GSR":"KOR";len=3;end
-    else if(px<688)begin left=576;text={"VIEW ",hex_digit({2'd0,pcb_detail})};len=6;end
+    else if(px<576)begin left=464;text=pcb_gsr?"EDIT GSR":"EDIT KOR";len=8;end
+    else if(px<688)begin left=576;text={"MORE ",hex_digit({2'd0,pcb_detail})};len=6;end
     else begin left=688;text=pcb_frozen?"LIVE":"FREEZE";len=pcb_frozen?4:6;end
     tx=left+12;if(ui_inside(px,py,left,134,left==688?88:100,44))base=card(px,py,left,134,left==688?88:100,44,pcb_frozen && left==688);
    end else if(py>=196 && py<388)begin

@@ -1,0 +1,8 @@
+{
+  "configuration": "stacked_small",
+  "test": "tb_stacked_effects",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 8.315
+}

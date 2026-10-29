@@ -1,0 +1,5 @@
+RUN tb_max98357_startup
+MAX_STARTUP_METRICS enable_to_audio_ready_us=9979.141
+PASS tb_max98357_startup checks=3702449
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_max98357_startup.sv:35: $finish called at 20133729382 (1ps)
+

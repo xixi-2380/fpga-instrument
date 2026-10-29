@@ -1,0 +1,181 @@
+// User reference: E:/FPGA竞赛/开发板资料/09_Misc/tang_mega_138k-pro_pins.cst
+// SHA256: f647104f7b74800890d0283a438b226301bff3a3429a04ec0f6df63c9026e8ba
+// Project copy: references/tang_mega_138k-pro_pins.cst (byte-identical).
+// Dock 4071f3 schematics supplement PA_EN and document physical LED labels.
+// Core 4071 AND 4072: P16=50MHz, U4=user button, same electrical mapping.
+// These are documentary checks; physical voltages and waveforms remain unmeasured.
+IO_LOC "clk" P16;
+IO_PORT "clk" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "rst" U4;
+// Diagnostic experiment: released USR is low in both core schematics.
+// Add weak pull-down after user observed reset LED stuck on; physical cause unverified.
+IO_PORT "rst" IO_TYPE=LVCMOS15 PULL_MODE=DOWN DRIVE=OFF BANK_VCCIO=1.5;
+// 2026-10-19 diagnostic: 4 mA for DAC serial outputs and their mirrors.
+// BCK-correlated analog spikes reported; electrical improvement is NOT yet measured.
+IO_LOC "HP_BCK" E22;
+IO_PORT "HP_BCK" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "HP_WS" F24;
+IO_PORT "HP_WS" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "HP_DIN" G24;
+IO_PORT "HP_DIN" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+// PA_EN is absent from the user CST; Dock 4071f3 schematic page 18: H17.
+IO_LOC "PA_EN" H17;
+IO_PORT "PA_EN" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+
+// 2026-10-23 user wiring: external MAX98357A on the other J23 row.
+// Reference Header indices 37/35/33/31; all are signal IO, NOT power/GND.
+// Keep short 3.3V logic connections and share a real GND with the module.
+IO_LOC "MAX_BCLK" V22;
+IO_PORT "MAX_BCLK" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "MAX_LRCLK" W19;
+IO_PORT "MAX_LRCLK" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "MAX_DIN" Y20;
+IO_PORT "MAX_DIN" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "MAX_SD_MODE" V26;
+IO_PORT "MAX_SD_MODE" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+
+// Logical led_n indices now follow the user CST led[0..5]: R26/J14/L20/M25/N21/N23.
+// Dock schematic page 15 labels J14 as physical LED0 and R26 as physical LED1.
+// Thus logical LEDs 0/1 have reversed schematic labels; active-low polarity remains.
+IO_LOC "led_n[0]" R26;
+IO_PORT "led_n[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "led_n[1]" J14;
+IO_PORT "led_n[1]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "led_n[2]" L20;
+IO_PORT "led_n[2]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "led_n[3]" M25;
+IO_PORT "led_n[3]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+// N21 is the unused USR_LED1, not U7 MOSI. Key LED N23 remains led_n[4].
+IO_LOC "led_n[4]" N23;
+IO_PORT "led_n[4]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+
+// Dock 4071f3 schematic sheet 15: S0/S1/S2/S3, active-low, 3.3V.
+// Follow physical switch numbering, not swapped key[1]/key[2] reference aliases.
+IO_LOC "board_buttons_n[0]" K16;
+IO_PORT "board_buttons_n[0]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "board_buttons_n[1]" F15;
+IO_PORT "board_buttons_n[1]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "board_buttons_n[2]" G15;
+IO_PORT "board_buttons_n[2]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "board_buttons_n[3]" G16;
+IO_PORT "board_buttons_n[3]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+
+// 2026-10-22 LCD: user-confirmed reference, Dock J20 RGB[7:2].
+// Trial Sipeed 800x480 DE-only profile; panel timing remains unverified.
+IO_LOC "lcd_clk" H21;
+IO_PORT "lcd_clk" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_hs" H22;
+IO_PORT "lcd_hs" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_vs" A23;
+IO_PORT "lcd_vs" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_en" A24;
+IO_PORT "lcd_en" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_g[5]" J16;
+IO_PORT "lcd_g[5]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_g[4]" K15;
+IO_PORT "lcd_g[4]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_g[3]" F22;
+IO_PORT "lcd_g[3]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_g[2]" G22;
+IO_PORT "lcd_g[2]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_g[1]" G21;
+IO_PORT "lcd_g[1]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_g[0]" G20;
+IO_PORT "lcd_g[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_b[5]" F20;
+IO_PORT "lcd_b[5]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_b[4]" G19;
+IO_PORT "lcd_b[4]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_b[3]" F19;
+IO_PORT "lcd_b[3]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_b[2]" F18;
+IO_PORT "lcd_b[2]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_b[1]" M17;
+IO_PORT "lcd_b[1]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_b[0]" M16;
+IO_PORT "lcd_b[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_r[5]" H19;
+IO_PORT "lcd_r[5]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_r[4]" J19;
+IO_PORT "lcd_r[4]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_r[3]" G25;
+IO_PORT "lcd_r[3]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_r[2]" H18;
+IO_PORT "lcd_r[2]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_r[1]" J18;
+IO_PORT "lcd_r[1]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "lcd_r[0]" K17;
+IO_PORT "lcd_r[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8 BANK_VCCIO=3.3;
+
+// User 2026-10-22: GT9110 on J23 header. Open-drain LOW or Z only.
+// P25/T25 are signal IO, NOT power pins; use real GND/module-rated supply.
+// External module pull-ups required; INT is released after address strap.
+IO_LOC "touch_scl" AB26;
+IO_PORT "touch_scl" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "touch_sda" U25;
+IO_PORT "touch_sda" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "touch_int" V23;
+IO_PORT "touch_int" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "touch_rst_n" R23;
+IO_PORT "touch_rst_n" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+
+IO_LOC "bt_rx" P24;
+IO_PORT "bt_rx" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+IO_LOC "bt_tx" P23;
+IO_PORT "bt_tx" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+// U7 second Flash, single SPI; U4 configuration Flash is untouched.
+IO_LOC "flash_cs_n" L25;
+IO_PORT "flash_cs_n" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "flash_sck" P20;
+IO_PORT "flash_sck" IO_TYPE=LVCMOS33 PULL_MODE=DOWN DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "flash_mosi" R21;
+IO_PORT "flash_mosi" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "flash_miso" T22;
+IO_PORT "flash_miso" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+IO_LOC "flash_wp_n" R22;
+IO_PORT "flash_wp_n" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "flash_hold_n" R20;
+IO_PORT "flash_hold_n" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=4 BANK_VCCIO=3.3;
+// RCWL-9610A: P21 is now Trig; Bluetooth EN has been removed.
+IO_LOC "ultrasonic_trig" P21;
+IO_PORT "ultrasonic_trig" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "ultrasonic_echo" U17;
+IO_PORT "ultrasonic_echo" IO_TYPE=LVCMOS33 PULL_MODE=DOWN DRIVE=OFF BANK_VCCIO=3.3;
+// 2026-10-27 three independent AiP5916 buses, all address 0x56.
+// Board 3 INT moved to U22 by user; MAX BCLK remains V22.
+IO_LOC "keypad_sda[0]" AB25;
+IO_PORT "keypad_sda[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "keypad_sda[1]" L22;
+IO_PORT "keypad_sda[1]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "keypad_sda[2]" W20;
+IO_PORT "keypad_sda[2]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "keypad_scl[0]" AA25;
+IO_PORT "keypad_scl[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "keypad_scl[1]" W26;
+IO_PORT "keypad_scl[1]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "keypad_scl[2]" V19;
+IO_PORT "keypad_scl[2]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=4 BANK_VCCIO=3.3;
+IO_LOC "keypad_int_n[0]" Y26;
+IO_PORT "keypad_int_n[0]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "keypad_int_n[1]" U26;
+IO_PORT "keypad_int_n[1]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "keypad_int_n[2]" U22;
+IO_PORT "keypad_int_n[2]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "ec11_a[0]" V16;
+IO_PORT "ec11_a[0]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "ec11_a[1]" U16;
+IO_PORT "ec11_a[1]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "ec11_a[2]" T23;
+IO_PORT "ec11_a[2]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "ec11_b[0]" Y21;
+IO_PORT "ec11_b[0]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "ec11_b[1]" U15;
+IO_PORT "ec11_b[1]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "ec11_b[2]" R25;
+IO_PORT "ec11_b[2]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "ec11_sw_n[0]" V17;
+IO_PORT "ec11_sw_n[0]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "ec11_sw_n[1]" W21;
+IO_PORT "ec11_sw_n[1]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;
+IO_LOC "ec11_sw_n[2]" W23;
+IO_PORT "ec11_sw_n[2]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=OFF BANK_VCCIO=3.3;

@@ -50,6 +50,8 @@
         <File path="src/dds_sine.sv" type="file.verilog" enable="1" />
         <File path="src/frame_buffer.sv" type="file.verilog" enable="1" />
         <File path="src/keyboard_core.sv" type="file.verilog" enable="1" />
+        <File path="src/sustain_envelope.sv" type="file.verilog" enable="1" />
+        <File path="src/config/sustain_curve.svh" type="file.other" enable="1" />
         <File path="src/synth_core.sv" type="file.verilog" enable="1" />
         <File path="src/ui_more_actions.sv" type="file.verilog" enable="1" />
         <File path="src/score_services.sv" type="file.verilog" enable="1" />

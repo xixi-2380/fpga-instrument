@@ -2,7 +2,7 @@
 `include "config/synth_config.svh"
 // Generic note-event synthesis; physical keyboard logic stays in its adapter.
 module synth_core #(
-    parameter integer STEREO_ENABLE=0,VISUAL_KEYS=16,LIMITER_HOLD_SAMPLES=240,OUTPUT_ENABLE=1,OUTPUT_GAIN=24,LIMITER_LOG2=6,
+    parameter integer STEREO_ENABLE=0,SUSTAIN_ENABLE=0,VISUAL_KEYS=16,LIMITER_HOLD_SAMPLES=240,OUTPUT_ENABLE=1,OUTPUT_GAIN=24,LIMITER_LOG2=6,
     VOICES=`VOICE_COUNT,MUTE=`MUTE_FRAMES,FADE=`FADE_FRAMES,
     ATTACK=`ADSR_ATTACK_FRAMES,DECAY=`ADSR_DECAY_FRAMES,
     SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES,
@@ -11,13 +11,13 @@ module synth_core #(
     output wire note_ready,input_ready,bck,ws,din,pa_enable,underrun,frame_ce,gate,
     output wire [VOICES-1:0] voice_active,voice_held,output reg [16:0] envelope_level,input wire [2:0] note_timbre,input wire effects_enable,input wire [1:0] effect_mode,
     input wire effect_cfg_valid,input wire [8:0] effect_echo_wet,effect_room_wet,effect_tremolo_depth,
-    input wire [3:0] effect_tremolo_rate_hz,output wire effect_cfg_ready,effect_cfg_applied,
+    input wire [4:0] effect_tremolo_rate_hz,output wire effect_cfg_ready,effect_cfg_applied,
     output wire visual_sample_valid,output wire signed [15:0] visual_sample,
     output reg [VISUAL_KEYS-1:0] visual_notes,
     input wire flush,input wire velocity_valid,input wire [6:0] note_velocity,
     input wire [6:0] volume_percent,input wire [6:0] note_pitch,input wire output_flush,
     output wire latency_valid,output wire [19:0] latency_bcd,
-    input wire [2:0] effect_mask,input wire [14:0] effect_echo_samples,
+    input wire [2:0] effect_mask,input wire [16:0] effect_echo_samples,
     input wire debug_mute,output wire debug_muted);
     // Register the soft engine clear before its wide envelope/RAM fanout.
     // Button assertion stays asynchronous; serial urgent-clear remains separate.
@@ -172,7 +172,7 @@ module synth_core #(
     assign pa_enable=input_ready;
     assign gate=|voice_held;
     // Freeze ownership while rendering; external producers retain valid/data.
-    voice_allocator #(.VOICES(VOICES),.AUTOMATIC_IDS(16)) allocator(
+    voice_allocator #(.VOICES(VOICES),.AUTOMATIC_IDS(16),.PRESERVE_MANUAL_TAILS(1)) allocator(
         .clk(clk),.rst(engine_reset),.enabled(input_ready && !render_busy),.frame_ce(frame_ce),
         .note_valid(note_valid),.note_on(note_on),.note_id(note_id),.note_fcw(note_fcw),
         .voice_active(voice_active),.note_ready(note_ready),.voice_start(voice_start),
@@ -181,6 +181,11 @@ module synth_core #(
         .note_timbre(note_timbre),.voice_timbres(voice_timbres),
         .note_independent(velocity_valid===1'b1 && note_id<16),.note_gain(velocity_gain(note_velocity)),.note_pitch(note_pitch),
         .voice_gains(voice_gains),.voice_pitches(voice_pitches));
+    `include "config/sustain_curve.svh"
+    reg [50:0] release_curve;reg [8:0] release_strength;
+    always @(posedge clk or posedge engine_reset)
+        if(engine_reset)begin release_curve<=sustain_curve(17'd7200);release_strength<=64;end
+        else if(effect_cfg_valid)begin release_curve<=sustain_curve(effect_echo_samples);release_strength<=effect_echo_wet>256?9'd256:effect_echo_wet;end
     for(genvar v=0;v<VOICES;v=v+1)begin: voices
         // Same predictor and reset as the main boundary FF: no added cycle.
         // Preserve local copies so each envelope has a nearby, bounded CE net.
@@ -197,9 +202,19 @@ module synth_core #(
         end
         assign envelope_resets[v]=envelope_reset;
         assign envelope_enables[v]=`BCK_HALF_CYCLES==1 ? (!rst && envelope_ce) : envelope_ce;
+        wire [16:0] native_level;wire native_active;
+        if(SUSTAIN_ENABLE)begin: sustain_on
+            sustain_envelope tail(.clk(clk),.rst(envelope_reset),.sample_ce(envelope_enables[v]),
+                .note_on(voice_start[v]),.note_off(voice_stop[v]),.enabled(effect_mask[0]===1'b1),
+                .base_level(native_level),.base_active(native_active),.duration(release_curve[50:34]),
+                .phase_step(release_curve[33:17]),.phase_remainder(release_curve[16:0]),.strength(release_strength),
+                .level(voice_level[v]),.active(voice_active[v]));
+        end else begin: sustain_off
+            assign voice_level[v]=native_level;assign voice_active[v]=native_active;
+        end
         instrument_envelope #(.ATTACK(ATTACK),.DECAY(DECAY),.SUSTAIN(SUSTAIN),.RELEASE(RELEASE),.PRECALC(1)) envelope(
             .clk(clk),.rst(envelope_reset),.sample_ce(envelope_enables[v]),.note_on(voice_start[v]),.note_off(voice_stop[v]),
-            .level(voice_level[v]),.active(voice_active[v]),.restart(voice_restart[v]),.timbre(voice_timbres[v*3+:3]));
+            .level(native_level),.active(native_active),.restart(voice_restart[v]),.timbre(voice_timbres[v*3+:3]));
     end
     dds_sine #(.VOICES(VOICES)) dds(.clk(clk),.rst(engine_reset),.sample_ce(dds_ce),
         .fcw(slot_fcw),.sample(raw_sample),.valid(raw_valid),
@@ -263,10 +278,10 @@ module synth_core #(
     if(STEREO_ENABLE)begin: stereo_on
         voice_mixer left_mixer(clk,engine_reset,gain_valid,pan_left,first_sample,last_sample,stereo_mix_valid,stereo_mix_l);
         voice_mixer right_mixer(clk,engine_reset,gain_valid,pan_right,first_sample,last_sample,stereo_mix_valid_r,stereo_mix_r);
-        audio_effects #(.DELAY_SAMPLES(DELAY_SAMPLES),.D0(ROOM_D0),.D1(ROOM_D1),.D2(ROOM_D2),.D3(ROOM_D3)) right_effect(
+        audio_effects #(.ECHO_ENABLE(!SUSTAIN_ENABLE),.DELAY_SAMPLES(DELAY_SAMPLES),.D0(ROOM_D0),.D1(ROOM_D1),.D2(ROOM_D2),.D3(ROOM_D3)) right_effect(
             .clk(clk),.rst(engine_reset),.enable(effects_enable),.mode(effect_mode),.in_valid(stereo_mix_valid_r),.in_sample(stereo_mix_r),
             .in_ready(effect_ready_r),.out_valid(effect_valid_r),.out_sample(effect_sample_r),
-            .effect_mask(effect_mask),.cfg_echo_samples(effect_echo_samples),
+            .effect_mask(effect_mask),.cfg_echo_samples(effect_echo_samples[14:0]),
             .cfg_valid(effect_cfg_valid),.cfg_echo_wet(effect_echo_wet),.cfg_room_wet(effect_room_wet),
             .cfg_tremolo_depth(effect_tremolo_depth),.cfg_tremolo_rate_hz(effect_tremolo_rate_hz),
             .cfg_ready(cfg_ready_r),.cfg_applied(cfg_applied_r));
@@ -298,10 +313,10 @@ module synth_core #(
         assign cfg_ready_r=effect_cfg_ready;assign cfg_applied_r=effect_cfg_applied;
         assign output_valid_r=output_valid;assign output_sample_r=output_sample;
     end
-    audio_effects #(.DELAY_SAMPLES(DELAY_SAMPLES),.D0(ROOM_D0),.D1(ROOM_D1),.D2(ROOM_D2),.D3(ROOM_D3)) effect(
+    audio_effects #(.ECHO_ENABLE(!SUSTAIN_ENABLE),.DELAY_SAMPLES(DELAY_SAMPLES),.D0(ROOM_D0),.D1(ROOM_D1),.D2(ROOM_D2),.D3(ROOM_D3)) effect(
         .clk(clk),.rst(engine_reset),.enable(effects_enable),.mode(effect_mode),.in_valid(stereo_mix_valid),.in_sample(stereo_mix_l),
         .in_ready(effect_ready),.out_valid(effect_valid),.out_sample(effect_sample),
-        .effect_mask(effect_mask),.cfg_echo_samples(effect_echo_samples),
+        .effect_mask(effect_mask),.cfg_echo_samples(effect_echo_samples[14:0]),
             .cfg_valid(effect_cfg_valid),.cfg_echo_wet(effect_echo_wet),.cfg_room_wet(effect_room_wet),
         .cfg_tremolo_depth(effect_tremolo_depth),.cfg_tremolo_rate_hz(effect_tremolo_rate_hz),
         .cfg_ready(effect_cfg_ready),.cfg_applied(effect_cfg_applied));

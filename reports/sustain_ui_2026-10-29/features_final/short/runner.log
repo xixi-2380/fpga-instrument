@@ -1,0 +1,4 @@
+RUN tb_bt_short_audio
+PASS tb_bt_short_audio checks=275335 note_samples=47/47/47
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_bt_short_audio.sv:56: $finish called at 4605140000 (1ps)
+

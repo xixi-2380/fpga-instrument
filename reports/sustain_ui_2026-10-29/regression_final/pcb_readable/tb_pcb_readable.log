@@ -1,0 +1,2 @@
+PASS tb_pcb_readable checks=6
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_pcb_readable.sv:22: $finish called at 12150000 (1ps)

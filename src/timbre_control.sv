@@ -8,16 +8,16 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
     input wire ui_action_valid,input wire [5:0] ui_action,input wire cfg_ready,
     output reg menu_mode,output reg cfg_valid,
     output reg [8:0] echo_wet,room_wet,tremolo_depth,
-    output reg [3:0] cfg_tremolo_rate_hz,
+    output reg [4:0] cfg_tremolo_rate_hz,
     output reg [6:0] echo_percent,room_percent,depth_percent,
-    output reg [3:0] tremolo_rate_hz,output reg [6:0] volume_percent,
+    output reg [4:0] tremolo_rate_hz,output reg [6:0] volume_percent,
     output reg ultrasonic_page,ultrasonic_enabled,output reg [2:0] ultrasonic_sensitivity,
     output reg [6:0] ultrasonic_min,ultrasonic_max,output reg [7:0] ultrasonic_version,
     input wire auto_valid,input wire [7:0] auto_version,input wire [6:0] auto_target,
     input wire [2:0] encoder_up,encoder_down,encoder_single,encoder_double,
     output reg [2:0] effect_mask,cfg_effect_mask,output reg echo_edit_strength,tremolo_edit_rate,
-    output reg [8:0] echo_time_ms,output wire [11:0] echo_time_bcd,
-    output reg [14:0] cfg_echo_samples);
+    output reg [10:0] echo_time_ms,output wire [15:0] echo_time_bcd,
+    output reg [16:0] cfg_echo_samples);
     assign effects_enabled=effect_mask[effect_mode];
     localparam integer CW=DEBOUNCE_CYCLES>1?$clog2(DEBOUNCE_CYCLES):1;
     (* async_reg="true" *) reg [3:0] sync_meta,sync_buttons;
@@ -144,58 +144,208 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
             default:amount=9'd64;
         endcase end
     endfunction
-    function automatic [11:0] time_bcd(input [8:0] ms);
+    function automatic [15:0] time_bcd(input [10:0] ms);
         begin case(ms)
-            9'd20:time_bcd=12'h020;
-            9'd30:time_bcd=12'h030;
-            9'd40:time_bcd=12'h040;
-            9'd50:time_bcd=12'h050;
-            9'd60:time_bcd=12'h060;
-            9'd70:time_bcd=12'h070;
-            9'd80:time_bcd=12'h080;
-            9'd90:time_bcd=12'h090;
-            9'd100:time_bcd=12'h100;
-            9'd110:time_bcd=12'h110;
-            9'd120:time_bcd=12'h120;
-            9'd130:time_bcd=12'h130;
-            9'd140:time_bcd=12'h140;
-            9'd150:time_bcd=12'h150;
-            9'd160:time_bcd=12'h160;
-            9'd170:time_bcd=12'h170;
-            9'd180:time_bcd=12'h180;
-            9'd190:time_bcd=12'h190;
-            9'd200:time_bcd=12'h200;
-            9'd210:time_bcd=12'h210;
-            9'd220:time_bcd=12'h220;
-            9'd230:time_bcd=12'h230;
-            9'd240:time_bcd=12'h240;
-            9'd250:time_bcd=12'h250;
-            9'd260:time_bcd=12'h260;
-            9'd270:time_bcd=12'h270;
-            9'd280:time_bcd=12'h280;
-            9'd290:time_bcd=12'h290;
-            9'd300:time_bcd=12'h300;
-            9'd310:time_bcd=12'h310;
-            9'd320:time_bcd=12'h320;
-            9'd330:time_bcd=12'h330;
-            9'd340:time_bcd=12'h340;
-            9'd350:time_bcd=12'h350;
-            9'd360:time_bcd=12'h360;
-            9'd370:time_bcd=12'h370;
-            9'd380:time_bcd=12'h380;
-            9'd390:time_bcd=12'h390;
-            9'd400:time_bcd=12'h400;
-            9'd410:time_bcd=12'h410;
-            9'd420:time_bcd=12'h420;
-            9'd430:time_bcd=12'h430;
-            9'd440:time_bcd=12'h440;
-            9'd450:time_bcd=12'h450;
-            9'd460:time_bcd=12'h460;
-            9'd470:time_bcd=12'h470;
-            9'd480:time_bcd=12'h480;
-            9'd490:time_bcd=12'h490;
-            9'd500:time_bcd=12'h500;
-            default:time_bcd=12'h150;
+            11'd20:time_bcd=16'h0020;
+            11'd30:time_bcd=16'h0030;
+            11'd40:time_bcd=16'h0040;
+            11'd50:time_bcd=16'h0050;
+            11'd60:time_bcd=16'h0060;
+            11'd70:time_bcd=16'h0070;
+            11'd80:time_bcd=16'h0080;
+            11'd90:time_bcd=16'h0090;
+            11'd100:time_bcd=16'h0100;
+            11'd110:time_bcd=16'h0110;
+            11'd120:time_bcd=16'h0120;
+            11'd130:time_bcd=16'h0130;
+            11'd140:time_bcd=16'h0140;
+            11'd150:time_bcd=16'h0150;
+            11'd160:time_bcd=16'h0160;
+            11'd170:time_bcd=16'h0170;
+            11'd180:time_bcd=16'h0180;
+            11'd190:time_bcd=16'h0190;
+            11'd200:time_bcd=16'h0200;
+            11'd210:time_bcd=16'h0210;
+            11'd220:time_bcd=16'h0220;
+            11'd230:time_bcd=16'h0230;
+            11'd240:time_bcd=16'h0240;
+            11'd250:time_bcd=16'h0250;
+            11'd260:time_bcd=16'h0260;
+            11'd270:time_bcd=16'h0270;
+            11'd280:time_bcd=16'h0280;
+            11'd290:time_bcd=16'h0290;
+            11'd300:time_bcd=16'h0300;
+            11'd310:time_bcd=16'h0310;
+            11'd320:time_bcd=16'h0320;
+            11'd330:time_bcd=16'h0330;
+            11'd340:time_bcd=16'h0340;
+            11'd350:time_bcd=16'h0350;
+            11'd360:time_bcd=16'h0360;
+            11'd370:time_bcd=16'h0370;
+            11'd380:time_bcd=16'h0380;
+            11'd390:time_bcd=16'h0390;
+            11'd400:time_bcd=16'h0400;
+            11'd410:time_bcd=16'h0410;
+            11'd420:time_bcd=16'h0420;
+            11'd430:time_bcd=16'h0430;
+            11'd440:time_bcd=16'h0440;
+            11'd450:time_bcd=16'h0450;
+            11'd460:time_bcd=16'h0460;
+            11'd470:time_bcd=16'h0470;
+            11'd480:time_bcd=16'h0480;
+            11'd490:time_bcd=16'h0490;
+            11'd500:time_bcd=16'h0500;
+            11'd510:time_bcd=16'h0510;
+            11'd520:time_bcd=16'h0520;
+            11'd530:time_bcd=16'h0530;
+            11'd540:time_bcd=16'h0540;
+            11'd550:time_bcd=16'h0550;
+            11'd560:time_bcd=16'h0560;
+            11'd570:time_bcd=16'h0570;
+            11'd580:time_bcd=16'h0580;
+            11'd590:time_bcd=16'h0590;
+            11'd600:time_bcd=16'h0600;
+            11'd610:time_bcd=16'h0610;
+            11'd620:time_bcd=16'h0620;
+            11'd630:time_bcd=16'h0630;
+            11'd640:time_bcd=16'h0640;
+            11'd650:time_bcd=16'h0650;
+            11'd660:time_bcd=16'h0660;
+            11'd670:time_bcd=16'h0670;
+            11'd680:time_bcd=16'h0680;
+            11'd690:time_bcd=16'h0690;
+            11'd700:time_bcd=16'h0700;
+            11'd710:time_bcd=16'h0710;
+            11'd720:time_bcd=16'h0720;
+            11'd730:time_bcd=16'h0730;
+            11'd740:time_bcd=16'h0740;
+            11'd750:time_bcd=16'h0750;
+            11'd760:time_bcd=16'h0760;
+            11'd770:time_bcd=16'h0770;
+            11'd780:time_bcd=16'h0780;
+            11'd790:time_bcd=16'h0790;
+            11'd800:time_bcd=16'h0800;
+            11'd810:time_bcd=16'h0810;
+            11'd820:time_bcd=16'h0820;
+            11'd830:time_bcd=16'h0830;
+            11'd840:time_bcd=16'h0840;
+            11'd850:time_bcd=16'h0850;
+            11'd860:time_bcd=16'h0860;
+            11'd870:time_bcd=16'h0870;
+            11'd880:time_bcd=16'h0880;
+            11'd890:time_bcd=16'h0890;
+            11'd900:time_bcd=16'h0900;
+            11'd910:time_bcd=16'h0910;
+            11'd920:time_bcd=16'h0920;
+            11'd930:time_bcd=16'h0930;
+            11'd940:time_bcd=16'h0940;
+            11'd950:time_bcd=16'h0950;
+            11'd960:time_bcd=16'h0960;
+            11'd970:time_bcd=16'h0970;
+            11'd980:time_bcd=16'h0980;
+            11'd990:time_bcd=16'h0990;
+            11'd1000:time_bcd=16'h1000;
+            11'd1010:time_bcd=16'h1010;
+            11'd1020:time_bcd=16'h1020;
+            11'd1030:time_bcd=16'h1030;
+            11'd1040:time_bcd=16'h1040;
+            11'd1050:time_bcd=16'h1050;
+            11'd1060:time_bcd=16'h1060;
+            11'd1070:time_bcd=16'h1070;
+            11'd1080:time_bcd=16'h1080;
+            11'd1090:time_bcd=16'h1090;
+            11'd1100:time_bcd=16'h1100;
+            11'd1110:time_bcd=16'h1110;
+            11'd1120:time_bcd=16'h1120;
+            11'd1130:time_bcd=16'h1130;
+            11'd1140:time_bcd=16'h1140;
+            11'd1150:time_bcd=16'h1150;
+            11'd1160:time_bcd=16'h1160;
+            11'd1170:time_bcd=16'h1170;
+            11'd1180:time_bcd=16'h1180;
+            11'd1190:time_bcd=16'h1190;
+            11'd1200:time_bcd=16'h1200;
+            11'd1210:time_bcd=16'h1210;
+            11'd1220:time_bcd=16'h1220;
+            11'd1230:time_bcd=16'h1230;
+            11'd1240:time_bcd=16'h1240;
+            11'd1250:time_bcd=16'h1250;
+            11'd1260:time_bcd=16'h1260;
+            11'd1270:time_bcd=16'h1270;
+            11'd1280:time_bcd=16'h1280;
+            11'd1290:time_bcd=16'h1290;
+            11'd1300:time_bcd=16'h1300;
+            11'd1310:time_bcd=16'h1310;
+            11'd1320:time_bcd=16'h1320;
+            11'd1330:time_bcd=16'h1330;
+            11'd1340:time_bcd=16'h1340;
+            11'd1350:time_bcd=16'h1350;
+            11'd1360:time_bcd=16'h1360;
+            11'd1370:time_bcd=16'h1370;
+            11'd1380:time_bcd=16'h1380;
+            11'd1390:time_bcd=16'h1390;
+            11'd1400:time_bcd=16'h1400;
+            11'd1410:time_bcd=16'h1410;
+            11'd1420:time_bcd=16'h1420;
+            11'd1430:time_bcd=16'h1430;
+            11'd1440:time_bcd=16'h1440;
+            11'd1450:time_bcd=16'h1450;
+            11'd1460:time_bcd=16'h1460;
+            11'd1470:time_bcd=16'h1470;
+            11'd1480:time_bcd=16'h1480;
+            11'd1490:time_bcd=16'h1490;
+            11'd1500:time_bcd=16'h1500;
+            11'd1510:time_bcd=16'h1510;
+            11'd1520:time_bcd=16'h1520;
+            11'd1530:time_bcd=16'h1530;
+            11'd1540:time_bcd=16'h1540;
+            11'd1550:time_bcd=16'h1550;
+            11'd1560:time_bcd=16'h1560;
+            11'd1570:time_bcd=16'h1570;
+            11'd1580:time_bcd=16'h1580;
+            11'd1590:time_bcd=16'h1590;
+            11'd1600:time_bcd=16'h1600;
+            11'd1610:time_bcd=16'h1610;
+            11'd1620:time_bcd=16'h1620;
+            11'd1630:time_bcd=16'h1630;
+            11'd1640:time_bcd=16'h1640;
+            11'd1650:time_bcd=16'h1650;
+            11'd1660:time_bcd=16'h1660;
+            11'd1670:time_bcd=16'h1670;
+            11'd1680:time_bcd=16'h1680;
+            11'd1690:time_bcd=16'h1690;
+            11'd1700:time_bcd=16'h1700;
+            11'd1710:time_bcd=16'h1710;
+            11'd1720:time_bcd=16'h1720;
+            11'd1730:time_bcd=16'h1730;
+            11'd1740:time_bcd=16'h1740;
+            11'd1750:time_bcd=16'h1750;
+            11'd1760:time_bcd=16'h1760;
+            11'd1770:time_bcd=16'h1770;
+            11'd1780:time_bcd=16'h1780;
+            11'd1790:time_bcd=16'h1790;
+            11'd1800:time_bcd=16'h1800;
+            11'd1810:time_bcd=16'h1810;
+            11'd1820:time_bcd=16'h1820;
+            11'd1830:time_bcd=16'h1830;
+            11'd1840:time_bcd=16'h1840;
+            11'd1850:time_bcd=16'h1850;
+            11'd1860:time_bcd=16'h1860;
+            11'd1870:time_bcd=16'h1870;
+            11'd1880:time_bcd=16'h1880;
+            11'd1890:time_bcd=16'h1890;
+            11'd1900:time_bcd=16'h1900;
+            11'd1910:time_bcd=16'h1910;
+            11'd1920:time_bcd=16'h1920;
+            11'd1930:time_bcd=16'h1930;
+            11'd1940:time_bcd=16'h1940;
+            11'd1950:time_bcd=16'h1950;
+            11'd1960:time_bcd=16'h1960;
+            11'd1970:time_bcd=16'h1970;
+            11'd1980:time_bcd=16'h1980;
+            11'd1990:time_bcd=16'h1990;
+            11'd2000:time_bcd=16'h2000;
+            default:time_bcd=16'h0150;
         endcase end
     endfunction
     assign echo_time_bcd=time_bcd(echo_time_ms);
@@ -207,10 +357,10 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
         end else if(!cfg_valid || cfg_ready)begin
             if(echo_wet!=amount(echo_percent) || room_wet!=amount(room_percent) ||
                 tremolo_depth!=amount(depth_percent) || cfg_tremolo_rate_hz!=tremolo_rate_hz ||
-                cfg_effect_mask!=effect_mask || cfg_echo_samples!=echo_time_ms*15'd48)begin
+                cfg_effect_mask!=effect_mask || cfg_echo_samples!=echo_time_ms*17'd48)begin
                 echo_wet<=amount(echo_percent);room_wet<=amount(room_percent);
                 tremolo_depth<=amount(depth_percent);cfg_tremolo_rate_hz<=tremolo_rate_hz;cfg_valid<=1;
-                cfg_effect_mask<=effect_mask;cfg_echo_samples<=echo_time_ms*15'd48;
+                cfg_effect_mask<=effect_mask;cfg_echo_samples<=echo_time_ms*17'd48;
             end else cfg_valid<=0;
         end
     end
@@ -318,7 +468,7 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
                         if(tremolo_rate_hz>1)tremolo_rate_hz<=tremolo_rate_hz-1'b1;
                     end
                     UI_FASTER:if(effect_mode==2)begin
-                        if(tremolo_rate_hz<10)tremolo_rate_hz<=tremolo_rate_hz+1'b1;
+                        if(tremolo_rate_hz<20)tremolo_rate_hz<=tremolo_rate_hz+1'b1;
                     end
                     UI_DEFAULTS:begin
                         volume_percent<=100;
@@ -350,8 +500,8 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
                     effect_mode<=2'(e);
                     case(e)
                         0:if(!echo_edit_strength)begin
-                            if(encoder_up[e]===1'b1)begin if(echo_time_ms<500)echo_time_ms<=echo_time_ms+9'd10;end
-                            else if(echo_time_ms>20)echo_time_ms<=echo_time_ms-9'd10;
+                            if(encoder_up[e]===1'b1)begin if(echo_time_ms<2000)echo_time_ms<=echo_time_ms+11'd10;end
+                            else if(echo_time_ms>20)echo_time_ms<=echo_time_ms-11'd10;
                         end else begin
                             if(encoder_up[e]===1'b1)begin if(echo_percent<100)echo_percent<=echo_percent+1'b1;end
                             else if(echo_percent>0)echo_percent<=echo_percent-1'b1;
@@ -361,7 +511,7 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
                             else if(room_percent>0)room_percent<=room_percent-1'b1;
                         end
                         2:if(tremolo_edit_rate)begin
-                            if(encoder_up[e]===1'b1)begin if(tremolo_rate_hz<10)tremolo_rate_hz<=tremolo_rate_hz+1'b1;end
+                            if(encoder_up[e]===1'b1)begin if(tremolo_rate_hz<20)tremolo_rate_hz<=tremolo_rate_hz+1'b1;end
                             else if(tremolo_rate_hz>1)tremolo_rate_hz<=tremolo_rate_hz-1'b1;
                         end else begin
                             if(encoder_up[e]===1'b1)begin if(depth_percent<100)depth_percent<=depth_percent+1'b1;end

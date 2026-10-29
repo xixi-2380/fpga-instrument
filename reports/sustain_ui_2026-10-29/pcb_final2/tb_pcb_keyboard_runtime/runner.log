@@ -1,0 +1,4 @@
+RUN tb_pcb_keyboard_runtime
+PASS tb_pcb_keyboard_runtime checks=5013
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_pcb_keyboard_runtime.sv:42: $finish called at 3215650000 (1ps)
+

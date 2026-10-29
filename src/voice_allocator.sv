@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 // Keyboard-independent ownership and pending frame commands. Rank is a
 // bounded permutation, avoiding the wraparound of timestamp-based stealing.
-module voice_allocator #(parameter integer VOICES=4,AUTOMATIC_IDS=0)(
+module voice_allocator #(parameter integer VOICES=4,AUTOMATIC_IDS=0,PRESERVE_MANUAL_TAILS=0)(
     input wire clk,rst,enabled,frame_ce,note_valid,note_on,
     input wire [6:0] note_id,input wire [31:0] note_fcw,
     input wire [VOICES-1:0] voice_active,
@@ -70,7 +70,7 @@ module voice_allocator #(parameter integer VOICES=4,AUTOMATIC_IDS=0)(
                 // Never retune that release tail: match only its held/pending
                 // owner; the new On allocates a free or oldest released slot.
                 scan_match<=owned[scan_slot] && ids[scan_slot]==event_id &&
-                    ((!event_independent && event_id>=AUTOMATIC_IDS) || voice_held[scan_slot] || pending_start[scan_slot]);
+                    ((!PRESERVE_MANUAL_TAILS && !event_independent && event_id>=AUTOMATIC_IDS) || voice_held[scan_slot] || pending_start[scan_slot]);
                 scan_free<=!owned[scan_slot] ||
                     (!voice_active[scan_slot] && !voice_held[scan_slot] &&
                      !pending_start[scan_slot] && !committed_gate[scan_slot]);

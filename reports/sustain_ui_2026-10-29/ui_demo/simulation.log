@@ -1,0 +1,2 @@
+PASS tb_pcb_renderer checks=3840015 frames=5
+E:/gowin/fpga-instrument-pcb-flash-debug/reports/sustain_ui_2026-10-29/ui_demo/tb_pcb_renderer_demo.sv:70: $finish called at 19202600000 (1ps)

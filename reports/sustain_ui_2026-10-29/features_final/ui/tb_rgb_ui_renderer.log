@@ -1,0 +1,2 @@
+PASS tb_rgb_ui_renderer checks=5376045 frames=7
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_rgb_ui_renderer.sv:94: $finish called at 26881860000 (1ps)

@@ -1,0 +1,8 @@
+{
+  "configuration": "ultrasonic",
+  "test": "tb_ultrasonic_top",
+  "params": [],
+  "behavioral_pll": true,
+  "passed": true,
+  "seconds": 540.898
+}

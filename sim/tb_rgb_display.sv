@@ -4,7 +4,7 @@ module tb_rgb_display;
  reg ref_clk=0,audio_clk=0,pll_reset=1,audio_reset=1;
  always #10 ref_clk=~ref_clk;always #8.138020833 audio_clk=~audio_clk;
  reg [31:0] active=32'h8000003f,held=32'h80000003;
- reg [6:0] ep=25,rp=70,dp=50;reg [3:0] hz=5;
+ reg [6:0] ep=25,rp=70,dp=50;reg [4:0] hz=20;
  wire pc,hs,vs,de;wire [5:0] r,g,b;
  reg [1206:0] frame_status;
  reg [4:0] de_history=0;reg next_de;
@@ -19,7 +19,7 @@ module tb_rgb_display;
   .lcd_r(r),.lcd_g(g),.lcd_b(b),.menu_mode(1'b1),.effects_enabled(1'b1),.effect_mode(2'd1),
   .volume_percent(7'd100),.echo_percent(ep),.room_percent(rp),.depth_percent(dp),.tremolo_rate_hz(hz),
   .touch_enabled(1'b0),.touch_ui_enabled(1'b0),.touch_ready_status(1'b0),.touch_error_status(1'b0),
-  .latency_valid(1'b1),.latency_bcd(latency_bcd),.ultrasonic_status(sensor_status),.encoder_status({12'h150,5'd0}),.keypad_online(3'b101),.more_status(146'd0),.pcb_status(2592'd0));
+  .latency_valid(1'b1),.latency_bcd(latency_bcd),.ultrasonic_status(sensor_status),.sustain_time_thousands(4'd2),.encoder_status({12'h000,5'd0}),.keypad_online(3'b101),.more_status(146'd0),.pcb_status(2592'd0));
  initial begin
   #200 pll_reset=0;wait(dut.pixel_lock);repeat(6)@(negedge dut.pixel_clk);
   `CHECK(!de && {r,g,b}==0,"audio reset blanks display despite locked pixel clock")
@@ -29,6 +29,7 @@ module tb_rgb_display;
   frame_status=dut.pixel_status;@(posedge dut.pixel_clk);#1;
   `CHECK(dut.renderer.state==frame_status && frame_status[1132:1112]=={1'b1,20'h00137},"frame captures original payload plus atomic latency")
   `CHECK(frame_status[1166:1133]==sensor_status,"complete ultrasonic tuple appended atomically")
+  `CHECK(dut.renderer.rate==20 && dut.renderer.sustain_ms_bcd==16'h2000,"20Hz and2000ms cross the real display CDC without truncation")
   for(integer i=1;i<1192*533;i=i+1)begin
    @(posedge dut.pixel_clk);nx=dut.x;ny=dut.y;next_de=dut.de;#1;
    `CHECK(de===de_history[4],"registered coordinates, four renderer stages plus connector register keep pixel and DE aligned")

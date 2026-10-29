@@ -26,3 +26,9 @@ __pycache__/
 /reports/pcb_flash_debug_2026-10-28/attempt*/gwsynthesis/
 /reports/pcb_flash_debug_2026-10-28/**/flash_image.bin
 /dist/pcb-flash-debug/*.sdf
+
+# Current sustain/UI build: publish selected evidence and canonical outputs only.
+/reports/sustain_ui_2026-10-29/implementation*/pnr/
+/reports/sustain_ui_2026-10-29/implementation*/gwsynthesis/
+/reports/sustain_ui_2026-10-29/audio_ab*/baseline/
+/dist/sustain-ui-2026-10-29/*.sdf

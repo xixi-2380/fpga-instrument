@@ -1,0 +1,150 @@
+{
+  "passed": true,
+  "sources_unchanged": true,
+  "results": [
+    {
+      "name": "sustain_envelope",
+      "test": "tb_sustain_envelope",
+      "parameters": [],
+      "passed": true,
+      "seconds": 1.98
+    },
+    {
+      "name": "sustain_controls",
+      "test": "tb_sustain_controls",
+      "parameters": [],
+      "passed": true,
+      "seconds": 1.459
+    },
+    {
+      "name": "sustain_direct",
+      "test": "tb_sustain_direct",
+      "parameters": [],
+      "passed": true,
+      "seconds": 1.444
+    },
+    {
+      "name": "retrigger32",
+      "test": "tb_sustain_retrigger",
+      "parameters": [
+        "VOICES=32"
+      ],
+      "passed": true,
+      "seconds": 63.358
+    },
+    {
+      "name": "pcb_readable",
+      "test": "tb_pcb_readable",
+      "parameters": [],
+      "passed": true,
+      "seconds": 1.489
+    },
+    {
+      "name": "pcb_repeat",
+      "test": "tb_pcb_repeat",
+      "parameters": [],
+      "passed": true,
+      "seconds": 1.742
+    },
+    {
+      "name": "allocator",
+      "test": "tb_voice_allocator",
+      "parameters": [],
+      "passed": true,
+      "seconds": 11.011
+    },
+    {
+      "name": "native_envelopes",
+      "test": "tb_instrument_envelopes",
+      "parameters": [],
+      "passed": true,
+      "seconds": 2.404
+    },
+    {
+      "name": "latency_mono",
+      "test": "tb_audio_latency",
+      "parameters": [],
+      "passed": true,
+      "seconds": 205.91
+    },
+    {
+      "name": "latency_stereo",
+      "test": "tb_audio_latency",
+      "parameters": [
+        "STEREO=1"
+      ],
+      "passed": true,
+      "seconds": 224.038
+    },
+    {
+      "name": "display_connector",
+      "test": "tb_rgb_display",
+      "parameters": [],
+      "passed": true,
+      "seconds": 231.278
+    },
+    {
+      "name": "retrigger_timbre_0",
+      "test": "tb_sustain_retrigger",
+      "parameters": [
+        "TIMBRE=0"
+      ],
+      "passed": true,
+      "seconds": 31.573
+    },
+    {
+      "name": "retrigger_timbre_1",
+      "test": "tb_sustain_retrigger",
+      "parameters": [
+        "TIMBRE=1"
+      ],
+      "passed": true,
+      "seconds": 31.904
+    },
+    {
+      "name": "retrigger_timbre_2",
+      "test": "tb_sustain_retrigger",
+      "parameters": [
+        "TIMBRE=2"
+      ],
+      "passed": true,
+      "seconds": 30.892
+    },
+    {
+      "name": "retrigger_timbre_3",
+      "test": "tb_sustain_retrigger",
+      "parameters": [
+        "TIMBRE=3"
+      ],
+      "passed": true,
+      "seconds": 31.642
+    },
+    {
+      "name": "retrigger_timbre_4",
+      "test": "tb_sustain_retrigger",
+      "parameters": [
+        "TIMBRE=4"
+      ],
+      "passed": true,
+      "seconds": 31.855
+    },
+    {
+      "name": "retrigger_timbre_5",
+      "test": "tb_sustain_retrigger",
+      "parameters": [
+        "TIMBRE=5"
+      ],
+      "passed": true,
+      "seconds": 29.585
+    },
+    {
+      "name": "retrigger_timbre_6",
+      "test": "tb_sustain_retrigger",
+      "parameters": [
+        "TIMBRE=6"
+      ],
+      "passed": true,
+      "seconds": 28.137
+    }
+  ]
+}

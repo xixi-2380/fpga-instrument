@@ -1,0 +1,16 @@
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/aip5916_model.svh:4: warning: timescale for aip5916_model inherited from another file.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_pcb_top.sv:1: ...: The inherited timescale is here.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/touch_keyboard_fixture.svh:4: warning: timescale for touch_keyboard_fixture inherited from another file.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_pcb_top.sv:1: ...: The inherited timescale is here.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/key_note_events.sv:43: warning: @* is sensitive to all 6 words in array 'group_key'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/synth_core.sv:270: warning: @* is sensitive to all 63 words in array 'peak_tree'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:72: warning: @* is sensitive to all 3 words in array 'draft'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:72: warning: @* is sensitive to all 3 words in array 'draft'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:75: warning: @* is sensitive to all 3 words in array 'last_result'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:111: warning: @* is sensitive to all 3 words in array 'last_result'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:131: warning: @* is sensitive to all 3 words in array 'draft'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:140: warning: @* is sensitive to all 3 words in array 'draft'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:140: warning: @* is sensitive to all 3 words in array 'draft'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:149: warning: @* is sensitive to all 3 words in array 'last_result'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:151: warning: @* is sensitive to all 3 words in array 'draft'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:152: warning: @* is sensitive to all 3 words in array 'draft'.

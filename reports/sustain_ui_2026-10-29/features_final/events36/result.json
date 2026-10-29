@@ -1,0 +1,10 @@
+{
+  "configuration": "events36",
+  "test": "tb_key_note_events",
+  "params": [
+    "NUM_KEYS=36"
+  ],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 2.001
+}

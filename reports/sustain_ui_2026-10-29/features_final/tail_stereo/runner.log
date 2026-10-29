@@ -1,0 +1,4 @@
+RUN tb_bt_tail_reuse
+PASS tb_bt_tail_reuse checks=8
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_bt_tail_reuse.sv:35: $finish called at 437905780 (1ps)
+

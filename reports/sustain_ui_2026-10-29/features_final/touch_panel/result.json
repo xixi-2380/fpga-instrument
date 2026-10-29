@@ -1,0 +1,8 @@
+{
+  "configuration": "touch_panel",
+  "test": "tb_gt9110_touch",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 0.58
+}

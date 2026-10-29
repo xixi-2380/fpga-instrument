@@ -1,0 +1,10 @@
+{
+  "configuration": "output_stereo",
+  "test": "tb_output_gain",
+  "params": [
+    "STEREO=1"
+  ],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 994.628
+}

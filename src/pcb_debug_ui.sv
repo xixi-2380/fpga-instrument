@@ -16,7 +16,7 @@ module pcb_debug_ui(
  reg opened,closing,frozen,edit_gsr,pending;reg [2:0] tab;reg [1:0] board,detail,target,clear_target;
  reg [3:0] channel;reg [7:0] sequence_id,clear_sequence;reg [131:0] request_data;
  reg [131:0] draft[0:2];reg [7:0] last_result[0:2];
- reg [6:0] refresh_ms;reg refresh,building;reg [2:0] row;reg [1:0] format_phase;reg [127:0] label_q;reg [31:0] word_q;reg [319:0] text_q;
+ reg [6:0] refresh_ms;reg refresh,building;reg [2:0] row;reg [1:0] format_phase;reg [127:0] label_q;reg [31:0] word_q;reg [319:0] text_q;reg [319:0] friendly,friendly_q;reg plain_q;
  reg [1023:0] captured;reg [127:0] captured_encoder;reg [319:0] captured_audio;reg [255:0] captured_history;
  reg [31:0] captured_meta;reg [2559:0] lines;reg [31:0] word;reg [127:0] label;
  reg [255:0] history[0:2];reg [15:0] timestamp,note_count,pcm_count,cfg_accept_count,cfg_apply_count;
@@ -36,6 +36,82 @@ module pcb_debug_ui(
   hex32={hx(n[31:28]),hx(n[27:24]),hx(n[23:20]),hx(n[19:16]),hx(n[15:12]),hx(n[11:8]),hx(n[7:4]),hx(n[3:0])};
  endfunction
  function automatic [15:0] inc(input [15:0] n);inc=n==16'hffff ? n : n+1'b1;endfunction
+ function automatic [39:0] decimal5(input [31:0] value);
+  reg [16:0] n;
+  begin n=value>99999?17'd99999:value;
+   decimal5={n>=10000?hx(n/10000):8'd32,n>=1000?hx((n/1000)%10):8'd32,
+     n>=100?hx((n/100)%10):8'd32,n>=10?hx((n/10)%10):8'd32,hx(n%10)};
+  end
+ endfunction
+ function automatic [15:0] decimal2(input [4:0] n);decimal2={hx(n/10),hx(n%10)};endfunction
+ function automatic [319:0] line(input [319:0] value,input integer length);
+  line=value<<((40-length)*8);
+ endfunction
+ function automatic [127:0] reason_text(input [7:0] e);
+  case(e)
+   0:reason_text="NONE            ";8'h11:reason_text="I2C NACK        ";8'h12:reason_text="I2C TIMEOUT     ";
+   8'h14:reason_text="STALE KEY DATA  ";8'h21:reason_text="CONFIG WRITE    ";8'h22:reason_text="CONFIG READ     ";
+   8'h23:reason_text="READBACK DIFFERS";8'h31:reason_text="REQUEST TIMEOUT ";default:reason_text="RECOVERY        ";
+  endcase
+ endfunction
+ wire [10:0] sustain_ms={captured_audio[294:293],captured_audio[93:85]};
+ wire [4:0] tremolo_hz={captured_audio[292],captured_audio[77:74]};
+ always @*begin
+  friendly=line({"BOARD ",hx(board+1'b1),"  CHANNEL ",decimal2(channel)," (0..11 KEY)"},31);
+  if(row!=0)case(tab)
+   0:case(row)
+    1:friendly=line({"LINK ",captured[139]?"ONLINE ":"OFFLINE","  DATA ",captured[140]?"READY":"STALE"},24);
+    2:friendly=line({"INIT ",captured[142]?"OK     ":"WAITING","  CONFIG ",pending?"BUSY":"IDLE"},25);
+    3:friendly=line({"LAST ISSUE: ",reason_text(captured[175:168])},28);
+    4:friendly=line({"GOOD ",decimal5(captured[191:176]),"  CHANGED ",decimal5(captured[207:192])},25);
+    5:friendly=line({"NACK ",decimal5(captured[223:208]),"  TIMEOUT ",decimal5(captured[239:224])},25);
+    6:friendly=line({"RESTART ",decimal5(captured[255:240]),"  STALE ",decimal5(captured[271:256])},26);
+    7:friendly=line({"NEXT: SENSITIV to adjust sensitivity"},36);
+   endcase
+   1:case(row)
+    1:friendly=line({"EDIT  GSR ",decimal2(draft[board][3:0]),"  KOR ",decimal5(draft[board][4+channel*8+:8])},23);
+    2:friendly=line({"SAVED GSR ",decimal2(captured[643:640]),"  KOR ",decimal5(captured[644+channel*8+:8])},23);
+    3:friendly=line({"READ  GSR ",decimal2(captured[775:772]),"  KOR ",decimal5(captured[776+channel*8+:8])},23);
+    4:friendly=line({"STATUS: ",pending?"APPLYING        ":reason_text(last_result[board])},24);
+    5:friendly=line({"GSR + = MORE sensitive   0..15"},30);
+    6:friendly=line({"KOR + = LESS sensitive   1..255"},31);
+    7:friendly=line({"APPLY writes / hold +/- to repeat"},33);
+   endcase
+   2:case(row)
+    1:friendly=line({"SDA ",hx(captured[4]),"  SCL ",hx(captured[5]),"  INT ",hx(captured[128]),"  BUSY ",hx(captured[1])},27);
+    2:friendly=line({"STATE ",decimal2(captured[18:14])," STAGE ",hx(captured[13:11])," BIT ",hx(captured[10:8])},22);
+    3:friendly=line({"REGISTER 0x",hx(captured[42:39]),hx(captured[38:35]),"  READ ",hx(captured[7])},21);
+    4:friendly=line({"LAST ISSUE: ",reason_text(captured[175:168])},28);
+    5:friendly=line({"NACK ",decimal5(captured[223:208]),"  TIMEOUT ",decimal5(captured[239:224])},25);
+    6:friendly=line({"LAST SNAPSHOT AGE ",decimal5(captured[303:272]-captured[335:304])," ms"},26);
+    7:friendly=line({"MORE 1/2: recent I2C event history"},34);
+   endcase
+   3:case(row)
+    1:friendly=line({"RAW READ1 ",hx(captured[64+channel]),"  READ2 ",hx(captured[80+channel])},20);
+    2:friendly=line({"CANDIDATE ",hx(captured[112+channel]),"  CONFIRMED ",hx(captured[96+channel])},24);
+    3:friendly=line({"MANUAL INPUT MUTED WHILE IN SETTINGS"},36);
+    4:friendly=line({"MENU ",captured_audio[41]?"BLOCKED":"OPEN   ","  BT ",captured_audio[39]?"BUSY":"IDLE"},21);
+    5:friendly=line({"DATA ",captured[140]?"READY":"STALE"," / 0..11 KEY, 12..15 AUX"},34);
+    6:friendly=line({"GLOBAL NOTES ",decimal5(note_count),"  PCM ",decimal5(pcm_count)},29);
+    7:friendly=line({"BACK, leave settings, release and play"},38);
+   endcase
+   4:case(row)
+    1:friendly=line({"RAW A",hx(captured_encoder[13])," B",hx(captured_encoder[12])," SW",captured_encoder[11]?"UP  ":"DOWN"," FILTER ",captured_encoder[16]?"UP  ":"DOWN"},28);
+    2:friendly=line({"UP ",decimal5(captured_encoder[63:48]),"  DOWN ",decimal5(captured_encoder[79:64])},20);
+    3:friendly=line({"CLICK ",decimal5(captured_encoder[95:80]),"  DOUBLE ",decimal5(captured_encoder[111:96])},25);
+    4:friendly=line({"BAD AB ",decimal5(captured_encoder[127:112]),"  HOLD ",decimal5(captured_encoder[47:32])," ms"},27);
+    5:friendly=line({"SUSTAIN ",decimal5(sustain_ms)," ms  LEVEL ",decimal5(captured_audio[59:53]),"%"},30);
+    6:friendly=line({"CFG OK ",decimal5(cfg_accept_count),"  APPLIED ",decimal5(cfg_apply_count)},27);
+    7:friendly=line({"Turn=edit Click=mode Double=on/off"},34);
+   endcase
+   default:begin end
+  endcase
+  if(tab==1 && row==2 && !captured[609])friendly=line({"SAVED: no successful configuration"},34);
+  if(tab==1 && row==3 && (!captured[592] || !captured[593+channel]))friendly=line({"READ: waiting for verified registers"},36);
+  if(tab==1 && row==4 && !pending && last_result[board]==0)friendly=line({"READY: adjust, APPLY, compare SAVED/READ"},40);
+  if(tab==4 && row==5 && board==1)friendly=line({"ROOM LEVEL ",decimal5(captured_audio[66:60]),"%  TURN TO ADJUST"},33);
+  if(tab==4 && row==5 && board==2)friendly=line({"TREM DEPTH ",decimal5(captured_audio[73:67]),"% RATE ",decimal5(tremolo_hz)," Hz"},31);
+ end
  always @*begin
   label="                ";word=0;
   if(row==0)begin label="PCB CH TAB PAGE ";word={8'(board+1'b1),4'd0,channel,5'd0,tab,6'd0,detail};end
@@ -104,7 +180,7 @@ module pcb_debug_ui(
      2:begin label="HOLD CLICK UP   ";word=captured_encoder[63:32];end
      3:begin label="DOWN SINGLE HEX ";word=captured_encoder[95:64];end
      4:begin label="DOUBLE INVALID  ";word=captured_encoder[127:96];end
-     5:begin label="MASK TIME RATE  ";word={14'd0,captured_audio[52],captured_audio[51],captured_audio[50:48],captured_audio[77:74],captured_audio[93:85]};end
+     5:begin label="MASK TIME RATE  ";word={11'd0,captured_audio[52],captured_audio[51],captured_audio[50:48],tremolo_hz,sustain_ms};end
      6:begin label="VOL DEP ROOM ECH";word={1'b0,captured_audio[84:78],1'b0,captured_audio[73:67],1'b0,captured_audio[66:60],1'b0,captured_audio[59:53]};end
      7:begin label="CFG ACCEPT/APPLY";word={cfg_apply_count,cfg_accept_count};end
     endcase
@@ -116,7 +192,7 @@ module pcb_debug_ui(
   if(rst)begin
    captured_meta<=0;opened<=0;closing<=0;frozen<=0;edit_gsr<=1;pending<=0;tab<=0;board<=0;detail<=0;target<=0;clear_target<=0;
    channel<=0;sequence_id<=0;clear_sequence<=0;request_data<=DEFAULT_CONFIG;refresh_ms<=0;
-   refresh<=1;building<=0;row<=0;format_phase<=0;label_q<=0;word_q<=0;text_q<=0;captured<=0;captured_encoder<=0;captured_audio<=0;captured_history<=0;
+   refresh<=1;building<=0;row<=0;format_phase<=0;label_q<=0;word_q<=0;text_q<=0;friendly_q<=0;plain_q<=0;captured<=0;captured_encoder<=0;captured_audio<=0;captured_history<=0;
    lines<=0;display<=0;encoder_clear<=0;timestamp<=0;previous_online<=0;note_count<=0;pcm_count<=0;cfg_accept_count<=0;cfg_apply_count<=0;
    for(integer b=0;b<3;b++)begin draft[b]<=DEFAULT_CONFIG;last_result[b]<=0;history[b]<=0;end
   end else begin
@@ -178,8 +254,8 @@ module pcb_debug_ui(
     row<=0;format_phase<=0;building<=1;refresh<=0;
    end else if(!command_valid && building)begin
     case(format_phase)
-     0:begin label_q<=label;word_q<=word;format_phase<=1;end
-     1:begin text_q<={label_q," : ",hex32(word_q),"             "};format_phase<=2;end
+     0:begin label_q<=label;word_q<=word;friendly_q<=friendly;plain_q<=detail==0;format_phase<=1;end
+     1:begin text_q<=plain_q ? friendly_q : {label_q," : ",hex32(word_q),"             "};format_phase<=2;end
      2:begin
       case(row)
        0:lines[0+:320]<=text_q;

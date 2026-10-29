@@ -1,0 +1,214 @@
+[
+  {
+    "configuration": "aip_fast",
+    "test": "tb_aip5916_keyboard",
+    "params": [],
+    "behavioral_pll": false,
+    "passed": true,
+    "seconds": 3.471
+  },
+  {
+    "configuration": "aip_100k",
+    "test": "tb_aip5916_keyboard",
+    "params": [
+      "HALF=250"
+    ],
+    "behavioral_pll": false,
+    "passed": true,
+    "seconds": 99.301
+  },
+  {
+    "configuration": "encoder",
+    "test": "tb_ec11_encoder",
+    "params": [],
+    "behavioral_pll": false,
+    "passed": true,
+    "seconds": 1.117
+  },
+  {
+    "configuration": "ec11_controls",
+    "test": "tb_ec11_controls",
+    "params": [],
+    "behavioral_pll": false,
+    "passed": true,
+    "seconds": 2.199
+  },
+  {
+    "configuration": "events36",
+    "test": "tb_key_note_events",
+    "params": [
+      "NUM_KEYS=36"
+    ],
+    "behavioral_pll": false,
+    "passed": true,
+    "seconds": 2.001
+  },
+  {
+    "configuration": "router",
+    "test": "tb_touch_keyboard_router",
+    "params": [],
+    "behavioral_pll": false,
+    "passed": true,
+    "seconds": 2.399
+  },
+  {
+    "configuration": "stacked_small",
+    "test": "tb_stacked_effects",
+    "params": [],
+    "behavioral_pll": false,
+    "passed": true,
+    "seconds": 8.315
+  },
+  {
+    "configuration": "stacked_production",
+    "test": "tb_stacked_effects",
+    "params": [
+      "PROD=1"
+    ],
+    "behavioral_pll": false,
+    "passed": true,
+    "seconds": 32.778
+  },
+  {
+    "configuration": "top",
+    "test": "tb_touch_ec11_top",
+    "params": [],
+    "behavioral_pll": true,
+    "passed": true,
+    "seconds": 702.848
+  },
+  {
+    "configuration": "stereo_math",
+    "test": "tb_stereo_audio",
+    "params": [],
+    "behavioral_pll": false,
+    "passed": true,
+    "seconds": 612.189
+  },
+  {
+    "configuration": "latency",
+    "test": "tb_audio_latency",
+    "params": [
+      "STEREO=1"
+    ],
+    "behavioral_pll": false,
+    "passed": true,
+    "seconds": 218.52
+  },
+  {
+    "configuration": "output_stereo",
+    "test": "tb_output_gain",
+    "params": [
+      "STEREO=1"
+    ],
+    "behavioral_pll": false,
+    "passed": true,
+    "seconds": 994.628
+  },
+  {
+    "configuration": "bluetooth",
+    "test": "tb_bluetooth_top",
+    "params": [],
+    "behavioral_pll": true,
+    "passed": true,
+    "seconds": 336.325
+  },
+  {
+    "configuration": "identity",
+    "test": "tb_bt_identity",
+    "params": [],
+    "behavioral_pll": true,
+    "passed": true,
+    "seconds": 480.086
+  },
+  {
+    "configuration": "short",
+    "test": "tb_bt_short_audio",
+    "params": [],
+    "behavioral_pll": true,
+    "passed": true,
+    "seconds": 101.525
+  },
+  {
+    "configuration": "library",
+    "test": "tb_bt_library_link",
+    "params": [],
+    "behavioral_pll": true,
+    "passed": true,
+    "seconds": 895.83
+  },
+  {
+    "configuration": "startup",
+    "test": "tb_max98357_startup",
+    "params": [],
+    "behavioral_pll": true,
+    "passed": true,
+    "seconds": 604.145
+  },
+  {
+    "configuration": "ultrasonic",
+    "test": "tb_ultrasonic_top",
+    "params": [],
+    "behavioral_pll": true,
+    "passed": true,
+    "seconds": 540.898
+  },
+  {
+    "configuration": "british_top",
+    "test": "tb_british_top",
+    "params": [],
+    "behavioral_pll": true,
+    "passed": true,
+    "seconds": 490.244
+  },
+  {
+    "configuration": "ui",
+    "test": "tb_rgb_ui_renderer",
+    "params": [],
+    "behavioral_pll": false,
+    "passed": true,
+    "seconds": 283.756
+  },
+  {
+    "configuration": "touch_panel",
+    "test": "tb_gt9110_touch",
+    "params": [],
+    "behavioral_pll": false,
+    "passed": true,
+    "seconds": 0.58
+  },
+  {
+    "configuration": "i2c_legacy",
+    "test": "tb_i2c_register_master",
+    "params": [],
+    "behavioral_pll": false,
+    "passed": true,
+    "seconds": 0.474
+  },
+  {
+    "configuration": "board_controls",
+    "test": "tb_timbre_control",
+    "params": [],
+    "behavioral_pll": false,
+    "passed": true,
+    "seconds": 0.51
+  },
+  {
+    "configuration": "allocator",
+    "test": "tb_voice_allocator",
+    "params": [],
+    "behavioral_pll": false,
+    "passed": true,
+    "seconds": 4.195
+  },
+  {
+    "configuration": "tail_stereo",
+    "test": "tb_bt_tail_reuse",
+    "params": [
+      "STEREO=1"
+    ],
+    "behavioral_pll": false,
+    "passed": true,
+    "seconds": 3.942
+  }
+]

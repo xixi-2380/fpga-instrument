@@ -1,0 +1,7 @@
+{
+  "name": "latency_mono",
+  "test": "tb_audio_latency",
+  "parameters": [],
+  "passed": true,
+  "seconds": 205.91
+}

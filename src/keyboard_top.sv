@@ -89,10 +89,10 @@ module keyboard_top #(
         else ultrasonic_ui_state<=!ultrasonic_enabled ? 3'd0 : ultrasonic_current ? ultrasonic_result[14:12] : 3'd1;
     wire [33:0] ultrasonic_ui={ultrasonic_page,ultrasonic_enabled,ultrasonic_sensitivity,
         ultrasonic_min,ultrasonic_max,ultrasonic_ui_state,ultrasonic_result[11:0]};
-    wire [3:0] tremolo_rate_hz,cfg_rate_hz;
+    wire [4:0] tremolo_rate_hz,cfg_rate_hz;
     wire [2:0] effect_mask,cfg_effect_mask,encoder_up,encoder_down,encoder_single,encoder_double;
-    wire echo_edit_strength,tremolo_edit_rate;wire [8:0] echo_time_ms;
-    wire [11:0] echo_time_bcd;wire [14:0] cfg_echo_samples;
+    wire echo_edit_strength,tremolo_edit_rate;wire [10:0] echo_time_ms;
+    wire [15:0] echo_time_bcd;wire [16:0] cfg_echo_samples;
     wire [383:0] encoder_diagnostics;wire [2:0] encoder_clear;
     localparam integer ECW=EC11_MS_CYCLES>1?$clog2(EC11_MS_CYCLES):1;
     reg [ECW-1:0] encoder_ms_count;
@@ -281,7 +281,7 @@ module keyboard_top #(
             .visual_sample_valid(visual_sample_valid),.visual_sample(visual_sample),.visual_notes(visual_notes),
             .latency_valid(latency_valid),.latency_bcd(latency_bcd),
             .ultrasonic_status(ultrasonic_ui),
-            .encoder_status({echo_time_bcd,tremolo_edit_rate,echo_edit_strength,effect_mask}),.keypad_online(keypad_online),
+            .encoder_status({echo_time_bcd[11:0],tremolo_edit_rate,echo_edit_strength,effect_mask}),.keypad_online(keypad_online),
             .score_busy(local_score_busy || bt_inhibit),.audio_ready(input_ready),.score_error(score_error),
             .underrun(underrun),.ghost(ghost),.lcd_clk(lcd_clk),.lcd_hs(lcd_hs),
             .lcd_vs(lcd_vs),.lcd_en(lcd_en),.lcd_r(lcd_r),.lcd_g(lcd_g),.lcd_b(lcd_b),
@@ -289,7 +289,7 @@ module keyboard_top #(
             .echo_percent(echo_percent),.room_percent(room_percent),.depth_percent(depth_percent),
             .volume_percent(volume_percent),.tremolo_rate_hz(tremolo_rate_hz),.touch_enabled(TOUCH_ENABLE!=0),
             .touch_ui_enabled(TOUCH_UI_ENABLE!=0 && touch_audio_valid && touch_audio[70:55]==800 && touch_audio[54:39]==480),.touch_ready_status(touch_audio[38]),.touch_error_status(touch_audio[37]),
-            .more_status({voice_held,bt_audio_ids,service_bundle[95:80],more_open,delete_confirm,more_info,service_audio[78:0]}),.pcb_status(pcb_display),.pcb_visible(pcb_display_visible));
+            .more_status({voice_held,bt_audio_ids,service_bundle[95:80],more_open,delete_confirm,more_info,service_audio[78:0]}),.sustain_time_thousands(echo_time_bcd[15:12]),.pcb_status(pcb_display),.pcb_visible(pcb_display_visible));
     end else begin: lcd_off
         assign pcb_display_visible=0;
         assign lcd_clk=0;assign lcd_hs=1;assign lcd_vs=1;assign lcd_en=0;
@@ -408,7 +408,7 @@ module keyboard_top #(
         .note_ready(note_ready && !take_bt && !local_score_busy),
         .note_valid(key_valid),.note_on(key_on),.note_id(key_id),.note_fcw(key_fcw),
         .gate(key_gate),.last_key(last_key),.selected_timbre(selected_timbre),.note_timbre(key_timbre));
-    synth_core #(.STEREO_ENABLE(STEREO_ENABLE),.VISUAL_KEYS(36),.OUTPUT_ENABLE(OUTPUT_ENABLE),.OUTPUT_GAIN(OUTPUT_GAIN),.LIMITER_LOG2(LIMITER_LOG2),.LIMITER_HOLD_SAMPLES(LIMITER_HOLD_SAMPLES),
+    synth_core #(.SUSTAIN_ENABLE(1),.STEREO_ENABLE(STEREO_ENABLE),.VISUAL_KEYS(36),.OUTPUT_ENABLE(OUTPUT_ENABLE),.OUTPUT_GAIN(OUTPUT_GAIN),.LIMITER_LOG2(LIMITER_LOG2),.LIMITER_HOLD_SAMPLES(LIMITER_HOLD_SAMPLES),
         .MUTE(MUTE),.FADE(FADE),.ATTACK(ATTACK),.DECAY(DECAY),
         .SUSTAIN(SUSTAIN),.RELEASE(RELEASE)) sound(
         .clk(audio_clk),.rst(audio_reset),.note_valid(note_valid),.note_on(note_on),
@@ -423,8 +423,8 @@ module keyboard_top #(
         .gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(envelope_level),
         .visual_sample_valid(visual_sample_valid),.visual_sample(visual_sample),.visual_notes(visual_notes),
         .latency_valid(latency_valid),.latency_bcd(latency_bcd),.debug_mute(pcb_mute),.debug_muted(pcb_muted));
-    assign pcb_audio_trace={28'd0,keypad_armed,16'd0,visual_sample,20'd0,note_fcw,7'd0,note_id,voice_active,voice_held,
-        echo_time_ms,volume_percent,tremolo_rate_hz,depth_percent,room_percent,echo_percent,
+    assign pcb_audio_trace={25'd0,echo_time_ms[10:9],tremolo_rate_hz[4],keypad_armed,16'd0,visual_sample,20'd0,note_fcw,7'd0,note_id,voice_active,voice_held,
+        echo_time_ms[8:0],volume_percent,tremolo_rate_hz[3:0],depth_percent,room_percent,echo_percent,
         tremolo_edit_rate,echo_edit_strength,effect_mask,input_ready,underrun,visual_sample_valid,
         cfg_applied,cfg_ready,effect_cfg_request,menu_mode,local_score_busy,take_bt,note_ready,note_on,note_valid,note_keys};
     pcb_debug_ui pcb_controls(.clk(audio_clk),.rst(audio_reset),.ms_ce(encoder_ms_ticks[0]),

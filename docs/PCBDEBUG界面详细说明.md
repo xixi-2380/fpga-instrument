@@ -1,5 +1,7 @@
 # PCB DEBUG 界面详细说明
 
+> 版本提示：下文保留旧检查点的操作/字段。当前26102902版的松键延音、20Hz颤音和易读PCB默认页，请先看[新版说明](延音与新版PCB界面_2026-10-29.md)；高级详情与旧版的差异也在该文列明。
+
 更新日期：2026-10-29。适用工程：`E:\gowin\fpga-instrument-pcb-flash-debug\keyboard_adsr.gprj`。
 
 本文依据当前 `pcb_debug_ui.sv`、`keyboard_top.sv`、`aip5916_keyboard.sv`、`i2c_register_master.sv` 和 `ec11_encoder.sv` 的实际字段编写。**当前源码包含颤音 SW=W23 的改动，但尚未重新生成匹配位流；旧位流的界面和字段可能不同。** 诊断页当前保留，后续删除另行处理。

@@ -4,7 +4,7 @@ module tb_stacked_effects;
  parameter integer PROD=0;
  reg clk=0,rst=1,input_valid=0,cfg=0;always #5 clk=~clk;
  reg [2:0] mask=0;reg [14:0] delay_samples=0;
- reg [8:0] echo=64,room=64,depth=128;reg [3:0] rate=5;
+ reg [8:0] echo=64,room=64,depth=128;reg [4:0] rate=5;
  reg signed [15:0] sample=0;wire ready,valid;wire signed [15:0] result;
  integer checks=0,fd,scan,reset_op,config_op,m,n,e,r,d,h,x,expected,latency,max_latency=0,vectors=0;
  reg [4095:0] filename;

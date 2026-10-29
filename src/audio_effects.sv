@@ -2,14 +2,14 @@
 // Independently enabled serial effects: echo -> normalized room -> tremolo.
 // Each mix is a bounded weighted average; existing output limiter remains last.
 module audio_effects #(
- parameter integer DELAY_SAMPLES=7200,MAX_DELAY_SAMPLES=24000,D0=1499,D1=1601,D2=1867,D3=2053,
+ parameter integer ECHO_ENABLE=1,DELAY_SAMPLES=7200,MAX_DELAY_SAMPLES=24000,D0=1499,D1=1601,D2=1867,D3=2053,
  ECHO_WET=64,ROOM_WET=64,TREMOLO_MIN=128,
  parameter [31:0] LFO_STEP=32'd447392)(
  input wire clk,rst,enable,input wire [1:0] mode,
  input wire in_valid,input wire signed [15:0] in_sample,
  output wire in_ready,output reg out_valid,output reg signed [15:0] out_sample,
  input wire cfg_valid,input wire [8:0] cfg_echo_wet,cfg_room_wet,cfg_tremolo_depth,
- input wire [3:0] cfg_tremolo_rate_hz,output wire cfg_ready,output reg cfg_applied,
+ input wire [4:0] cfg_tremolo_rate_hz,output wire cfg_ready,output reg cfg_applied,
  input wire [2:0] effect_mask,input wire [14:0] cfg_echo_samples);
  reg [2:0] stage;
  reg [8:0] echo_target,room_target,depth_target,echo_level,room_level,depth_level;
@@ -27,7 +27,7 @@ module audio_effects #(
  function automatic [8:0] slew(input [8:0] current,input [8:0] target);
   begin slew=current<target?current+9'd1:current>target?current-9'd1:current;end
  endfunction
-    function automatic [31:0] rate_step(input [3:0] hz);
+    function automatic [31:0] rate_step(input [4:0] hz);
         begin case(hz)
             0,1:rate_step=32'd89478;
             2:rate_step=32'd178957;
@@ -38,7 +38,18 @@ module audio_effects #(
             7:rate_step=32'd626349;
             8:rate_step=32'd715828;
             9:rate_step=32'd805306;
-            default:rate_step=32'd894785;
+            10:rate_step=32'd894785;
+            11:rate_step=32'd984263;
+            12:rate_step=32'd1073742;
+            13:rate_step=32'd1163220;
+            14:rate_step=32'd1252699;
+            15:rate_step=32'd1342177;
+            16:rate_step=32'd1431656;
+            17:rate_step=32'd1521134;
+            18:rate_step=32'd1610613;
+            19:rate_step=32'd1700091;
+            20:rate_step=32'd1789570;
+            default:rate_step=32'd1789570;
         endcase end
     endfunction
 
@@ -71,10 +82,18 @@ module audio_effects #(
  assign in_ready=!rst && stage==0 && echo_ready && room_ready;
  wire accept=in_valid && in_ready;
  wire room_launch=stage==2 && room_ready;
+ generate if(ECHO_ENABLE)begin: echo_on
  audio_delay #(.DELAY_SAMPLES(DELAY_SAMPLES),.MAX_SAMPLES(MAX_DELAY_SAMPLES)) echo(
   .clk(clk),.rst(rst),.enable(1'b0),.in_valid(accept),.in_sample(in_sample),
   .in_ready(echo_ready),.out_valid(echo_valid),.out_sample(echo_dry),
   .out_history(echo_history),.delay_samples(echo_samples));
+ end else begin: direct_attack
+  reg valid;reg signed [15:0] dry;
+  always @(posedge clk or posedge rst)
+   if(rst)begin valid<=0;dry<=0;end
+   else begin valid<=accept;if(accept)dry<=in_sample;end
+  assign echo_ready=!rst;assign echo_valid=valid;assign echo_dry=dry;assign echo_history=0;
+ end endgenerate
  audio_reverb #(.D0(D0),.D1(D1),.D2(D2),.D3(D3)) room(
   .clk(clk),.rst(rst),.in_valid(room_launch),.in_sample(echo_stage),
   .in_ready(room_ready),.out_valid(room_valid),.out_sample(room_sample));
@@ -86,7 +105,7 @@ module audio_effects #(
    out_valid<=0;
    if(accept)begin
     used_echo<=echo_level;used_room<=room_level;used_tremolo_gain<=tremolo_gain;
-    echo_level<=slew(echo_level,requested_mask[0] ? echo_target : 9'd0);
+    echo_level<=slew(echo_level,(ECHO_ENABLE && requested_mask[0]) ? echo_target : 9'd0);
     room_level<=slew(room_level,requested_mask[1] ? room_target : 9'd0);
     depth_level<=slew(depth_level,requested_mask[2] ? depth_target : 9'd0);
     lfo_phase<=lfo_phase+phase_step;stage<=1;

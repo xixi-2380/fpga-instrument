@@ -1,0 +1,3 @@
+REPLAY before=2ee01008683001b4e82 after_left=2ee01008683001b4e82 after_right=2ee01008683001b4e82
+PASS tb_effect_cfg_replay checks=6
+E:/gowin/fpga-instrument-pcb-flash-debug/reports/sustain_ui_2026-10-29/replay_2s/bench.sv:25: $finish called at 24202412 (1ps)

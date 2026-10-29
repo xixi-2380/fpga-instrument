@@ -1,0 +1,79 @@
+{
+  "name": "implementation2",
+  "exit_code": 0,
+  "seconds": 10997.93,
+  "sources_unchanged": true,
+  "setup_hold_violations": {
+    "Setup": 639,
+    "Hold": 0
+  },
+  "fmax_mhz": {
+    "ref_clk": {
+      "target": 50.0,
+      "actual": 45.349
+    },
+    "audio_clk": {
+      "target": 61.44,
+      "actual": 49.91
+    },
+    "pixel_clk": {
+      "target": 35.0,
+      "actual": 31.598
+    }
+  },
+  "bitstream_sha256": "286b3b5181576a0e079b0fabcc52988e32a6b9f1ddf4bbffc5ce7e779039a472",
+  "warnings": [
+    "WARN  (EX3791) : Expression size 6 truncated to fit in target size 4(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\ui_more_actions.sv\":16)",
+    "WARN  (EX3791) : Expression size 16 truncated to fit in target size 9(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\bluetooth_score_core.sv\":59)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 2(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\local_score_control.sv\":27)",
+    "WARN  (EX3791) : Expression size 16 truncated to fit in target size 9(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\flash_song_library.sv\":149)",
+    "WARN  (EX3045) : Case equality operator always evaluates to false due to comparison with 'x' or 'z'(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\rgb_display.sv\":102)",
+    "WARN  (EX3045) : Case equality operator always evaluates to false due to comparison with 'x' or 'z'(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\rgb_display.sv\":103)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 11(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\rgb_scan_timing.sv\":20)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 11(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\rgb_scan_timing.sv\":21)",
+    "WARN  (EX3791) : Expression size 9 truncated to fit in target size 4(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\rgb_ui_renderer.sv\":77)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 11(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\rgb_ui_renderer.sv\":198)",
+    "WARN  (EX3791) : Expression size 31 truncated to fit in target size 7(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\rgb_ui_renderer.sv\":255)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 10(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\rgb_ui_renderer.sv\":256)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 10(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\rgb_ui_renderer.sv\":257)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 8(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\rgb_ui_renderer.sv\":90)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 11(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\rgb_ui_renderer.sv\":339)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 11(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\rgb_ui_renderer.sv\":342)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 11(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\rgb_ui_renderer.sv\":345)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 11(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\rgb_ui_renderer.sv\":394)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 12(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\rgb_ui_renderer.sv\":453)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 4(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\rgb_ui_renderer.sv\":453)",
+    "WARN  (EX1998) : Net 'instruction[63]' does not have a driver(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\score_player.sv\":20)",
+    "WARN  (EX3791) : Expression size 3 truncated to fit in target size 2(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\timbre_control.sv\":490)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 8(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\aip5916_keyboard.sv\":50)",
+    "WARN  (EX3791) : Expression size 10 truncated to fit in target size 5(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\synth_core.sv\":72)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 12(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\audio_latency_meter.sv\":31)",
+    "WARN  (EX3791) : Expression size 30 truncated to fit in target size 24(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\audio_limiter.sv\":32)",
+    "WARN  (EX3791) : Expression size 18 truncated to fit in target size 17(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\audio_limiter.sv\":38)",
+    "WARN  (EX3791) : Expression size 18 truncated to fit in target size 17(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\audio_limiter.sv\":43)",
+    "WARN  (EX3791) : Expression size 18 truncated to fit in target size 16(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\master_volume.sv\":133)",
+    "WARN  (EX3791) : Expression size 18 truncated to fit in target size 17(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\sustain_envelope.sv\":38)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 14(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\adsr_envelope.sv\":52)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 14(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\adsr_envelope.sv\":52)",
+    "WARN  (EX3791) : Expression size 15 truncated to fit in target size 14(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\adsr_envelope.sv\":100)",
+    "WARN  (EX3791) : Expression size 18 truncated to fit in target size 17(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\adsr_envelope.sv\":101)",
+    "WARN  (EX3791) : Expression size 18 truncated to fit in target size 17(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\adsr_envelope.sv\":101)",
+    "WARN  (EX3791) : Expression size 6 truncated to fit in target size 5(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\synth_core.sv\":233)",
+    "WARN  (EX3045) : Case equality operator always evaluates to false due to comparison with 'x' or 'z'(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\audio_effects.sv\":60)",
+    "WARN  (EX3045) : Case inequality operator always evaluates to true due to comparison with 'x' or 'z'(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\audio_effects.sv\":70)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 16(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\audio_reverb.sv\":15)",
+    "WARN  (EX3791) : Expression size 12 truncated to fit in target size 11(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\audio_reverb.sv\":37)",
+    "WARN  (EX3791) : Expression size 30 truncated to fit in target size 16(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\audio_reverb.sv\":53)",
+    "WARN  (EX3791) : Expression size 20 truncated to fit in target size 16(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\audio_effects.sv\":113)",
+    "WARN  (EX3791) : Expression size 20 truncated to fit in target size 16(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\audio_effects.sv\":115)",
+    "WARN  (EX3791) : Expression size 19 truncated to fit in target size 16(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\audio_effects.sv\":117)",
+    "WARN  (EX3791) : Expression size 32 truncated to fit in target size 17(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\pcb_debug_ui.sv\":41)",
+    "WARN  (NL0002) : The module \"voice_mixer\" instantiated to \"mixer\" is swept in optimizing(\"E:\\gowin\\fpga-instrument-pcb-flash-debug\\src\\synth_core.sv\":259)",
+    "WARN  (CK3000) : Can't calculate clocks' relationship between: \"clk\" and \"clocks/pll2/CLKOUT0.default_gen_clk\"",
+    "WARN  (CK3000) : Can't calculate clocks' relationship between: \"clocks/pll2/CLKOUT0.default_gen_clk\" and \"clk\"",
+    "WARN  (CK3000) : Can't calculate clocks' relationship between: \"clocks/pll2/CLKOUT0.default_gen_clk\" and \"lcd_on.display_driver/pixel_pll/CLKOUT0.default_gen_clk\"",
+    "WARN  (CK3000) : Can't calculate clocks' relationship between: \"lcd_on.display_driver/pixel_pll/CLKOUT0.default_gen_clk\" and \"clocks/pll2/CLKOUT0.default_gen_clk\"",
+    "WARN  (PR1014) : Generic routing resource will be used to clock signal 'clk_d' by the specified constraint. And then it may lead to the excessive delay or skew"
+  ],
+  "errors": []
+}
