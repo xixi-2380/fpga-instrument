@@ -9,7 +9,7 @@ module tb_ui_inputs;
  reg [15:0] x=0,y=0,rx=800,ry=480;reg [1:0] fx=0;
  wire tv;wire [5:0] ta;integer checks=0,kevents=0,tevents=0;
  ui_keypad_router #(.RELEASE_CYCLES(2)) k(clk,rst,menu,ghost,keys,inhibit,kv,ka,1'b0,sensor_page);
- ui_touch_actions t(clk,rst,enabled,valid,ready,error,down,count,x,y,rx,ry,fx,menu,tv,ta,1'b0,sensor_page);
+ ui_touch_actions t(clk,rst,enabled,valid,ready,error,down,count,x,y,rx,ry,fx,menu,tv,ta,1'b0,sensor_page,1'b0);
  always @(posedge clk)begin if(kv)kevents=kevents+1;if(tv)tevents=tevents+1;end
  task cycles(input integer n);begin repeat(n)@(negedge clk);end endtask
  task matrix_contact(input integer index,input [5:0] expected);integer previous_events;begin

@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 module tb_flash_song_library;
- reg clk=0,rst=1,request=0,fail_io=0;always #10 clk=~clk;
+ reg clk=0,rst=1,request=0,fail_io=0,flash_supported=1;always #10 clk=~clk;
  reg [1:0] command=0;reg [4:0] song=0,lookup=0;
  wire reqready,busy,init,done,lock,grant,we,inv,imp,sd,fr,fv,fd,bw;
  wire [7:0] error,se,fe,bi,bd,ri,rd;wire [15:0] job,sc;
@@ -20,7 +20,7 @@ module tb_flash_song_library;
  .lookup_index(lookup),.lookup_data(metadata),.ram_valid(valid),.ram_count(count),.ram_duration(duration),.ram_crc(crc),
  .storage_lock(lock),.storage_ready(grant),.storage_write(we),.storage_invalidate(inv),.storage_address(sa),.storage_wdata(sw),.storage_rdata(sr),
  .storage_import(imp),.storage_count(sc),.storage_crc(scrc),.storage_done(sd),.storage_error(se),.upload_active(1'b0),
- .flash_initialized(1'b1),.flash_supported(1'b1),.flash_ready(fr),.flash_valid(fv),.flash_op(fo),.flash_address(fa),.flash_length(fl),.flash_done(fd),.flash_error(fe),
+ .flash_initialized(1'b1),.flash_supported(flash_supported),.flash_ready(fr),.flash_valid(fv),.flash_op(fo),.flash_address(fa),.flash_length(fl),.flash_done(fd),.flash_error(fe),
  .buffer_write(bw),.buffer_index(bi),.buffer_wdata(bd),.read_index(ri),.read_data(rd));
  buffered_nor_model memory_model(clk,rst,fv,fr,fo,fa,fl,fd,fe,fail_io,bw,bi,bd,ri,rd);
  function automatic [31:0] cb(input [31:0] c,input [7:0] b);reg [31:0] x;
@@ -51,7 +51,7 @@ module tb_flash_song_library;
   #100 rst=0;wait(init && reqready);check(entries==0 && memory_model.erases==0,"empty boot scan is read-only");
   seed(0);operation(0,0,0);check(entries==1 && js==2,"first save is persistent only after verified directory commit");
   lookup=0;repeat(3)@(negedge clk);check(metadata[31:16]==3 && metadata[95:64]==~expected,"catalog metadata reports actual stored record count/CRC");
-  reset_fpga();old_song();
+  reset_fpga();flash_supported=0;old_song();flash_supported=1;
   seed(2);operation(0,1,0);reset_fpga();check(entries==3,"multiple songs survive reboot");
   operation(1,1,0);check(core.score_ram[0][39:32]==62 && loaded && loaded_id==1,"independent song selection/load");
   operation(2,1,0);reset_fpga();check(entries==1,"atomic deletion survives reboot");old_song();

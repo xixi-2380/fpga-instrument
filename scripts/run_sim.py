@@ -30,7 +30,7 @@ results=[]
 for t in tests:
     name=t.stem
     model_sources=[]
-    if name in ['tb_spi_nor_flash','tb_flash_write_permissions','tb_bt_library_link']:model_sources=[root/'sim/spi_nor_model.sv']
+    if name in ['tb_flash_busy_budget','tb_flash_production','tb_spi_nor_flash','tb_flash_write_permissions','tb_flash_compatibility','tb_flash_recovery','tb_bt_library_link']:model_sources=[root/'sim/spi_nor_model.sv']
     if name=='tb_flash_song_library':model_sources=[root/'sim/buffered_nor_model.sv']
     extra_args=[]
     if name=='tb_audio_limiter':
@@ -56,7 +56,7 @@ for t in tests:
     c=subprocess.run(cmd,capture_output=True,text=True,encoding='utf8',errors='replace',env=env)
     (out/(name+'_compile.log')).write_text(c.stdout+c.stderr,encoding='utf8')
     if c.returncode: print('compile exit',c.returncode,c.stdout+c.stderr);raise SystemExit(1)
-    run=subprocess.run([str(bin/'vvp.exe'),str(out/(name+'.vvp')),'+SIM_OUT_DIR='+out.as_posix()]+extra_args,capture_output=True,text=True,encoding='utf8',errors='replace',env=env,timeout=2400 if name=='tb_auto_manual_equivalence' else 1800 if name=='tb_output_gain' else 900)
+    run=subprocess.run([str(bin/'vvp.exe'),str(out/(name+'.vvp')),'+SIM_OUT_DIR='+out.as_posix()]+extra_args,capture_output=True,text=True,encoding='utf8',errors='replace',env=env,timeout=3600 if name=='tb_flash_production' else 2400 if name=='tb_auto_manual_equivalence' else 1800 if name=='tb_output_gain' else 1800)
     (out/(name+'.log')).write_text(run.stdout+run.stderr,encoding='utf8')
     print(run.stdout,flush=True)
     ok=run.returncode==0 and 'PASS '+name in run.stdout

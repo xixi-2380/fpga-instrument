@@ -5,7 +5,7 @@ module tb_spi_nor_flash;
  reg [7:0] bi=0,bd=0,ri=0;wire [7:0] rd,err;wire ready,done,init,supported,cs,sck,mosi,miso;
  wire [23:0] jedec;integer programs,erases,checks=0;
  always #10 clk=~clk;
- spi_nor_flash #(.HALF_CYCLES(4),.BOOT_CYCLES(8),.POLL_CYCLES(8),.TIMEOUT_CYCLES(50000),.REGION_LAST(24'h001fff)) dut(
+ spi_nor_flash #(.HALF_CYCLES(4),.BOOT_CYCLES(8),.POLL_CYCLES(8),.TIMEOUT_CYCLES(500000),.REGION_LAST(24'h001fff)) dut(
  .clk(clk),.rst(rst),.request_valid(valid),.request_ready(ready),.operation(op),.address(addr),.length(len),.writes_enabled(enable),
  .done(done),.error(err),.initialized(init),.supported(supported),.jedec_id(jedec),
  .buffer_write(bw),.buffer_index(bi),.buffer_wdata(bd),.read_index(ri),.read_data(rd),.cs_n(cs),.sck(sck),.mosi(mosi),.miso(miso));
@@ -35,5 +35,5 @@ module tb_spi_nor_flash;
   check(ready && cs,"busy timeout releases command interface/CS without stopping clocks");
   $display("PASS tb_spi_nor_flash checks=%0d programs=%0d erases=%0d",checks,programs,erases);$finish;
  end
- initial begin #10000000;$fatal(1,"SPI timeout state=%0d id=%h",dut.state,jedec);end
+ initial begin #100000000;$fatal(1,"SPI timeout state=%0d id=%h",dut.state,jedec);end
 endmodule

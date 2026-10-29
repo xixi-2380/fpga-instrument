@@ -1,0 +1,4 @@
+RUN tb_pcb_renderer
+PASS tb_pcb_renderer checks=3840015 frames=5
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_pcb_renderer.sv:70: $finish called at 19202600000 (1ps)
+

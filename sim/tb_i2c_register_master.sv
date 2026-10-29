@@ -14,7 +14,7 @@ module tb_i2c_register_master;
     integer checks=0,cycles=0,done_count=0;
     reg prior_done=0;
     i2c_register_master #(.HALF_CYCLES(4),.TIMEOUT_CYCLES(64))
-        dut(clk,rst,start,reading,address,8'd0,length,scl,sda,scl_low,sda_low,busy,done,error,data);
+        dut(clk,rst,start,reading,address,8'd0,length,scl,sda,scl_low,sda_low,busy,done,error,data,,);
     always @(posedge clk)begin
         #1;
         `CHECK(!(done && prior_done),"done is a single clock pulse")

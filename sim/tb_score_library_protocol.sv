@@ -5,14 +5,16 @@ module tb_score_library_protocol;
  reg [7:0] command=0;reg [8:0] len=0;reg [63:0] data=0;
  wire ready,response_valid,job_valid;wire [4:0] response_len,index,lookup;
  wire [159:0] response;reg [159:0] metadata=0;wire [1:0] operation;wire [55:0] name;
- reg [15:0] job=41;reg [1:0] state=2;integer checks=0,starts=0;
+ reg [15:0] job=41;reg [1:0] state=2;integer checks=0,starts=0,probes=0;
+ wire probe_valid;reg probe_done=0;reg [7:0] probe_error=0;
  score_library_protocol dut(.clk(clk),.rst(rst),.request_valid(valid),.request_ready(ready),.command(command),.length(len),.payload(data),
  .response_valid(response_valid),.response_ready(rr),.response_length(response_len),.response(response),.initialized(initialized),.supported(supported),.writable(writable),
  .library_busy(busy),.local_busy(local_busy),.storage_ready(1'b1),.jedec_id(24'hef4018),.status1(8'd0),.status2(8'd0),.status3(8'd0),.library_error(8'd0),
  .job_id(job),.job_state(state),.ram_crc(32'h12345678),.library_valid(job_valid),.library_ready(1'b1),.library_command(operation),.library_index(index),.library_name(name),
- .lookup_index(lookup),.lookup_data(metadata));
+ .lookup_index(lookup),.lookup_data(metadata),.probe_valid(probe_valid),.probe_ready(1'b1),.probe_done(probe_done),.probe_error(probe_error));
  always @(posedge clk)begin
   metadata<={8'd0,56'h31303053,32'h87654321,32'd500,16'(lookup+10),8'd2,8'd1};
+  probe_done<=probe_valid;if(probe_valid)probes++;
   if(!rst && job_valid)begin job<=job+1'b1;state<=1;starts++;end
  end
  task check(input bit ok,input string why);begin checks++;if(!ok)$fatal(1,"%s",why);end endtask
@@ -33,6 +35,13 @@ module tb_score_library_protocol;
   request(8'h45,8,{32'h12345679,8'd2,8'd0,16'd42},8'h28);consume();
   job=43;request(8'h45,8,{32'h12345678,8'd2,8'd0,16'd42},8'h28);consume();
   check(starts==1,"invalid requests and polling cannot create additional erase jobs");
+  check(probes==4,"idle diagnostics and each valid write refresh physical status");
+  supported=0;writable=0;request(8'h43,1,2,0);
+  check(starts==2 && operation==1,"LOAD does not require write-capable identity");consume();
+  probe_error=8'h22;request(8'h40,0,0,0);
+  check(response[127:120]==8'h22,"idle diagnosis reports the new physical probe failure");consume();
+  request(8'h42,8,0,8'h22);consume();
+  check(starts==2,"failed probe never starts a write or replaces a tracked job");
   $display("PASS tb_score_library_protocol checks=%0d",checks);$finish;
  end
  initial begin #1000000;$fatal(1,"extension timeout");end

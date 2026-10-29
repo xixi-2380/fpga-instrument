@@ -1,16 +1,18 @@
-# FPGA 电子乐器：时序、Flash 与多声部音频修复副本
+# 当前PCB / Flash专项副本
 
-当前工程为 `E:\gowin\fpga-instrument-timing-audio-fix\keyboard_adsr.gprj`，本地开发分支 `codex/timing-audio-flash-fix`。从 integrated 当前磁盘状态独立复制，原工程只读保留。按用户后续授权，将最终源码、诊断APK、报告和可烧录文件提交并推送至原分支 **`codex/integrated-instrument`**；不更新main、不强推、不烧录硬件。
+当前版本检查点：[2026-10-29 提交范围与待办](docs/版本检查点_2026-10-29.md)。本次为源码/诊断App检查点，尚无匹配W23改动的新位流。
 
-本轮说明与实板操作步骤见 [修复与验证说明](docs/timing_audio_flash_fix_2026-10-28.md)。新报告位于 `reports/timing_audio_flash_2026-10-27`；只有严格检查通过后生成的 `dist/timing-audio-fix/manifest.json` 及其匹配位流构成本轮验收交付。保持 73 个引脚、32 个物理声部、16 个自动身份和 50／61.44／35MHz。
+操作入口：[操作说明（PCB专项版）](docs/操作说明_PCB专项版.md)。 [PCB DEBUG界面详细说明](docs/PCBDEBUG界面详细说明.md)。
 
-最终构建 **attempt5**：Setup／Hold违例均为0、TNS=0；参考／音频／像素内部余量为 **2.305／0.059／1.395ns**。音频尚未达到最初0.5ns余量目标，按用户已认可的零违例结果收尾。58项HDL配置共75,350,315次检查、左右独立模型18,376项、Java36,114项通过；数字链路延迟仍为1.37ms。实板Flash保存和听感未验证。
+主工程：`E:/gowin/fpga-instrument-pcb-flash-debug/keyboard_adsr.gprj`。实际测试来源为integrated，原目录保持只读。操作说明：[PCB与Flash修复](docs/PCB与Flash修复_2026-10-28.md)，问题追踪：[键盘与旋钮](docs/keyboard_knob_issues_2026-10-28.md)。本轮最终产物入口为`dist/pcb-flash-debug`；仅在manifest标记验收完成后使用该目录的.fs与APK，其他旧产物为历史。
 
-烧录入口：[D2_keyboard_leds.fs](dist/timing-audio-fix/D2_keyboard_leds.fs)；[交付校验清单](dist/timing-audio-fix/manifest.json)；[诊断APK](android/dist/GaoshanScore-0.3.1-flashdiag.apk)。型号、引脚和操作以本轮说明为准。
+2026-10-29：颤音旋钮 A/B/SW 为 **T23/R25/W23**（SW从W25移出）。按用户要求停止后续时序优化，诊断页暂保留、以后删除。本次引脚变更尚未生成新位流。
 
-以下为复制保留的合并与功能历史，其中“未运行 EDA”“允许提交推送”等只描述对应历史阶段，不能作为本轮状态或授权。
+板载按键/复位与旋钮原功能保留，12个AUX控制默认关闭；PCB页触摸调参、运行时参数、始终静音。硬件烧录和实物验收由用户执行。
 
-# FPGA电子乐器合并工程（2026-10-26，历史）
+---
+
+# FPGA电子乐器合并工程（2026-10-26）
 
 2026-10-27 Flash保存故障检查：修正一处把状态寄存器锁定误认为数据区保护、导致已识别芯片仍返回21的判断；增加App0.3.1只读Flash诊断，并保留“RAM已下载成功”的阶段结果。实板ID/错误码尚待确认，未运行EDA或硬件擦写。入口见[Flash检查记录](docs/flash_link_2026-10-27.md)，安装包为[0.3.1-flashdiag](android/dist/GaoshanScore-0.3.1-flashdiag.apk)。
 

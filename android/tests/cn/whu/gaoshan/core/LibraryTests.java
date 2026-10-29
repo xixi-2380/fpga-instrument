@@ -19,12 +19,13 @@ public final class LibraryTests {
         String diagnostic=ProtocolClient.flashDiagnostic(new ProtocolClient.LibraryCapabilities(diag));
         check(diagnostic.contains("ID=EF4018 SR1=E0 SR2=3B SR3=60"),"real raw status bytes are available for hardware diagnosis");
         check(diagnostic.contains("需核对固件")&&!diagnostic.contains("数据区保护已启用"),"register locks alone are not reported as array protection");
-        diag[10]=4;check(ProtocolClient.flashDiagnostic(new ProtocolClient.LibraryCapabilities(diag)).contains("数据区保护已启用"),"actual BP flag explained");
-        diag[10]=0;diag[12]=4;check(ProtocolClient.flashDiagnostic(new ProtocolClient.LibraryCapabilities(diag)).contains("独立块保护模式"),"WPS remains distinct");
+        diag[10]=4;diag[2]=7;check(ProtocolClient.flashDiagnostic(new ProtocolClient.LibraryCapabilities(diag)).contains("成功以读回校验为准"),"BP does not imply entire chip is unavailable");
+        diag[10]=0;diag[12]=4;check(ProtocolClient.flashDiagnostic(new ProtocolClient.LibraryCapabilities(diag)).contains("芯片保护保持"),"individual lock mode does not imply every sector is locked");
         check(ProtocolClient.flashJobError(9).contains("0x09")&&ProtocolClient.flashJobError(9).contains("Flash读回"),"Flash CRC failure includes exact code and context");
         check(ProtocolClient.flashJobError(0x21).contains("0x21"),"write rejection code stays visible");
         SimulatedDevice device=new SimulatedDevice(true);ProtocolClient client=new ProtocolClient(device,()->System.nanoTime()/1000000L,10);
         ProtocolClient.Capabilities caps=client.hello();check(caps.maxNotes==4096&&caps.voices==16&&caps.features==5,"actual poly capacity, RAM feature semantics unchanged");
+        check(caps.minNote==48&&caps.maxNote==83,"tested automatic range remains unchanged");
         ProtocolClient.LibraryCapabilities ext=client.libraryCapabilities();check(ext.writable&&ext.initialized&&ext.jedecId==0xef4018,"extension profile");
         List<Score.Note> notes=new ArrayList<>();for(int i=0;i<16;i++)notes.add(new Score.Note(0,60,112+i,10));
         Score score=new Score(notes,Collections.emptyList());score.validate(caps);check(score.polyphony==16,"same pitch overlap needs 16 voices");

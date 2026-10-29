@@ -1,20 +1,13 @@
-# Current publication authorization — 2026-10-28
+# 2026-10-29 用户最新调整
 
-- User now explicitly requests: “把最终版本编译之后推送到原分支并提交，同时把可烧录文件也一起推送”. The original project branch was read and confirmed as codex/integrated-instrument, remote https://github.com/xixi-2380/fpga-instrument.git. After the final matching build/regression/package, commit from this new copy and push to that remote branch, including the canonical matching .fs (force-add only this intended ignored burn file). Do not push main or force-push. Preserve the original source directory and do not program hardware.
-- This supersedes the older no-commit/no-push instructions below. Publish source, diagnostic APK, matching burn file and compact validation/build evidence; retain intermediate databases, simulator executables, local SDK/signing keys and large temporary traces locally.
+- 当前副本的颤音旋钮 A/B/SW 为 T23/R25/W23；仅SW由W25改为W23，覆盖下方保留全部旧球位的规定。原integrated及donor仍只读，板载按键功能不改。
+- 用户明确取消当前时序问题的处理，不再执行时序收敛迭代。诊断页现在保留，用户计划以后删除，不能自行提前删除。
 
-# Current acceptance update — 2026-10-28
+# 2026-10-28 PCB / Flash debug implementation (current scope)
 
-- After being told attempt4 has zero setup/hold violations and TNS=0, with ref/audio/pixel internal WNS3.695/0.157/1.538ns and the original0.5ns audio margin target still unmet, the user replied: “好的，已经达到预期目标了”. Treat this as acceptance of the disclosed result and finish the already-running attempt5 build/regression/package. Do not add further structural timing optimizations merely to pursue0.5ns. Report the actual margins and whether the original0.5ns target was achieved; never label an unmet target as met.
-- Package with scripts/package_timing_audio_fix.py --implementation attempt5 --accept-zero-violation only if all setup/hold/recovery/removal/pulse checks and TNS pass, functional regression passes and artifact/source hashes match. Original source remains read-only. No hardware programming. Git publication follows the latest explicit authorization above.
-
-# Current task authorization — 2026-10-27 timing/audio/Flash copy
-
-- User explicitly requested this independent copy, source fixes, simulations, full Gowin synthesis/P&R/STA and matching new bitstream. Do not program hardware, commit, push, or alter the source E:/gowin/fpga-instrument-integrated or other source projects. No further questions; use approved defaults.
-- Preserve 73 pins, 32 physical voices/16 automatic IDs, 36 touch keys/12 AUX, EC11, stereo, Flash/App, ultrasonic and 50/61.44/35MHz clocks. Target setup/hold/recovery/removal/pulse-width violations=0, TNS=0; internal setup WNS>=0.5ns in ref/audio/pixel. No clock reduction or ordinary path false-path/multicycle relaxation.
-- Noise report: only Bluetooth polyphony, distortion increases with voice count, manual playing is normal. Audio quality prioritized; retain single-note loudness and sample latency, permit smooth polyphonic overload attenuation. Add 240-sample (5ms) release hold only if trace/model measurements support it.
-- All new outputs belong to this directory. Copied old products are historical, archived under reports/timing_audio_flash_2026-10-27/source_build_history. Source integrity manifest is source_project_snapshot.json. Baseline means full build of copied CURRENT disk contents, including uncommitted/untracked files, not Git HEAD.
-- Inherited instructions below are historical when they conflict with this authorization. No agents were requested; do not delegate.
+- User explicitly authorizes implementation of the approved copy, PCB settings, keyboard filtering, Flash chain, timing/audio fixes, full Gowin implementation and publication to origin/codex/integrated-instrument including matching bitstream. Original integrated and donor timing-audio-fix remain read-only. Do not program hardware, update main or force push.
+- Working root is E:/gowin/fpga-instrument-pcb-flash-debug. Preserve all board S0/S1/S2/S3 and reset functions; new page controls use LCD touch only. Preserve encoder functions and all 73 pin locations.
+- AUX control disabled; runtime-only per-board GSR/KOR; debug page always muted; source and build manifests required. Historical restrictions below are superseded only within this explicitly approved scope.
 
 # Local project working rules
 

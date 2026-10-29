@@ -1,0 +1,4 @@
+RUN tb_ui_inputs
+PASS tb_ui_inputs checks=123 keypad_events=13 touch_events=29
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_ui_inputs.sv:63: $finish called at 7760000 (1ps)
+

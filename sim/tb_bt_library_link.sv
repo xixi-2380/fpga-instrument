@@ -2,7 +2,8 @@
 // Byte-framed phone -> actual core/services -> wire-level U7 -> reset recovery
 // -> actual more-action CDC/local controller -> same player/32-voice engine.
 module tb_bt_library_link;
- parameter integer REGISTER_LOCKS=0;
+ parameter integer REGISTER_LOCKS=0,PITCH_BASE=60,NOR_VENDOR=0;
+ localparam [23:0] NOR_ID=NOR_VENDOR?24'hc84018:24'hef4018;
  reg clk=0,rst=1,rv=0,ui_valid=0;reg [7:0] rb=0;reg [5:0] ui_action=63;
  always #10 clk=~clk;
  wire rr,cs,sck,mosi,miso;integer programs,erases;
@@ -15,7 +16,7 @@ module tb_bt_library_link;
  defparam dut.bluetooth_on.services.flash.HALF_CYCLES=4;
  defparam dut.bluetooth_on.services.flash.BOOT_CYCLES=8;
  defparam dut.bluetooth_on.services.flash.POLL_CYCLES=8;
- spi_nor_model chip(clk,cs,sck,mosi,miso,24'hef4018,1'b0,1'b0,programs,erases);
+ spi_nor_model chip(clk,cs,sck,mosi,miso,NOR_ID,1'b0,1'b0,programs,erases);
  assign rr=dut.bluetooth_on.link.core.rx_ready;
  function automatic [15:0] cb(input [15:0] c,input [7:0] b);reg [15:0] x;
  begin x=c^{b,8'b0};for(integer k=0;k<8;k++)x=(x<<1)^(x[15]?16'h1021:0);cb=x;end endfunction
@@ -53,10 +54,11 @@ module tb_bt_library_link;
   #100 rst=0;wait(dut.input_ready && dut.bluetooth_on.services.library_init);cycles(20);
   check(!dut.gate && erases==0,"boot probes/scans only; no autoplay or automatic erase");
   command(1,0,0,0);check(response[15]==16 && {response[14],response[13]}==4096,"production HELLO reports16/4096");
-  command(8'h40,1,0,0);check(response[10][2] && {response[17],response[16],response[15]}==24'hef4018,"real SPI identity enables extension profile");
+  command(8'h40,1,0,0);check(response[10][2] && {response[17],response[16],response[15]}==NOR_ID,"fresh SPI identity enables standard NOR access");
+  check(response[17]==NOR_ID[23:16],"reported manufacturer remains unmodified");
   for(integer i=0;i<3;i++)begin
    for(integer k=0;k<4;k++)payload[2+i*8+k]=0;
-   payload[6+i*8]=60+i*2;payload[7+i*8]=100;payload[8+i*8]=5;payload[9+i*8]=0;
+   payload[6+i*8]=PITCH_BASE+i*2;payload[7+i*8]=100;payload[8+i*8]=5;payload[9+i*8]=0;
   end
   crc32=32'hffffffff;for(integer i=2;i<26;i++)crc32=c32(crc32,payload[i]);crc32=~crc32;
   payload[0]=3;payload[1]=0;for(integer k=0;k<4;k++)payload[2+k]=crc32>>(8*k);
@@ -64,7 +66,7 @@ module tb_bt_library_link;
   payload[0]=0;payload[1]=0;
   for(integer i=0;i<3;i++)begin
    for(integer k=0;k<4;k++)payload[2+i*8+k]=0;
-   payload[6+i*8]=60+i*2;payload[7+i*8]=100;payload[8+i*8]=5;payload[9+i*8]=0;
+   payload[6+i*8]=PITCH_BASE+i*2;payload[7+i*8]=100;payload[8+i*8]=5;payload[9+i*8]=0;
   end
   command(8'h11,3,26,0);command(8'h12,4,0,0);
   for(integer k=0;k<8;k++)payload[k]=0;

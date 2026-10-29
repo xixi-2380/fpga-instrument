@@ -4,8 +4,9 @@
 module keyboard_top #(
     parameter integer BT_ENABLE=1,FLASH_WRITES=1,OUTPUT_ENABLE=1,OUTPUT_GAIN=24,LIMITER_LOG2=6,LIMITER_HOLD_SAMPLES=240,
     ULTRA_PERIOD_US=60000,ULTRA_TIMEOUT_US=30000,ULTRA_LOST_MS=1000,ULTRA_SLEW_CYCLES=(`AUDIO_HZ/500),
-    parameter integer KEYPAD_BOOT_CYCLES=500000,KEYPAD_POLL_CYCLES=150000,KEYPAD_I2C_HALF=250,
+    parameter integer KEYPAD_AUX_ENABLE=0,KEYPAD_BOOT_CYCLES=500000,KEYPAD_POLL_CYCLES=150000,KEYPAD_I2C_HALF=250,
     KEYPAD_TIMEOUT_CYCLES=50000,KEYPAD_RETRY_CYCLES=500000,
+    KEYPAD_STALE_CYCLES=2500000,PCB_COMMAND_TIMEOUT_CYCLES=150000000,
     EC11_MS_CYCLES=(`AUDIO_HZ/1000),EC11_FILTER_CYCLES=(`AUDIO_HZ/20000),
     EC11_DEBOUNCE_MS=10,EC11_DOUBLE_MS=250,EC11_LONG_MS=600,EC11_STEPS=4,
     parameter [2:0] EC11_REVERSE=3'b000,
@@ -82,13 +83,17 @@ module keyboard_top #(
         {ultrasonic_applied_version,ultrasonic_target,ultrasonic_state,ultrasonic_distance_bcd},
         ultrasonic_result,ultrasonic_result_valid,);
     wire ultrasonic_current=ultrasonic_result_valid && ultrasonic_result[29:22]==ultrasonic_version;
-    wire [2:0] ultrasonic_ui_state=!ultrasonic_enabled ? 3'd0 : ultrasonic_current ? ultrasonic_result[14:12] : 3'd1;
+    reg [2:0] ultrasonic_ui_state;
+    always @(posedge audio_clk or posedge audio_reset)
+        if(audio_reset)ultrasonic_ui_state<=0;
+        else ultrasonic_ui_state<=!ultrasonic_enabled ? 3'd0 : ultrasonic_current ? ultrasonic_result[14:12] : 3'd1;
     wire [33:0] ultrasonic_ui={ultrasonic_page,ultrasonic_enabled,ultrasonic_sensitivity,
         ultrasonic_min,ultrasonic_max,ultrasonic_ui_state,ultrasonic_result[11:0]};
     wire [3:0] tremolo_rate_hz,cfg_rate_hz;
     wire [2:0] effect_mask,cfg_effect_mask,encoder_up,encoder_down,encoder_single,encoder_double;
     wire echo_edit_strength,tremolo_edit_rate;wire [8:0] echo_time_ms;
     wire [11:0] echo_time_bcd;wire [14:0] cfg_echo_samples;
+    wire [383:0] encoder_diagnostics;wire [2:0] encoder_clear;
     localparam integer ECW=EC11_MS_CYCLES>1?$clog2(EC11_MS_CYCLES):1;
     reg [ECW-1:0] encoder_ms_count;
     wire encoder_ms_ce=encoder_ms_count==EC11_MS_CYCLES-1;
@@ -109,12 +114,19 @@ module keyboard_top #(
         ec11_encoder #(.FILTER_CYCLES(EC11_FILTER_CYCLES),.DEBOUNCE_MS(EC11_DEBOUNCE_MS),
             .DOUBLE_MS(EC11_DOUBLE_MS),.LONG_MS(EC11_LONG_MS),.STEPS_PER_DETENT(EC11_STEPS),.REVERSE(EC11_REVERSE[e])) control(
             .clk(audio_clk),.rst(audio_reset),.ms_ce(ms_tick),.a(ec11_a[e]),.b(ec11_b[e]),.sw_n(ec11_sw_n[e]),
-            .step_up(encoder_up[e]),.step_down(encoder_down[e]),.single_click(encoder_single[e]),.double_click(encoder_double[e]));
+            .step_up(encoder_up[e]),.step_down(encoder_down[e]),.single_click(encoder_single[e]),.double_click(encoder_double[e]),
+            .clear_stats(encoder_clear[e]),.diagnostic(encoder_diagnostics[e*128+:128]));
     end
     // synthesis translate_off
     always @(posedge audio_clk)if(!audio_reset && encoder_ms_ticks!=={3{encoder_ms_ce}})
         $fatal(1,"Distributed EC11 tick changed millisecond phase");
     // synthesis translate_on
+    wire pcb_mute,pcb_muted,pcb_page,pcb_display_visible;
+    wire [2591:0] pcb_display;
+    wire [159:0] pcb_control,pcb_ref_control;wire pcb_control_valid,pcb_control_update;
+    reg [1023:0] pcb_ref_status;wire [1023:0] pcb_ref_live_status,pcb_audio_status;wire pcb_status_valid,pcb_status_update;
+    wire [319:0] pcb_audio_trace;wire [35:0] keypad_armed;
+    wire [2:0] keypad_data_valid;
     wire aux_action_valid,touch_action_valid;
     wire [5:0] aux_action,touch_action;
     wire ui_action_valid=aux_action_valid || touch_action_valid;
@@ -138,9 +150,11 @@ module keyboard_top #(
     wire [2:0] bt_timbre;
     wire [31:0] bt_fcw;
     reg score_cancelled;
-    reg bt_flush_d;
+    reg bt_flush_d,bt_restore;
+    wire effect_cfg_request=cfg_valid || bt_restore;
     always @(posedge audio_clk or posedge audio_reset)begin
-        if(audio_reset)bt_flush_d<=0;else bt_flush_d<=bt_flush;
+        if(audio_reset)begin bt_flush_d<=0;bt_restore<=0;end
+        else begin bt_flush_d<=bt_flush;bt_restore<=bt_flush_d && !bt_flush;end
     end
     wire local_score_busy=score_busy && !score_cancelled;
     wire take_bt=bt_inhibit || bt_valid || bt_flush;
@@ -252,12 +266,13 @@ module keyboard_top #(
         .ready(touch_audio[38]),.error(touch_audio[37]),.down(touch_audio[36]),.count(touch_audio[35:32]),
         .x(touch_audio[31:16]),.y(touch_audio[15:0]),.resolution_x(touch_audio[70:55]),
         .resolution_y(touch_audio[54:39]),.effect_mode(effect_mode),.menu_mode(menu_mode),
-        .action_valid(touch_action_valid),.action(touch_action),.more_mode(more_open),.ultrasonic_page(ultrasonic_page));
-    touch_keyboard_router menu_keys(.clk(audio_clk),.rst(audio_reset),
+        .action_valid(touch_action_valid),.action(touch_action),.more_mode(more_open),.ultrasonic_page(ultrasonic_page),.pcb_page(pcb_page));
+    // AUX shortcuts stay disabled during touch-board fault diagnosis.
+    touch_keyboard_router #(.AUX_ENABLE(KEYPAD_AUX_ENABLE)) menu_keys(.clk(audio_clk),.rst(audio_reset),
         .blocked(menu_mode || take_bt || local_score_busy),.menu_mode(menu_mode),
         .more_mode(more_open),.ultrasonic_page(ultrasonic_page),.snapshot_valid(keypad_snapshot_valid),
-        .piano(keys),.aux(auxiliary_keys),.online(keypad_online),.note_keys(note_keys),
-        .action_valid(aux_action_valid),.action(aux_action));
+        .piano(keys),.aux(auxiliary_keys),.online(keypad_online & keypad_data_valid),.note_keys(note_keys),
+        .action_valid(aux_action_valid),.action(aux_action),.qualified_keys(keypad_armed));
     if(LCD_ENABLE)begin: lcd_on
         rgb_display #(.VOICES(`VOICE_COUNT),.TEST_PATTERN(LCD_TEST_PATTERN),
             .PCLK_INVERT(LCD_PCLK_INVERT)) display_driver(
@@ -274,8 +289,9 @@ module keyboard_top #(
             .echo_percent(echo_percent),.room_percent(room_percent),.depth_percent(depth_percent),
             .volume_percent(volume_percent),.tremolo_rate_hz(tremolo_rate_hz),.touch_enabled(TOUCH_ENABLE!=0),
             .touch_ui_enabled(TOUCH_UI_ENABLE!=0 && touch_audio_valid && touch_audio[70:55]==800 && touch_audio[54:39]==480),.touch_ready_status(touch_audio[38]),.touch_error_status(touch_audio[37]),
-            .more_status({voice_held,bt_audio_ids,service_bundle[95:80],more_open,delete_confirm,more_info,service_audio[78:0]}));
+            .more_status({voice_held,bt_audio_ids,service_bundle[95:80],more_open,delete_confirm,more_info,service_audio[78:0]}),.pcb_status(pcb_display),.pcb_visible(pcb_display_visible));
     end else begin: lcd_off
+        assign pcb_display_visible=0;
         assign lcd_clk=0;assign lcd_hs=1;assign lcd_vs=1;assign lcd_en=0;
         assign lcd_r=0;assign lcd_g=0;assign lcd_b=0;
     end
@@ -305,7 +321,7 @@ module keyboard_top #(
         .depth_percent(depth_percent),.tremolo_rate_hz(tremolo_rate_hz),.volume_percent(volume_percent),
         .ultrasonic_page(ultrasonic_page),.ultrasonic_enabled(ultrasonic_enabled),
         .ultrasonic_sensitivity(ultrasonic_sensitivity),.ultrasonic_min(ultrasonic_min),.ultrasonic_max(ultrasonic_max),
-        .ultrasonic_version(ultrasonic_version),.auto_valid(ultrasonic_current && ultrasonic_result[14:12]!=0),
+        .ultrasonic_version(ultrasonic_version),.auto_valid(ultrasonic_result_valid && ultrasonic_result[14:12]!=0),
         .auto_version(ultrasonic_result[29:22]),.auto_target(ultrasonic_result[21:15]));
     wire [5:0] diagnostic_leds;
     assign led_n={diagnostic_leds[5],diagnostic_leds[3:0]};
@@ -316,21 +332,76 @@ module keyboard_top #(
     clock_reset #(.LOCK_N(LOCK_N)) reset_control(clk,rst,lock1,lock2,audio_clk,
         pll1_reset,pll2_reset,audio_reset);
     wire [47:0] keypad_ref_keys;
-    wire [2:0] keypad_ref_online,keypad_fault,keypad_report;
-    wire [50:0] keypad_snapshot;
+    wire [2:0] keypad_ref_online,keypad_ref_valid,keypad_fault,keypad_report;
+    wire [53:0] keypad_snapshot;
+    wire [1919:0] keypad_diagnostics;
+    wire [395:0] keypad_applied,keypad_observed;
+    wire [2:0] keypad_cfg_ready,keypad_cfg_done;wire [23:0] keypad_cfg_error;
+    reg [7:0] command_seen,command_ack,command_result,clear_seen;
+    reg queued,inflight;reg [1:0] command_board;reg [131:0] command_data;
+    localparam integer PCW=$clog2(PCB_COMMAND_TIMEOUT_CYCLES+1);
+    reg [PCW-1:0] command_timeout;
+    reg [2:0] keypad_clear;
+    wire [2:0] keypad_cfg_valid=(queued && command_timeout<PCB_COMMAND_TIMEOUT_CYCLES-1) ? (3'b001<<command_board) : 3'd0;
+    wire [1:0] diagnostic_board=pcb_ref_control[1:0]<3 ? pcb_ref_control[1:0] : 2'd0;
+    assign pcb_ref_live_status={96'd0,command_result,command_ack,keypad_ref_valid,keypad_ref_online,
+        diagnostic_board,keypad_observed[diagnostic_board*132+:132],
+        keypad_applied[diagnostic_board*132+:132],keypad_diagnostics[diagnostic_board*640+:640]};
+    reg [15:0] pcb_diag_counter;
+    always @(posedge clk or posedge ultrasonic_ref_reset)begin
+        if(ultrasonic_ref_reset)begin pcb_ref_status<=0;pcb_diag_counter<=0;end
+        else if(pcb_diag_counter==49999 ||
+            pcb_ref_live_status[927:904]!=pcb_ref_status[927:904])begin
+            pcb_ref_status<=pcb_ref_live_status;pcb_diag_counter<=0;
+        end else pcb_diag_counter<=pcb_diag_counter+1'b1;
+    end
+    rgb_status_cdc #(.WIDTH(160)) pcb_command_bridge(audio_clk,clk,ultrasonic_reset,
+        pcb_control,pcb_ref_control,pcb_control_valid,pcb_control_update);
+    rgb_status_cdc #(.WIDTH(1024)) pcb_diagnostic_bridge(clk,audio_clk,ultrasonic_reset,
+        pcb_ref_status,pcb_audio_status,pcb_status_valid,pcb_status_update);
+    always @(posedge clk or posedge ultrasonic_ref_reset)begin
+        if(ultrasonic_ref_reset)begin command_seen<=0;command_ack<=0;command_result<=0;clear_seen<=0;
+            queued<=0;inflight<=0;command_board<=0;command_data<=0;command_timeout<=0;keypad_clear<=0;end
+        else begin
+            keypad_clear<=0;
+            if(pcb_control_valid && pcb_ref_control[151:144]!=clear_seen)begin
+                clear_seen<=pcb_ref_control[151:144];
+                if(pcb_ref_control[153:152]<3)keypad_clear[pcb_ref_control[153:152]]<=1;
+            end
+            if(!queued && !inflight && pcb_control_valid && pcb_ref_control[11:4]!=command_seen)begin
+                command_seen<=pcb_ref_control[11:4];command_board<=pcb_ref_control[3:2];
+                command_data<=pcb_ref_control[143:12];queued<=1;command_timeout<=0;
+            end else if(queued || inflight)begin
+                if(command_timeout==PCB_COMMAND_TIMEOUT_CYCLES-1)begin
+                    queued<=0;inflight<=0;command_ack<=command_seen;command_result<=8'h31;
+                end else begin
+                    command_timeout<=command_timeout+1'b1;
+                    if(queued && keypad_cfg_ready[command_board])begin queued<=0;inflight<=1;end
+                    if(inflight && keypad_cfg_done[command_board])begin
+                        inflight<=0;command_ack<=command_seen;command_result<=keypad_cfg_error[command_board*8+:8];
+                    end
+                end
+            end
+        end
+    end
     for(genvar b=0;b<3;b=b+1)begin: touch_keyboards
         aip5916_keyboard #(.BOOT_CYCLES(KEYPAD_BOOT_CYCLES),.POLL_CYCLES(KEYPAD_POLL_CYCLES),
             .I2C_HALF_CYCLES(KEYPAD_I2C_HALF),.TIMEOUT_CYCLES(KEYPAD_TIMEOUT_CYCLES),
-            .RETRY_CYCLES(KEYPAD_RETRY_CYCLES)) reader(
+            .RETRY_CYCLES(KEYPAD_RETRY_CYCLES),.STALE_CYCLES(KEYPAD_STALE_CYCLES)) reader(
             .clk(clk),.rst(ultrasonic_ref_reset),.intr_n(keypad_int_n[b]),
             .scl(keypad_scl[b]),.sda(keypad_sda[b]),.keys(keypad_ref_keys[b*16+:16]),
-            .online(keypad_ref_online[b]),.report(keypad_report[b]),.fault(keypad_fault[b]));
+            .online(keypad_ref_online[b]),.report(keypad_report[b]),.fault(keypad_fault[b]),
+            .cfg_valid(keypad_cfg_valid[b]),.cfg_data(command_data),.cfg_ready(keypad_cfg_ready[b]),
+            .cfg_done(keypad_cfg_done[b]),.cfg_error(keypad_cfg_error[b*8+:8]),.data_valid(keypad_ref_valid[b]),
+            .applied_config(keypad_applied[b*132+:132]),.observed_config(keypad_observed[b*132+:132]),
+            .diagnostic(keypad_diagnostics[b*640+:640]),.clear_stats(keypad_clear[b]));
         assign keys[b*12+:12]=keypad_snapshot[b*16+:12];
         assign auxiliary_keys[b*4+:4]=keypad_snapshot[b*16+12+:4];
     end
-    rgb_status_cdc #(.WIDTH(51)) keypad_bridge(clk,audio_clk,ultrasonic_reset,
-        {keypad_ref_online,keypad_ref_keys},keypad_snapshot,keypad_snapshot_valid,keypad_snapshot_update);
-    assign keypad_online=keypad_snapshot[50:48];
+    rgb_status_cdc #(.WIDTH(54)) keypad_bridge(clk,audio_clk,ultrasonic_reset,
+        {keypad_ref_online,keypad_ref_valid,keypad_ref_keys},keypad_snapshot,keypad_snapshot_valid,keypad_snapshot_update);
+    assign keypad_online=keypad_snapshot[53:51];
+    assign keypad_data_valid=keypad_snapshot[50:48];
     key_note_events #(.KEYS(36)) key_events(
         .clk(audio_clk),.rst(audio_reset || take_bt || local_score_busy),
         .enabled(input_ready && !take_bt && !local_score_busy),.keys(note_keys),
@@ -344,14 +415,23 @@ module keyboard_top #(
         .note_pitch(take_bt ? bt_pitch : note_id),.volume_percent(volume_percent),.flush(bt_flush),.output_flush(bt_output_flush),.velocity_valid(take_bt),.note_velocity(bt_velocity),
         .note_id(note_id),.note_fcw(note_fcw),.note_timbre(event_timbre),.effects_enable(effects_enabled),.effect_mode(effect_mode),
         .effect_mask(cfg_effect_mask),.effect_echo_samples(cfg_echo_samples),
-        .effect_cfg_valid(cfg_valid || bt_flush_d),.effect_echo_wet(echo_wet),.effect_room_wet(room_wet),
+        .effect_cfg_valid(effect_cfg_request),.effect_echo_wet(echo_wet),.effect_room_wet(room_wet),
         .effect_tremolo_depth(tremolo_depth),.effect_tremolo_rate_hz(cfg_rate_hz),
         .effect_cfg_ready(cfg_ready),.effect_cfg_applied(cfg_applied),
         .bck(MAX_BCLK),.ws(MAX_LRCLK),.din(MAX_DIN),.pa_enable(synth_pa_enable),.underrun(underrun),
         .frame_ce(frame_ce),.note_ready(note_ready),.input_ready(input_ready),
         .gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(envelope_level),
         .visual_sample_valid(visual_sample_valid),.visual_sample(visual_sample),.visual_notes(visual_notes),
-        .latency_valid(latency_valid),.latency_bcd(latency_bcd));
+        .latency_valid(latency_valid),.latency_bcd(latency_bcd),.debug_mute(pcb_mute),.debug_muted(pcb_muted));
+    assign pcb_audio_trace={28'd0,keypad_armed,16'd0,visual_sample,20'd0,note_fcw,7'd0,note_id,voice_active,voice_held,
+        echo_time_ms,volume_percent,tremolo_rate_hz,depth_percent,room_percent,echo_percent,
+        tremolo_edit_rate,echo_edit_strength,effect_mask,input_ready,underrun,visual_sample_valid,
+        cfg_applied,cfg_ready,effect_cfg_request,menu_mode,local_score_busy,take_bt,note_ready,note_on,note_valid,note_keys};
+    pcb_debug_ui pcb_controls(.clk(audio_clk),.rst(audio_reset),.ms_ce(encoder_ms_ticks[0]),
+        .menu_mode(menu_mode),.mute_ack(pcb_muted),.action_valid(touch_action_valid),.action(touch_action),
+        .hardware_valid(pcb_status_valid),.hardware(pcb_audio_status),.encoder_diag(encoder_diagnostics),
+        .encoder_events({encoder_double,encoder_single,encoder_down,encoder_up}),.audio_status(pcb_audio_trace),
+        .mute_request(pcb_mute),.page_active(pcb_page),.control(pcb_control),.encoder_clear(encoder_clear),.display(pcb_display),.display_visible(pcb_display_visible));
 endmodule
 
 

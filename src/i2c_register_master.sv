@@ -13,7 +13,7 @@ module i2c_register_master #(
     input wire [3:0] read_bytes,
     input wire scl_in,sda_in,
     output reg scl_low,sda_low,busy,done,error,
-    output reg [71:0] read_data
+    output reg [71:0] read_data,output wire [63:0] diagnostic,output reg [7:0] error_code
 );
     localparam IDLE=0,FREE=1,START_HOLD=2,TX_LOW=3,TX_RISE=4,TX_HIGH=5,
         ACK_LOW=6,ACK_RISE=7,ACK_HIGH=8,RX_LOW=9,RX_RISE=10,RX_HIGH=11,
@@ -41,6 +41,8 @@ module i2c_register_master #(
         if(rst)begin scl_sync<=3;sda_sync<=3;end
         else begin scl_sync<={scl_sync[0],scl_in};sda_sync<={sda_sync[0],sda_in};end
 
+    assign diagnostic={5'd0,error_code,8'(timeout_count),address[7:0],tx,rx,
+        state,stage,bit_index,reading,repeated,scl_sync[1],sda_sync[1],scl_low,sda_low,busy,error};
     task low_phase(input bit next_low,input [4:0] next_state);
         begin
             // Hold the observed previous data through SCL falling, then change
@@ -59,19 +61,19 @@ module i2c_register_master #(
         begin low_phase(1'b1,STOP_LOW);end
     endtask
     task abort_bus;
-        begin scl_low<=0;sda_low<=0;busy<=0;done<=1;error<=1;state<=IDLE;end
+        begin scl_low<=0;sda_low<=0;busy<=0;done<=1;error<=1;error_code<=8'h02;state<=IDLE;end
     endtask
     always @(posedge clk or posedge rst)begin
         if(rst)begin
             state<=IDLE;timer<=0;timeout_count<=0;address<=0;tx<=0;rx<=0;write_byte<=0;
             length<=0;byte_index<=0;bit_index<=0;stage<=0;reading<=0;repeated<=0;
-            next_sda_low<=0;
-            scl_low<=0;sda_low<=0;busy<=0;done<=0;error<=0;read_data<=0;
+            error_code<=0;next_sda_low<=0;
+            scl_low<=0;sda_low<=0;busy<=0;done<=0;error<=0;error_code<=0;read_data<=0;
         end else begin
             done<=0;
             case(state)
                 IDLE:if(start)begin
-                    error<=0;read_data<=0;address<=register_addr;write_byte<=write_data;
+                    error<=0;error_code<=0;read_data<=0;address<=register_addr;write_byte<=write_data;
                     reading<=read_request;length<=read_bytes;byte_index<=0;repeated<=0;
                     busy<=1;timer<=HALF_CYCLES-1;timeout_count<=0;state<=FREE;
                     if(read_request && (read_bytes<1 || read_bytes>9))abort_bus();
@@ -119,7 +121,7 @@ module i2c_register_master #(
                         end else low_phase(1'b0,ACK_LOW);
                     end
                 ACK_HIGH:if(timer!=0)timer<=timer-1'b1;
-                    else if(sda_sync[1]!==1'b0)begin error<=1;stop_bus();end
+                    else if(sda_sync[1]!==1'b0)begin error<=1;error_code<=8'h01;stop_bus();end
                     else case(stage)
                         0:if(REGISTER_BYTES==1)send_byte(address[7:0],2);else send_byte(address[15:8],1);
                         1:send_byte(address[7:0],2);

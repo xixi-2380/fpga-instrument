@@ -10,7 +10,7 @@ module tb_aip5916_keyboard;
  assign scl=hold_scl?1'b0:1'bz;
  aip5916_model chip(rst,present,touch_keys,scl,sda,int_n);
  aip5916_keyboard #(.BOOT_CYCLES(20),.POLL_CYCLES(HALF*400),.I2C_HALF_CYCLES(HALF),
-  .TIMEOUT_CYCLES(HALF*24),.RETRY_CYCLES(32)) dut(clk,rst,int_n,scl,sda,keys,online,report,fault);
+  .TIMEOUT_CYCLES(HALF*24),.RETRY_CYCLES(32)) dut(.clk(clk),.rst(rst),.intr_n(int_n),.scl(scl),.sda(sda),.keys(keys),.online(online),.report(report),.fault(fault),.cfg_valid(1'b0),.cfg_data(132'd0),.clear_stats(1'b0));
  always @(posedge clk)begin #1;if(report)reports++;
   if(!rst)begin
    `CHECK(!dut.bus.scl_low || scl===0,"master SCL is open drain")

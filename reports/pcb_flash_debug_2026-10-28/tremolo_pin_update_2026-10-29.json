@@ -1,0 +1,15 @@
+{
+  "changed": [
+    [
+      "ec11_sw_n[2]",
+      "W25",
+      "W23"
+    ]
+  ],
+  "pins_count": 73,
+  "unique": true,
+  "constraint_sha256": "2aac1c6489e08fed7c3432da13cd7d0d77ae680026c8bfb9c789098bfdcf885a",
+  "build_updated": false,
+  "original_modified": false,
+  "timing_optimization_cancelled": true
+}

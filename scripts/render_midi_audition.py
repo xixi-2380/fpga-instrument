@@ -2,7 +2,7 @@
 This is a sample-domain audition model, not a board recording or a replacement for RTL tests.
 """
 from pathlib import Path
-import collections,hashlib,json,math,struct,sys,wave
+import argparse,collections,hashlib,json,math,struct,sys,wave
 from functools import lru_cache
 import numpy as np
 from reference_audio_limiter import Limiter
@@ -71,7 +71,8 @@ def envelope(timbre,frames):
    else:level=max(0,level-release)
  return a
 
-r=Path(__file__).resolve().parents[1];out=r/'reports/timing_audio_flash_2026-10-27/midi_audition';out.mkdir(parents=True,exist_ok=True)
+p=argparse.ArgumentParser();p.add_argument('--out-dir',default='reports/pcb_flash_debug_2026-10-28/midi_audition');a=p.parse_args()
+r=Path(__file__).resolve().parents[1];out=r/a.out_dir;out.mkdir(parents=True,exist_ok=True)
 # This 82s project fixture includes explicit1/4/8/16-voice sections.
 p=r/'android/examples/twinkle_capability_demo.mid';notes=read_midi(p);assert len(notes)==362 and max(x[0]+x[3] for x in notes)==82000
 (out/'fixture_records.json').write_text(json.dumps({'file':str(p.relative_to(r)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'notes':notes},indent=2),encoding='utf-8')

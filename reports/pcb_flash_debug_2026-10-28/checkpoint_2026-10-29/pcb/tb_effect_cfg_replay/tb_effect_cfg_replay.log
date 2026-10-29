@@ -1,0 +1,3 @@
+REPLAY before=0f0010086830006d3a0 after_left=0f0010086830006d3a0 after_right=0f0010086830006d3a0
+PASS tb_effect_cfg_replay checks=4
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_effect_cfg_replay.sv:22: $finish called at 23714132 (1ps)

@@ -1,7 +1,7 @@
 """Cycle/edge equivalence to copy-time audio timing, including HALF_CYCLES=1."""
 import hashlib,json,os,pathlib,subprocess
-r=pathlib.Path(__file__).resolve().parents[1];out=r/'reports/timing_audio_flash_2026-10-27/audio_phase';out.mkdir(exist_ok=True)
-old=r/'reports/timing_audio_flash_2026-10-27/baseline/sources/src/audio_timing.sv'
+r=pathlib.Path(__file__).resolve().parents[1];out=r/'reports/pcb_flash_debug_2026-10-28/audio_phase';out.mkdir(exist_ok=True)
+old=r/'reports/pcb_flash_debug_2026-10-28/baseline/sources/src/audio_timing.sv'
 source=old.read_text().replace('module audio_timing','module baseline_audio_timing',1)
 (out/'baseline_audio_timing.sv').write_text(source,encoding='utf8')
 bench=r'''

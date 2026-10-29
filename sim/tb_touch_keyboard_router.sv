@@ -6,7 +6,16 @@ module tb_touch_keyboard_router;
  wire [35:0] notes;wire av;wire [5:0] action;
  integer checks=0,events=0;reg [5:0] last_action;
  `include "../src/config/ui_layout.svh"
- touch_keyboard_router dut(clk,rst,blocked,menu,more,ultra,valid,piano,aux,online,notes,av,action);
+ touch_keyboard_router dut(clk,rst,blocked,menu,more,ultra,valid,piano,aux,online,notes,av,action,);
+ wire [35:0] disabled_notes;wire disabled_av;wire [5:0] disabled_action;
+ touch_keyboard_router #(.AUX_ENABLE(0)) disabled_dut(
+  clk,rst,blocked,menu,more,ultra,valid,piano,aux,online,disabled_notes,disabled_av,disabled_action,);
+ always @(posedge clk)begin
+  #1;if(!rst)begin
+   `CHECK(!disabled_av,"disabled AUX never sends settings/library/ultrasonic actions")
+   `CHECK(disabled_notes==notes,"disabling AUX preserves piano and per-key release qualification")
+  end
+ end
  always @(posedge clk)begin #1;if(av)begin events++;last_action=action;end end
  task cycles(input integer n);begin repeat(n)@(negedge clk);end endtask
  task tap(input integer n,input [5:0] expected);integer before_count;begin
@@ -33,6 +42,11 @@ module tb_touch_keyboard_router;
   menu=1;tap(9,UI_ULTRA_OPEN);tap(10,UI_OPEN_MORE);
   more=1;tap(8,UI_SONG_DELETE);tap(11,UI_MORE_BACK);more=0;
   ultra=1;tap(6,UI_MAX_DOWN);tap(11,UI_ULTRA_BACK);
+  for(integer page=0;page<4;page=page+1)begin
+   menu=page!=0;more=page==2;ultra=page==3;
+   for(integer k=0;k<12;k=k+1)begin aux=12'b1<<k;cycles(5);aux=0;cycles(3);end
+   aux=12'hfff;cycles(5);aux=0;cycles(3);
+  end
   valid=0;cycles(3);valid=1;cycles(3);`CHECK(notes==0,"invalid snapshots do not admit held keys")
   $display("PASS tb_touch_keyboard_router checks=%0d actions=%0d",checks,events);$finish;
  end

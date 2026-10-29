@@ -17,7 +17,8 @@ module synth_core #(
     input wire flush,input wire velocity_valid,input wire [6:0] note_velocity,
     input wire [6:0] volume_percent,input wire [6:0] note_pitch,input wire output_flush,
     output wire latency_valid,output wire [19:0] latency_bcd,
-    input wire [2:0] effect_mask,input wire [14:0] effect_echo_samples);
+    input wire [2:0] effect_mask,input wire [14:0] effect_echo_samples,
+    input wire debug_mute,output wire debug_muted);
     // Register the soft engine clear before its wide envelope/RAM fanout.
     // Button assertion stays asynchronous; serial urgent-clear remains separate.
     // One clk of control staging is far below a sample and cancels work before
@@ -142,7 +143,17 @@ module synth_core #(
         assign limiter_ready=1;assign limiter_gain=65536;assign limiter_clipped=0;
     end endgenerate
     // Urgent clears cancel PCM/valid only; the user's gain/ramp survives.
-    master_volume volume_control(clk,rst,limited_valid,limited_sample,volume_percent,output_valid,output_sample,output_reset);
+    wire [6:0] effective_volume=debug_mute===1'b1 ? 7'd0 : volume_percent;
+    reg [8:0] mute_samples;
+    always @(posedge clk or posedge rst)begin
+        if(rst)mute_samples<=0;
+        else if(debug_mute!==1'b1)mute_samples<=0;
+        else if(output_valid && mute_samples<260)mute_samples<=mute_samples+1'b1;
+    end
+    // Four frames beyond the maximum 256-sample ramp cover the frame buffer
+    // and the complete left/right serial words; no audio clocks are stopped.
+    assign debug_muted=debug_mute===1'b1 && mute_samples==260 && frame_l==0 && frame_r==0;
+    master_volume volume_control(clk,rst,limited_valid,limited_sample,effective_volume,output_valid,output_sample,output_reset);
     // Mirror valid/PCM timing through volume, pending frame and serializer.
     always @(posedge clk or posedge output_reset)begin
         if(output_reset)begin volume_product_tag<=0;volume_output_tag<=0;pending_tag<=0;serial_tag<=0;tag_pending_valid<=0;end
@@ -279,7 +290,7 @@ module synth_core #(
             assign right_limited_tag=render_tag;
             assign right_limiter_ready=1;assign right_limiter_gain=65536;assign right_limiter_clipped=0;
         end
-        master_volume right_volume(clk,rst,right_limited_valid,right_limited_sample,volume_percent,output_valid_r,output_sample_r,output_reset);
+        master_volume right_volume(clk,rst,right_limited_valid,right_limited_sample,effective_volume,output_valid_r,output_sample_r,output_reset);
     end else begin: mono_on
         assign stereo_mix_valid=mix_valid;assign stereo_mix_valid_r=mix_valid;
         assign stereo_mix_l=mix_sample;assign stereo_mix_r=mix_sample;

@@ -10,7 +10,7 @@ module tb_i2s_tx;
  reg [15:0] expected_l=0,expected_r=0,decoded=0;
  integer checks=0,bits=0,channel=0,words=0,zeros=0,coincident=0;
  realtime last_rise=0;
- audio_timing #(.HALF_CYCLES(HALF)) timing(clk,rst,bck,rise,fall,fc,index,);
+ audio_timing #(.HALF_CYCLES(HALF)) timing(clk,rst,bck,rise,fall,fc,index);
  frame_buffer buffer(clk,rst,fc,valid,ready,in_l,in_r,frame_l,frame_r,underrun);
  i2s_tx dut(clk,rst,fall,index,frame_l,frame_r,ws,din);
  always @(posedge rst)begin

@@ -25,8 +25,20 @@ module score_services #(parameter integer FLASH_WRITES=1)(
  wire [4:0] lookup_index=remote_pending?remote_lookup:selected;
  reg [4:0] previous_lookup,selected_meta_index;reg [159:0] selected_meta;
  wire fr,fv,fd,fi,fs,bw;wire [1:0] fo;wire [23:0] fa,jedec;wire [8:0] fl;
+ wire driver_ready,driver_done,probe_valid,probe_ready,probe_done;
+ reg probe_active;
+ wire probe_accept=probe_valid && probe_ready;
  wire [7:0] fe,bi,bd,ri,rd,s1,s2,s3;
- wire writable=FLASH_WRITES!=0 && fs && w25q128_array_writable(s1,s2,s3);
+ wire writable=FLASH_WRITES!=0 && nor_write_ready(jedec,s1);
+ assign probe_ready=driver_ready && !probe_active && !fv && !library_busy && !control_busy;
+ assign probe_done=driver_done && probe_active;
+ assign fr=driver_ready && !probe_active && !probe_accept;
+ assign fd=driver_done && !probe_active;
+ always @(posedge clk or posedge rst)begin
+  if(rst)probe_active<=0;
+  else if(probe_accept)probe_active<=1;
+  else if(probe_done)probe_active<=0;
+ end
  assign action_ready=!control_busy && !remote_pending;
  assign status={3'd0,job_id,job_state,fs,jedec,(selected_meta_index==selected?selected_meta[31:16]:16'd0),play_state,
   (control_error!=0?control_error:library_error),library_init,library_busy,entries[selected],selected};
@@ -45,7 +57,8 @@ module score_services #(parameter integer FLASH_WRITES=1)(
  .response_length(extension_response_length),.response(extension_response),.initialized(library_init),.supported(fs),.writable(writable),
  .library_busy(library_busy),.local_busy(control_busy),.storage_ready(storage_ready),.jedec_id(jedec),.status1(s1),.status2(s2),.status3(s3),.library_error(library_error),
  .job_id(job_id),.job_state(job_state),.ram_crc(song_crc),.library_valid(remote_library_valid),.library_ready(library_ready),.library_command(remote_library_command),
- .library_index(remote_library_index),.library_name(remote_name),.lookup_index(remote_lookup),.lookup_data(lookup_data));
+ .library_index(remote_library_index),.library_name(remote_name),.lookup_index(remote_lookup),.lookup_data(lookup_data),
+ .probe_valid(probe_valid),.probe_ready(probe_ready),.probe_done(probe_done),.probe_error(fe));
  flash_song_library song_library(.clk(clk),.rst(rst),.request_valid(remote_library_valid || (local_library_valid && !remote_pending)),.request_ready(library_ready),
  .command(remote_library_valid?remote_library_command:local_library_command),.song_index(remote_library_valid?remote_library_index:local_library_index),
  .song_name(remote_library_valid?remote_name:56'd0),.busy(library_busy),.initialized(library_init),.job_id(job_id),.job_state(job_state),.error(library_error),.done(library_done),
@@ -55,8 +68,9 @@ module score_services #(parameter integer FLASH_WRITES=1)(
  .storage_wdata(storage_wdata),.storage_rdata(storage_rdata),.storage_import(storage_import),.storage_count(storage_count),.storage_crc(storage_crc),.storage_done(storage_done),.storage_error(storage_error),
  .upload_active(upload_active),.flash_initialized(fi),.flash_supported(fs),.flash_ready(fr),.flash_valid(fv),.flash_op(fo),.flash_address(fa),.flash_length(fl),.flash_done(fd),.flash_error(fe),
  .buffer_write(bw),.buffer_index(bi),.buffer_wdata(bd),.read_index(ri),.read_data(rd));
- spi_nor_flash flash(.clk(clk),.rst(rst),.request_valid(fv),.request_ready(fr),.operation(fo),.address(fa),.length(fl),.writes_enabled(FLASH_WRITES!=0),
- .done(fd),.error(fe),.initialized(fi),.supported(fs),.jedec_id(jedec),.status1(s1),.status2(s2),.status3(s3),
- .buffer_write(bw),.buffer_index(bi),.buffer_wdata(bd),.read_index(ri),.read_data(rd),
+ spi_nor_flash flash(.clk(clk),.rst(rst),.request_valid((fv && !probe_active) || probe_accept),.request_ready(driver_ready),
+ .operation(probe_accept?2'd0:fo),.address(fa),.length(fl),.writes_enabled(FLASH_WRITES!=0),
+ .done(driver_done),.error(fe),.initialized(fi),.supported(fs),.jedec_id(jedec),.status1(s1),.status2(s2),.status3(s3),
+ .buffer_write(bw && !probe_active),.buffer_index(bi),.buffer_wdata(bd),.read_index(ri),.read_data(rd),
  .cs_n(flash_cs_n),.sck(flash_sck),.mosi(flash_mosi),.miso(flash_miso),.wp_n(flash_wp_n),.hold_n(flash_hold_n));
 endmodule

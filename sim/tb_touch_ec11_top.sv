@@ -33,6 +33,11 @@ module tb_touch_ec11_top;
  initial begin
   #100;rst=0;wait(dut.input_ready && dut.keypad_online==7);more(4);
   `CHECK(dut.effect_mask==0 && !dut.ultrasonic_trig,"startup retains dry/manual default")
+  auxiliary=12'hfff;wait(dut.auxiliary_keys==12'hfff);more(3);
+  `CHECK(!dut.aux_action_valid && !dut.menu_mode && !dut.more_open && !dut.ultrasonic_page &&
+    dut.selected_timbre==0 && dut.volume_percent==100 && dut.effect_mask==0,
+    "production default ignores all twelve AUX controls without changing settings")
+  auxiliary=0;wait(dut.auxiliary_keys==0);more(2);
   turn(0);cycles(8);`CHECK(dut.echo_time_ms==160 && dut.cfg_echo_samples==7680 && dut.effect_mask==0,"physical echo A/B changes time without enabling")
   one(0);turn(0);`CHECK(dut.echo_edit_strength && dut.echo_percent==26,"physical single click changes echo control to amount")
   two(0);two(1);two(2);cycles(20);

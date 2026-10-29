@@ -5,7 +5,7 @@ module tb_audio_timing;
  reg clk=0,rst=1; always #5 clk=~clk;
  wire bck,rise_ce,fall_ce,frame_ce;wire [4:0] bit_index;
  integer checks=0,cycle=0,last_edge=-1,last_frame=-1,frames=0,expected_bit=0;
- audio_timing dut(clk,rst,bck,rise_ce,fall_ce,frame_ce,bit_index,);
+ audio_timing dut(clk,rst,bck,rise_ce,fall_ce,frame_ce,bit_index);
  always @(posedge clk) if(!rst) begin
   cycle=cycle+1;
   if(rise_ce||fall_ce) begin

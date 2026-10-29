@@ -39,7 +39,7 @@ public final class MainActivity extends Activity {
     }
     @Override public void onCreate(Bundle saved){super.onCreate(saved);getWindow().setStatusBarColor(Color.rgb(13,26,34));getWindow().setNavigationBarColor(Color.rgb(13,26,34));
         ScrollView scroll=new ScrollView(this);page=new LinearLayout(this);page.setOrientation(LinearLayout.VERTICAL);page.setPadding(dp(20),dp(28),dp(20),dp(32));page.setBackgroundColor(Color.rgb(13,26,34));scroll.addView(page);scroll.setOnApplyWindowInsetsListener((v,insets)->{page.setPadding(dp(20)+insets.getSystemWindowInsetLeft(),dp(20)+insets.getSystemWindowInsetTop(),dp(20)+insets.getSystemWindowInsetRight(),dp(24)+insets.getSystemWindowInsetBottom());return insets;});setContentView(scroll);
-        label("高山流水",30,ink);label("曲谱传送 · 开发版 0.3.1 · Flash链路诊断",14,accent);
+        label("高山流水",30,ink);label("曲谱传送 · 开发版 0.3.3 · PCB与Flash诊断",14,accent);
         label("连接电子琴",20,ink);status=label("未连接设备",15,accent);capacity=label("先在系统蓝牙设置中配对模块。此 App 只列出已配对的经典蓝牙设备。",13,muted);
         label("第一步：仅连接蓝牙模块",15,ink);
         connectionMode=new Spinner(this);setItems(connectionMode,new String[]{"自动兼容：安全失败后尝试 insecure","仅安全 RFCOMM","仅兼容 insecure RFCOMM"});page.addView(connectionMode);
@@ -68,7 +68,7 @@ public final class MainActivity extends Activity {
         row(button("保存当前RAM",()->libraryAction(0),true),button("加载选中曲谱",()->libraryAction(1),true));
         page.addView(button("删除选中曲谱",()->{int index=librarySlots.getSelectedItemPosition();new AlertDialog.Builder(this).setMessage(String.format(Locale.ROOT,"删除琴端 S%03d？",index+1)).setNegativeButton("取消",null).setPositiveButton("确认删除",(d,w)->runLibraryAction(2,index)).show();},true));
         label("连接记录",20,ink);log=label("等待操作。离线演示不使用蓝牙，也不驱动扬声器。",12,muted);
-        Button copy=button("复制诊断记录",()->{android.content.ClipboardManager clipboard=(android.content.ClipboardManager)getSystemService(CLIPBOARD_SERVICE);clipboard.setPrimaryClip(ClipData.newPlainText("蓝牙诊断","高山流水 0.3.1-flashdiag\n设备："+deviceLabel+"\n状态："+module.state()+"\n"+log.getText()));Toast.makeText(this,"诊断记录已复制",Toast.LENGTH_SHORT).show();},false);lockedButtons.remove(copy);page.addView(copy);render();
+        Button copy=button("复制诊断记录",()->{android.content.ClipboardManager clipboard=(android.content.ClipboardManager)getSystemService(CLIPBOARD_SERVICE);clipboard.setPrimaryClip(ClipData.newPlainText("蓝牙诊断","高山流水 0.3.3-pcb-flash-debug\n设备："+deviceLabel+"\n状态："+module.state()+"\n"+log.getText()));Toast.makeText(this,"诊断记录已复制",Toast.LENGTH_SHORT).show();},false);lockedButtons.remove(copy);page.addView(copy);render();
     }
     private int dp(int n){return (int)(getResources().getDisplayMetrics().density*n+.5f);}
     private TextView label(String text,int size,int color){TextView v=new TextView(this);v.setText(text);v.setTextSize(size);v.setTextColor(color);v.setPadding(0,dp(10),0,dp(6));page.addView(v);return v;}
@@ -159,7 +159,7 @@ public final class MainActivity extends Activity {
             ui(()->{if(epoch==generation){libraryCaps=ext;showLibraryCapabilities(ext);String text=ProtocolClient.flashDiagnostic(ext);append(text);new AlertDialog.Builder(this).setTitle("Flash诊断").setMessage(text+"\n可点“复制诊断记录”发送此结果。").setPositiveButton("知道了",null).show();}});
         });
     }
-    private void showLibraryCapabilities(ProtocolClient.LibraryCapabilities ext){libraryInfo.setText(ext==null?"旧版RAM固件：不支持Flash曲库。":String.format(Locale.ROOT,"Flash ID %06X · %s · 32首\nRAM下载与Flash保存为两个独立阶段。",ext.jedecId,ext.writable?"可写":ext.supported?"只读/忙/受保护":"未知型号，只读"));}
+    private void showLibraryCapabilities(ProtocolClient.LibraryCapabilities ext){libraryInfo.setText(ext==null?"旧版RAM固件：不支持Flash曲库。":String.format(Locale.ROOT,"Flash ID %06X · %s · 32首\nRAM下载与Flash保存为两个独立阶段。",ext.jedecId,ext.writable?"允许写入，保存后读回确认":ext.supported?"忙或未开放写入":"未识别到有效Flash"));}
     private void refreshLibrary(){int epoch=generation;task("读取曲库",()->{ProtocolClient c=client;ProtocolClient.LibraryCapabilities ext=c.libraryCapabilities();if(ext==null)throw new IOException("当前固件不支持曲库");String[] names=new String[32];for(int i=0;i<32;i++){ProtocolClient.LibraryEntry e=c.libraryEntry(i);names[i]=String.format(Locale.ROOT,"S%03d · %s",i+1,e.exists?e.name+" / "+e.count+"音符":"空");}ui(()->{if(epoch==generation){int selection=librarySlots.getSelectedItemPosition();setItems(librarySlots,names);librarySlots.setSelection(selection);libraryCaps=ext;showLibraryCapabilities(ext);}});});}
     private void libraryAction(int op){int index=librarySlots.getSelectedItemPosition();if(op==0)new AlertDialog.Builder(this).setMessage(String.format(Locale.ROOT,"将当前RAM保存到 S%03d，替换该编号已有曲谱？",index+1)).setNegativeButton("取消",null).setPositiveButton("确认保存",(d,w)->runLibraryAction(op,index)).show();else runLibraryAction(op,index);}
     private void runLibraryAction(int op,int index){cancel.set(false);int epoch=generation;task("曲库操作",()->{ProtocolClient c=client;ProtocolClient.LibraryCapabilities ext=c.libraryCapabilities();if(ext==null)throw new IOException("当前固件不支持曲库");ProtocolClient.LibraryJob job=startTrackedJob(c,op,index,op==0?ext.activeCrc:0);waitLibraryJob(c,job,epoch);});}
@@ -171,7 +171,7 @@ public final class MainActivity extends Activity {
     private void rememberJob(ProtocolClient.LibraryJob job)throws IOException{boolean saved=getSharedPreferences("libraryJob",MODE_PRIVATE).edit().putBoolean("pending",true).putString("device",deviceLabel).putInt("id",job.id).putInt("op",job.operation).putInt("index",job.index).putLong("crc",job.crc).commit();if(!saved)throw new IOException("任务已启动，但手机未能保存任务编号，请核对曲库状态");}
     private void queryPendingJob(){SharedPreferences p=getSharedPreferences("libraryJob",MODE_PRIVATE);if(!p.getBoolean("pending",false)){message("没有保留的未完成任务");return;}if(!deviceLabel.equals(p.getString("device",""))){message("任务属于另一模块，请连接原模块后查询");return;}int id=p.getInt("id",-1),op=p.getInt("op",0),index=p.getInt("index",0);long crc=p.getLong("crc",0);cancel.set(false);int epoch=generation;task("查询曲库任务",()->{ProtocolClient c=client;ProtocolClient.LibraryCapabilities ext=c.libraryCapabilities();if(ext==null)throw new IOException("当前固件不支持任务查询");ProtocolClient.LibraryJob job=new ProtocolClient.LibraryJob(id<0?ext.latestJobId:id,op,index,crc);waitLibraryJob(c,job,epoch);});}
     private void waitLibraryJob(ProtocolClient c,ProtocolClient.LibraryJob job,int epoch)throws Exception{
-        long deadline=SystemClock.elapsedRealtime()+120000;
+        long deadline=SystemClock.elapsedRealtime()+180000;
         while(SystemClock.elapsedRealtime()<deadline){
             if(epoch!=generation||cancel.get())throw new IOException("已停止等待；琴端任务可能仍在运行。重连原模块后查询未完成任务。");
             ProtocolClient.LibraryJobStatus state=c.libraryJob(job);

@@ -4,7 +4,7 @@
 module ec11_encoder #(parameter integer FILTER_CYCLES=3072,DEBOUNCE_MS=10,
  DOUBLE_MS=250,LONG_MS=600,STEPS_PER_DETENT=4,REVERSE=0)(
  input wire clk,rst,ms_ce,a,b,sw_n,
- output reg step_up,step_down,single_click,double_click);
+ output reg step_up,step_down,single_click,double_click,input wire clear_stats,output wire [127:0] diagnostic);
  (* syn_async_reg=1,async_reg="true" *) reg [2:0] meta,sync;
  localparam integer FW=FILTER_CYCLES>1?$clog2(FILTER_CYCLES):1;
  localparam integer BW=DEBOUNCE_MS>1?$clog2(DEBOUNCE_MS):1;
@@ -19,6 +19,20 @@ module ec11_encoder #(parameter integer FILTER_CYCLES=3072,DEBOUNCE_MS=10,
  wire detent=STEPS_PER_DETENT==2 ? stable_ab==0 || stable_ab==3 : stable_ab==3;
  wire rotate=last_ab!=stable_ab && delta!=0 && detent &&
   (total==STEPS_PER_DETENT || total==-STEPS_PER_DETENT);
+ reg [15:0] up_count,down_count,single_count,double_count,invalid_count;
+ function automatic [15:0] inc(input [15:0] v);inc=v==16'hffff ? v : v+1'b1;endfunction
+ assign diagnostic={invalid_count,double_count,single_count,down_count,up_count,
+   16'(held_ms),8'(click_ms),quarter,click_state,turned,button_n,
+   2'd0,a,b,sw_n,sync,stable_ab,last_ab,step_up,step_down,single_click,double_click};
+ always @(posedge clk or posedge rst)begin
+  if(rst)begin up_count<=0;down_count<=0;single_count<=0;double_count<=0;invalid_count<=0;end
+  else if(clear_stats===1'b1)begin up_count<=0;down_count<=0;single_count<=0;double_count<=0;invalid_count<=0;end
+  else begin
+   if(step_up)up_count<=inc(up_count);if(step_down)down_count<=inc(down_count);
+   if(single_click)single_count<=inc(single_count);if(double_click)double_count<=inc(double_count);
+   if(last_ab!=stable_ab && delta==0)invalid_count<=inc(invalid_count);
+  end
+ end
  always @*begin
   delta=0;
   case({last_ab,stable_ab})

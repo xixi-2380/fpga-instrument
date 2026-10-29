@@ -42,7 +42,8 @@ function automatic [5:0] ui_hit(input integer px,py,input [1:0] fx,input menu);
    if(ui_inside(px,py,272,420,44,44))ui_hit=UI_VOLUME_UP;
    if(ui_inside(px,py,664,420,116,44))ui_hit=UI_DEFAULTS;
    if(ui_inside(px,py,550,420,104,44))ui_hit=UI_OPEN_MORE;
-   if(ui_inside(px,py,340,420,200,44))ui_hit=UI_ULTRA_OPEN;
+   if(ui_inside(px,py,340,420,96,44))ui_hit=UI_ULTRA_OPEN;
+   if(ui_inside(px,py,444,420,96,44))ui_hit=6'd42;
   end
  end
 endfunction
@@ -75,3 +76,41 @@ function automatic [5:0] ultrasonic_hit(input integer px,py);
   else if(ui_inside(px,py,684,324,64,48))ultrasonic_hit=UI_MAX_UP;
  end
 endfunction
+
+// PCB diagnostics use only LCD touch; board buttons keep their legacy actions.
+localparam [5:0] UI_PCB_OPEN=42,UI_PCB_BACK=43,UI_PCB_TAB0=44,UI_PCB_TAB1=45,
+ UI_PCB_TAB2=46,UI_PCB_TAB3=47,UI_PCB_TAB4=48,UI_PCB_PREV=49,UI_PCB_NEXT=50,
+ UI_PCB_CH_PREV=51,UI_PCB_CH_NEXT=52,UI_PCB_MINUS=53,UI_PCB_PLUS=54,
+ UI_PCB_ITEM=55,UI_PCB_ALL=56,UI_PCB_APPLY=57,UI_PCB_DEFAULT=58,
+ UI_PCB_REINIT=59,UI_PCB_FREEZE=60,UI_PCB_CLEAR=61,UI_PCB_DETAIL=62;
+function automatic [5:0] pcb_hit(input integer px,py);
+ begin
+  pcb_hit=UI_NONE;
+  if(ui_inside(px,py,648,16,132,48))pcb_hit=UI_PCB_BACK;
+  else if(py>=80 && py<120)begin
+   if(px>=24 && px<168)pcb_hit=UI_PCB_TAB0;
+   else if(px>=176 && px<320)pcb_hit=UI_PCB_TAB1;
+   else if(px>=328 && px<472)pcb_hit=UI_PCB_TAB2;
+   else if(px>=480 && px<624)pcb_hit=UI_PCB_TAB3;
+   else if(px>=632 && px<776)pcb_hit=UI_PCB_TAB4;
+  end else if(py>=134 && py<178)begin
+   if(px>=24 && px<124)pcb_hit=UI_PCB_PREV;
+   else if(px>=132 && px<232)pcb_hit=UI_PCB_NEXT;
+   else if(px>=244 && px<344)pcb_hit=UI_PCB_CH_PREV;
+   else if(px>=352 && px<452)pcb_hit=UI_PCB_CH_NEXT;
+   else if(px>=464 && px<564)pcb_hit=UI_PCB_ITEM;
+   else if(px>=576 && px<676)pcb_hit=UI_PCB_DETAIL;
+   else if(px>=688 && px<776)pcb_hit=UI_PCB_FREEZE;
+  end else if(py>=420 && py<464)begin
+   if(px>=24 && px<140)pcb_hit=UI_PCB_APPLY;
+   else if(px>=150 && px<266)pcb_hit=UI_PCB_DEFAULT;
+   else if(px>=276 && px<392)pcb_hit=UI_PCB_REINIT;
+   else if(px>=402 && px<518)pcb_hit=UI_PCB_ALL;
+   else if(px>=528 && px<644)pcb_hit=UI_PCB_CLEAR;
+   else if(px>=654 && px<710)pcb_hit=UI_PCB_MINUS;
+   else if(px>=720 && px<776)pcb_hit=UI_PCB_PLUS;
+  end
+ end
+endfunction
+
+localparam [31:0] PCB_BUILD_ID=32'h26102801;

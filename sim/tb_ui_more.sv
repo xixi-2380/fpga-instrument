@@ -5,7 +5,7 @@ module tb_ui_more;
  reg [3:0] count=0;reg [15:0] x=0,y=0,keys=0;
  wire touch_valid,key_valid,open,confirm,cv,inhibit,info;wire [5:0] ta,ka;wire [3:0] cmd;
  integer checks=0,commands=0;reg [3:0] last;
- ui_touch_actions touch(clk,rst,1'b1,1'b1,1'b1,1'b0,down,count,x,y,16'd800,16'd480,2'd0,menu,touch_valid,ta,open,1'b0);
+ ui_touch_actions touch(clk,rst,1'b1,1'b1,1'b1,1'b0,down,count,x,y,16'd800,16'd480,2'd0,menu,touch_valid,ta,open,1'b0,1'b0);
  ui_keypad_router #(.RELEASE_CYCLES(2)) keypad(clk,rst,menu,1'b0,keys,inhibit,key_valid,ka,open,1'b0);
  ui_more_actions more(clk,rst,menu,touch_valid || key_valid,key_valid?ka:ta,open,confirm,cv,ready,cmd,info);
  always @(posedge clk)if(!rst && cv && ready)begin commands++;last=cmd;end

@@ -20,8 +20,7 @@ module tb_output_gain;
   @(negedge clk);nv=1;on=yes;id=ident;wait(nr);@(posedge clk);@(negedge clk);nv=0;
  end endtask
  always @(posedge clk)if(!rst)begin
-  // Check every clock without millions of host-side string task copies.
-  checks=checks+1;if(u!==1'b0)$fatal(1,"production32-voice renderer and limiter meet every frame");
+  check(!u,"production32-voice renderer and limiter meet every frame");
   if(last_percent!=percent)begin $fdisplay(fd,"P %0d",percent);last_percent=percent;end
   if(hard)begin
    stage_sample=0;pending_code=0;stage_r=0;pending_r=0;

@@ -1,7 +1,7 @@
 """Passive HDL trace of actual upload/player/CDC/synth/stereo I2S; no hardware."""
 import argparse,hashlib,json,os,pathlib,subprocess,xml.etree.ElementTree as ET
-p=argparse.ArgumentParser(description=__doc__);p.add_argument('--timbre',type=int,default=0);a=p.parse_args();assert 0<=a.timbre<=6
-r=pathlib.Path(__file__).resolve().parents[1];out=r/f'reports/timing_audio_flash_2026-10-27/bt_trace_timbre_{a.timbre}';out.mkdir(exist_ok=True)
+p=argparse.ArgumentParser(description=__doc__);p.add_argument('--timbre',type=int,default=0);p.add_argument('--out-root',default='reports/pcb_flash_debug_2026-10-28');a=p.parse_args();assert 0<=a.timbre<=6
+r=pathlib.Path(__file__).resolve().parents[1];out=r/a.out_root/f'bt_trace_timbre_{a.timbre}';out.mkdir(parents=True,exist_ok=True)
 paths=[r/f.get('path') for f in ET.parse(r/'keyboard_adsr.gprj').getroot().findall('./FileList/File') if f.get('enable')=='1']+[r/'sim/tb_bt_identity.sv',r/'sim/data/bt_identity_notes.hex']
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 inputs={str(f.relative_to(r)):sha(f) for f in paths};(out/'input_manifest.json').write_text(json.dumps(inputs,indent=2),encoding='utf8')
@@ -46,7 +46,7 @@ sources += [out/'gowin_io_sim.v',out/'tb_bt_identity_trace.sv']
 bins=r/'tools/mingw64/bin';env=os.environ.copy();env['PATH']=str(bins)+os.pathsep+env['PATH']
 cmd=[str(bins/'iverilog.exe'),'-g2012','-grelative-include','-Isim','-s','tb_bt_identity','-P','tb_bt_identity.TIMBRE='+str(a.timbre),'-o',str(out/'trace.vvp')]+[f.as_posix() for f in sources]
 c=subprocess.run(cmd,cwd=r,env=env,capture_output=True,text=True);(out/'compile.log').write_text(c.stdout+c.stderr,encoding='utf8');assert c.returncode==0,c.stderr
-run=subprocess.run([str(bins/'vvp.exe'),str(out/'trace.vvp'),'+SIM_OUT_DIR='+out.as_posix()],cwd=r,env=env,capture_output=True,text=True,timeout=900)
+run=subprocess.run([str(bins/'vvp.exe'),str(out/'trace.vvp'),'+SIM_OUT_DIR='+out.as_posix()],cwd=r,env=env,capture_output=True,text=True,timeout=1800)
 (out/'simulation.log').write_text(run.stdout+run.stderr,encoding='utf8')
 from collections import Counter
 rows=(out/'audio_trace.csv').read_text().splitlines();counts=Counter(row.split(',')[0] for row in rows if not row.startswith('#'))

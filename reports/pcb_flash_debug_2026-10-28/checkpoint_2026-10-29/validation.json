@@ -1,0 +1,86 @@
+{
+  "passed": true,
+  "scope": "source-and-APK checkpoint; no matching new bitstream",
+  "pcb_tests": [
+    {
+      "test": "tb_pcb_keyboard_runtime",
+      "passed": true,
+      "seconds": 1.857
+    },
+    {
+      "test": "tb_pcb_debug_ui",
+      "passed": true,
+      "seconds": 0.866
+    },
+    {
+      "test": "tb_pcb_touch",
+      "passed": true,
+      "seconds": 0.515
+    },
+    {
+      "test": "tb_pcb_config_deadline",
+      "passed": true,
+      "seconds": 1.166
+    },
+    {
+      "test": "tb_pcb_top",
+      "passed": true,
+      "seconds": 140.671
+    },
+    {
+      "test": "tb_pcb_renderer",
+      "passed": true,
+      "seconds": 265.076
+    },
+    {
+      "test": "tb_ui_more",
+      "passed": true,
+      "seconds": 0.592
+    },
+    {
+      "test": "tb_ui_inputs",
+      "passed": true,
+      "seconds": 0.601
+    },
+    {
+      "test": "tb_effect_cfg_replay",
+      "passed": true,
+      "seconds": 1.45
+    }
+  ],
+  "flash_tests": [
+    {
+      "configuration": "flash_driver",
+      "test": "tb_spi_nor_flash",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 9.884
+    },
+    {
+      "configuration": "flash_protocol",
+      "test": "tb_score_library_protocol",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 0.745
+    },
+    {
+      "configuration": "flash_recovery",
+      "test": "tb_flash_recovery",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 59.72
+    }
+  ],
+  "production_flash_4096_prior_run_dependencies_match": true,
+  "source_manifests_match": true,
+  "original_3941_files_unchanged": true,
+  "board_button_source_unchanged": true,
+  "pins_unique": 73,
+  "tremolo_sw": "W23",
+  "new_sustain_ui_changes_not_implemented": true,
+  "hardware_tested": false,
+  "timing_pass_not_claimed": true
+}

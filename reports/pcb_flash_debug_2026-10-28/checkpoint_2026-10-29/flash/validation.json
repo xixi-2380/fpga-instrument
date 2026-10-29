@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "sources_unchanged": true,
+  "results": [
+    {
+      "configuration": "flash_driver",
+      "test": "tb_spi_nor_flash",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 9.884
+    },
+    {
+      "configuration": "flash_protocol",
+      "test": "tb_score_library_protocol",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 0.745
+    },
+    {
+      "configuration": "flash_recovery",
+      "test": "tb_flash_recovery",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 59.72
+    }
+  ]
+}

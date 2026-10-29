@@ -1,0 +1,35 @@
+{
+  "scope": "actual elaborated module closure; captured during run and checked against executable compilation time",
+  "modules": [
+    "bluetooth_score_core",
+    "bt_frame_rx",
+    "bt_frame_tx",
+    "bt_score_player",
+    "flash_song_library",
+    "local_score_control",
+    "score_library_protocol",
+    "score_services",
+    "score_validator",
+    "spi_byte_master",
+    "spi_nor_flash",
+    "spi_nor_model",
+    "tb_flash_production"
+  ],
+  "executable_sha256": "0de484081fbdbe8ae25319345c3d5d2b0b583fa8b695a4bb23e91678cb195894",
+  "files": {
+    "src\\bluetooth_score_core.sv": "644a93314ab728d2bafc31d661466cb9a584b27bcd3e61cebde4773b2db352e8",
+    "src\\bt_frame_rx.sv": "b3d3c09303f3168624cf8c87948f222e208dec515390b8c81272a669e9b478cd",
+    "src\\bt_frame_tx.sv": "e036926622a193fd7ddc34f8241ff07e7ac1c5d219ed4fa901d3801b08c41198",
+    "src\\bt_score_player.sv": "87673e91b84b58368c3094cfea852a0c458fd3ce26d15df723420a361696e21e",
+    "src\\flash_song_library.sv": "bbd2efce35bf5103fcf297ca9ddef9ab41d0911fd8cdd199460e814780a44e14",
+    "src\\local_score_control.sv": "d00a74b3d6b40ef28e82513ee50f7a7bdbb0ab1c1bed5c656a47c7f1ae9e523a",
+    "src\\score_library_protocol.sv": "795bc05f1d31937ff643ad68ed674c1512267fed10120609c0c91c84942f2cf3",
+    "src\\score_services.sv": "753c27d7ced4ccba22a901874e1f438b354ab8e762925925b4eaa075919ce495",
+    "src\\score_validator.sv": "37f636171406b473afafe27955d851d6d05e61c2dc8c69acb00e7287e80d3c5a",
+    "src\\spi_byte_master.sv": "a611de9a8355b55a9d89e06cb17d4f1cd0486c45b4f1d4b067ddd8d83f65667c",
+    "src\\spi_nor_flash.sv": "f5ca8b20322a6dac2c9dd421eada1b9b293201a6fd49d5bea904fd80a72d5028",
+    "sim\\spi_nor_model.sv": "860f09da8a1c9b7c02e1e272796dc2053ca52b2181f0648c2a2bc762c1252fb8",
+    "sim\\tb_flash_production.sv": "606807841b0747be8792fad6079d1c60c3b1dee45396e7b8cfee0622b6deeb10",
+    "src\\config\\flash_profile.svh": "1feb67206ae43002be6818572fa881071f596d6c26441251ce27874a55c3aba3"
+  }
+}

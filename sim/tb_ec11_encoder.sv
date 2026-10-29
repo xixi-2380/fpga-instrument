@@ -4,7 +4,7 @@ module tb_ec11_encoder;
  reg clk=0,rst=1,a=1,b=1,sw=1;always #5 clk=~clk;
  wire up,down,single_click,double_click;integer checks=0,ups=0,downs=0,singles=0,doubles=0,old;
  ec11_encoder #(.FILTER_CYCLES(2),.DEBOUNCE_MS(2),.DOUBLE_MS(40),.LONG_MS(80)) dut(
-  clk,rst,1'b1,a,b,sw,up,down,single_click,double_click);
+  clk,rst,1'b1,a,b,sw,up,down,single_click,double_click,1'b0,);
  always @(posedge clk)if(!rst)begin
   if(up)ups=ups+1;if(down)downs=downs+1;
   if(single_click)singles=singles+1;if(double_click)doubles=doubles+1;

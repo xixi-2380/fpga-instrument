@@ -1,13 +1,14 @@
 `timescale 1ns/1ps
 // Piano release qualification is per key. Entering menus/BT or disconnecting
 // drains Note Off; held keys cannot start again until physically released.
-module touch_keyboard_router(
+module touch_keyboard_router #(parameter integer AUX_ENABLE=1)(
  input wire clk,rst,blocked,menu_mode,more_mode,ultrasonic_page,
  input wire snapshot_valid,input wire [35:0] piano,input wire [11:0] aux,
  input wire [2:0] online,output wire [35:0] note_keys,
- output reg action_valid,output reg [5:0] action);
+ output reg action_valid,output reg [5:0] action,output wire [35:0] qualified_keys);
  `include "config/ui_layout.svh"
- reg [35:0] armed;reg [11:0] aux_armed;
+ reg [35:0] armed;
+ assign qualified_keys=armed;reg [11:0] aux_armed;
  reg [2:0] was_online;
  wire [35:0] connected={{12{online[2]}},{12{online[1]}},{12{online[0]}}};
  wire [11:0] aux_connected={{4{online[2]}},{4{online[1]}},{4{online[0]}}};
@@ -30,7 +31,7 @@ module touch_keyboard_router(
     end
    end
    // AUX1..12 are settings controls, never note IDs.
-   if(snapshot_valid && |aux_pressed)begin
+   if(AUX_ENABLE!=0 && snapshot_valid && |aux_pressed)begin
     action_valid<=1;
     if(more_mode)case(index)
      0:action<=UI_SONG_PREV;1:action<=UI_SONG_NEXT;2:action<=UI_SONG_LOAD;3:action<=UI_SONG_PLAY;

@@ -1,0 +1,4 @@
+RUN tb_score_library_protocol
+PASS tb_score_library_protocol checks=26
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_score_library_protocol.sv:45: $finish called at 840000 (1ps)
+

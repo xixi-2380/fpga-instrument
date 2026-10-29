@@ -1,7 +1,7 @@
 """Fresh Gowin implementation with immutable input hashes; never programs hardware."""
 import argparse,hashlib,json,os,pathlib,re,shutil,subprocess,time,xml.etree.ElementTree as ET
-p=argparse.ArgumentParser();p.add_argument('--name',required=True);a=p.parse_args()
-r=pathlib.Path(__file__).resolve().parents[1];out=r/'reports/timing_audio_flash_2026-10-27'/a.name
+p=argparse.ArgumentParser();p.add_argument('--name',required=True);p.add_argument('--out-root',default='reports/timing_audio_flash_2026-10-27');a=p.parse_args()
+r=pathlib.Path(__file__).resolve().parents[1];out=r/pathlib.Path(a.out_root)/a.name
 assert not out.exists(), 'Use a new implementation name to preserve evidence'
 out.mkdir(parents=True)
 files=[f.get('path') for f in ET.parse(r/'keyboard_adsr.gprj').getroot().findall('./FileList/File') if f.get('enable')=='1']

@@ -1,0 +1,11 @@
+{
+  "apk": "GaoshanScore-0.3.3-pcb-flash-debug.apk",
+  "sha256": "7067afa864628c728c603b9ea5e4a80ba73ec537bc0e1f74b654daa305df911e",
+  "size": 57747,
+  "build": "javac + D8 + aapt2 + zipalign + apksigner",
+  "min_sdk": 26,
+  "target_sdk": 35,
+  "java_sources": 9,
+  "apk_device_run": "not performed",
+  "radio_fpga_test": "not performed"
+}

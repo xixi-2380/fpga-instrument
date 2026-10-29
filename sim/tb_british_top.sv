@@ -7,7 +7,8 @@ module tb_british_top;
  tri1 [2:0] scl,sda;wire [2:0] int_n;wire pa,bck,lrclk,din;
  integer checks=0,frames=0,events=0,tap_count=0,windows=0;reg [6:0] seen=0;
  wire [1206:0] displayed;
- keyboard_top #(.KEYPAD_BOOT_CYCLES(20),.KEYPAD_POLL_CYCLES(1600),.KEYPAD_I2C_HALF(4),.KEYPAD_TIMEOUT_CYCLES(100),.KEYPAD_RETRY_CYCLES(32),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.SCORE_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(2),.BUTTON_LONG_PRESS_CYCLES(128),
+ // Explicit opt-in retains coverage of the dormant AUX mappings.
+ keyboard_top #(.KEYPAD_AUX_ENABLE(1),.KEYPAD_BOOT_CYCLES(20),.KEYPAD_POLL_CYCLES(1600),.KEYPAD_I2C_HALF(4),.KEYPAD_TIMEOUT_CYCLES(100),.KEYPAD_RETRY_CYCLES(32),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.SCORE_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(2),.BUTTON_LONG_PRESS_CYCLES(128),
   .LOCK_N(16),
   .MUTE(4),.FADE(4),.ATTACK(2),.DECAY(2),.RELEASE(2)) dut(
   .clk(clk),.rst(rst),.board_buttons_n(buttons),.keypad_scl(scl),.keypad_sda(sda),.keypad_int_n(int_n),.ec11_a(3'b111),.ec11_b(3'b111),.ec11_sw_n(3'b111),
@@ -27,7 +28,15 @@ module tb_british_top;
  end
  task more_frames(input integer n);integer target;begin target=frames+n;wait(frames>=target);#1;end endtask
  task toggle;begin buttons=14;repeat(256)@(negedge dut.audio_clk);buttons=15;repeat(10)@(negedge dut.audio_clk);end endtask
- task key(input integer n);begin auxiliary=12'b1<<n;more_frames(4);auxiliary=0;more_frames(4);end endtask
+ task key(input integer n);integer wait_cycles;begin
+  auxiliary=12'b1<<n;wait_cycles=0;
+  while(dut.auxiliary_keys!=auxiliary && wait_cycles<100000)begin @(negedge clk);wait_cycles++;end
+  `CHECK(dut.auxiliary_keys==auxiliary,"AUX press passes two coherent polls within a bounded time")
+  more_frames(2);auxiliary=0;wait_cycles=0;
+  while(dut.auxiliary_keys!=0 && wait_cycles<100000)begin @(negedge clk);wait_cycles++;end
+  `CHECK(dut.auxiliary_keys==0,"AUX release passes two coherent polls within a bounded time")
+  more_frames(2);
+ end endtask
  initial begin
   #100 rst=0;wait(pa && dut.keypad_online==7);more_frames(4);
   for(integer t=0;t<7;t=t+1)begin

@@ -17,3 +17,12 @@ __pycache__/
 # Reproducible Java bytecode and raw simulation images; keep logs and PNG evidence
 *.class
 /reports/**/*.ppm
+
+# PCB/Flash debug: preserve evidence, omit simulator images and implementation databases.
+/tmp/
+/reports/pcb_flash_debug_2026-10-28/tested_baseline_impl/
+/reports/pcb_flash_debug_2026-10-28/**/impl/
+/reports/pcb_flash_debug_2026-10-28/attempt*/pnr/
+/reports/pcb_flash_debug_2026-10-28/attempt*/gwsynthesis/
+/reports/pcb_flash_debug_2026-10-28/**/flash_image.bin
+/dist/pcb-flash-debug/*.sdf

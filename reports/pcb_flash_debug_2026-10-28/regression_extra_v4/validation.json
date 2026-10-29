@@ -1,0 +1,354 @@
+{
+  "passed": true,
+  "sources_unchanged": true,
+  "results": [
+    {
+      "configuration": "limiter_legacy",
+      "test": "tb_audio_limiter",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 12.485
+    },
+    {
+      "configuration": "limiter_fixed",
+      "test": "tb_audio_limiter",
+      "params": [
+        "FIXED=1"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 15.746
+    },
+    {
+      "configuration": "limiter_hold",
+      "test": "tb_audio_limiter",
+      "params": [
+        "FIXED=1",
+        "HOLD=240"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 15.533
+    },
+    {
+      "configuration": "flash_driver",
+      "test": "tb_spi_nor_flash",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 26.903
+    },
+    {
+      "configuration": "flash_permissions_fast",
+      "test": "tb_flash_write_permissions",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 65.747
+    },
+    {
+      "configuration": "flash_permissions_1mhz",
+      "test": "tb_flash_write_permissions",
+      "params": [
+        "HALF=25"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 322.559
+    },
+    {
+      "configuration": "flash_library",
+      "test": "tb_flash_song_library",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 129.509
+    },
+    {
+      "configuration": "flash_protocol",
+      "test": "tb_score_library_protocol",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 0.938
+    },
+    {
+      "configuration": "flash_fullchain_locks",
+      "test": "tb_bt_library_link",
+      "params": [
+        "REGISTER_LOCKS=1"
+      ],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 1334.734
+    },
+    {
+      "configuration": "flash_compatibility_fast",
+      "test": "tb_flash_compatibility",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 45.996
+    },
+    {
+      "configuration": "flash_compatibility_1mhz",
+      "test": "tb_flash_compatibility",
+      "params": [
+        "HALF=25"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 245.116
+    },
+    {
+      "configuration": "flash_recovery",
+      "test": "tb_flash_recovery",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 142.608
+    },
+    {
+      "configuration": "flash_high_nonvendor",
+      "test": "tb_bt_library_link",
+      "params": [
+        "REGISTER_LOCKS=1",
+        "PITCH_BASE=60",
+        "NOR_VENDOR=1"
+      ],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 1274.152
+    },
+    {
+      "configuration": "display_connector",
+      "test": "tb_rgb_display",
+      "params": [],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 265.052
+    },
+    {
+      "configuration": "envelope_production",
+      "test": "tb_adsr_production",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 1.123
+    },
+    {
+      "configuration": "envelopes_seven",
+      "test": "tb_instrument_envelopes",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 1.159
+    },
+    {
+      "configuration": "audio_timing",
+      "test": "tb_audio_timing",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 1.321
+    },
+    {
+      "configuration": "master_volume",
+      "test": "tb_master_volume",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 0.943
+    },
+    {
+      "configuration": "audio_articulation",
+      "test": "tb_bt_articulation",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 2.235
+    },
+    {
+      "configuration": "display_cdc",
+      "test": "tb_rgb_status_cdc",
+      "params": [],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 0.872
+    },
+    {
+      "configuration": "polyphony_stereo_0",
+      "test": "tb_bt_polyphony",
+      "params": [
+        "STEREO=1",
+        "EFFECT=0"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 77.333
+    },
+    {
+      "configuration": "polyphony_stereo_1",
+      "test": "tb_bt_polyphony",
+      "params": [
+        "STEREO=1",
+        "EFFECT=1"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 83.977
+    },
+    {
+      "configuration": "polyphony_stereo_2",
+      "test": "tb_bt_polyphony",
+      "params": [
+        "STEREO=1",
+        "EFFECT=2"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 79.182
+    },
+    {
+      "configuration": "identity_timbre_0",
+      "test": "tb_bt_identity",
+      "params": [
+        "TIMBRE=0"
+      ],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 846.481
+    },
+    {
+      "configuration": "identity_timbre_1",
+      "test": "tb_bt_identity",
+      "params": [
+        "TIMBRE=1"
+      ],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 793.877
+    },
+    {
+      "configuration": "identity_timbre_2",
+      "test": "tb_bt_identity",
+      "params": [
+        "TIMBRE=2"
+      ],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 774.105
+    },
+    {
+      "configuration": "identity_timbre_3",
+      "test": "tb_bt_identity",
+      "params": [
+        "TIMBRE=3"
+      ],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 718.718
+    },
+    {
+      "configuration": "identity_timbre_4",
+      "test": "tb_bt_identity",
+      "params": [
+        "TIMBRE=4"
+      ],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 548.738
+    },
+    {
+      "configuration": "identity_timbre_5",
+      "test": "tb_bt_identity",
+      "params": [
+        "TIMBRE=5"
+      ],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 407.209
+    },
+    {
+      "configuration": "identity_timbre_6",
+      "test": "tb_bt_identity",
+      "params": [
+        "TIMBRE=6"
+      ],
+      "behavioral_pll": true,
+      "passed": true,
+      "seconds": 407.612
+    },
+    {
+      "configuration": "auto_manual_timbre_0",
+      "test": "tb_auto_manual_equivalence",
+      "params": [
+        "TIMBRE=0"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 351.421
+    },
+    {
+      "configuration": "auto_manual_timbre_1",
+      "test": "tb_auto_manual_equivalence",
+      "params": [
+        "TIMBRE=1"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 1644.7
+    },
+    {
+      "configuration": "auto_manual_timbre_2",
+      "test": "tb_auto_manual_equivalence",
+      "params": [
+        "TIMBRE=2"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 1667.471
+    },
+    {
+      "configuration": "auto_manual_timbre_3",
+      "test": "tb_auto_manual_equivalence",
+      "params": [
+        "TIMBRE=3"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 1716.011
+    },
+    {
+      "configuration": "auto_manual_timbre_4",
+      "test": "tb_auto_manual_equivalence",
+      "params": [
+        "TIMBRE=4"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 447.546
+    },
+    {
+      "configuration": "auto_manual_timbre_5",
+      "test": "tb_auto_manual_equivalence",
+      "params": [
+        "TIMBRE=5"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 436.442
+    },
+    {
+      "configuration": "auto_manual_timbre_6",
+      "test": "tb_auto_manual_equivalence",
+      "params": [
+        "TIMBRE=6"
+      ],
+      "behavioral_pll": false,
+      "passed": true,
+      "seconds": 379.609
+    }
+  ]
+}

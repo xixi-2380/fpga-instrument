@@ -1,7 +1,9 @@
-// W25Q128JV EF4018 array-write policy. SRP/SRL lock STATUS REGISTER writes;
-// SEC/TB select geometry when BP!=0. They do not protect an array with BP=000,
-// CMP=0 and WPS=0. QE and Security Register LB bits do not protect main data.
-// No status register is ever modified here. Individual-lock mode remains rejected.
-function automatic w25q128_array_writable(input [7:0] sr1,sr2,sr3);
- begin w25q128_array_writable=(sr1[4:2]==0) && !sr1[0] && !sr2[6] && !sr2[7] && !sr3[2];end
+// U7 uses standard 24-bit SPI NOR commands. An ID is presence information,
+// not a manufacturer allowlist. Hardware locks remain untouched; writes must
+// acquire WEL and every programmed page / erased sector is read back.
+function automatic nor_identified(input [23:0] id);
+ begin nor_identified=id[23:16]!=8'h00 && id[23:16]!=8'hff;end
+endfunction
+function automatic nor_write_ready(input [23:0] id,input [7:0] sr1);
+ begin nor_write_ready=nor_identified(id) && !sr1[0];end
 endfunction

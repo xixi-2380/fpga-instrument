@@ -1,3 +1,13 @@
+# PCB / Flash诊断App 0.3.3
+
+本次APK为`GaoshanScore-0.3.3-pcb-flash-debug.apk`，versionCode6，保持原开发证书。生产RTL同时更新后，空闲诊断实际刷新Flash，SAVE/DELETE重新探测，任务等待180秒，RAM完成与Flash持久确认分开显示。实际手机无线/硬件擦写验收仍由用户执行。
+
+本地SDK现位于本副本`android/build-local/sdk`，JDK17位于`android/build-local/jdk17`。从工程根目录运行`python android/build_apk.py --sdk-root android/build-local/sdk --out-dir android/build-local/pcb-flash-debug`；先把该JDK的bin加入当前进程PATH。保持输出目录里的开发密钥以兼容已有App。SDK、JDK和密钥均只在本地忽略目录，不提交Git。
+
+完整交付见`dist/pcb-flash-debug`及`docs/PCB与Flash修复_2026-10-28.md`。
+
+---
+
 2026-10-27 新增 0.3.1-flashdiag（versionCode 4），与0.3同签名：增加“读取Flash诊断”与准确的RAM/Flash分阶段错误，详见[Flash检查记录](../docs/flash_link_2026-10-27.md)。下方0.3等记录是历史。新包路径 dist/GaoshanScore-0.3.1-flashdiag.apk。
 
 # 高山流水曲谱 · 安卓开发版 0.3

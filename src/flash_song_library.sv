@@ -107,7 +107,7 @@ module flash_song_library #(parameter integer MAX_NOTES=4096,AW=(MAX_NOTES>1?$cl
     end
     JOB_START:if(!storage_ready || upload_active)finish(5);
      else if(operation>2)finish(6);
-     else if(!flash_supported)finish(8'h21);
+     else if(operation!=1 && !flash_supported)finish(8'h21);
      else if(operation==0 && (!ram_valid || storage_count==0 || storage_count>MAX_NOTES))finish(8'h0e);
      else if(operation!=0 && !entries[target])finish(8'h0e);
      else state<=LOOKUP_WAIT;

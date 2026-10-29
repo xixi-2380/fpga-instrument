@@ -82,3 +82,9 @@ report_timing -setup -to [get_pins {lcd_on.display_driver/pixel_clock_forward/D1
 report_timing -hold -to [get_pins {lcd_on.display_driver/pixel_clock_forward/D1}] -max_paths 2
 report_timing -setup -from [get_pins {lcd_on.display_driver/pixel_clock_forward/CLK}] -to [get_ports {lcd_clk}] -max_paths 2
 report_timing -hold -from [get_pins {lcd_on.display_driver/pixel_clock_forward/CLK}] -to [get_ports {lcd_clk}] -max_paths 2
+
+# The new PCB display bridge has the same two-stage asynchronous reset boundary.
+# Only its PRESET assertion inputs are excepted; data and synchronizer stages remain timed.
+set_false_path -to [get_pins {lcd_on.display_driver/pcb_bridge/pixel_reset_sync/pipe_0_s0/PRESET lcd_on.display_driver/pcb_bridge/pixel_reset_sync/pipe_1_s0/PRESET}]
+# Pixel-source reset boundary of the page visibility acknowledgement.
+set_false_path -to [get_pins {lcd_on.display_driver/pcb_visibility_bridge/source_reset_sync/pipe_0_s0/PRESET lcd_on.display_driver/pcb_visibility_bridge/source_reset_sync/pipe_1_s0/PRESET}]

@@ -1,0 +1,3 @@
+FULL_SAVE programs=134 erases=9 sim_clock=1334874850000
+PASS tb_flash_production checks=4104 half=25 count=4096 programs=134 erases=9
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_flash_production.sv:54: $finish called at 1635391230000 (1ps)

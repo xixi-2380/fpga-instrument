@@ -1,0 +1,4 @@
+RUN tb_flash_recovery
+PASS tb_flash_recovery checks=24 diagnostic_refresh=1 direct_save_retry=1 no_reset=1
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_flash_recovery.sv:48: $finish called at 59349060000 (1ps)
+

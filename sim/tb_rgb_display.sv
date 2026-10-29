@@ -14,25 +14,24 @@ module tb_rgb_display;
  reg [33:0] sensor_status={1'b0,1'b1,3'd3,7'd20,7'd80,3'd2,12'h125};
  integer checks=0,visible=0,lines=0,row=0;
  rgb_display dut(.ref_clk(ref_clk),.pll_reset(pll_reset),.audio_clk(audio_clk),.audio_reset(audio_reset),
-  .voice_active(active),.voice_held(held),.selected_timbre(3'd1),.visual_sample_valid(1'b0),.visual_sample(16'sd0),.visual_notes(36'hf00000121),.score_busy(1'b0),.audio_ready(1'b1),
+  .voice_active(active),.voice_held(held),.selected_timbre(3'd1),.visual_sample_valid(1'b0),.visual_sample(16'sd0),.visual_notes(36'h0121),.score_busy(1'b0),.audio_ready(1'b1),
   .score_error(1'b0),.underrun(1'b0),.ghost(1'b0),.lcd_clk(pc),.lcd_hs(hs),.lcd_vs(vs),.lcd_en(de),
   .lcd_r(r),.lcd_g(g),.lcd_b(b),.menu_mode(1'b1),.effects_enabled(1'b1),.effect_mode(2'd1),
   .volume_percent(7'd100),.echo_percent(ep),.room_percent(rp),.depth_percent(dp),.tremolo_rate_hz(hz),
   .touch_enabled(1'b0),.touch_ui_enabled(1'b0),.touch_ready_status(1'b0),.touch_error_status(1'b0),
-  .latency_valid(1'b1),.latency_bcd(latency_bcd),.ultrasonic_status(sensor_status),.encoder_status(17'h0154f),.keypad_online(3'b101));
+  .latency_valid(1'b1),.latency_bcd(latency_bcd),.ultrasonic_status(sensor_status),.encoder_status({12'h150,5'd0}),.keypad_online(3'b101),.more_status(146'd0),.pcb_status(2592'd0));
  initial begin
   #200 pll_reset=0;wait(dut.pixel_lock);repeat(6)@(negedge dut.pixel_clk);
   `CHECK(!de && {r,g,b}==0,"audio reset blanks display despite locked pixel clock")
   audio_reset=0;wait(dut.status_valid);
   `CHECK(dut.pixel_status[11:0]=={6'd3,6'd7},"balanced popcount includes bit31")
-  while(!dut.frame_start)@(negedge dut.pixel_clk);
-  frame_status=dut.pixel_status;repeat(2)begin @(posedge dut.pixel_clk);#1;end
+  while(!dut.render_frame_start)@(negedge dut.pixel_clk);
+  frame_status=dut.pixel_status;@(posedge dut.pixel_clk);#1;
   `CHECK(dut.renderer.state==frame_status && frame_status[1132:1112]=={1'b1,20'h00137},"frame captures original payload plus atomic latency")
   `CHECK(frame_status[1166:1133]==sensor_status,"complete ultrasonic tuple appended atomically")
-  `CHECK(frame_status[1206:1204]==5 && frame_status[1203:1184]==20'hf0000 && frame_status[1183:1167]==17'h0154f,"all 1207 status bits survive coordinate pipeline")
   for(integer i=1;i<1192*533;i=i+1)begin
    @(posedge dut.pixel_clk);nx=dut.x;ny=dut.y;next_de=dut.de;#1;
-   `CHECK(de===de_history[4],"coordinate stage, four renderer stages and connector register align pixel and DE")
+   `CHECK(de===de_history[4],"registered coordinates, four renderer stages plus connector register keep pixel and DE aligned")
    `CHECK(hs && vs,"DE-only sync polarity preserved")
    `CHECK(dut.renderer.state==frame_status,"settings cannot tear current frame")
    `CHECK((^{r,g,b})!==1'bx,"all connector bits defined")

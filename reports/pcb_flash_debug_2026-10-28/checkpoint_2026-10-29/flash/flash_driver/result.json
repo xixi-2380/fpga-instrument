@@ -1,0 +1,8 @@
+{
+  "configuration": "flash_driver",
+  "test": "tb_spi_nor_flash",
+  "params": [],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 9.884
+}

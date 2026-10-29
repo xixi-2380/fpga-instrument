@@ -45,7 +45,7 @@ module gt9110_touch #(
     assign touch_int=(rst || state==RESET || state==STRAP)?1'b0:1'bz;
     i2c_register_master #(.HALF_CYCLES(I2C_HALF_CYCLES),.TIMEOUT_CYCLES(I2C_TIMEOUT_CYCLES))
         bus(clk,rst,start,read_request,address,8'd0,length,touch_scl,touch_sda,
-            scl_low,sda_low,busy,done,bus_error,data);
+            scl_low,sda_low,busy,done,bus_error,data,,);
     task begin_read(input [15:0] reg_addr,input [3:0] bytes,input [3:0] next_state);
         begin address<=reg_addr;length<=bytes;read_request<=1;start<=1;state<=next_state;end
     endtask
