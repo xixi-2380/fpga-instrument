@@ -1,0 +1,66 @@
+[
+  {
+    "name": "sine",
+    "high_band_outside_harmonics_1_to_4_energy_ratio": 1.636865756115709e-10
+  },
+  {
+    "name": "flute",
+    "high_band_outside_harmonics_1_to_4_energy_ratio": 1.554795863182669e-10
+  },
+  {
+    "name": "reed",
+    "high_band_outside_harmonics_1_to_4_energy_ratio": 1.5684654538793106e-10
+  },
+  {
+    "name": "cello",
+    "high_band_outside_harmonics_1_to_4_energy_ratio": 3.0357216535520593e-10
+  },
+  {
+    "name": "piano",
+    "high_band_outside_harmonics_1_to_4_energy_ratio": 2.171462615311279e-10
+  },
+  {
+    "name": "guitar",
+    "high_band_outside_harmonics_1_to_4_energy_ratio": 2.2349776418607258e-10
+  },
+  {
+    "name": "vibraphone",
+    "high_band_outside_harmonics_1_to_4_energy_ratio": 2.1137428080992447e-10
+  },
+  {
+    "name": "organ",
+    "high_band_outside_harmonics_1_to_4_energy_ratio": 2.3611038210033127e-10
+  },
+  {
+    "name": "bass",
+    "high_band_outside_harmonics_1_to_4_energy_ratio": 1.9792799158991142e-10
+  },
+  {
+    "name": "violin",
+    "high_band_outside_harmonics_1_to_4_energy_ratio": 3.5179654606180556e-10
+  },
+  {
+    "name": "strings",
+    "high_band_outside_harmonics_1_to_4_energy_ratio": 2.613480233523909e-10
+  },
+  {
+    "name": "trumpet",
+    "high_band_outside_harmonics_1_to_4_energy_ratio": 3.499437587080169e-10
+  },
+  {
+    "name": "sax",
+    "high_band_outside_harmonics_1_to_4_energy_ratio": 3.005889310051403e-10
+  },
+  {
+    "name": "lead",
+    "high_band_outside_harmonics_1_to_4_energy_ratio": 2.675553816844136e-10
+  },
+  {
+    "name": "pad",
+    "high_band_outside_harmonics_1_to_4_energy_ratio": 1.4495294244472842e-10
+  },
+  {
+    "name": "accordion",
+    "high_band_outside_harmonics_1_to_4_energy_ratio": 2.341630765701724e-10
+  }
+]

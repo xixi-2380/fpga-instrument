@@ -5,7 +5,7 @@ module touch_keyboard_router #(parameter integer AUX_ENABLE=1)(
  input wire clk,rst,blocked,menu_mode,more_mode,ultrasonic_page,
  input wire snapshot_valid,input wire [35:0] piano,input wire [11:0] aux,
  input wire [2:0] online,output wire [35:0] note_keys,
- output reg action_valid,output reg [5:0] action,output wire [35:0] qualified_keys);
+ output reg action_valid,output reg [6:0] action,output wire [35:0] qualified_keys);
  `include "config/ui_layout.svh"
  reg [35:0] armed;
  assign qualified_keys=armed;reg [11:0] aux_armed;

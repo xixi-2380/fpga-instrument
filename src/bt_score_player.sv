@@ -8,17 +8,19 @@ module bt_score_player #(
  input wire clk,rst,input wire command_valid,output wire command_ready,
  input wire [1:0] command,output reg command_done,
  input wire [15:0] note_count,input wire [31:0] song_duration,
- output reg [AW-1:0] ram_address,input wire [63:0] ram_data,
+ output reg [AW-1:0] ram_address,input wire [95:0] ram_data,
  output wire event_valid,input wire event_ready,output reg [1:0] event_kind,
  output reg [6:0] event_id,event_pitch,event_velocity,
  output reg [1:0] play_state,output reg [31:0] position_ms,
- output wire busy,output reg deadline_error);
+ output wire busy,output reg deadline_error,input wire record_format,output reg [4:0] event_timbre,output wire event_legacy);
+ assign event_legacy=!(record_format===1'b1);
+ reg [4:0] timbres[0:VOICES-1];
  localparam integer MS_CYCLES=CLOCK_HZ/1000;
  localparam integer MS_W=MS_CYCLES>1?$clog2(MS_CYCLES):1;
  localparam [3:0] IDLE=0,WAIT_TICK=1,SILENCE=2,OFF_BEGIN=3,OFF_SCAN=4,EMIT_OFF=5,
   ON_CHECK=6,FETCH=7,FETCH_WAIT=8,FETCH_LATCH=9,FREE_SCAN=10,EMIT_ON=11,RESUME_SCAN=12,RESUME_EMIT=13,OFF_READ=14;
  reg [3:0] state;reg [1:0] action;reg [MS_W-1:0] ms_counter;
- reg [15:0] pc;reg [63:0] next_record;reg next_valid;
+ reg [15:0] pc;reg [95:0] next_record;reg next_valid;
  reg [VOICES-1:0] active;reg [31:0] end_ms[0:VOICES-1];
  reg [6:0] pitches[0:VOICES-1],velocities[0:VOICES-1];
  reg [6:0] scan;reg fault_pending,natural_finish;
@@ -33,9 +35,9 @@ module bt_score_player #(
  always @(posedge clk or posedge rst)begin
   if(rst)begin
    state<=IDLE;action<=0;ms_counter<=0;pc<=0;next_record<=0;next_valid<=0;active<=0;
-   event_kind<=0;event_id<=0;event_pitch<=0;event_velocity<=0;scan<=0;scanned_active<=0;scanned_end<=0;scanned_pitch<=0;
+   event_timbre<=0;event_kind<=0;event_id<=0;event_pitch<=0;event_velocity<=0;scan<=0;scanned_active<=0;scanned_end<=0;scanned_pitch<=0;
    play_state<=0;position_ms<=0;command_done<=0;ram_address<=0;deadline_error<=0;fault_pending<=0;natural_finish<=0;
-   for(integer i=0;i<VOICES;i=i+1)begin end_ms[i]<=0;pitches[i]<=0;velocities[i]<=0;end
+   for(integer i=0;i<VOICES;i=i+1)begin timbres[i]<=0;end_ms[i]<=0;pitches[i]<=0;velocities[i]<=0;end
   end else begin
    command_done<=0;deadline_error<=0;
    if(play_state==1)begin if(time_tick)ms_counter<=0;else ms_counter<=ms_counter+1'b1;end
@@ -78,13 +80,13 @@ module bt_score_player #(
     FETCH_LATCH:begin next_record<=ram_data;next_valid<=1;state<=ON_CHECK;end
     FREE_SCAN:if(!active[scan])begin
       active[scan]<=1;end_ms[scan]<={16'b0,next_record[63:48]}+next_record[31:0];
-      pitches[scan]<=next_record[38:32];velocities[scan]<=next_record[46:40];
+      timbres[scan]<=next_record[68:64];event_timbre<=next_record[68:64];pitches[scan]<=next_record[38:32];velocities[scan]<=next_record[46:40];
       event_kind<=1;event_id<=scan;event_pitch<=next_record[38:32];event_velocity<=next_record[46:40];
       next_valid<=0;pc<=pc+1'b1;state<=EMIT_ON;
      end else if(scan==VOICES-1)begin fault_pending<=1;deadline_error<=1;state<=WAIT_TICK;end
      else scan<=scan+1'b1;
     EMIT_ON:if(event_ready)state<=ON_CHECK;
-    RESUME_SCAN:if(active[scan])begin event_kind<=1;event_id<=scan;event_pitch<=pitches[scan];event_velocity<=velocities[scan];state<=RESUME_EMIT;end
+    RESUME_SCAN:if(active[scan])begin event_timbre<=timbres[scan]; event_kind<=1;event_id<=scan;event_pitch<=pitches[scan];event_velocity<=velocities[scan];state<=RESUME_EMIT;end
      else if(scan==VOICES-1)begin play_state<=1;ms_counter<=0;state<=WAIT_TICK;command_done<=1;end
      else scan<=scan+1'b1;
     RESUME_EMIT:if(event_ready)begin

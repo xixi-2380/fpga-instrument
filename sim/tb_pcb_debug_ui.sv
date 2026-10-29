@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 module tb_pcb_debug_ui;
  reg clk=0,rst=1,menu=0,ack=0,av=0;always #5 clk=~clk;
- reg visible=0;reg [5:0] action=63;reg [1023:0] hw=0;reg [383:0] enc=0;reg [319:0] audio=0;
+ reg visible=0;reg [6:0] action=63;reg [1023:0] hw=0;reg [383:0] enc=0;reg [319:0] audio=0;
  wire mute,page;wire [159:0] control;wire [2:0] clear;wire [2591:0] display;
  integer checks=0;reg [2559:0] frozen_lines;
  pcb_debug_ui dut(clk,rst,1'b1,menu,ack,av,action,1'b1,hw,enc,12'd0,audio,mute,page,control,clear,display,visible);

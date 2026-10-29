@@ -3,7 +3,7 @@
 // Sending zero keys to the note adapter drains Note Off instead of freezing it.
 module ui_keypad_router #(parameter integer RELEASE_CYCLES=1)(
  input wire clk,rst,menu_mode,ghost,input wire [15:0] keys,
- output wire inhibit_notes,output reg action_valid,output reg [5:0] action,input wire more_mode,ultrasonic_page);
+ output wire inhibit_notes,output reg action_valid,output reg [6:0] action,input wire more_mode,ultrasonic_page);
  `include "config/ui_layout.svh"
  localparam integer RW=$clog2(RELEASE_CYCLES+1);
  reg [RW-1:0] release_count;

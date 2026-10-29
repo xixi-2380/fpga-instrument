@@ -1,0 +1,3 @@
+FULL_SAVE programs=8 erases=2 sim_clock=133850110000
+PASS tb_midi_flash_production checks=32 half=25 count=24 programs=8 erases=2
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_midi_flash_production.sv:56: $finish called at 155532530000 (1ps)

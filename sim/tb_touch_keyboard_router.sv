@@ -3,7 +3,7 @@
 module tb_touch_keyboard_router;
  reg clk=0,rst=1,blocked=0,menu=0,more=0,ultra=0,valid=0;always #5 clk=~clk;
  reg [35:0] piano=0;reg [11:0] aux=0;reg [2:0] online=0;
- wire [35:0] notes;wire av;wire [5:0] action;
+ wire [35:0] notes;wire av;wire [6:0] action;
  integer checks=0,events=0;reg [5:0] last_action;
  `include "../src/config/ui_layout.svh"
  touch_keyboard_router dut(clk,rst,blocked,menu,more,ultra,valid,piano,aux,online,notes,av,action,);

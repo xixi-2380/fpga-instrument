@@ -3,9 +3,9 @@
 module tb_ui_controls;
  `include "../src/config/ui_layout.svh"
  reg clk=0,rst=1;always #5 clk=~clk;
- reg [3:0] buttons=15;reg v=0,ready=1;reg [5:0] action=UI_NONE;
- wire [2:0] timbre;wire [1:0] fx;wire en,menu,cv;wire [8:0] e,r,d;
- wire [6:0] ep,rp,dp;wire [3:0] hz,cfg_hz;
+ reg [3:0] buttons=15;reg v=0,ready=1;reg [6:0] action=UI_NONE;
+ wire [4:0] timbre;wire [1:0] fx;wire en,menu,cv;wire [8:0] e,r,d;
+ wire [6:0] ep,rp,dp;wire [4:0] hz,cfg_hz;
  reg av=0;reg [7:0] aver=0;reg [6:0] atarget=0;
  wire upage,uen;wire [2:0] sens;wire [6:0] umin,umax;wire [7:0] uver;
  integer checks=0,commands=0;reg [30:0] held;
@@ -18,7 +18,7 @@ module tb_ui_controls;
   .ultrasonic_min(umin),.ultrasonic_max(umax),.ultrasonic_version(uver),
   .auto_valid(av),.auto_version(aver),.auto_target(atarget));
  task cycles(input integer n);begin repeat(n)@(negedge clk);end endtask
- task act(input [5:0] a);begin @(negedge clk);v=1;action=a;@(negedge clk);v=0;cycles(4);end endtask
+ task act(input [6:0] a);begin @(negedge clk);v=1;action=a;@(negedge clk);v=0;cycles(4);end endtask
  task short0;begin buttons=14;cycles(10);buttons=15;cycles(10);end endtask
  always @(posedge clk)if(!rst && cv && ready)commands=commands+1;
  initial begin
@@ -33,9 +33,12 @@ module tb_ui_controls;
   act(UI_PIANO);`CHECK(timbre==4,"direct piano command")
   act(UI_GUITAR);`CHECK(timbre==5,"direct guitar command")
   act(UI_VIBES);`CHECK(timbre==6,"direct vibraphone command")
-  act(UI_NEXT);`CHECK(timbre==0,"next wraps seven presets")
-  act(UI_PREV);`CHECK(timbre==6,"previous wraps seven presets")
-  repeat(7)act(UI_NEXT);`CHECK(timbre==6,"full cycle preserves preset identity")
+  act(UI_NEXT);`CHECK(timbre==7,"next reaches added organ")
+  act(UI_SINE);act(UI_PREV);`CHECK(timbre==15,"previous wraps sixteen presets")
+  repeat(16)act(UI_NEXT);`CHECK(timbre==15,"full cycle preserves preset identity")
+  act(UI_SINE);act(7'd80);`CHECK(timbre==8,"page switch reaches second bank")
+  for(integer i=0;i<8;i++)begin act(7'(64+i));`CHECK(timbre==8+i,"all second-page instruments selectable") end
+  act(7'd80);`CHECK(timbre==7,"page switch preserves card index")
   act(UI_SINE);
   act(UI_ECHO);repeat(30)begin act(UI_MORE);`CHECK(e==(ep*256+50)/100,"percentage lookup matches rounded arithmetic") end
   `CHECK(ep==100 && e==256 && en,"echo amount clamps at 100 percent")
@@ -43,8 +46,8 @@ module tb_ui_controls;
   `CHECK(ep==0 && e==0,"echo clamps at zero")
   act(UI_ROOM);repeat(3)act(UI_MORE);`CHECK(rp==40 && r==102 && ep==0,"room target is independent")
   act(UI_TREMOLO);repeat(15)act(UI_MORE);repeat(15)act(UI_FASTER);
-  `CHECK(dp==100 && d==256 && hz==10 && cfg_hz==10,"depth and rate clamp high")
-  repeat(15)act(UI_SLOWER);`CHECK(hz==1 && cfg_hz==1,"rate clamps low")
+  `CHECK(dp==100 && d==256 && hz==20 && cfg_hz==20,"depth and rate clamp high")
+  repeat(25)act(UI_SLOWER);`CHECK(hz==1 && cfg_hz==1,"rate clamps low")
   act(UI_ECHO);act(UI_FASTER);`CHECK(hz==1,"rate controls ignored outside tremolo")
   act(UI_DEFAULTS);`CHECK(ep==25 && rp==25 && dp==50 && hz==5 && fx==0 && !en,"restore effects defaults preserves timbre and menu")
   ready=0;act(UI_MORE);cycles(4);`CHECK(cv,"pending parameter packet offered")

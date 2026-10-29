@@ -1,0 +1,2 @@
+PASS tb_pcb_repeat checks=3
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_pcb_repeat.sv:14: $finish called at 770000 (1ps)

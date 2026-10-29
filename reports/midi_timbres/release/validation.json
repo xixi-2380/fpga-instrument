@@ -1,0 +1,236 @@
+{
+  "passed": true,
+  "base_commit": "a8f38e055e351c65b53ff087bd403de8dcae0302",
+  "hdl_configurations": 44,
+  "java_checks": 36258,
+  "results": [
+    {
+      "name": "legacy_protocol",
+      "passed": true,
+      "evidence": "legacy_protocol.log"
+    },
+    {
+      "name": "extended_protocol",
+      "passed": true,
+      "evidence": "extended_protocol.log"
+    },
+    {
+      "name": "legacy_flash_transactions",
+      "passed": true,
+      "evidence": "legacy_flash_transactions.log"
+    },
+    {
+      "name": "mixed_flash_upgrade",
+      "passed": true,
+      "evidence": "mixed_flash_upgrade.log"
+    },
+    {
+      "name": "timbre_audio_components",
+      "passed": true,
+      "evidence": "timbre_audio_components.log"
+    },
+    {
+      "name": "top16_and_drums",
+      "passed": true,
+      "evidence": "top16_and_drums.log"
+    },
+    {
+      "name": "dds",
+      "passed": true,
+      "evidence": "dds.log"
+    },
+    {
+      "name": "seven_original_waveforms",
+      "passed": true,
+      "evidence": "seven_original_waveforms.log"
+    },
+    {
+      "name": "envelopes",
+      "passed": true,
+      "evidence": "envelopes.log"
+    },
+    {
+      "name": "allocator",
+      "passed": true,
+      "evidence": "allocator.log"
+    },
+    {
+      "name": "mixed32",
+      "passed": true,
+      "evidence": "mixed32.log"
+    },
+    {
+      "name": "synth32",
+      "passed": true,
+      "evidence": "synth32.log"
+    },
+    {
+      "name": "ui_controls",
+      "passed": true,
+      "evidence": "ui_controls.log"
+    },
+    {
+      "name": "ui_touch",
+      "passed": true,
+      "evidence": "ui_touch.log"
+    },
+    {
+      "name": "menu_visual",
+      "passed": true,
+      "evidence": "menu_visual.log"
+    },
+    {
+      "name": "renderer",
+      "passed": true,
+      "evidence": "renderer.log"
+    },
+    {
+      "name": "pcb_silence",
+      "passed": true,
+      "evidence": "pcb_silence.log"
+    },
+    {
+      "name": "pcb_readable",
+      "passed": true,
+      "evidence": "pcb_readable.log"
+    },
+    {
+      "name": "pcb_repeat",
+      "passed": true,
+      "evidence": "pcb_repeat.log"
+    },
+    {
+      "name": "bt_polyphony",
+      "passed": true,
+      "evidence": "bt_polyphony.log"
+    },
+    {
+      "name": "bt_production_player",
+      "passed": true,
+      "evidence": "bt_production_player.log"
+    },
+    {
+      "name": "stereo",
+      "passed": true,
+      "evidence": "stereo.log"
+    },
+    {
+      "name": "effect_replay",
+      "passed": true,
+      "evidence": "effect_replay.log"
+    },
+    {
+      "name": "bt_identity",
+      "passed": true,
+      "evidence": "bt_identity.log"
+    },
+    {
+      "name": "tail_reuse",
+      "passed": true,
+      "evidence": "tail_reuse.log"
+    },
+    {
+      "name": "touch_keyboard",
+      "passed": true,
+      "evidence": "touch_keyboard.log"
+    },
+    {
+      "name": "touch_ec11",
+      "passed": true,
+      "evidence": "touch_ec11.log"
+    },
+    {
+      "name": "event_cdc",
+      "passed": true,
+      "evidence": "event_cdc.log"
+    },
+    {
+      "name": "status_cdc",
+      "passed": true,
+      "evidence": "status_cdc.log"
+    },
+    {
+      "name": "sustain",
+      "passed": true,
+      "evidence": "sustain.log"
+    },
+    {
+      "name": "flash_full4096_accelerated",
+      "passed": true,
+      "evidence": "flash_full4096_accelerated.log"
+    },
+    {
+      "name": "flash_production_1mhz_24",
+      "passed": true,
+      "evidence": "flash_production_1mhz_24.log"
+    },
+    {
+      "name": "retrigger_0",
+      "passed": true,
+      "evidence": "retrigger_0.log"
+    },
+    {
+      "name": "retrigger_4",
+      "passed": true,
+      "evidence": "retrigger_4.log"
+    },
+    {
+      "name": "retrigger_6",
+      "passed": true,
+      "evidence": "retrigger_6.log"
+    },
+    {
+      "name": "retrigger_7",
+      "passed": true,
+      "evidence": "retrigger_7.log"
+    },
+    {
+      "name": "retrigger_8",
+      "passed": true,
+      "evidence": "retrigger_8.log"
+    },
+    {
+      "name": "retrigger_9",
+      "passed": true,
+      "evidence": "retrigger_9.log"
+    },
+    {
+      "name": "retrigger_10",
+      "passed": true,
+      "evidence": "retrigger_10.log"
+    },
+    {
+      "name": "retrigger_11",
+      "passed": true,
+      "evidence": "retrigger_11.log"
+    },
+    {
+      "name": "retrigger_12",
+      "passed": true,
+      "evidence": "retrigger_12.log"
+    },
+    {
+      "name": "retrigger_13",
+      "passed": true,
+      "evidence": "retrigger_13.log"
+    },
+    {
+      "name": "retrigger_14",
+      "passed": true,
+      "evidence": "retrigger_14.log"
+    },
+    {
+      "name": "retrigger_15",
+      "passed": true,
+      "evidence": "retrigger_15.log"
+    }
+  ],
+  "models": "Integration uses behavioral PLL/ODDR/GSR; components use actual project RTL",
+  "flash_full_capacity": "4096 x12B, real services/driver/wire NOR; HALF=4 (6.25MHz) and accelerated NOR busy",
+  "flash_production_speed": "24 x12B crossing a page; HALF=25 (1MHz), original program/erase busy cycles",
+  "not_completed": "Uninterrupted 4096 x12B production1MHz was cancelled; not a pass. Historical8B fixture took5274s. Early fixture issues were corrected before the two release configurations.",
+  "hardware": "No Gowin/STA/programming/phone/radio/board audition; no matching bitstream",
+  "known_baseline_sta": "639 Setup violations, 0 Hold, not a new measurement",
+  "apk_signing": "New development key; cannot upgrade an old APK signed by another key",
+  "obsolete_test": "tb_ui_top uses removed matrix parameters and is not a production test; touch_ec11_top covers current adapters"
+}

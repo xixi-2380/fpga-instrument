@@ -25,7 +25,7 @@ module tb_ultrasonic_top;
   prior_volume=dut.volume_percent;
  end
  task cycles(input integer n);begin repeat(n)@(negedge dut.audio_clk);end endtask
- task act(input [5:0] action);begin
+ task act(input [6:0] action);begin
   @(negedge dut.audio_clk);command=action;command_valid=1;
   @(negedge dut.audio_clk);command_valid=0;cycles(3);
  end endtask

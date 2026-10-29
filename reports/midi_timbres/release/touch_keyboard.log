@@ -1,0 +1,2 @@
+PASS tb_touch_keyboard_router checks=1331 actions=56
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_touch_keyboard_router.sv:51: $finish called at 6520000 (1ps)

@@ -5,7 +5,7 @@ module key_note_events #(parameter integer BASE_NOTE=60,KEYS=16,INDEX_W=(KEYS>1?
     input wire clk,rst,enabled,input wire [KEYS-1:0] keys,input wire note_ready,
     output reg note_valid,note_on,output reg [6:0] note_id,
     output reg [31:0] note_fcw,output wire gate,output reg [INDEX_W-1:0] last_key,
-    input wire [2:0] selected_timbre,output reg [2:0] note_timbre);
+    input wire [4:0] selected_timbre,output reg [4:0] note_timbre);
     `include "config/keyboard_notes.svh"
     reg [KEYS-1:0] reported_keys;
     reg [INDEX_W-1:0] offered_key;
@@ -17,16 +17,12 @@ module key_note_events #(parameter integer BASE_NOTE=60,KEYS=16,INDEX_W=(KEYS>1?
     reg [INDEX_W-1:0] group_key[0:GROUPS-1];
     reg lookup_pending,select_pending;
     reg [KEYS-1:0] released_q,pressed_q;
-    reg [2:0] sampled_timbre,offered_timbre;
+    reg [4:0] sampled_timbre,offered_timbre;
     // Free-running preparation: LOAD consumes the value sampled on the
     // selection edge, preserving the exact onset preset without a long CE.
     always @(posedge clk or posedge rst)begin
         if(rst)sampled_timbre<=0;
-        else case(selected_timbre)
-            1:sampled_timbre<=1;2:sampled_timbre<=2;3:sampled_timbre<=3;
-            4:sampled_timbre<=4;5:sampled_timbre<=5;6:sampled_timbre<=6;
-            default:sampled_timbre<=0;
-        endcase
+        else if(selected_timbre<16)sampled_timbre<=selected_timbre;else sampled_timbre<=0;
     end
     always @* begin
         // Bounded two-level priority, six keys per group. A registered key

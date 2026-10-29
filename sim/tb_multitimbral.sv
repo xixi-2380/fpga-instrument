@@ -73,11 +73,11 @@ module tb_multitimbral;
   more_frames(25);
   `CHECK(&voice_active && &voice_held,"all 32 mixed-timbre voices sustain")
   for(integer v=0;v<VOICES;v=v+1)begin
-   `CHECK(sound.voice_timbres[v*3+:3]==v%3,"accepted timbre stays with its voice")
+   `CHECK(sound.voice_timbres[v*5+:5]==v%3,"accepted timbre stays with its voice")
   end
   note_timbre=2;more_frames(10);
   for(integer v=0;v<VOICES;v=v+1)begin
-   `CHECK(sound.voice_timbres[v*3+:3]==v%3,"selection alone does not alter held notes")
+   `CHECK(sound.voice_timbres[v*5+:5]==v%3,"selection alone does not alter held notes")
   end
   event_note(0,32,0);more_frames(3);
   `CHECK(sound.voice_timbres[1:0]==0 && voice_active[0],"release preserves original timbre during tail")

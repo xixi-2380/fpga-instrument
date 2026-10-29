@@ -9,7 +9,7 @@ module synth_core #(
     DELAY_SAMPLES=7200,ROOM_D0=1499,ROOM_D1=1601,ROOM_D2=1867,ROOM_D3=2053)(
     input wire clk,rst,note_valid,note_on,input wire [6:0] note_id,input wire [31:0] note_fcw,
     output wire note_ready,input_ready,bck,ws,din,pa_enable,underrun,frame_ce,gate,
-    output wire [VOICES-1:0] voice_active,voice_held,output reg [16:0] envelope_level,input wire [2:0] note_timbre,input wire effects_enable,input wire [1:0] effect_mode,
+    output wire [VOICES-1:0] voice_active,voice_held,output reg [16:0] envelope_level,input wire [4:0] note_timbre,input wire effects_enable,input wire [1:0] effect_mode,
     input wire effect_cfg_valid,input wire [8:0] effect_echo_wet,effect_room_wet,effect_tremolo_depth,
     input wire [4:0] effect_tremolo_rate_hz,output wire effect_cfg_ready,effect_cfg_applied,
     output wire visual_sample_valid,output wire signed [15:0] visual_sample,
@@ -62,8 +62,8 @@ module synth_core #(
     wire [VOICES*7-1:0] voice_ids,voice_pitches;
     wire [VOICES*9-1:0] voice_gains;
     wire [16:0] voice_level[0:VOICES-1];
-    wire [VOICES*3-1:0] voice_timbres;
-    reg [VOICES*3-1:0] frame_timbres;
+    wire [VOICES*5-1:0] voice_timbres;
+    reg [VOICES*5-1:0] frame_timbres;
     reg render_busy;
     reg [CYCLE_W-1:0] render_cycle;
     reg [VOICES*32-1:0] frame_fcw;
@@ -83,7 +83,7 @@ module synth_core #(
     reg gain_request,first_sample,last_sample;
     reg [INDEX_W-1:0] sample_voice;
     reg [INDEX_W-1:0] prepared_voice;
-    reg [31:0] slot_fcw;reg slot_restart;reg [2:0] slot_timbre;
+    reg [31:0] slot_fcw;reg slot_restart;reg [4:0] slot_timbre;
     wire signed [`VOICE_W-1:0] gain_sample;
     wire signed [15:0] mix_sample;
     wire [15:0] frame_l,frame_r;
@@ -205,7 +205,7 @@ module synth_core #(
         wire [16:0] native_level;wire native_active;
         if(SUSTAIN_ENABLE)begin: sustain_on
             sustain_envelope tail(.clk(clk),.rst(envelope_reset),.sample_ce(envelope_enables[v]),
-                .note_on(voice_start[v]),.note_off(voice_stop[v]),.enabled(effect_mask[0]===1'b1),
+                .note_on(voice_start[v]),.note_off(voice_stop[v]),.enabled(effect_mask[0]===1'b1 && voice_timbres[v*5+:5]<16),
                 .base_level(native_level),.base_active(native_active),.duration(release_curve[50:34]),
                 .phase_step(release_curve[33:17]),.phase_remainder(release_curve[16:0]),.strength(release_strength),
                 .level(voice_level[v]),.active(voice_active[v]));
@@ -214,7 +214,7 @@ module synth_core #(
         end
         instrument_envelope #(.ATTACK(ATTACK),.DECAY(DECAY),.SUSTAIN(SUSTAIN),.RELEASE(RELEASE),.PRECALC(1)) envelope(
             .clk(clk),.rst(envelope_reset),.sample_ce(envelope_enables[v]),.note_on(voice_start[v]),.note_off(voice_stop[v]),
-            .level(native_level),.active(native_active),.restart(voice_restart[v]),.timbre(voice_timbres[v*3+:3]));
+            .level(native_level),.active(native_active),.restart(voice_restart[v]),.timbre(voice_timbres[v*5+:5]));
     end
     dds_sine #(.VOICES(VOICES)) dds(.clk(clk),.rst(engine_reset),.sample_ce(dds_ce),
         .fcw(slot_fcw),.sample(raw_sample),.valid(raw_valid),
@@ -233,7 +233,7 @@ module synth_core #(
                 prepared_voice<=render_cycle>>4;
             if(render_busy && render_cycle<16*VOICES && render_cycle[3:0]==15)begin
                 slot_fcw<=frame_fcw[prepared_voice*32+:32];
-                slot_restart<=frame_restart[prepared_voice];slot_timbre<=frame_timbres[prepared_voice*3+:3];
+                slot_restart<=frame_restart[prepared_voice];slot_timbre<=frame_timbres[prepared_voice*5+:5];
             end
             // Context selection and multiplication occupy separate clocks.
             gain_request<=in_slots && render_cycle[3:0]==4;
@@ -328,7 +328,7 @@ module synth_core #(
         if(envelope_enables!=={VOICES{frame_ce}})$fatal(1,"Distributed envelope CE changed sample boundary");
         if(envelope_resets!=={VOICES{engine_reset}})$fatal(1,"Distributed envelope reset changed clear phase");
         if(dds_ce && (prepared_voice!==selected_voice ||
-           {slot_fcw,slot_restart,slot_timbre}!=={frame_fcw[selected_voice*32+:32],frame_restart[selected_voice],frame_timbres[selected_voice*3+:3]}))
+           {slot_fcw,slot_restart,slot_timbre}!=={frame_fcw[selected_voice*32+:32],frame_restart[selected_voice],frame_timbres[selected_voice*5+:5]}))
             $fatal(1,"Prepared DDS context differs at the original sample edge");
         if(frame_ce && render_busy)$fatal(1,"Frame renderer missed deadline");
         if(STEREO_ENABLE && (stereo_mix_valid!==stereo_mix_valid_r || effect_valid!==effect_valid_r || output_valid!==output_valid_r || effect_cfg_ready!==cfg_ready_r || effect_cfg_applied!==cfg_applied_r))$fatal(1,"Stereo channel pipeline mismatch");

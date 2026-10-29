@@ -1,0 +1,2 @@
+PASS tb_touch_ec11_top checks=1352772 frames=1057 max_delivery=527
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_touch_ec11_top.sv:64: $finish called at 22001678074 (1ps)

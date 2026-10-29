@@ -1,0 +1,12 @@
+job cmd=0 id=0 error=00 entries=00000001
+job cmd=1 id=0 error=00 entries=00000001
+job cmd=1 id=0 error=00 entries=00000001
+job cmd=1 id=0 error=00 entries=00000001
+job cmd=1 id=0 error=00 entries=00000001
+job cmd=1 id=0 error=00 entries=00000001
+job cmd=0 id=1 error=00 entries=00000003
+job cmd=1 id=1 error=00 entries=00000003
+job cmd=1 id=0 error=00 entries=00000003
+job cmd=1 id=1 error=09 entries=00000003
+PASS tb_midi_flash checks=95
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_midi_flash.sv:74: $finish called at 4094340000 (1ps)

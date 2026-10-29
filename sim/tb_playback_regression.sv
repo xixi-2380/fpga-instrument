@@ -19,7 +19,7 @@ module tb_playback_regression;
    `CHECK(dut.visual_sample==0,"released idle produces exact digital zero")
  end
  task more(input integer n);integer target;begin target=frames+n;wait(frames>=target);#1;end endtask
- task act(input [5:0] action);begin
+ task act(input [6:0] action);begin
   @(negedge dut.audio_clk);command=action;command_valid=1;
   @(negedge dut.audio_clk);command_valid=0;
  end endtask

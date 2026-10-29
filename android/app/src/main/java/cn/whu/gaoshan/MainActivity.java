@@ -27,7 +27,7 @@ public final class MainActivity extends Activity {
     private ProtocolClient.Capabilities caps;private boolean busy=false,demo=false,dead=false;
     private final AtomicBoolean cancel=new AtomicBoolean();
     private MidiFile midi;private Score score;private String songName="未导入";
-    private TextView status,capacity,summary,log,position,progressText,libraryInfo;private Spinner tracks,channels,librarySlots;
+    private TextView status,capacity,summary,log,position,progressText,libraryInfo;private Spinner tracks,channels,librarySlots,timbreMode;private CheckBox excludeDrums;
     private ProtocolClient.LibraryCapabilities libraryCaps;
     private EditText transpose;private ProgressBar progress;private LinearLayout page;
     private Spinner connectionMode;private Button verifyButton;private String deviceLabel="";private boolean askedScanPermission;
@@ -39,7 +39,7 @@ public final class MainActivity extends Activity {
     }
     @Override public void onCreate(Bundle saved){super.onCreate(saved);getWindow().setStatusBarColor(Color.rgb(13,26,34));getWindow().setNavigationBarColor(Color.rgb(13,26,34));
         ScrollView scroll=new ScrollView(this);page=new LinearLayout(this);page.setOrientation(LinearLayout.VERTICAL);page.setPadding(dp(20),dp(28),dp(20),dp(32));page.setBackgroundColor(Color.rgb(13,26,34));scroll.addView(page);scroll.setOnApplyWindowInsetsListener((v,insets)->{page.setPadding(dp(20)+insets.getSystemWindowInsetLeft(),dp(20)+insets.getSystemWindowInsetTop(),dp(20)+insets.getSystemWindowInsetRight(),dp(24)+insets.getSystemWindowInsetBottom());return insets;});setContentView(scroll);
-        label("高山流水",30,ink);label("曲谱传送 · 开发版 0.3.3 · PCB与Flash诊断",14,accent);
+        label("高山流水",30,ink);label("曲谱传送 · 开发版 0.4 · MIDI多音色",14,accent);
         label("连接电子琴",20,ink);status=label("未连接设备",15,accent);capacity=label("先在系统蓝牙设置中配对模块。此 App 只列出已配对的经典蓝牙设备。",13,muted);
         label("第一步：仅连接蓝牙模块",15,ink);
         connectionMode=new Spinner(this);setItems(connectionMode,new String[]{"自动兼容：安全失败后尝试 insecure","仅安全 RFCOMM","仅兼容 insecure RFCOMM"});page.addView(connectionMode);
@@ -51,6 +51,7 @@ public final class MainActivity extends Activity {
         label("导入与选择",20,ink);row(button("导入 MIDI",this::pickMidi,false),button("三音符示例",this::golden,false));
         tracks=new Spinner(this);channels=new Spinner(this);setItems(tracks,new String[]{"全部轨道"});setItems(channels,new String[]{"全部通道"});
         label("轨道",13,muted);page.addView(tracks);label("MIDI 通道",13,muted);page.addView(channels);
+        timbreMode=new Spinner(this);String[] modes=new String[18];modes[0]="按原谱音色（默认）";for(int i=0;i<16;i++)modes[i+1]="统一旋律："+Timbres.NAMES[i];modes[17]="旧协议：琴端统一音色（须排除鼓轨）";setItems(timbreMode,modes);page.addView(timbreMode);excludeDrums=new CheckBox(this);excludeDrums.setText("排除第10通道鼓轨");excludeDrums.setTextColor(ink);page.addView(excludeDrums);
         transpose=new EditText(this);transpose.setSingleLine(true);transpose.setText("0");transpose.setTextColor(ink);transpose.setHintTextColor(muted);transpose.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_SIGNED);transpose.setHint("移调半音：-48 ～ +48");page.addView(transpose);
         page.addView(button("应用筛选与移调",this::convert,false));summary=label("尚无曲谱。导入后检查轨道、音域和声部数。",14,ink);
         label("传送到琴",20,ink);progress=new ProgressBar(this,null,android.R.attr.progressBarStyleHorizontal);progress.setMax(1000);page.addView(progress);progressText=label("尚未上传",13,muted);
@@ -68,14 +69,14 @@ public final class MainActivity extends Activity {
         row(button("保存当前RAM",()->libraryAction(0),true),button("加载选中曲谱",()->libraryAction(1),true));
         page.addView(button("删除选中曲谱",()->{int index=librarySlots.getSelectedItemPosition();new AlertDialog.Builder(this).setMessage(String.format(Locale.ROOT,"删除琴端 S%03d？",index+1)).setNegativeButton("取消",null).setPositiveButton("确认删除",(d,w)->runLibraryAction(2,index)).show();},true));
         label("连接记录",20,ink);log=label("等待操作。离线演示不使用蓝牙，也不驱动扬声器。",12,muted);
-        Button copy=button("复制诊断记录",()->{android.content.ClipboardManager clipboard=(android.content.ClipboardManager)getSystemService(CLIPBOARD_SERVICE);clipboard.setPrimaryClip(ClipData.newPlainText("蓝牙诊断","高山流水 0.3.3-pcb-flash-debug\n设备："+deviceLabel+"\n状态："+module.state()+"\n"+log.getText()));Toast.makeText(this,"诊断记录已复制",Toast.LENGTH_SHORT).show();},false);lockedButtons.remove(copy);page.addView(copy);render();
+        Button copy=button("复制诊断记录",()->{android.content.ClipboardManager clipboard=(android.content.ClipboardManager)getSystemService(CLIPBOARD_SERVICE);clipboard.setPrimaryClip(ClipData.newPlainText("蓝牙诊断","高山流水 0.4-midi-timbres\n设备："+deviceLabel+"\n状态："+module.state()+"\n"+log.getText()));Toast.makeText(this,"诊断记录已复制",Toast.LENGTH_SHORT).show();},false);lockedButtons.remove(copy);page.addView(copy);render();
     }
     private int dp(int n){return (int)(getResources().getDisplayMetrics().density*n+.5f);}
     private TextView label(String text,int size,int color){TextView v=new TextView(this);v.setText(text);v.setTextSize(size);v.setTextColor(color);v.setPadding(0,dp(10),0,dp(6));page.addView(v);return v;}
     private Button button(String text,Runnable action,boolean needsConnection){Button b=new Button(this);b.setText(text);b.setAllCaps(false);b.setMinHeight(dp(52));b.setOnClickListener(v->action.run());lockedButtons.add(b);if(needsConnection)connectedButtons.add(b);return b;}
     private void row(Button a,Button b){LinearLayout l=new LinearLayout(this);l.setOrientation(LinearLayout.HORIZONTAL);l.addView(a,new LinearLayout.LayoutParams(0,-2,1));l.addView(b,new LinearLayout.LayoutParams(0,-2,1));page.addView(l);}
     private void setItems(Spinner s,String[] items){ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,items){@Override public View getView(int position,View convertView,ViewGroup parent){TextView text=(TextView)super.getView(position,convertView,parent);text.setTextColor(ink);text.setPadding(dp(8),dp(12),dp(8),dp(12));return text;}};adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);s.setAdapter(adapter);}
-    private void render(){for(Button b:lockedButtons)b.setEnabled(!busy&&(!connectedButtons.contains(b)||client!=null&&caps!=null));tracks.setEnabled(!busy&&midi!=null);channels.setEnabled(!busy&&midi!=null);transpose.setEnabled(!busy&&midi!=null);if(librarySlots!=null)librarySlots.setEnabled(!busy);
+    private void render(){for(Button b:lockedButtons)b.setEnabled(!busy&&(!connectedButtons.contains(b)||client!=null&&caps!=null));tracks.setEnabled(!busy&&midi!=null);channels.setEnabled(!busy&&midi!=null);transpose.setEnabled(!busy&&midi!=null);timbreMode.setEnabled(!busy);excludeDrums.setEnabled(!busy);if(librarySlots!=null)librarySlots.setEnabled(!busy);
         ModuleConnection.State state=module.state();verifyButton.setEnabled(!busy&&!demo&&(state==ModuleConnection.State.MODULE_CONNECTED||state==ModuleConnection.State.READY));connectionMode.setEnabled(!busy);}
     private void renderConnection(){
         if(status==null||demo)return;
@@ -116,9 +117,9 @@ public final class MainActivity extends Activity {
             module.connect(secure->new BluetoothAttempt(device,secure,module,text->ui(()->append(text))),mode,12000,()->epoch!=generation);
         });
     }
-    private void verifyFpga(){int epoch=generation;task("验证FPGA通信",()->{ProtocolClient.Capabilities cap=module.verify();ProtocolClient verified=module.readyClient();if(verified==null)throw new IOException("验证后连接已断开");ProtocolClient.Status actual;ProtocolClient.LibraryCapabilities ext;try{actual=verified.status();ext=verified.libraryCapabilities();}catch(IOException e){module.protocolFailed();throw e;}ui(()->{if(epoch==generation&&module.state()==ModuleConnection.State.READY){client=verified;caps=cap;libraryCaps=ext;showCapacity(cap);showStatus(actual);showLibraryCapabilities(ext);append("HELLO及状态查询已确认；设备报告 UART "+cap.baud+" bit/s。");}});});}
-    private void showCapacity(ProtocolClient.Capabilities c){capacity.setText((demo?"模拟能力（非实板）：":"设备报告：")+c.maxNotes+" 条音符 / "+c.voices+" 声部 / MIDI "+c.minNote+"～"+c.maxNote+"\n"+((c.features&2)==0?"曲谱保存在RAM，断电丢失。":"设备声明掉电保留；以实际固件为准。"));}
-    private void startDemo(){disconnect();demo=true;deviceLabel="DEMO";int epoch=generation;task("启动离线演示",()->{ProtocolClient c=new ProtocolClient(new SimulatedDevice(true));client=c;ProtocolClient.Capabilities cap=c.hello();ProtocolClient.LibraryCapabilities ext=c.libraryCapabilities();ui(()->{if(epoch==generation){caps=cap;libraryCaps=ext;status.setText("离线演示 · 未连接FPGA");showCapacity(cap);showLibraryCapabilities(ext);append("现在只与手机内模拟设备通信，不发声，不证明硬件通过；演示曲库关闭App后不保留。");}});});}
+    private void verifyFpga(){int epoch=generation;task("验证FPGA通信",()->{ProtocolClient.Capabilities cap=module.verify();ProtocolClient verified=module.readyClient();if(verified==null)throw new IOException("验证后连接已断开");ProtocolClient.Status actual;ProtocolClient.LibraryCapabilities ext;try{actual=verified.status();ext=verified.libraryCapabilities();verified.audioCapabilities();}catch(IOException e){module.protocolFailed();throw e;}ui(()->{if(epoch==generation&&module.state()==ModuleConnection.State.READY){client=verified;caps=cap;libraryCaps=ext;showCapacity(cap);showStatus(actual);showLibraryCapabilities(ext);append("HELLO及状态查询已确认；设备报告 UART "+cap.baud+" bit/s。");}});});}
+    private void showCapacity(ProtocolClient.Capabilities c){capacity.setText((demo?"模拟能力（非实板）：":"设备报告：")+(client!=null&&client.multitimbral?"16种旋律音色＋10种鼓音\n":"仅支持旧模式：8字节曲谱\n")+c.maxNotes+" 条音符 / "+c.voices+" 声部 / MIDI "+c.minNote+"～"+c.maxNote+"\n"+((c.features&2)==0?"曲谱保存在RAM，断电丢失。":"设备声明掉电保留；以实际固件为准。"));}
+    private void startDemo(){disconnect();demo=true;deviceLabel="DEMO";int epoch=generation;task("启动离线演示",()->{ProtocolClient c=new ProtocolClient(new SimulatedDevice(true));client=c;ProtocolClient.Capabilities cap=c.hello();c.audioCapabilities();ProtocolClient.LibraryCapabilities ext=c.libraryCapabilities();ui(()->{if(epoch==generation){caps=cap;libraryCaps=ext;status.setText("离线演示 · 未连接FPGA");showCapacity(cap);showLibraryCapabilities(ext);append("现在只与手机内模拟设备通信，不发声，不证明硬件通过；演示曲库关闭App后不保留。");}});});}
     private void disconnect(){generation++;cancel.set(true);ProtocolClient c=client;client=null;caps=null;libraryCaps=null;if(c!=null)c.close();module.disconnect();busy=false;if(status!=null){status.setText("未连接模块");capacity.setText("可以连接已配对的SPP模块，或先用离线演示。");render();}}
     private void pickMidi(){Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT);i.setType("*/*");i.addCategory(Intent.CATEGORY_OPENABLE);startActivityForResult(i,11);}
     @Override protected void onActivityResult(int request,int result,Intent intent){super.onActivityResult(request,result,intent);if(request==12){if(result==RESULT_OK)chooseDevice();else append("蓝牙未开启，未发起连接。");return;}if(request!=11||result!=RESULT_OK||intent==null||intent.getData()==null)return;Uri uri=intent.getData();
@@ -130,12 +131,12 @@ public final class MainActivity extends Activity {
     }
     private void golden(){midi=null;score=Score.golden();songName="三音符示例（C4 D4 E4）";showScore();render();}
     private void convert(){if(midi==null){message("先导入MIDI；三音符示例可直接下载。");return;}int shift;try{shift=Integer.parseInt(transpose.getText().toString().trim());}catch(Exception e){message("移调请输入-48到48的整数");return;}
-        MidiFile file=midi;int tr=tracks.getSelectedItemPosition()-1,ch=channels.getSelectedItemPosition()-1;int semitones=shift;
-        task("转换曲谱",()->{Score converted=file.convert(tr,ch,semitones);ui(()->{score=converted;showScore();});});
+        MidiFile file=midi;int tr=tracks.getSelectedItemPosition()-1,ch=channels.getSelectedItemPosition()-1;int semitones=shift;int tone=timbreMode.getSelectedItemPosition()==17?-2:timbreMode.getSelectedItemPosition()-1;boolean omitDrums=excludeDrums.isChecked();if(tone==-2&&!omitDrums){message("旧协议不支持鼓组，请勾选排除鼓轨。");return;}
+        task("转换曲谱",()->{Score converted=file.convert(tr,ch,semitones,tone,omitDrums);ui(()->{score=converted;showScore();});});
     }
     private void showScore(){Score s=score;summary.setText(songName+"\n"+s.notes.size()+" 条音符 · "+String.format(Locale.ROOT,"%.3f",s.duration/1000.0)+" 秒 · 最大同时 "+s.polyphony+" 音\nMIDI音域 "+s.minPitch+"～"+s.maxPitch+" · 数据 "+s.bytes().length+" 字节\nCRC32 "+String.format(Locale.ROOT,"%08X",Wire.crc32(s.bytes()))+(s.warnings.isEmpty()?"":"\n⚠ 简化演奏："+String.join("；",s.warnings)));}
     private void confirmUpload(){Score s=score;ProtocolClient.Capabilities cap=caps;if(s==null||cap==null){message("请先生成曲谱预览，并连接设备或进入离线演示");return;}try{s.validate(cap);}catch(Exception e){message(e.getMessage());return;}
-        String text=(demo?"【离线模拟，无真实设备】\n":"")+songName+"\n"+s.notes.size()+" 条音符，"+s.duration+" ms。\n开始上传后会替换琴上RAM原曲。"+(libraryCaps!=null&&libraryCaps.writable?String.format(Locale.ROOT,"校验后自动保存到 S%03d，并替换该编号已有曲谱。",librarySlots.getSelectedItemPosition()+1):"当前仅保存RAM，断电丢失。")+(s.warnings.isEmpty()?"":"\n\n将按简化方式演奏：\n"+String.join("\n",s.warnings));
+        String text=(demo?"【离线模拟，无真实设备】\n":"")+songName+"\n"+s.notes.size()+" 条音符，"+s.duration+" ms。\n开始上传后会替换琴上RAM原曲。"+(libraryCaps!=null&&libraryCaps.writable?String.format(Locale.ROOT,"校验后自动保存到 S%03d，并替换该编号已有曲谱。多音色保存会升级曲库目录，旧固件不能读取升级后的曲库。",librarySlots.getSelectedItemPosition()+1):"当前仅保存RAM，断电丢失。")+(s.warnings.isEmpty()?"":"\n\n将按简化方式演奏：\n"+String.join("\n",s.warnings));
         new AlertDialog.Builder(this).setTitle("确认下载曲谱").setMessage(text).setNegativeButton("取消",null).setPositiveButton("确认下载",(dialog,which)->upload(s)).show();
     }
     private void upload(Score s){

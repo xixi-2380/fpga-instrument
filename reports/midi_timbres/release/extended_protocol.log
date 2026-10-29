@@ -1,0 +1,15 @@
+REQ 01 seq 0 len 0 expected 00 actual 00
+REQ 46 seq 1 len 0 expected 00 actual 00
+REQ 14 seq 2 len 7 expected 00 actual 00
+REQ 11 seq 3 len 38 expected 06 actual 06
+REQ 11 seq 4 len 38 expected 00 actual 00
+REQ 11 seq 4 len 38 expected 00 actual 00
+REQ 12 seq 5 len 0 expected 00 actual 00
+REQ 21 seq 7 len 0 expected 00 actual 00
+REQ 22 seq 8 len 0 expected 00 actual 00
+REQ 23 seq 9 len 0 expected 00 actual 00
+REQ 14 seq 10 len 7 expected 00 actual 00
+REQ 11 seq 11 len 14 expected 06 actual 06
+REQ 13 seq 12 len 0 expected 00 actual 00
+PASS tb_midi_protocol checks=144
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_midi_protocol.sv:104: $finish called at 18980000 (1ps)
