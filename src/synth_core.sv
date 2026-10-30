@@ -2,7 +2,7 @@
 `include "config/synth_config.svh"
 // Generic note-event synthesis; physical keyboard logic stays in its adapter.
 module synth_core #(
-    parameter integer STEREO_ENABLE=0,SUSTAIN_ENABLE=0,VISUAL_KEYS=16,LIMITER_HOLD_SAMPLES=240,OUTPUT_ENABLE=1,OUTPUT_GAIN=24,LIMITER_LOG2=6,
+    parameter integer PERFORMANCE_ENABLE=0,STEREO_ENABLE=0,SUSTAIN_ENABLE=0,VISUAL_KEYS=16,LIMITER_HOLD_SAMPLES=240,OUTPUT_ENABLE=1,OUTPUT_GAIN=24,LIMITER_LOG2=6,
     VOICES=`VOICE_COUNT,MUTE=`MUTE_FRAMES,FADE=`FADE_FRAMES,
     ATTACK=`ADSR_ATTACK_FRAMES,DECAY=`ADSR_DECAY_FRAMES,
     SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES,
@@ -18,7 +18,9 @@ module synth_core #(
     input wire [6:0] volume_percent,input wire [6:0] note_pitch,input wire output_flush,
     output wire latency_valid,output wire [19:0] latency_bcd,
     input wire [2:0] effect_mask,input wire [16:0] effect_echo_samples,
-    input wire debug_mute,output wire debug_muted);
+    input wire debug_mute,output wire debug_muted,
+    input wire [17:0] manual_pitch_ratio,input wire chorus_enabled,
+    input wire [8:0] chorus_wet,input wire [1:0] chorus_depth,chorus_rate);
     // Register the soft engine clear before its wide envelope/RAM fanout.
     // Button assertion stays asynchronous; serial urgent-clear remains separate.
     // One clk of control staging is far below a sample and cancels work before
@@ -83,6 +85,9 @@ module synth_core #(
     reg gain_request,first_sample,last_sample;
     reg [INDEX_W-1:0] sample_voice;
     reg [INDEX_W-1:0] prepared_voice;
+    reg [17:0] frame_pitch_ratio;reg [31:0] bend_source,bent_fcw;reg bend_manual;
+    reg [49:0] bend_product;
+    wire [17:0] safe_pitch_ratio=(PERFORMANCE_ENABLE && manual_pitch_ratio>=58386 && manual_pitch_ratio<=73562)?manual_pitch_ratio:18'd65536;
     reg [31:0] slot_fcw;reg slot_restart;reg [4:0] slot_timbre;
     wire signed [`VOICE_W-1:0] gain_sample;
     wire signed [15:0] mix_sample;
@@ -179,7 +184,7 @@ module synth_core #(
         .voice_stop(voice_stop),.voice_restart(voice_restart),.voice_held(voice_held),
         .voice_fcw(voice_fcw),.voice_ids(voice_ids),
         .note_timbre(note_timbre),.voice_timbres(voice_timbres),
-        .note_independent(velocity_valid===1'b1 && note_id<16),.note_gain(velocity_gain(note_velocity)),.note_pitch(note_pitch),
+        .note_independent(velocity_valid===1'b1 && (note_id<16 || (PERFORMANCE_ENABLE && note_id>=96 && note_id<108))),.note_gain(velocity_gain(note_velocity)),.note_pitch(note_pitch),
         .voice_gains(voice_gains),.voice_pitches(voice_pitches));
     `include "config/sustain_curve.svh"
     reg [50:0] release_curve;reg [8:0] release_strength;
@@ -225,14 +230,24 @@ module synth_core #(
             selected_level<=0;selected_startup<=0;level_product<=0;combined_level<=0;gain_request<=0;
             first_sample<=0;last_sample<=0;sample_voice<=0;velocity_scale<=256;
             prepared_voice<=0;slot_fcw<=0;slot_restart<=0;slot_timbre<=0;
+            frame_pitch_ratio<=65536;bend_source<=0;bend_manual<=0;bend_product<=0;bent_fcw<=0;
         end else begin
+            // Frame-atomic manual pitch bend, three registered steps before slot0.
+            if(PERFORMANCE_ENABLE && render_busy && render_cycle<16*VOICES)begin
+                if(render_cycle[3:0]==11)begin
+                    bend_source<=frame_fcw[(render_cycle>>4)*32+:32];
+                    bend_manual<=voice_ids[(render_cycle>>4)*7+:7]>=60 && voice_ids[(render_cycle>>4)*7+:7]<=107;
+                end
+                if(render_cycle[3:0]==12)bend_product<=bend_source*(bend_manual?frame_pitch_ratio:18'd65536);
+                if(render_cycle[3:0]==13)bent_fcw<=(bend_product+50'd32768)>>16;
+            end
             // Prepare the next voice during its two preceding idle clocks.
             // DDS still samples on slot0: context mux and phase addition no
             // longer share the render-counter path, with no extra audio cycle.
             if(render_busy && render_cycle<16*VOICES && render_cycle[3:0]==14)
                 prepared_voice<=render_cycle>>4;
             if(render_busy && render_cycle<16*VOICES && render_cycle[3:0]==15)begin
-                slot_fcw<=frame_fcw[prepared_voice*32+:32];
+                slot_fcw<=PERFORMANCE_ENABLE?bent_fcw:frame_fcw[prepared_voice*32+:32];
                 slot_restart<=frame_restart[prepared_voice];slot_timbre<=frame_timbres[prepared_voice*5+:5];
             end
             // Context selection and multiplication occupy separate clocks.
@@ -241,7 +256,7 @@ module synth_core #(
             if(in_slots && render_cycle[3:0]==3)combined_level<=scaled_level[24:8];
             if(frame_ce)begin
                 render_busy<=1;render_cycle<=0;
-                frame_fcw<=voice_fcw;frame_restart<=voice_restart;frame_timbres<=voice_timbres;
+                frame_fcw<=voice_fcw;frame_restart<=voice_restart;frame_timbres<=voice_timbres;frame_pitch_ratio<=safe_pitch_ratio;
             end else if(render_busy)begin
                 if(render_cycle==RENDER_BUDGET-2)render_busy<=0;
                 else render_cycle<=render_cycle+1'b1;
@@ -278,13 +293,14 @@ module synth_core #(
     if(STEREO_ENABLE)begin: stereo_on
         voice_mixer left_mixer(clk,engine_reset,gain_valid,pan_left,first_sample,last_sample,stereo_mix_valid,stereo_mix_l);
         voice_mixer right_mixer(clk,engine_reset,gain_valid,pan_right,first_sample,last_sample,stereo_mix_valid_r,stereo_mix_r);
-        audio_effects #(.ECHO_ENABLE(!SUSTAIN_ENABLE),.DELAY_SAMPLES(DELAY_SAMPLES),.D0(ROOM_D0),.D1(ROOM_D1),.D2(ROOM_D2),.D3(ROOM_D3)) right_effect(
+        audio_effects #(.CHORUS_ENABLE(PERFORMANCE_ENABLE),.CHORUS_PHASE(32'h40000000),.ECHO_ENABLE(!SUSTAIN_ENABLE),.DELAY_SAMPLES(DELAY_SAMPLES),.D0(ROOM_D0),.D1(ROOM_D1),.D2(ROOM_D2),.D3(ROOM_D3)) right_effect(
             .clk(clk),.rst(engine_reset),.enable(effects_enable),.mode(effect_mode),.in_valid(stereo_mix_valid_r),.in_sample(stereo_mix_r),
             .in_ready(effect_ready_r),.out_valid(effect_valid_r),.out_sample(effect_sample_r),
             .effect_mask(effect_mask),.cfg_echo_samples(effect_echo_samples[14:0]),
             .cfg_valid(effect_cfg_valid),.cfg_echo_wet(effect_echo_wet),.cfg_room_wet(effect_room_wet),
             .cfg_tremolo_depth(effect_tremolo_depth),.cfg_tremolo_rate_hz(effect_tremolo_rate_hz),
-            .cfg_ready(cfg_ready_r),.cfg_applied(cfg_applied_r));
+            .cfg_ready(cfg_ready_r),.cfg_applied(cfg_applied_r),
+            .chorus_enabled(chorus_enabled),.chorus_wet(chorus_wet),.chorus_depth(chorus_depth),.chorus_rate(chorus_rate));
         wire right_limited_valid;wire signed [15:0] right_limited_sample;
         wire right_limiter_ready,right_limiter_clipped;wire [16:0] right_limiter_gain,right_limited_tag;
         if(OUTPUT_ENABLE)begin: output_conditioning
@@ -313,13 +329,14 @@ module synth_core #(
         assign cfg_ready_r=effect_cfg_ready;assign cfg_applied_r=effect_cfg_applied;
         assign output_valid_r=output_valid;assign output_sample_r=output_sample;
     end
-    audio_effects #(.ECHO_ENABLE(!SUSTAIN_ENABLE),.DELAY_SAMPLES(DELAY_SAMPLES),.D0(ROOM_D0),.D1(ROOM_D1),.D2(ROOM_D2),.D3(ROOM_D3)) effect(
+    audio_effects #(.CHORUS_ENABLE(PERFORMANCE_ENABLE),.CHORUS_PHASE(32'h00000000),.ECHO_ENABLE(!SUSTAIN_ENABLE),.DELAY_SAMPLES(DELAY_SAMPLES),.D0(ROOM_D0),.D1(ROOM_D1),.D2(ROOM_D2),.D3(ROOM_D3)) effect(
         .clk(clk),.rst(engine_reset),.enable(effects_enable),.mode(effect_mode),.in_valid(stereo_mix_valid),.in_sample(stereo_mix_l),
         .in_ready(effect_ready),.out_valid(effect_valid),.out_sample(effect_sample),
         .effect_mask(effect_mask),.cfg_echo_samples(effect_echo_samples[14:0]),
             .cfg_valid(effect_cfg_valid),.cfg_echo_wet(effect_echo_wet),.cfg_room_wet(effect_room_wet),
         .cfg_tremolo_depth(effect_tremolo_depth),.cfg_tremolo_rate_hz(effect_tremolo_rate_hz),
-        .cfg_ready(effect_cfg_ready),.cfg_applied(effect_cfg_applied));
+        .cfg_ready(effect_cfg_ready),.cfg_applied(effect_cfg_applied),
+        .chorus_enabled(chorus_enabled),.chorus_wet(chorus_wet),.chorus_depth(chorus_depth),.chorus_rate(chorus_rate));
     frame_buffer buffer(clk,OUTPUT_ENABLE?output_reset:engine_reset,frame_ce,output_valid,ready,output_sample,output_sample_r,frame_l,frame_r,underrun);
     i2s_tx tx(clk,rst,fall_ce,bit_index,frame_l,frame_r,ws,din);
     // synthesis translate_off
@@ -327,7 +344,7 @@ module synth_core #(
     always @(posedge clk)if(!rst)begin
         if(envelope_enables!=={VOICES{frame_ce}})$fatal(1,"Distributed envelope CE changed sample boundary");
         if(envelope_resets!=={VOICES{engine_reset}})$fatal(1,"Distributed envelope reset changed clear phase");
-        if(dds_ce && (prepared_voice!==selected_voice ||
+        if(!PERFORMANCE_ENABLE && dds_ce && (prepared_voice!==selected_voice ||
            {slot_fcw,slot_restart,slot_timbre}!=={frame_fcw[selected_voice*32+:32],frame_restart[selected_voice],frame_timbres[selected_voice*5+:5]}))
             $fatal(1,"Prepared DDS context differs at the original sample edge");
         if(frame_ce && render_busy)$fatal(1,"Frame renderer missed deadline");

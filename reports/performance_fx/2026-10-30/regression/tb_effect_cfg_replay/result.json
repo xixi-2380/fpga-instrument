@@ -1,0 +1,8 @@
+{
+  "test": "tb_effect_cfg_replay",
+  "parameters": {},
+  "passed": true,
+  "checks": 4,
+  "seconds": 0.718,
+  "independent_model": {}
+}

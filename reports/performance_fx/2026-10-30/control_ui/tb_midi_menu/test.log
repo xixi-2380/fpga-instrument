@@ -1,0 +1,2 @@
+PASS tb_midi_menu checks=1536009 frames=2
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_midi_menu.sv:58: $finish called at 7680251000 (1ps)

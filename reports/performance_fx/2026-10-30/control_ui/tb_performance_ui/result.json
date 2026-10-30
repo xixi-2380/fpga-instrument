@@ -1,0 +1,8 @@
+{
+  "test": "tb_performance_ui",
+  "parameters": {},
+  "passed": true,
+  "checks": 1152007,
+  "seconds": 61.712,
+  "independent_model": {}
+}

@@ -1,0 +1,2 @@
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_bt_tail_reuse.sv:10: warning: Port 19 (note_timbre) of synth_core expects 5 bits, got 3.
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_bt_tail_reuse.sv:10:        : Padding 2 high bits of the port.

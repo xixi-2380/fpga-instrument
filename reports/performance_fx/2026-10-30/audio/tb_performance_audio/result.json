@@ -1,0 +1,13 @@
+{
+  "test": "tb_performance_audio",
+  "parameters": {},
+  "passed": true,
+  "checks": 178560,
+  "seconds": 229.975,
+  "independent_model": {
+    "passed": true,
+    "checks": 3644,
+    "nonzero_frames": 1765,
+    "scope": "independent production32voice dry-mix to post-chorus stereo values"
+  }
+}

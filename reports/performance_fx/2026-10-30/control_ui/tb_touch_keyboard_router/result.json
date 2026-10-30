@@ -1,0 +1,8 @@
+{
+  "test": "tb_touch_keyboard_router",
+  "parameters": {},
+  "passed": true,
+  "checks": 1331,
+  "seconds": 0.078,
+  "independent_model": {}
+}

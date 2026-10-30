@@ -1,0 +1,8 @@
+{
+  "test": "tb_midi_audio",
+  "parameters": {},
+  "passed": true,
+  "checks": 2496053,
+  "seconds": 40.916,
+  "independent_model": {}
+}

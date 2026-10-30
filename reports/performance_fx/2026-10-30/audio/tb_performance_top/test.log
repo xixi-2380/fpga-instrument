@@ -1,0 +1,2 @@
+PASS tb_performance_top checks=65 plucks=13 releases=12 physical=1
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_performance_top.sv:41: $finish called at 11980877532 (1ps)

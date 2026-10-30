@@ -1,0 +1,8 @@
+{
+  "test": "tb_i2c_register_master",
+  "parameters": {},
+  "passed": true,
+  "checks": 430,
+  "seconds": 0.053,
+  "independent_model": {}
+}

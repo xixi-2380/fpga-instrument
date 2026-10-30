@@ -1,0 +1,2 @@
+PASS tb_touch_keyboard_router checks=1331 actions=56
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_touch_keyboard_router.sv:51: $finish called at 6520000 (1ps)

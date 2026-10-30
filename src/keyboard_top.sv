@@ -12,7 +12,7 @@ module keyboard_top #(
     parameter [2:0] EC11_REVERSE=3'b000,
     parameter integer STEREO_ENABLE=1,LCD_ENABLE=1,LCD_TEST_PATTERN=0,LCD_PCLK_INVERT=1,
     TOUCH_ENABLE=1,TOUCH_UI_ENABLE=1,TOUCH_RESET_CYCLES=1000000,TOUCH_STRAP_CYCLES=300000,
-    TOUCH_BOOT_CYCLES=2500000,TOUCH_POLL_CYCLES=500000,TOUCH_I2C_HALF=250,
+    TOUCH_BOOT_CYCLES=2500000,TOUCH_POLL_CYCLES=50000,TOUCH_I2C_HALF=250,
     parameter SCORE_FILE="src/scores/twinkle.hex",
     parameter integer SCORE_WORDS=512,SCORE_ENABLE=0,SCORE_BEAT_FRAMES=(`SAMPLE_HZ/2),
     BUTTON_DEBOUNCE_CYCLES=(`AUDIO_HZ/100),BUTTON_LONG_PRESS_CYCLES=(`AUDIO_HZ*4/5),
@@ -143,7 +143,20 @@ module keyboard_top #(
     wire [15:0] touch_x,touch_y,touch_size,touch_resolution_x,touch_resolution_y;
     wire [7:0] touch_track_id;wire [31:0] touch_product_id;
     wire [38:0] touch_status={touch_ready,touch_error,touch_down,touch_count,touch_x,touch_y};
-    wire [70:0] touch_audio;
+    wire [72:0] touch_audio;wire touch_health;
+    reg touch_epoch,seen_epoch,seen_health;
+    always @(posedge clk or posedge pll1_reset)
+        if(pll1_reset)touch_epoch<=0;else if(touch_report)touch_epoch<=!touch_epoch;
+    always @(posedge audio_clk or posedge audio_reset)
+        if(audio_reset)begin seen_epoch<=0;seen_health<=0;end
+        else if(touch_update)begin seen_epoch<=touch_audio[71];seen_health<=touch_audio[72];end
+    wire fresh_health=touch_update && touch_audio[72]!=seen_health;
+    wire fresh_touch=touch_update && touch_audio[71]!=seen_epoch;
+    wire performance_active,harp_valid,harp_on,harp_ready,manual_valid,manual_on,manual_ready,manual_expressive,key_ready;
+    wire [6:0] harp_id,harp_pitch,harp_velocity,manual_id,manual_pitch,manual_velocity;
+    wire [31:0] harp_fcw,manual_fcw;wire [4:0] harp_timbre,manual_timbre;
+    wire [17:0] manual_pitch_ratio;wire [63:0] performance_status;
+    wire chorus_enabled;wire [8:0] chorus_wet;wire [1:0] chorus_depth,chorus_rate;
     wire touch_audio_valid,touch_update;
     wire bt_inhibit,bt_valid,bt_ready,bt_flush,bt_output_flush,bt_note_on;
     wire [6:0] bt_note_id,bt_velocity,bt_pitch;
@@ -251,22 +264,36 @@ module keyboard_top #(
             .error(touch_error),.touch_down(touch_down),.report_pulse(touch_report),
             .touch_count(touch_count),.touch_x(touch_x),.touch_y(touch_y),.touch_size(touch_size),
             .track_id(touch_track_id),.product_id(touch_product_id),
-            .resolution_x(touch_resolution_x),.resolution_y(touch_resolution_y));
-        rgb_status_cdc #(.WIDTH(71)) touch_bridge(clk,audio_clk,pll1_reset || audio_reset,
-            {touch_resolution_x,touch_resolution_y,touch_status},touch_audio,touch_audio_valid,touch_update);
+            .resolution_x(touch_resolution_x),.resolution_y(touch_resolution_y),.health_toggle(touch_health));
+        rgb_status_cdc #(.WIDTH(73)) touch_bridge(clk,audio_clk,pll1_reset || audio_reset,
+            {touch_health,touch_epoch,touch_resolution_x,touch_resolution_y,touch_status},touch_audio,touch_audio_valid,touch_update);
     end else begin: touch_off
         assign touch_scl=1'bz;assign touch_sda=1'bz;assign touch_int=1'bz;assign touch_rst_n=1'bz;
         assign touch_ready=0;assign touch_error=0;assign touch_down=0;assign touch_report=0;
         assign touch_count=0;assign touch_x=0;assign touch_y=0;assign touch_size=0;
         assign touch_track_id=0;assign touch_product_id=0;assign touch_resolution_x=0;assign touch_resolution_y=0;
-        assign touch_audio=0;assign touch_audio_valid=0;assign touch_update=0;
+        assign touch_health=0;assign touch_audio=0;assign touch_audio_valid=0;assign touch_update=0;
     end
     ui_touch_actions touch_commands(.clk(audio_clk),.rst(audio_reset),
-        .enabled(TOUCH_ENABLE!=0 && TOUCH_UI_ENABLE!=0),.snapshot_valid(touch_audio_valid),
+        .enabled(TOUCH_ENABLE!=0 && TOUCH_UI_ENABLE!=0 && !performance_active),.snapshot_valid(touch_audio_valid),
         .ready(touch_audio[38]),.error(touch_audio[37]),.down(touch_audio[36]),.count(touch_audio[35:32]),
         .x(touch_audio[31:16]),.y(touch_audio[15:0]),.resolution_x(touch_audio[70:55]),
         .resolution_y(touch_audio[54:39]),.effect_mode(effect_mode),.menu_mode(menu_mode),
         .action_valid(touch_action_valid),.action(touch_action),.more_mode(more_open),.ultrasonic_page(ultrasonic_page),.pcb_page(pcb_page));
+    performance_control performance(.clk(audio_clk),.rst(audio_reset),.frame_ce(frame_ce),.input_ready(input_ready),
+        .blocked(take_bt || local_score_busy),.menu_mode(menu_mode),.can_open(!pcb_page && !more_open && TOUCH_UI_ENABLE!=0 && TOUCH_ENABLE!=0),
+        .snapshot_valid(touch_audio_valid),.report_valid(fresh_touch),.health_valid(fresh_health),.ready(touch_audio[38]),.error(touch_audio[37]),
+        .down(touch_audio[36]),.count(touch_audio[35:32]),.x(touch_audio[31:16]),.y(touch_audio[15:0]),
+        .resolution_x(touch_audio[70:55]),.resolution_y(touch_audio[54:39]),.selected_timbre(selected_timbre),
+        .note_ready(harp_ready),.note_valid(harp_valid),.note_on(harp_on),.note_id(harp_id),.note_pitch(harp_pitch),
+        .note_velocity(harp_velocity),.note_fcw(harp_fcw),.note_timbre(harp_timbre),.active(performance_active),.status(performance_status),
+        .pitch_ratio(manual_pitch_ratio),.chorus_enabled(chorus_enabled),.chorus_wet(chorus_wet),.chorus_depth(chorus_depth),.chorus_rate(chorus_rate));
+    manual_event_arbiter manual_inputs(.clk(audio_clk),.rst(audio_reset || take_bt || local_score_busy),
+        .a_valid(key_valid),.a_on(key_on),.a_id(key_id),.a_fcw(key_fcw),.a_timbre(key_timbre),
+        .b_valid(harp_valid),.b_on(harp_on),.b_id(harp_id),.b_fcw(harp_fcw),.b_timbre(harp_timbre),.b_pitch(harp_pitch),.b_velocity(harp_velocity),
+        .ready(manual_ready),.a_ready(key_ready),.b_ready(harp_ready),.valid(manual_valid),.on(manual_on),.id(manual_id),
+        .pitch(manual_pitch),.velocity(manual_velocity),.fcw(manual_fcw),.timbre(manual_timbre),.expressive(manual_expressive));
+    assign manual_ready=note_ready && !take_bt && !local_score_busy;
     // AUX shortcuts stay disabled during touch-board fault diagnosis.
     touch_keyboard_router #(.AUX_ENABLE(KEYPAD_AUX_ENABLE)) menu_keys(.clk(audio_clk),.rst(audio_reset),
         .blocked(menu_mode || take_bt || local_score_busy),.menu_mode(menu_mode),
@@ -289,7 +316,7 @@ module keyboard_top #(
             .echo_percent(echo_percent),.room_percent(room_percent),.depth_percent(depth_percent),
             .volume_percent(volume_percent),.tremolo_rate_hz(tremolo_rate_hz),.touch_enabled(TOUCH_ENABLE!=0),
             .touch_ui_enabled(TOUCH_UI_ENABLE!=0 && touch_audio_valid && touch_audio[70:55]==800 && touch_audio[54:39]==480),.touch_ready_status(touch_audio[38]),.touch_error_status(touch_audio[37]),
-            .more_status({voice_held,bt_audio_ids,service_bundle[95:80],more_open,delete_confirm,more_info,service_audio[78:0]}),.sustain_time_thousands(echo_time_bcd[15:12]),.pcb_status(pcb_display),.pcb_visible(pcb_display_visible));
+            .more_status({voice_held,bt_audio_ids,service_bundle[95:80],more_open,delete_confirm,more_info,service_audio[78:0]}),.sustain_time_thousands(echo_time_bcd[15:12]),.pcb_status(pcb_display),.pcb_visible(pcb_display_visible),.performance_status(performance_status));
     end else begin: lcd_off
         assign pcb_display_visible=0;
         assign lcd_clk=0;assign lcd_hs=1;assign lcd_vs=1;assign lcd_en=0;
@@ -297,11 +324,11 @@ module keyboard_top #(
     end
     // A source owns the event interface through its final release/tail. The
     // keyboard is admitted only after the one-shot score has fully completed.
-    assign note_valid=bt_flush ? 1'b0 : take_bt ? bt_valid : local_score_busy ? score_valid : key_valid;
-    assign note_on=take_bt?bt_note_on:local_score_busy?score_on:key_on;
-    assign note_id=take_bt?bt_note_id:local_score_busy?score_id:key_id;
-    assign note_fcw=take_bt?bt_fcw:local_score_busy?score_fcw:key_fcw;
-    assign event_timbre=take_bt?bt_timbre:local_score_busy?score_timbre:key_timbre;
+    assign note_valid=bt_flush ? 1'b0 : take_bt ? bt_valid : local_score_busy ? score_valid : manual_valid;
+    assign note_on=take_bt?bt_note_on:local_score_busy?score_on:manual_on;
+    assign note_id=take_bt?bt_note_id:local_score_busy?score_id:manual_id;
+    assign note_fcw=take_bt?bt_fcw:local_score_busy?score_fcw:manual_fcw;
+    assign event_timbre=take_bt?bt_timbre:local_score_busy?score_timbre:manual_timbre;
     score_player #(.SCORE_FILE(SCORE_FILE),.SCORE_WORDS(SCORE_WORDS),.ENABLE(SCORE_ENABLE),
         .BEAT_FRAMES(SCORE_BEAT_FRAMES),.TAIL_FRAMES(RELEASE+4))
         score(.clk(audio_clk),.rst(audio_reset),.input_ready(input_ready),.frame_ce(frame_ce),
@@ -405,14 +432,14 @@ module keyboard_top #(
     key_note_events #(.KEYS(36)) key_events(
         .clk(audio_clk),.rst(audio_reset || take_bt || local_score_busy),
         .enabled(input_ready && !take_bt && !local_score_busy),.keys(note_keys),
-        .note_ready(note_ready && !take_bt && !local_score_busy),
+        .note_ready(key_ready && !take_bt && !local_score_busy),
         .note_valid(key_valid),.note_on(key_on),.note_id(key_id),.note_fcw(key_fcw),
         .gate(key_gate),.last_key(last_key),.selected_timbre(selected_timbre),.note_timbre(key_timbre));
-    synth_core #(.SUSTAIN_ENABLE(1),.STEREO_ENABLE(STEREO_ENABLE),.VISUAL_KEYS(36),.OUTPUT_ENABLE(OUTPUT_ENABLE),.OUTPUT_GAIN(OUTPUT_GAIN),.LIMITER_LOG2(LIMITER_LOG2),.LIMITER_HOLD_SAMPLES(LIMITER_HOLD_SAMPLES),
+    synth_core #(.PERFORMANCE_ENABLE(1),.SUSTAIN_ENABLE(1),.STEREO_ENABLE(STEREO_ENABLE),.VISUAL_KEYS(36),.OUTPUT_ENABLE(OUTPUT_ENABLE),.OUTPUT_GAIN(OUTPUT_GAIN),.LIMITER_LOG2(LIMITER_LOG2),.LIMITER_HOLD_SAMPLES(LIMITER_HOLD_SAMPLES),
         .MUTE(MUTE),.FADE(FADE),.ATTACK(ATTACK),.DECAY(DECAY),
         .SUSTAIN(SUSTAIN),.RELEASE(RELEASE)) sound(
         .clk(audio_clk),.rst(audio_reset),.note_valid(note_valid),.note_on(note_on),
-        .note_pitch(take_bt ? bt_pitch : note_id),.volume_percent(volume_percent),.flush(bt_flush),.output_flush(bt_output_flush),.velocity_valid(take_bt),.note_velocity(bt_velocity),
+        .note_pitch(take_bt ? bt_pitch : local_score_busy ? note_id : manual_pitch),.volume_percent(volume_percent),.flush(bt_flush),.output_flush(bt_output_flush),.velocity_valid(take_bt || (!local_score_busy && manual_expressive)),.note_velocity(take_bt ? bt_velocity : manual_velocity),
         .note_id(note_id),.note_fcw(note_fcw),.note_timbre(event_timbre),.effects_enable(effects_enabled),.effect_mode(effect_mode),
         .effect_mask(cfg_effect_mask),.effect_echo_samples(cfg_echo_samples),
         .effect_cfg_valid(effect_cfg_request),.effect_echo_wet(echo_wet),.effect_room_wet(room_wet),
@@ -422,7 +449,8 @@ module keyboard_top #(
         .frame_ce(frame_ce),.note_ready(note_ready),.input_ready(input_ready),
         .gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(envelope_level),
         .visual_sample_valid(visual_sample_valid),.visual_sample(visual_sample),.visual_notes(visual_notes),
-        .latency_valid(latency_valid),.latency_bcd(latency_bcd),.debug_mute(pcb_mute),.debug_muted(pcb_muted));
+        .latency_valid(latency_valid),.latency_bcd(latency_bcd),.debug_mute(pcb_mute),.debug_muted(pcb_muted),.manual_pitch_ratio(manual_pitch_ratio),
+        .chorus_enabled(chorus_enabled),.chorus_wet(chorus_wet),.chorus_depth(chorus_depth),.chorus_rate(chorus_rate));
     assign pcb_audio_trace={25'd0,echo_time_ms[10:9],tremolo_rate_hz[4],keypad_armed,16'd0,visual_sample,20'd0,note_fcw,7'd0,note_id,voice_active,voice_held,
         echo_time_ms[8:0],volume_percent,tremolo_rate_hz[3:0],depth_percent,room_percent,echo_percent,
         tremolo_edit_rate,echo_edit_strength,effect_mask,input_ready,underrun,visual_sample_valid,

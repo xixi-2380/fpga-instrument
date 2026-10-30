@@ -1,0 +1,10 @@
+{
+  "test": "tb_sustain_retrigger",
+  "parameters": {
+    "TIMBRE": 5
+  },
+  "passed": true,
+  "checks": 7,
+  "seconds": 11.796,
+  "independent_model": {}
+}

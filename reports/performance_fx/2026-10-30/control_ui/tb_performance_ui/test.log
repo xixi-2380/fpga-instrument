@@ -1,0 +1,2 @@
+PASS tb_performance_ui checks=1152007 frames=3
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_performance_ui.sv:31: $finish called at 11520420000 (1ps)

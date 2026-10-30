@@ -12,7 +12,7 @@ module gt9110_touch #(
     output reg [15:0] touch_x,touch_y,touch_size,
     output reg [7:0] track_id,
     output reg [31:0] product_id,
-    output reg [15:0] resolution_x,resolution_y
+    output reg [15:0] resolution_x,resolution_y,output reg health_toggle
 );
     localparam RESET=0,STRAP=1,BOOT=2,ID_START=3,ID_WAIT=4,RES_START=5,RES_WAIT=6,
         POLL_START=7,POLL_WAIT=8,CLEAR_START=9,CLEAR_WAIT=10,DELAY=11;
@@ -61,7 +61,7 @@ module gt9110_touch #(
             address<=0;length<=1;ready<=0;error<=0;touch_down<=0;report_pulse<=0;
             touch_count<=0;touch_x<=0;touch_y<=0;touch_size<=0;track_id<=0;
             product_id<=0;resolution_x<=0;resolution_y<=0;
-            pending_count<=0;pending_x<=0;pending_y<=0;pending_size<=0;pending_id<=0;pending_bad<=0;
+            health_toggle<=0;pending_count<=0;pending_x<=0;pending_y<=0;pending_size<=0;pending_id<=0;pending_bad<=0;
         end else begin
             start<=0;report_pulse<=0;
             case(state)
@@ -86,6 +86,7 @@ module gt9110_touch #(
                 end
                 POLL_START:if(!busy)begin_read(16'h814e,9,POLL_WAIT);
                 POLL_WAIT:if(done)begin
+                    if(!bus_error)health_toggle<=!health_toggle;
                     if(bus_error)failed(POLL_START);
                     else if(!data[7])begin
                         counter<=0;retry_state<=POLL_START;state<=DELAY;

@@ -1,0 +1,2 @@
+PASS tb_performance_audio checks=178560 slots=58304 renders=1822 max_delivery=535
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_performance_audio.sv:63: $finish called at 37979460064 (1ps)

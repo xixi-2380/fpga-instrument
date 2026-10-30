@@ -1,0 +1,8 @@
+{
+  "test": "tb_pcb_readable",
+  "parameters": {},
+  "passed": true,
+  "checks": 6,
+  "seconds": 0.089,
+  "independent_model": {}
+}

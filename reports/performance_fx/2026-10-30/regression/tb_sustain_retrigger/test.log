@@ -1,0 +1,2 @@
+PASS tb_sustain_retrigger checks=7 first_sound_frames=47
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_sustain_retrigger.sv:39: $finish called at 2708733300 (1ps)

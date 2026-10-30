@@ -1,0 +1,8 @@
+{
+  "test": "tb_performance_control",
+  "parameters": {},
+  "passed": true,
+  "checks": 166,
+  "seconds": 2.133,
+  "independent_model": {}
+}

@@ -4,12 +4,14 @@
 module rgb_ui_renderer(
  input wire pixel_clk,rst,frame_start,status_valid,input wire [1207:0] status_data,
  input wire [10:0] x,y,input wire de_in,hs_in,vs_in,
- output reg [23:0] rgb,output reg de_out,hs_out,vs_out,input wire [145:0] more_data,input wire [2591:0] pcb_data,output wire pcb_visible);
+ output reg [23:0] rgb,output reg de_out,hs_out,vs_out,input wire [145:0] more_data,input wire [2591:0] pcb_data,output wire pcb_visible,input wire [63:0] performance_data);
  `include "config/ui_layout.svh"
  localparam [23:0] BG=24'h101214,PANEL=24'h191c20,GOLD=24'hd6b979,
   CREAM=24'hf2e6c9,INK=24'h17191b,DIM=24'h9c987f,LINE=24'h4b4534,
   WINE=24'h67333e,GREEN=24'h8bc79b,RED=24'hef8f85;
- reg [1207:0] state;
+ wire [16:0] harp_neck_y=y*6'd48;wire [16:0] harp_neck_x=x*3'd7;
+ reg [1207:0] state;reg [63:0] performance_state;
+ wire performance_page=performance_state[0]===1'b1 && !menu;
  wire [2:0] effect_bits=state[1169:1167];
  wire echo_amount_edit=state[1170],tremolo_rate_edit=state[1171];
  wire [11:0] echo_ms_bcd=state[1183:1172];
@@ -430,6 +432,64 @@ module rgb_ui_renderer(
     if(pcb_state[2571] && left<528)fg=LINE;
    end
   end
+  if(!menu && !performance_page && ui_inside(px,py,456,16,176,48))begin
+   base=card(px,py,456,16,176,48,0);fg=GOLD;text="HARP / FX";len=9;tx=496;ty=32;
+  end
+  if(performance_page)begin
+   base=24'h182b2a;fg=24'hf4e3bb;text=0;len=0;tx=24;ty=32;
+   // Jade, aged walnut and brass; fixed geometry with no external image RAM.
+   if(py<80 || py>=416)base=24'h122320;
+   if((py==78 || py==414) && px>=20 && px<780)base=24'h8d7952;
+   if(px<688 && py>=92 && py<376)begin
+    if((px[6:0]==32 || px[6:0]==96) && py[5:0]==16)base=24'h25413b;
+    if((px>=64 && px<88 && py>=110 && py<352) ||
+       (px>=664 && px<684 && py>=198 && py<352) ||
+       (px>=64 && px<684 && py>=338 && py<354))begin
+     base=px[2:0]==0?24'hbc985b:24'h684735;
+    end
+    if(px>=76 && px<684 && harp_neck_y>=harp_neck_x+17'd4700 && harp_neck_y<harp_neck_x+17'd5360)base=24'h795338;
+    for(i=0;i<12;i=i+1)begin
+     left=112+i*48;top=132+i*7;
+     
+     if(px>=left-3 && px<=left+3 && py>=top-10 && py<top-4)base=24'hc5a46c;
+     if(px>=left-1 && px<=left+1 && py>=top && py<338)
+      base=performance_state[9+i]?24'hfff5bf:24'hc8b88b;
+     if(performance_state[9+i] && px>=left-4 && px<=left+4 && py>=top && py<338 && px!=left)
+      base=24'h8b9361;
+     if(py>=356 && py<372 && px>=left-10 && px<left+18)begin
+      tx=left-10;ty=356;len=2;fg=24'hd9c79e;
+      case(i%5)0:text="C ";1:text="D ";2:text="E ";3:text="G ";default:text="A ";endcase
+     end
+    end
+   end
+   if(py<72 && px>=456 && px<632)begin text="KONGHOU";len=7;tx=484;ty=32;fg=GOLD;end
+   if(ui_inside(px,py,648,16,136,48))begin base=card(px,py,648,16,136,48,0);text="BACK";len=4;tx=696;ty=32;fg=GOLD;end
+   if(px>=696 && py>=92 && py<368)begin
+    if(py<164)begin top=104;text=performance_state[1]?"ON":"OFF";len=performance_state[1]?2:3;end
+    else if(py<232)begin top=176;text={percent_text(performance_state[4:2]==1?7'd13:performance_state[4:2]==2?7'd25:performance_state[4:2]==3?7'd38:7'd50),"%"};len=4;end
+    else if(py<300)begin top=244;text=performance_state[6:5]==0?"LOW":performance_state[6:5]==1?"MID":"HIGH";len=performance_state[6:5]==2?4:3;end
+    else begin top=312;text=performance_state[8:7]==0?"SLOW":performance_state[8:7]==1?"MID":"FAST";len=performance_state[8:7]==1?3:4;end
+    tx=712;ty=top+18;fg=GOLD;
+    if(ui_inside(px,py,704,top,80,48))base=card(px,py,704,top,80,48,0);
+   end
+   if(px>=700 && py>=160 && py<176)begin text="MIX";len=3;tx=712;ty=160;fg=DIM;end
+   if(px>=700 && py>=228 && py<244)begin text="DEPTH";len=5;tx=704;ty=228;fg=DIM;end
+   if(px>=700 && py>=296 && py<312)begin text="RATE";len=4;tx=712;ty=296;fg=DIM;end
+   if(px>=692 && py>=82 && py<98)begin text="CHORUS";len=6;tx=704;ty=84;fg=GOLD;end
+   if(ui_inside(px,py,128,380,544,24))begin
+    base=24'h40534a;
+    if(px>=398 && px<=402)base=24'h8d7952;
+    if(px>=140+performance_state[30:21] && px<=148+performance_state[30:21])base=24'he4ca8a;
+   end
+   if(py>=420 && py<468)begin
+    if(ui_inside(px,py,24,420,140,48))begin base=card(px,py,24,420,140,48,0);text=performance_state[33]?timbre_name(timbre):"GUITAR";len=performance_state[33]?name_length(timbre):6;tx=36;ty=436;end
+    else if(ui_inside(px,py,184,420,140,48))begin base=card(px,py,184,420,140,48,0);text="STOP / BACK";len=11;tx=198;ty=436;end
+    else if(px>=344)begin
+     text=performance_state[32]?"BT PLAYING / HARP PAUSED":!performance_state[31]?"TOUCH WAIT / RELEASE TO ARM":"BEND +/-2 SEMITONES / RELEASE=CENTER";
+     len=performance_state[32]?24:!performance_state[31]?27:36;tx=344;ty=436;fg=DIM;
+    end
+   end
+  end
   if(!de_in || px>=800 || py>=480)begin base=0;end
  end
  // Synchronous font ROM; RGB/DE/HS/VS traverse the same four stages.
@@ -441,9 +501,9 @@ module rgb_ui_renderer(
    base_glyph<=0;fg_glyph<=0;de_glyph<=0;hs_glyph<=0;vs_glyph<=0;
    glyph_text<=0;glyph_len<=0;glyph_dx<=0;glyph_dy<=0;glyph_title<=0;glyph_allow<=0;
    title_address<=0;title_bit<=0;base_layout<=0;fg_layout<=0;de_layout<=0;hs_layout<=0;vs_layout<=0;state<=0;base_pipe<=0;fg_pipe<=0;bit_pipe<=0;ink_pipe<=0;
-   de_pipe<=0;hs_pipe<=0;vs_pipe<=0;rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;more_state<=0;pcb_state<=0;end
+   de_pipe<=0;hs_pipe<=0;vs_pipe<=0;rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;more_state<=0;pcb_state<=0;performance_state<=0;end
   else begin
-   if(frame_start && status_valid)begin state<=status_data;more_state<=more_data[81]===1'b1 ? more_data : 146'd0;pcb_state<=pcb_data[2560]===1'b1 ? pcb_data : 2592'd0;end
+   if(frame_start && status_valid)begin performance_state<=performance_data;state<=status_data;more_state<=more_data[81]===1'b1 ? more_data : 146'd0;pcb_state<=pcb_data[2560]===1'b1 ? pcb_data : 2592'd0;end
    layout_text<=text;layout_len<=len;layout_x<=x;layout_y<=y;layout_tx<=tx;layout_ty<=ty;
    glyph_text<=layout_text;glyph_len<=layout_len;
    glyph_dx<=$signed({1'b0,layout_x})-$signed({1'b0,layout_tx});

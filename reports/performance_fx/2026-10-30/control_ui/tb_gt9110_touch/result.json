@@ -1,0 +1,8 @@
+{
+  "test": "tb_gt9110_touch",
+  "parameters": {},
+  "passed": true,
+  "checks": 29591,
+  "seconds": 0.159,
+  "independent_model": {}
+}

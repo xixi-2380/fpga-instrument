@@ -1,0 +1,2 @@
+PASS tb_ui_controls checks=118 commands=92
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_ui_controls.sv:94: $finish called at 22050000 (1ps)

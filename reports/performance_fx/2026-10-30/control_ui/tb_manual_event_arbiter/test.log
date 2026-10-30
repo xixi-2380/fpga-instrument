@@ -1,0 +1,2 @@
+PASS tb_manual_event_arbiter checks=7
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_manual_event_arbiter.sv:16: $finish called at 320000 (1ps)

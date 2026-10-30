@@ -22,7 +22,7 @@ module rgb_display #(
     input wire touch_enabled,touch_ui_enabled,touch_ready_status,touch_error_status,
     input wire [145:0] more_status,
     input wire latency_valid,input wire [19:0] latency_bcd,input wire [33:0] ultrasonic_status,
-    input wire [16:0] encoder_status,input wire [2:0] keypad_online,input wire [2591:0] pcb_status,output wire pcb_visible,input wire [3:0] sustain_time_thousands
+    input wire [16:0] encoder_status,input wire [2:0] keypad_online,input wire [2591:0] pcb_status,output wire pcb_visible,input wire [3:0] sustain_time_thousands,input wire [63:0] performance_status
 );
     wire pixel_clk,pixel_lock,pixel_reset;
     wire common_reset=pll_reset || !pixel_lock || audio_reset;
@@ -121,6 +121,9 @@ module rgb_display #(
     wire renderer_pcb_visible;wire visible_valid,visible_update;
     rgb_status_cdc #(.WIDTH(1)) pcb_visibility_bridge(pixel_clk,audio_clk,common_reset,
         renderer_pcb_visible,pcb_visible,visible_valid,visible_update);
+    wire [63:0] pixel_performance;wire performance_valid;
+    rgb_status_cdc #(.WIDTH(64)) performance_bridge(audio_clk,pixel_clk,common_reset,
+        performance_status,pixel_performance,performance_valid,);
     wire rendered_de,rendered_hs,rendered_vs;
     reg [10:0] render_x,render_y;
     reg render_de,render_hs,render_vs,render_frame_start;
@@ -129,7 +132,7 @@ module rgb_display #(
         else begin render_x<=x;render_y<=y;render_de<=de;render_hs<=hs;render_vs<=vs;render_frame_start<=frame_start;end
     end
     rgb_ui_renderer renderer(pixel_clk,pixel_reset,render_frame_start,status_valid,pixel_status,
-        render_x,render_y,render_de,render_hs,render_vs,rgb,rendered_de,rendered_hs,rendered_vs,pixel_more,pixel_pcb,renderer_pcb_visible);
+        render_x,render_y,render_de,render_hs,render_vs,rgb,rendered_de,rendered_hs,rendered_vs,pixel_more,pixel_pcb,renderer_pcb_visible,pixel_performance);
     // Only the output pin is phase-inverted. It never clocks any internal RTL.
     // At default phase, a panel rising edge has half a pixel period of setup.
     ODDR pixel_clock_forward(.Q0(lcd_clk),.Q1(),.D0(!PCLK_INVERT[0] && !pixel_reset),

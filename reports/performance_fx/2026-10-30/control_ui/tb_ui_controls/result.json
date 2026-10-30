@@ -1,0 +1,8 @@
+{
+  "test": "tb_ui_controls",
+  "parameters": {},
+  "passed": true,
+  "checks": 118,
+  "seconds": 0.123,
+  "independent_model": {}
+}

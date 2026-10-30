@@ -1,0 +1,2 @@
+PASS tb_bt_tail_reuse checks=8
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_bt_tail_reuse.sv:35: $finish called at 437905780 (1ps)

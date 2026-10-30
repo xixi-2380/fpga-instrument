@@ -1,0 +1,2 @@
+PASS tb_performance_control checks=166 ons=30 offs=29
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_performance_control.sv:52: $finish called at 2317140000 (1ps)

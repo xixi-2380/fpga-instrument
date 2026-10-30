@@ -1,0 +1,8 @@
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_bt_polyphony.sv:14: warning: Port 10 (ram_data) of bt_score_player expects 96 bits, got 64.
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_bt_polyphony.sv:14:        : Padding 32 high bits of the port.
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_bt_polyphony.sv:29: warning: Port 17 (selected_timbre) of bluetooth_audio_bridge expects 5 bits, got 3.
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_bt_polyphony.sv:29:        : Padding 2 high bits of the port.
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_bt_polyphony.sv:29: warning: Port 18 (note_timbre) of bluetooth_audio_bridge expects 5 bits, got 3.
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_bt_polyphony.sv:29:        : Padding 2 high bits of the port.
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_bt_polyphony.sv:33: warning: Port 19 (note_timbre) of synth_core expects 5 bits, got 3.
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_bt_polyphony.sv:33:        : Padding 2 high bits of the port.

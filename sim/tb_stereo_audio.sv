@@ -5,7 +5,7 @@
 module tb_stereo_audio;
  reg clk=0,rst=1,nv=0,no=0,flush=0,fx=0,cfg=0;
  always #8.138020833 clk=~clk;
- reg [6:0] id=0,pitch=60,vel=127,volume=100;reg [2:0] timbre=0;reg [1:0] mode=0;
+ reg [6:0] id=0,pitch=60,vel=127,volume=100;reg [4:0] timbre=0;reg [1:0] mode=0;
  reg [31:0] fcw=23409859;
  wire nr,ready,bck,ws,din,frame,u,vs;wire signed [15:0] visual;
  wire [31:0] held,active;wire er=rst||flush;
@@ -28,19 +28,19 @@ module tb_stereo_audio;
  .note_ready(nr),.input_ready(ready),.bck(bck),.ws(ws),.din(din),.frame_ce(frame),.underrun(u),
  .voice_held(held),.voice_active(active),.visual_sample_valid(vs),.visual_sample(visual),
  .effects_enable(fx),.effect_mode(mode),.effect_cfg_valid(cfg),.effect_echo_wet(9'd128),
- .effect_room_wet(9'd96),.effect_tremolo_depth(9'd192),.effect_tremolo_rate_hz(4'd7));
+ .effect_room_wet(9'd96),.effect_tremolo_depth(9'd192),.effect_tremolo_rate_hz(5'd7));
  // Reference inputs are mathematical sums, not DUT samples; effect algorithms
  // themselves retain the separately verified existing implementation.
  audio_effects #(.DELAY_SAMPLES(17),.D0(3),.D1(5),.D2(7),.D3(11)) ref_left(
  .clk(clk),.rst(er),.enable(fx),.mode(mode),.in_valid(sound.mix_valid),.in_sample(dry_l),
  .in_ready(unused_ready_l),.out_valid(refv_l),.out_sample(ref_fx_l),.cfg_valid(cfg),
- .cfg_echo_wet(9'd128),.cfg_room_wet(9'd96),.cfg_tremolo_depth(9'd192),.cfg_tremolo_rate_hz(4'd7));
+ .cfg_echo_wet(9'd128),.cfg_room_wet(9'd96),.cfg_tremolo_depth(9'd192),.cfg_tremolo_rate_hz(5'd7));
  audio_effects #(.DELAY_SAMPLES(17),.D0(3),.D1(5),.D2(7),.D3(11)) ref_right(
  .clk(clk),.rst(er),.enable(fx),.mode(mode),.in_valid(sound.mix_valid),.in_sample(dry_r),
  .in_ready(unused_ready_r),.out_valid(refv_r),.out_sample(ref_fx_r),.cfg_valid(cfg),
- .cfg_echo_wet(9'd128),.cfg_room_wet(9'd96),.cfg_tremolo_depth(9'd192),.cfg_tremolo_rate_hz(4'd7));
- master_volume ref_volume_l(clk,rst,refv_l,ref_fx_l,volume,refov_l,ref_out_l);
- master_volume ref_volume_r(clk,rst,refv_r,ref_fx_r,volume,refov_r,ref_out_r);
+ .cfg_echo_wet(9'd128),.cfg_room_wet(9'd96),.cfg_tremolo_depth(9'd192),.cfg_tremolo_rate_hz(5'd7));
+ master_volume ref_volume_l(clk,rst,refv_l,ref_fx_l,volume,refov_l,ref_out_l,1'b0);
+ master_volume ref_volume_r(clk,rst,refv_r,ref_fx_r,volume,refov_r,ref_out_r,1'b0);
  function automatic signed [15:0] sat(input signed [63:0] value);
  if(value>32767)sat=32767;else if(value < -32768)sat=-32768;else sat=value[15:0];endfunction
  task more(input integer n);integer target;begin target=frames_count+n;wait(frames_count>=target);@(negedge clk);end endtask

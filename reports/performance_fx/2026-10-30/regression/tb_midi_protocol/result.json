@@ -1,0 +1,8 @@
+{
+  "test": "tb_midi_protocol",
+  "parameters": {},
+  "passed": true,
+  "checks": 144,
+  "seconds": 0.111,
+  "independent_model": {}
+}

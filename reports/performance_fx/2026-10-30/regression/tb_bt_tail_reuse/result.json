@@ -1,0 +1,10 @@
+{
+  "test": "tb_bt_tail_reuse",
+  "parameters": {
+    "STEREO": 1
+  },
+  "passed": true,
+  "checks": 8,
+  "seconds": 2.626,
+  "independent_model": {}
+}

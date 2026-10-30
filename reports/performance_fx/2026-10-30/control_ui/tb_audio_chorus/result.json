@@ -1,0 +1,12 @@
+{
+  "test": "tb_audio_chorus",
+  "parameters": {},
+  "passed": true,
+  "checks": 96000,
+  "seconds": 1.439,
+  "independent_model": {
+    "frames": 24000,
+    "different_stereo_frames": 11195,
+    "resets": 2
+  }
+}

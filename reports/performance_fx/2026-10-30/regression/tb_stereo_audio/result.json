@@ -1,0 +1,8 @@
+{
+  "test": "tb_stereo_audio",
+  "parameters": {},
+  "passed": true,
+  "checks": 5977704,
+  "seconds": 268.681,
+  "independent_model": {}
+}

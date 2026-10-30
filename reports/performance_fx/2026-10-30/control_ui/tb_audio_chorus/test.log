@@ -1,0 +1,2 @@
+PASS tb_audio_chorus checks=96000 frames=24000
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_audio_chorus.sv:25: $finish called at 2160100000 (1ps)

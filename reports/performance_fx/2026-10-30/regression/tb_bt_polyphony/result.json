@@ -1,0 +1,11 @@
+{
+  "test": "tb_bt_polyphony",
+  "parameters": {
+    "STEREO": 1,
+    "EFFECT": 2
+  },
+  "passed": true,
+  "checks": 266747,
+  "seconds": 30.135,
+  "independent_model": {}
+}

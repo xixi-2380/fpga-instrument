@@ -2,6 +2,8 @@
 // Independently enabled serial effects: echo -> normalized room -> tremolo.
 // Each mix is a bounded weighted average; existing output limiter remains last.
 module audio_effects #(
+ parameter integer CHORUS_ENABLE=0,
+ parameter [31:0] CHORUS_PHASE=0,
  parameter integer ECHO_ENABLE=1,DELAY_SAMPLES=7200,MAX_DELAY_SAMPLES=24000,D0=1499,D1=1601,D2=1867,D3=2053,
  ECHO_WET=64,ROOM_WET=64,TREMOLO_MIN=128,
  parameter [31:0] LFO_STEP=32'd447392)(
@@ -10,14 +12,25 @@ module audio_effects #(
  output wire in_ready,output reg out_valid,output reg signed [15:0] out_sample,
  input wire cfg_valid,input wire [8:0] cfg_echo_wet,cfg_room_wet,cfg_tremolo_depth,
  input wire [4:0] cfg_tremolo_rate_hz,output wire cfg_ready,output reg cfg_applied,
- input wire [2:0] effect_mask,input wire [14:0] cfg_echo_samples);
+ input wire [2:0] effect_mask,input wire [14:0] cfg_echo_samples,
+ input wire chorus_enabled,input wire [8:0] chorus_wet,input wire [1:0] chorus_depth,chorus_rate);
  reg [2:0] stage;
+ wire chorus_ready,chorus_valid;wire signed [15:0] chorus_sample,chorus_input;
+ generate if(CHORUS_ENABLE)begin: chorus_on
+  audio_chorus #(.PHASE_OFFSET(CHORUS_PHASE)) chorus(.clk(clk),.rst(rst),
+   .in_valid(stage==5),.in_sample(chorus_input),.enabled(chorus_enabled),
+   .wet(chorus_wet),.depth(chorus_depth),.rate(chorus_rate),
+   .in_ready(chorus_ready),.out_valid(chorus_valid),.out_sample(chorus_sample));
+ end else begin: chorus_off
+  assign chorus_ready=1;assign chorus_valid=0;assign chorus_sample=0;
+ end endgenerate
  reg [8:0] echo_target,room_target,depth_target,echo_level,room_level,depth_level;
  reg [8:0] used_echo,used_room,used_tremolo_gain;
  reg [14:0] echo_samples;
  reg [31:0] lfo_phase,phase_step;
  reg signed [15:0] echo_stage,room_stage;
  reg signed [26:0] tremolo_product;
+ assign chorus_input=tremolo_product>>>8;
  wire echo_ready,echo_valid,room_ready,room_valid;
  wire signed [15:0] echo_dry,echo_history,room_sample;
  assign cfg_ready=!rst;
@@ -114,7 +127,11 @@ module audio_effects #(
     2:if(room_ready)stage<=3;
     3:if(room_valid)begin room_stage<=room_blend>>>8;stage<=4;end
     4:begin tremolo_product<=$signed(room_stage)*$signed({1'b0,used_tremolo_gain});stage<=5;end
-    5:begin out_sample<=tremolo_product>>>8;out_valid<=1;stage<=0;end
+    5:begin
+     if(CHORUS_ENABLE)begin if(chorus_ready)stage<=6;end
+     else begin out_sample<=tremolo_product>>>8;out_valid<=1;stage<=0;end
+    end
+    6:if(chorus_valid)begin out_sample<=chorus_sample;out_valid<=1;stage<=0;end
     default:begin end
    endcase
   end

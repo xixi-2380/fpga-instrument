@@ -1,0 +1,8 @@
+{
+  "test": "tb_manual_event_arbiter",
+  "parameters": {},
+  "passed": true,
+  "checks": 7,
+  "seconds": 0.073,
+  "independent_model": {}
+}

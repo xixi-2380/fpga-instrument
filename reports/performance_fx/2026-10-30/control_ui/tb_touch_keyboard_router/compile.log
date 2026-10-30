@@ -1,0 +1,2 @@
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_touch_keyboard_router.sv:11: warning: Port 13 (action) of touch_keyboard_router expects 7 bits, got 6.
+/workspace/scratch/6579ba30d432/performance-fx/sim/tb_touch_keyboard_router.sv:11:        : Padding 1 high bits of the port.

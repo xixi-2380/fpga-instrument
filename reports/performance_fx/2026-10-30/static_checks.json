@@ -1,0 +1,28 @@
+{
+  "preserved": [
+    "CST",
+    "SDC",
+    "PLL",
+    "50/61.44/35MHz configuration",
+    "I2S",
+    "allocator",
+    "master_volume",
+    "limiter"
+  ],
+  "dependencies": 111,
+  "hdl_sources": 66,
+  "syntax": [
+    {
+      "cwd": "/workspace/scratch/6579ba30d432/performance-fx",
+      "passed": true,
+      "scope": "syntax/elaboration with explicit simulation PLL/IO; not synthesis or STA",
+      "warnings": ""
+    },
+    {
+      "cwd": "/workspace/scratch/6579ba30d432",
+      "passed": true,
+      "scope": "syntax/elaboration with explicit simulation PLL/IO; not synthesis or STA",
+      "warnings": ""
+    }
+  ]
+}
