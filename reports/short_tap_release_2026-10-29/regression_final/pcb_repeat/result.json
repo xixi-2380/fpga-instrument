@@ -1,0 +1,7 @@
+{
+  "name": "pcb_repeat",
+  "test": "tb_pcb_repeat",
+  "parameters": [],
+  "passed": true,
+  "seconds": 1.15
+}

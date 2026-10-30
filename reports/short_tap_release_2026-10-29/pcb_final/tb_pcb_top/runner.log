@@ -1,0 +1,4 @@
+RUN tb_pcb_top
+PASS tb_pcb_top checks=50761 frames=371 serial_checks=627
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_pcb_top.sv:46: $finish called at 7725777748 (1ps)
+

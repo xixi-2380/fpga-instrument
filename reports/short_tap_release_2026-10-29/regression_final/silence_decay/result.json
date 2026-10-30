@@ -1,0 +1,7 @@
+{
+  "name": "silence_decay",
+  "test": "tb_effects_silence",
+  "parameters": [],
+  "passed": true,
+  "seconds": 26.63
+}

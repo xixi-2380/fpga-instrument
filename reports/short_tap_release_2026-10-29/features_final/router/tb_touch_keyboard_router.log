@@ -1,0 +1,2 @@
+PASS tb_touch_keyboard_router checks=1331 actions=56
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_touch_keyboard_router.sv:51: $finish called at 6520000 (1ps)

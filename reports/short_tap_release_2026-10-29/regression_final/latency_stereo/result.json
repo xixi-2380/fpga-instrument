@@ -1,0 +1,9 @@
+{
+  "name": "latency_stereo",
+  "test": "tb_audio_latency",
+  "parameters": [
+    "STEREO=1"
+  ],
+  "passed": true,
+  "seconds": 250.499
+}

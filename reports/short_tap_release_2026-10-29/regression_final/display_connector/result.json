@@ -1,0 +1,7 @@
+{
+  "name": "display_connector",
+  "test": "tb_rgb_display",
+  "parameters": [],
+  "passed": true,
+  "seconds": 224.315
+}

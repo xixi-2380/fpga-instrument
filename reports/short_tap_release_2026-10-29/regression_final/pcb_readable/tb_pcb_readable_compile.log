@@ -1,0 +1,10 @@
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:72: warning: @* is sensitive to all 3 words in array 'draft'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:72: warning: @* is sensitive to all 3 words in array 'draft'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:75: warning: @* is sensitive to all 3 words in array 'last_result'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:111: warning: @* is sensitive to all 3 words in array 'last_result'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:134: warning: @* is sensitive to all 3 words in array 'draft'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:143: warning: @* is sensitive to all 3 words in array 'draft'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:143: warning: @* is sensitive to all 3 words in array 'draft'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:152: warning: @* is sensitive to all 3 words in array 'last_result'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:154: warning: @* is sensitive to all 3 words in array 'draft'.
+E:/gowin/fpga-instrument-pcb-flash-debug/src/pcb_debug_ui.sv:155: warning: @* is sensitive to all 3 words in array 'draft'.

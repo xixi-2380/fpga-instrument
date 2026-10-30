@@ -1,0 +1,2 @@
+PASS tb_ultrasonic_top checks=1729410 frames=735
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_ultrasonic_top.sv:60: $finish called at 15307122272 (1ps)

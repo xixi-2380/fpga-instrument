@@ -1,0 +1,4 @@
+RUN tb_rgb_display
+PASS tb_rgb_display checks=2793167 visible=384000
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_rgb_display.sv:57: $finish called at 36306401542 (1ps)
+

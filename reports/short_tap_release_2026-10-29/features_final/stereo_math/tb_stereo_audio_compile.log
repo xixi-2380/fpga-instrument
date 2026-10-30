@@ -1,0 +1,17 @@
+E:/gowin/fpga-instrument-pcb-flash-debug/src/synth_core.sv:271: warning: @* is sensitive to all 63 words in array 'peak_tree'.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_stereo_audio.sv:25: warning: Port 26 (effect_tremolo_rate_hz) of module synth_core expects 5 bit(s), given 4.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_stereo_audio.sv:25:        : Padding 1 high bits of the port.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_stereo_audio.sv:25: warning: Instantiating module synth_core with dangling input port 37 (output_flush) floating.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_stereo_audio.sv:25: warning: Instantiating module synth_core with dangling input port 40 (effect_mask) floating.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_stereo_audio.sv:25: warning: Instantiating module synth_core with dangling input port 41 (effect_echo_samples) floating.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_stereo_audio.sv:25: warning: Instantiating module synth_core with dangling input port 42 (debug_mute) floating.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_stereo_audio.sv:34: warning: Port 14 (cfg_tremolo_rate_hz) of module audio_effects expects 5 bit(s), given 4.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_stereo_audio.sv:34:        : Padding 1 high bits of the port.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_stereo_audio.sv:34: warning: Instantiating module audio_effects with dangling input port 17 (effect_mask) floating.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_stereo_audio.sv:34: warning: Instantiating module audio_effects with dangling input port 18 (cfg_echo_samples) floating.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_stereo_audio.sv:38: warning: Port 14 (cfg_tremolo_rate_hz) of module audio_effects expects 5 bit(s), given 4.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_stereo_audio.sv:38:        : Padding 1 high bits of the port.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_stereo_audio.sv:38: warning: Instantiating module audio_effects with dangling input port 17 (effect_mask) floating.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_stereo_audio.sv:38: warning: Instantiating module audio_effects with dangling input port 18 (cfg_echo_samples) floating.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_stereo_audio.sv:42: warning: Instantiating module master_volume with dangling input port 8 (clear) floating.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_stereo_audio.sv:43: warning: Instantiating module master_volume with dangling input port 8 (clear) floating.

@@ -1,0 +1,4 @@
+RUN tb_effects_silence
+PASS tb_effects_silence checks=4
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_effects_silence.sv:23: $finish called at 6448190000 (1ps)
+

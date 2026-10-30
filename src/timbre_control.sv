@@ -17,7 +17,7 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
     input wire [2:0] encoder_up,encoder_down,encoder_single,encoder_double,
     output reg [2:0] effect_mask,cfg_effect_mask,output reg echo_edit_strength,tremolo_edit_rate,
     output reg [10:0] echo_time_ms,output wire [15:0] echo_time_bcd,
-    output reg [16:0] cfg_echo_samples);
+    output reg [16:0] cfg_echo_samples,output reg room_edit_volume);
     assign effects_enabled=effect_mask[effect_mode];
     localparam integer CW=DEBOUNCE_CYCLES>1?$clog2(DEBOUNCE_CYCLES):1;
     (* async_reg="true" *) reg [3:0] sync_meta,sync_buttons;
@@ -399,7 +399,7 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
     end
     always @(posedge clk or posedge rst)begin
         if(rst)begin selected<=0;effect_mask<=0;effect_mode<=0;hold_count<=0;holding<=0;long_fired<=0;
-            echo_edit_strength<=0;tremolo_edit_rate<=0;echo_time_ms<=150;
+            echo_edit_strength<=0;room_edit_volume<=0;tremolo_edit_rate<=0;echo_time_ms<=150;
             menu_mode<=0;menu_hold<=0;menu_holding<=0;menu_fired<=0;
             menu_terminal<=LONG_PRESS_CYCLES==1;effect_terminal<=LONG_PRESS_CYCLES==1;
             echo_percent<=25;room_percent<=25;depth_percent<=50;tremolo_rate_hz<=5;volume_percent<=100;
@@ -475,7 +475,7 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
                         ultrasonic_enabled<=0;ultrasonic_page<=0;ultrasonic_sensitivity<=1;
                         ultrasonic_min<=0;ultrasonic_max<=100;ultrasonic_version<=ultrasonic_version+1'b1;
                         echo_percent<=25;room_percent<=25;depth_percent<=50;tremolo_rate_hz<=5;
-                        effect_mode<=0;effect_mask<=0;echo_time_ms<=150;echo_edit_strength<=0;tremolo_edit_rate<=0;
+                        effect_mode<=0;effect_mask<=0;echo_time_ms<=150;echo_edit_strength<=0;room_edit_volume<=0;tremolo_edit_rate<=0;
                     end
                     default:begin end
                 endcase
@@ -506,7 +506,12 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
                             if(encoder_up[e]===1'b1)begin if(echo_percent<100)echo_percent<=echo_percent+1'b1;end
                             else if(echo_percent>0)echo_percent<=echo_percent-1'b1;
                         end
-                        1:begin
+                        1:if(room_edit_volume)begin
+                            if(!ultrasonic_enabled)begin
+                                if(encoder_up[e]===1'b1)begin if(volume_percent<100)volume_percent<=volume_percent+1'b1;end
+                                else if(volume_percent>0)volume_percent<=volume_percent-1'b1;
+                            end
+                        end else begin
                             if(encoder_up[e]===1'b1)begin if(room_percent<100)room_percent<=room_percent+1'b1;end
                             else if(room_percent>0)room_percent<=room_percent-1'b1;
                         end
@@ -522,6 +527,7 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
                 if(encoder_single[e]===1'b1)begin
                     effect_mode<=2'(e);
                     if(e==0)echo_edit_strength<=!echo_edit_strength;
+                    if(e==1)room_edit_volume<=!room_edit_volume;
                     if(e==2)tremolo_edit_rate<=!tremolo_edit_rate;
                 end
                 if(encoder_double[e]===1'b1)begin effect_mode<=2'(e);effect_mask[e]<=!effect_mask[e];end

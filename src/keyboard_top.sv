@@ -91,7 +91,7 @@ module keyboard_top #(
         ultrasonic_min,ultrasonic_max,ultrasonic_ui_state,ultrasonic_result[11:0]};
     wire [4:0] tremolo_rate_hz,cfg_rate_hz;
     wire [2:0] effect_mask,cfg_effect_mask,encoder_up,encoder_down,encoder_single,encoder_double;
-    wire echo_edit_strength,tremolo_edit_rate;wire [10:0] echo_time_ms;
+    wire echo_edit_strength,room_edit_volume,tremolo_edit_rate;wire [10:0] echo_time_ms;
     wire [15:0] echo_time_bcd;wire [16:0] cfg_echo_samples;
     wire [383:0] encoder_diagnostics;wire [2:0] encoder_clear;
     localparam integer ECW=EC11_MS_CYCLES>1?$clog2(EC11_MS_CYCLES):1;
@@ -145,7 +145,7 @@ module keyboard_top #(
     wire [38:0] touch_status={touch_ready,touch_error,touch_down,touch_count,touch_x,touch_y};
     wire [70:0] touch_audio;
     wire touch_audio_valid,touch_update;
-    wire bt_inhibit,bt_valid,bt_ready,bt_flush,bt_output_flush,bt_note_on;
+    wire bt_inhibit,bt_valid,bt_ready,bt_flush,bt_output_flush,bt_note_on,bt_tail_pending,audio_quiet;
     wire [6:0] bt_note_id,bt_velocity,bt_pitch;
     wire [2:0] bt_timbre;
     wire [31:0] bt_fcw;
@@ -157,7 +157,7 @@ module keyboard_top #(
         else begin bt_flush_d<=bt_flush;bt_restore<=bt_flush_d && !bt_flush;end
     end
     wire local_score_busy=score_busy && !score_cancelled;
-    wire take_bt=bt_inhibit || bt_valid || bt_flush;
+    wire take_bt=bt_inhibit || bt_valid || bt_flush || bt_tail_pending;
     always @(posedge audio_clk or posedge audio_reset)begin
         if(audio_reset)score_cancelled<=0;
         else if(bt_inhibit || bt_valid)score_cancelled<=1;
@@ -211,15 +211,15 @@ module keyboard_top #(
             source_valid,source_ready,{source_kind,source_id,source_pitch,source_velocity},
             ev_valid,ev_ready,{kind,ident,pitch,velocity});
         bt_identity_monitor source_id_monitor(clk,source_reset,source_valid,source_ready,source_kind,source_id,bt_source_ids);
-        bluetooth_audio_bridge #(.DRAIN_FRAMES(OUTPUT_ENABLE ? (1<<LIMITER_LOG2)+2 : 2)) bridge(.clk(audio_clk),.rst(audio_reset),.frame_ce(frame_ce),
+        bluetooth_audio_bridge #(.WAIT_FOR_TAIL(1),.NATURAL_QUIET_FRAMES(2053+(1<<LIMITER_LOG2)+4),.DRAIN_FRAMES(OUTPUT_ENABLE ? (1<<LIMITER_LOG2)+2 : 2)) bridge(.clk(audio_clk),.rst(audio_reset),.frame_ce(frame_ce),
             .event_valid(ev_valid),.event_ready(ev_ready),.event_kind(kind),
             .event_id(ident),.event_pitch(pitch),.event_velocity(velocity),.inhibit(bt_inhibit),
             .note_valid(bt_valid),.note_ready(bt_ready),.note_on(bt_note_on),
             .note_id(bt_note_id),.note_fcw(bt_fcw),.note_velocity(bt_velocity),.flush(bt_flush),
-            .selected_timbre(selected_timbre),.note_timbre(bt_timbre),.note_pitch(bt_pitch),.audio_ready(input_ready),.output_flush(bt_output_flush));
+            .selected_timbre(selected_timbre),.note_timbre(bt_timbre),.note_pitch(bt_pitch),.audio_ready(input_ready),.output_flush(bt_output_flush),.audio_quiet(audio_quiet),.tail_pending(bt_tail_pending));
     end else begin: bluetooth_off
         assign bt_tx=1;assign bt_inhibit=0;assign bt_valid=0;assign bt_flush=0;assign bt_output_flush=0;
-        assign bt_note_on=0;assign bt_note_id=0;assign bt_fcw=0;assign bt_velocity=127;assign bt_pitch=0;assign bt_timbre=0;
+        assign bt_tail_pending=0;assign bt_note_on=0;assign bt_note_id=0;assign bt_fcw=0;assign bt_velocity=127;assign bt_pitch=0;assign bt_timbre=0;
         assign service_status=0;assign more_command_ready=1;
         assign bt_source_ids=0;
         assign flash_cs_n=1;assign flash_sck=0;assign flash_mosi=0;assign flash_wp_n=1;assign flash_hold_n=1;
@@ -281,7 +281,7 @@ module keyboard_top #(
             .visual_sample_valid(visual_sample_valid),.visual_sample(visual_sample),.visual_notes(visual_notes),
             .latency_valid(latency_valid),.latency_bcd(latency_bcd),
             .ultrasonic_status(ultrasonic_ui),
-            .encoder_status({echo_time_bcd[11:0],tremolo_edit_rate,echo_edit_strength,effect_mask}),.keypad_online(keypad_online),
+            .encoder_status({echo_time_bcd[11:1],room_edit_volume,tremolo_edit_rate,echo_edit_strength,effect_mask}),.keypad_online(keypad_online),
             .score_busy(local_score_busy || bt_inhibit),.audio_ready(input_ready),.score_error(score_error),
             .underrun(underrun),.ghost(ghost),.lcd_clk(lcd_clk),.lcd_hs(lcd_hs),
             .lcd_vs(lcd_vs),.lcd_en(lcd_en),.lcd_r(lcd_r),.lcd_g(lcd_g),.lcd_b(lcd_b),
@@ -312,7 +312,7 @@ module keyboard_top #(
         .clk(audio_clk),.rst(audio_reset),.buttons_n(board_buttons_n),
         .encoder_up(encoder_up),.encoder_down(encoder_down),.encoder_single(encoder_single),.encoder_double(encoder_double),
         .effect_mask(effect_mask),.cfg_effect_mask(cfg_effect_mask),.cfg_echo_samples(cfg_echo_samples),
-        .echo_edit_strength(echo_edit_strength),.tremolo_edit_rate(tremolo_edit_rate),
+        .echo_edit_strength(echo_edit_strength),.room_edit_volume(room_edit_volume),.tremolo_edit_rate(tremolo_edit_rate),
         .echo_time_ms(echo_time_ms),.echo_time_bcd(echo_time_bcd),
         .selected(selected_timbre),.effects_enabled(effects_enabled),.effect_mode(effect_mode),
         .ui_action_valid(ui_action_valid),.ui_action(ui_action),.cfg_ready(cfg_ready),
@@ -422,8 +422,8 @@ module keyboard_top #(
         .frame_ce(frame_ce),.note_ready(note_ready),.input_ready(input_ready),
         .gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(envelope_level),
         .visual_sample_valid(visual_sample_valid),.visual_sample(visual_sample),.visual_notes(visual_notes),
-        .latency_valid(latency_valid),.latency_bcd(latency_bcd),.debug_mute(pcb_mute),.debug_muted(pcb_muted));
-    assign pcb_audio_trace={25'd0,echo_time_ms[10:9],tremolo_rate_hz[4],keypad_armed,16'd0,visual_sample,20'd0,note_fcw,7'd0,note_id,voice_active,voice_held,
+        .latency_valid(latency_valid),.latency_bcd(latency_bcd),.debug_mute(pcb_mute),.debug_muted(pcb_muted),.audio_quiet(audio_quiet));
+    assign pcb_audio_trace={24'd0,room_edit_volume,echo_time_ms[10:9],tremolo_rate_hz[4],keypad_armed,16'd0,visual_sample,20'd0,note_fcw,7'd0,note_id,voice_active,voice_held,
         echo_time_ms[8:0],volume_percent,tremolo_rate_hz[3:0],depth_percent,room_percent,echo_percent,
         tremolo_edit_rate,echo_edit_strength,effect_mask,input_ready,underrun,visual_sample_valid,
         cfg_applied,cfg_ready,effect_cfg_request,menu_mode,local_score_busy,take_bt,note_ready,note_on,note_valid,note_keys};

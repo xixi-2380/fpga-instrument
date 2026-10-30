@@ -32,3 +32,8 @@ __pycache__/
 /reports/sustain_ui_2026-10-29/implementation*/gwsynthesis/
 /reports/sustain_ui_2026-10-29/audio_ab*/baseline/
 /dist/sustain-ui-2026-10-29/*.sdf
+
+# Short-tap/knob2 follow-up: generated databases stay local.
+/reports/short_tap_release_2026-10-29/implementation*/pnr/
+/reports/short_tap_release_2026-10-29/implementation*/gwsynthesis/
+/dist/short-tap-release-2026-10-29/*.sdf

@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "checks": 18376,
+  "frames": 4603,
+  "maximum_final_code": 29203,
+  "final_inflight_frames": 1,
+  "channels": {
+    "L": {
+      "checks": 9188,
+      "frames": 4603,
+      "maximum": 29203
+    },
+    "R": {
+      "checks": 9188,
+      "frames": 4603,
+      "maximum": 29203
+    }
+  },
+  "scope": "production32-voice/48kHz PCM checked with independent Python model per channel"
+}

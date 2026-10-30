@@ -1,0 +1,9 @@
+{
+  "name": "retrigger32",
+  "test": "tb_sustain_retrigger",
+  "parameters": [
+    "VOICES=32"
+  ],
+  "passed": true,
+  "seconds": 76.166
+}

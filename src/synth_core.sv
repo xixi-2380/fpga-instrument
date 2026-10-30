@@ -18,7 +18,7 @@ module synth_core #(
     input wire [6:0] volume_percent,input wire [6:0] note_pitch,input wire output_flush,
     output wire latency_valid,output wire [19:0] latency_bcd,
     input wire [2:0] effect_mask,input wire [16:0] effect_echo_samples,
-    input wire debug_mute,output wire debug_muted);
+    input wire debug_mute,output wire debug_muted,output wire audio_quiet);
     // Register the soft engine clear before its wide envelope/RAM fanout.
     // Button assertion stays asynchronous; serial urgent-clear remains separate.
     // One clk of control staging is far below a sample and cancels work before
@@ -87,6 +87,7 @@ module synth_core #(
     wire signed [`VOICE_W-1:0] gain_sample;
     wire signed [15:0] mix_sample;
     wire [15:0] frame_l,frame_r;
+    assign audio_quiet=!(|voice_active) && !(|voice_held) && frame_l==0 && frame_r==0;
     reg [VISUAL_KEYS-1:0] note_scan;
     // Metadata read, automatic lookup, then bitmap update occupy separate clocks.
     // Avoid a render-counter -> context mux -> dynamic shift -> bitmap path.

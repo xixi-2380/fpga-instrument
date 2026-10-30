@@ -1,0 +1,8 @@
+[
+  {
+    "test": "tb_effect_cfg_replay",
+    "passed": true,
+    "pll_model": "behavioral substitute",
+    "seconds": 2.386
+  }
+]

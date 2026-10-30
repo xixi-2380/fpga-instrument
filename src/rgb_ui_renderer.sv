@@ -12,7 +12,9 @@ module rgb_ui_renderer(
  reg [1206:0] state;
  wire [2:0] effect_bits=state[1169:1167];
  wire echo_amount_edit=state[1170],tremolo_rate_edit=state[1171];
- wire [11:0] echo_ms_bcd=state[1183:1172];
+ // Time uses10ms steps, so the ones digit is zero; bit1172 carries knob2 mode.
+ wire room_volume_edit=state[1172];
+ wire [11:0] echo_ms_bcd={state[1183:1176],4'd0};
  wire [35:0] piano_notes={state[1203:1184],state[79:64]};
  wire [2:0] keyboard_online=state[1206:1204];
  wire sensor_page=state[1166],sensor_enabled=state[1165];
@@ -223,7 +225,7 @@ module rgb_ui_renderer(
    end
    if(px>=380 && py>=382 && py<402)begin
     text=fx==0 ? (echo_amount_edit ? "KNOB: AMOUNT" : "KNOB: TIME") :
-         fx==1 ? "KNOB: AMOUNT" : (tremolo_rate_edit ? "KNOB: RATE" : "KNOB: DEPTH");
+         fx==1 ? (room_volume_edit ? "KNOB: VOLUME" : "KNOB: AMOUNT") : (tremolo_rate_edit ? "KNOB: RATE" : "KNOB: DEPTH");
     len=fx==1 || (fx==0 && echo_amount_edit) ? 12 : fx==2 && !tremolo_rate_edit ? 11 : 10;
     tx=490;ty=384;fg=DIM;
    end
@@ -312,6 +314,7 @@ module rgb_ui_renderer(
    end else begin
     text=menu ? "S1-/S2+ VOLUME" : "NOTE MONITOR C4-B6 / 10.7 MS WINDOW";
     len=menu ? 14 : 35;ty=446;if(menu)tx=360;
+    if(!menu && room_volume_edit)begin text={"KNOB2 VOLUME ",percent_text(volume),"%"};len=17;tx=24;end
     if(state[16] || state[17] || state[18])begin text=state[18] ? "GHOST KEYS" : "AUDIO ERROR";len=state[18] ? 10 : 11;fg=RED;end
    end
   end

@@ -1,0 +1,8 @@
+[
+  {
+    "test": "tb_ultrasonic_top",
+    "passed": true,
+    "pll_model": "behavioral substitute",
+    "seconds": 376.329
+  }
+]

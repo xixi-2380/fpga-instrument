@@ -31,6 +31,21 @@ module tb_sustain_envelope;
   repeat(600)@(negedge clk);base_level=0;base_active=0;enable=1;off=1;
   @(negedge clk);off=0;repeat(8)@(negedge clk);
   check(!active && level==0,"releasing a long-held naturally silent note must not resurrect it");
+  // A slow Attack can still be quiet after10ms; wall-clock age is insufficient.
+  @(negedge clk);base_active=1;base_level=0;on=1;
+  @(negedge clk);on=0;base_level=1200;
+  repeat(960)@(negedge clk);off=1;
+  @(negedge clk);off=0;base_active=0;base_level=0;
+  repeat(64)@(negedge clk);
+  check(active && level>8000,"20ms slow-attack tap receives an audible smooth tail");
+  repeat(24000)@(negedge clk);
+  check(!active && level==0,"slow-attack compensation still terminates at configured duration");
+  @(negedge clk);base_active=1;base_level=65536;on=1;
+  @(negedge clk);on=0;repeat(2)@(negedge clk);base_level=100;
+  repeat(500)@(negedge clk);off=1;
+  @(negedge clk);off=0;base_active=0;base_level=0;
+  repeat(8)@(negedge clk);
+  check(level<=100,"a naturally decayed note is not raised to the attack floor");
   $display("PASS tb_sustain_envelope checks=%0d",checks);$finish;
  end
  initial begin #2000000;$fatal(1,"sustain envelope timeout");end

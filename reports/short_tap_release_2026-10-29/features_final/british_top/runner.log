@@ -1,0 +1,4 @@
+RUN tb_british_top
+PASS tb_british_top checks=1287532 notes=9 windows=1
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_british_top.sv:69: $finish called at 20939180794 (1ps)
+

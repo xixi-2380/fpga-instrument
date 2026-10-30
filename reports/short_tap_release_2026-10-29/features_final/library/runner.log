@@ -1,0 +1,4 @@
+RUN tb_bt_library_link
+PASS tb_bt_library_link checks=1489 programs=13 erases=3
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_bt_library_link.sv:94: $finish called at 32994837408 (1ps)
+

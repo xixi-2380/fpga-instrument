@@ -1,0 +1,8 @@
+{
+  "configuration": "startup",
+  "test": "tb_max98357_startup",
+  "params": [],
+  "behavioral_pll": true,
+  "passed": true,
+  "seconds": 410.027
+}

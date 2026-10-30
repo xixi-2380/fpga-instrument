@@ -1,0 +1,7 @@
+{
+  "name": "allocator",
+  "test": "tb_voice_allocator",
+  "parameters": [],
+  "passed": true,
+  "seconds": 8.421
+}

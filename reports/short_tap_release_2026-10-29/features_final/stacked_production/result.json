@@ -1,0 +1,10 @@
+{
+  "configuration": "stacked_production",
+  "test": "tb_stacked_effects",
+  "params": [
+    "PROD=1"
+  ],
+  "behavioral_pll": false,
+  "passed": true,
+  "seconds": 31.418
+}

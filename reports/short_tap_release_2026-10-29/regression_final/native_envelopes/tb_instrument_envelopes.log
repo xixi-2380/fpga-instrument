@@ -1,0 +1,2 @@
+PASS tb_instrument_envelopes checks=7932
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_instrument_envelopes.sv:37: $finish called at 244171000 (1ps)

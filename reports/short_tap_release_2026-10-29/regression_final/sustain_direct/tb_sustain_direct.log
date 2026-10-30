@@ -1,0 +1,2 @@
+PASS tb_sustain_direct checks=300
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_sustain_direct.sv:18: $finish called at 24030000 (1ps)

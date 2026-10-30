@@ -1,0 +1,2 @@
+PASS tb_ui_more checks=21 commands=12
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_ui_more.sv:29: $finish called at 2480000 (1ps)

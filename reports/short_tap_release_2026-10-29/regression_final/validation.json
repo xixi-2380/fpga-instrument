@@ -1,0 +1,164 @@
+{
+  "passed": true,
+  "sources_unchanged": true,
+  "results": [
+    {
+      "name": "natural_tail",
+      "test": "tb_bt_natural_sustain",
+      "parameters": [],
+      "passed": true,
+      "seconds": 408.332
+    },
+    {
+      "name": "silence_decay",
+      "test": "tb_effects_silence",
+      "parameters": [],
+      "passed": true,
+      "seconds": 26.63
+    },
+    {
+      "name": "sustain_envelope",
+      "test": "tb_sustain_envelope",
+      "parameters": [],
+      "passed": true,
+      "seconds": 2.282
+    },
+    {
+      "name": "sustain_controls",
+      "test": "tb_sustain_controls",
+      "parameters": [],
+      "passed": true,
+      "seconds": 2.146
+    },
+    {
+      "name": "sustain_direct",
+      "test": "tb_sustain_direct",
+      "parameters": [],
+      "passed": true,
+      "seconds": 1.466
+    },
+    {
+      "name": "retrigger32",
+      "test": "tb_sustain_retrigger",
+      "parameters": [
+        "VOICES=32"
+      ],
+      "passed": true,
+      "seconds": 76.166
+    },
+    {
+      "name": "pcb_readable",
+      "test": "tb_pcb_readable",
+      "parameters": [],
+      "passed": true,
+      "seconds": 1.044
+    },
+    {
+      "name": "pcb_repeat",
+      "test": "tb_pcb_repeat",
+      "parameters": [],
+      "passed": true,
+      "seconds": 1.15
+    },
+    {
+      "name": "allocator",
+      "test": "tb_voice_allocator",
+      "parameters": [],
+      "passed": true,
+      "seconds": 8.421
+    },
+    {
+      "name": "native_envelopes",
+      "test": "tb_instrument_envelopes",
+      "parameters": [],
+      "passed": true,
+      "seconds": 1.355
+    },
+    {
+      "name": "latency_mono",
+      "test": "tb_audio_latency",
+      "parameters": [],
+      "passed": true,
+      "seconds": 237.653
+    },
+    {
+      "name": "latency_stereo",
+      "test": "tb_audio_latency",
+      "parameters": [
+        "STEREO=1"
+      ],
+      "passed": true,
+      "seconds": 250.499
+    },
+    {
+      "name": "display_connector",
+      "test": "tb_rgb_display",
+      "parameters": [],
+      "passed": true,
+      "seconds": 224.315
+    },
+    {
+      "name": "retrigger_timbre_0",
+      "test": "tb_sustain_retrigger",
+      "parameters": [
+        "TIMBRE=0"
+      ],
+      "passed": true,
+      "seconds": 35.501
+    },
+    {
+      "name": "retrigger_timbre_1",
+      "test": "tb_sustain_retrigger",
+      "parameters": [
+        "TIMBRE=1"
+      ],
+      "passed": true,
+      "seconds": 30.593
+    },
+    {
+      "name": "retrigger_timbre_2",
+      "test": "tb_sustain_retrigger",
+      "parameters": [
+        "TIMBRE=2"
+      ],
+      "passed": true,
+      "seconds": 30.006
+    },
+    {
+      "name": "retrigger_timbre_3",
+      "test": "tb_sustain_retrigger",
+      "parameters": [
+        "TIMBRE=3"
+      ],
+      "passed": true,
+      "seconds": 30.886
+    },
+    {
+      "name": "retrigger_timbre_4",
+      "test": "tb_sustain_retrigger",
+      "parameters": [
+        "TIMBRE=4"
+      ],
+      "passed": true,
+      "seconds": 31.894
+    },
+    {
+      "name": "retrigger_timbre_5",
+      "test": "tb_sustain_retrigger",
+      "parameters": [
+        "TIMBRE=5"
+      ],
+      "passed": true,
+      "seconds": 30.149
+    },
+    {
+      "name": "retrigger_timbre_6",
+      "test": "tb_sustain_retrigger",
+      "parameters": [
+        "TIMBRE=6"
+      ],
+      "passed": true,
+      "seconds": 27.644
+    }
+  ]
+}

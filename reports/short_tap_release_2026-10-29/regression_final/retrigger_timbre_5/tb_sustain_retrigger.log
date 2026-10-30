@@ -1,0 +1,2 @@
+PASS tb_sustain_retrigger checks=7 first_sound_frames=47
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_sustain_retrigger.sv:39: $finish called at 2708733300 (1ps)

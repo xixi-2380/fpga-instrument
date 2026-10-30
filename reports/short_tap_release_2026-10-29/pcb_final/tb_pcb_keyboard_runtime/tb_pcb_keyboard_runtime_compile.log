@@ -1,0 +1,2 @@
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/aip5916_model.svh:4: warning: timescale for aip5916_model inherited from another file.
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_pcb_keyboard_runtime.sv:1: ...: The inherited timescale is here.

@@ -1,0 +1,7 @@
+{
+  "name": "native_envelopes",
+  "test": "tb_instrument_envelopes",
+  "parameters": [],
+  "passed": true,
+  "seconds": 1.355
+}

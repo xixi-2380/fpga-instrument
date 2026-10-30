@@ -109,7 +109,10 @@ module pcb_debug_ui(
   if(tab==1 && row==2 && !captured[609])friendly=line({"SAVED: no successful configuration"},34);
   if(tab==1 && row==3 && (!captured[592] || !captured[593+channel]))friendly=line({"READ: waiting for verified registers"},36);
   if(tab==1 && row==4 && !pending && last_result[board]==0)friendly=line({"READY: adjust, APPLY, compare SAVED/READ"},40);
-  if(tab==4 && row==5 && board==1)friendly=line({"ROOM LEVEL ",decimal5(captured_audio[66:60]),"%  TURN TO ADJUST"},33);
+  if(tab==4 && row==5 && board==1)begin
+   if(captured_audio[295])friendly=line({"MASTER VOLUME ",decimal5(captured_audio[84:78]),"% / CLICK: ROOM"},34);
+   else friendly=line({"ROOM LEVEL ",decimal5(captured_audio[66:60]),"% / CLICK: VOLUME"},33);
+  end
   if(tab==4 && row==5 && board==2)friendly=line({"TREM DEPTH ",decimal5(captured_audio[73:67]),"% RATE ",decimal5(tremolo_hz)," Hz"},31);
  end
  always @*begin

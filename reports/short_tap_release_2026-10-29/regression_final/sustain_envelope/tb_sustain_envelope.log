@@ -1,0 +1,2 @@
+PASS tb_sustain_envelope checks=12
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_sustain_envelope.sv:49: $finish called at 1234020000 (1ps)

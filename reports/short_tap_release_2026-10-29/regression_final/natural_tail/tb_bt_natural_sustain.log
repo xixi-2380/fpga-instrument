@@ -1,0 +1,2 @@
+PASS tb_bt_natural_sustain checks=9 tailPCM=2 frames=2472
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_bt_natural_sustain.sv:48: $finish called at 51500275060 (1ps)

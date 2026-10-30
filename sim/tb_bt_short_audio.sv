@@ -49,11 +49,12 @@ module tb_bt_short_audio;
   #100 rst=0;wait(dut.input_ready);repeat(8)@(negedge clk);
   command_valid=1;wait(dut.bluetooth_on.link.core.player_ready);@(negedge clk);command_valid=0;
   wait(ons==3);wait(!dut.bluetooth_on.link.core.manual_inhibit && !dut.bt_inhibit);
+  wait(!dut.bt_tail_pending && !dut.bt_flush);
   repeat(1000)@(negedge clk);
   check(offs==3 && dut.bluetooth_on.link.core.position_ms==3,"all short records end without scheduler fault");
   check(heard[1]>10 && heard[2]>10 && heard[3]>10,"each1ms note survives subsequent On and final drain");
   check(!dut.bluetooth_on.link.scheduler_fault && dut.visual_sample==0 && dut.sound.tx.latched_l==0 && dut.sound.tx.latched_r==0,"natural end completes only after actual zeroed serial output");
   $display("PASS tb_bt_short_audio checks=%0d note_samples=%0d/%0d/%0d",checks,heard[1],heard[2],heard[3]);$finish;
  end
- initial begin #15000000;$fatal(1,"short audio timeout ons=%0d offs=%0d",ons,offs);end
+ initial begin #150000000;$fatal(1,"short audio timeout ons=%0d offs=%0d",ons,offs);end
 endmodule

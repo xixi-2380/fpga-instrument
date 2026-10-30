@@ -1,0 +1,4 @@
+RUN tb_touch_ec11_top
+PASS tb_touch_ec11_top checks=1352772 frames=1057 max_delivery=527
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_touch_ec11_top.sv:64: $finish called at 22001678074 (1ps)
+

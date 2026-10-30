@@ -3,12 +3,12 @@ module tb_sustain_controls;
  reg clk=0,rst=1;always #5 clk=~clk;
  reg [2:0] up=0,down=0,single=0;reg ready=1;
  wire [10:0] ms;wire [15:0] bcd;wire [16:0] samples;
- wire [4:0] rate,cfg_rate;wire valid;integer checks=0;
+ wire [4:0] rate,cfg_rate;wire valid;wire volume_edit;wire [6:0] volume,room;integer checks=0;
  timbre_control #(.DEBOUNCE_CYCLES(2),.LONG_PRESS_CYCLES(8)) dut(
   .clk(clk),.rst(rst),.buttons_n(4'hf),.ui_action_valid(1'b0),.ui_action(6'd63),.cfg_ready(ready),
   .encoder_up(up),.encoder_down(down),.encoder_single(single),.encoder_double(3'd0),
   .echo_time_ms(ms),.echo_time_bcd(bcd),.cfg_echo_samples(samples),.tremolo_rate_hz(rate),.cfg_tremolo_rate_hz(cfg_rate),.cfg_valid(valid),
-  .auto_valid(1'b0),.auto_version(8'd0),.auto_target(7'd0));
+  .room_edit_volume(volume_edit),.volume_percent(volume),.room_percent(room),.auto_valid(1'b0),.auto_version(8'd0),.auto_target(7'd0));
  task check(input bit ok,input string why);begin checks++;if(!ok)$fatal(1,"%s",why);end endtask
  task turn(input [2:0] a,input bit reverse);begin
   @(negedge clk);up=reverse?0:a;down=reverse?a:0;@(negedge clk);up=0;down=0;repeat(5)@(negedge clk);
@@ -22,6 +22,12 @@ module tb_sustain_controls;
   @(negedge clk);single=4;@(negedge clk);single=0;
   repeat(30)turn(3'b100,0);check(rate==20 && cfg_rate==20,"tremolo reaches20Hz without four-bit truncation");
   repeat(30)turn(3'b100,1);check(rate==1,"tremolo lower bound remains1Hz");
+  @(negedge clk);single=2;@(negedge clk);single=0;
+  turn(2,1);check(volume_edit && volume==99 && room==25,"knob2 click selects master volume independently of room amount");
+  repeat(110)turn(2,1);check(volume==0 && room==25,"knob2 master volume clamps at zero");
+  repeat(110)turn(2,0);check(volume==100,"knob2 master volume clamps at100");
+  @(negedge clk);single=2;@(negedge clk);single=0;
+  turn(2,0);check(!volume_edit && volume==100 && room==26,"second click returns knob2 to room strength");
   $display("PASS tb_sustain_controls checks=%0d",checks);$finish;
  end
 endmodule

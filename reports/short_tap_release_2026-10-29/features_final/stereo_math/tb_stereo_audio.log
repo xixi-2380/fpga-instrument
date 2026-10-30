@@ -1,0 +1,2 @@
+PASS tb_stereo_audio checks=5977704 frames=2223 serial_words=4440 differing_pairs=2177 max_delivery=532
+E:/gowin/fpga-instrument-pcb-flash-debug/sim/tb_stereo_audio.sv:155: $finish called at 46271528680 (1ps)
