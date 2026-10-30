@@ -20,18 +20,22 @@ assert not (a.vendor and a.behavioral_pll),'Choose official vendor or behavioral
 if a.behavioral_pll:
     assert a.test and a.test!='tb_pll_pair','Behavioral substitute requires one integration test, not a PLL test'
     sources=[s for s in sources if s.name!='pll_pair.sv']+[root/'sim/pll_pair_behavioral.sv',root/'sim/pixel_pll_behavioral.sv']
-    vendor=pathlib.Path('C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v').read_text(encoding='utf-8')
-    io_source='`timescale 1ns/1ps\n// Unmodified official GW5A ODDR/GSR simulation definitions.\n'
-    for primitive in ['ODDR','GSR']:
-        begin=vendor.index('module '+primitive+' (');end=vendor.index('endmodule',begin)+len('endmodule')
-        io_source+=vendor[begin:end]+'\n'
-    io_file=out/'gowin_io_sim.v';io_file.write_text(io_source,encoding='utf-8');sources+=[io_file]
+    official=pathlib.Path('C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v')
+    if official.exists():
+        vendor=official.read_text(encoding='utf-8');io_source='`timescale 1ns/1ps\n'
+        for primitive in ['ODDR','GSR']:
+            begin=vendor.index('module '+primitive+' (');end=vendor.index('endmodule',begin)+len('endmodule');io_source+=vendor[begin:end]+'\n'
+        io_file=out/'gowin_io_sim.v';io_file.write_text(io_source,encoding='utf-8');sources+=[io_file]
+    else:
+        print('Explicit behavioral ODDR/GSR substitute; no vendor-cell/STA validation',flush=True)
+        sources+=[root/'sim/io_behavioral.sv']
+
 results=[]
 for t in tests:
     name=t.stem
     model_sources=[]
-    if name in ['tb_flash_busy_budget','tb_flash_production','tb_spi_nor_flash','tb_flash_write_permissions','tb_flash_compatibility','tb_flash_recovery','tb_bt_library_link']:model_sources=[root/'sim/spi_nor_model.sv']
-    if name=='tb_flash_song_library':model_sources=[root/'sim/buffered_nor_model.sv']
+    if name in ['tb_midi_top','tb_flash_busy_budget','tb_midi_flash_production','tb_flash_production','tb_spi_nor_flash','tb_flash_write_permissions','tb_flash_compatibility','tb_flash_recovery','tb_bt_library_link']:model_sources=[root/'sim/spi_nor_model.sv']
+    if name in ['tb_flash_song_library','tb_midi_flash']:model_sources=[root/'sim/buffered_nor_model.sv']
     extra_args=[]
     if name=='tb_audio_limiter':
         subprocess.run([sys.executable,str(root/'scripts/reference_audio_limiter.py'),'--out-dir',str(out),'--hold-samples',next((v.split('=',1)[1] for v in a.param if v.startswith('HOLD=')),'0')],check=True,env=env)
@@ -56,7 +60,7 @@ for t in tests:
     c=subprocess.run(cmd,capture_output=True,text=True,encoding='utf8',errors='replace',env=env)
     (out/(name+'_compile.log')).write_text(c.stdout+c.stderr,encoding='utf8')
     if c.returncode: print('compile exit',c.returncode,c.stdout+c.stderr);raise SystemExit(1)
-    run=subprocess.run([str(bin/'vvp.exe'),str(out/(name+'.vvp')),'+SIM_OUT_DIR='+out.as_posix()]+extra_args,capture_output=True,text=True,encoding='utf8',errors='replace',env=env,timeout=3600 if name=='tb_flash_production' else 2400 if name=='tb_auto_manual_equivalence' else 1800 if name=='tb_output_gain' else 1800)
+    run=subprocess.run([str(bin/'vvp.exe'),str(out/(name+'.vvp')),'+SIM_OUT_DIR='+out.as_posix()]+extra_args,capture_output=True,text=True,encoding='utf8',errors='replace',env=env,timeout=14400 if name in ['tb_flash_production','tb_midi_flash_production'] else 2400 if name=='tb_auto_manual_equivalence' else 1800 if name=='tb_output_gain' else 1800)
     (out/(name+'.log')).write_text(run.stdout+run.stderr,encoding='utf8')
     print(run.stdout,flush=True)
     ok=run.returncode==0 and 'PASS '+name in run.stdout

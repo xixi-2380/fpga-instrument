@@ -12,7 +12,7 @@ module tb_bt_polyphony;
  reg last_flush=0;reg [15:0] off_seen=0;integer first_after_pause;
  realtime cluster_start=0,worst_cluster=0,delta;
  bt_score_player #(.MAX_NOTES(32),.VOICES(16)) player(
- refclk,rst,cv,cr,cmd,done,16'd32,32'd23,addr,data,sv,sr,sk,si,sp,svl,play,pos,busy,fault);
+ refclk,rst,cv,cr,cmd,done,16'd32,32'd23,addr,data,sv,sr,sk,si,sp,svl,play,pos,busy,fault,1'b0,,);
  always @(posedge refclk)begin
   data<={16'(addr<16?3:20),8'(addr[3:0]+112),8'(addr[0]?62:60),32'(addr<16?0:3)};
   if(!rst && sv && sr)begin

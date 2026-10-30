@@ -8,7 +8,7 @@ module tb_sustain_retrigger;
  synth_core #(.VOICES(VOICES),.SUSTAIN_ENABLE(1),.STEREO_ENABLE(1),.MUTE(1),.FADE(1)) sound(
  .clk(clk),.rst(rst),.note_valid(nv),.note_on(on),.note_id(id),.note_fcw(fcw),
  .note_ready(nr),.input_ready(ready),.frame_ce(frame),.voice_active(active),.voice_held(held),.underrun(underrun),
- .note_timbre(3'(TIMBRE)),.effects_enable(1'b1),.effect_mode(2'd0),.effect_cfg_valid(1'b1),
+ .note_timbre(5'(TIMBRE)),.effects_enable(1'b1),.effect_mode(2'd0),.effect_cfg_valid(1'b1),
  .effect_echo_wet(9'd256),.effect_room_wet(9'd0),.effect_tremolo_depth(9'd0),.effect_tremolo_rate_hz(5'd20),
  .effect_echo_samples(17'd96000),.effect_mask(3'b001),.flush(1'b0),.output_flush(1'b0),
  .velocity_valid(1'b0),.note_velocity(7'd127),.volume_percent(7'd100),.note_pitch(id),.debug_mute(1'b0));

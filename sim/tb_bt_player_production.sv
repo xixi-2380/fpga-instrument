@@ -7,7 +7,7 @@ module tb_bt_player_production;
  task check(input bit ok,input string why);begin checks++;if(!ok)$fatal(1,"%s",why);end endtask
  bt_score_player #(.CLOCK_HZ(50000000),.MAX_NOTES(4),.VOICES(1)) dut(
  clk,rst,cmd_valid,cmd_ready,2'd0,done,16'd3,32'd3,addr,ram,
- ev,ready,kind,id,pitch,velocity,play,position,busy,fault);
+ ev,ready,kind,id,pitch,velocity,play,position,busy,fault,1'b0,,);
  always @(posedge clk)case(addr)
   0:ram<={16'd1,8'd100,8'd60,32'd0};
   1:ram<={16'd1,8'd100,8'd62,32'd1};

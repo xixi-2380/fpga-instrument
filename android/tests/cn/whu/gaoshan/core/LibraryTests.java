@@ -25,7 +25,7 @@ public final class LibraryTests {
         check(ProtocolClient.flashJobError(0x21).contains("0x21"),"write rejection code stays visible");
         SimulatedDevice device=new SimulatedDevice(true);ProtocolClient client=new ProtocolClient(device,()->System.nanoTime()/1000000L,10);
         ProtocolClient.Capabilities caps=client.hello();check(caps.maxNotes==4096&&caps.voices==16&&caps.features==5,"actual poly capacity, RAM feature semantics unchanged");
-        check(caps.minNote==48&&caps.maxNote==83,"tested automatic range remains unchanged");
+        check(caps.minNote==21&&caps.maxNote==108,"extended melodic range");
         ProtocolClient.LibraryCapabilities ext=client.libraryCapabilities();check(ext.writable&&ext.initialized&&ext.jedecId==0xef4018,"extension profile");
         List<Score.Note> notes=new ArrayList<>();for(int i=0;i<16;i++)notes.add(new Score.Note(0,60,112+i,10));
         Score score=new Score(notes,Collections.emptyList());score.validate(caps);check(score.polyphony==16,"same pitch overlap needs 16 voices");

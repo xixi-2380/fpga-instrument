@@ -10,15 +10,16 @@ module flash_song_library #(parameter integer MAX_NOTES=4096,AW=(MAX_NOTES>1?$cl
  input wire [4:0] lookup_index,output reg [159:0] lookup_data,
  input wire ram_valid,input wire [15:0] ram_count,input wire [31:0] ram_duration,ram_crc,
  output wire storage_lock,input wire storage_ready,output reg storage_write,storage_invalidate,
- output reg [AW-1:0] storage_address,output reg [63:0] storage_wdata,input wire [63:0] storage_rdata,
+ output reg [AW-1:0] storage_address,output reg [95:0] storage_wdata,input wire [95:0] storage_rdata,
  output wire storage_import,output reg [15:0] storage_count,output reg [31:0] storage_crc,
  input wire storage_done,input wire [7:0] storage_error,input wire upload_active,
  input wire flash_initialized,flash_supported,flash_ready,
  output wire flash_valid,output reg [1:0] flash_op,output reg [23:0] flash_address,output reg [8:0] flash_length,
  input wire flash_done,input wire [7:0] flash_error,
  output reg buffer_write,output reg [7:0] buffer_index,buffer_wdata,
- output reg [7:0] read_index,input wire [7:0] read_data);
+ output reg [7:0] read_index,input wire [7:0] read_data,input wire ram_format,output reg storage_format);
  localparam integer DIR_BYTES=1056;
+ reg directory_extended;reg [3:0] record_byte;wire [4:0] stride=storage_format?12:8;
  localparam [6:0] BOOT=0,READY=1,JOB_START=2,LOOKUP_WAIT=3,LOOKUP_LATCH=4,
  ALLOC_START=5,ALLOC_READ=6,ALLOC_WAIT=7,ALLOC_SLOT=8,ERASE_DATA=9,ERASE_NEXT=10,
  SAVE_WORD=11,SAVE_WAIT=12,SAVE_LATCH=13,SAVE_BYTE=14,PROGRAM_PAGE=15,READ_PAYLOAD=16,
@@ -48,7 +49,7 @@ module flash_song_library #(parameter integer MAX_NOTES=4096,AW=(MAX_NOTES>1?$cl
  end
  reg [31:0] candidate_entries;reg [32:0] used_slots;reg [5:0] slot;
  reg active_bank,have_directory,scan_bank,verify_directory,boot_failed,bad_directory,bank_nonblank,any_nonblank;
- reg [7:0] format,entry_limit;reg [15:0] record_no;reg [63:0] word_shift;
+ reg [7:0] format,entry_limit;reg [15:0] record_no;reg [95:0] word_shift;
  reg [15:0] payload_bytes;reg [7:0] page;reg [3:0] sector;reg [8:0] byte_no,page_length;
  reg [23:0] payload_base,dir_base;reg [7:0] commit_index;
  reg [31:0] expected_duration;
@@ -67,7 +68,7 @@ module flash_song_library #(parameter integer MAX_NOTES=4096,AW=(MAX_NOTES>1?$cl
  function automatic [7:0] header_byte(input [4:0] n,input [31:0] gen);
  begin case(n)
   0:header_byte="F";1:header_byte="S";2:header_byte="C";3:header_byte="1";
-  4:header_byte=1;5:header_byte=32;
+  4:header_byte=directory_extended?2:1;5:header_byte=32;
   8:header_byte=gen[7:0];9:header_byte=gen[15:8];10:header_byte=gen[23:16];11:header_byte=gen[31:24];
   16,17,18,19:header_byte=255;default:header_byte=0;
  endcase end endfunction
@@ -91,7 +92,7 @@ module flash_song_library #(parameter integer MAX_NOTES=4096,AW=(MAX_NOTES>1?$cl
    flash_op<=0;flash_address<=0;flash_length<=0;buffer_write<=0;buffer_index<=0;buffer_wdata<=0;read_index<=0;
    meta_shift<=0;new_meta<=0;meta_index<=0;meta_byte<=0;offset<=0;generation<=0;candidate_generation<=0;crc<=0;stored_crc<=0;magic<=0;marker<=0;
    candidate_entries<=0;used_slots<=0;slot<=0;active_bank<=1;have_directory<=0;scan_bank<=0;verify_directory<=0;boot_failed<=0;bad_directory<=0;bank_nonblank<=0;any_nonblank<=0;
-   format<=0;entry_limit<=0;record_no<=0;word_shift<=0;payload_bytes<=0;page<=0;sector<=0;byte_no<=0;page_length<=0;payload_base<=0;dir_base<=0;commit_index<=0;expected_duration<=0;
+   directory_extended<=0;storage_format<=0;record_byte<=0;format<=0;entry_limit<=0;record_no<=0;word_shift<=0;payload_bytes<=0;page<=0;sector<=0;byte_no<=0;page_length<=0;payload_base<=0;dir_base<=0;commit_index<=0;expected_duration<=0;
   end else begin
    done<=0;storage_write<=0;storage_invalidate<=0;buffer_write<=0;
    if(upload_active)loaded_valid<=0;
@@ -101,8 +102,8 @@ module flash_song_library #(parameter integer MAX_NOTES=4096,AW=(MAX_NOTES>1?$cl
      operation<=command;target<=song_index;meta_index<=song_index;job_id<=job_id+1'b1;job_state<=1;error<=0;
      new_meta<=0;state<=JOB_START;
      if(command==0)begin
-      storage_count<=ram_count;storage_crc<=ram_crc;
-      new_meta<={8'd0,(song_name==0?default_name(song_index):song_name),ram_crc,ram_duration,ram_count,8'd0,8'd1};
+      storage_format<=ram_format===1'b1;if(ram_format===1'b1)directory_extended<=1;storage_count<=ram_count;storage_crc<=ram_crc;
+      new_meta<={(ram_format===1'b1 ?8'd1:8'd0),(song_name==0?default_name(song_index):song_name),ram_crc,ram_duration,ram_count,8'd0,8'd1};
      end
     end
     JOB_START:if(!storage_ready || upload_active)finish(5);
@@ -115,7 +116,7 @@ module flash_song_library #(parameter integer MAX_NOTES=4096,AW=(MAX_NOTES>1?$cl
     LOOKUP_LATCH:if(operation==0)begin used_slots<=0;meta_index<=0;state<=ALLOC_READ;end
      else if(operation==2)begin offset<=0;crc<=32'hffffffff;state<=BUILD_HEADER;end
      else begin
-      storage_count<=catalog_read[31:16];storage_crc<=catalog_read[95:64];payload_bytes<=catalog_read[31:16]<<3;expected_duration<=catalog_read[63:32];
+      storage_format<=catalog_read[159:152]==1;record_byte<=0;word_shift<=0;storage_count<=catalog_read[31:16];storage_crc<=catalog_read[95:64];payload_bytes<=catalog_read[159:152]==1 ? (catalog_read[31:16]<<3)+(catalog_read[31:16]<<2) : catalog_read[31:16]<<3;expected_duration<=catalog_read[63:32];
       payload_base<=24'h010000+{catalog_read[15:8],16'd0};page<=0;record_no<=0;
       storage_invalidate<=1;loaded_valid<=0;crc<=32'hffffffff;state<=READ_PAYLOAD;
      end
@@ -125,7 +126,7 @@ module flash_song_library #(parameter integer MAX_NOTES=4096,AW=(MAX_NOTES>1?$cl
      if(meta_index==31)begin slot<=0;state<=ALLOC_SLOT;end else begin meta_index<=meta_index+1'b1;state<=ALLOC_READ;end
     end
     ALLOC_SLOT:if(!used_slots[slot])begin
-      new_meta[15:8]<={2'd0,slot};payload_base<=24'h010000+{2'd0,slot,16'd0};payload_bytes<=storage_count<<3;
+      new_meta[15:8]<={2'd0,slot};payload_base<=24'h010000+{2'd0,slot,16'd0};payload_bytes<=storage_format?(storage_count<<3)+(storage_count<<2):storage_count<<3;record_byte<=0;
       sector<=0;page<=0;record_no<=0;crc<=32'hffffffff;state<=ERASE_DATA;
      end else if(slot==32)finish(8);else slot<=slot+1'b1;
     ERASE_DATA:io(3,payload_base+{8'd0,sector,12'd0},1,ERASE_NEXT);
@@ -133,15 +134,14 @@ module flash_song_library #(parameter integer MAX_NOTES=4096,AW=(MAX_NOTES>1?$cl
      else begin sector<=sector+1'b1;state<=ERASE_DATA;end
     SAVE_WORD:begin storage_address<=record_no[AW-1:0];state<=SAVE_WAIT;end
     SAVE_WAIT:state<=SAVE_LATCH;
-    SAVE_LATCH:begin word_shift<=storage_rdata;meta_byte<=0;state<=SAVE_BYTE;end
+    SAVE_LATCH:begin word_shift<=storage_rdata;record_byte<=0;state<=SAVE_BYTE;end
     SAVE_BYTE:begin
      buffer_write<=1;buffer_index<=byte_no[7:0];buffer_wdata<=word_shift[7:0];word_shift<=word_shift>>8;
      byte_no<=byte_no+1'b1;
-     if(meta_byte==7)begin
-      record_no<=record_no+1'b1;
-      if(byte_no==255 || record_no+1==storage_count)begin page_length<=byte_no+1'b1;state<=PROGRAM_PAGE;end
-      else state<=SAVE_WORD;
-     end else meta_byte<=meta_byte+1'b1;
+     if(record_byte==stride-1)begin record_byte<=0;record_no<=record_no+1'b1;end
+     else record_byte<=record_byte+1'b1;
+     if(byte_no==255 || (record_byte==stride-1 && record_no+1==storage_count))begin page_length<=byte_no+1'b1;state<=PROGRAM_PAGE;end
+     else if(record_byte==stride-1)state<=SAVE_WORD;
     end
     PROGRAM_PAGE:io(2,current_page,page_length,READ_PAYLOAD);
     READ_PAYLOAD:begin
@@ -152,9 +152,14 @@ module flash_song_library #(parameter integer MAX_NOTES=4096,AW=(MAX_NOTES>1?$cl
     PAYLOAD_FETCH:begin read_index<=byte_no[7:0];state<=PAYLOAD_WAIT;end
     PAYLOAD_WAIT:state<=PAYLOAD_BYTE;
     PAYLOAD_BYTE:begin
-     crc<=crc_next;word_shift<={read_data,word_shift[63:8]};
-     if(operation==1 && byte_no[2:0]==7)begin
-      storage_wdata<={read_data,word_shift[63:8]};storage_address<=record_no[AW-1:0];storage_write<=1;
+     crc<=crc_next;
+     if(operation==1)begin
+      if(record_byte==0)word_shift<=0;
+      word_shift[record_byte*8+:8]<=read_data;
+      if(record_byte==stride-1)record_byte<=0;else record_byte<=record_byte+1'b1;
+     end
+     if(operation==1 && record_byte==stride-1)begin
+      storage_wdata<=storage_format?{read_data,word_shift[87:0]}:{32'd0,read_data,word_shift[55:0]};storage_address<=record_no[AW-1:0];storage_write<=1;
       record_no<=record_no+1'b1;state<=LOAD_WRITE;
      end else state<=PAYLOAD_NEXT;
     end
@@ -164,7 +169,7 @@ module flash_song_library #(parameter integer MAX_NOTES=4096,AW=(MAX_NOTES>1?$cl
       if((crc^32'hffffffff)!=storage_crc)finish(9);
       else if(operation==1)state<=IMPORT;
       else begin offset<=0;crc<=32'hffffffff;state<=BUILD_HEADER;end
-     end else begin page<=page+1'b1;byte_no<=0;state<=operation==0?SAVE_WORD:READ_PAYLOAD;end
+     end else begin page<=page+1'b1;byte_no<=0;state<=operation==0?(record_byte==0?SAVE_WORD:SAVE_BYTE):READ_PAYLOAD;end
     end else begin byte_no<=byte_no+1'b1;state<=PAYLOAD_FETCH;end
     IMPORT:if(storage_done)begin
      if(storage_error==0 && ram_duration==expected_duration)begin loaded_valid<=1;loaded_index<=target;finish(0);end
@@ -223,7 +228,7 @@ module flash_song_library #(parameter integer MAX_NOTES=4096,AW=(MAX_NOTES>1?$cl
       if(offset[4:0]==19)begin
        candidates[(offset-32)>>5]<=parsed_meta;
        if((parsed_meta[7:0]!=0 && parsed_meta[7:0]!=1) ||
-        (parsed_meta[7:0]==1 && (parsed_meta[15:8]>32 || parsed_meta[31:16]==0 || parsed_meta[31:16]>MAX_NOTES || parsed_meta[63:32]>3600000)))bad_directory<=1;
+        (parsed_meta[7:0]==1 && (parsed_meta[15:8]>32 || parsed_meta[31:16]==0 || parsed_meta[31:16]>MAX_NOTES || parsed_meta[159:152]>1 || (format==1 && parsed_meta[159:152]!=0) || parsed_meta[63:32]>3600000)))bad_directory<=1;
        if(parsed_meta[7:0]==1 && parsed_meta[15:8]<=32)begin
         candidate_entries[(offset-32)>>5]<=1;
         if(used_slots[parsed_meta[13:8]])bad_directory<=1;
@@ -239,7 +244,7 @@ module flash_song_library #(parameter integer MAX_NOTES=4096,AW=(MAX_NOTES>1?$cl
       if(byte_no+1==page_length)begin page<=page+1'b1;state<=DIR_READ;end
       else begin byte_no<=byte_no+1'b1;state<=DIR_FETCH;end
      end
-    DIR_CHECK:if(magic!=32'h31435346 || format!=1 || entry_limit!=32 || stored_crc!=(crc^32'hffffffff) || bad_directory ||
+    DIR_CHECK:if(magic!=32'h31435346 || (format!=1 && format!=2) || entry_limit!=32 || stored_crc!=(crc^32'hffffffff) || bad_directory ||
        marker!=(verify_directory?32'hffffffff:32'h454e4f44))begin
       if(verify_directory)finish(9);else begin if(bank_nonblank)any_nonblank<=1;state<=BOOT_NEXT;end
      end else if(verify_directory)begin commit_index<=0;state<=MARK_FILL;end
@@ -259,7 +264,7 @@ module flash_song_library #(parameter integer MAX_NOTES=4096,AW=(MAX_NOTES>1?$cl
     APPLY:begin
      catalog[meta_index]<=candidates[meta_index];
      if(meta_index==31)begin
-      entries<=candidate_entries;generation<=candidate_generation;active_bank<=dir_base[12];have_directory<=1;
+      entries<=candidate_entries;generation<=candidate_generation;directory_extended<=format==2;active_bank<=dir_base[12];have_directory<=1;
       if(verify_directory)begin
        if(operation==2 && loaded_valid && loaded_index==target)loaded_valid<=0;
        finish(0);

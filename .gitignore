@@ -37,3 +37,7 @@ __pycache__/
 /reports/short_tap_release_2026-10-29/implementation*/pnr/
 /reports/short_tap_release_2026-10-29/implementation*/gwsynthesis/
 /dist/short-tap-release-2026-10-29/*.sdf
+
+/reports/short_tap_release_2026-10-30/implementation*/pnr/
+/reports/short_tap_release_2026-10-30/implementation*/gwsynthesis/
+/dist/short-tap-release-2026-10-30/*.sdf

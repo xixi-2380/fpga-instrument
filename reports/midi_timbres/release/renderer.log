@@ -1,0 +1,2 @@
+PASS tb_rgb_ui_renderer checks=6144049 frames=8
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_rgb_ui_renderer.sv:95: $finish called at 30721970000 (1ps)

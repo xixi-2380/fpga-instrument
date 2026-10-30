@@ -7,7 +7,7 @@ import java.util.*;
 public final class MidiFile {
     public static final int MAX_BYTES=2*1024*1024,MAX_EVENTS=100000;
     private static final class Event {
-        long tick,ms;int track,channel,pitch,velocity,kind,tempo,index;
+        long tick,ms;int track,channel,pitch,velocity,kind,tempo,index,program,gain;
     }
     private static final class Reader {
         final byte[] b;int p,end;
@@ -36,14 +36,15 @@ public final class MidiFile {
                 tick=Math.addExact(tick,t.vlq());if(events.size()>=MAX_EVENTS)throw bad("事件超过10万");
                 int status=t.get();if(status<128){if(running==0)throw bad("running status无前置状态");t.p--;status=running;}
                 if(status==0xff){running=0;int type=t.get();long size=t.vlq();if(size>t.end-t.p)throw bad("元事件长度超限");
-                    if(type==0x2f){if(size!=0)throw bad("结束事件长度错误");ended=true;if(t.p!=t.end)throw bad("结束事件后还有轨道数据");break;}
+                    if(type==0x2f){if(size!=0)throw bad("结束事件长度错误");Event end=new Event();end.tick=tick;end.track=track;end.kind=5;end.index=events.size();events.add(end);ended=true;if(t.p!=t.end)throw bad("结束事件后还有轨道数据");break;}
                     if(type==0x51){if(size!=3)throw bad("速度事件长度错误");Event e=new Event();e.tick=tick;e.track=track;e.kind=2;e.tempo=(t.get()<<16)|(t.get()<<8)|t.get();if(e.tempo==0)throw bad("速度值为0");e.index=events.size();events.add(e);}
                     else if(type==3){int n=(int)size;name=new String(bytes,t.p,Math.min(n,120),StandardCharsets.UTF_8);t.skip(n);}
                     else t.skip(size);
                 }else if(status==0xf0||status==0xf7){running=0;t.skip(t.vlq());warnings.add("文件含系统专用事件，首版将忽略；设备设置可能无法还原");}
                 else if(status>=0x80&&status<=0xef){running=status;int kind=status>>>4,ch=status&15,a=t.data(),b=(kind==12||kind==13)?0:t.data();
                     if(kind==8||kind==9){Event e=new Event();e.tick=tick;e.track=track;e.channel=ch;e.pitch=a;e.velocity=b;e.kind=(kind==8||b==0)?0:1;e.index=events.size();events.add(e);}
-                    else warnings.add("含踏板、音色、弯音或表情等控制事件，首版忽略这些控制，只按音高、力度与起止时间转换");
+                    else if(kind==12 || kind==11){Event e=new Event();e.tick=tick;e.track=track;e.channel=ch;e.pitch=a;e.velocity=b;e.kind=kind==12?3:4;e.index=events.size();events.add(e);}
+                    else warnings.add("弯音、触后等事件未还原");
                 }else throw bad("不支持的系统状态字节");
             }
             if(!ended)throw bad("轨道缺少结束事件");labels.add(name.isEmpty()?"轨道 "+(track+1):name);
@@ -57,19 +58,40 @@ public final class MidiFile {
             if(e.kind==2){if(tempoTick==e.tick&&tempoAtTick!=e.tempo)throw bad("同一时刻存在冲突速度事件");tempo=e.tempo;tempoTick=e.tick;tempoAtTick=tempo;}
         }
     }
-    public Score convert(int track,int channel,int transpose){
-        if(track<-1||track>=tracks.size()||channel<-1||channel>15||transpose<-48||transpose>48)throw bad("筛选或移调范围错误");
-        Map<Integer,ArrayDeque<Event>> pending=new HashMap<>();ArrayList<Score.Note> notes=new ArrayList<>();Map<Score.Note,Integer> order=new IdentityHashMap<>();
-        for(Event e:events){if(e.kind==2||(track>=0&&track!=e.track)||(channel>=0&&channel!=e.channel))continue;
+    /** Legacy API keeps the 8-byte record contract. New import UI calls the overload. */
+    public Score convert(int track,int channel,int transpose){return convert(track,channel,transpose,-2,false);}
+    public Score convert(int track,int channel,int transpose,int unified,boolean excludeDrums){
+        if(track<-1||track>=tracks.size()||channel<-1||channel>15||transpose<-48||transpose>48||unified < -2||unified>15)throw bad("筛选、音色或移调范围错误");
+        int[] programs=new int[16],volume=new int[16],expression=new int[16];Arrays.fill(volume,127);Arrays.fill(expression,127);
+        boolean[] pedal=new boolean[16];Map<Integer,ArrayDeque<Event>> pending=new HashMap<>();
+        List<Event> sustained=new ArrayList<>();ArrayList<Score.Note> notes=new ArrayList<>();Map<Score.Note,Integer> order=new IdentityHashMap<>();
+        Set<String> messages=new LinkedHashSet<>(warnings);long endMs=0;
+        for(Event e:events){endMs=Math.max(endMs,e.ms);
+            if(e.kind==3){programs[e.channel]=e.pitch;if(e.pitch>=96)messages.add("民族音色及特殊音效映射为相近合成音色");continue;}
+            if(e.kind==4){int ch=e.channel;
+                if(e.pitch==64){boolean down=e.velocity>=64;if(pedal[ch]&&!down){Iterator<Event> it=sustained.iterator();while(it.hasNext()){Event on=it.next();if(on.channel==ch){finish(on,e.ms,transpose,unified,notes,order);it.remove();}}}pedal[ch]=down;}
+                else if(e.pitch==7||e.pitch==11){if(e.pitch==7)volume[ch]=e.velocity;else expression[ch]=e.velocity;messages.add("CC7/11仅换算起音音量，持音期间变化未还原");}
+                else if((e.pitch==0||e.pitch==32)&&e.velocity!=0)messages.add("非默认音色库按GM基础乐器映射");
+                else if(e.pitch!=0&&e.pitch!=32)messages.add("存在未支持的MIDI控制事件");continue;}
+            if(e.kind>1||(track>=0&&track!=e.track)||(channel>=0&&channel!=e.channel)||(excludeDrums&&e.channel==9))continue;
             int key=e.channel*128+e.pitch;ArrayDeque<Event> q=pending.computeIfAbsent(key,k->new ArrayDeque<>());
-            if(e.kind==1)q.addLast(e);
-            else {if(q.isEmpty())throw bad("发现没有配对起音的结束事件（通道"+(e.channel+1)+"，音高"+e.pitch+"）");
-                Event on=q.removeFirst();long duration=e.ms-on.ms;
-                if(duration<1||duration>65535)throw bad("毫秒舍入后音符时长不在1～65535内，请修改原谱");
-                Score.Note result=new Score.Note(on.ms,on.pitch+transpose,on.velocity,(int)duration);notes.add(result);order.put(result,on.index);}
+            if(e.kind==1){Event on=new Event();on.ms=e.ms;on.pitch=e.pitch;on.velocity=e.velocity;on.channel=e.channel;on.index=e.index;
+                on.program=e.channel==9?Timbres.drum(e.pitch):unified>=0?unified:Timbres.program(programs[e.channel]);
+                on.gain=(e.velocity*volume[e.channel]*expression[e.channel]+8064)/16129;q.addLast(on);
+            }else{if(q.isEmpty())throw bad("发现没有配对起音的结束事件（通道"+(e.channel+1)+"，音高"+e.pitch+"）");
+                Event on=q.removeFirst();if(pedal[e.channel]&&e.channel!=9)sustained.add(on);else finish(on,e.ms,transpose,unified,notes,order);}
         }
         for(ArrayDeque<Event> q:pending.values())if(!q.isEmpty())throw bad("文件结束时还有未关闭的音符");
-        // Preserve start-time and original event order even if note-offs occur out of order.
-        notes.sort(Comparator.<Score.Note>comparingLong(n->n.start).thenComparingInt(order::get));return new Score(notes,new ArrayList<>(warnings));
+        for(Event on:sustained)finish(on,endMs,transpose,unified,notes,order);
+        notes.sort(Comparator.<Score.Note>comparingLong(n->n.start).thenComparingInt(order::get));
+
+        return new Score(notes,new ArrayList<>(messages));
+    }
+    private static void finish(Event on,long end,int transpose,int unified,List<Score.Note> notes,Map<Score.Note,Integer> order){
+        if(on.gain==0)return;long duration=on.channel==9?Timbres.DRUM_MS[on.program-16]:end-on.ms;
+        if(duration<1||duration>65535)throw bad("毫秒舍入后音符时长不在1～65535内，请修改原谱");
+        int pitch=on.channel==9?on.pitch:on.pitch+transpose;
+        Score.Note result=unified==-2?new Score.Note(on.ms,pitch,on.gain,(int)duration):new Score.Note(on.ms,pitch,on.gain,(int)duration,on.program,on.channel);
+        notes.add(result);order.put(result,on.index);
     }
 }

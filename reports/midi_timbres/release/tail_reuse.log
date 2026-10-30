@@ -1,0 +1,2 @@
+PASS tb_bt_tail_reuse checks=8
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_bt_tail_reuse.sv:35: $finish called at 437905780 (1ps)

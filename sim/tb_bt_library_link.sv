@@ -4,7 +4,7 @@
 module tb_bt_library_link;
  parameter integer REGISTER_LOCKS=0,PITCH_BASE=60,NOR_VENDOR=0;
  localparam [23:0] NOR_ID=NOR_VENDOR?24'hc84018:24'hef4018;
- reg clk=0,rst=1,rv=0,ui_valid=0;reg [7:0] rb=0;reg [5:0] ui_action=63;
+ reg clk=0,rst=1,rv=0,ui_valid=0;reg [7:0] rb=0;reg [6:0] ui_action=63;
  always #10 clk=~clk;
  wire rr,cs,sck,mosi,miso;integer programs,erases;
  integer checks=0,replies=0,n=0,goal=0,pseq=1,saved_id=0,watch=0;
@@ -39,7 +39,7 @@ module tb_bt_library_link;
  task job_payload;begin payload[0]=saved_id;payload[1]=saved_id>>8;payload[2]=0;payload[3]=0;
   for(integer k=0;k<4;k++)payload[4+k]=crc32>>(8*k);
  end endtask
- task ui(input [5:0] action);begin
+ task ui(input [6:0] action);begin
   @(negedge dut.audio_clk);ui_action=action;ui_valid=1;@(negedge dut.audio_clk);ui_valid=0;repeat(10)@(negedge dut.audio_clk);
  end endtask
  always @(posedge clk)if(!dut.bluetooth_on.source_reset && dut.bluetooth_on.link.core.tx_valid)begin

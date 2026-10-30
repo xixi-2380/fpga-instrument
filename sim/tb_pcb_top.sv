@@ -3,7 +3,7 @@
 module tb_pcb_top;
  reg clk=0,rst=1;always #10 clk=~clk;
  reg [3:0] buttons=15;reg [2:0] a=7,b=7,sw=7;reg [35:0] pressed=0;reg [11:0] auxiliary=0;
- tri1 [2:0] scl,sda;wire [2:0] intr;reg av=0;reg [5:0] action=63;
+ tri1 [2:0] scl,sda;wire [2:0] intr;reg av=0;reg [6:0] action=63;
  integer checks=0,frames=0,old_volume,old_echo,serial_checks=0;
  keyboard_top #(.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.LOCK_N(16),
  .MUTE(2),.FADE(2),.ATTACK(2),.DECAY(2),.RELEASE(1200),.SUSTAIN(32768),
@@ -30,7 +30,7 @@ module tb_pcb_top;
   #100 rst=0;wait(dut.input_ready && dut.keypad_data_valid==7);cycles(100);
   pressed=1;wait(dut.gate);wait(dut.visual_sample!=0);
   buttons[0]=0;cycles(70);buttons[0]=1;cycles(20);check(dut.menu_mode,"original S0 hold opens settings");
-  act(42);check(dut.pcb_mute && !dut.pcb_page,"entry starts the original gradual volume ramp");
+  $display("PCB_PRE frame_l=%d volume=%d mute=%b page=%b native=%d",dut.sound.frame_l,dut.volume_percent,dut.pcb_mute,dut.pcb_page,dut.sound.voices[0].native_level);act(42);$display("PCB_POST action=%d cmd=%d open=%b mute=%b page=%b sample=%d frame=%d",dut.touch_action,dut.pcb_controls.command,dut.pcb_controls.opened,dut.pcb_mute,dut.pcb_page,dut.visual_sample,dut.sound.frame_l);check(dut.pcb_mute && !dut.pcb_page,"entry starts the original gradual volume ramp");
   wait(dut.pcb_page);check(dut.voice_active!=0,"mute is tested with a real nonzero release tail still running");
   old_volume=dut.volume_percent;short_button(1);check(dut.volume_percent==old_volume-5,"S1 keeps volume decrement while debug is open");
   short_button(2);check(dut.volume_percent==old_volume,"S2 keeps volume increment while debug is open");

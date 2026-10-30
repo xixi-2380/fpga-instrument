@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 // Audio-domain adapter only. Delete requires two released activations.
 module ui_more_actions(
- input wire clk,rst,menu_mode,action_valid,input wire [5:0] action,
+ input wire clk,rst,menu_mode,action_valid,input wire [6:0] action,
  output reg open,delete_confirm,output reg command_valid,input wire command_ready,output reg [3:0] command,output reg info);
  `include "config/ui_layout.svh"
  always @(posedge clk or posedge rst)begin

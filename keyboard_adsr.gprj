@@ -88,6 +88,32 @@
         <File path="src/rom/guitar4096.hex" type="file.other" enable="1" />
         <File path="src/rom/vibraphone4096.hex" type="file.other" enable="1" />
         <File path="src/rom/british_font.hex" type="file.other" enable="1" />
+        <File path="src/rom/sine_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/flute_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/reed_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/cello_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/piano_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/guitar_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/vibraphone_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/organ4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/organ_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/bass4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/bass_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/violin4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/violin_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/strings4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/strings_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/trumpet4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/trumpet_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/sax4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/sax_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/lead4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/lead_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/pad4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/pad_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/accordion4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/accordion_high1024.hex" type="file.other" enable="1" />
+        <File path="src/config/score_record.svh" type="file.other" enable="1" />
     </FileList>
 </Project>
 

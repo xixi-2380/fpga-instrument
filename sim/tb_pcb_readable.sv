@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 module tb_pcb_readable;
  reg clk=0,rst=1,av=0;always #5 clk=~clk;
- reg [5:0] action=63;reg [1023:0] hw=0;reg [319:0] audio=0;
+ reg [6:0] action=63;reg [1023:0] hw=0;reg [319:0] audio=0;
  wire [2591:0] display;integer checks=0;
  pcb_debug_ui dut(.clk(clk),.rst(rst),.ms_ce(1'b1),.menu_mode(1'b1),.mute_ack(1'b1),.action_valid(av),.action(action),
  .hardware_valid(1'b1),.hardware(hw),.encoder_diag(384'd0),.encoder_events(12'd0),.audio_status(audio),.display(display),.display_visible(1'b1));

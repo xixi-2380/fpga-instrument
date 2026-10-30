@@ -1,0 +1,21 @@
+{
+  "unchanged_from_a8f38e0": {
+    "src/keyboard.cst": true,
+    "src/keyboard.sdc": true,
+    "src/pll_pair.sv": true,
+    "src/config/synth_config.svh": true,
+    "src/rom/sine4096.hex": true,
+    "src/rom/flute4096.hex": true,
+    "src/rom/reed4096.hex": true,
+    "src/rom/cello4096.hex": true,
+    "src/rom/piano4096.hex": true,
+    "src/rom/guitar4096.hex": true,
+    "src/rom/vibraphone4096.hex": true,
+    "src/scores/twinkle.hex": true
+  },
+  "pin_count": 73,
+  "unique_pins": 73,
+  "project_dependencies": 108,
+  "all_dependencies_exist": true,
+  "timbre_fields_at_least_5_bits": true
+}

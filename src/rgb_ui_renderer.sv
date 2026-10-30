@@ -1,15 +1,15 @@
 `timescale 1ns/1ps
 // British black/gold UI. Layout, coordinates, glyph/ROM and output: four stages.
-// One atomic1207-bit snapshot per frame; no framebuffer and no audio stalls.
+// One atomic1208-bit snapshot per frame; no framebuffer and no audio stalls.
 module rgb_ui_renderer(
- input wire pixel_clk,rst,frame_start,status_valid,input wire [1206:0] status_data,
+ input wire pixel_clk,rst,frame_start,status_valid,input wire [1207:0] status_data,
  input wire [10:0] x,y,input wire de_in,hs_in,vs_in,
  output reg [23:0] rgb,output reg de_out,hs_out,vs_out,input wire [145:0] more_data,input wire [2591:0] pcb_data,output wire pcb_visible);
  `include "config/ui_layout.svh"
  localparam [23:0] BG=24'h101214,PANEL=24'h191c20,GOLD=24'hd6b979,
   CREAM=24'hf2e6c9,INK=24'h17191b,DIM=24'h9c987f,LINE=24'h4b4534,
   WINE=24'h67333e,GREEN=24'h8bc79b,RED=24'hef8f85;
- reg [1206:0] state;
+ reg [1207:0] state;
  wire [2:0] effect_bits=state[1169:1167];
  wire echo_amount_edit=state[1170],tremolo_rate_edit=state[1171];
  // Time uses10ms steps, so the ones digit is zero; bit1172 carries knob2 mode.
@@ -27,7 +27,7 @@ module rgb_ui_renderer(
  wire pcb_open=pcb_state[2560];wire [2:0] pcb_tab=pcb_state[2564:2562];
  wire pcb_frozen=pcb_state[2572],pcb_gsr=pcb_state[2573];
  wire [1:0] pcb_detail=pcb_state[2575:2574];
- wire [2:0] timbre={state[53],state[13:12]};
+ wire [3:0] timbre={state[1207]===1'b1,state[53],state[13:12]};
  wire [1:0] fx=state[22:21];wire menu=state[20],enabled=state[23];
  wire [6:0] percent=fx==0 ? state[30:24] : fx==1 ? state[37:31] : state[44:38];
  wire [4:0] rate={state[61],state[48:45]};
@@ -109,14 +109,14 @@ module rgb_ui_renderer(
  function automatic [23:0] percent_text(input [6:0] value);
   begin percent_text={value==100 ? 8'd49 : 8'd32,value>=10 ? digit((value/10)%10) : 8'd32,digit(value%10)};end
  endfunction
- function automatic [79:0] timbre_name(input [2:0] id);
+ function automatic [79:0] timbre_name(input [3:0] id);
   begin case(id)
    1:timbre_name="FLUTE";2:timbre_name="REED";3:timbre_name="CELLO";
    4:timbre_name="PIANO";5:timbre_name="GUITAR";6:timbre_name="VIBRAPHONE";
-   default:timbre_name="SINE";endcase end
+   7:timbre_name="ORGAN";8:timbre_name="BASS";9:timbre_name="VIOLIN";10:timbre_name="STRINGS";11:timbre_name="TRUMPET";12:timbre_name="SAX";13:timbre_name="LEAD";14:timbre_name="PAD";15:timbre_name="ACCORDION";default:timbre_name="SINE";endcase end
  endfunction
- function automatic integer name_length(input [2:0] id);
-  begin case(id)1,3,4:name_length=5;2,0:name_length=4;5:name_length=6;default:name_length=10;endcase end
+ function automatic integer name_length(input [3:0] id);
+  begin case(id)1,3,4:name_length=5;2,0:name_length=4;5:name_length=6;7:name_length=5;8,13:name_length=4;9:name_length=6;10,11:name_length=7;12,14:name_length=3;15:name_length=9;default:name_length=10;endcase end
  endfunction
  function automatic [23:0] card(input integer xx,yy,l,t,w,h,input selected);
   begin
@@ -178,17 +178,17 @@ module rgb_ui_renderer(
   end else if(menu)begin
    if(ui_inside(px,py,20,92,260,310) || ui_inside(px,py,296,92,484,88) ||
       ui_inside(px,py,296,194,484,102) || ui_inside(px,py,296,306,484,96))base=PANEL;
-   for(i=0;i<7;i=i+1)begin
+   for(i=0;i<8;i=i+1)begin
     left=timbre_x(i);top=timbre_y(i);
     if(ui_inside(px,py,left,top,112,52))begin
-     base=card(px,py,left,top,112,52,timbre==i);
-     fg=timbre==i ? INK : CREAM;text=timbre_name(i);len=name_length(i);
-     tx=left+(112-name_length(i)*10)/2;ty=top+18;
+     base=card(px,py,left,top,112,52,timbre[2:0]==i);
+     fg=timbre[2:0]==i ? INK : CREAM;text=timbre_name({timbre[3],3'(i)});len=name_length({timbre[3],3'(i)});
+     tx=left+(112-name_length({timbre[3],3'(i)})*10)/2;ty=top+18;
     end
    end
-   if(ui_inside(px,py,152,324,112,52))begin
-    base=card(px,py,152,324,112,52,enabled);fg=enabled ? INK : DIM;
-    text=enabled ? "FX ON" : "FX OFF";len=enabled ? 5 : 6;tx=enabled ? 183 : 178;ty=342;
+   if(ui_inside(px,py,28,390,236,24))begin
+    base=card(px,py,28,390,236,24,0);fg=GOLD;
+    text=timbre[3]?"PAGE 2/2  NEXT":"PAGE 1/2  NEXT";len=14;tx=74;ty=394;
    end
    for(i=0;i<3;i=i+1)begin
     left=308+156*i;

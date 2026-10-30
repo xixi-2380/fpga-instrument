@@ -1,0 +1,2 @@
+PASS tb_ui_inputs checks=126 keypad_events=13 touch_events=30
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_ui_inputs.sv:63: $finish called at 7920000 (1ps)

@@ -5,7 +5,7 @@ r=pathlib.Path(__file__).resolve().parents[1];out=r/a.out_dir;out.mkdir(parents=
 sha=lambda f:hashlib.sha256(f.read_bytes()).hexdigest()
 inputs={str(f.relative_to(r)):sha(f) for folder in ['src','sim'] for f in sorted((r/folder).rglob('*')) if f.is_file()}
 (out/'source_manifest.json').write_text(json.dumps(inputs,indent=2),encoding='utf8')
-tests=[('natural_tail','tb_bt_natural_sustain',[],False),('silence_decay','tb_effects_silence',[],False),('sustain_envelope','tb_sustain_envelope',[],False),('sustain_controls','tb_sustain_controls',[],False),
+tests=[('natural_tail_midi','tb_bt_natural_sustain',['TIMBRE=14','LEGACY=0'],False),('natural_tail_drum','tb_bt_natural_sustain',['TIMBRE=19','LEGACY=0'],False),('natural_tail','tb_bt_natural_sustain',[],False),('silence_decay','tb_effects_silence',[],False),('sustain_envelope','tb_sustain_envelope',[],False),('sustain_controls','tb_sustain_controls',[],False),
  ('sustain_direct','tb_sustain_direct',[],False),('retrigger32','tb_sustain_retrigger',['VOICES=32'],False),
  ('pcb_readable','tb_pcb_readable',[],False),('pcb_repeat','tb_pcb_repeat',[],False),
  ('allocator','tb_voice_allocator',[],False),('native_envelopes','tb_instrument_envelopes',[],False),

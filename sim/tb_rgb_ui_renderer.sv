@@ -2,12 +2,12 @@
 `include "check.svh"
 module tb_rgb_ui_renderer;
  reg clk=0,rst=1,frame_start=0,valid=1,de=0;always #5 clk=~clk;
- reg [1206:0] status=0;reg [10:0] x=0,y=0;
+ reg [1207:0] status=0;reg [10:0] x=0,y=0;
  reg [145:0] more_status=0,frozen_more;
  wire [23:0] rgb;wire de_out,hs_out,vs_out;
  reg record=0;reg [23:0] pixels[0:383999];
  integer checks=0,n=0,fd,scene;reg [4095:0] outdir;reg [4095:0] filename;
- reg [1206:0] frozen;
+ reg [1207:0] frozen;
  rgb_ui_renderer dut(clk,rst,frame_start,valid,status,x,y,de,1'b1,1'b1,rgb,de_out,hs_out,vs_out,more_status,2592'd0,);
  always @(posedge clk)begin #1;
   if(record && de_out)begin
@@ -85,13 +85,14 @@ module tb_rgb_ui_renderer;
   spot(350,200,24'h00ff00,1);spot(450,200,24'hff00ff,1);spot(550,200,24'hff0000,1);
   spot(650,200,24'h0000ff,1);spot(750,200,24'h000000,1);spot(799,200,24'hf2e6c9,1);
   spot(800,200,24'h000000,0);
+  status=0;status[15]=1;status[20]=1;status[1207]=1;status[13:12]=3;status[53]=1;more_status=0;snapshot;render(7);
   status=0;status[15]=1;more_status=0;snapshot;
   @(negedge clk);x=24;y=446;#1;
   `CHECK(dut.text=="NOTE MONITOR C4-B6 / 10.7 MS WINDOW" && dut.len==35,"footer matches all 36 chromatic keys")
   status[19]=1;snapshot;
   valid=0;status=0;snapshot;`CHECK(dut.state[19],"invalid snapshot cannot replace current frame state")
   rst=1;repeat(4)@(negedge clk);`CHECK(!de_out && rgb==0,"reset blanks both pipeline stages")
-  $display("PASS tb_rgb_ui_renderer checks=%0d frames=7",checks);$finish;
+  $display("PASS tb_rgb_ui_renderer checks=%0d frames=8",checks);$finish;
  end
  initial begin #50000000;$fatal(1,"UI raster timeout");end
 endmodule

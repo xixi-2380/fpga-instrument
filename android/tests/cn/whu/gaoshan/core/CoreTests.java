@@ -50,7 +50,7 @@ public final class CoreTests {
         check(channel.convert(-1,1,12).notes.get(0).pitch==76,"channel filtering and transposition");
         check(parse(smf(0,480,track(event(0,0x90,60,100),event(480,0x80,60,0),event(0,0x90,62,100),event(480,0x80,62,0),end()))).polyphony==1,"half-open same-time off before on");
         check(parse(smf(0,1000,track(event(0,0x90,60,100),event(1,0x80,60,0),end()))).notes.get(0).duration==1,"half millisecond rounds up");
-        check(!parse(smf(0,480,track(event(0,0xb0,64,127),event(0,0x90,60,100),event(480,0x80,60,0),end()))).warnings.isEmpty(),"controller simplification warning");
+        check(parse(smf(0,480,track(event(0,0xb0,64,127),event(0,0x90,60,100),event(480,0x80,60,0),end()))).duration==500,"supported pedal closes at end of song");
         rejects(()->parse(smf(2,480,track(end()))),"format2 rejected");rejects(()->parse(smf(0,0xe728,track(end()))),"SMPTE rejected");
         rejects(()->parse(smf(0,480,track(event(0,0x80,60,0),end()))),"orphan off");
         rejects(()->parse(smf(0,480,track(event(0,0x90,60,100),end()))),"unclosed on");

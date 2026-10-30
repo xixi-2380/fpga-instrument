@@ -9,7 +9,7 @@ module rgb_display #(
 )(
     input wire ref_clk,pll_reset,audio_clk,audio_reset,
     input wire [VOICES-1:0] voice_active,voice_held,
-    input wire [2:0] selected_timbre,
+    input wire [4:0] selected_timbre,
     input wire visual_sample_valid,input wire signed [15:0] visual_sample,input wire [35:0] visual_notes,
     input wire score_busy,audio_ready,score_error,underrun,ghost,
     output wire lcd_clk,
@@ -101,10 +101,10 @@ module rgb_display #(
     wire [33:0] sensor_status=(ultrasonic_status[33]===1'b0 || ultrasonic_status[33]===1'b1) ? ultrasonic_status : 34'd0;
     wire [16:0] knobs=(^encoder_status===1'bx)?{12'h150,5'd0}:encoder_status;
     wire [2:0] online=(^keypad_online===1'bx)?3'd0:keypad_online;
-    wire [1206:0] source_status={online,visual_notes[35:16],knobs,sensor_status,latency_status,waveform,peak,visual_notes[15:0],settings_status};
-    wire [1206:0] pixel_status;
+    wire [1207:0] source_status={selected_timbre[3],online,visual_notes[35:16],knobs,sensor_status,latency_status,waveform,peak,visual_notes[15:0],settings_status};
+    wire [1207:0] pixel_status;
     wire status_valid,update_pulse;
-    rgb_status_cdc #(.WIDTH(1207)) status_bridge(audio_clk,pixel_clk,common_reset,source_status,
+    rgb_status_cdc #(.WIDTH(1208)) status_bridge(audio_clk,pixel_clk,common_reset,source_status,
         pixel_status,status_valid,update_pulse);
     wire [10:0] x,y;
     wire de,hs,vs,frame_start;

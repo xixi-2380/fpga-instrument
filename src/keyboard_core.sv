@@ -8,7 +8,7 @@ module keyboard_core #(
     output wire [3:0] col_enable,output wire [15:0] keys,output wire ghost,
     output wire note_valid,note_on,output wire [6:0] note_id,
     output wire [31:0] note_fcw,output wire gate,output wire [3:0] last_key,
-    input wire [2:0] selected_timbre,output wire [2:0] note_timbre,input wire inhibit_notes);
+    input wire [4:0] selected_timbre,output wire [4:0] note_timbre,input wire inhibit_notes);
     wire scan_valid;
     wire [15:0] note_keys=(inhibit_notes===1'b1) ? 16'd0 : keys;
     matrix_keypad #(.SLOT_CYCLES(SLOT_CYCLES),.SETTLE_CYCLES(SETTLE_CYCLES),.DEBOUNCE_SCANS(DEBOUNCE_SCANS))

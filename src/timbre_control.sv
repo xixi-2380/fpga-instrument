@@ -4,8 +4,8 @@
 module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
     LONG_PRESS_CYCLES=(`AUDIO_HZ*4/5),ULTRA_SLEW_CYCLES=(`AUDIO_HZ/500))(
     input wire clk,rst,input wire [3:0] buttons_n,
-    output reg [2:0] selected,output wire effects_enabled,output reg [1:0] effect_mode,
-    input wire ui_action_valid,input wire [5:0] ui_action,input wire cfg_ready,
+    output reg [4:0] selected,output wire effects_enabled,output reg [1:0] effect_mode,
+    input wire ui_action_valid,input wire [6:0] ui_action,input wire cfg_ready,
     output reg menu_mode,output reg cfg_valid,
     output reg [8:0] echo_wet,room_wet,tremolo_depth,
     output reg [4:0] cfg_tremolo_rate_hz,
@@ -431,10 +431,12 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=(`AUDIO_HZ/100),
             end
             if(ui_action_valid && !board_event)begin
                 case(ui_action)
+                    7'd64,7'd65,7'd66,7'd67,7'd68,7'd69,7'd70,7'd71:selected<={1'b0,selected[3],ui_action[2:0]};
+                    UI_TONE_PAGE:selected<=selected^5'd8;
                     UI_SINE:selected<=0;UI_FLUTE:selected<=1;UI_REED:selected<=2;
                     UI_CELLO:selected<=3;UI_PIANO:selected<=4;UI_GUITAR:selected<=5;UI_VIBES:selected<=6;
-                    UI_PREV:if(selected==0)selected<=6;else selected<=selected-1'b1;
-                    UI_NEXT:if(selected==6)selected<=0;else selected<=selected+1'b1;
+                    UI_PREV:if(selected==0)selected<=15;else selected<=selected-1'b1;
+                    UI_NEXT:if(selected==15)selected<=0;else selected<=selected+1'b1;
                     UI_ECHO:begin effect_mode<=0;effect_mask[0]<=1;end
                     UI_ROOM:begin effect_mode<=1;effect_mask[1]<=1;end
                     UI_TREMOLO:begin effect_mode<=2;effect_mask[2]<=1;end

@@ -1,0 +1,4 @@
+PCB_PRE frame_l=    0 volume=100 mute=0 page=0 native= 32768
+PCB_POST action= 42 cmd= 42 open=1 mute=1 page=0 sample=   300 frame=    0
+PASS tb_pcb_top checks=50761 frames=371 serial_checks=627
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_pcb_top.sv:46: $finish called at 7725777748 (1ps)

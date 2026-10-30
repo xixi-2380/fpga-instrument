@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 module tb_pcb_touch;
  reg clk=0,rst=1,down=0,page=0;always #5 clk=~clk;
- reg [15:0] x=0,y=0;wire valid;wire [5:0] action;integer checks=0,events=0;
+ reg [15:0] x=0,y=0;wire valid;wire [6:0] action;integer checks=0,events=0;
  ui_touch_actions dut(clk,rst,1'b1,1'b1,1'b1,1'b0,down,4'd1,x,y,16'd800,16'd480,2'd0,1'b1,valid,action,1'b0,1'b0,page);
  always @(posedge clk)if(valid)events++;
  task tap(input integer xx,yy,expected);integer events_before;begin

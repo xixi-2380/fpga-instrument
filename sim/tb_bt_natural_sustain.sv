@@ -1,16 +1,17 @@
 `timescale 1ns/1ps
 module tb_bt_natural_sustain;
+ parameter integer TIMBRE=3,LEGACY=1;
  reg clk=0,rst=1,ev=0,inh=0;always #8.138020833 clk=~clk;
  reg [1:0] kind=0;wire er,nv,nr,on,flush,oflush,frame,ready,quiet,pending;
- wire [6:0] id,vel,pitch;wire [31:0] fcw;wire [2:0] timbre;
+ wire [6:0] id,vel,pitch;wire [31:0] fcw;wire [4:0] timbre;
  wire [1:0] active,held;wire signed [15:0] pcm;wire pv,under;
  integer checks=0,frames=0,tail_pcm=0,acks=0;
  bluetooth_audio_bridge #(.WAIT_FOR_TAIL(1),.NATURAL_QUIET_FRAMES(85)) bridge(
  .clk(clk),.rst(rst),.frame_ce(frame),.event_valid(ev),.event_ready(er),.event_kind(kind),
  .event_id(7'd0),.event_pitch(7'd60),.event_velocity(7'd127),.inhibit(inh),
  .note_valid(nv),.note_ready(nr),.note_on(on),.note_id(id),.note_fcw(fcw),.note_velocity(vel),
- .flush(flush),.output_flush(oflush),.selected_timbre(3'd3),.note_timbre(timbre),.note_pitch(pitch),
- .audio_ready(ready),.audio_quiet(quiet),.tail_pending(pending));
+ .flush(flush),.output_flush(oflush),.selected_timbre(LEGACY ? 5'(TIMBRE) : 5'd0),.note_timbre(timbre),.note_pitch(pitch),
+ .event_timbre(LEGACY ? 5'd15 : 5'(TIMBRE)),.event_legacy(1'(LEGACY)),.audio_ready(ready),.audio_quiet(quiet),.tail_pending(pending));
  synth_core #(.VOICES(2),.SUSTAIN_ENABLE(1),.STEREO_ENABLE(1),.MUTE(1),.FADE(1),
  .ROOM_D0(7),.ROOM_D1(11),.ROOM_D2(13),.ROOM_D3(17)) sound(
  .clk(clk),.rst(rst),.note_valid(nv),.note_on(on),.note_id(id),.note_fcw(fcw),.note_ready(nr),
@@ -33,7 +34,7 @@ module tb_bt_natural_sustain;
   if(under)$fatal(1,"audio underrun");
  end
  initial begin
-  #101 rst=0;wait(ready);inh=1;send(2);send(1);more(1);send(0);send(3);inh=0;
+  #101 rst=0;wait(ready);inh=1;send(2);send(1);check(timbre==TIMBRE,"legacy selection and extended per-note timbre are preserved");more(1);send(0);send(3);inh=0;
   check(pending && !flush && !oflush,"natural EOF is acknowledged without resetting the short note release");
   more(100);check(pending && active!=0 && held==0,"one-frame tap continues beyond legacy66-frame clear");
   more(400);check(active!=0 && tail_pcm>0,"short cello tap has real stereo PCM throughout its release");

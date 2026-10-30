@@ -86,9 +86,14 @@ public final class ProtocolClient {
     private Capabilities capabilities;private long lastStatus=-1;
     public ProtocolClient(Transport link){this(link,()->System.nanoTime()/1000000L,2000);}
     public ProtocolClient(Transport link,Clock clock,int timeoutMs){this.link=link;this.clock=clock;this.timeoutMs=timeoutMs;}
+    public boolean multitimbral;
+    public boolean audioCapabilities()throws IOException{
+        try{byte[] b=request(0x46,new byte[0],8);if(b[1]!=3||b[2]!=26||b[3]!=21||b[4]!=108||b[5]!=35||b[6]!=59||b[7]!=0)throw new IOException("多音色能力不兼容");return multitimbral=true;}
+        catch(DeviceError e){if(e.code==1){multitimbral=false;return false;}throw e;}
+    }
     public boolean sessionReady(){return session;}
     public Capabilities hello()throws IOException{
-        session=false;seq=1;capabilities=null;lastStatus=-1;decoder.reset();link.drain();
+        session=false;multitimbral=false;seq=1;capabilities=null;lastStatus=-1;decoder.reset();link.drain();
         byte[] b=exchange(1,0,new byte[0],20);capabilities=Capabilities.parse(b);session=true;return capabilities;
     }
     private byte[] exchange(int cmd,int id,byte[] payload,int successLength)throws IOException{
@@ -143,19 +148,20 @@ public final class ProtocolClient {
     }
     public LibraryJobStatus libraryJob(LibraryJob job)throws IOException{return new LibraryJobStatus(request(0x45,job.token(),20),job);}
     public long upload(Score score,AtomicBoolean cancel,Progress progress)throws IOException{
-        if(capabilities==null||!session)throw new IOException("尚未握手");score.validate(capabilities);
+        if(capabilities==null||!session)throw new IOException("尚未握手");score.validate(capabilities);if(score.format==1&&!multitimbral&&!audioCapabilities())throw new IOException("旧固件仅支持旧模式，请选择旧协议统一音色并排除鼓轨后重新转换");
         if(cancel.get())throw new IOException("上传已取消");
         Status current=status();if(current.uploading)throw new IOException("设备正在上传，请重新HELLO清理后再试");
         command(0x23); // STOP is always valid; pause/play must stop before BEGIN.
-        byte[] records=score.bytes(),begin=new byte[6];Wire.put16(begin,0,score.notes.size());Wire.put32(begin,2,Wire.crc32(records));
+        byte[] records=score.bytes(),begin=new byte[score.format==1?7:6];Wire.put16(begin,0,score.notes.size());Wire.put32(begin,2,Wire.crc32(records));
+        if(score.format==1)begin[6]=1;
         boolean begun=false;
         try{
-            byte[] ack=request(0x10,begin,3);begun=true;
+            byte[] ack=request(score.format==1?0x14:0x10,begin,3);begun=true;
             if(Wire.u16(ack,1)!=0)throw new IOException("BEGIN确认索引不是0");progress.confirmed(0,score.notes.size());
             int count=score.notes.size();
             for(int index=0;index<count;){
                 if(cancel.get()){request(0x13,new byte[0],1);begun=false;throw new IOException("上传已取消，设备已确认ABORT");}
-                int n=Math.min(16,count-index);byte[] payload=new byte[2+8*n];Wire.put16(payload,0,index);System.arraycopy(records,index*8,payload,2,n*8);
+                int n=Math.min(16,count-index);byte[] payload=new byte[2+score.stride()*n];Wire.put16(payload,0,index);System.arraycopy(records,index*score.stride(),payload,2,n*score.stride());
                 ack=request(0x11,payload,3);
                 if(Wire.u16(ack,1)!=index+n)throw new IOException("DATA确认索引不一致");index+=n;progress.confirmed(index,count);
             }

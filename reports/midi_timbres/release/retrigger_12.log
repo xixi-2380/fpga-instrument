@@ -1,0 +1,2 @@
+PASS tb_sustain_retrigger checks=7 first_sound_frames=48
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_sustain_retrigger.sv:39: $finish called at 2708733300 (1ps)

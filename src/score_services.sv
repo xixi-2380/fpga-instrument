@@ -8,11 +8,11 @@ module score_services #(parameter integer FLASH_WRITES=1)(
  input wire [15:0] total_notes,input wire [31:0] song_duration,song_crc,
  output wire local_valid,input wire local_ready,output wire [1:0] local_command,input wire local_done,input wire [7:0] local_error,
  output wire storage_lock,input wire storage_ready,output wire storage_write,storage_invalidate,
- output wire [11:0] storage_address,output wire [63:0] storage_wdata,input wire [63:0] storage_rdata,
+ output wire [11:0] storage_address,output wire [95:0] storage_wdata,input wire [95:0] storage_rdata,
  output wire storage_import,output wire [15:0] storage_count,output wire [31:0] storage_crc,input wire storage_done,input wire [7:0] storage_error,
  input wire extension_valid,output wire extension_ready,input wire [7:0] extension_command,input wire [8:0] extension_length,input wire [63:0] extension_payload,
  output wire extension_response_valid,input wire extension_response_ready,output wire [4:0] extension_response_length,output wire [159:0] extension_response,
- output wire flash_cs_n,flash_sck,flash_mosi,input wire flash_miso,output wire flash_wp_n,flash_hold_n);
+ output wire flash_cs_n,flash_sck,flash_mosi,input wire flash_miso,output wire flash_wp_n,flash_hold_n,input wire song_format,output wire storage_format);
  `include "config/flash_profile.svh"
  wire library_ready,library_busy,library_init,library_done,loaded_valid;
  wire [4:0] selected,loaded_index;wire [31:0] entries;
@@ -63,7 +63,7 @@ module score_services #(parameter integer FLASH_WRITES=1)(
  .command(remote_library_valid?remote_library_command:local_library_command),.song_index(remote_library_valid?remote_library_index:local_library_index),
  .song_name(remote_library_valid?remote_name:56'd0),.busy(library_busy),.initialized(library_init),.job_id(job_id),.job_state(job_state),.error(library_error),.done(library_done),
  .entries(entries),.loaded_valid(loaded_valid),.loaded_index(loaded_index),.lookup_index(lookup_index),.lookup_data(lookup_data),
- .ram_valid(song_valid),.ram_count(total_notes),.ram_duration(song_duration),.ram_crc(song_crc),
+ .ram_format(song_format),.storage_format(storage_format),.ram_valid(song_valid),.ram_count(total_notes),.ram_duration(song_duration),.ram_crc(song_crc),
  .storage_lock(storage_lock),.storage_ready(storage_ready),.storage_write(storage_write),.storage_invalidate(storage_invalidate),.storage_address(storage_address),
  .storage_wdata(storage_wdata),.storage_rdata(storage_rdata),.storage_import(storage_import),.storage_count(storage_count),.storage_crc(storage_crc),.storage_done(storage_done),.storage_error(storage_error),
  .upload_active(upload_active),.flash_initialized(fi),.flash_supported(fs),.flash_ready(fr),.flash_valid(fv),.flash_op(fo),.flash_address(fa),.flash_length(fl),.flash_done(fd),.flash_error(fe),

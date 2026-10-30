@@ -1,14 +1,14 @@
 `timescale 1ns/1ps
 // Audio-domain UI/telemetry only. No physical button or encoder action routing.
 module pcb_debug_ui(
- input wire clk,rst,ms_ce,menu_mode,mute_ack,action_valid,input wire [5:0] action,
+ input wire clk,rst,ms_ce,menu_mode,mute_ack,action_valid,input wire [6:0] action,
  input wire hardware_valid,input wire [1023:0] hardware,
  input wire [383:0] encoder_diag,input wire [11:0] encoder_events,
  input wire [319:0] audio_status,
  output wire mute_request,output wire page_active,output wire [159:0] control,
  output reg [2:0] encoder_clear,output reg [2591:0] display,input wire display_visible);
  `include "config/ui_layout.svh"
- reg command_valid;reg [5:0] command;
+ reg command_valid;reg [6:0] command;
  always @(posedge clk or posedge rst)
   if(rst)begin command_valid<=0;command<=UI_NONE;end
   else begin command_valid<=action_valid;command<=action;end
