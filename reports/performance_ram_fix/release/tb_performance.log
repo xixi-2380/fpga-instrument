@@ -1,0 +1,2 @@
+PASS tb_performance checks=12556 (4096 capture/CRC, mapping, long duration, duplicate pitch, local control)
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_performance.sv:55: $finish called at 74314450000 (1ps)

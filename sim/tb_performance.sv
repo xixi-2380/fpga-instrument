@@ -5,7 +5,7 @@ module tb_performance;
  reg ev=0,on=0;reg [5:0] key=0;reg [6:0] pitch=60,vel=100;reg [4:0] tone=4;
  reg ls=0,lp=0;wire [7:0] le;wire [575:0] map;wire locked;wire [63:0] ui;
  reg lv=0;wire lr,sv;reg sr=0;reg [575:0] lm=0;wire [591:0] sd;reg [31:0] ss=32'h30000000;
- reg [159:0] reply;reg [31:0] expected_crc,token=42;reg [575:0] edited;integer checks=0;
+ reg [95:0] before_reset;reg [159:0] reply;reg [31:0] expected_crc,token=42;reg [575:0] edited;integer checks=0;
  instrument_features #(.MS_CYCLES(2)) d(clk,rst,qv,qr,q,rv,rr,response,unavailable,keys,pending,ev,on,key,pitch,vel,tone,ls,lp,le,map,locked,ui,lv,lr,lm,sv,sr,sd,ss,1'b0);
  function automatic [31:0] crc8(input [31:0] c,input [7:0] b);reg [31:0] v;begin v=c^{24'd0,b};for(integer j=0;j<8;j++)v=v[0]?(v>>1)^32'hedb88320:v>>1;crc8=v;end endfunction
  task check(input bit b,input [255:0] why);begin checks++;if(!b)$fatal(1,"%0s state=%d response=%h",why,d.rec_state,reply);end endtask
@@ -43,6 +43,15 @@ module tb_performance;
   @(negedge clk);ls=1;@(negedge clk);ls=0;check(locked,"local start");event_note(1,35,108,15);@(negedge clk);lp=1;@(negedge clk);lp=0;frozen();check(d.count==1,"local stop");
   cmd('h61,0,0,0);for(integer j=0;j<36;j++)event_note(1,6'(j),60,5'(j%16));cmd('h62,0,0,0);frozen();check(d.count==36,"capture beyond automatic polyphony");
   cmd('h61,0,0,0);repeat(7200005)@(negedge clk);frozen();check(d.reason==3 && d.elapsed==3600000,"one hour automatic stop");
+  // Reset invalidates metadata without clearing or writing the BSRAM contents.
+  cmd('h61,0,0,0);event_note(1,0,60,4);before_reset=d.memory[0];
+  @(negedge clk);rst=1;ev=1;on=0;key=0;repeat(3)@(negedge clk);
+  check(d.memory[0]===before_reset,"reset leaves RAM data intact");check(!d.memory_write_enable,"reset suppresses writes");
+  rst=0;ev=0;repeat(4)@(negedge clk);check(d.count==0 && d.rec_state==0,"reset invalidates prior capture");cmd('h64,6,0,5);
+  cmd('h61,0,0,0);event_note(1,35,21,15);event_note(0,35,21,15);cmd('h62,0,0,0);frozen();check(d.count==1,"new capture overwrites stale slot only");
+  cmd('h63,0,0,0);token=reply[47:16];expected_crc='1;cmd('h64,6,{16'd0,16'd0,token},0);
+  check(reply[135:128]==21 && reply[151:144]==15 && reply[159:152]==35,"no stale onset context after reset");
+  for(integer k=8;k<20;k++)expected_crc=crc8(expected_crc,reply[k*8+:8]);check(~expected_crc==d.final_crc,"new capture CRC after reset");
   $display("PASS tb_performance checks=%0d (4096 capture/CRC, mapping, long duration, duplicate pitch, local control)",checks);$finish;
  end
  initial begin #200000000;$fatal(1,"timeout");end

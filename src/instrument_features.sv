@@ -14,7 +14,7 @@ module instrument_features #(parameter integer MS_CYCLES=61440,MAX_NOTES=4096,MA
  localparam IDLE=0,REPLY=1,MAP_CRC=2,SAVE=3,READ_WAIT=4,READ_REPLY=5;
  reg [2:0] state;reg [575:0] stage;reg [35:0] stage_mask;reg [31:0] stage_token,stage_crc,map_crc,saved_crc;
  reg local_confirm;reg loading;reg stage_open;reg [15:0] map_version,save_id;reg [6:0] map_byte;reg [31:0] map_check;
- reg [95:0] memory[0:MAX_NOTES-1];reg [95:0] read_word;
+ reg [95:0] memory[0:MAX_NOTES-1] /* synthesis syn_ramstyle = "block_ram" */;reg [95:0] read_word;
  reg [11:0] read_index;reg [12:0] count;reg [31:0] capture_id,elapsed,final_crc;
  reg [2:0] rec_state; // 0 empty,1 recording,2 close,3 crc fetch,4 crc byte,5 frozen
  reg [7:0] reason;reg [35:0] held;reg [11:0] slots[0:35];reg [31:0] starts[0:35];reg [31:0] meta[0:35];
@@ -41,9 +41,32 @@ module instrument_features #(parameter integer MS_CYCLES=61440,MAX_NOTES=4096,MA
  begin local_confirm<=0;local_error<=0;capture_id<=capture_id+1'b1;count<=0;elapsed<=0;ms_count<=0;held<=0;reason<=0;final_crc<=0;rec_state<=1;end endtask
  task automatic close_capture(input [7:0] why);
  begin reason<=why;close_key<=0;rec_state<=2;end endtask
+ // One synchronous read port and one synchronous write port. Keep all RAM
+ // access out of the asynchronous-reset controller: resetting controller state
+ // invalidates old records via count/held, without resetting the RAM array.
+ wire memory_read_enable=(rec_state==3 && crc_index<count) || state==READ_WAIT;
+ wire [11:0] memory_read_address=rec_state==3 ? crc_index[11:0] : read_index;
+ reg memory_write_enable;reg [11:0] memory_write_address;reg [95:0] memory_write_data;
+ always @*begin
+  memory_write_enable=0;memory_write_address=0;memory_write_data=0;
+  if(!rst)begin
+   if(rec_state==1 && event_valid && event_key<36)begin
+    if(event_on && !held[event_key] && count<MAX_NOTES)begin
+     memory_write_enable=1;memory_write_address=count[11:0];
+     memory_write_data={{2'd0,event_key},{3'd0,event_timbre},{1'b0,event_velocity},{1'b0,event_pitch},32'd0,elapsed};
+    end else if(!event_on && held[event_key])begin
+     memory_write_enable=1;memory_write_address=slots[event_key];
+     memory_write_data={meta[event_key],(elapsed>starts[event_key]?elapsed-starts[event_key]:32'd1),starts[event_key]};
+    end
+   end else if(rec_state==2 && held[close_key])begin
+    memory_write_enable=1;memory_write_address=slots[close_key];
+    memory_write_data={meta[close_key],(elapsed>starts[close_key]?elapsed-starts[close_key]:32'd1),starts[close_key]};
+   end
+  end
+ end
  always @(posedge clk)begin
-  if(rec_state==3 && crc_index<count)read_word<=memory[crc_index[11:0]];
-  else if(state==READ_WAIT)read_word<=memory[read_index];
+  if(memory_write_enable)memory[memory_write_address]<=memory_write_data;
+  if(memory_read_enable)read_word<=memory[memory_read_address];
  end
  always @(posedge clk or posedge rst)begin
   if(rst)begin
@@ -59,20 +82,19 @@ module instrument_features #(parameter integer MS_CYCLES=61440,MAX_NOTES=4096,MA
     if(event_valid && event_key<36)begin
      if(event_on && !held[event_key])begin
       if(count<MAX_NOTES)begin
-       memory[count[11:0]]<={{2'd0,event_key},{3'd0,event_timbre},{1'b0,event_velocity},{1'b0,event_pitch},32'd0,elapsed};
        slots[event_key]<=count[11:0];starts[event_key]<=elapsed;
        meta[event_key]<={{2'd0,event_key},{3'd0,event_timbre},{1'b0,event_velocity},{1'b0,event_pitch}};
        held[event_key]<=1;count<=count+1'b1;
        if(count==MAX_NOTES-1)close_capture(2);
       end else close_capture(2);
      end else if(!event_on && held[event_key])begin
-      memory[slots[event_key]]<={meta[event_key],(elapsed>starts[event_key]?elapsed-starts[event_key]:32'd1),starts[event_key]};held[event_key]<=0;
+      held[event_key]<=0;
      end
     end
     if(elapsed>=MAX_MS-1 && ms_count==MS_CYCLES-1)close_capture(3);
     if(unavailable)close_capture(4);
    end else if(rec_state==2)begin
-    if(held[close_key])begin memory[slots[close_key]]<={meta[close_key],(elapsed>starts[close_key]?elapsed-starts[close_key]:32'd1),starts[close_key]};held[close_key]<=0;end
+    if(held[close_key])held[close_key]<=0;
     if(close_key==35)begin crc<=32'hffffffff;crc_index<=0;rec_state<=3;end else close_key<=close_key+1'b1;
    end else if(rec_state==3)begin
     if(crc_index==count)begin final_crc<=~crc;rec_state<=5;end

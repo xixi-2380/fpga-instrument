@@ -1,0 +1,29 @@
+{
+  "base_commit": "81302c44266724ad54501fd5b464c06887ae46a6",
+  "passed": true,
+  "scope": "RTL simulation and Gowin-compatible inference template only; no Gowin synthesis, resource measurement, P&R, STA or programming",
+  "issue": "IF0008: recorder 4096 x96 bits represented as393216 DFF; device limit139140",
+  "change": "One synchronous read and one synchronous write expression; memory accesses removed from asynchronous-reset controller; syn_ramstyle=block_ram",
+  "capacity_notes": 4096,
+  "record_bits": 96,
+  "recorder_checks": 12556,
+  "integration_checks": 70,
+  "results": [
+    {
+      "test": "tb_performance",
+      "passed": true,
+      "evidence": "tb_performance.log"
+    },
+    {
+      "test": "tb_performance_top",
+      "passed": true,
+      "evidence": "tb_performance_top.log"
+    }
+  ],
+  "source_sha256": {
+    "src/instrument_features.sv": "cd03eca2a93ac1f9c88071cd29e81b9edbeaeee5d120db20e6936680f6281f53",
+    "sim/tb_performance.sv": "2bd26b5617e45a538957d247c9ba72795d96c4d32d78d698c452598e233a71bc",
+    "docs/recording_ram_inference_fix_2026-10-30.md": "fbc7a165d4b66d726fce26114c461b76bc460b65418e525ad3bbf4f5e6ca2ab5"
+  },
+  "mapping_verified_by_vendor_tool": false
+}
