@@ -14,7 +14,7 @@ module tb_pcb_renderer;
  reg record=0;reg [23:0] pixels[0:383999];
  integer checks=0,n=0,fd,scene;reg [4095:0] outdir;reg [4095:0] filename;
  reg [1206:0] frozen;
- rgb_ui_renderer dut(clk,rst,frame_start,valid,status,x,y,de,1'b1,1'b1,rgb,de_out,hs_out,vs_out,more_status,pcb,);
+ rgb_ui_renderer dut(clk,rst,frame_start,valid,status,x,y,de,1'b1,1'b1,rgb,de_out,hs_out,vs_out,more_status,pcb,,520'd0);
  always @(posedge clk)begin #1;
   if(record && de_out)begin
    `CHECK(n<384000 && (^rgb)!==1'bx,"defined pixel within full frame")

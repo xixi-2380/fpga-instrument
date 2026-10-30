@@ -1,0 +1,4 @@
+RUN tb_rgb_led_notes
+PASS tb_rgb_led_notes checks=81
+E:/gowin/fpga-instrument-reintegrated-rgb/sim/tb_rgb_led_notes.sv:36: $finish called at 5646176952 (1ps)
+

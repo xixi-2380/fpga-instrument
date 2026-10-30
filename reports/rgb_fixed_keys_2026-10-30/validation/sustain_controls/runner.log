@@ -1,0 +1,4 @@
+RUN tb_sustain_controls
+PASS tb_sustain_controls checks=9
+E:/gowin/fpga-instrument-reintegrated-rgb/sim/tb_sustain_controls.sv:31: $finish called at 51030000 (1ps)
+

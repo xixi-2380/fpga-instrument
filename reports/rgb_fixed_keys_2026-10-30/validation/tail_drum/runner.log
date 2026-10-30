@@ -1,0 +1,4 @@
+RUN tb_bt_natural_sustain
+PASS tb_bt_natural_sustain checks=10 tailPCM=2 frames=5435
+E:/gowin/fpga-instrument-reintegrated-rgb/sim/tb_bt_natural_sustain.sv:49: $finish called at 113229283700 (1ps)
+

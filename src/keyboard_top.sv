@@ -25,7 +25,7 @@ module keyboard_top #(
     input wire [2:0] ec11_a,ec11_b,ec11_sw_n,
     output wire HP_BCK,HP_WS,HP_DIN,PA_EN,
     output wire MAX_BCLK,MAX_LRCLK,MAX_DIN,MAX_SD_MODE,
-    output wire [4:0] led_n,
+    output wire [4:0] led_n,output wire rgb_led_data,
     output wire lcd_clk,lcd_hs,lcd_vs,lcd_en,output wire [5:0] lcd_r,lcd_g,lcd_b,
     inout wire touch_scl,touch_sda,touch_int,touch_rst_n,
     output wire flash_cs_n,flash_sck,flash_mosi,input wire flash_miso,output wire flash_wp_n,flash_hold_n);
@@ -131,6 +131,18 @@ module keyboard_top #(
     wire [6:0] aux_action,touch_action;
     wire ui_action_valid=aux_action_valid || touch_action_valid;
     wire [6:0] ui_action=aux_action_valid?aux_action:touch_action;
+    wire rgb_page;wire [15:0] rgb_config_audio,rgb_config_ref;
+    wire rgb_config_valid,rgb_keys_valid,rgb_busy;wire [20:0] rgb_manual,rgb_auto,rgb_held_ref;
+    wire [519:0] rgb_preview_ref;
+    rgb_led_settings rgb_controls(audio_clk,audio_reset,menu_mode,ui_action_valid,ui_action,rgb_config_audio,rgb_page);
+    rgb_key_lights rgb_keys(keys,keypad_online & keypad_data_valid & {3{keypad_snapshot_valid}},rgb_manual);
+    rgb_status_cdc #(.WIDTH(16)) rgb_config_bridge(audio_clk,clk,ultrasonic_reset,
+        rgb_config_audio,rgb_config_ref,rgb_config_valid,);
+    rgb_status_cdc #(.WIDTH(21)) rgb_keys_bridge(audio_clk,clk,ultrasonic_reset,
+        rgb_manual | rgb_auto,rgb_held_ref,rgb_keys_valid,);
+    rgb_led_controller rgb_strip(.clk(clk),.rst(ultrasonic_ref_reset),
+        .config_valid(rgb_config_valid),.keys_valid(rgb_keys_valid),.config_data(rgb_config_ref),
+        .white_held(rgb_held_ref),.data(rgb_led_data),.busy(rgb_busy),.preview_status(rgb_preview_ref));
     wire more_open,delete_confirm,more_command_valid,more_command_ready,more_info;
     wire [3:0] more_command;
     wire [79:0] service_status,service_audio;wire service_audio_valid,service_update;
@@ -266,7 +278,7 @@ module keyboard_top #(
         .ready(touch_audio[38]),.error(touch_audio[37]),.down(touch_audio[36]),.count(touch_audio[35:32]),
         .x(touch_audio[31:16]),.y(touch_audio[15:0]),.resolution_x(touch_audio[70:55]),
         .resolution_y(touch_audio[54:39]),.effect_mode(effect_mode),.menu_mode(menu_mode),
-        .action_valid(touch_action_valid),.action(touch_action),.more_mode(more_open),.ultrasonic_page(ultrasonic_page),.pcb_page(pcb_page));
+        .action_valid(touch_action_valid),.action(touch_action),.more_mode(more_open),.ultrasonic_page(ultrasonic_page),.pcb_page(pcb_page),.rgb_page(rgb_page));
     // AUX shortcuts stay disabled during touch-board fault diagnosis.
     touch_keyboard_router #(.AUX_ENABLE(KEYPAD_AUX_ENABLE)) menu_keys(.clk(audio_clk),.rst(audio_reset),
         .blocked(menu_mode || take_bt || local_score_busy),.menu_mode(menu_mode),
@@ -289,7 +301,7 @@ module keyboard_top #(
             .echo_percent(echo_percent),.room_percent(room_percent),.depth_percent(depth_percent),
             .volume_percent(volume_percent),.tremolo_rate_hz(tremolo_rate_hz),.touch_enabled(TOUCH_ENABLE!=0),
             .touch_ui_enabled(TOUCH_UI_ENABLE!=0 && touch_audio_valid && touch_audio[70:55]==800 && touch_audio[54:39]==480),.touch_ready_status(touch_audio[38]),.touch_error_status(touch_audio[37]),
-            .more_status({voice_held,bt_audio_ids,service_bundle[95:80],more_open,delete_confirm,more_info,service_audio[78:0]}),.sustain_time_thousands(echo_time_bcd[15:12]),.pcb_status(pcb_display),.pcb_visible(pcb_display_visible));
+            .more_status({voice_held,bt_audio_ids,service_bundle[95:80],more_open,delete_confirm,more_info,service_audio[78:0]}),.sustain_time_thousands(echo_time_bcd[15:12]),.rgb_led_status(rgb_preview_ref),.pcb_status(pcb_display),.pcb_visible(pcb_display_visible));
     end else begin: lcd_off
         assign pcb_display_visible=0;
         assign lcd_clk=0;assign lcd_hs=1;assign lcd_vs=1;assign lcd_en=0;
@@ -422,7 +434,7 @@ module keyboard_top #(
         .frame_ce(frame_ce),.note_ready(note_ready),.input_ready(input_ready),
         .gate(gate),.voice_active(voice_active),.voice_held(voice_held),.envelope_level(envelope_level),
         .visual_sample_valid(visual_sample_valid),.visual_sample(visual_sample),.visual_notes(visual_notes),
-        .latency_valid(latency_valid),.latency_bcd(latency_bcd),.debug_mute(pcb_mute),.debug_muted(pcb_muted),.audio_quiet(audio_quiet));
+        .latency_valid(latency_valid),.latency_bcd(latency_bcd),.debug_mute(pcb_mute),.debug_muted(pcb_muted),.audio_quiet(audio_quiet),.auto_white_held(rgb_auto));
     assign pcb_audio_trace={24'd0,room_edit_volume,echo_time_ms[10:9],tremolo_rate_hz[4],keypad_armed,16'd0,visual_sample,20'd0,note_fcw,7'd0,note_id,voice_active,voice_held,
         echo_time_ms[8:0],volume_percent,tremolo_rate_hz[3:0],depth_percent,room_percent,echo_percent,
         tremolo_edit_rate,echo_edit_strength,effect_mask,input_ready,underrun,visual_sample_valid,

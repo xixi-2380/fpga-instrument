@@ -1,0 +1,4 @@
+RUN tb_rgb_tail_arbitration
+PASS tb_rgb_tail_arbitration checks=5
+E:/gowin/fpga-instrument-reintegrated-rgb/sim/tb_rgb_tail_arbitration.sv:21: $finish called at 22851504 (1ps)
+

@@ -7,6 +7,9 @@ localparam [6:0] UI_SINE=0,UI_FLUTE=1,UI_REED=2,UI_ECHO=3,UI_ROOM=4,
  UI_SONG_PAUSE=26,UI_SONG_RESUME=27,UI_SONG_STOP=28,UI_SONG_LOAD=29,UI_SONG_SAVE=30,
  UI_SONG_DELETE=31,UI_FLASH_INFO=32,UI_ULTRA_OPEN=33,UI_ULTRA_TOGGLE=34,UI_SENS_DOWN=35,UI_SENS_UP=36,
  UI_MIN_DOWN=37,UI_MIN_UP=38,UI_MAX_DOWN=39,UI_MAX_UP=40,UI_ULTRA_BACK=41,UI_NONE=63,UI_TONE_FIRST=64,UI_TONE_PAGE=80;
+localparam [6:0] UI_RGB_OPEN=100,UI_RGB_BACK=101,UI_RGB_TOGGLE=102,
+ UI_RGB_STATIC=103,UI_RGB_BREATH=104,UI_RGB_RAINBOW=105,UI_RGB_KEYS=106,
+ UI_RGB_DOWN=107,UI_RGB_UP=108,UI_RGB_REVERSE=109,UI_RGB_COLOR=112;
 function automatic ui_inside(input integer px,py,left,top,width,height);
  begin ui_inside=px>=left && px<left+width && py>=top && py<top+height;end
 endfunction
@@ -39,11 +42,12 @@ function automatic [6:0] ui_hit(input integer px,py,input [1:0] fx,input menu);
    if(fx==2 && ui_inside(px,py,308,344,52,48))ui_hit=UI_SLOWER;
    if(fx==2 && ui_inside(px,py,716,344,52,48))ui_hit=UI_FASTER;
    if(ui_inside(px,py,24,420,44,44))ui_hit=UI_VOLUME_DOWN;
-   if(ui_inside(px,py,272,420,44,44))ui_hit=UI_VOLUME_UP;
-   if(ui_inside(px,py,664,420,116,44))ui_hit=UI_DEFAULTS;
-   if(ui_inside(px,py,550,420,104,44))ui_hit=UI_OPEN_MORE;
-   if(ui_inside(px,py,340,420,96,44))ui_hit=UI_ULTRA_OPEN;
-   if(ui_inside(px,py,444,420,96,44))ui_hit=6'd42;
+   if(ui_inside(px,py,192,420,44,44))ui_hit=UI_VOLUME_UP;
+   if(ui_inside(px,py,660,420,120,44))ui_hit=UI_DEFAULTS;
+   if(ui_inside(px,py,544,420,104,44))ui_hit=UI_OPEN_MORE;
+   if(ui_inside(px,py,248,420,96,44))ui_hit=UI_ULTRA_OPEN;
+   if(ui_inside(px,py,352,420,88,44))ui_hit=7'd42;
+   if(ui_inside(px,py,448,420,88,44))ui_hit=UI_RGB_OPEN;
   end
  end
 endfunction
@@ -113,4 +117,20 @@ function automatic [6:0] pcb_hit(input integer px,py);
  end
 endfunction
 
-localparam [31:0] PCB_BUILD_ID=32'h26103001;
+localparam [31:0] PCB_BUILD_ID=32'h26103004;
+
+function automatic [6:0] rgb_led_hit(input integer px,py);
+ integer j;
+ begin
+  rgb_led_hit=UI_NONE;
+  if(ui_inside(px,py,648,16,132,48))rgb_led_hit=UI_RGB_BACK;
+  if(ui_inside(px,py,596,88,180,44))rgb_led_hit=UI_RGB_TOGGLE;
+  for(j=0;j<4;j=j+1)
+   if(ui_inside(px,py,24+j*192,152,180,52))rgb_led_hit=UI_RGB_STATIC+j;
+  for(j=0;j<8;j=j+1)
+   if(ui_inside(px,py,24+j*96,240,84,44))rgb_led_hit=UI_RGB_COLOR+j;
+  if(ui_inside(px,py,24,308,64,44))rgb_led_hit=UI_RGB_DOWN;
+  if(ui_inside(px,py,376,308,64,44))rgb_led_hit=UI_RGB_UP;
+  if(ui_inside(px,py,500,308,276,44))rgb_led_hit=UI_RGB_REVERSE;
+ end
+endfunction

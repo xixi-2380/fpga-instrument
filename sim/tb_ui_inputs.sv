@@ -9,7 +9,7 @@ module tb_ui_inputs;
  reg [15:0] x=0,y=0,rx=800,ry=480;reg [1:0] fx=0;
  wire tv;wire [6:0] ta;integer checks=0,kevents=0,tevents=0;
  ui_keypad_router #(.RELEASE_CYCLES(2)) k(clk,rst,menu,ghost,keys,inhibit,kv,ka,1'b0,sensor_page);
- ui_touch_actions t(clk,rst,enabled,valid,ready,error,down,count,x,y,rx,ry,fx,menu,tv,ta,1'b0,sensor_page,1'b0);
+ ui_touch_actions t(clk,rst,enabled,valid,ready,error,down,count,x,y,rx,ry,fx,menu,tv,ta,1'b0,sensor_page,1'b0,1'b0);
  always @(posedge clk)begin if(kv)kevents=kevents+1;if(tv)tevents=tevents+1;end
  task cycles(input integer n);begin repeat(n)@(negedge clk);end endtask
  task matrix_contact(input integer index,input [6:0] expected);integer previous_events;begin
@@ -49,8 +49,8 @@ module tb_ui_inputs;
   contact(308,124,UI_ECHO);contact(464,124,UI_ROOM);contact(620,124,UI_TREMOLO);
   contact(152,324,71);contact(40,398,80);contact(308,240,UI_LESS);contact(767,287,UI_MORE);contact(768,287,UI_NONE);
   contact(308,344,UI_NONE);fx=2;contact(308,344,UI_SLOWER);contact(716,344,UI_FASTER);
-  contact(24,420,UI_VOLUME_DOWN);contact(272,420,UI_VOLUME_UP);
-  contact(340,420,UI_ULTRA_OPEN);sensor_page=1;
+  contact(24,420,UI_VOLUME_DOWN);contact(192,420,UI_VOLUME_UP);
+  contact(248,420,UI_ULTRA_OPEN);sensor_page=1;
   contact(500,100,UI_ULTRA_TOGGLE);contact(500,180,UI_SENS_DOWN);contact(684,180,UI_SENS_UP);
   contact(500,252,UI_MIN_DOWN);contact(684,252,UI_MIN_UP);
   contact(500,324,UI_MAX_DOWN);contact(684,324,UI_MAX_UP);

@@ -1,0 +1,15 @@
+{
+  "base": "815b56a",
+  "reviewed_input": "81302c4",
+  "excluded": [
+    "custom keymap RTL/Flash/protocol/App/UI",
+    "performance recording RTL/protocol/App/UI",
+    "later recorder BSRAM rewrite"
+  ],
+  "included": [
+    "815b56a existing MIDI/tail/sustain/knob2",
+    "21 WS2812 + RGB LCD settings"
+  ],
+  "build_id": "26103004",
+  "EDA_run": false
+}

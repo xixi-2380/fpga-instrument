@@ -5,6 +5,11 @@
     <Version>5</Version>
     <Device name="GW5AST-138C" pn="GW5AST-LV138FPG676AC1/I0">gw5ast138c-003</Device>
     <FileList>
+        <File path="src/ws2812_driver.v" type="file.verilog" enable="1" />
+        <File path="src/rgb_key_lights.sv" type="file.verilog" enable="1" />
+        <File path="src/rgb_led_settings.sv" type="file.verilog" enable="1" />
+        <File path="src/rgb_led_controller.sv" type="file.verilog" enable="1" />
+        <File path="src/config/rgb_led_config.svh" type="file.other" enable="1" />
         <File path="src/ultrasonic_range.sv" type="file.verilog" enable="1" />
         <File path="src/ultrasonic_volume.sv" type="file.verilog" enable="1" />
         <File path="src/bt_event_cdc.sv" type="file.verilog" enable="1" />

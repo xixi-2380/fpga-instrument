@@ -1,0 +1,25 @@
+{
+  "all_project_dependencies_present": true,
+  "excluded_features_absent": [
+    "src/instrument_features.sv",
+    "src/flash_keymap.sv",
+    "android/app/src/main/java/cn/whu/gaoshan/core/KeyMap.java",
+    "android/app/src/main/java/cn/whu/gaoshan/core/PerformanceRecording.java",
+    "android/dist/GaoshanScore-0.5-performance.apk"
+  ],
+  "unchanged_815b56a_modules": {
+    "src/key_note_events.sv": "862b992134f5f006d2c8bfbb04f1cbf3e81e471f775d98666635b3c05c419941",
+    "src/score_services.sv": "e639a51f43534c98fbb784d6592f150d08d6383679bffa1a911e374d9377c459",
+    "src/bluetooth_score_core.sv": "1c8ba82093d9ec204e69ef655197e5c4aa618b960abfb2aafe675c47f3f6edc4",
+    "src/bluetooth_score_link.sv": "543bb93ca6fac3235c76e587e3b8153814cf9d4525f8f8c50dfc977a23cc912c",
+    "src/bluetooth_audio_bridge.sv": "bdec41821be4c36d6d07546b920e6ed73a7432d99a998fc7ad8df72ce4c5bdaa",
+    "src/sustain_envelope.sv": "94deeed8ca5769f8c59069508414789e7353f4e4950782d272df78cd2918c6bc",
+    "src/timbre_control.sv": "d1eabc126a9e9c718c4630be43f71f121534f6e4245748170316913e8d96d271",
+    "src/keyboard.sdc": "3452efcd242ba8196f5b59cd273d62a52e962e33b3634c70c3b436698ad0b373"
+  },
+  "android_tree_identical_to_815b56a": true,
+  "app": "android/dist/GaoshanScore-0.4-midi-timbres.apk",
+  "build_id": "26103004",
+  "new_pin": "P25",
+  "EDA_run": false
+}

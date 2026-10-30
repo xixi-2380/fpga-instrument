@@ -1,0 +1,4 @@
+RUN tb_pcb_repeat
+PASS tb_pcb_repeat checks=3
+E:/gowin/fpga-instrument-reintegrated-rgb/sim/tb_pcb_repeat.sv:14: $finish called at 770000 (1ps)
+

@@ -1,0 +1,4 @@
+RUN tb_pcb_readable
+PASS tb_pcb_readable checks=7
+E:/gowin/fpga-instrument-reintegrated-rgb/sim/tb_pcb_readable.sv:24: $finish called at 14550000 (1ps)
+

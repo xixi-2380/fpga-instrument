@@ -4,15 +4,17 @@
 module rgb_ui_renderer(
  input wire pixel_clk,rst,frame_start,status_valid,input wire [1207:0] status_data,
  input wire [10:0] x,y,input wire de_in,hs_in,vs_in,
- output reg [23:0] rgb,output reg de_out,hs_out,vs_out,input wire [145:0] more_data,input wire [2591:0] pcb_data,output wire pcb_visible);
+ output reg [23:0] rgb,output reg de_out,hs_out,vs_out,input wire [145:0] more_data,input wire [2591:0] pcb_data,output wire pcb_visible,input wire [519:0] rgb_led_data);
  `include "config/ui_layout.svh"
+ `include "config/rgb_led_config.svh"
+ reg [519:0] led_state;
+ wire [15:0] led_cfg=led_state[519:504];
  localparam [23:0] BG=24'h101214,PANEL=24'h191c20,GOLD=24'hd6b979,
   CREAM=24'hf2e6c9,INK=24'h17191b,DIM=24'h9c987f,LINE=24'h4b4534,
   WINE=24'h67333e,GREEN=24'h8bc79b,RED=24'hef8f85;
  reg [1207:0] state;
  wire [2:0] effect_bits=state[1169:1167];
  wire echo_amount_edit=state[1170],tremolo_rate_edit=state[1171];
- // Time uses10ms steps, so the ones digit is zero; bit1172 carries knob2 mode.
  wire room_volume_edit=state[1172];
  wire [11:0] echo_ms_bcd={state[1183:1176],4'd0};
  wire [35:0] piano_notes={state[1203:1184],state[79:64]};
@@ -29,6 +31,7 @@ module rgb_ui_renderer(
  wire [1:0] pcb_detail=pcb_state[2575:2574];
  wire [3:0] timbre={state[1207]===1'b1,state[53],state[13:12]};
  wire [1:0] fx=state[22:21];wire menu=state[20],enabled=state[23];
+ wire led_open=menu && led_state[519];
  wire [6:0] percent=fx==0 ? state[30:24] : fx==1 ? state[37:31] : state[44:38];
  wire [4:0] rate={state[61],state[48:45]};
  wire [15:0] sustain_ms_bcd={2'd0,state[63:62],echo_ms_bcd};
@@ -229,8 +232,8 @@ module rgb_ui_renderer(
     len=fx==1 || (fx==0 && echo_amount_edit) ? 12 : fx==2 && !tremolo_rate_edit ? 11 : 10;
     tx=490;ty=384;fg=DIM;
    end
-   if(ui_inside(px,py,664,420,116,44))begin
-    base=card(px,py,664,420,116,44,1'b0);text="RESET";len=5;tx=697;ty=434;fg=GOLD;
+   if(ui_inside(px,py,660,420,120,44))begin
+    base=card(px,py,660,420,120,44,1'b0);text="RESET";len=5;tx=695;ty=434;fg=GOLD;
    end
   end else begin
    if(ui_inside(px,py,20,128,552,196) || ui_inside(px,py,588,128,192,196) || ui_inside(px,py,20,338,760,68))base=PANEL;
@@ -318,17 +321,17 @@ module rgb_ui_renderer(
     if(state[16] || state[17] || state[18])begin text=state[18] ? "GHOST KEYS" : "AUDIO ERROR";len=state[18] ? 10 : 11;fg=RED;end
    end
   end
-  if(menu && !sensor_page && ui_inside(px,py,24,420,292,44))begin
+  if(menu && !sensor_page && ui_inside(px,py,24,420,212,44))begin
    fg=GOLD;ty=434;
-   if(px<68 || px>=272)begin
-    left=px<68 ? 24 : 272;base=card(px,py,left,420,44,44,0);
+   if(px<68 || px>=192)begin
+    left=px<68 ? 24 : 192;base=card(px,py,left,420,44,44,0);
     text=px<68 ? "-" : "+";len=1;tx=left+17;if(sensor_enabled)fg=LINE;
    end else begin
-    text={"VOL ",volume==100 ? 8'd49 : 8'd32,volume>=10 ? digit((volume/10)%10) : 8'd32,digit(volume%10),"%"};len=8;tx=116;
+    text={"VOL ",volume==100 ? 8'd49 : 8'd32,volume>=10 ? digit((volume/10)%10) : 8'd32,digit(volume%10),"%"};len=8;tx=88;
    end
   end
-  if(menu && !sensor_page && ui_inside(px,py,550,420,104,44))begin
-   base=card(px,py,550,420,104,44,0);fg=GOLD;text="more";len=4;tx=582;ty=434;
+  if(menu && !sensor_page && ui_inside(px,py,544,420,104,44))begin
+   base=card(px,py,544,420,104,44,0);fg=GOLD;text="more";len=4;tx=576;ty=434;
   end
   // Minimal fixed character rows; original two pages retain their layout.
   if(menu && more_state[81])begin
@@ -362,12 +365,15 @@ module rgb_ui_renderer(
     text=more_state[80]?"DELETE AGAIN TO CONFIRM / BACK CANCEL":"TOUCH BACK / S0 HOLD EXIT";len=more_state[80]?37:25;ty=442;fg=GOLD;
    end
   end
-  if(menu && !sensor_page && !more_state[81] && ui_inside(px,py,340,420,96,44))begin
-   base=card(px,py,340,420,96,44,sensor_enabled);fg=sensor_enabled ? INK : GOLD;
-   text="ULTRA";len=5;tx=364;ty=434;
+  if(menu && !sensor_page && !more_state[81] && ui_inside(px,py,248,420,96,44))begin
+   base=card(px,py,248,420,96,44,sensor_enabled);fg=sensor_enabled ? INK : GOLD;
+   text="ULTRA";len=5;tx=272;ty=434;
   end
-  if(menu && !sensor_page && !more_state[81] && ui_inside(px,py,444,420,96,44))begin
-   base=card(px,py,444,420,96,44,0);fg=GOLD;text="PCB";len=3;tx=476;ty=434;
+  if(menu && !sensor_page && !more_state[81] && ui_inside(px,py,352,420,88,44))begin
+   base=card(px,py,352,420,88,44,0);fg=GOLD;text="PCB";len=3;tx=380;ty=434;
+  end
+  if(menu && !sensor_page && !more_state[81] && ui_inside(px,py,448,420,88,44))begin
+   base=card(px,py,448,420,88,44,0);fg=GOLD;text="RGB";len=3;tx=476;ty=434;
   end
   if(!menu && px>=620 && py>=440 && py<464)begin
    fg=DIM;tx=640;ty=446;len=13;
@@ -433,6 +439,58 @@ module rgb_ui_renderer(
     if(pcb_state[2571] && left<528)fg=LINE;
    end
   end
+  if(led_open)begin
+   base=BG;fg=CREAM;text=0;len=0;tx=24;ty=32;
+   if(py>=16 && py<64)begin
+    if(px<648)begin text="RGB STRIP / 21 WHITE KEYS";len=25;fg=GOLD;end
+    else begin base=card(px,py,648,16,132,48,0);text="BACK";len=4;tx=694;fg=GOLD;end
+   end
+   if(py>=96 && py<120 && px<580)begin
+    text=led_cfg[14]?"STRIP ON / LIVE PREVIEW":"STRIP OFF / ALL DARK";
+    len=led_cfg[14]?23:20;ty=102;fg=led_cfg[14]?GREEN:DIM;
+   end
+   if(ui_inside(px,py,596,88,180,44))begin
+    base=card(px,py,596,88,180,44,led_cfg[14]);fg=led_cfg[14]?INK:GOLD;
+    text=led_cfg[14]?"TURN OFF":"TURN ON";len=led_cfg[14]?8:7;tx=646;ty=102;
+   end
+   for(i=0;i<4;i=i+1)begin
+    left=24+i*192;
+    if(ui_inside(px,py,left,152,180,52))begin
+     base=card(px,py,left,152,180,52,led_cfg[13:12]==i);fg=led_cfg[13:12]==i?INK:CREAM;
+     case(i)0:begin text="SOLID";len=5;end 1:begin text="BREATH";len=6;end
+      2:begin text="RAINBOW";len=7;end default:begin text="KEY LINK";len=8;end endcase
+     tx=left+(180-len*10)/2;ty=170;
+    end
+   end
+   if(py>=214 && py<232)begin text="COLOR / SOLID, BREATH AND KEY LINK";len=34;ty=216;fg=DIM;end
+   for(i=0;i<8;i=i+1)begin
+    left=24+i*96;
+    if(ui_inside(px,py,left,240,84,44))begin
+     base=card(px,py,left,240,84,44,led_cfg[11:9]==i);text=0;len=0;
+     if(ui_inside(px,py,left+6,246,72,32))base=rgb_palette(3'(i));
+    end
+   end
+   if(ui_inside(px,py,24,308,64,44) || ui_inside(px,py,376,308,64,44))begin
+    left=px<100?24:376;base=card(px,py,left,308,64,44,0);fg=GOLD;
+    text=px<100?"-":"+";len=1;tx=left+27;ty=322;
+   end
+   if(px>=104 && px<370 && py>=314 && py<344)begin
+    text={"BRIGHT ",percent_text(led_cfg[8:2]),"%"};len=11;tx=140;ty=322;fg=GOLD;
+   end
+   if(ui_inside(px,py,500,308,276,44))begin
+    base=card(px,py,500,308,276,44,led_cfg[1]);fg=led_cfg[1]?INK:GOLD;
+    text=led_cfg[1]?"DIRECTION: REVERSE":"DIRECTION: NORMAL";len=led_cfg[1]?18:17;tx=548;ty=322;
+   end
+   for(i=0;i<21;i=i+1)begin
+    left=24+i*36;
+    if(ui_inside(px,py,left,378,32,36))begin
+     base=led_state[i*24+:24];text=0;len=0;
+     if(px==left || px==left+31 || py==378 || py==413)base=LINE;
+    end
+   end
+   if(py>=424 && py<444)begin text="TARGET PREVIEW / NO STRIP READBACK";len=34;ty=426;fg=DIM;end
+   if(py>=448 && py<468)begin text="KEY LINK: RELEASE = OFF / NO EFFECT TAIL";len=40;ty=450;fg=DIM;end
+  end
   if(!de_in || px>=800 || py>=480)begin base=0;end
  end
  // Synchronous font ROM; RGB/DE/HS/VS traverse the same four stages.
@@ -444,15 +502,15 @@ module rgb_ui_renderer(
    base_glyph<=0;fg_glyph<=0;de_glyph<=0;hs_glyph<=0;vs_glyph<=0;
    glyph_text<=0;glyph_len<=0;glyph_dx<=0;glyph_dy<=0;glyph_title<=0;glyph_allow<=0;
    title_address<=0;title_bit<=0;base_layout<=0;fg_layout<=0;de_layout<=0;hs_layout<=0;vs_layout<=0;state<=0;base_pipe<=0;fg_pipe<=0;bit_pipe<=0;ink_pipe<=0;
-   de_pipe<=0;hs_pipe<=0;vs_pipe<=0;rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;more_state<=0;pcb_state<=0;end
+   de_pipe<=0;hs_pipe<=0;vs_pipe<=0;rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;more_state<=0;pcb_state<=0;led_state<=0;end
   else begin
-   if(frame_start && status_valid)begin state<=status_data;more_state<=more_data[81]===1'b1 ? more_data : 146'd0;pcb_state<=pcb_data[2560]===1'b1 ? pcb_data : 2592'd0;end
+   if(frame_start && status_valid)begin state<=status_data;led_state<=rgb_led_data[519]===1'b1 ? rgb_led_data:520'd0;more_state<=more_data[81]===1'b1 ? more_data : 146'd0;pcb_state<=pcb_data[2560]===1'b1 ? pcb_data : 2592'd0;end
    layout_text<=text;layout_len<=len;layout_x<=x;layout_y<=y;layout_tx<=tx;layout_ty<=ty;
    glyph_text<=layout_text;glyph_len<=layout_len;
    glyph_dx<=$signed({1'b0,layout_x})-$signed({1'b0,layout_tx});
    glyph_dy<=$signed({1'b0,layout_y})-$signed({1'b0,layout_ty});
    layout_allow<=de_in && x<800 && y<480 && !state[19];
-   layout_title<=de_in && !state[19] && !(menu && more_state[81]) && !pcb_open && ui_inside(px,py,24,4,384,64);
+   layout_title<=de_in && !state[19] && !(menu && more_state[81]) && !pcb_open && !led_open && ui_inside(px,py,24,4,384,64);
    layout_title_address<=1536+(py-4)*24+((px-24)>>4);layout_title_bit<=15-((px-24)%16);
    base_layout<=base;fg_layout<=fg;de_layout<=de_in && x<800 && y<480;hs_layout<=hs_in;vs_layout<=vs_in;
    glyph_allow<=layout_allow;glyph_title<=layout_title;

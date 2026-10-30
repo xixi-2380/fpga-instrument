@@ -1,0 +1,4 @@
+RUN tb_rgb_led_control
+PASS tb_rgb_led_control checks=107
+E:/gowin/fpga-instrument-reintegrated-rgb/sim/tb_rgb_led_control.sv:42: $finish called at 267600720000 (1ps)
+

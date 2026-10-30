@@ -1,0 +1,4 @@
+RUN tb_pcb_touch
+PASS tb_pcb_touch checks=44
+E:/gowin/fpga-instrument-reintegrated-rgb/sim/tb_pcb_touch.sv:17: $finish called at 2450000 (1ps)
+

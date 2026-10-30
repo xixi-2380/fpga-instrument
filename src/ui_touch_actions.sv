@@ -5,14 +5,14 @@
 module ui_touch_actions #(parameter integer PCB_REPEAT_DELAY=(`AUDIO_HZ/2),PCB_REPEAT_PERIOD=(`AUDIO_HZ/10))(
  input wire clk,rst,enabled,snapshot_valid,ready,error,down,
  input wire [3:0] count,input wire [15:0] x,y,resolution_x,resolution_y,
- input wire [1:0] effect_mode,input wire menu_mode,output reg action_valid,output reg [6:0] action,input wire more_mode,ultrasonic_page,input wire pcb_page);
+ input wire [1:0] effect_mode,input wire menu_mode,output reg action_valid,output reg [6:0] action,input wire more_mode,ultrasonic_page,input wire pcb_page,input wire rgb_page);
  `include "config/ui_layout.svh"
  reg armed,repeat_active;reg [6:0] repeat_action;
  localparam integer RCW=$clog2(PCB_REPEAT_DELAY+1);
  reg [RCW-1:0] repeat_count;
  wire calibrated=resolution_x==800 && resolution_y==480;
  wire valid_point=count==1 && x<800 && y<480;
- wire [6:0] hit=pcb_page===1'b1 ? pcb_hit(integer'(x),integer'(y)) : more_mode===1'b1 ? more_hit(integer'(x),integer'(y)) :
+ wire [6:0] hit=rgb_page===1'b1 ? rgb_led_hit(integer'(x),integer'(y)) : pcb_page===1'b1 ? pcb_hit(integer'(x),integer'(y)) : more_mode===1'b1 ? more_hit(integer'(x),integer'(y)) :
   (menu_mode && ultrasonic_page===1'b1) ? ultrasonic_hit(integer'(x),integer'(y)) :
   ui_hit(integer'(x),integer'(y),effect_mode,menu_mode);
  always @(posedge clk or posedge rst)begin

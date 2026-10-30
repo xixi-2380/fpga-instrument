@@ -1,0 +1,4 @@
+RUN tb_rgb_led_driver
+PASS tb_rgb_led_driver checks=1978
+E:/gowin/fpga-instrument-reintegrated-rgb/sim/tb_rgb_led_driver.sv:31: $finish called at 2170991000 (1ps)
+

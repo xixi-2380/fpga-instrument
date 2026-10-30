@@ -18,7 +18,8 @@ module synth_core #(
     input wire [6:0] volume_percent,input wire [6:0] note_pitch,input wire output_flush,
     output wire latency_valid,output wire [19:0] latency_bcd,
     input wire [2:0] effect_mask,input wire [16:0] effect_echo_samples,
-    input wire debug_mute,output wire debug_muted,output wire audio_quiet);
+    input wire debug_mute,output wire debug_muted,output wire audio_quiet,output reg [20:0] auto_white_held);
+    `include "config/rgb_led_config.svh"
     // Register the soft engine clear before its wide envelope/RAM fanout.
     // Button assertion stays asynchronous; serial urgent-clear remains separate.
     // One clk of control staging is far below a sample and cancels work before
@@ -89,20 +90,25 @@ module synth_core #(
     wire [15:0] frame_l,frame_r;
     assign audio_quiet=!(|voice_active) && !(|voice_held) && frame_l==0 && frame_r==0;
     reg [VISUAL_KEYS-1:0] note_scan;
+    reg [20:0] white_scan;reg [4:0] scanning_timbre;
     // Metadata read, automatic lookup, then bitmap update occupy separate clocks.
     // Avoid a render-counter -> context mux -> dynamic shift -> bitmap path.
     reg [6:0] scanning_id,scanning_pitch;
     reg scanning_held,scanning_first,scanning_last;reg [6:0] slot_pitch;
     wire [VISUAL_KEYS-1:0] note_bit=(scanning_held && scanning_pitch>=60 && scanning_pitch<60+VISUAL_KEYS) ? ( {{(VISUAL_KEYS-1){1'b0}},1'b1} << (scanning_pitch-7'd60)) : {VISUAL_KEYS{1'b0}};
+    wire [4:0] white_index=rgb_white_index(scanning_pitch);
+    wire [20:0] white_bit=scanning_held && scanning_id<16 && scanning_timbre<16 && white_index<21 ? (21'd1<<white_index):21'd0;
     always @(posedge clk or posedge engine_reset)begin
-        if(engine_reset)begin note_scan<=0;visual_notes<=0;scanning_id<=0;scanning_pitch<=0;scanning_held<=0;scanning_first<=0;scanning_last<=0;slot_pitch<=0;end
+        if(engine_reset)begin white_scan<=0;auto_white_held<=0;scanning_timbre<=0;note_scan<=0;visual_notes<=0;scanning_id<=0;scanning_pitch<=0;scanning_held<=0;scanning_first<=0;scanning_last<=0;slot_pitch<=0;end
         else begin
             if(dds_ce)begin
-                scanning_id<=voice_ids[selected_voice*7+:7];slot_pitch<=voice_pitches[selected_voice*7+:7];scanning_held<=voice_held[selected_voice];
+                scanning_timbre<=voice_timbres[selected_voice*5+:5];scanning_id<=voice_ids[selected_voice*7+:7];slot_pitch<=voice_pitches[selected_voice*7+:7];scanning_held<=voice_held[selected_voice];
                 scanning_first<=selected_voice==0;scanning_last<=selected_voice==VOICES-1;
             end
             if(in_slots && render_cycle[3:0]==1)scanning_pitch<=slot_pitch;
             if(in_slots && render_cycle[3:0]==2)begin
+                if(scanning_first)white_scan<=white_bit;else white_scan<=white_scan | white_bit;
+                if(scanning_last)auto_white_held<=scanning_first ? white_bit : white_scan | white_bit;
                 if(scanning_first)note_scan<=note_bit;else note_scan<=note_scan | note_bit;
                 if(scanning_last)visual_notes<=scanning_first ? note_bit : note_scan | note_bit;
             end

@@ -1,0 +1,8 @@
+[
+  {
+    "test": "tb_rgb_tail_arbitration",
+    "passed": true,
+    "pll_model": "behavioral substitute",
+    "seconds": 1.566
+  }
+]

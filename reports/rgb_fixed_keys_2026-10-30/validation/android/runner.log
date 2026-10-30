@@ -1,0 +1,8 @@
+PASS core: 36043 checks; wire/MIDI/session/upload/cancel/retry; software only
+
+PASS connection: 32 checks; no phone/radio validation
+
+PASS library: 40 checks; protocol mock only, no Flash/phone verification
+
+PASS MIDI timbres: 143 checks; software model only
+

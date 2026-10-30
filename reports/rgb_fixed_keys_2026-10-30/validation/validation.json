@@ -1,0 +1,157 @@
+{
+  "build_id": "26103004",
+  "custom_keymap": false,
+  "performance_recording": false,
+  "passed": true,
+  "sources_unchanged": true,
+  "old_pins": 73,
+  "new_pins": 74,
+  "din": "P25",
+  "android": {
+    "name": "android_core",
+    "passed": true,
+    "timed_out": false,
+    "seconds": 10.028
+  },
+  "results": [
+    {
+      "name": "tail_arbitration",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 1.784
+    },
+    {
+      "name": "driver",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 0.687
+    },
+    {
+      "name": "control",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 49.658
+    },
+    {
+      "name": "notes",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 25.333
+    },
+    {
+      "name": "rgb_page",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 95.463
+    },
+    {
+      "name": "ui_inputs",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 0.538
+    },
+    {
+      "name": "ui_controls",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 0.608
+    },
+    {
+      "name": "ui_more",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 0.514
+    },
+    {
+      "name": "pcb_touch",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 0.502
+    },
+    {
+      "name": "pcb_repeat",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 0.47
+    },
+    {
+      "name": "pcb_readable",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 0.504
+    },
+    {
+      "name": "pcb_top",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 169.466
+    },
+    {
+      "name": "sustain_envelope",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 0.858
+    },
+    {
+      "name": "sustain_controls",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 0.679
+    },
+    {
+      "name": "sustain_retrigger32",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 32.499
+    },
+    {
+      "name": "tail_legacy",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 203.72
+    },
+    {
+      "name": "tail_midi",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 204.837
+    },
+    {
+      "name": "tail_drum",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 414.353
+    },
+    {
+      "name": "midi_protocol",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 0.658
+    },
+    {
+      "name": "midi_flash",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 7.273
+    },
+    {
+      "name": "display_connector",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 142.365
+    },
+    {
+      "name": "cdc",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 0.478
+    },
+    {
+      "name": "latency_stereo",
+      "passed": true,
+      "timed_out": false,
+      "seconds": 124.848
+    }
+  ],
+  "scope": "Software/RTL only. No EDA, STA, bitstream or hardware test; no4096/1MHz full-library claim."
+}

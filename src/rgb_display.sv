@@ -22,10 +22,12 @@ module rgb_display #(
     input wire touch_enabled,touch_ui_enabled,touch_ready_status,touch_error_status,
     input wire [145:0] more_status,
     input wire latency_valid,input wire [19:0] latency_bcd,input wire [33:0] ultrasonic_status,
-    input wire [16:0] encoder_status,input wire [2:0] keypad_online,input wire [2591:0] pcb_status,output wire pcb_visible,input wire [3:0] sustain_time_thousands
+    input wire [16:0] encoder_status,input wire [2:0] keypad_online,input wire [2591:0] pcb_status,output wire pcb_visible,input wire [3:0] sustain_time_thousands,input wire [519:0] rgb_led_status
 );
     wire pixel_clk,pixel_lock,pixel_reset;
     wire common_reset=pll_reset || !pixel_lock || audio_reset;
+    wire [519:0] rgb_led_pixel;wire rgb_led_valid;
+    rgb_status_cdc #(.WIDTH(520)) rgb_led_bridge(ref_clk,pixel_clk,common_reset,rgb_led_status,rgb_led_pixel,rgb_led_valid,);
     // 50 * 21 / 30 = 35 MHz; independent third PLL, no audio clock edits.
     PLL #(.FCLKIN("50"),.IDIV_SEL(1),.FBDIV_SEL(1),.MDIV_SEL(21),
         .ODIV0_SEL(30),.CLKFB_SEL("INTERNAL")) pixel_pll(
@@ -129,7 +131,7 @@ module rgb_display #(
         else begin render_x<=x;render_y<=y;render_de<=de;render_hs<=hs;render_vs<=vs;render_frame_start<=frame_start;end
     end
     rgb_ui_renderer renderer(pixel_clk,pixel_reset,render_frame_start,status_valid,pixel_status,
-        render_x,render_y,render_de,render_hs,render_vs,rgb,rendered_de,rendered_hs,rendered_vs,pixel_more,pixel_pcb,renderer_pcb_visible);
+        render_x,render_y,render_de,render_hs,render_vs,rgb,rendered_de,rendered_hs,rendered_vs,pixel_more,pixel_pcb,renderer_pcb_visible,rgb_led_valid?rgb_led_pixel:520'd0);
     // Only the output pin is phase-inverted. It never clocks any internal RTL.
     // At default phase, a panel rising edge has half a pixel period of setup.
     ODDR pixel_clock_forward(.Q0(lcd_clk),.Q1(),.D0(!PCLK_INVERT[0] && !pixel_reset),
