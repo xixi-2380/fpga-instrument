@@ -1,14 +1,18 @@
 `timescale 1ns/1ps
 // Keyboard state-to-event adapter. An offered event remains stable
 // through backpressure; acknowledged state catches up to the latest keys.
-module key_note_events #(parameter integer BASE_NOTE=60,KEYS=16,INDEX_W=(KEYS>1?$clog2(KEYS):1))(
+module key_note_events #(parameter integer MAPPING=0,BASE_NOTE=60,KEYS=16,INDEX_W=(KEYS>1?$clog2(KEYS):1))(
     input wire clk,rst,enabled,input wire [KEYS-1:0] keys,input wire note_ready,
     output reg note_valid,note_on,output reg [6:0] note_id,
     output reg [31:0] note_fcw,output wire gate,output reg [INDEX_W-1:0] last_key,
-    input wire [4:0] selected_timbre,output reg [4:0] note_timbre);
+    input wire [4:0] selected_timbre,output reg [4:0] note_timbre, input wire [575:0] keymap,output reg [6:0] note_pitch,output wire event_pending);
     `include "config/keyboard_notes.svh"
-    reg [KEYS-1:0] reported_keys;
+    `include "config/midi_frequency.svh"
+    reg [6:0] held_pitch[0:KEYS-1];reg [4:0] held_timbre[0:KEYS-1];
     reg [INDEX_W-1:0] offered_key;
+    wire [6:0] mapped_pitch=keymap[offered_key*16+:7];
+    wire [4:0] mapped_timbre=keymap[offered_key*16+8+:5];
+    reg [KEYS-1:0] reported_keys;
     wire [KEYS-1:0] released=reported_keys & ~keys;
     wire [KEYS-1:0] pressed=keys & ~reported_keys;
     reg [INDEX_W-1:0] candidate;
@@ -38,23 +42,27 @@ module key_note_events #(parameter integer BASE_NOTE=60,KEYS=16,INDEX_W=(KEYS>1?
         for(integer g=GROUPS-1;g>=0;g=g-1)
             if(group_valid[g])candidate=group_key[g];
     end
+    assign event_pending=note_valid || lookup_pending || select_pending || (|reported_keys);
     assign gate=|reported_keys;
     always @(posedge clk or posedge rst)begin
         if(rst)begin
             reported_keys<=0;offered_key<=0;last_key<=0;
-            note_valid<=0;note_on<=0;note_id<=0;note_fcw<=0;note_timbre<=0;lookup_pending<=0;
+            note_pitch<=0;note_valid<=0;note_on<=0;note_id<=0;note_fcw<=0;note_timbre<=0;lookup_pending<=0;
             select_pending<=0;released_q<=0;pressed_q<=0;offered_timbre<=0;
         end else if(note_valid)begin
             if(note_ready)begin
                 for(integer k=0;k<KEYS;k=k+1)
                     if(offered_key==k)reported_keys[k]<=note_on;
-                if(note_on)last_key<=offered_key;
+                if(note_on)begin last_key<=offered_key;held_pitch[offered_key]<=note_pitch;held_timbre[offered_key]<=note_timbre;end
                 note_valid<=0;
             end
         end else if(lookup_pending)begin
             note_id<=BASE_NOTE+offered_key;
-            note_fcw<=key_fcw(offered_key);
-            note_timbre<=offered_timbre;
+            if(MAPPING!=0)begin
+                note_pitch<=note_on?mapped_pitch:held_pitch[offered_key];
+                note_fcw<=frequency(note_on?mapped_pitch:held_pitch[offered_key]);
+                note_timbre<=note_on?(mapped_timbre==31?offered_timbre:mapped_timbre):held_timbre[offered_key];
+            end else begin note_pitch<=BASE_NOTE+offered_key;note_fcw<=key_fcw(offered_key);note_timbre<=offered_timbre;end
             lookup_pending<=0;note_valid<=1;
         end else if(select_pending)begin
             offered_key<=candidate;

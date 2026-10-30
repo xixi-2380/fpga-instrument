@@ -1,0 +1,7 @@
+{
+  "constraints_pll_and_all_existing_waveforms_byte_identical": true,
+  "pins": 73,
+  "unique_pins": 73,
+  "enabled_hdl_files": 65,
+  "no_eda_or_programming": true
+}

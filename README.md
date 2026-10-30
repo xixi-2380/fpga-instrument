@@ -1,3 +1,7 @@
+# Key mapping and performance recording (0.5)
+
+See [key mapping / MIDI recording guide](docs/bluetooth_score/%E9%94%AE%E4%BD%8D%E4%B8%8E%E6%BC%94%E5%A5%8F%E5%9B%9E%E4%BC%A0.md). APK: `android/dist/GaoshanScore-0.5-performance.apk`. Baseline: `86711a3`. Software/RTL verification only; no matching bitstream or new STA.
+
 # 蓝牙 MIDI 多音色更新
 
 16种旋律音色、10种鼓音、MIDI21～108、踏板转谱、新旧曲谱混存及两页手动菜单。详见[实现与操作说明](docs/bluetooth_score/MIDI多音色实现.md)。本次仅软件/HDL验证，无匹配新位流。

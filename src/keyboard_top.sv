@@ -162,6 +162,30 @@ module keyboard_top #(
         if(audio_reset)score_cancelled<=0;
         else if(bt_inhibit || bt_valid)score_cancelled<=1;
     end
+    wire [575:0] performance_map,load_map_audio;
+    wire feature_req_valid,feature_req_ready,feature_rsp_valid,feature_rsp_ready;
+    wire [80:0] feature_request;wire [164:0] feature_response;
+    wire load_map_valid,load_map_ready,save_map_valid,save_map_ready;
+    wire [591:0] save_map_data;wire [31:0] map_status_audio;
+    wire performance_lock,performance_unavailable_audio;wire [63:0] performance_ui;wire [7:0] record_local_error;
+    wire [6:0] key_pitch;wire key_pending;
+    // Initial configuration must arrive before manual onset. Later Flash saves
+    // may keep the SPI service busy, but must never suppress key releases.
+    reg map_boot_ready;
+    always @(posedge audio_clk or posedge audio_reset)
+     if(audio_reset)map_boot_ready<=0;else if(map_status_audio[28])map_boot_ready<=1;
+    wire [5:0] last_event_key=key_id-7'd60;
+    instrument_features #(.MS_CYCLES(`AUDIO_HZ/1000)) performance(
+     .clk(audio_clk),.rst(audio_reset),.request_valid(feature_req_valid),.request_ready(feature_req_ready),.request(feature_request),
+     .response_valid(feature_rsp_valid),.response_ready(feature_rsp_ready),.response(feature_response),
+     .unavailable(performance_unavailable_audio || take_bt || local_score_busy),.keys(keys),.key_pending(key_pending),
+     .event_valid(key_valid && note_ready && !take_bt && !local_score_busy),.event_on(key_on),.event_key(last_event_key),
+     .event_pitch(key_pitch),.event_velocity(7'd127),.event_timbre(key_timbre),
+     .local_start(menu_mode && more_open && ui_action_valid && ui_action==96),
+     .local_stop(menu_mode && more_open && ui_action_valid && ui_action==97),.local_error(record_local_error),
+     .keymap(performance_map),.performance_lock(performance_lock),.ui_status(performance_ui),
+     .load_valid(load_map_valid),.load_ready(load_map_ready),.load_map(load_map_audio),
+     .save_valid(save_map_valid),.save_ready(save_map_ready),.save_data(save_map_data),.save_status(map_status_audio),.local_cancel(!menu_mode || !more_open));
     if(BT_ENABLE)begin: bluetooth_on
         wire ev_valid,ev_ready;wire [1:0] kind;
         wire [6:0] ident,pitch,velocity;
@@ -173,11 +197,34 @@ module keyboard_top #(
         wire storage_lock,storage_ready,storage_write,storage_invalidate,storage_import,storage_done;
         wire [11:0] storage_address;wire [95:0] storage_wdata,storage_rdata;
         wire [15:0] storage_count;wire [31:0] storage_crc;wire [7:0] storage_error;
-        wire extension_valid,extension_ready,extension_response_valid,extension_response_ready;
+        wire channel_reset=pll1_reset || audio_reset;
         wire [7:0] extension_command;wire [8:0] extension_length;wire [63:0] extension_payload;
         wire [4:0] extension_response_length;wire [159:0] extension_response;
+        wire extension_valid,extension_ready,extension_response_valid,extension_response_ready;
+        wire lib_ext_ready,lib_rsp_valid,lib_rsp_ready;wire [4:0] lib_rsp_length;wire [159:0] lib_rsp;
+        wire feature_ext=extension_command>=8'h50 && extension_command<=8'h66;
+        wire feat_source_ready,feat_ref_rsp_valid;wire [164:0] feat_ref_response;
+        bt_event_cdc #(.WIDTH(81)) feature_commands(clk,audio_clk,channel_reset,
+         extension_valid && feature_ext,feat_source_ready,{extension_payload,extension_length,extension_command},
+         feature_req_valid,feature_req_ready,feature_request);
+        bt_event_cdc #(.WIDTH(165)) feature_replies(audio_clk,clk,channel_reset,
+         feature_rsp_valid,feature_rsp_ready,feature_response,feat_ref_rsp_valid,extension_response_ready && feature_ext,feat_ref_response);
+        assign extension_ready=feature_ext?feat_source_ready:lib_ext_ready;
+        assign extension_response_valid=feature_ext?feat_ref_rsp_valid:lib_rsp_valid;
+        assign extension_response_length=feature_ext?feat_ref_response[164:160]:lib_rsp_length;
+        assign extension_response=feature_ext?feat_ref_response[159:0]:lib_rsp;
+        assign lib_rsp_ready=extension_response_ready && !feature_ext;
+        wire perf_lock_ref,perf_lock_valid;wire [1:0] perf_flags_audio;wire perf_flags_valid;
+        wire service_unavailable;
+        rgb_status_cdc #(.WIDTH(1)) perf_lock_bridge(audio_clk,clk,channel_reset,performance_lock,perf_lock_ref,perf_lock_valid,);
+        rgb_status_cdc #(.WIDTH(2)) perf_flags_bridge(clk,audio_clk,channel_reset,
+         {upload_active || play_state!=0,service_unavailable},perf_flags_audio,perf_flags_valid,);
+        assign performance_unavailable_audio=!perf_flags_valid || |perf_flags_audio;
+        wire save_ref_valid,save_ref_ready,load_ref_valid,load_ref_ready;wire [591:0] save_ref_data;wire [575:0] load_ref_data;wire [31:0] map_status_ref;wire map_status_valid;
+        bt_event_cdc #(.WIDTH(592)) map_saves(audio_clk,clk,channel_reset,save_map_valid,save_map_ready,save_map_data,save_ref_valid,save_ref_ready,save_ref_data);
+        bt_event_cdc #(.WIDTH(576)) map_loads(clk,audio_clk,channel_reset,load_ref_valid,load_ref_ready,load_ref_data,load_map_valid,load_map_ready,load_map_audio);
+        rgb_status_cdc #(.WIDTH(32)) map_states(clk,audio_clk,channel_reset,map_status_ref,map_status_audio,map_status_valid,);
         wire action_valid,action_ready;wire [3:0] action;
-        wire channel_reset=pll1_reset || audio_reset;
         reset_sync bt_reset(clk,channel_reset,source_reset);
         (* syn_async_reg=1, async_reg="true" *) reg inhibit_meta,inhibit_sync;
         always @(posedge audio_clk or posedge audio_reset)begin
@@ -187,7 +234,7 @@ module keyboard_top #(
         assign bt_inhibit=inhibit_sync;
         bluetooth_score_link #(.CLOCK_HZ(`REF_HZ),.MAX_NOTES(4096),.MAX_VOICES(16),.LIBRARY_EXTENSION(1),.NOTE_MIN(21),.NOTE_MAX(108)) link(
             .clk(clk),.rst(source_reset),.uart_rx_pin(bt_rx),.uart_tx_pin(bt_tx),
-            .event_valid(source_valid),.event_ready(source_ready),.event_kind(source_kind),.event_id(source_id),
+            .performance_lock(perf_lock_ref),.event_valid(source_valid),.event_ready(source_ready),.event_kind(source_kind),.event_id(source_id),
             .event_timbre(source_timbre),.event_legacy(source_legacy),.storage_format(storage_format),.song_format(song_format),.event_pitch(source_pitch),.event_velocity(source_velocity),.manual_inhibit(source_inhibit),
             .song_valid(song_valid),.upload_active(upload_active),.play_state(play_state),.total_notes(total_notes),.song_duration(song_duration),.song_crc(song_crc),
             .local_valid(local_valid),.local_ready(local_ready),.local_command(local_command),.local_done(local_done),.local_error(local_error),
@@ -197,14 +244,16 @@ module keyboard_top #(
             .extension_valid(extension_valid),.extension_ready(extension_ready),.extension_command(extension_command),.extension_length(extension_length),.extension_payload(extension_payload),
             .extension_response_valid(extension_response_valid),.extension_response_ready(extension_response_ready),.extension_response_length(extension_response_length),.extension_response(extension_response));
         bt_event_cdc #(.WIDTH(4)) local_actions(audio_clk,clk,channel_reset,more_command_valid,more_command_ready,more_command,action_valid,action_ready,action);
-        score_services #(.FLASH_WRITES(FLASH_WRITES)) services(.clk(clk),.rst(source_reset),.action_valid(action_valid),.action_ready(action_ready),.action(action),.status(service_status),.song_format(song_format),.storage_format(storage_format),
+        score_services #(.PERFORMANCE_ENABLE(1),.FLASH_WRITES(FLASH_WRITES)) services(.clk(clk),.rst(source_reset),.performance_lock(perf_lock_ref),.performance_unavailable(service_unavailable),
+            .keymap_save_valid(save_ref_valid),.keymap_save_ready(save_ref_ready),.keymap_save_data(save_ref_data),
+            .keymap_load_valid(load_ref_valid),.keymap_load_ready(load_ref_ready),.keymap_load_data(load_ref_data),.keymap_status(map_status_ref),.action_valid(action_valid),.action_ready(action_ready),.action(action),.status(service_status),.song_format(song_format),.storage_format(storage_format),
             .song_valid(song_valid),.upload_active(upload_active),.play_state(play_state),.total_notes(total_notes),.song_duration(song_duration),.song_crc(song_crc),
             .local_valid(local_valid),.local_ready(local_ready),.local_command(local_command),.local_done(local_done),.local_error(local_error),
             .storage_lock(storage_lock),.storage_ready(storage_ready),.storage_write(storage_write),.storage_invalidate(storage_invalidate),
             .storage_address(storage_address),.storage_wdata(storage_wdata),.storage_rdata(storage_rdata),
             .storage_import(storage_import),.storage_count(storage_count),.storage_crc(storage_crc),.storage_done(storage_done),.storage_error(storage_error),
-            .extension_valid(extension_valid),.extension_ready(extension_ready),.extension_command(extension_command),.extension_length(extension_length),.extension_payload(extension_payload),
-            .extension_response_valid(extension_response_valid),.extension_response_ready(extension_response_ready),.extension_response_length(extension_response_length),.extension_response(extension_response),
+            .extension_valid(extension_valid && !feature_ext),.extension_ready(lib_ext_ready),.extension_command(extension_command),.extension_length(extension_length),.extension_payload(extension_payload),
+            .extension_response_valid(lib_rsp_valid),.extension_response_ready(lib_rsp_ready),.extension_response_length(lib_rsp_length),.extension_response(lib_rsp),
             .flash_cs_n(flash_cs_n),.flash_sck(flash_sck),.flash_mosi(flash_mosi),.flash_miso(flash_miso),.flash_wp_n(flash_wp_n),.flash_hold_n(flash_hold_n));
         // Automatic IDs 0..15; manual keyboard IDs 60..95 remain separate.
         bt_event_cdc #(.WIDTH(29)) events(clk,audio_clk,channel_reset,
@@ -221,6 +270,9 @@ module keyboard_top #(
         assign bt_tx=1;assign bt_inhibit=0;assign bt_valid=0;assign bt_flush=0;assign bt_output_flush=0;
         assign bt_note_on=0;assign bt_note_id=0;assign bt_fcw=0;assign bt_velocity=127;assign bt_pitch=0;assign bt_timbre=0;
         assign service_status=0;assign more_command_ready=1;
+        assign feature_req_valid=0;assign feature_request=0;assign feature_rsp_ready=1;
+        assign load_map_valid=0;assign load_map_audio=0;assign save_map_ready=0;assign map_status_audio=32'h10000000;
+        assign performance_unavailable_audio=0;
         assign bt_source_ids=0;
         assign flash_cs_n=1;assign flash_sck=0;assign flash_mosi=0;assign flash_wp_n=1;assign flash_hold_n=1;
     end
@@ -289,7 +341,7 @@ module keyboard_top #(
             .echo_percent(echo_percent),.room_percent(room_percent),.depth_percent(depth_percent),
             .volume_percent(volume_percent),.tremolo_rate_hz(tremolo_rate_hz),.touch_enabled(TOUCH_ENABLE!=0),
             .touch_ui_enabled(TOUCH_UI_ENABLE!=0 && touch_audio_valid && touch_audio[70:55]==800 && touch_audio[54:39]==480),.touch_ready_status(touch_audio[38]),.touch_error_status(touch_audio[37]),
-            .more_status({voice_held,bt_audio_ids,service_bundle[95:80],more_open,delete_confirm,more_info,service_audio[78:0]}),.sustain_time_thousands(echo_time_bcd[15:12]),.pcb_status(pcb_display),.pcb_visible(pcb_display_visible));
+            .more_status({voice_held,bt_audio_ids,service_bundle[95:80],more_open,delete_confirm,more_info,service_audio[78:0]}),.sustain_time_thousands(echo_time_bcd[15:12]),.performance_status(performance_ui),.pcb_status(pcb_display),.pcb_visible(pcb_display_visible));
     end else begin: lcd_off
         assign pcb_display_visible=0;
         assign lcd_clk=0;assign lcd_hs=1;assign lcd_vs=1;assign lcd_en=0;
@@ -402,17 +454,17 @@ module keyboard_top #(
         {keypad_ref_online,keypad_ref_valid,keypad_ref_keys},keypad_snapshot,keypad_snapshot_valid,keypad_snapshot_update);
     assign keypad_online=keypad_snapshot[53:51];
     assign keypad_data_valid=keypad_snapshot[50:48];
-    key_note_events #(.KEYS(36)) key_events(
+    key_note_events #(.MAPPING(1),.KEYS(36)) key_events(
         .clk(audio_clk),.rst(audio_reset || take_bt || local_score_busy),
-        .enabled(input_ready && !take_bt && !local_score_busy),.keys(note_keys),
+        .enabled(input_ready && map_boot_ready && !take_bt && !local_score_busy),.keys(note_keys),
         .note_ready(note_ready && !take_bt && !local_score_busy),
         .note_valid(key_valid),.note_on(key_on),.note_id(key_id),.note_fcw(key_fcw),
-        .gate(key_gate),.last_key(last_key),.selected_timbre(selected_timbre),.note_timbre(key_timbre));
+        .keymap(performance_map),.note_pitch(key_pitch),.event_pending(key_pending),.gate(key_gate),.last_key(last_key),.selected_timbre(selected_timbre),.note_timbre(key_timbre));
     synth_core #(.SUSTAIN_ENABLE(1),.STEREO_ENABLE(STEREO_ENABLE),.VISUAL_KEYS(36),.OUTPUT_ENABLE(OUTPUT_ENABLE),.OUTPUT_GAIN(OUTPUT_GAIN),.LIMITER_LOG2(LIMITER_LOG2),.LIMITER_HOLD_SAMPLES(LIMITER_HOLD_SAMPLES),
         .MUTE(MUTE),.FADE(FADE),.ATTACK(ATTACK),.DECAY(DECAY),
         .SUSTAIN(SUSTAIN),.RELEASE(RELEASE)) sound(
         .clk(audio_clk),.rst(audio_reset),.note_valid(note_valid),.note_on(note_on),
-        .note_pitch(take_bt ? bt_pitch : note_id),.volume_percent(volume_percent),.flush(bt_flush),.output_flush(bt_output_flush),.velocity_valid(take_bt),.note_velocity(bt_velocity),
+        .note_pitch(take_bt ? bt_pitch : local_score_busy ? note_id : key_pitch),.volume_percent(volume_percent),.flush(bt_flush),.output_flush(bt_output_flush),.velocity_valid(take_bt),.note_velocity(bt_velocity),
         .note_id(note_id),.note_fcw(note_fcw),.note_timbre(event_timbre),.effects_enable(effects_enabled),.effect_mode(effect_mode),
         .effect_mask(cfg_effect_mask),.effect_echo_samples(cfg_echo_samples),
         .effect_cfg_valid(effect_cfg_request),.effect_echo_wet(echo_wet),.effect_room_wet(room_wet),

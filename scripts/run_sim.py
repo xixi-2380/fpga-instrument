@@ -34,8 +34,8 @@ results=[]
 for t in tests:
     name=t.stem
     model_sources=[]
-    if name in ['tb_midi_top','tb_flash_busy_budget','tb_midi_flash_production','tb_flash_production','tb_spi_nor_flash','tb_flash_write_permissions','tb_flash_compatibility','tb_flash_recovery','tb_bt_library_link']:model_sources=[root/'sim/spi_nor_model.sv']
-    if name in ['tb_flash_song_library','tb_midi_flash']:model_sources=[root/'sim/buffered_nor_model.sv']
+    if name in ['tb_keymap_wire','tb_performance_top','tb_midi_top','tb_flash_busy_budget','tb_midi_flash_production','tb_flash_production','tb_spi_nor_flash','tb_flash_write_permissions','tb_flash_compatibility','tb_flash_recovery','tb_bt_library_link']:model_sources=[root/'sim/spi_nor_model.sv']
+    if name in ['tb_flash_song_library','tb_midi_flash','tb_keymap_flash']:model_sources=[root/'sim/buffered_nor_model.sv']
     extra_args=[]
     if name=='tb_audio_limiter':
         subprocess.run([sys.executable,str(root/'scripts/reference_audio_limiter.py'),'--out-dir',str(out),'--hold-samples',next((v.split('=',1)[1] for v in a.param if v.startswith('HOLD=')),'0')],check=True,env=env)

@@ -4,7 +4,7 @@
 module rgb_ui_renderer(
  input wire pixel_clk,rst,frame_start,status_valid,input wire [1207:0] status_data,
  input wire [10:0] x,y,input wire de_in,hs_in,vs_in,
- output reg [23:0] rgb,output reg de_out,hs_out,vs_out,input wire [145:0] more_data,input wire [2591:0] pcb_data,output wire pcb_visible);
+ output reg [23:0] rgb,output reg de_out,hs_out,vs_out,input wire [145:0] more_data,input wire [2591:0] pcb_data,output wire pcb_visible,input wire [63:0] performance_data);
  `include "config/ui_layout.svh"
  localparam [23:0] BG=24'h101214,PANEL=24'h191c20,GOLD=24'hd6b979,
   CREAM=24'hf2e6c9,INK=24'h17191b,DIM=24'h9c987f,LINE=24'h4b4534,
@@ -20,7 +20,7 @@ module rgb_ui_renderer(
  wire [6:0] sensor_min=state[1161:1155],sensor_max=state[1154:1148];
  wire [11:0] sensor_distance=state[1144:1133];
  wire [19:0] latency=state[1131:1112];
- reg [145:0] more_state;reg [2591:0] pcb_state;
+ reg [63:0] performance_state;reg [145:0] more_state;reg [2591:0] pcb_state;
  assign pcb_visible=pcb_state[2560];
  wire pcb_open=pcb_state[2560];wire [2:0] pcb_tab=pcb_state[2564:2562];
  wire pcb_frozen=pcb_state[2572],pcb_gsr=pcb_state[2573];
@@ -339,11 +339,11 @@ module rgb_ui_renderer(
     i=px<204?0:px<384?1:px<564?2:3;tx=24+i*180;ty=212;
     case(i)0:begin text="PREV";len=4;end 1:begin text="NEXT";len=4;end 2:begin text="LOAD";len=4;end default:begin text="PLAY";len=4;end endcase
    end else if(py>=252 && py<292)begin
-    i=px<204?0:px<384?1:2;tx=24+i*180;ty=264;
-    case(i)0:begin text="PAUSE";len=5;end 1:begin text="RESUME";len=6;end default:begin text="STOP";len=4;end endcase
+    i=px<204?0:px<384?1:px<564?2:3;tx=24+i*180;ty=264;
+    case(i)0:begin text="PAUSE";len=5;end 1:begin text="RESUME";len=6;end 2:begin text="STOP";len=4;end default:begin text="REC START";len=9;end endcase
    end else if(py>=304 && py<344)begin
-    i=px<204?0:px<384?1:2;tx=24+i*180;ty=316;fg=GOLD;
-    case(i)0:begin text="SAVE";len=4;end 1:begin text="DELETE";len=6;end default:begin text="FLASH INFO";len=10;end endcase
+    i=px<204?0:px<384?1:px<564?2:3;tx=24+i*180;ty=316;fg=GOLD;
+    case(i)0:begin text="SAVE";len=4;end 1:begin text="DELETE";len=6;end 2:begin text="FLASH INFO";len=10;end default:begin text="REC STOP";len=8;end endcase
    end else if(py>=356 && py<388)begin
     text={more_state[6]?"BUSY ":"READY"," ID ",hex_digit(more_state[57:54]),hex_digit(more_state[53:50]),hex_digit(more_state[49:46]),hex_digit(more_state[45:42]),hex_digit(more_state[41:38]),hex_digit(more_state[37:34])};len=15;ty=364;
     if(!more_state[58])begin text="FLASH UNKNOWN / READ ONLY";len=25;fg=GOLD;end
@@ -356,7 +356,11 @@ module rgb_ui_renderer(
      text={"SRC ",hex16(more_state[97:82])," RX ",hex16(more_state[113:98])," H ",hex16(more_state[145:130]),hex16(more_state[129:114])};len=27;fg=GOLD;
     end
    end else if(py>=436 && py<468)begin
-    text=more_state[80]?"DELETE AGAIN TO CONFIRM / BACK CANCEL":"TOUCH BACK / S0 HOLD EXIT";len=more_state[80]?37:25;ty=442;fg=GOLD;
+    if(performance_state[63]===1'b1)begin text="REC START AGAIN TO REPLACE / STOP CANCEL";len=39;ty=442;fg=GOLD;end
+    else if(performance_state[2:0]!=0)begin
+     text={performance_state[2:0]==1?"RECORDING ":performance_state[2:0]==5?"REC READY ":"REC BUSY  ","N ",hex_digit({3'd0,performance_state[27]}),hex_digit(performance_state[26:23]),hex_digit(performance_state[22:19]),hex_digit(performance_state[18:15])," ERR ",hex_digit(performance_state[14:11]),hex_digit(performance_state[10:7])};len=23;ty=442;fg=GOLD;
+    end else begin
+    text=more_state[80]?"DELETE AGAIN TO CONFIRM / BACK CANCEL":"TOUCH BACK / S0 HOLD EXIT";len=more_state[80]?37:25;ty=442;fg=GOLD;end
    end
   end
   if(menu && !sensor_page && !more_state[81] && ui_inside(px,py,340,420,96,44))begin
@@ -441,9 +445,9 @@ module rgb_ui_renderer(
    base_glyph<=0;fg_glyph<=0;de_glyph<=0;hs_glyph<=0;vs_glyph<=0;
    glyph_text<=0;glyph_len<=0;glyph_dx<=0;glyph_dy<=0;glyph_title<=0;glyph_allow<=0;
    title_address<=0;title_bit<=0;base_layout<=0;fg_layout<=0;de_layout<=0;hs_layout<=0;vs_layout<=0;state<=0;base_pipe<=0;fg_pipe<=0;bit_pipe<=0;ink_pipe<=0;
-   de_pipe<=0;hs_pipe<=0;vs_pipe<=0;rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;more_state<=0;pcb_state<=0;end
+   de_pipe<=0;hs_pipe<=0;vs_pipe<=0;rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;performance_state<=0;more_state<=0;pcb_state<=0;end
   else begin
-   if(frame_start && status_valid)begin state<=status_data;more_state<=more_data[81]===1'b1 ? more_data : 146'd0;pcb_state<=pcb_data[2560]===1'b1 ? pcb_data : 2592'd0;end
+   if(frame_start && status_valid)begin state<=status_data;performance_state<=performance_data;more_state<=more_data[81]===1'b1 ? more_data : 146'd0;pcb_state<=pcb_data[2560]===1'b1 ? pcb_data : 2592'd0;end
    layout_text<=text;layout_len<=len;layout_x<=x;layout_y<=y;layout_tx<=tx;layout_ty<=ty;
    glyph_text<=layout_text;glyph_len<=layout_len;
    glyph_dx<=$signed({1'b0,layout_x})-$signed({1'b0,layout_tx});

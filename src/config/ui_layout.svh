@@ -50,6 +50,8 @@ endfunction
 function automatic [6:0] more_hit(input integer px,py);
  begin
   more_hit=UI_NONE;
+  if(ui_inside(px,py,564,252,160,40))more_hit=7'd96;
+  if(ui_inside(px,py,564,304,160,40))more_hit=7'd97;
   if(ui_inside(px,py,648,16,132,48))more_hit=UI_MORE_BACK;
   if(ui_inside(px,py,24,200,160,40))more_hit=UI_SONG_PREV;
   if(ui_inside(px,py,204,200,160,40))more_hit=UI_SONG_NEXT;

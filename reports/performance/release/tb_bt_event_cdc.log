@@ -1,0 +1,2 @@
+PASS tb_bt_event_cdc checks=131
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_bt_event_cdc.sv:23: $finish called at 13202000 (1ps)

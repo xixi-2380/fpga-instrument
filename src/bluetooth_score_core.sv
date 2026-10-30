@@ -25,7 +25,7 @@ module bluetooth_score_core #(
  output wire extension_valid,input wire extension_ready,output wire [7:0] extension_command,
  output wire [8:0] extension_length,output wire [63:0] extension_payload,
  input wire extension_response_valid,output wire extension_response_ready,
- input wire [4:0] extension_response_length,input wire [159:0] extension_response,input wire storage_format,output reg song_format,output wire [4:0] event_timbre,output wire event_legacy);
+ input wire [4:0] extension_response_length,input wire [159:0] extension_response,input wire performance_lock,input wire storage_format,output reg song_format,output wire [4:0] event_timbre,output wire event_legacy);
  `include "config/score_record.svh"
  wire extended=song_format;wire [4:0] record_bytes=extended?12:8;
  wire [5:0] incoming_count;
@@ -124,7 +124,7 @@ module bluetooth_score_core #(
      end
      else if(local_valid===1'b1 && local_ready)begin
       local_error<=0;
-      if(upload_active || (!song_valid && local_command!=3) || (local_command!=0 && local_command!=3 && play_state==0))begin
+      if(performance_lock===1'b1 || upload_active || (!song_valid && local_command!=3) || (local_command!=0 && local_command!=3 && play_state==0))begin
        local_error<=upload_active?8'd5:(!song_valid?8'h0e:8'd5);local_done<=1;
       end else begin player_command<=local_command;local_transaction<=1;state<=PLAYER_SEND;end
      end
@@ -172,9 +172,10 @@ module bluetooth_score_core #(
      end
      else if({1'b0,seq}!=expected_seq || (cache_valid&&seq==cached_seq))respond(8'h0b);
      else begin consume_seq<=1;state<=EXECUTE;end
-    EXECUTE:if(cmd!=8'h14&&cmd!=8'h46&&cmd!=8'h10&&cmd!=8'h11&&cmd!=8'h12&&cmd!=8'h13&&cmd!=8'h20&&cmd!=8'h21&&cmd!=8'h22&&cmd!=8'h23&&cmd!=8'h30&&!(LIBRARY_EXTENSION!=0&&cmd>=8'h40&&cmd<=8'h45))respond(1);
-     else if((cmd==8'h10&&len!=6)||(cmd==8'h14&&len!=7)||(cmd==8'h11&&(len<record_bytes+2||len>254||(len-2)%record_bytes!=0))||(cmd!=8'h14&&cmd!=8'h10&&cmd!=8'h11&&len!=0&&!(cmd>=8'h40&&cmd<=8'h45)))respond(3);
+    EXECUTE:if(cmd!=8'h14&&cmd!=8'h46&&cmd!=8'h10&&cmd!=8'h11&&cmd!=8'h12&&cmd!=8'h13&&cmd!=8'h20&&cmd!=8'h21&&cmd!=8'h22&&cmd!=8'h23&&cmd!=8'h30&&!(LIBRARY_EXTENSION!=0&&((cmd>=8'h40&&cmd<=8'h45)||(cmd>=8'h50&&cmd<=8'h57)||(cmd>=8'h60&&cmd<=8'h66))))respond(1);
+     else if((cmd==8'h10&&len!=6)||(cmd==8'h14&&len!=7)||(cmd==8'h11&&(len<record_bytes+2||len>254||(len-2)%record_bytes!=0))||(cmd!=8'h14&&cmd!=8'h10&&cmd!=8'h11&&len!=0&&!((cmd>=8'h40&&cmd<=8'h45)||(cmd>=8'h50&&cmd<=8'h57)||(cmd>=8'h60&&cmd<=8'h66))))respond(3);
      else if(!session)respond(5);
+     else if(performance_lock===1'b1 && (cmd==8'h10 || cmd==8'h14 || (cmd>=8'h20 && cmd<=8'h22) || cmd==8'h42 || cmd==8'h43 || cmd==8'h44))respond(5);
      else if(storage_lock===1'b1 && ((cmd==8'h10 || cmd==8'h14) || (cmd>=8'h20 && cmd<=8'h23)))respond(5);
      else if(upload_active&&(cmd==8'h10||cmd==8'h14||cmd==8'h20||cmd==8'h21||cmd==8'h22))respond(5);
      else case(cmd)
@@ -205,7 +206,7 @@ module bluetooth_score_core #(
        reply[47:32]<=received_notes;reply[63:48]<=total_notes;reply[95:64]<=position_ms;reply[103:96]<=last_error;
       end
       8'h40,8'h41,8'h42,8'h43,8'h44,8'h45:state<=EXT_SEND;
-      default:respond(1);
+      default:if(LIBRARY_EXTENSION!=0 && ((cmd>=8'h50&&cmd<=8'h57)||(cmd>=8'h60&&cmd<=8'h66)))state<=EXT_SEND;else respond(1);
      endcase
     DATA_END:begin current_end<={1'b0,current_record[31:0]}+{17'b0,current_record[63:48]};state<=DATA_CHECK;end
     DATA_CHECK:if(!score_record_valid(current_record,extended) || current_end>MAX_END_MS || current_record[31:0]<packet_last)respond(6);

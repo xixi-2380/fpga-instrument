@@ -1,0 +1,2 @@
+PASS tb_keymap_wire checks=6 SPI HALF=25 vendor=0
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_keymap_wire.sv:17: $finish called at 40422510000 (1ps)

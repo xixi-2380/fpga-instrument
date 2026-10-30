@@ -92,7 +92,7 @@ module synth_core #(
     // Avoid a render-counter -> context mux -> dynamic shift -> bitmap path.
     reg [6:0] scanning_id,scanning_pitch;
     reg scanning_held,scanning_first,scanning_last;reg [6:0] slot_pitch;
-    wire [VISUAL_KEYS-1:0] note_bit=(scanning_held && scanning_pitch>=60 && scanning_pitch<60+VISUAL_KEYS) ? ( {{(VISUAL_KEYS-1){1'b0}},1'b1} << (scanning_pitch-7'd60)) : {VISUAL_KEYS{1'b0}};
+    wire [VISUAL_KEYS-1:0] note_bit=(scanning_held && ((scanning_id>=60 && scanning_id<60+VISUAL_KEYS) || (scanning_id<16 && scanning_pitch>=60 && scanning_pitch<60+VISUAL_KEYS))) ? ( {{(VISUAL_KEYS-1){1'b0}},1'b1} << ((scanning_id>=60?scanning_id:scanning_pitch)-7'd60)) : {VISUAL_KEYS{1'b0}};
     always @(posedge clk or posedge engine_reset)begin
         if(engine_reset)begin note_scan<=0;visual_notes<=0;scanning_id<=0;scanning_pitch<=0;scanning_held<=0;scanning_first<=0;scanning_last<=0;slot_pitch<=0;end
         else begin

@@ -1,0 +1,2 @@
+PASS tb_timbres checks=28679
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_timbres.sv:36: $finish called at 286806000 (1ps)

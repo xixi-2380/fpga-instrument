@@ -1,0 +1,2 @@
+PASS tb_bt_polyphony checks=266747 effect=0 worst_cluster_us=81.580000 peak=29199
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_bt_polyphony.sv:75: $finish called at 4336414680 (1ps)

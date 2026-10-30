@@ -1,0 +1,2 @@
+PASS tb_performance_menu checks=768008 frames=1
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_performance_menu.sv:61: $finish called at 3840261000 (1ps)

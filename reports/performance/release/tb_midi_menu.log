@@ -1,0 +1,2 @@
+PASS tb_midi_menu checks=1536009 frames=2
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_midi_menu.sv:58: $finish called at 7680251000 (1ps)

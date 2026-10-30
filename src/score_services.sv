@@ -1,8 +1,11 @@
 `timescale 1ns/1ps
 // Reference-domain composition only: independent control, protocol, library,
 // and physical Flash driver. No UI rendering or audio synthesis here.
-module score_services #(parameter integer FLASH_WRITES=1)(
- input wire clk,rst,action_valid,output wire action_ready,input wire [3:0] action,
+module score_services #(parameter integer PERFORMANCE_ENABLE=0,FLASH_WRITES=1)(
+ input wire clk,rst,action_valid,
+ input wire performance_lock,output wire performance_unavailable,
+ input wire keymap_save_valid,output wire keymap_save_ready,input wire [591:0] keymap_save_data,
+ output wire keymap_load_valid,input wire keymap_load_ready,output wire [575:0] keymap_load_data,output wire [31:0] keymap_status,output wire action_ready,input wire [3:0] action,
  output wire [79:0] status,
  input wire song_valid,upload_active,input wire [1:0] play_state,
  input wire [15:0] total_notes,input wire [31:0] song_duration,song_crc,
@@ -30,10 +33,26 @@ module score_services #(parameter integer FLASH_WRITES=1)(
  wire probe_accept=probe_valid && probe_ready;
  wire [7:0] fe,bi,bd,ri,rd,s1,s2,s3;
  wire writable=FLASH_WRITES!=0 && nor_write_ready(jedec,s1);
- assign probe_ready=driver_ready && !probe_active && !fv && !library_busy && !control_busy;
+ wire cfg_busy,cfv,cfr,cfd,cbw;wire [1:0] cfo;wire [23:0] cfa;wire [8:0] cfl;wire [7:0] cbi,cbd,cri;
+ reg cfg_owner;
+ wire cfg_claim=cfg_busy && library_init && !library_busy && !control_busy && !fv && !probe_active && driver_ready;
+ always @(posedge clk or posedge rst)if(rst)cfg_owner<=0;else if(!cfg_busy)cfg_owner<=0;else if(cfg_claim)cfg_owner<=1;
+ assign cfr=driver_ready && cfg_owner;assign cfd=driver_done && cfg_owner;
+ assign performance_unavailable=library_busy || control_busy || cfg_busy;
+ if(PERFORMANCE_ENABLE!=0)begin: configuration
+ flash_keymap keymap_store(.clk(clk),.rst(rst),.initialized(fi),.supported(fs),.writable(writable),.jedec(jedec),
+  .save_valid(keymap_save_valid),.save_ready(keymap_save_ready),.save_data(keymap_save_data),
+  .load_valid(keymap_load_valid),.load_ready(keymap_load_ready),.load_map(keymap_load_data),.status(keymap_status),.busy(cfg_busy),
+  .flash_valid(cfv),.flash_ready(cfr),.flash_op(cfo),.flash_address(cfa),.flash_length(cfl),.flash_done(cfd),.flash_error(fe),
+  .buffer_write(cbw),.buffer_index(cbi),.buffer_wdata(cbd),.read_index(cri),.read_data(rd));
+ end else begin: no_configuration
+  assign cfg_busy=0;assign cfv=0;assign cfo=0;assign cfa=0;assign cfl=0;assign cbw=0;assign cbi=0;assign cbd=0;assign cri=0;
+  assign keymap_save_ready=0;assign keymap_load_valid=0;assign keymap_load_data=0;assign keymap_status=32'h10000000;
+ end
+ assign probe_ready=driver_ready && !probe_active && !fv && !library_busy && !control_busy && !cfg_owner && !cfg_claim;
  assign probe_done=driver_done && probe_active;
- assign fr=driver_ready && !probe_active && !probe_accept;
- assign fd=driver_done && !probe_active;
+ assign fr=driver_ready && !probe_active && !probe_accept && !cfg_owner && !cfg_claim;
+ assign fd=driver_done && !probe_active && !cfg_owner;
  always @(posedge clk or posedge rst)begin
   if(rst)probe_active<=0;
   else if(probe_accept)probe_active<=1;
@@ -47,7 +66,7 @@ module score_services #(parameter integer FLASH_WRITES=1)(
   else begin previous_lookup<=lookup_index;if(lookup_index==selected && previous_lookup==selected)begin selected_meta<=lookup_data;selected_meta_index<=selected;end end
  end
  local_score_control control(.clk(clk),.rst(rst),.action_valid(action_valid && action_ready),.action(action),.entries(entries),
- .upload_active(upload_active),.library_busy(library_busy || remote_pending),.song_valid(song_valid),.loaded_valid(loaded_valid),.loaded_index(loaded_index),
+ .upload_active(upload_active),.library_busy(library_busy || remote_pending || cfg_busy || performance_lock===1'b1),.song_valid(song_valid),.loaded_valid(loaded_valid),.loaded_index(loaded_index),
  .selected(selected),.busy(control_busy),.done(control_done),.error(control_error),
  .player_valid(local_valid),.player_ready(local_ready),.player_command(local_command),.player_done(local_done),.player_error(local_error),
  .library_valid(local_library_valid),.library_ready(library_ready && !remote_pending),.library_command(local_library_command),.library_index(local_library_index),
@@ -55,7 +74,7 @@ module score_services #(parameter integer FLASH_WRITES=1)(
  score_library_protocol protocol(.clk(clk),.rst(rst),.request_valid(extension_valid),.request_ready(extension_ready),
  .command(extension_command),.length(extension_length),.payload(extension_payload),.response_valid(extension_response_valid),.response_ready(extension_response_ready),
  .response_length(extension_response_length),.response(extension_response),.initialized(library_init),.supported(fs),.writable(writable),
- .library_busy(library_busy),.local_busy(control_busy),.storage_ready(storage_ready),.jedec_id(jedec),.status1(s1),.status2(s2),.status3(s3),.library_error(library_error),
+ .library_busy(library_busy),.local_busy(control_busy || cfg_busy || performance_lock===1'b1),.storage_ready(storage_ready),.jedec_id(jedec),.status1(s1),.status2(s2),.status3(s3),.library_error(library_error),
  .job_id(job_id),.job_state(job_state),.ram_crc(song_crc),.library_valid(remote_library_valid),.library_ready(library_ready),.library_command(remote_library_command),
  .library_index(remote_library_index),.library_name(remote_name),.lookup_index(remote_lookup),.lookup_data(lookup_data),
  .probe_valid(probe_valid),.probe_ready(probe_ready),.probe_done(probe_done),.probe_error(fe));
@@ -68,9 +87,9 @@ module score_services #(parameter integer FLASH_WRITES=1)(
  .storage_wdata(storage_wdata),.storage_rdata(storage_rdata),.storage_import(storage_import),.storage_count(storage_count),.storage_crc(storage_crc),.storage_done(storage_done),.storage_error(storage_error),
  .upload_active(upload_active),.flash_initialized(fi),.flash_supported(fs),.flash_ready(fr),.flash_valid(fv),.flash_op(fo),.flash_address(fa),.flash_length(fl),.flash_done(fd),.flash_error(fe),
  .buffer_write(bw),.buffer_index(bi),.buffer_wdata(bd),.read_index(ri),.read_data(rd));
- spi_nor_flash flash(.clk(clk),.rst(rst),.request_valid((fv && !probe_active) || probe_accept),.request_ready(driver_ready),
- .operation(probe_accept?2'd0:fo),.address(fa),.length(fl),.writes_enabled(FLASH_WRITES!=0),
+ spi_nor_flash #(.REGION_LAST(PERFORMANCE_ENABLE!=0?24'h221fff:24'h21ffff)) flash(.clk(clk),.rst(rst),.request_valid(cfg_owner?cfv:((fv && !probe_active) || probe_accept)),.request_ready(driver_ready),
+ .operation(cfg_owner?cfo:probe_accept?2'd0:fo),.address(cfg_owner?cfa:fa),.length(cfg_owner?cfl:fl),.writes_enabled(FLASH_WRITES!=0),
  .done(driver_done),.error(fe),.initialized(fi),.supported(fs),.jedec_id(jedec),.status1(s1),.status2(s2),.status3(s3),
- .buffer_write(bw && !probe_active),.buffer_index(bi),.buffer_wdata(bd),.read_index(ri),.read_data(rd),
+ .buffer_write(cfg_owner?cbw:(bw && !probe_active)),.buffer_index(cfg_owner?cbi:bi),.buffer_wdata(cfg_owner?cbd:bd),.read_index(cfg_owner?cri:ri),.read_data(rd),
  .cs_n(flash_cs_n),.sck(flash_sck),.mosi(flash_mosi),.miso(flash_miso),.wp_n(flash_wp_n),.hold_n(flash_hold_n));
 endmodule

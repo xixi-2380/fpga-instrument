@@ -1,0 +1,225 @@
+{
+  "passed": true,
+  "base_commit": "86711a306017598fa2f965e578fb04ca3bd9fe81",
+  "branch": "codex/integrated-instrument",
+  "hdl_configurations": 41,
+  "java_checks": 40434,
+  "results": [
+    {
+      "test": "tb_key_note_events",
+      "passed": true,
+      "evidence": "tb_key_note_events.log"
+    },
+    {
+      "test": "tb_midi_protocol",
+      "passed": true,
+      "evidence": "tb_midi_protocol.log"
+    },
+    {
+      "test": "tb_midi_flash",
+      "passed": true,
+      "evidence": "tb_midi_flash.log"
+    },
+    {
+      "test": "tb_voice_allocator",
+      "passed": true,
+      "evidence": "tb_voice_allocator.log"
+    },
+    {
+      "test": "tb_multitimbral",
+      "passed": true,
+      "evidence": "tb_multitimbral.log"
+    },
+    {
+      "test": "tb_synth_core",
+      "passed": true,
+      "evidence": "tb_synth_core.log"
+    },
+    {
+      "test": "tb_ui_controls",
+      "passed": true,
+      "evidence": "tb_ui_controls.log"
+    },
+    {
+      "test": "tb_ui_inputs",
+      "passed": true,
+      "evidence": "tb_ui_inputs.log"
+    },
+    {
+      "test": "tb_rgb_ui_renderer",
+      "passed": true,
+      "evidence": "tb_rgb_ui_renderer.log"
+    },
+    {
+      "test": "tb_midi_menu",
+      "passed": true,
+      "evidence": "tb_midi_menu.log"
+    },
+    {
+      "test": "tb_pcb_top",
+      "passed": true,
+      "evidence": "tb_pcb_top.log"
+    },
+    {
+      "test": "tb_pcb_readable",
+      "passed": true,
+      "evidence": "tb_pcb_readable.log"
+    },
+    {
+      "test": "tb_pcb_repeat",
+      "passed": true,
+      "evidence": "tb_pcb_repeat.log"
+    },
+    {
+      "test": "tb_bt_polyphony",
+      "passed": true,
+      "evidence": "tb_bt_polyphony.log"
+    },
+    {
+      "test": "tb_bt_player_production",
+      "passed": true,
+      "evidence": "tb_bt_player_production.log"
+    },
+    {
+      "test": "tb_stereo_audio",
+      "passed": true,
+      "evidence": "tb_stereo_audio.log"
+    },
+    {
+      "test": "tb_effect_cfg_replay",
+      "passed": true,
+      "evidence": "tb_effect_cfg_replay.log"
+    },
+    {
+      "test": "tb_bt_identity",
+      "passed": true,
+      "evidence": "tb_bt_identity.log"
+    },
+    {
+      "test": "tb_bt_tail_reuse",
+      "passed": true,
+      "evidence": "tb_bt_tail_reuse.log"
+    },
+    {
+      "test": "tb_touch_keyboard_router",
+      "passed": true,
+      "evidence": "tb_touch_keyboard_router.log"
+    },
+    {
+      "test": "tb_touch_ec11_top",
+      "passed": true,
+      "evidence": "tb_touch_ec11_top.log"
+    },
+    {
+      "test": "tb_bt_event_cdc",
+      "passed": true,
+      "evidence": "tb_bt_event_cdc.log"
+    },
+    {
+      "test": "tb_rgb_status_cdc",
+      "passed": true,
+      "evidence": "tb_rgb_status_cdc.log"
+    },
+    {
+      "test": "tb_sustain_envelope",
+      "passed": true,
+      "evidence": "tb_sustain_envelope.log"
+    },
+    {
+      "test": "tb_ui_more",
+      "passed": true,
+      "evidence": "tb_ui_more.log"
+    },
+    {
+      "test": "tb_keymap_events",
+      "passed": true,
+      "evidence": "tb_keymap_events.log"
+    },
+    {
+      "test": "tb_performance",
+      "passed": true,
+      "evidence": "tb_performance.log"
+    },
+    {
+      "test": "tb_keymap_flash",
+      "passed": true,
+      "evidence": "tb_keymap_flash.log"
+    },
+    {
+      "test": "tb_keymap_wire",
+      "passed": true,
+      "evidence": "tb_keymap_wire.log"
+    },
+    {
+      "test": "tb_keymap_wire_HALF4_VENDOR1",
+      "passed": true,
+      "evidence": "tb_keymap_wire_HALF4_VENDOR1.log"
+    },
+    {
+      "test": "tb_performance_top",
+      "passed": true,
+      "evidence": "tb_performance_top.log"
+    },
+    {
+      "test": "tb_performance_menu",
+      "passed": true,
+      "evidence": "tb_performance_menu.log"
+    },
+    {
+      "test": "tb_bluetooth_score_core",
+      "passed": true,
+      "evidence": "tb_bluetooth_score_core.log"
+    },
+    {
+      "test": "tb_dds_sine",
+      "passed": true,
+      "evidence": "tb_dds_sine.log"
+    },
+    {
+      "test": "tb_timbres",
+      "passed": true,
+      "evidence": "tb_timbres.log"
+    },
+    {
+      "test": "tb_instrument_envelopes",
+      "passed": true,
+      "evidence": "tb_instrument_envelopes.log"
+    },
+    {
+      "test": "tb_sustain_retrigger_TIMBRE0",
+      "passed": true,
+      "evidence": "tb_sustain_retrigger_TIMBRE0.log"
+    },
+    {
+      "test": "tb_sustain_retrigger_TIMBRE4",
+      "passed": true,
+      "evidence": "tb_sustain_retrigger_TIMBRE4.log"
+    },
+    {
+      "test": "tb_sustain_retrigger_TIMBRE6",
+      "passed": true,
+      "evidence": "tb_sustain_retrigger_TIMBRE6.log"
+    },
+    {
+      "test": "tb_sustain_retrigger_TIMBRE9",
+      "passed": true,
+      "evidence": "tb_sustain_retrigger_TIMBRE9.log"
+    },
+    {
+      "test": "tb_sustain_retrigger_TIMBRE15",
+      "passed": true,
+      "evidence": "tb_sustain_retrigger_TIMBRE15.log"
+    }
+  ],
+  "source_aggregate_sha256": "7f6f5e4179a31954ea09ed8a5ed17e905b45cf6346c5b127076bc4ebcaecf13c",
+  "apk_sha256": "7ca20f8b59097b30e7b9fb026a8197b891a643905361d33dbf6544023503c794",
+  "audio_delivery_cycles": 532,
+  "audio_budget_cycles": 544,
+  "flash": "4096 captured records independently checked; keymap SPI HALF25=1MHz EF4018; HALF4 C84018 accelerated; interrupted erase/body/commit, readback failure and CRC recovery transaction tests",
+  "scope": "Software and RTL only. Behavioral PLL/ODDR/GSR in top simulations. No EDA, STA, hardware programming, phone/radio test, or board listening. Baseline 639 setup violations are not a measurement of this version.",
+  "superseded_runs": {
+    "renderer": "Old positional connection updated and rerun passed",
+    "pcb": "Initial configuration/held-key startup wait corrected; cancelled historical run replaced by passing final fixture"
+  },
+  "not_implemented": "PCM/WAV recording, effect automation, offline LED teaching, new bitstream"
+}

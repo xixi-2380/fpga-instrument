@@ -17,7 +17,7 @@ module bluetooth_score_link #(
  output wire extension_valid,input wire extension_ready,output wire [7:0] extension_command,
  output wire [8:0] extension_length,output wire [63:0] extension_payload,
  input wire extension_response_valid,output wire extension_response_ready,
- input wire [4:0] extension_response_length,input wire [159:0] extension_response,input wire storage_format,output wire song_format,output wire [4:0] event_timbre,output wire event_legacy);
+ input wire [4:0] extension_response_length,input wire [159:0] extension_response,input wire performance_lock,input wire storage_format,output wire song_format,output wire [4:0] event_timbre,output wire event_legacy);
  localparam integer PW=$clog2(FIFO_DEPTH),CW=$clog2(FIFO_DEPTH+1);
  wire [7:0] data;wire valid,rx_error,ready,tx_valid,tx_ready;wire [7:0] tx_data;
  reg [7:0] fifo[0:FIFO_DEPTH-1];reg [PW-1:0] wr,rd;reg [CW-1:0] count;
@@ -39,7 +39,7 @@ module bluetooth_score_link #(
   .storage_address(storage_address),.storage_wdata(storage_wdata),.storage_rdata(storage_rdata),
   .storage_import(storage_import),.storage_count(storage_count),.storage_crc(storage_crc),
   .storage_done(storage_done),.storage_error(storage_error),.song_duration(song_duration),.song_crc(song_crc),
-  .extension_valid(extension_valid),.extension_ready(extension_ready),.extension_command(extension_command),
+  .performance_lock(performance_lock),.extension_valid(extension_valid),.extension_ready(extension_ready),.extension_command(extension_command),
   .extension_length(extension_length),.extension_payload(extension_payload),.extension_response_valid(extension_response_valid),
   .extension_response_ready(extension_response_ready),.extension_response_length(extension_response_length),.extension_response(extension_response),.storage_format(storage_format),.song_format(song_format),.event_timbre(event_timbre),.event_legacy(event_legacy));
  always @(posedge clk or posedge rst)begin

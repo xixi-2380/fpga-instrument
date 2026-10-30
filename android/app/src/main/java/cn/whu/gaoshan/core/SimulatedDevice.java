@@ -21,7 +21,31 @@ public final class SimulatedDevice implements ProtocolClient.Transport {
     private void clearUpload(){upload=false;total=0;received=0;position=0;store.reset();}
     private static byte[] ok(){return new byte[]{0};}
     private static byte[] index(int n){byte[] b={0,0,0};Wire.put16(b,1,n);return b;}
+    private KeyMap keyMap=KeyMap.defaults();private byte[] staged;private boolean[] stagedKeys;
+    private long stageToken,stageCrc,captureId=0,recordStarted,mapSavedCrc;private int recordState=0,mapJob=0,mapVersion=0;
+    private byte[] capture=new byte[0];
+    private byte[] performanceCommand(int cmd,byte[] p){
+        if(!hello)return error(5);
+        if(recordState==1&&(cmd>=0x52&&cmd<=0x55||cmd==0x57||cmd==0x61))return error(5);
+        if(cmd==0x50){if(p.length!=0)return error(3);byte[] b=new byte[12];b[1]=1;b[2]=36;b[3]=21;b[4]=108;b[5]=16;Wire.put16(b,6,4096);Wire.put32(b,8,3600000);return b;}
+        if(cmd==0x51){if(p.length!=1)return error(3);int k=p[0]&255;if(k>=36)return error(6);return new byte[]{0,(byte)k,(byte)keyMap.pitch(k),(byte)keyMap.timbre(k)};}
+        if(cmd==0x52){if(p.length!=8)return error(3);stageToken=Wire.u32(p,0);stageCrc=Wire.u32(p,4);staged=new byte[72];stagedKeys=new boolean[36];return ok();}
+        if(cmd==0x53){if(p.length!=7)return error(3);int k=p[4]&255;if(staged==null||stageToken!=Wire.u32(p,0)||k>=36)return error(6);int pitch=p[5]&255,tone=p[6]&255;if(pitch<21||pitch>108||tone>15&&tone!=31)return error(6);staged[2*k]=p[5];staged[2*k+1]=p[6];stagedKeys[k]=true;return ok();}
+        if(cmd==0x54){if(p.length!=4)return error(3);if(staged==null||stageToken!=Wire.u32(p,0))return error(6);for(boolean filled:stagedKeys)if(!filled)return error(6);if(Wire.crc32(staged)!=stageCrc)return error(9);if(upload||state!=0||jobState==1)return error(5);keyMap=new KeyMap(staged);staged=null;mapVersion++;return ok();}
+        if(cmd==0x55){if(p.length!=4)return error(3);if(upload||state!=0||jobState==1)return error(5);if(Wire.u32(p,0)!=keyMap.crc())return error(6);mapSavedCrc=keyMap.crc();return index(++mapJob);}
+        if(cmd==0x56){if(p.length!=0)return error(3);byte[] b=new byte[16];Wire.put16(b,1,mapJob);b[3]=(byte)(mapJob==0?0:2);Wire.put32(b,5,mapSavedCrc);b[9]=13;Wire.put16(b,10,mapVersion);Wire.put32(b,12,keyMap.crc());return b;}
+        if(cmd==0x57){if(p.length!=0)return error(3);if(upload||state!=0||jobState==1)return error(5);keyMap=KeyMap.defaults();mapVersion++;return ok();}
+        if(cmd==0x60||cmd==0x63){if(p.length!=0)return error(3);byte[] b=new byte[20];b[1]=(byte)recordState;Wire.put32(b,2,captureId);Wire.put16(b,6,capture.length/12);Wire.put32(b,8,recordState==0?0:recordState==1?Math.min(3600000,System.nanoTime()/1000000-recordStarted):1000);Wire.put32(b,12,Wire.crc32(capture));b[16]=(byte)(recordState==5?1:0);return b;}
+        if(cmd==0x61){if(p.length!=0)return error(3);if(upload||state!=0||jobState==1)return error(5);captureId++;capture=new byte[0];recordStarted=System.nanoTime()/1000000;recordState=1;byte[] b=new byte[5];Wire.put32(b,1,captureId);return b;}
+        if(cmd==0x62){if(p.length!=0)return error(3);if(recordState==0)return error(5);if(recordState==1){capture=new byte[24];for(int k=0;k<2;k++){int off=k*12;Wire.put32(capture,off,k*100);Wire.put32(capture,off+4,500);capture[off+8]=(byte)keyMap.pitch(k);capture[off+9]=100;capture[off+10]=(byte)(keyMap.timbre(k)==31?4:keyMap.timbre(k));capture[off+11]=(byte)k;}recordState=5;}return ok();}
+        if(cmd==0x64){if(p.length!=6)return error(3);if(recordState!=5)return error(5);int k=Wire.u16(p,4);if(Wire.u32(p,0)!=captureId||k>=capture.length/12)return error(6);byte[] b=new byte[20];Wire.put32(b,1,captureId);Wire.put16(b,5,k);b[7]=1;System.arraycopy(capture,k*12,b,8,12);return b;}
+        if(cmd==0x65){if(p.length!=4)return error(3);if(recordState==1)return error(5);if(Wire.u32(p,0)!=captureId)return error(6);capture=new byte[0];recordState=0;return ok();}
+        if(cmd==0x66){if(p.length!=0)return error(3);byte[] b=new byte[8];b[1]=1;Wire.put16(b,2,4096);Wire.put32(b,4,3600000);return b;}
+        return error(1);
+    }
     private byte[] execute(int cmd,byte[] p){
+        if(extensions&&cmd>=0x50&&cmd<=0x66)return performanceCommand(cmd,p);
+        if(recordState==1&&(cmd==0x10||cmd==0x14||cmd>=0x20&&cmd<=0x22||cmd>=0x42&&cmd<=0x44))return error(5);
         if(extensions&&cmd==0x46)return p.length==0?new byte[]{0,3,26,21,108,35,59,0}:error(3);
         if(cmd==0x14&&!extensions)return error(1);
         if(extensions&&cmd>=0x40&&cmd<=0x45)return libraryCommand(cmd,p);

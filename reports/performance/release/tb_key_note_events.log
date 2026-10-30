@@ -1,0 +1,2 @@
+PASS tb_key_note_events checks=149
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_key_note_events.sv:55: $finish called at 2060000 (1ps)

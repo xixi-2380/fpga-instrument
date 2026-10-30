@@ -1,0 +1,2 @@
+PASS tb_ui_more checks=21 commands=12
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_ui_more.sv:29: $finish called at 2480000 (1ps)

@@ -1,0 +1,11 @@
+{
+  "apk": "GaoshanScore-0.5-performance.apk",
+  "sha256": "7ca20f8b59097b30e7b9fb026a8197b891a643905361d33dbf6544023503c794",
+  "size": 70035,
+  "build": "javac + D8 + aapt2 + zipalign + apksigner",
+  "min_sdk": 26,
+  "target_sdk": 35,
+  "java_sources": 12,
+  "apk_device_run": "not performed",
+  "radio_fpga_test": "not performed"
+}

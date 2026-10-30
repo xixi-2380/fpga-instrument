@@ -1,0 +1,2 @@
+PASS tb_performance_top checks=70 (framing/CDC/SPI/reset/mapping/record/UI/audio)
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_performance_top.sv:91: $finish called at 13463824582 (1ps)

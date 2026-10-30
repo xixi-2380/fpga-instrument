@@ -1,0 +1,2 @@
+PASS tb_dds_sine checks=44820
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_dds_sine.sv:45: $finish called at 120527000 (1ps)

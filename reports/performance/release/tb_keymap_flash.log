@@ -1,0 +1,2 @@
+PASS tb_keymap_flash checks=16 (save/reboot/power cut/failure/corruption/capacity)
+C:/Users/36724/Documents/Codex/2026-10-29/github-codex-integrated-instrument-mid-codex/work/fpga-instrument/sim/tb_keymap_flash.sv:33: $finish called at 340690000 (1ps)

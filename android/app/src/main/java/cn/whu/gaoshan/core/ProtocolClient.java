@@ -91,9 +91,41 @@ public final class ProtocolClient {
         try{byte[] b=request(0x46,new byte[0],8);if(b[1]!=3||b[2]!=26||b[3]!=21||b[4]!=108||b[5]!=35||b[6]!=59||b[7]!=0)throw new IOException("多音色能力不兼容");return multitimbral=true;}
         catch(DeviceError e){if(e.code==1){multitimbral=false;return false;}throw e;}
     }
+    public boolean performanceSupported;
+    public boolean performanceCapabilities()throws IOException{
+        try{byte[] b=request(0x50,new byte[0],12);if(b[1]!=1||b[2]!=36||b[3]!=21||b[4]!=108||b[5]!=16||Wire.u16(b,6)!=4096||Wire.u32(b,8)!=3600000)throw new IOException("Unsupported performance capability");return performanceSupported=true;}
+        catch(DeviceError e){if(e.code==1){performanceSupported=false;return false;}throw e;}
+    }
+    private void requirePerformance()throws IOException{if(!performanceSupported)throw new IOException("当前固件不支持键位自定义和演奏录制，请更新FPGA固件");}
+    public KeyMap readKeyMap()throws IOException{requirePerformance();byte[] map=new byte[72];for(int k=0;k<36;k++){byte[] b=request(0x51,new byte[]{(byte)k},4);if((b[1]&255)!=k)throw new IOException("Key reply mismatch");map[2*k]=b[2];map[2*k+1]=b[3];}return new KeyMap(map);}
+    public void applyKeyMap(KeyMap map)throws IOException{requirePerformance();long token=(System.nanoTime()&0xffffffffL);byte[] b=new byte[8];Wire.put32(b,0,token);Wire.put32(b,4,map.crc());request(0x52,b,1);for(int k=0;k<36;k++){b=new byte[7];Wire.put32(b,0,token);b[4]=(byte)k;b[5]=(byte)map.pitch(k);b[6]=(byte)map.timbre(k);request(0x53,b,1);}b=new byte[4];Wire.put32(b,0,token);request(0x54,b,1);KeyMap actual=readKeyMap();if(!Arrays.equals(map.bytes,actual.bytes))throw new IOException("Mapping readback mismatch");}
+    public int saveKeyMap(KeyMap map)throws IOException{requirePerformance();byte[] p=new byte[4];Wire.put32(p,0,map.crc());return Wire.u16(request(0x55,p,3),1);}
+    public static final class KeyMapStatus{
+        public final int job,state,error,flags,version;public final long savedCrc,activeCrc;
+        KeyMapStatus(byte[] b){job=Wire.u16(b,1);state=b[3]&255;error=b[4]&255;savedCrc=Wire.u32(b,5);flags=b[9]&255;version=Wire.u16(b,10);activeCrc=Wire.u32(b,12);}
+    }
+    public KeyMapStatus keyMapStatus()throws IOException{requirePerformance();return new KeyMapStatus(request(0x56,new byte[0],16));}
+    public void defaultKeyMap()throws IOException{requirePerformance();request(0x57,new byte[0],1);}
+    public static final class RecordingStatus{
+        public final int state,count,reason,error;public final long id,elapsed,crc;
+        public RecordingStatus(byte[] b){if(b.length!=20||(b[1]&255)>5)throw new IllegalArgumentException("Invalid capture state");state=b[1]&255;id=Wire.u32(b,2);count=Wire.u16(b,6);elapsed=Wire.u32(b,8);crc=Wire.u32(b,12);reason=b[16]&255;error=b[17]&255;}
+        public String text(){String[] states={"空","录制中","关闭持音中","校验中","校验中","可回传"};String[] reasons={"未停止","手动停止","容量已满","达到1小时","自动任务占用"};return states[state]+"："+count+"个音符，"+elapsed+"ms；"+(reason<reasons.length?reasons[reason]:"结束原因 "+reason)+"；错误 "+error+"。RAM录制复位后丢失。";}
+    }
+    public RecordingStatus recordingStatus()throws IOException{requirePerformance();return new RecordingStatus(request(0x63,new byte[0],20));}
+    public long startRecording()throws IOException{requirePerformance();return Wire.u32(request(0x61,new byte[0],5),1);}
+    public void stopRecording()throws IOException{requirePerformance();request(0x62,new byte[0],1);}
+    public void clearRecording(long id)throws IOException{requirePerformance();byte[] b=new byte[4];Wire.put32(b,0,id);request(0x65,b,1);}
+    public void downloadRecording(PerformanceRecording recording,Progress progress,AtomicBoolean cancelled)throws IOException{
+        requirePerformance();if(!recording.matches(recordingStatus()))throw new IOException("琴端录制已变化，请重新读取摘要");
+        for(int i=recording.received;i<recording.count;i++){
+            if(cancelled.get())throw new IOException("回传已暂停，可重新连接并继续同一段录制");byte[] p=new byte[6];Wire.put32(p,0,recording.id);Wire.put16(p,4,i);byte[] b=request(0x64,p,20);
+            if(Wire.u32(b,1)!=recording.id||Wire.u16(b,5)!=i||b[7]!=1)throw new IOException("录制编号或记录索引不匹配");System.arraycopy(b,8,recording.data,i*12,12);recording.received=i+1;if(progress!=null)progress.confirmed(i+1,recording.count);
+        }
+        recording.verify();
+    }
     public boolean sessionReady(){return session;}
     public Capabilities hello()throws IOException{
-        session=false;multitimbral=false;seq=1;capabilities=null;lastStatus=-1;decoder.reset();link.drain();
+        session=false;multitimbral=false;performanceSupported=false;seq=1;capabilities=null;lastStatus=-1;decoder.reset();link.drain();
         byte[] b=exchange(1,0,new byte[0],20);capabilities=Capabilities.parse(b);session=true;return capabilities;
     }
     private byte[] exchange(int cmd,int id,byte[] payload,int successLength)throws IOException{
