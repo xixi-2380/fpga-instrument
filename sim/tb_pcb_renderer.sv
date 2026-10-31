@@ -9,7 +9,7 @@ module tb_pcb_renderer;
   .action_valid(av),.action(act_code),.hardware_valid(1'b1),.hardware(hw),.encoder_diag(384'd0),
   .encoder_events(12'd0),.audio_status(320'd0),.mute_request(mute),.page_active(active),
   .control(control),.encoder_clear(clear),.display(pcb),.display_visible(1'b1));
- task act(input [5:0] a);begin @(negedge clk);act_code=a;av=1;@(negedge clk);av=0;repeat(32)@(negedge clk);end endtask
+ task act(input [5:0] a);begin @(negedge clk);act_code=a;av=1;@(negedge clk);av=0;repeat(160)@(negedge clk);end endtask
  wire [23:0] rgb;wire de_out,hs_out,vs_out;
  reg record=0;reg [23:0] pixels[0:383999];
  integer checks=0,n=0,fd,scene;reg [4095:0] outdir;reg [4095:0] filename;

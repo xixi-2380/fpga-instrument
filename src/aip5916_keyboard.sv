@@ -119,8 +119,10 @@ module aip5916_keyboard #(
     end
     VERIFY:if(!busy)begin reading<=1;start<=1;state<=VERIFY_WAIT;end
     VERIFY_WAIT:if(done)begin
-     if(error || data[7:0]!=config_value(config_index))begin
-      last_address<=address[7:0];last_expected<=config_value(config_index);last_actual<=error?8'd0:data[7:0];
+     // Verify the byte latched for this exact write transaction. Avoid
+     // config-index -> 128-bit mux -> compare -> recovery/history fanout.
+     if(error || data[7:0]!=write_byte)begin
+      last_address<=address[7:0];last_expected<=write_byte;last_actual<=error?8'd0:data[7:0];
       reconnect(error?8'h22:8'h23);
      end
      else begin

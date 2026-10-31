@@ -16,11 +16,11 @@ for name in ['src/instrument_features.sv','src/flash_keymap.sv',
  'android/app/src/main/java/cn/whu/gaoshan/core/KeyMap.java',
  'android/app/src/main/java/cn/whu/gaoshan/core/PerformanceRecording.java']:
  assert not (r/name).exists(), name
-for name in ['src/key_note_events.sv','src/score_services.sv','src/bluetooth_score_core.sv','src/bluetooth_score_link.sv']:
+for name in ['src/key_note_events.sv','src/score_services.sv','src/bluetooth_score_link.sv']:
  assert (r/name).read_bytes()==subprocess.check_output(['git','show','815b56a:'+name],cwd=r), name
 assert not subprocess.check_output(['git','diff','--name-only','815b56a','--','android'],cwd=r).strip()
 
-tests=[('tail_arbitration','tb_rgb_tail_arbitration',[],True),('driver','tb_rgb_led_driver',[],False),('control','tb_rgb_led_control',[],False),('notes','tb_rgb_led_notes',[],False),('rgb_page','tb_rgb_led_ui',[],False),
+tests=[('packet_math','tb_bt_packet_math',[],False),('tail_arbitration','tb_rgb_tail_arbitration',[],True),('driver','tb_rgb_led_driver',[],False),('control','tb_rgb_led_control',[],False),('notes','tb_rgb_led_notes',[],False),('rgb_page','tb_rgb_led_ui',[],False),
  ('ui_inputs','tb_ui_inputs',[],False),('ui_controls','tb_ui_controls',[],False),('ui_more','tb_ui_more',[],False),
  ('pcb_touch','tb_pcb_touch',[],False),('pcb_repeat','tb_pcb_repeat',[],False),('pcb_readable','tb_pcb_readable',[],False),('pcb_top','tb_pcb_top',[],True),
  ('sustain_envelope','tb_sustain_envelope',[],False),('sustain_controls','tb_sustain_controls',[],False),('sustain_retrigger32','tb_sustain_retrigger',['VOICES=32'],False),
@@ -48,6 +48,6 @@ def run(c):
  return bounded(label,cmd,out/label)
 with concurrent.futures.ThreadPoolExecutor(max_workers=a.jobs) as pool:results=list(pool.map(run,tests))
 same=all(sha(r/f)==h for f,h in manifest.items())
-summary=dict(build_id='26103004',custom_keymap=False,performance_recording=False,passed=android['passed'] and all(v['passed'] for v in results) and same,sources_unchanged=same,old_pins=73,new_pins=74,din='P25',android=android,results=results,scope='Software/RTL only. No EDA, STA, bitstream or hardware test; no4096/1MHz full-library claim.')
+summary=dict(build_id='26103005',custom_keymap=False,performance_recording=False,passed=android['passed'] and all(v['passed'] for v in results) and same,sources_unchanged=same,old_pins=73,new_pins=74,din='P25',android=android,results=results,scope='Software/RTL only. No EDA, STA, bitstream or hardware test; no4096/1MHz full-library claim.')
 (out/'validation.json').write_text(json.dumps(summary,indent=2),encoding='utf8')
 raise SystemExit(0 if summary['passed'] else 1)

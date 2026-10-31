@@ -45,7 +45,14 @@ module bluetooth_score_core #(
  reg [8:0] byte_cursor;reg [3:0] field_index;reg duplicate_mismatch,write_phase;
  reg [63:0] small_payload;
  reg [7:0] cmd;reg [15:0] seq,len;reg [7:0] ver;
- assign incoming_count=extended?(len-2)/12:(len-2)/8;
+ // Both formats have a constant record size. Keep the subtraction at the
+ // actual16-bit length width; a variable32-bit modulo builds a divider chain.
+ // Low6 quotient bits and DATA rejection are exact even for lengths0/1.
+ wire [15:0] data_bytes=len-16'd2;
+ assign incoming_count=extended ? data_bytes/16'd12 : data_bytes[8:3];
+ wire data_length_invalid=(len < (extended ? 16'd14 : 16'd10)) ||
+                         (len>16'd254) ||
+                         (extended ? data_bytes%16'd12!=0 : data_bytes[2:0]!=0);
  reg session,cache_valid,consume_seq;reg [16:0] expected_seq;
  reg [7:0] cached_cmd;reg [15:0] cached_seq,cached_len;
  reg [4:0] cached_reply_len,reply_len;reg [159:0] cached_reply,reply;
@@ -173,7 +180,7 @@ module bluetooth_score_core #(
      else if({1'b0,seq}!=expected_seq || (cache_valid&&seq==cached_seq))respond(8'h0b);
      else begin consume_seq<=1;state<=EXECUTE;end
     EXECUTE:if(cmd!=8'h14&&cmd!=8'h46&&cmd!=8'h10&&cmd!=8'h11&&cmd!=8'h12&&cmd!=8'h13&&cmd!=8'h20&&cmd!=8'h21&&cmd!=8'h22&&cmd!=8'h23&&cmd!=8'h30&&!(LIBRARY_EXTENSION!=0&&cmd>=8'h40&&cmd<=8'h45))respond(1);
-     else if((cmd==8'h10&&len!=6)||(cmd==8'h14&&len!=7)||(cmd==8'h11&&(len<record_bytes+2||len>254||(len-2)%record_bytes!=0))||(cmd!=8'h14&&cmd!=8'h10&&cmd!=8'h11&&len!=0&&!(cmd>=8'h40&&cmd<=8'h45)))respond(3);
+     else if((cmd==8'h10&&len!=6)||(cmd==8'h14&&len!=7)||(cmd==8'h11&&data_length_invalid)||(cmd!=8'h14&&cmd!=8'h10&&cmd!=8'h11&&len!=0&&!(cmd>=8'h40&&cmd<=8'h45)))respond(3);
      else if(!session)respond(5);
      else if(storage_lock===1'b1 && ((cmd==8'h10 || cmd==8'h14) || (cmd>=8'h20 && cmd<=8'h23)))respond(5);
      else if(upload_active&&(cmd==8'h10||cmd==8'h14||cmd==8'h20||cmd==8'h21||cmd==8'h22))respond(5);

@@ -117,7 +117,7 @@ function automatic [6:0] pcb_hit(input integer px,py);
  end
 endfunction
 
-localparam [31:0] PCB_BUILD_ID=32'h26103004;
+localparam [31:0] PCB_BUILD_ID=32'h26103005;
 
 function automatic [6:0] rgb_led_hit(input integer px,py);
  integer j;

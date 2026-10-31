@@ -88,3 +88,7 @@ report_timing -hold -from [get_pins {lcd_on.display_driver/pixel_clock_forward/C
 set_false_path -to [get_pins {lcd_on.display_driver/pcb_bridge/pixel_reset_sync/pipe_0_s0/PRESET lcd_on.display_driver/pcb_bridge/pixel_reset_sync/pipe_1_s0/PRESET}]
 # Pixel-source reset boundary of the page visibility acknowledgement.
 set_false_path -to [get_pins {lcd_on.display_driver/pcb_visibility_bridge/source_reset_sync/pipe_0_s0/PRESET lcd_on.display_driver/pcb_visibility_bridge/source_reset_sync/pipe_1_s0/PRESET}]
+
+# WS2812 DIN is registered50MHz data; bound its output route, not internal paths.
+set_max_delay -from [get_clocks {ref_clk}] -to [get_ports {rgb_led_data}] 30.000
+set_min_delay -from [get_clocks {ref_clk}] -to [get_ports {rgb_led_data}] 0.000

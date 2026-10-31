@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "checks": 920300,
+  "source_sha256": "ee5092a264f91bae3b84ffb60726b17c2a6409124da41021e761a1cda36cc277",
+  "baseline_logic": 444,
+  "candidate_logic": 384,
+  "state_and_clock_latency": "identical",
+  "hardware_tested": false
+}

@@ -126,12 +126,27 @@ module rgb_display #(
     wire rendered_de,rendered_hs,rendered_vs;
     reg [10:0] render_x,render_y;
     reg render_de,render_hs,render_vs,render_frame_start;
+    // Fetch the two scope points beside the existing raster input register.
+    // The renderer then compares Y/colors in the following stage. No extra
+    // pixel, HS/VS/DE or panel-clock latency is introduced.
+    wire [1023:0] waveform_snapshot;
+    wire [6:0] scope_bin=(x-11'd32)>>2;
+    wire signed [7:0] scope_now=waveform_snapshot[scope_bin*8+:8];
+    wire signed [7:0] scope_previous=scope_bin!=0 ? waveform_snapshot[(scope_bin-7'd1)*8+:8] : scope_now;
+    reg signed [9:0] scope_point_q,scope_previous_q;
+    always @(posedge pixel_clk)begin
+        if(pixel_reset)begin scope_point_q<=234;scope_previous_q<=234;end
+        else begin
+            scope_point_q<=10'sd234-($signed(scope_now)>>>1);
+            scope_previous_q<=10'sd234-($signed(scope_previous)>>>1);
+        end
+    end
     always @(posedge pixel_clk)begin
         if(pixel_reset)begin render_x<=0;render_y<=0;render_de<=0;render_hs<=!HS_ACTIVE[0];render_vs<=!VS_ACTIVE[0];render_frame_start<=0;end
         else begin render_x<=x;render_y<=y;render_de<=de;render_hs<=hs;render_vs<=vs;render_frame_start<=frame_start;end
     end
-    rgb_ui_renderer renderer(pixel_clk,pixel_reset,render_frame_start,status_valid,pixel_status,
-        render_x,render_y,render_de,render_hs,render_vs,rgb,rendered_de,rendered_hs,rendered_vs,pixel_more,pixel_pcb,renderer_pcb_visible,rgb_led_valid?rgb_led_pixel:520'd0);
+    rgb_ui_renderer #(.WAVE_PREFETCH(1)) renderer(pixel_clk,pixel_reset,render_frame_start,status_valid,pixel_status,
+        render_x,render_y,render_de,render_hs,render_vs,rgb,rendered_de,rendered_hs,rendered_vs,pixel_more,pixel_pcb,renderer_pcb_visible,rgb_led_valid?rgb_led_pixel:520'd0,scope_point_q,scope_previous_q,waveform_snapshot);
     // Only the output pin is phase-inverted. It never clocks any internal RTL.
     // At default phase, a panel rising edge has half a pixel period of setup.
     ODDR pixel_clock_forward(.Q0(lcd_clk),.Q1(),.D0(!PCLK_INVERT[0] && !pixel_reset),

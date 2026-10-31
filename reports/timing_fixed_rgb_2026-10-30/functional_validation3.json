@@ -1,0 +1,93 @@
+{
+  "passed": true,
+  "build_id": "26103005",
+  "rtl_regression_cases": 24,
+  "java_groups": 4,
+  "pcb_cases": 9,
+  "pcb_results": [
+    {
+      "test": "tb_pcb_keyboard_runtime",
+      "passed": true,
+      "seconds": 3.131
+    },
+    {
+      "test": "tb_pcb_debug_ui",
+      "passed": true,
+      "seconds": 4.275
+    },
+    {
+      "test": "tb_pcb_touch",
+      "passed": true,
+      "seconds": 1.234
+    },
+    {
+      "test": "tb_pcb_config_deadline",
+      "passed": true,
+      "seconds": 3.067
+    },
+    {
+      "test": "tb_pcb_top",
+      "passed": true,
+      "seconds": 336.164
+    },
+    {
+      "test": "tb_pcb_renderer",
+      "passed": true,
+      "seconds": 591.8712379932404,
+      "evidence": "pcb_raster_wait_fix/validation.json",
+      "fixture_change": "Only32->160 clock wait; all original assertions retained"
+    },
+    {
+      "test": "tb_ui_more",
+      "passed": true,
+      "seconds": 1.037
+    },
+    {
+      "test": "tb_ui_inputs",
+      "passed": true,
+      "seconds": 1.098
+    },
+    {
+      "test": "tb_effect_cfg_replay",
+      "passed": true,
+      "seconds": 3.188
+    }
+  ],
+  "pixel_equivalence": {
+    "passed": true,
+    "source_hashes": {
+      "src/pcb_debug_ui.sv": "034b30df170d88cb1a4330224a84d0b09fd67ead25659ec39e117e93ad82c0a0",
+      "src/rgb_ui_renderer.sv": "8b063641b3e25dea7021e65aa19c5aa3f49306398994313ed33b4691417fcb9d"
+    },
+    "unchanged": true,
+    "results": [
+      {
+        "case": "pixels",
+        "passed": true,
+        "seconds": 1448.507
+      }
+    ]
+  },
+  "rgb_math_checks": 1198448,
+  "rgb_math_frames": 25748,
+  "source_scope": {
+    "current_inputs_unchanged": true,
+    "current_native_and_regression_sources_match": true,
+    "changed_since_prior_ui_proofs": [
+      "src/bluetooth_score_core.sv",
+      "src/sustain_envelope.sv"
+    ],
+    "ui_raster_and_pcb_component_sources_unchanged": true,
+    "audio_bt_and_pcb_top_rerun": true,
+    "exact_sustain_state_math_checks": 920300,
+    "exact_packet_length_format_checks": 131072
+  },
+  "sta_status": "PENDING",
+  "hardware_tested": false,
+  "rtl_regression": "regression3/validation.json",
+  "native_build": "candidate_compact3",
+  "new_arithmetic_sources": {
+    "src/bluetooth_score_core.sv": "61cd5cf61e06f00d29b6a30ac6bafa8da24837d8d664468aeb4657f109e211cb",
+    "src/sustain_envelope.sv": "ee5092a264f91bae3b84ffb60726b17c2a6409124da41021e761a1cda36cc277"
+  }
+}

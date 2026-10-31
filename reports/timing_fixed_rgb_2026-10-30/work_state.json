@@ -1,0 +1,103 @@
+{
+  "status": "stopped_by_user_checkpoint_not_timing_closed",
+  "goal": "Fmax meets50/61.44/35MHz, all TNS0.000, preserve fixed keys + RGB and improve P&R speed",
+  "baseline": "baseline_pnr_resume2",
+  "candidate": "candidate_compact3",
+  "native_pids": {},
+  "sessions": {},
+  "source_baseline": "4a0ea05",
+  "candidate_build_id": "26103005",
+  "candidate_options": {
+    "place_option": 1,
+    "route_option": 0,
+    "timing_driven": 1
+  },
+  "must_finish": [],
+  "unchanged_pins_sha256": "e22bda4fbdeb851b9557a73e74527d9148a8f9d8ca374cbb1eeb74d8b9a2a9df",
+  "constraints_policy": "No clock reduction, ordinary-path relaxation or whole-domain false path",
+  "hardware_programming": false,
+  "custom_mapping": false,
+  "recording": false,
+  "source_frozen": true,
+  "completed_evidence": [
+    "23 RTL configs +4 Java groups passed; regression2/final_scope_audit handles only unused PCB fixture change",
+    "9 PCB cases passed using8 original passes + corrected160-clock wait raster (3840015 checks)",
+    "pixels_equivalence2:3460288 checks across9 full frames and clipping/sync",
+    "pcb_equivalence2:131135 checks including60 page snapshots",
+    "rgb_math2:1198448 checks,25748 frames",
+    "keyboard_candidate1:aip_fast and100k passed",
+    "regression3:24RTL +4Java all passed; current candidate source hashes stable and matched native snapshot"
+  ],
+  "last_observed": 1793427340.217313,
+  "current_placement_phase": {
+    "baseline_pnr_resume2": "20% Placement Phase1",
+    "candidate_fast2": "20% Placement Phase1"
+  },
+  "functional_summary": "functional_validation3.json",
+  "candidate_synthesis": {
+    "logic": 95036,
+    "registers": 57532,
+    "bsram": 150,
+    "seconds": 1583.383,
+    "estimated_only_fmax": {
+      "ref": 45.094,
+      "audio": 59.573,
+      "pixel": 45.509
+    }
+  },
+  "baseline_synthesis": {
+    "logic": 103760,
+    "registers": 57477,
+    "bsram": 150,
+    "seconds": 1266.965
+  },
+  "next_actions": [
+    "No further investigation/EDA without a new user request"
+  ],
+  "actual_tool_phases": {
+    "candidate_routability1": "FAILED PR0004:8906 unrouted nets",
+    "candidate_compact3": "FAILED PR0004:8491 unrouted nets"
+  },
+  "baseline_result": {
+    "exit_code": 1,
+    "pnr_seconds": 3431.549,
+    "unrouted_nets": 8241,
+    "post_route_sta_present": false,
+    "speed_comparison_valid": false,
+    "original_result_snapshot_flag": "false only due to runtime.gprj.user mutation; separate design audit follows"
+  },
+  "candidate_fast2_result": {
+    "exit_code": 1,
+    "whole_build_seconds": 4232.489,
+    "syn_seconds": 1583.383,
+    "native_pnr_report_seconds": 2605,
+    "unrouted_nets": 13894,
+    "cls_utilization_percent": 89,
+    "no_sta_or_bitstream": true
+  },
+  "new_proofs": [
+    "sustain_clamp_equivalence:920300 state/math checks; single instance444->384logic",
+    "packet_math3:131072 exact length/format count+rejection checks"
+  ],
+  "candidate_compact3_synthesis": {
+    "logic": 93689,
+    "lut": 82001,
+    "alu": 10740,
+    "ssram": 158,
+    "registers": 57532,
+    "bsram": 150,
+    "seconds": 1297.508,
+    "estimated_only_fmax": {
+      "ref": 48.533,
+      "audio": 59.573,
+      "pixel": 47.294
+    },
+    "not_post_route_timing": true
+  },
+  "progress_read_policy": "Read each log with build name, never infer progress from concatenated unlabeled tails",
+  "user_reported_unrouted_nets": [
+    499,
+    542
+  ],
+  "checkpoint_publication": "Source checkpoint only; timing objective not achieved; no new validated bitstream"
+}

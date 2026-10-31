@@ -1,0 +1,2 @@
+PASS sustain shared difference checks=920300
+E:/gowin/fpga-instrument-reintegrated-rgb/tmp/sustain_clamp_area/tb.sv:48: $finish called at 3960140000 (1ps)

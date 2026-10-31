@@ -24,10 +24,14 @@ def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 paths=[root/f.get('path') for f in files]+list((root/'src/config').glob('*'))+[root/'src/rom/sine4096.hex',root/'scripts/build_keyboard.py',root/'scripts/build_keyboard.tcl']+[root/'sim'/(name+'.sv') for name in tests]+[root/'sim/touch_keyboard_fixture.svh',root/'sim/poly_audio_reference.svh',root/'sim/check.svh']
 inputs={str(p.relative_to(root)):sha(p) for p in paths if p.is_file()}
 record=out/'build_inputs.json'
+# Include the supplied WS2812.v and every other design/ROM/header input.
+# Physical/timing constraints may change for a P&R-only run.
+source_files=[p for p in (root/'src').rglob('*') if p.is_file() and p.suffix.lower() not in ['.sdc','.cst']]+[root/'keyboard_adsr.gprj']
 if a.stage!='package':
     if a.stage=='pnr':
         assert a.synthesis_inputs,'PNR requires the manifest from a successful --stage syn'
         previous=json.loads(pathlib.Path(a.synthesis_inputs).read_text(encoding='utf8'))
+        assert {str(p.relative_to(root)) for p in source_files}.issubset(previous['source_files']), 'Synthesis manifest does not cover all design inputs; regenerate it with --stage syn'
         assert all(sha(root/n)==h for n,h in previous['source_files'].items()),'HDL/ROM/project changed after synthesis'
         assert sha(root/'impl/gwsynthesis/D2_keyboard_leds.vg')==previous['netlist_sha256'],'Netlist changed after synthesis'
     command=['C:/Gowin/Gowin_V1.9.12.04_x64/IDE/bin/gw_sh.exe',str(root/'scripts/build_keyboard.tcl')]
@@ -42,7 +46,6 @@ if a.stage!='package':
     if run.returncode or re.search(r'^.*ERROR.*$',log,re.M):print(log[-7000:]);raise SystemExit('Keyboard build failed')
     record.write_text(json.dumps(inputs,indent=2),encoding='utf8')
     if a.stage=='syn':
-        source_files=list((root/'src').rglob('*.sv'))+list((root/'src').rglob('*.svh'))+list((root/'src').rglob('*.hex'))+[root/'keyboard_adsr.gprj']
         (out/'netlist_manifest.json').write_text(json.dumps(dict(source_files={str(p.relative_to(root)):sha(p) for p in source_files},netlist_sha256=sha(root/'impl/gwsynthesis/D2_keyboard_leds.vg')),indent=2),encoding='utf8')
         print('SYNTHESIS_COMPLETED; physical timing and bitstream not generated');raise SystemExit(0)
 else:
@@ -59,8 +62,9 @@ expected={'clk':'P16','rst':'U4','HP_BCK':'E22','HP_WS':'F24','HP_DIN':'G24','PA
  'keypad_int_n[2]':'U22'}
 if bt_enabled:expected.update({'bt_rx':'P24','bt_tx':'P23'})
 expected.update({'ultrasonic_trig':'P21','ultrasonic_echo':'U17'})
+expected['rgb_led_data']='P25'
 expected.update({'MAX_BCLK':'V22','MAX_LRCLK':'W19','MAX_DIN':'Y20','MAX_SD_MODE':'V26'})
-for name,balls in {'keypad_sda':['AB25','L22','W20'],'keypad_scl':['AA25','W26','V19'],'keypad_int_n':['Y26','U26','U22'],'ec11_a':['V16','U16','T23'],'ec11_b':['Y21','U15','R25'],'ec11_sw_n':['V17','W21','W25']}.items():
+for name,balls in {'keypad_sda':['AB25','L22','W20'],'keypad_scl':['AA25','W26','V19'],'keypad_int_n':['Y26','U26','U22'],'ec11_a':['V16','U16','T23'],'ec11_b':['Y21','U15','R25'],'ec11_sw_n':['V17','W21','W23']}.items():
     expected.update({name+'['+str(i)+']':ball for i,ball in enumerate(balls)})
 expected.update({'led_n['+str(i)+']':v for i,v in enumerate(['R26','J14','L20','M25','N23'])})
 expected.update({'flash_cs_n':'L25','flash_sck':'P20','flash_mosi':'R21','flash_miso':'T22','flash_wp_n':'R22','flash_hold_n':'R20'})

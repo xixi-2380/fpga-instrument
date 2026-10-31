@@ -1,10 +1,12 @@
 `timescale 1ns/1ps
 // British black/gold UI. Layout, coordinates, glyph/ROM and output: four stages.
 // One atomic1208-bit snapshot per frame; no framebuffer and no audio stalls.
-module rgb_ui_renderer(
+module rgb_ui_renderer #(parameter integer WAVE_PREFETCH=0)(
  input wire pixel_clk,rst,frame_start,status_valid,input wire [1207:0] status_data,
  input wire [10:0] x,y,input wire de_in,hs_in,vs_in,
- output reg [23:0] rgb,output reg de_out,hs_out,vs_out,input wire [145:0] more_data,input wire [2591:0] pcb_data,output wire pcb_visible,input wire [519:0] rgb_led_data);
+ output reg [23:0] rgb,output reg de_out,hs_out,vs_out,input wire [145:0] more_data,input wire [2591:0] pcb_data,output wire pcb_visible,input wire [519:0] rgb_led_data,
+ input wire signed [9:0] wave_point_prefetch,wave_previous_prefetch,
+ output wire [1023:0] waveform_snapshot);
  `include "config/ui_layout.svh"
  `include "config/rgb_led_config.svh"
  reg [519:0] led_state;
@@ -13,6 +15,7 @@ module rgb_ui_renderer(
   CREAM=24'hf2e6c9,INK=24'h17191b,DIM=24'h9c987f,LINE=24'h4b4534,
   WINE=24'h67333e,GREEN=24'h8bc79b,RED=24'hef8f85;
  reg [1207:0] state;
+ assign waveform_snapshot=state[1111:88];
  wire [2:0] effect_bits=state[1169:1167];
  wire echo_amount_edit=state[1170],tremolo_rate_edit=state[1171];
  wire room_volume_edit=state[1172];
@@ -258,8 +261,11 @@ module rgb_ui_renderer(
    if(ui_inside(px,py,32,164,512,140))begin
     if(x[5:0]==6'd32 || py==164 || py==199 || py==234 || py==269)base=24'h292c2c;
     bin=(px-32)>>2;
-    point_y=234-($signed(state[88+bin*8+:8])>>>1);
-    if(bin>0)previous_y=234-($signed(state[88+(bin-1)*8+:8])>>>1);else previous_y=point_y;
+    if(WAVE_PREFETCH)begin point_y=wave_point_prefetch;previous_y=wave_previous_prefetch;end
+    else begin
+     point_y=234-($signed(state[88+bin*8+:8])>>>1);
+     if(bin>0)previous_y=234-($signed(state[88+(bin-1)*8+:8])>>>1);else previous_y=point_y;
+    end
     minimum_y=point_y<previous_y ? point_y : previous_y;
     maximum_y=point_y>previous_y ? point_y : previous_y;
     if(py==point_y || (x[1:0]==0 && py>=minimum_y && py<=maximum_y))base=GOLD;

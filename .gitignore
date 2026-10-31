@@ -41,3 +41,6 @@ __pycache__/
 /reports/short_tap_release_2026-10-30/implementation*/pnr/
 /reports/short_tap_release_2026-10-30/implementation*/gwsynthesis/
 /dist/short-tap-release-2026-10-30/*.sdf
+
+# Isolated timing builds: source copies and native databases remain local.
+/reports/timing_fixed_rgb_2026-10-30/**/project/
