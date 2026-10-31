@@ -503,7 +503,7 @@ module rgb_ui_renderer(
    title_address<=0;title_bit<=0;base_layout<=0;fg_layout<=0;de_layout<=0;hs_layout<=0;vs_layout<=0;state<=0;base_pipe<=0;fg_pipe<=0;bit_pipe<=0;ink_pipe<=0;
    de_pipe<=0;hs_pipe<=0;vs_pipe<=0;rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;more_state<=0;pcb_state<=0;performance_state<=0;end
   else begin
-   if(frame_start && status_valid)begin performance_state<=performance_data;state<=status_data;more_state<=more_data[81]===1'b1 ? more_data : 146'd0;pcb_state<=pcb_data[2560]===1'b1 ? pcb_data : 2592'd0;end
+   if(frame_start && status_valid)begin performance_state<=performance_data;state<=status_data;more_state<=more_data[81]===1'b1 ? more_data : 146'd0;pcb_state<={pcb_data[2591:2561],pcb_data[2560]===1'b1,pcb_data[2559:0]};end
    layout_text<=text;layout_len<=len;layout_x<=x;layout_y<=y;layout_tx<=tx;layout_ty<=ty;
    glyph_text<=layout_text;glyph_len<=layout_len;
    glyph_dx<=$signed({1'b0,layout_x})-$signed({1'b0,layout_tx});

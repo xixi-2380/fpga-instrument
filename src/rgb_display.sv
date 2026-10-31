@@ -116,7 +116,9 @@ module rgb_display #(
     wire [145:0] pixel_more;wire more_valid,more_update;
     rgb_status_cdc #(.WIDTH(146)) more_bridge(audio_clk,pixel_clk,common_reset,more_status,pixel_more,more_valid,more_update);
     wire [2591:0] pixel_pcb;wire pcb_valid,pcb_update;
-    wire [2591:0] safe_pcb=pcb_status[2560]===1'b1 ? pcb_status : 2592'd0;
+    // Only visibility needs sanitizing. Hidden text is never rendered.
+    // Avoid a page-enable mux on every bit of the 2592-bit snapshot.
+    wire [2591:0] safe_pcb={pcb_status[2591:2561],pcb_status[2560]===1'b1,pcb_status[2559:0]};
     rgb_status_cdc #(.WIDTH(2592)) pcb_bridge(audio_clk,pixel_clk,common_reset,safe_pcb,pixel_pcb,pcb_valid,pcb_update);
     wire renderer_pcb_visible;wire visible_valid,visible_update;
     rgb_status_cdc #(.WIDTH(1)) pcb_visibility_bridge(pixel_clk,audio_clk,common_reset,
