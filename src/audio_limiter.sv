@@ -30,7 +30,10 @@ module audio_limiter #(
  reg signed [41:0] product;
  wire signed [23:0] input_extended={{8{in_sample[15]}},in_sample};
  wire signed [23:0] amplified=input_extended*PRE_GAIN;
- wire [23:0] input_mag=amplified[23] ? -amplified : amplified;
+ // Reuse WAIT_RAM to separate pre-gain from absolute value. No state
+ // or RAM access is added: peak is ready before the first SCAN comparison.
+ reg signed [23:0] accepted_amplified;
+ wire [23:0] input_mag=accepted_amplified[23] ? -accepted_amplified : accepted_amplified;
  wire [23:0] read_mag=audio_q[23] ? -audio_q : audio_q;
  wire read_initialized=filled==W || scan_address<filled;
  wire [24:0] trial={remainder[23:0],numerator[30]};
@@ -69,17 +72,17 @@ module audio_limiter #(
  always @(posedge clk or posedge rst)begin
   if(rst)begin
    state<=IDLE;pointer<=0;read_address<=0;scan_address<=0;filled<=0;scan_count<=0;
-   peak<=0;magnitude_q<=0;magnitude_valid<=0;hold_count<=0;added_sum<=0;delayed<=0;released<=65536;new_gain<=65536;target<=65536;
+   accepted_amplified<=0;peak<=0;magnitude_q<=0;magnitude_valid<=0;hold_count<=0;added_sum<=0;delayed<=0;released<=65536;new_gain<=65536;target<=65536;
    gain_sum<=W*65536;updated_sum<=W*65536;numerator<=0;remainder<=0;quotient<=0;bits_left<=0;
    product<=0;out_valid<=0;out_sample<=0;applied_gain<=65536;clipped<=0;release_error<=0;delayed_tag<=0;out_tag<=0;
   end else begin
    out_valid<=0;clipped<=0;
    case(state)
     IDLE:if(in_valid)begin
-     peak<=input_mag;read_address<=pointer+1'b1;scan_address<=pointer+1'b1;
+     accepted_amplified<=amplified;read_address<=pointer+1'b1;scan_address<=pointer+1'b1;
      scan_count<=0;magnitude_valid<=0;state<=WAIT_RAM;
     end
-    WAIT_RAM:begin read_address<=read_address+1'b1;state<=SCAN;end
+    WAIT_RAM:begin peak<=input_mag;read_address<=read_address+1'b1;state<=SCAN;end
     SCAN:begin
      if(scan_count==0)begin
       delayed<=filled>=W-1 ? audio_q : 24'sd0;
