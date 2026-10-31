@@ -1,0 +1,95 @@
+{
+  "tcl_mock_profiles": [
+    {
+      "argv": [],
+      "stages": [
+        "syn",
+        "pnr"
+      ],
+      "options": {
+        "-place_option": "3",
+        "-route_option": "2",
+        "-route_maxfan": "23"
+      },
+      "passed": true
+    },
+    {
+      "argv": [
+        "syn"
+      ],
+      "stages": [
+        "syn"
+      ],
+      "options": {
+        "-place_option": "1",
+        "-route_option": "2",
+        "-route_maxfan": "60"
+      },
+      "passed": true
+    },
+    {
+      "argv": [
+        "pnr"
+      ],
+      "stages": [
+        "pnr"
+      ],
+      "options": {
+        "-place_option": "3",
+        "-route_option": "2",
+        "-route_maxfan": "23"
+      },
+      "passed": true
+    },
+    {
+      "argv": [
+        "pnr",
+        "--routability"
+      ],
+      "stages": [
+        "pnr"
+      ],
+      "options": {
+        "-place_option": "1",
+        "-route_option": "2",
+        "-route_maxfan": "60"
+      },
+      "passed": true
+    },
+    {
+      "argv": [
+        "pnr",
+        "C:/fake prior.p",
+        "--routability"
+      ],
+      "stages": [
+        "pnr"
+      ],
+      "options": {
+        "-place_option": "1",
+        "-route_option": "2",
+        "-route_maxfan": "60"
+      },
+      "passed": true
+    },
+    {
+      "argv": [
+        "pnr",
+        "--routability",
+        "C:/fake prior.p"
+      ],
+      "stages": [
+        "pnr"
+      ],
+      "options": {
+        "-place_option": "1",
+        "-route_option": "2",
+        "-route_maxfan": "60"
+      },
+      "passed": true
+    }
+  ],
+  "python_parse": true,
+  "pin_expectation_matches_cst": true,
+  "eda_executed": false
+}

@@ -63,7 +63,7 @@ expected={'clk':'P16','rst':'U4','HP_BCK':'E22','HP_WS':'F24','HP_DIN':'G24','PA
 if bt_enabled:expected.update({'bt_rx':'P24','bt_tx':'P23'})
 expected.update({'ultrasonic_trig':'P21','ultrasonic_echo':'U17'})
 expected.update({'MAX_BCLK':'V22','MAX_LRCLK':'W19','MAX_DIN':'Y20','MAX_SD_MODE':'V26'})
-for name,balls in {'keypad_sda':['AB25','L22','W20'],'keypad_scl':['AA25','W26','V19'],'keypad_int_n':['Y26','U26','U22'],'ec11_a':['V16','U16','T23'],'ec11_b':['Y21','U15','R25'],'ec11_sw_n':['V17','W21','W25']}.items():
+for name,balls in {'keypad_sda':['AB25','L22','W20'],'keypad_scl':['AA25','W26','V19'],'keypad_int_n':['Y26','U26','U22'],'ec11_a':['V16','U16','T23'],'ec11_b':['Y21','U15','R25'],'ec11_sw_n':['V17','W21','W23']}.items():
     expected.update({name+'['+str(i)+']':ball for i,ball in enumerate(balls)})
 expected.update({'led_n['+str(i)+']':v for i,v in enumerate(['R26','J14','L20','M25','N23'])})
 expected.update({'flash_cs_n':'L25','flash_sck':'P20','flash_mosi':'R21','flash_miso':'T22','flash_wp_n':'R22','flash_hold_n':'R20'})

@@ -25,3 +25,6 @@ framevisibility通过真实PCB源和CDC握手验证关页数据到达之后、fr
 在前一候选菜单声明顺序兼容副本上，还完成tb_pcb_renderer3840015检查5全帧、tb_rgb_ui_renderer6144049检查8全帧。当前frame候选的完整display仿真由另一个验证任务执行，不能把前一候选结果冒充当前文件验收。
 
 实际keyboard_top默认参数+GPRJ66 HDL+官方gw5a prim_sim.v用Icarus13编译出现既有touch_update声明后引用错误；只在work副本前移该wire声明后编译展开通过。没有修改生产顶层来规避构建冻结。不能把兼容副本编译通过写成实际未改源Icarus编译通过；实际Gowin综合结论另看构建报告。
+
+
+最终补充：当前冻结frame候选两模式整帧回归、六配置frame桥共5624165检查通过，完整源哈希及结果见本轮validation.json；新增测试现位于sim/structural，参考模块仍在sim根，复现布局见docs/structural_test_layout_2026-10-31.md。

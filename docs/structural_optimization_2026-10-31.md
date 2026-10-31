@@ -19,4 +19,22 @@
 
 动态测试、形式等价证明和实际综合/实现结果由本轮validation与构建输入manifest记录。所有“失败/主动停止/兼容镜像”应与成功分开记录。Icarus13对原keyboard_top中的touch_update先用后声明报错，工作副本只前移声明后官方库顶层编译通过；生产Gowin综合为实际顶层语法/展开检查。不能把该兼容镜像称为原顶层Icarus通过。
 
-当前还需等待组合候选综合、物理实现和最终回归结果；没有新的合格位流，不得使用旧impl/pnr中的.fs作为本轮结果。
+本轮最终状态见下表及对应JSON；没有新的合格位流，不得使用旧impl/pnr中的.fs作为本轮结果。
+
+## 本轮最终检查点
+
+代码检查点c22170c；组合综合LUT78932、寄存器49398、ALU11082；ref/pixel/audio估算Fmax50.632/45.078/55.626MHz。相对94030a减少3255FF，LUT反增2392。渲染器FF4060→805；波形采集控制集131→4；宽载荷移除6189个FF异步复位负载。不能把资源下降等同布通成功。
+
+- Place1/Route2/maxfan60：18分58秒，PR0004，6488条未布通，CLS60379/69120（88%）。不推荐将此试验profile当作已成功的默认值。
+- 同网表Place3/Route2/maxfan23：stopped_at_time_budget；未布通数None；耗时秒None。完整数据见reports/structural_optimization/window_2026-10-31/default_result.json。
+
+已完成当前候选约709万项动态检查（包含两个显示模式）、完整slew输入域2^34数学等价证明。测试夹具移入sim/structural，避免旧run_sim.py自动发现不适用的顶层/缺少reference；专用runner路径回归29配置612316检查通过，属于重布局验证，不重复计入上述709万。
+
+发现gw_sh会持久化process选项，最终脚本对所有将运行pnr的阶段先显式恢复3/2/23，再允许显式routability覆盖；6组Tcl mock参数路径通过。引脚验证期望由过时W25修正为真实CST的W23，没有改CST。实际物理实验使用的脚本副本分别保存在本机对应构建目录；脚本验收修正未改变已经冻结的HDL或网表。
+
+正常构建命令：
+
+    python scripts/build_keyboard.py --stage syn --out-dir reports/new_syn
+    python scripts/build_keyboard.py --stage pnr --synthesis-inputs reports/new_syn/netlist_manifest.json --out-dir reports/new_pnr
+
+本轮仍未达到整体优化完成/可烧录验收。保留下一轮滑音缩位与删除内部宽valid mask候选，二者已动态验证但未综合，未应用到生产，不能与本次物理结果混用。若继续，需要先评估其实际映射，再考虑更大的共享包络调度重构；不能仅凭计数承诺两小时内成功。

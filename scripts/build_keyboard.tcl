@@ -12,6 +12,14 @@ set_option -oreg_in_iob 1
 set_option -inc_pnr 0
 set_option -gen_sdf 1
 set stage [lindex $argv 0]
+if {$stage ne "syn"} {
+    # Explicit baseline: gw_sh persists process options into the project.
+    # Do not let a previous experimental profile silently become the default.
+    set_option -place_option 3
+    set_option -route_option 2
+    set_option -route_maxfan 23
+    puts "PNR_PROFILE=default PLACE=3 ROUTE=2 ROUTE_MAXFAN=23"
+}
 if {$stage eq "pnr"} {
     foreach item [lrange $argv 1 end] {
         if {$item eq "--routability"} {

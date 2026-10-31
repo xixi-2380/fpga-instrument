@@ -1,0 +1,20 @@
+{
+  "profile": "place1-route2-maxfan60",
+  "pnr_completed": false,
+  "tool_failed": true,
+  "error": "PR0004",
+  "unrouted_nets": 6488,
+  "elapsed_seconds": 1138,
+  "placement_seconds": 529,
+  "routing_seconds": 609,
+  "resources": {
+    "logic": 91754,
+    "registers": 49398,
+    "cls": 60379,
+    "cls_available": 69120,
+    "bsram": 174,
+    "dsp": 199.5
+  },
+  "sta_passed": false,
+  "bitstream_qualified": false
+}

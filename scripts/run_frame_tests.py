@@ -18,8 +18,8 @@ def run(name,top,files,params=()):
  count=re.search(r'checks=(\d+)',log)
  results.append(dict(name=name,checks=int(count[1]) if count else None,passed=True));print(log.splitlines()[0],flush=True)
 for reset,width,sc,pc in [(0,20,3,11),(1,20,3,11),(0,1208,17,5),(1,1208,17,5),(0,2592,7,11),(1,2592,7,11)]:
- run(f'frame_r{reset}_w{width}_s{sc}_p{pc}','tb_rgb_frame_status_cdc',[r/'src/rgb_status_cdc.sv',r/'src/reset_sync.sv',r/'sim/tb_rgb_frame_status_cdc.sv'],[('RESET_PAYLOAD',reset),('WIDTH',width),('SOURCE_HALF',sc),('PIXEL_HALF',pc)])
+ run(f'frame_r{reset}_w{width}_s{sc}_p{pc}','tb_rgb_frame_status_cdc',[r/'src/rgb_status_cdc.sv',r/'src/reset_sync.sv',r/'sim/structural/tb_rgb_frame_status_cdc.sv'],[('RESET_PAYLOAD',reset),('WIDTH',width),('SOURCE_HALF',sc),('PIXEL_HALF',pc)])
 if not a.skip_display:
  for locked in [0,1]:
-  run(f'display_locked{locked}','tb_rgb_display',[r/'src/rgb_status_cdc.sv',r/'src/rgb_display.sv',r/'src/rgb_ui_renderer.sv',r/'src/reset_sync.sv',r/'src/rgb_scan_timing.sv',r/'src/audio_visualizer.sv',r/'sim/pixel_pll_behavioral.sv',r/'sim/io_behavioral.sv',r/'sim'/('tb_rgb_display_frame_locked.sv' if locked else 'tb_rgb_display_frame_legacy.sv')])
+  run(f'display_locked{locked}','tb_rgb_display',[r/'src/rgb_status_cdc.sv',r/'src/rgb_display.sv',r/'src/rgb_ui_renderer.sv',r/'src/reset_sync.sv',r/'src/rgb_scan_timing.sv',r/'src/audio_visualizer.sv',r/'sim/pixel_pll_behavioral.sv',r/'sim/io_behavioral.sv',r/'sim/structural'/('tb_rgb_display_frame_locked.sv' if locked else 'tb_rgb_display_frame_legacy.sv')])
 (o/'validation.json').write_text(json.dumps(dict(tests=results,behavioral_pll=True,hardware_validation=False,gowin_sta=False),indent=2))

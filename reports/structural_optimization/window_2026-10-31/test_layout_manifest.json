@@ -1,0 +1,80 @@
+{
+  "moves": [
+    {
+      "old": "sim/tb_audio_visualizer_compare.sv",
+      "new": "sim/structural/tb_audio_visualizer_compare.sv",
+      "sha256": "0958e2ccff49d330d122de47451f6058fc72e1755343c53ad12b27a876be3fe5"
+    },
+    {
+      "old": "sim/tb_rgb_display_frame_legacy.sv",
+      "new": "sim/structural/tb_rgb_display_frame_legacy.sv",
+      "sha256": "648f19e850953344fb804eb4665930e0efed86acd18deabd3b5c3665b8fb8080"
+    },
+    {
+      "old": "sim/tb_rgb_display_frame_locked.sv",
+      "new": "sim/structural/tb_rgb_display_frame_locked.sv",
+      "sha256": "6f15a907b83c3d170f57fe06facf5c72d3361eec2fa03d64ca6cbdac06248193"
+    },
+    {
+      "old": "sim/tb_rgb_display_frame_visibility.sv",
+      "new": "sim/structural/tb_rgb_display_frame_visibility.sv",
+      "sha256": "fd56edac7bbebe37a427a90fc91dedf04bfcfbf91d1b1cf1b4ad60a7f74ceefa"
+    },
+    {
+      "old": "sim/tb_rgb_frame_status_cdc.sv",
+      "new": "sim/structural/tb_rgb_frame_status_cdc.sv",
+      "sha256": "247e20bb31fe3fbb7157ac10fcfa1ec95e8d8fb95a1a52cc0561e01a99b0e0f1"
+    },
+    {
+      "old": "sim/tb_rgb_status_cdc_reset_payload.sv",
+      "new": "sim/structural/tb_rgb_status_cdc_reset_payload.sv",
+      "sha256": "f5a86b36fdf700eb372201653fba2a448693e47ae8a8d3fa085be7d2299dcd1f"
+    },
+    {
+      "old": "sim/tb_sustain_slew_equivalence.sv",
+      "new": "sim/structural/tb_sustain_slew_equivalence.sv",
+      "sha256": "3036bdef6e68796431a29d9ac355dad25cb9072061b83745b09aeb19357721b0"
+    }
+  ],
+  "delete": [
+    "sim/tb_audio_visualizer_compare.sv",
+    "sim/tb_rgb_display_frame_legacy.sv",
+    "sim/tb_rgb_display_frame_locked.sv",
+    "sim/tb_rgb_display_frame_visibility.sv",
+    "sim/tb_rgb_frame_status_cdc.sv",
+    "sim/tb_rgb_status_cdc_reset_payload.sv",
+    "sim/tb_sustain_slew_equivalence.sv"
+  ],
+  "add": [
+    "sim/structural/tb_audio_visualizer_compare.sv",
+    "sim/structural/tb_rgb_display_frame_legacy.sv",
+    "sim/structural/tb_rgb_display_frame_locked.sv",
+    "sim/structural/tb_rgb_display_frame_visibility.sv",
+    "sim/structural/tb_rgb_frame_status_cdc.sv",
+    "sim/structural/tb_rgb_status_cdc_reset_payload.sv",
+    "sim/structural/tb_sustain_slew_equivalence.sv"
+  ],
+  "updates": {
+    "scripts/run_structural_optimization_tests.py": "5952861e4db6f321ca1003a511fc422b5813613c8b009f51ed3f890e33e6143d",
+    "scripts/run_frame_tests.py": "ca1c2cf87d927043dde16de9656af7b693267a98bf160f71f3ef597c3b735081",
+    "docs/structural_test_layout_2026-10-31.md": "b7fe6ab5b04de98c7bd208602a582d3243187778355da4610a551db84779fa84"
+  },
+  "production_src_changed": false,
+  "test_source_contents_changed": false,
+  "legacy_runner_changed": false,
+  "default_discovery_excludes": [
+    "tb_audio_visualizer_compare.sv",
+    "tb_rgb_display_frame_legacy.sv",
+    "tb_rgb_display_frame_locked.sv",
+    "tb_rgb_display_frame_visibility.sv",
+    "tb_rgb_frame_status_cdc.sv",
+    "tb_rgb_status_cdc_reset_payload.sv",
+    "tb_sustain_slew_equivalence.sv"
+  ],
+  "legacy_default_tb_count_before": 125,
+  "legacy_default_tb_count_after": 118,
+  "legacy_runner_sha256": "cb796f0a77647df0f1b2c56a5eea17d30e938f5e8e2fb2e7263008da89603e56",
+  "validation": "relocation_validation.json",
+  "case_count": 29,
+  "total_checks": 612316
+}

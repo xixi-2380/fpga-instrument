@@ -156,7 +156,38 @@
       "audio": 55.626
     }
   },
-  "pnr_status": "running; no success/STA conclusion yet",
+  "pnr_status": {
+    "routability": {
+      "profile": "place1-route2-maxfan60",
+      "pnr_completed": false,
+      "tool_failed": true,
+      "error": "PR0004",
+      "unrouted_nets": 6488,
+      "elapsed_seconds": 1138,
+      "placement_seconds": 529,
+      "routing_seconds": 609,
+      "resources": {
+        "logic": 91754,
+        "registers": 49398,
+        "cls": 60379,
+        "cls_available": 69120,
+        "bsram": 174,
+        "dsp": 199.5
+      },
+      "sta_passed": false,
+      "bitstream_qualified": false
+    },
+    "default": {
+      "profile": "place3-route2-maxfan23",
+      "status": "stopped_at_time_budget",
+      "unrouted_nets": null,
+      "elapsed_seconds": null,
+      "resources": {},
+      "source_inputs_verified": true,
+      "netlist_sha256": "9a41619e0d1e58fd8a987ca57aa54a11ccec1eab7a99672a745f08e6ef6e147f",
+      "qualified_bitstream": false
+    }
+  },
   "hardware_programmed": false,
   "source_sha256_normalized_lf": {
     "src\\adsr_envelope.sv": "f04a43e0a7ea56eaba37a1461daaecd4783aad94b75544af4b893efb986def4f",
@@ -269,5 +300,11 @@
     "src\\scores\\twinkle.hex": "050f469e4c6795cc85ea4db58a207f2f24a5521f04285bf075f54a893f91f775",
     "keyboard_adsr.gprj": "cb2ae1903470e6a053e7e240f0f189f1c76b9a8fc004888491e38be994cfb068"
   },
-  "netlist_sha256": "9a41619e0d1e58fd8a987ca57aa54a11ccec1eab7a99672a745f08e6ef6e147f"
+  "netlist_sha256": "9a41619e0d1e58fd8a987ca57aa54a11ccec1eab7a99672a745f08e6ef6e147f",
+  "overall_complete": false,
+  "code_checkpoint": "c22170ceb9218c2cbab6ac6986e4254bedcad490",
+  "pending_candidates_not_applied": [
+    "bend_width",
+    "frame_valid_mask"
+  ]
 }

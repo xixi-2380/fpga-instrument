@@ -1,0 +1,10 @@
+{
+  "profile": "place3-route2-maxfan23",
+  "status": "stopped_at_time_budget",
+  "unrouted_nets": null,
+  "elapsed_seconds": null,
+  "resources": {},
+  "source_inputs_verified": true,
+  "netlist_sha256": "9a41619e0d1e58fd8a987ca57aa54a11ccec1eab7a99672a745f08e6ef6e147f",
+  "qualified_bitstream": false
+}

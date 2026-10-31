@@ -3,7 +3,7 @@ Requires Icarus Verilog; pass --tool-bin explicitly if not on PATH.
 The frozen reference modules are from commit94030a and are simulation-only.
 """
 import argparse,hashlib,itertools,json,os,pathlib,re,shutil,subprocess,sys
-p=argparse.ArgumentParser();p.add_argument('--root',type=pathlib.Path);p.add_argument('--tool-bin',type=pathlib.Path);p.add_argument('--out-dir',type=pathlib.Path,default=pathlib.Path('reports/structural_optimization/dynamic'));p.add_argument('--suite',choices=['all','cdc','visualizer','limiter','pcb','renderer','frame-visibility'],default='all');a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--root',type=pathlib.Path);p.add_argument('--tool-bin',type=pathlib.Path);p.add_argument('--out-dir',type=pathlib.Path,default=pathlib.Path('reports/structural_optimization/dynamic'));p.add_argument('--suite',choices=['all','cdc','visualizer','limiter','pcb','renderer','frame-visibility','sustain'],default='all');a=p.parse_args()
 root=(a.root or pathlib.Path(__file__).resolve().parents[1]).resolve();out=a.out_dir
 if not out.is_absolute():out=root/out
 out.mkdir(parents=True,exist_ok=True)
@@ -34,9 +34,9 @@ try:
  if a.suite in ['all','cdc']:
   run('cdc_legacy','tb_rgb_status_cdc',['reset_sync.sv','rgb_status_cdc.sv'],['tb_rgb_status_cdc.sv'])
   for width,mode,(sh,ph) in itertools.product([20,1208,2592],[0,1],[(7,11),(13,3),(5,5)]):
-   run(f'cdc_w{width}_r{mode}_s{sh}_p{ph}','tb_rgb_status_cdc_reset_payload',['reset_sync.sv','rgb_status_cdc.sv'],['reference_rgb_status_cdc_94030a.sv','tb_rgb_status_cdc_reset_payload.sv'],dict(WIDTH=width,RESET_PAYLOAD=mode,SOURCE_HALF=sh,PIXEL_HALF=ph))
+   run(f'cdc_w{width}_r{mode}_s{sh}_p{ph}','tb_rgb_status_cdc_reset_payload',['reset_sync.sv','rgb_status_cdc.sv'],['reference_rgb_status_cdc_94030a.sv','structural/tb_rgb_status_cdc_reset_payload.sv'],dict(WIDTH=width,RESET_PAYLOAD=mode,SOURCE_HALF=sh,PIXEL_HALF=ph))
  if a.suite in ['all','visualizer']:
-  run('visualizer_compare','tb_audio_visualizer_compare',['audio_visualizer.sv'],['reference_audio_visualizer_94030a.sv','tb_audio_visualizer_compare.sv'])
+  run('visualizer_compare','tb_audio_visualizer_compare',['audio_visualizer.sv'],['reference_audio_visualizer_94030a.sv','structural/tb_audio_visualizer_compare.sv'])
  if a.suite in ['all','limiter']:
   for fixed,hold in [(0,0),(1,0),(1,240)]:
    vecdir=out/f'limiter_vectors_hold{hold}';vecdir.mkdir(exist_ok=True)
@@ -47,7 +47,9 @@ try:
    run(top,top,['pcb_debug_ui.sv'],[top+'.sv'])
  if a.suite in ['all','frame-visibility']:
   for mode in [0,1]:
-   run(f'frame_visibility_{mode}','tb_rgb_display_frame_visibility',['rgb_display.sv','rgb_ui_renderer.sv','rgb_status_cdc.sv','reset_sync.sv','audio_visualizer.sv','rgb_scan_timing.sv'],['pixel_pll_behavioral.sv','io_behavioral.sv','tb_rgb_display_frame_visibility.sv'],dict(FRAME_LOCKED=mode))
+   run(f'frame_visibility_{mode}','tb_rgb_display_frame_visibility',['rgb_display.sv','rgb_ui_renderer.sv','rgb_status_cdc.sv','reset_sync.sv','audio_visualizer.sv','rgb_scan_timing.sv'],['pixel_pll_behavioral.sv','io_behavioral.sv','structural/tb_rgb_display_frame_visibility.sv'],dict(FRAME_LOCKED=mode))
+ if a.suite in ['all','sustain']:
+  run('sustain_slew_equivalence','tb_sustain_slew_equivalence',['sustain_envelope.sv'],['reference_sustain_envelope_94030a.sv','structural/tb_sustain_slew_equivalence.sv'])
  if a.suite in ['all','renderer']:
   run('pcb_renderer','tb_pcb_renderer',['pcb_debug_ui.sv','rgb_ui_renderer.sv'],['tb_pcb_renderer.sv'],timeout=600)
   run('rgb_ui_renderer','tb_rgb_ui_renderer',['rgb_ui_renderer.sv'],['tb_rgb_ui_renderer.sv'],timeout=600)
