@@ -17,7 +17,9 @@ module rgb_status_cdc #(
     reset_sync pixel_reset_sync(pixel_clk,async_reset,pixel_reset);
     reg request,acknowledge;
     (* syn_preserve=1,syn_async_reg=1 *) reg [1:0] request_sync,ack_sync;
-    (* syn_preserve=1 *) reg [WIDTH-1:0] held_data;
+    // Payload is an ordinary clocked hold register. Keep control synchronizers
+    // preserved, but allow constant/unused payload bits to be optimized.
+    reg [WIDTH-1:0] held_data;
     // Single-bit control synchronizers; do not synchronize payload bits separately.
     always @(posedge source_clk or posedge source_reset)
         if(source_reset)request_sync<=0;
