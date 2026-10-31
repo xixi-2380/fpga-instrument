@@ -21,9 +21,10 @@ module audio_visualizer(
     decimate<=decimate+1'b1;
     peak_work<=max_peak;
     if(decimate==3)begin
-     working[index*8+:8]<=display_sample;
+     // A common shift enable avoids 128 separately decoded byte enables.
+     working<={display_sample,working[1023:8]};
      if(index==127)begin
-      waveform<={display_sample,working[1015:0]};peak<=max_peak;
+      waveform<={display_sample,working[1023:8]};peak<=max_peak;
       index<=0;peak_work<=0;window_valid<=1;
      end else index<=index+1'b1;
     end

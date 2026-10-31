@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 // British black/gold UI. Layout, coordinates, glyph/ROM and output: four stages.
 // One atomic1208-bit snapshot per frame; no framebuffer and no audio stalls.
-module rgb_ui_renderer(
+module rgb_ui_renderer #(parameter integer FRAME_LOCKED_INPUTS=0)(
  input wire pixel_clk,rst,frame_start,status_valid,input wire [1207:0] status_data,
  input wire [10:0] x,y,input wire de_in,hs_in,vs_in,
  output reg [23:0] rgb,output reg de_out,hs_out,vs_out,input wire [145:0] more_data,input wire [2591:0] pcb_data,output wire pcb_visible,input wire [63:0] performance_data);
@@ -10,8 +10,10 @@ module rgb_ui_renderer(
   CREAM=24'hf2e6c9,INK=24'h17191b,DIM=24'h9c987f,LINE=24'h4b4534,
   WINE=24'h67333e,GREEN=24'h8bc79b,RED=24'hef8f85;
  wire [16:0] harp_neck_y=y*6'd48;wire [16:0] harp_neck_x=x*3'd7;
- reg [1207:0] state;reg [63:0] performance_state;
- wire performance_page=performance_state[0]===1'b1 && !menu;
+ reg [1207:0] state_q;reg [63:0] performance_state_q;
+ wire [1207:0] state=FRAME_LOCKED_INPUTS!=0 ? (status_valid ? status_data : 1208'd0) : state_q;
+ wire [63:0] performance_state=FRAME_LOCKED_INPUTS!=0 ? performance_data : performance_state_q;
+ wire performance_page=performance_state[0]===1'b1 && !state[20];
  wire [2:0] effect_bits=state[1169:1167];
  wire echo_amount_edit=state[1170],tremolo_rate_edit=state[1171];
  wire [11:0] echo_ms_bcd=state[1183:1172];
@@ -22,7 +24,9 @@ module rgb_ui_renderer(
  wire [6:0] sensor_min=state[1161:1155],sensor_max=state[1154:1148];
  wire [11:0] sensor_distance=state[1144:1133];
  wire [19:0] latency=state[1131:1112];
- reg [145:0] more_state;reg [2591:0] pcb_state;
+ reg [145:0] more_state_q;reg [2591:0] pcb_state_q;
+ wire [145:0] more_state=FRAME_LOCKED_INPUTS!=0 ? (more_data[81]===1'b1 ? more_data : 146'd0) : more_state_q;
+ wire [2591:0] pcb_state=FRAME_LOCKED_INPUTS!=0 ? pcb_data : pcb_state_q;
  assign pcb_visible=pcb_state[2560];
  wire pcb_open=pcb_state[2560];wire [2:0] pcb_tab=pcb_state[2564:2562];
  wire pcb_frozen=pcb_state[2572],pcb_gsr=pcb_state[2573];
@@ -500,10 +504,10 @@ module rgb_ui_renderer(
    layout_allow<=0;layout_title<=0;layout_title_address<=0;layout_title_bit<=0;
    base_glyph<=0;fg_glyph<=0;de_glyph<=0;hs_glyph<=0;vs_glyph<=0;
    glyph_text<=0;glyph_len<=0;glyph_dx<=0;glyph_dy<=0;glyph_title<=0;glyph_allow<=0;
-   title_address<=0;title_bit<=0;base_layout<=0;fg_layout<=0;de_layout<=0;hs_layout<=0;vs_layout<=0;state<=0;base_pipe<=0;fg_pipe<=0;bit_pipe<=0;ink_pipe<=0;
-   de_pipe<=0;hs_pipe<=0;vs_pipe<=0;rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;more_state<=0;pcb_state<=0;performance_state<=0;end
+   title_address<=0;title_bit<=0;base_layout<=0;fg_layout<=0;de_layout<=0;hs_layout<=0;vs_layout<=0;state_q<=0;base_pipe<=0;fg_pipe<=0;bit_pipe<=0;ink_pipe<=0;
+   de_pipe<=0;hs_pipe<=0;vs_pipe<=0;rgb<=0;de_out<=0;hs_out<=0;vs_out<=0;more_state_q<=0;pcb_state_q<=0;performance_state_q<=0;end
   else begin
-   if(frame_start && status_valid)begin performance_state<=performance_data;state<=status_data;more_state<=more_data[81]===1'b1 ? more_data : 146'd0;pcb_state<={pcb_data[2591:2561],pcb_data[2560]===1'b1,pcb_data[2559:0]};end
+   if(FRAME_LOCKED_INPUTS==0 && frame_start && status_valid)begin performance_state_q<=performance_data;state_q<=status_data;more_state_q<=more_data[81]===1'b1 ? more_data : 146'd0;pcb_state_q<={pcb_data[2591:2561],pcb_data[2560]===1'b1,pcb_data[2559:0]};end
    layout_text<=text;layout_len<=len;layout_x<=x;layout_y<=y;layout_tx<=tx;layout_ty<=ty;
    glyph_text<=layout_text;glyph_len<=layout_len;
    glyph_dx<=$signed({1'b0,layout_x})-$signed({1'b0,layout_tx});

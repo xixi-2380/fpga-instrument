@@ -1,6 +1,6 @@
 """Offline keyboard/ADSR build; all device programming is owned by the user."""
 import argparse,pathlib,xml.etree.ElementTree as ET,subprocess,json,re,hashlib,shutil,stat
-p=argparse.ArgumentParser();p.add_argument('--stage',choices=['all','build','package','syn','pnr'],default='all');p.add_argument('--sim-dir',default='reports/sim/current');p.add_argument('--out-dir',default='reports/keyboard/current');p.add_argument('--synthesis-inputs');p.add_argument('--pnr-snapshot');a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--stage',choices=['all','build','package','syn','pnr'],default='all');p.add_argument('--sim-dir',default='reports/sim/current');p.add_argument('--out-dir',default='reports/keyboard/current');p.add_argument('--synthesis-inputs');p.add_argument('--pnr-snapshot');p.add_argument('--pnr-profile',choices=['default','routability'],default='default');a=p.parse_args()
 root=pathlib.Path(__file__).resolve().parents[1]
 voice_count=int(re.search(r'^`define VOICE_COUNT (\d+)',(root/'src/config/synth_config.svh').read_text(encoding='utf8'),re.M)[1])
 lcd_enabled=int(re.search(r'LCD_ENABLE=(\d+)',(root/'src/keyboard_top.sv').read_text(encoding='utf8'))[1])!=0
@@ -37,6 +37,9 @@ if a.stage!='package':
         assert a.stage=='pnr' and snapshot.is_file() and snapshot.suffix=='.p','Incremental PNR requires a saved .p file'
         (out/'pnr_snapshot.json').write_text(json.dumps(dict(path=str(snapshot),sha256=sha(snapshot)),indent=2),encoding='utf8')
         command.append(str(snapshot))
+    if a.pnr_profile!='default':
+        assert a.stage=='pnr','--pnr-profile requires --stage pnr'
+        command.append('--routability')
     run=subprocess.run(command,cwd=root,capture_output=True,text=True,encoding='utf8',errors='replace',timeout=7200)
     log=run.stdout+run.stderr;(out/'build.log').write_text(log,encoding='utf8')
     if run.returncode or re.search(r'^.*ERROR.*$',log,re.M):print(log[-7000:]);raise SystemExit('Keyboard build failed')

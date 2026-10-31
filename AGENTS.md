@@ -1,3 +1,10 @@
+# 2026-10-31 当前结构优化授权与验证边界
+
+- 用户要求持续优化、直接推送codex/performance-fx-enhancement，并明确允许本机综合/布局布线及电脑操作；本轮时间窗口约75分钟，可在收益不足时停止。此前“不运行EDA”的历史分工已被本次用户授权覆盖。仍不更新main、不烧录硬件，不放宽原时钟或普通数据路径预算。
+- 本轮生产显示启用FRAME_LOCKED_SNAPSHOTS=1：帧边界CDC提交与渲染帧快照合并，可能额外增加一帧显示采样年龄（约18.15ms）；音频/事件通路不变。默认组件参数保持旧接口，PCB可见位必须由其自身valid及主status_valid保护。
+- RESET_PAYLOAD=0只用于有valid保护的显示载荷；单比特控制同步器和各域复位同步器保留。未有效载荷不能当零使用。参考模块仅用于sim，不加入GPRJ。
+- 结构、测试与工具profile说明见docs/structural_optimization_2026-10-31.md。物理结果须读本轮输入manifest和日志；旧impl中的.fs/rpt不能当新输入的成功结果。Icarus顶层旧touch_update声明顺序兼容问题已单独记录，不能把兼容镜像编译称为原顶层通过。
+
 # 2026-10-30 王开册当前授权：演奏与效果器新分支
 
 - 用户明确取消键盘真实力度/击键速度采集，授权完成触屏箜篌拨弦、连续滑音、Chorus及相关验证，在新分支`codex/performance-fx-enhancement`交付。基准`86711a306017598fa2f965e578fb04ca3bd9fe81`；不更新main或integrated来源分支。

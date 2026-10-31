@@ -14,6 +14,8 @@ module sustain_envelope(
  wire [17:0] phase_delta={1'b0,step_size}+carry;
  wire [33:0] product=peak*phase[24:8];
  wire [16:0] target=enabled ? product[32:16] : 17'd0;
+ // One signed subtraction encodes both direction and distance.
+ wire signed [17:0] slew_error=$signed({1'b0,target})-$signed({1'b0,current});
  // A very short tap must not disappear because it was released in Attack.
  // Approach this minimum smoothly; never jump the sample amplitude.
  wire [16:0] release_seed=base_level<16384 && held_age<480 ? 17'd16384 : base_level;
@@ -36,8 +38,9 @@ module sustain_envelope(
     else begin
      remaining<=remaining-1'b1;phase<=phase-phase_delta;
      error<=carry?error_sum-total:error_sum;
-     if(current>target)current<=current-target>256 ? current-17'd256 : target;
-     else current<=target-current>256 ? current+17'd256 : target;
+     if(slew_error>18'sd256)current<=current+17'd256;
+     else if(slew_error < -18'sd256)current<=current-17'd256;
+     else current<=target;
     end
    end
   end

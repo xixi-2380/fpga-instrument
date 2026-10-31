@@ -5,6 +5,7 @@
 module rgb_display #(
     parameter integer VOICES=32,TEST_PATTERN=0,PCLK_INVERT=1,
     H_SYNC=0,H_BACK=182,H_FRONT=210,V_SYNC=0,V_BACK=8,V_FRONT=45,
+    FRAME_LOCKED_SNAPSHOTS=0,
     HS_ACTIVE=0,VS_ACTIVE=0,DE_ONLY=1
 )(
     input wire ref_clk,pll_reset,audio_clk,audio_reset,
@@ -104,7 +105,8 @@ module rgb_display #(
     wire [1207:0] source_status={selected_timbre[3],online,visual_notes[35:16],knobs,sensor_status,latency_status,waveform,peak,visual_notes[15:0],settings_status};
     wire [1207:0] pixel_status;
     wire status_valid,update_pulse;
-    rgb_status_cdc #(.WIDTH(1208)) status_bridge(audio_clk,pixel_clk,common_reset,source_status,
+    reg render_frame_start;
+    rgb_frame_status_cdc #(.WIDTH(1208),.RESET_PAYLOAD(0),.FRAME_LOCKED(FRAME_LOCKED_SNAPSHOTS)) status_bridge(audio_clk,pixel_clk,common_reset,render_frame_start,source_status,
         pixel_status,status_valid,update_pulse);
     wire [10:0] x,y;
     wire de,hs,vs,frame_start;
@@ -114,27 +116,30 @@ module rgb_display #(
         scan(pixel_clk,pixel_reset,x,y,de,hs,vs,frame_start);
     wire [23:0] rgb;
     wire [145:0] pixel_more;wire more_valid,more_update;
-    rgb_status_cdc #(.WIDTH(146)) more_bridge(audio_clk,pixel_clk,common_reset,more_status,pixel_more,more_valid,more_update);
+    rgb_frame_status_cdc #(.WIDTH(146),.FRAME_LOCKED(FRAME_LOCKED_SNAPSHOTS)) more_bridge(audio_clk,pixel_clk,common_reset,render_frame_start,more_status,pixel_more,more_valid,more_update);
     wire [2591:0] pixel_pcb;wire pcb_valid,pcb_update;
     // Only visibility needs sanitizing. Hidden text is never rendered.
     // Avoid a page-enable mux on every bit of the 2592-bit snapshot.
     wire [2591:0] safe_pcb={pcb_status[2591:2561],pcb_status[2560]===1'b1,pcb_status[2559:0]};
-    rgb_status_cdc #(.WIDTH(2592)) pcb_bridge(audio_clk,pixel_clk,common_reset,safe_pcb,pixel_pcb,pcb_valid,pcb_update);
+    rgb_frame_status_cdc #(.WIDTH(2592),.RESET_PAYLOAD(0),.FRAME_LOCKED(FRAME_LOCKED_SNAPSHOTS)) pcb_bridge(audio_clk,pixel_clk,common_reset,render_frame_start,safe_pcb,pixel_pcb,pcb_valid,pcb_update);
+    // The resetless PCB payload is not meaningful until its own handshake
+    // completes. Only visibility is masked; hidden text needs no wide reset mux.
+    wire [2591:0] pixel_pcb_safe={pixel_pcb[2591:2561],pcb_valid && status_valid && pixel_pcb[2560],pixel_pcb[2559:0]};
     wire renderer_pcb_visible;wire visible_valid,visible_update;
     rgb_status_cdc #(.WIDTH(1)) pcb_visibility_bridge(pixel_clk,audio_clk,common_reset,
         renderer_pcb_visible,pcb_visible,visible_valid,visible_update);
     wire [63:0] pixel_performance;wire performance_valid;
-    rgb_status_cdc #(.WIDTH(64)) performance_bridge(audio_clk,pixel_clk,common_reset,
+    rgb_frame_status_cdc #(.WIDTH(64),.FRAME_LOCKED(FRAME_LOCKED_SNAPSHOTS)) performance_bridge(audio_clk,pixel_clk,common_reset,render_frame_start,
         performance_status,pixel_performance,performance_valid,);
     wire rendered_de,rendered_hs,rendered_vs;
     reg [10:0] render_x,render_y;
-    reg render_de,render_hs,render_vs,render_frame_start;
+    reg render_de,render_hs,render_vs;
     always @(posedge pixel_clk)begin
         if(pixel_reset)begin render_x<=0;render_y<=0;render_de<=0;render_hs<=!HS_ACTIVE[0];render_vs<=!VS_ACTIVE[0];render_frame_start<=0;end
         else begin render_x<=x;render_y<=y;render_de<=de;render_hs<=hs;render_vs<=vs;render_frame_start<=frame_start;end
     end
-    rgb_ui_renderer renderer(pixel_clk,pixel_reset,render_frame_start,status_valid,pixel_status,
-        render_x,render_y,render_de,render_hs,render_vs,rgb,rendered_de,rendered_hs,rendered_vs,pixel_more,pixel_pcb,renderer_pcb_visible,pixel_performance);
+    rgb_ui_renderer #(.FRAME_LOCKED_INPUTS(FRAME_LOCKED_SNAPSHOTS)) renderer(pixel_clk,pixel_reset,render_frame_start,status_valid,pixel_status,
+        render_x,render_y,render_de && (FRAME_LOCKED_SNAPSHOTS==0 || status_valid),render_hs,render_vs,rgb,rendered_de,rendered_hs,rendered_vs,pixel_more,pixel_pcb_safe,renderer_pcb_visible,pixel_performance);
     // Only the output pin is phase-inverted. It never clocks any internal RTL.
     // At default phase, a panel rising edge has half a pixel period of setup.
     ODDR pixel_clock_forward(.Q0(lcd_clk),.Q1(),.D0(!PCLK_INVERT[0] && !pixel_reset),

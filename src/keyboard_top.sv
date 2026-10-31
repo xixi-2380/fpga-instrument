@@ -302,7 +302,7 @@ module keyboard_top #(
         .action_valid(aux_action_valid),.action(aux_action),.qualified_keys(keypad_armed));
     if(LCD_ENABLE)begin: lcd_on
         rgb_display #(.VOICES(`VOICE_COUNT),.TEST_PATTERN(LCD_TEST_PATTERN),
-            .PCLK_INVERT(LCD_PCLK_INVERT)) display_driver(
+            .PCLK_INVERT(LCD_PCLK_INVERT),.FRAME_LOCKED_SNAPSHOTS(1)) display_driver(
             .ref_clk(clk),.pll_reset(pll1_reset),.audio_clk(audio_clk),.audio_reset(audio_reset),
             .voice_active(voice_active),.voice_held(voice_held),.selected_timbre(selected_timbre),
             .visual_sample_valid(visual_sample_valid),.visual_sample(visual_sample),.visual_notes(visual_notes),

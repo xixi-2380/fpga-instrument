@@ -1,0 +1,273 @@
+{
+  "base_commit": "94030a304e4cdce7d329904bfc80b1e7bf688a8c",
+  "focused_tests": [
+    {
+      "name": "cdc_legacy",
+      "checks": 5302
+    },
+    {
+      "name": "cdc_w20_r0_s7_p11",
+      "checks": 9537
+    },
+    {
+      "name": "cdc_w20_r0_s13_p3",
+      "checks": 7965
+    },
+    {
+      "name": "cdc_w20_r0_s5_p5",
+      "checks": 9029
+    },
+    {
+      "name": "cdc_w20_r1_s7_p11",
+      "checks": 9537
+    },
+    {
+      "name": "cdc_w20_r1_s13_p3",
+      "checks": 7965
+    },
+    {
+      "name": "cdc_w20_r1_s5_p5",
+      "checks": 9029
+    },
+    {
+      "name": "cdc_w1208_r0_s7_p11",
+      "checks": 9537
+    },
+    {
+      "name": "cdc_w1208_r0_s13_p3",
+      "checks": 7965
+    },
+    {
+      "name": "cdc_w1208_r0_s5_p5",
+      "checks": 9029
+    },
+    {
+      "name": "cdc_w1208_r1_s7_p11",
+      "checks": 9537
+    },
+    {
+      "name": "cdc_w1208_r1_s13_p3",
+      "checks": 7965
+    },
+    {
+      "name": "cdc_w1208_r1_s5_p5",
+      "checks": 9029
+    },
+    {
+      "name": "cdc_w2592_r0_s7_p11",
+      "checks": 9537
+    },
+    {
+      "name": "cdc_w2592_r0_s13_p3",
+      "checks": 7965
+    },
+    {
+      "name": "cdc_w2592_r0_s5_p5",
+      "checks": 9029
+    },
+    {
+      "name": "cdc_w2592_r1_s7_p11",
+      "checks": 9537
+    },
+    {
+      "name": "cdc_w2592_r1_s13_p3",
+      "checks": 7965
+    },
+    {
+      "name": "cdc_w2592_r1_s5_p5",
+      "checks": 9029
+    },
+    {
+      "name": "frame_visibility_0",
+      "checks": 8
+    },
+    {
+      "name": "frame_visibility_1",
+      "checks": 8
+    },
+    {
+      "name": "limiter_fixed0_hold0",
+      "checks": 248204
+    },
+    {
+      "name": "limiter_fixed1_hold0",
+      "checks": 293836
+    },
+    {
+      "name": "limiter_fixed1_hold240",
+      "checks": 351076
+    },
+    {
+      "name": "tb_pcb_readable",
+      "checks": 6
+    },
+    {
+      "name": "tb_pcb_debug_ui",
+      "checks": 27
+    },
+    {
+      "name": "visualizer_compare",
+      "checks": 63969
+    }
+  ],
+  "focused_checks": 1121622,
+  "frame": {
+    "bridge_tests": 6,
+    "bridge_checks": 37832,
+    "display_default_checks": 2793166,
+    "display_locked_checks": 2793167,
+    "total_checks": 5624165,
+    "display_pixels_per_mode": 384000,
+    "behavioral_pll": true,
+    "hardware_validation": false,
+    "gowin_sta": false,
+    "source_files_sha256": {
+      "src/rgb_status_cdc.sv": "8d2702e80ac5536804c6cfc20acbedb9fa5ace1845406f417161e31eab8a9a45",
+      "src/rgb_display.sv": "7935562ad3fcdee5b02cf6f3450832eb62dd3b8505d2f995000e75d86b2f5fdc",
+      "src/rgb_ui_renderer.sv": "d1e0fe39daac67e6eb2b53600afbfd08b6a9fa466156157a73862d880c7a8d5c",
+      "src/rgb_scan_timing.sv": "4cc871b48f4c61d5eb68ebe403566628a5db890ea3a569d68fafc9186a419950",
+      "src/reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+      "src/audio_visualizer.sv": "f92b333c0325635388db95fdb57eea40fbf32a76733581b0716c428deb184485",
+      "src/config/ui_layout.svh": "c88f2b5cdb04fd4a0d6387112fc61aa3ae308f8145b59134df05dd8564edf09a",
+      "src/rom/british_font.hex": "e02799ce567e02a24108c2d23f8373ef583d7f58cd2c5f34fce39166e488bbd1",
+      "sim/pixel_pll_behavioral.sv": "d79f0c0fd3233fe961f544fb6578fd75fe5a57cd5e6771684442a4d7a4f32e82",
+      "sim/io_behavioral.sv": "32df000dd6434fcbffc5d043d8000de0a2eed536d1ee85099d527f621bcd0bba"
+    },
+    "fixture_changes": {
+      "display_locked1": [
+        "First following frame must retain previously captured state",
+        "Wait exactly one extra frame before checking mid-frame source changes",
+        "Overall TB timeout60ms ->100ms to include initialization and two following frames"
+      ],
+      "default_display": "No behavioral assertions changed"
+    },
+    "source_match": "candidate display3 normalized hashes equal frozen production display3 hashes"
+  },
+  "sustain_proof": "Z3 UNSAT for any mismatch in 2^34 current/target pairs",
+  "sustain_checks": 346011,
+  "legacy_sustain_checks": 9,
+  "synthesis": {
+    "lut": 78932,
+    "registers": 49398,
+    "alu": 11082,
+    "fmax_mhz": {
+      "ref": 50.632,
+      "pixel": 45.078,
+      "audio": 55.626
+    }
+  },
+  "pnr_status": "running; no success/STA conclusion yet",
+  "hardware_programmed": false,
+  "source_sha256_normalized_lf": {
+    "src\\adsr_envelope.sv": "f04a43e0a7ea56eaba37a1461daaecd4783aad94b75544af4b893efb986def4f",
+    "src\\aip5916_keyboard.sv": "999a1382eecb0f2408f69589b3fb0bf2d168f7ee67c34f828032814dc3cfe2e3",
+    "src\\audio_chorus.sv": "2d93392cbfbd1a619d47a56ed5894bb5e129b4cd44804496bbcbcd5ee91627db",
+    "src\\audio_delay.sv": "ffaa8545d3eeb079cbbeb6b5c1c118150ff4f2238f79359c29fe68155eca930a",
+    "src\\audio_effects.sv": "b1c83b85f52a8a29474098b3a310a24984953ebfaf01aa69ee41847dc888e1cf",
+    "src\\audio_latency_meter.sv": "a364b3bb8ad00d27447d2385a52d980ba726b389e4e2ae6e5651f945ee8cfea8",
+    "src\\audio_limiter.sv": "bcf4ce805b5ba2fd27beb9ba141e35aee04bc4b4ff0a4bfa54c4336729f96e7d",
+    "src\\audio_reverb.sv": "1adcf71ed5bf3e2110c51acaaac688cdcfa39fcc0da54aa1759057720618412f",
+    "src\\audio_timing.sv": "22aaeef1879f64d8169ffc1f31ffb7089308e27320a8e126dc73bddb77a58de2",
+    "src\\audio_visualizer.sv": "2717d45bc2732d06d4260fae0fb4e3bfc720475520ba6d03ae97eec6d443cadc",
+    "src\\bluetooth_audio_bridge.sv": "521efc740b89a341555920ef086ca107c57ff421ad5e2cec8934b6504f0dbf91",
+    "src\\bluetooth_score_core.sv": "1c8ba82093d9ec204e69ef655197e5c4aa618b960abfb2aafe675c47f3f6edc4",
+    "src\\bluetooth_score_link.sv": "543bb93ca6fac3235c76e587e3b8153814cf9d4525f8f8c50dfc977a23cc912c",
+    "src\\bt_event_cdc.sv": "e4ebe796f6ea4b117c33b47391810a1c42043234925bc11714d475c80689b338",
+    "src\\bt_frame_rx.sv": "b3d3c09303f3168624cf8c87948f222e208dec515390b8c81272a669e9b478cd",
+    "src\\bt_frame_tx.sv": "e036926622a193fd7ddc34f8241ff07e7ac1c5d219ed4fa901d3801b08c41198",
+    "src\\bt_identity_monitor.sv": "4e7c3ff570cf66c84574840eadd76ea9fb9f029197cd7425a3e06a8471e06db2",
+    "src\\bt_score_player.sv": "93208341565f95bdb4fac0a6abca70bc522cb0a215ebe85b5523f7297c24e550",
+    "src\\clock_reset.sv": "41ba781630b6b7c8e57fba9ed3f9864fc0c279bfc2dc13ec2a213cdd56deded1",
+    "src\\dds_sine.sv": "3a13aecc42b9b2e7b8d8ef791d37a84c8f33b194473e26ed9c398855e548e4e6",
+    "src\\ec11_encoder.sv": "aad7f5027fc28f65e7c24b3b0b864c5752a35e8f14af4c88d6651e7365bb091d",
+    "src\\flash_song_library.sv": "1b8ef981e44a85653cc9e4874b6128dcf92f5f3d56df156492f855376d4053ad",
+    "src\\frame_buffer.sv": "9fedcbce9385238e58677d93d4ab8d1df2c6b6a68604346f75564846cd1cc419",
+    "src\\gt9110_touch.sv": "bca7a73584f1b801b534ed687e8cebcd4106ccf3b346842bdd4d775ee6a34dff",
+    "src\\i2c_register_master.sv": "eee075ceadaa9c840b744c4fc73cd63e49069eff7474e46e669bccc87ba19c46",
+    "src\\i2s_tx.sv": "d98062c26f3b783972679eb3dd6f4c5fe38d0c0032a1e3cc5c710b4b3e5c5c5e",
+    "src\\instrument_envelope.sv": "5ee7ab0ce3b509f3b8566367f1c306ab6061b0e27c26066adf4616c578e60d53",
+    "src\\keyboard_core.sv": "8dc6ee81c7cd7cb150b4298ee2a21cef226932f51c644eb26b17253fdfa26307",
+    "src\\keyboard_top.sv": "f52a578c67889792ae769ed656ba668a48976e1e6643cd606e5703b00147dbcf",
+    "src\\key_note_events.sv": "862b992134f5f006d2c8bfbb04f1cbf3e81e471f775d98666635b3c05c419941",
+    "src\\local_score_control.sv": "d00a74b3d6b40ef28e82513ee50f7a7bdbb0ab1c1bed5c656a47c7f1ae9e523a",
+    "src\\lock_guard.sv": "96e64db7a83b39331d70304d54e9b09aa98e8cf7bb6f2f461211d8aadc605a81",
+    "src\\manual_event_arbiter.sv": "e5457506915b56fcf9bd41cfa7767158ab05077c2bbe5758ea7b68b0d4e1b8cb",
+    "src\\master_volume.sv": "f4e423e11bb75f4f560484b866fc01849a21794efb295f17a84f319c59fc3de6",
+    "src\\matrix_keypad.sv": "3ce1581874357c6d9b1a7b4d0996f7ac541ec7f201f227dd31127920be318aec",
+    "src\\pcb_debug_ui.sv": "398da0802a9999400dad7d2c186e2b4ef35c1ff67cc3af5f7b3d7ac4764cb8c4",
+    "src\\performance_control.sv": "3e3b2de00cbf5c06b6279473571da99257cb4ced001cb3da7f9f69af659f1e9c",
+    "src\\pll_pair.sv": "1cfd31c3f4dc2be87af8a20dde85e293ca5a8cb53e20c6cb55bdd1c3605fb227",
+    "src\\reset_sync.sv": "8bd4021ba165a4329b079bb0f19f002d9bcc98ebf8caef6e49d568836f15b4c0",
+    "src\\rgb_display.sv": "49e63732310b6b3f653956650312abc7fe927b2e27ff36a1319a30bf0a3fbdd6",
+    "src\\rgb_scan_timing.sv": "4cc871b48f4c61d5eb68ebe403566628a5db890ea3a569d68fafc9186a419950",
+    "src\\rgb_status_cdc.sv": "370f58d278ffac89e6312570e6f163a55b8dce2eed1935a52d16ce6beda8d570",
+    "src\\rgb_ui_renderer.sv": "43c98292c614bc2e132723278330bdd151df8d08e8796e16607323bc08672426",
+    "src\\run_leds.sv": "db725978a1e9e386a848ec1223985eeded526ff2eb64f29b21987f1ac7d10713",
+    "src\\score_library_protocol.sv": "1cf692761c5ac8df00bacbd74a512106e4fd24ec2f2c630b0da82e57234043e7",
+    "src\\score_player.sv": "fd055f429df222194d0cb767eb218514f8a5aa46708e8ee62bfec1552d0d3383",
+    "src\\score_services.sv": "e639a51f43534c98fbb784d6592f150d08d6383679bffa1a911e374d9377c459",
+    "src\\score_validator.sv": "507f5109dd16191862aba71a9c52db53416da13b81b8d7b53e9d65235b1aad46",
+    "src\\sine_rom.sv": "7390b17079fc0c4657408ac6581cb6a1cbea296c3f929535af9a6385e7999d75",
+    "src\\spi_byte_master.sv": "a611de9a8355b55a9d89e06cb17d4f1cd0486c45b4f1d4b067ddd8d83f65667c",
+    "src\\spi_nor_flash.sv": "f5ca8b20322a6dac2c9dd421eada1b9b293201a6fd49d5bea904fd80a72d5028",
+    "src\\startup_envelope.sv": "418e106fa75b2ebf9ccc7415ef248116619618c7f747a80a2f89136a76e4160e",
+    "src\\sustain_envelope.sv": "0a355f748bdbbf236d4bc594036a37f3c18ace18b39a1f7b771e15c7e738e745",
+    "src\\synth_core.sv": "7d5742ac8335092c04bf5bbbcb199ccda70bd1b17752b8acb952659577b21b6b",
+    "src\\timbre_control.sv": "7383d5621c078ec9f819d5e11fc0170a0c30834062d8da24f816f22fcad5c253",
+    "src\\tone_gain.sv": "b64dd893a4c5269f33c94d7636281fef34bde042f3ace4382949b4d157a50d4b",
+    "src\\touch_keyboard_router.sv": "7af55641d0a75f6e6a2e856c94d42ba343cc678edc93102884e1d7e24dca876e",
+    "src\\uart_rx.sv": "d44108f265325fd74ddf63afcaa22483828766634159d96bac86d457e891425f",
+    "src\\uart_tx.sv": "2d4dd9e6e1911024184a663df704b353176c147f20ce4016bf2dd37f816efb50",
+    "src\\ui_keypad_router.sv": "7922cca987f8bd330053c099d043377696d4d3c0e52e38e23da62282ba89f14e",
+    "src\\ui_more_actions.sv": "889fd01d806d00fe87ca2f62f0371da173f11ca5ac1e8235e57d079d857e70d5",
+    "src\\ui_touch_actions.sv": "98eab5311aa7d69957920ab65c0b575d064f43948be9024e0fcb7ae74646d615",
+    "src\\ultrasonic_range.sv": "9cbf22eb8c40ce330b92d224e9cdb431a212322bbc98c2614299c97241f240c4",
+    "src\\ultrasonic_volume.sv": "7eb6ed1c7154b2f2d85a15cb4ca6f50feba2b6cbd67ed8b95a53bd78f0193acf",
+    "src\\voice_allocator.sv": "7b63580db46bae31313bd9988c07f8ad4c0961c1700b28e7b3f729f2bf898bb1",
+    "src\\voice_mixer.sv": "51e90e6a63192b7851e9a6635553701b4e528c49b2472e10906a6574171b3a19",
+    "src\\config\\flash_profile.svh": "6be35b615da073823db26f88c4140d84d3992472ada18272b32bf983c4a99633",
+    "src\\config\\keyboard_config.svh": "941faf20aabe571b2636248a17aa4690d31bf5d5451c6801f825394227073e2c",
+    "src\\config\\keyboard_notes.svh": "3365973704266e84bdef0dcbfbb2a87644708bcf7d54abb0a3448b17f5fa0f70",
+    "src\\config\\run_leds_config.svh": "2cdc3ed138ed6a3b70c58e53e9de871f15afb7898f8c88a4b597c624734a1589",
+    "src\\config\\score_record.svh": "97f795e3843c46ba9a2bd41acdf6faeb62ac2897404dcc3fe3a88a22af6067a9",
+    "src\\config\\sustain_curve.svh": "b9d59bb2cb0ff97d28aada4e66b5070a589e863fdb5baecc186ee377cc896507",
+    "src\\config\\synth_config.svh": "e3d2fcb59d6b718a24f2cb56f3974ec92d521d238ba3569c3b7ad0f27c31f434",
+    "src\\config\\ui_layout.svh": "c88f2b5cdb04fd4a0d6387112fc61aa3ae308f8145b59134df05dd8564edf09a",
+    "src\\rom\\accordion4096.hex": "be23fb84f020d180eef5647172bf51e9641c539c3416322808530d847126f3bd",
+    "src\\rom\\accordion_high1024.hex": "17113d91056ff9baa624dadfff5828fc4930e4f31b8382dd682963b4d73f1a15",
+    "src\\rom\\bass4096.hex": "3b4ba87a5c3459691ab592cd06400a8ccead4c900fcd687f70d2fdeb5a08d22d",
+    "src\\rom\\bass_high1024.hex": "c3f353569b1b2ff40fe1a7164f18a2116fb68d99726ca6798d301314359dd87b",
+    "src\\rom\\british_font.hex": "e02799ce567e02a24108c2d23f8373ef583d7f58cd2c5f34fce39166e488bbd1",
+    "src\\rom\\cello4096.hex": "6d7cf879da893019306840771589cb7d1fdcd42f697c7c9921a43b6c025718f6",
+    "src\\rom\\cello_high1024.hex": "8ca060534d553d29add8443c283a4e294a56222e3a6bc45f36c9f80ccfea0c39",
+    "src\\rom\\flute4096.hex": "630a276aac151a989700648aa4a4b44b4ae48dbfbfd46413c68537f873521eaa",
+    "src\\rom\\flute_high1024.hex": "1db0c2f75cd20c3443e613383093086d22e2b717c4fd137a3cc3ce47777fcaea",
+    "src\\rom\\guitar4096.hex": "7c090fa8a791ff68e8da288a04bbb40d09f6984c87acdf46aeaca9b0af26f543",
+    "src\\rom\\guitar_high1024.hex": "3451adfca79d38b5be5340f5dd3223bbcc0eaabb3571d5957926838cd4a418a7",
+    "src\\rom\\lead4096.hex": "10d7443e5d7ad3cb1be6dd92931dc1b5f78c49bb8e942a441f0718f5a188c063",
+    "src\\rom\\lead_high1024.hex": "3ffe9108e79aa5528e7feef9d4e74b63705e4f2da4578a6b292625ed3a761c56",
+    "src\\rom\\organ4096.hex": "d697ec1a7a1473e66fd3d3231c860ff6e93dcb23d2b91da4ed7e86ed4caf0cd1",
+    "src\\rom\\organ_high1024.hex": "2c87c40453afcd2979e134225677718d3d16632520edd4d464919f749b66f8dd",
+    "src\\rom\\pad4096.hex": "2ac98f3f1b59251e0e01c0f049f4ae53fde64ae043ae8be687cbdb8e554823b3",
+    "src\\rom\\pad_high1024.hex": "d250d448fd140d666419b6d660adc7189bd86857e981405034120d071b116a62",
+    "src\\rom\\piano4096.hex": "31a90362aa50520d0a8ba92396900a6e0de10bd1ba876c48480b25d10b23ce51",
+    "src\\rom\\piano_high1024.hex": "5b69d00e25934d252e3f631949ea848a07af781ebe8443e53c4d18e9ab92558a",
+    "src\\rom\\reed4096.hex": "b81e3b514e23cb9b925097fbe22bc59dce76a617d910da33739a6297074eb61d",
+    "src\\rom\\reed_high1024.hex": "ed0858f6037937d0080bc6c148915972ebfea199ac8a5f5c5ef4830a50754263",
+    "src\\rom\\sax4096.hex": "711b0001fe536721f2a11994113d536ea62b84134e5e15fd25c3d5bee2696a9c",
+    "src\\rom\\sax_high1024.hex": "3d5d47f62c22d55955dc6189277152a6b4dad52c7d1b5edf27cb1552b55b2cb0",
+    "src\\rom\\sine4096.hex": "d1f5952989b7395c13250be61b81b34f0f834c51fe23cfe2975acf9a6712e443",
+    "src\\rom\\sine_high1024.hex": "7608efaa3b554fad17d385b6e2c47cb2251e0adebb5e80d0d71053483fa36451",
+    "src\\rom\\strings4096.hex": "437a63bc883a7db644f131a9ba829e016026f7e51f8b2e61e3ce5b9617050af6",
+    "src\\rom\\strings_high1024.hex": "0c1e78fb3f8fe7ee354518ed7ff1bffc5900d6397539c0f76995e610aa3270b5",
+    "src\\rom\\trumpet4096.hex": "b4174c0bce8d5cbc2f705f8081dd9091d2fa95ef36526cb39c61b2ad9b53930e",
+    "src\\rom\\trumpet_high1024.hex": "9d05d6e78eee30b5f7bcf30f92a067997b3abdc41c26dde32038d65d22dd4eeb",
+    "src\\rom\\vibraphone4096.hex": "2499f32d8326d308ee255595ee07b53898503a569831ed6a393b79940e792ee0",
+    "src\\rom\\vibraphone_high1024.hex": "86fdc6eb713b4a6d0891d64afd823fe34ccbf184711b06283ac863727efb1e90",
+    "src\\rom\\violin4096.hex": "aeb6af0e77d59e241a8ced8c314a319e3d9a3fb4f532e5c1ea7b8b8b66c58989",
+    "src\\rom\\violin_high1024.hex": "ab3fca97f0b58a27b1eb1d674022394b176cfb06155967994a47457bdab2a14c",
+    "src\\scores\\twinkle.hex": "050f469e4c6795cc85ea4db58a207f2f24a5521f04285bf075f54a893f91f775",
+    "keyboard_adsr.gprj": "cb2ae1903470e6a053e7e240f0f189f1c76b9a8fc004888491e38be994cfb068"
+  },
+  "netlist_sha256": "9a41619e0d1e58fd8a987ca57aa54a11ccec1eab7a99672a745f08e6ef6e147f"
+}

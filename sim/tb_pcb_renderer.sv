@@ -2,18 +2,19 @@
 `include "check.svh"
 module tb_pcb_renderer;
  reg clk=0,rst=1,frame_start=0,valid=1,de=0;always #5 clk=~clk;
- reg [1206:0] status=0;reg [10:0] x=0,y=0;
+ reg [1207:0] status=0;reg [10:0] x=0,y=0;
  reg [145:0] more_status=0,frozen_more;wire [2591:0] pcb;reg [1023:0] hw=0;reg av=0;reg [5:0] act_code=63;
  wire [159:0] control;wire [2:0] clear;wire mute,active;
  pcb_debug_ui ui(.clk(clk),.rst(rst),.ms_ce(1'b1),.menu_mode(1'b1),.mute_ack(1'b1),
   .action_valid(av),.action(act_code),.hardware_valid(1'b1),.hardware(hw),.encoder_diag(384'd0),
   .encoder_events(12'd0),.audio_status(320'd0),.mute_request(mute),.page_active(active),
   .control(control),.encoder_clear(clear),.display(pcb),.display_visible(1'b1));
- task act(input [5:0] a);begin @(negedge clk);act_code=a;av=1;@(negedge clk);av=0;repeat(32)@(negedge clk);end endtask
+ // Allow shared BCD conversion (25*19 clocks) and complete-frame publication.
+ task act(input [5:0] a);begin @(negedge clk);act_code=a;av=1;@(negedge clk);av=0;repeat(900)@(negedge clk);end endtask
  wire [23:0] rgb;wire de_out,hs_out,vs_out;
  reg record=0;reg [23:0] pixels[0:383999];
  integer checks=0,n=0,fd,scene;reg [4095:0] outdir;reg [4095:0] filename;
- reg [1206:0] frozen;
+ reg [1207:0] frozen;
  rgb_ui_renderer dut(clk,rst,frame_start,valid,status,x,y,de,1'b1,1'b1,rgb,de_out,hs_out,vs_out,more_status,pcb,,64'd0);
  always @(posedge clk)begin #1;
   if(record && de_out)begin

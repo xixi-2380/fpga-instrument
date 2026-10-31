@@ -5,7 +5,8 @@ module tb_pcb_readable;
  wire [2591:0] display;integer checks=0;
  pcb_debug_ui dut(.clk(clk),.rst(rst),.ms_ce(1'b1),.menu_mode(1'b1),.mute_ack(1'b1),.action_valid(av),.action(action),
  .hardware_valid(1'b1),.hardware(hw),.encoder_diag(384'd0),.encoder_events(12'd0),.audio_status(audio),.display(display),.display_visible(1'b1));
- task act(input [5:0] code);begin @(negedge clk);action=code;av=1;@(negedge clk);av=0;repeat(160)@(negedge clk);end endtask
+ // Allow shared BCD conversion (25*19 clocks) and complete-frame publication.
+ task act(input [5:0] code);begin @(negedge clk);action=code;av=1;@(negedge clk);av=0;repeat(900)@(negedge clk);end endtask
  task check(input bit ok,input string why);begin checks++;if(!ok)$fatal(1,"%s",why);end endtask
  initial begin
   hw[771:640]={{16{8'd4}},4'd2};hw[903:772]={{16{8'd4}},4'd2};hw[609]=1;hw[608:592]='1;
@@ -16,7 +17,7 @@ module tb_pcb_readable;
   act(45);check(display[1*320+319-:10*8]=="EDIT  GSR ","sensitivity default view names editable parameters");
   check(display[5*320+319-:5*8]=="GSR +","sensitivity direction is shown directly");
   act(48);check(display[5*320+319-:30*8]=="SUSTAIN  2000 ms  LEVEL    25%","2s is displayed in decimal without the old9-bit wrap");
-  act(50);act(50);hw[905:904]=2;repeat(240)@(negedge clk);
+  act(50);act(50);hw[905:904]=2;repeat(900)@(negedge clk);
   check(display[5*320+319-:31*8]=="TREM DEPTH    50% RATE    20 Hz","20Hz and strength are human-readable");
   act(62);check(display[1*320+319-:15*8]=="EC11 PCB EVENTS","advanced history remains accessible");
   $display("PASS tb_pcb_readable checks=%0d",checks);$finish;
