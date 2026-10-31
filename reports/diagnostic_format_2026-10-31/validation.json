@@ -1,0 +1,8 @@
+{
+  "syntax_elaboration_errors": 0,
+  "decimal5_reference_checks": 151073,
+  "decimal2_reference_checks": 32,
+  "hdl_simulation": false,
+  "gowin_synthesis_and_pnr": false,
+  "base_commit": "89af23fa1b6954c174fc00d9862e6b15420f8cbf"
+}
