@@ -2,6 +2,7 @@
 
 - 用户要求按上一轮继续约75分钟，直接推送codex/performance-fx-enhancement，可操作电脑；不更新main、不烧录、不降低时钟或放宽普通时序预算。当前工程F:/FPGA_Projects/fpga-instrument-codex-performance-fx-enhancement。
 - 生产启用共享ADSR准备：各voice seed/level只在sample_ce更新，间隔至少VOICES+5；生产1280拍/32声部满足37拍要求。音频包络与输出采样边界保持，默认组件回退仍可用。生产延音启用PRECALC，需要采样间至少一个空闲时钟。
+- 蓝牙incoming_count限定8位DATA载荷域，只能在EXECUTE的长度范围/对齐拒绝之后使用；全部52种合法包计数等价，非法包必须保持先拒绝。
 - 帧锁定renderer不再内部宽掩码；rgb_display的主valid门控DE、PCB双valid可见位和输出异步消隐必须保留。默认renderer模式不变。
 - 证据见docs/structural_optimization_2026-11-01.md及reports/structural_optimization/window_2026-11-01/checkpoint.json；报告须与实际源/网表哈希对应。中间综合或仿真通过不能称最终布局布通、STA或实板通过。
 

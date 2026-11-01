@@ -61,7 +61,16 @@ module bluetooth_score_core #(
      digit_sum==12 || digit_sum==15 || digit_sum==18 || digit_sum==21)) : length_value[2:0]==3'd2;
   end
  endfunction
- assign incoming_count=extended?(len-2)/12:(len-2)/8;
+ // EXECUTE rejects DATA lengths outside record_bytes+2..254 before using
+ // incoming_count. Its two-byte header therefore leaves at most252 bytes.
+ function automatic [5:0] data_record_count(input [7:0] length_value,input extended_format);
+  reg [7:0] payload_bytes;
+  begin
+   payload_bytes=length_value-8'd2;
+   data_record_count=extended_format ? 6'(payload_bytes/8'd12) : {1'b0,payload_bytes[7:3]};
+  end
+ endfunction
+ assign incoming_count=data_record_count(len[7:0],extended);
  reg session,cache_valid,consume_seq;reg [16:0] expected_seq;
  reg [7:0] cached_cmd;reg [15:0] cached_seq,cached_len;
  reg [4:0] cached_reply_len,reply_len;reg [159:0] cached_reply,reply;

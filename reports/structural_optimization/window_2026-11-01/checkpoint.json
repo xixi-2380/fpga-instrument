@@ -3,7 +3,7 @@
   "branch": "codex/performance-fx-enhancement",
   "start_utc": "2026-11-01T02:11:11Z",
   "deadline_utc": "2026-11-01T03:26:11Z",
-  "status": "combined_synthesis_running",
+  "status": "bounded_synthesis_running",
   "complete": false,
   "hardware_programmed": false,
   "qualified_bitstream": false,
@@ -167,7 +167,7 @@
   },
   "source_sha256": {
     "src/adsr_envelope.sv": "a3822b56ada03da3140e69096937e26b7907effe0569fbcfdf7bc807709c6dda",
-    "src/bluetooth_score_core.sv": "534e044d66598063381554d10ee01c0ec4904fbd60e0d37b31417c786a4e0173",
+    "src/bluetooth_score_core.sv": "24a5805608d2adc8e2ad4a4ce5f44cd6cd1660ef9aa532f084a0c5e98e6122e4",
     "src/instrument_envelope.sv": "28fe0cc06c9fb31db8c800b6cf30bac71e771962d92c8e323705f31a621c2df5",
     "src/keyboard_top.sv": "b12b47fe7a1150dffd33be7dbe5929fbb6593cdee8dedb38384ea775c36b686c",
     "src/performance_control.sv": "9014963035a78f499c7c866fb30b8d7367f8b14ca75bb2488cc42825fe325f63",
@@ -193,7 +193,7 @@
     "sim/structural/tb_bend_width_exhaustive.sv": "c3610d1beef94daf18e5fd17c188690e92521e2aaf4da6acee76c7c6b1d735c9",
     "sim/structural/tb_precalc_bank_arithmetic.sv": "71217249da7867edc5900f6d4d517acc7d4a129c2c9e2d65ba6f405cd74e39cf",
     "sim/structural/tb_rgb_display_frame_mask.sv": "501235bc222df34f59503ab56163fe25d8b017a5237407dcfabede6a3bfec34d",
-    "sim/structural/tb_score_length_alignment.sv": "b8e1302a1abe1c2972818d24d11be7f3ff8c3236912f9971b950dae1226e9198",
+    "sim/structural/tb_score_length_alignment.sv": "2d6efb565c8991a01fc0fa0a4a93758bd6d9bd5c15074a14e2985514867232a7",
     "sim/structural/tb_shared_envelope_precalc.sv": "5c8c4af75de947c2897d88486a35fb31ed23bfd4af2845ffa54928a15d30bcd9",
     "sim/structural/tb_sustain_carry_equivalence.sv": "3ee1e6254f62c5584f234d467ed0eeec61eec63648174147ea79f9afc6462fd2",
     "sim/structural/tb_synth_precalc_compare.sv": "7a2582b79750ba4da9fbac68ab9cc3ae0176e6081b2e90f259f45d3d4da4e7a7"
@@ -262,11 +262,46 @@
       "archived_utc": "2026-11-01T02:33:00.499787+00:00",
       "synthesis_passed": true,
       "pnr_passed": false
+    },
+    "combined_syn": {
+      "resources": {
+        "LUT": 75391,
+        "Register": 49072,
+        "ALU": 10640
+      },
+      "clocks": [
+        {
+          "name": "clk",
+          "constraint": "50.000(MHz)",
+          "actual": "36.836(MHz)",
+          "logic_levels": "33"
+        },
+        {
+          "name": "lcd_on.display_driver/pixel_pll/CLKOUT0.default_gen_clk",
+          "constraint": "35.000(MHz)",
+          "actual": "42.197(MHz)",
+          "logic_levels": "29"
+        },
+        {
+          "name": "clocks/pll2/CLKOUT0.default_gen_clk",
+          "constraint": "61.440(MHz)",
+          "actual": "58.772(MHz)",
+          "logic_levels": "20"
+        }
+      ],
+      "netlist_sha256": "95fbdf9f167a486d3106c46ec188c9e07793063e12d30855f08a1487825eed95",
+      "input_count": 110,
+      "archived_utc": "2026-11-01T02:44:15.111123+00:00",
+      "synthesis_passed": true,
+      "pnr_passed": false
     }
   },
   "build_stage_check": {
     "python_ast": true,
     "pnr_does_not_package": true,
     "explicit_package_still_requires_simulation_logs": true
-  }
+  },
+  "length_count_valid_cases": 52,
+  "final_alignment_validation": "reports/optimization_window_2026-11-01/final_alignment_dynamic/validation.json",
+  "final_performance_validation": "reports/optimization_window_2026-11-01/performance_top_bounded/validation.json"
 }
