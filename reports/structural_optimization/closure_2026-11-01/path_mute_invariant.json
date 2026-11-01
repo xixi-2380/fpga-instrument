@@ -1,0 +1,12 @@
+{
+  "method": "Exhaustive inductive transition check over all reachable counts and input combinations",
+  "checks": 1044,
+  "range": [
+    0,
+    260
+  ],
+  "invariant": "mute_count_ready == (mute_samples == 260)",
+  "reset_preserves_invariant": true,
+  "passed": true,
+  "source_sha256": "90879c92f9cb7a93df3ed48c7cfa7446c56fbd21adda102f5b35d4a1f585f758"
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "initial_syn",
+    "exit_code": 0,
+    "seconds": 1.6,
+    "automatic_synthesis": true,
+    "fully_routed": false,
+    "netlist_sha256": "fd37f6e02cee446d6a49645dd89ba3d072bd5351a5877c5d58943be9765fa905"
+  },
+  {
+    "name": "minimal_pnr",
+    "exit_code": 0,
+    "seconds": 31.18,
+    "automatic_synthesis": false,
+    "fully_routed": true,
+    "netlist_sha256": "fd37f6e02cee446d6a49645dd89ba3d072bd5351a5877c5d58943be9765fa905"
+  },
+  {
+    "name": "repeated_options_pnr",
+    "exit_code": 0,
+    "seconds": 32.17,
+    "automatic_synthesis": true,
+    "fully_routed": true,
+    "netlist_sha256": "23b3da65983159718c34c14673d0d9b48b425c24ebe1db98c08424ffa76c7f92"
+  }
+]

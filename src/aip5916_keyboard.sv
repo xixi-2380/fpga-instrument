@@ -119,13 +119,16 @@ module aip5916_keyboard #(
     end
     VERIFY:if(!busy)begin reading<=1;start<=1;state<=VERIFY_WAIT;end
     VERIFY_WAIT:if(done)begin
-     if(error || data[7:0]!=config_value(config_index))begin
-      last_address<=address[7:0];last_expected<=config_value(config_index);last_actual<=error?8'd0:data[7:0];
+     if(error || data[7:0]!=write_byte)begin
+      last_address<=address[7:0];last_expected<=write_byte;last_actual<=error?8'd0:data[7:0];
       reconnect(error?8'h22:8'h23);
      end
      else begin
       if(config_index==4)begin observed_config[3:0]<=data[3:0];verified[0]<=1;end
-      if(config_index>=5 && config_index<=20)begin observed_config[4+(config_index-5)*8+:8]<=data[7:0];verified[config_index-4]<=1;end
+      // Constant byte destinations avoid a variable write barrel network.
+      for(integer channel=0;channel<16;channel=channel+1)if(config_index==channel+5)begin
+       observed_config[4+channel*8+:8]<=data[7:0];verified[channel+1]<=1;
+      end
       if(config_index==24)begin
        fault<=0;failures<=0;poll_count<=0;state<=IDLE;configured<=1;ever_configured<=1;online<=1;age<=0;
        if(applying)begin applied_config<=working_config;cfg_done<=1;cfg_error<=0;applying<=0;end
@@ -167,6 +170,8 @@ module aip5916_keyboard #(
   end
  end
  // synthesis translate_off
+ always @(posedge clk)if(!rst && state==VERIFY_WAIT && done && write_byte!==config_value(config_index))
+  $fatal(1,"Configuration changed between write and readback verification");
  initial if(BOOT_CYCLES<1 || POLL_CYCLES<1 || RETRY_CYCLES<1 || STALE_CYCLES<2)$fatal(1,"Invalid touch timing");
  // synthesis translate_on
 endmodule

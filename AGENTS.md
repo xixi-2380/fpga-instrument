@@ -1,3 +1,11 @@
+# 2026-11-01 16:00 当前收敛状态
+
+- 用户已重置额度，继续无时限自主优化，直接推送codex/performance-fx-enhancement；以完整P&R及时序验收通过为前提。无须再询问继续；不更新main、不烧录、不放宽原时钟或普通数据路径。
+- 主F盘源码已同步path_candidate，默认Place3/Route2/Maxfan23完整物理运行中。源110项与实际输入manifest一致。F盘原impl是旧源码产物，不能当新源码合格位流。
+- 上个DDS版本完整布通：P&R28分37秒、墙钟37分16秒、0未布通，但128setup/0hold，三域WNS−0.193/−0.360/+0.163ns，未通过验收。当前针对这些实际路径继续优化；源码与独立PNR目录冻结，详见docs/closure_2026-11-01.md。
+- DDS PREPARE_CONTEXT=1要求前一空闲上升沿已稳定同一声部上下文；生产索引安排满足。GATE_FRAME_COMMANDS=0只在生产音源既有同相局部CE消费者中使用；默认组件行为不变。
+- 新验证脚本scripts/run_closure_regression.py；34种限幅位宽、DDS、AiP外部VCD、完整音源及生产顶层检查的源哈希见reports/structural_optimization/closure_2026-11-01。没有合格位流或实板通过结论。下方状态为历史。
+
 # 2026-11-01 无时限布局布线收敛任务
 
 - 用户要求继续自主优化并直接推送codex/performance-fx-enhancement，本轮取消75分钟时间限制；以完整布局布线通过为前提，再减少实际耗时。保留功能、73球位及50/61.44/35MHz，不更新main、不烧录。

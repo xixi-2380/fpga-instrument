@@ -1,16 +1,33 @@
 `timescale 1ns/1ps
 `include "config/synth_config.svh"
 // One selected context and one registered sample per original renderer slot.
-module dds_sine #(parameter integer VOICES=1,INDEX_W=VOICES>1?$clog2(VOICES):1)(
+module dds_sine #(parameter integer VOICES=1,INDEX_W=VOICES>1?$clog2(VOICES):1,PREPARE_CONTEXT=0)(
  input wire clk,rst,sample_ce,input wire [31:0] fcw,
  output wire signed [15:0] sample,output reg valid,output wire [VOICES*32-1:0] phase,
  input wire restart,input wire [INDEX_W-1:0] voice_index,input wire [4:0] timbre);
  reg [31:0] phases[0:VOICES-1],noise[0:VOICES-1];reg [16:0] age[0:VOICES-1];
  reg signed [15:0] waves[0:65535],high_waves[0:16383];
- wire [31:0] sample_phase=restart?32'd0:phases[voice_index];
+ // In the renderer the voice index is ready two clocks before sample_ce.
+ // Pre-read its immutable context during the idle clock, leaving the sample
+ // edge for step calculation/addition. Public phase/sample timing is unchanged.
+ reg [31:0] prepared_phase,prepared_noise;reg [16:0] prepared_age;
+ reg [INDEX_W-1:0] prepared_index;reg prepared_valid;
+ generate if(PREPARE_CONTEXT!=0)begin: context_preparation
+  always @(posedge clk or posedge rst)begin
+   if(rst)begin prepared_phase<=0;prepared_noise<=0;prepared_age<=0;prepared_index<=0;prepared_valid<=0;end
+   else if(!sample_ce)begin
+    prepared_phase<=phases[voice_index];prepared_noise<=noise[voice_index];
+    prepared_age<=age[voice_index];prepared_index<=voice_index;prepared_valid<=1;
+   end else prepared_valid<=0;
+  end
+ end endgenerate
+ wire [31:0] selected_phase=PREPARE_CONTEXT!=0?prepared_phase:phases[voice_index];
+ wire [31:0] selected_noise=PREPARE_CONTEXT!=0?prepared_noise:noise[voice_index];
+ wire [16:0] selected_age=PREPARE_CONTEXT!=0?prepared_age:age[voice_index];
+ wire [31:0] sample_phase=restart?32'd0:selected_phase;
  wire [4:0] tone=(^timbre===1'bx)?5'd0:((timbre<=25)?timbre:5'd0);
- wire [16:0] elapsed=restart?17'd0:age[voice_index];
- wire [31:0] random_bits=restart?(32'h6d2b79f5^{27'd0,voice_index}):noise[voice_index];
+ wire [16:0] elapsed=restart?17'd0:selected_age;
+ wire [31:0] random_bits=restart?(32'h6d2b79f5^{27'd0,voice_index}):selected_noise;
  reg signed [15:0] wave_q,random_sample;reg [4:0] sampled_tone;reg [16:0] sampled_age;
  wire signed [15:0] sine_sample=wave_q;
  wire high_register=fcw>32'd210213429 && tone!=0 && tone<16;
@@ -83,4 +100,11 @@ module dds_sine #(parameter integer VOICES=1,INDEX_W=VOICES>1?$clog2(VOICES):1)(
    end
   end
  end
+ // synthesis translate_off
+ always @(posedge clk)if(!rst && PREPARE_CONTEXT!=0 && sample_ce)begin
+  if(!prepared_valid || prepared_index!==voice_index ||
+     {prepared_phase,prepared_noise,prepared_age}!=={phases[voice_index],noise[voice_index],age[voice_index]})
+   $fatal(1,"DDS context was not stable during the preceding idle clock");
+ end
+ // synthesis translate_on
 endmodule

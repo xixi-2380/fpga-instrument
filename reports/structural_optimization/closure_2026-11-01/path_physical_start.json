@@ -1,0 +1,12 @@
+{
+  "start_utc": "2026-11-01T07:42:53.092309+00:00",
+  "pid": 34376,
+  "command": [
+    "C:/Gowin/Gowin_V1.9.12.04_x64/IDE/bin/gw_sh.exe",
+    "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\path_candidate\\scripts\\build_keyboard.tcl",
+    "pnr"
+  ],
+  "profile": "default",
+  "timeout_seconds": null,
+  "netlist_sha256": "15a828eae9b0b6b0a1880a8a0be86f10b2be507d5489ae4080fdfd39dcdb9a2f"
+}

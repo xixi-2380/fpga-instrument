@@ -1,0 +1,15 @@
+{
+  "updated_utc": "2026-11-01T07:58:56.948574+00:00",
+  "status": "path_candidate_physical_running",
+  "qualified_bitstream": false,
+  "physical_root": "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\path_candidate",
+  "source_sha256": {
+    "src/aip5916_keyboard.sv": "909f7be450f877b5f7b3839d9864f03cf061a1f546b7a881778065702820e82e",
+    "src/audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+    "src/dds_sine.sv": "e0e860789c82b36f9fa098cba569ac43259aab94ea0fccd3e7fc016008fc9a57",
+    "src/rgb_display.sv": "66a8b83958fed77dc7abad840a0b71ff3c77210584c63c70b28fdbd8a1e4646f",
+    "src/synth_core.sv": "90879c92f9cb7a93df3ed48c7cfa7446c56fbd21adda102f5b35d4a1f585f758",
+    "src/voice_allocator.sv": "6a027cfa314c65a77c4b632ee91151a8e711edc07e91975f98fcaf29b016dc24"
+  },
+  "note": "F impl files predate this source revision. Use the independent path_default run for physical validation; do not claim F old .fs matches new sources."
+}

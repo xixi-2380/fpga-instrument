@@ -1,0 +1,114 @@
+{
+  "baseline_commit": "c6352faf09e1e110291e24130079fdd3ae94acdd",
+  "tests": [
+    {
+      "name": "tb_pnr_limiter_equivalence_FIXED0_HOLD0",
+      "passed": true,
+      "checks": 320153,
+      "seconds": 3.175,
+      "source_sha256": {
+        "src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "sim\\reference_audio_limiter_c6352fa.sv": "7dbcb20ffaabd34658d61f7f5c3a6dec3c709ccfd32f2ccfbcad51a4e74fba81",
+        "sim\\tb_pnr_limiter_equivalence.sv": "0a21dc5f65ed15b46b867057841b512a2ef0416a63168abc7bbe9c3ec24f3cb0"
+      },
+      "output": "PASS tb_pnr_limiter_equivalence checks=320153 outputs=3047 fixed=0 hold=0\nF:/FPGA_Projects/fpga-instrument-codex-performance-fx-enhancement/sim/tb_pnr_limiter_equivalence.sv:36: $finish called at 3201530000 (1ps)\n"
+    },
+    {
+      "name": "tb_pnr_limiter_equivalence_FIXED1_HOLD0",
+      "passed": true,
+      "checks": 320153,
+      "seconds": 3.258,
+      "source_sha256": {
+        "src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "sim\\reference_audio_limiter_c6352fa.sv": "7dbcb20ffaabd34658d61f7f5c3a6dec3c709ccfd32f2ccfbcad51a4e74fba81",
+        "sim\\tb_pnr_limiter_equivalence.sv": "0a21dc5f65ed15b46b867057841b512a2ef0416a63168abc7bbe9c3ec24f3cb0"
+      },
+      "output": "PASS tb_pnr_limiter_equivalence checks=320153 outputs=3047 fixed=1 hold=0\nF:/FPGA_Projects/fpga-instrument-codex-performance-fx-enhancement/sim/tb_pnr_limiter_equivalence.sv:36: $finish called at 3201530000 (1ps)\n"
+    },
+    {
+      "name": "tb_pnr_limiter_equivalence_FIXED1_HOLD240",
+      "passed": true,
+      "checks": 320153,
+      "seconds": 3.197,
+      "source_sha256": {
+        "src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "sim\\reference_audio_limiter_c6352fa.sv": "7dbcb20ffaabd34658d61f7f5c3a6dec3c709ccfd32f2ccfbcad51a4e74fba81",
+        "sim\\tb_pnr_limiter_equivalence.sv": "0a21dc5f65ed15b46b867057841b512a2ef0416a63168abc7bbe9c3ec24f3cb0"
+      },
+      "output": "PASS tb_pnr_limiter_equivalence checks=320153 outputs=3047 fixed=1 hold=240\nF:/FPGA_Projects/fpga-instrument-codex-performance-fx-enhancement/sim/tb_pnr_limiter_equivalence.sv:36: $finish called at 3201530000 (1ps)\n"
+    },
+    {
+      "name": "tb_pnr_pcb_equivalence",
+      "passed": true,
+      "checks": 180013,
+      "seconds": 9.347,
+      "source_sha256": {
+        "src\\pcb_debug_ui.sv": "adf175ae44b3f989f218957688c82651464c45c6e0a7e8832410876275c73087",
+        "sim\\reference_pcb_debug_ui_c6352fa.sv": "28cb4467943bc8e943a0cf3ae347dd217dc4fb955ca3a1f9c321c363d1b3997e",
+        "sim\\tb_pnr_pcb_equivalence.sv": "385c2c2be9ccfacdddb6c8a03e36e271b4478260cf4068e9f3f970ec05f60de4"
+      },
+      "output": "PASS tb_pnr_pcb_equivalence checks=180013 publications=92 reset_rows=ff\nF:/FPGA_Projects/fpga-instrument-codex-performance-fx-enhancement/sim/tb_pnr_pcb_equivalence.sv:46: $finish called at 1800130000 (1ps)\n"
+    },
+    {
+      "name": "tb_pcb_debug_ui",
+      "passed": true,
+      "checks": 27,
+      "seconds": 5.315,
+      "source_sha256": {
+        "src\\pcb_debug_ui.sv": "adf175ae44b3f989f218957688c82651464c45c6e0a7e8832410876275c73087",
+        "sim\\tb_pcb_debug_ui.sv": "2cb4362153346e90cef381d48fae8c218b5ab29daffaaf959ac38b318e6a3f24"
+      },
+      "output": "PASS tb_pcb_debug_ui checks=27\nF:/FPGA_Projects/fpga-instrument-codex-performance-fx-enhancement/sim/tb_pcb_debug_ui.sv:53: $finish called at 4840790000 (1ps)\n"
+    },
+    {
+      "name": "tb_pcb_readable",
+      "passed": true,
+      "checks": 6,
+      "seconds": 0.355,
+      "source_sha256": {
+        "src\\pcb_debug_ui.sv": "adf175ae44b3f989f218957688c82651464c45c6e0a7e8832410876275c73087",
+        "sim\\tb_pcb_readable.sv": "61d34cc08dbd62252752c50f437a8d660142e8952d7bef598ccd0f1fd85550e9"
+      },
+      "output": "PASS tb_pcb_readable checks=6\nF:/FPGA_Projects/fpga-instrument-codex-performance-fx-enhancement/sim/tb_pcb_readable.sv:23: $finish called at 63150000 (1ps)\n"
+    },
+    {
+      "name": "tb_audio_limiter_FIXED0_HOLD0",
+      "passed": true,
+      "checks": 280176,
+      "seconds": 1.281,
+      "source_sha256": {
+        "src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "sim\\tb_audio_limiter.sv": "9b97c798daeff80ff1ffefcd0a76cab6cbaae339a22dcef306c9a57fbb36fb3b"
+      },
+      "output": "PASS tb_audio_limiter checks=280176 vectors=2830 max_cycles=104\nF:/FPGA_Projects/fpga-instrument-codex-performance-fx-enhancement/sim/tb_audio_limiter.sv:35: $finish called at 2858840000 (1ps)\n"
+    },
+    {
+      "name": "tb_audio_limiter_FIXED1_HOLD0",
+      "passed": true,
+      "checks": 299984,
+      "seconds": 1.316,
+      "source_sha256": {
+        "src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "sim\\tb_audio_limiter.sv": "9b97c798daeff80ff1ffefcd0a76cab6cbaae339a22dcef306c9a57fbb36fb3b"
+      },
+      "output": "PASS tb_audio_limiter checks=299984 vectors=2830 max_cycles=104\nF:/FPGA_Projects/fpga-instrument-codex-performance-fx-enhancement/sim/tb_audio_limiter.sv:35: $finish called at 3056920000 (1ps)\n"
+    },
+    {
+      "name": "tb_audio_limiter_FIXED1_HOLD240",
+      "passed": true,
+      "checks": 299984,
+      "seconds": 1.343,
+      "source_sha256": {
+        "src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "sim\\tb_audio_limiter.sv": "9b97c798daeff80ff1ffefcd0a76cab6cbaae339a22dcef306c9a57fbb36fb3b"
+      },
+      "output": "PASS tb_audio_limiter checks=299984 vectors=2830 max_cycles=104\nF:/FPGA_Projects/fpga-instrument-codex-performance-fx-enhancement/sim/tb_audio_limiter.sv:35: $finish called at 3056920000 (1ps)\n"
+    }
+  ],
+  "all_tests_completed": true,
+  "checks": 2020649,
+  "config_sha256": "c88f2b5cdb04fd4a0d6387112fc61aa3ae308f8145b59134df05dd8564edf09a",
+  "gowin_synthesis_run": false,
+  "pnr_run": false,
+  "hardware_tested": false
+}

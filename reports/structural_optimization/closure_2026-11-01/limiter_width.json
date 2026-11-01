@@ -1,0 +1,515 @@
+{
+  "tests": [
+    {
+      "parameters": {
+        "PRE_GAIN": 1,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 2,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 3,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 4,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 5,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 6,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 7,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 8,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 9,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 10,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 11,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 12,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 13,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 14,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 15,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 16,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 17,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 18,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 19,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 20,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 21,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 22,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 23,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 24,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 25,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 26,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 27,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 28,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 29,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 30,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 31,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 32,
+        "WINDOW_LOG2": 2,
+        "FIXED": 0,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 24,
+        "WINDOW_LOG2": 6,
+        "FIXED": 1,
+        "HOLD": 240
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    },
+    {
+      "parameters": {
+        "PRE_GAIN": 32,
+        "WINDOW_LOG2": 6,
+        "FIXED": 1,
+        "HOLD": 0
+      },
+      "passed": true,
+      "checks": 180229,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\src\\audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\width_candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_width_equivalence.sv": "f655d77facca4217273de7e1937756195ed50bcf9d9c0b8c938d0e6c41a3beea"
+      }
+    }
+  ],
+  "total_checks": 6127786
+}

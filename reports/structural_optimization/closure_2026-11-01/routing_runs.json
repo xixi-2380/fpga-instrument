@@ -1,0 +1,262 @@
+[
+  {
+    "status": "routed_timing_not_closed",
+    "start_utc": "2026-11-01T03:41:02.804450+00:00",
+    "finished_utc": "2026-11-01T04:31:01.999058+00:00",
+    "wall_seconds": 2999.194608,
+    "tool_elapsed": "0h 49m 1s",
+    "profile": "default",
+    "unrouted_nets": 0,
+    "fully_routed": true,
+    "resources": {
+      "Logic": {
+        "used": 87855.0,
+        "available": 138240
+      },
+      "Register": {
+        "used": 49071.0,
+        "available": 139140
+      },
+      "CLS": {
+        "used": 60033.0,
+        "available": 69120
+      },
+      "BSRAM": {
+        "used": 174.0,
+        "available": 340
+      },
+      "DSP": {
+        "used": 106.5,
+        "available": 298
+      },
+      "PLL": {
+        "used": 3.0,
+        "available": 12
+      },
+      "PRIMARY": {
+        "used": 7.0,
+        "available": 8
+      },
+      "LW": {
+        "used": 8.0,
+        "available": 8
+      }
+    },
+    "errors": [],
+    "name": "baseline_full",
+    "qualified_bitstream": false,
+    "netlist_sha256": "f3dcc0d5ef5b27e3c072804bb89bef80647f9da57a8527cad59b88c87950ac0c",
+    "source_netlist_constraints_unchanged": true,
+    "timing": {
+      "counts": {
+        "Setup": 534,
+        "Hold": 0
+      },
+      "fmax": {
+        "ref_clk": {
+          "target": 50.0,
+          "actual": 53.83
+        },
+        "audio_clk": {
+          "target": 61.44,
+          "actual": 57.803
+        },
+        "pixel_clk": {
+          "target": 35.0,
+          "actual": 37.141
+        }
+      },
+      "internal_wns": {
+        "ref_clk": 1.423,
+        "audio_clk": -1.024,
+        "pixel_clk": 1.647
+      },
+      "internal_margin_pass": false,
+      "setup_hold_pass": false
+    },
+    "pin_count": 73,
+    "pin_mismatches": [],
+    "lcd_clock_passed": true
+  },
+  {
+    "status": "routing_failed",
+    "start_utc": "2026-11-01T04:04:19.993799+00:00",
+    "finished_utc": "2026-11-01T04:20:07.499445+00:00",
+    "wall_seconds": 947.505646,
+    "tool_elapsed": "0h 15m 36s",
+    "profile": "fast_route",
+    "unrouted_nets": 4840,
+    "fully_routed": false,
+    "resources": {
+      "Logic": {
+        "used": 87544.0,
+        "available": 138240
+      },
+      "Register": {
+        "used": 49070.0,
+        "available": 139140
+      },
+      "CLS": {
+        "used": 59349.0,
+        "available": 69120
+      },
+      "BSRAM": {
+        "used": 174.0,
+        "available": 340
+      },
+      "DSP": {
+        "used": 106.5,
+        "available": 298
+      },
+      "PLL": {
+        "used": 3.0,
+        "available": 12
+      },
+      "PRIMARY": {
+        "used": 7.0,
+        "available": 8
+      },
+      "LW": {
+        "used": 8.0,
+        "available": 8
+      }
+    },
+    "errors": [
+      "ERROR  (PR0004) : There are total 4840 unrouted nets",
+      "ERROR  (PR0004) : There are total 4840 unrouted nets"
+    ],
+    "name": "private_fast",
+    "qualified_bitstream": false,
+    "netlist_sha256": "0aa8fd26b0194738ba282c3cdd0f1017cf5ecd5fc0f541f59720ba9c4b8bc434"
+  },
+  {
+    "status": "routing_failed",
+    "start_utc": "2026-11-01T04:15:00.696821+00:00",
+    "finished_utc": "2026-11-01T05:28:35.102693+00:00",
+    "wall_seconds": 4414.405872,
+    "tool_elapsed": "1h 5m 32s",
+    "profile": "closure",
+    "unrouted_nets": 24826,
+    "fully_routed": false,
+    "resources": {
+      "Logic": {
+        "used": 87424.0,
+        "available": 138240
+      },
+      "Register": {
+        "used": 49110.0,
+        "available": 139140
+      },
+      "CLS": {
+        "used": 59408.0,
+        "available": 69120
+      },
+      "BSRAM": {
+        "used": 174.0,
+        "available": 340
+      },
+      "DSP": {
+        "used": 106.5,
+        "available": 298
+      },
+      "PLL": {
+        "used": 3.0,
+        "available": 12
+      },
+      "PRIMARY": {
+        "used": 7.0,
+        "available": 8
+      },
+      "LW": {
+        "used": 8.0,
+        "available": 8
+      }
+    },
+    "errors": [
+      "ERROR  (PR0004) : There are total 24826 unrouted nets",
+      "ERROR  (PR0004) : There are total 24826 unrouted nets"
+    ],
+    "name": "bank_closure",
+    "qualified_bitstream": false,
+    "netlist_sha256": "d87f8c6d04cf531af2f8ca69b21e5b1ee284076ca5d7950f4c309e34dcffe054"
+  },
+  {
+    "status": "routed_timing_not_closed",
+    "start_utc": "2026-11-01T04:50:22.492718+00:00",
+    "finished_utc": "2026-11-01T05:27:38.691776+00:00",
+    "wall_seconds": 2236.199058,
+    "tool_elapsed": "0h 28m 37s",
+    "profile": "default",
+    "unrouted_nets": 0,
+    "fully_routed": true,
+    "resources": {
+      "Logic": {
+        "used": 87411.0,
+        "available": 138240
+      },
+      "Register": {
+        "used": 49191.0,
+        "available": 139140
+      },
+      "CLS": {
+        "used": 59939.0,
+        "available": 69120
+      },
+      "BSRAM": {
+        "used": 174.0,
+        "available": 340
+      },
+      "DSP": {
+        "used": 106.5,
+        "available": 298
+      },
+      "PLL": {
+        "used": 3.0,
+        "available": 12
+      },
+      "PRIMARY": {
+        "used": 7.0,
+        "available": 8
+      },
+      "LW": {
+        "used": 8.0,
+        "available": 8
+      }
+    },
+    "errors": [],
+    "name": "dds_default",
+    "qualified_bitstream": false,
+    "netlist_sha256": "19178ebfd58e70e0b736ea8904b1a22931aeb02aff51404ad08e0737b303cb7b",
+    "source_netlist_constraints_unchanged": true,
+    "timing": {
+      "counts": {
+        "Setup": 128,
+        "Hold": 0
+      },
+      "fmax": {
+        "ref_clk": {
+          "target": 50.0,
+          "actual": 49.523
+        },
+        "audio_clk": {
+          "target": 61.44,
+          "actual": 60.11
+        },
+        "pixel_clk": {
+          "target": 35.0,
+          "actual": 35.201
+        }
+      },
+      "internal_wns": {
+        "ref_clk": -0.193,
+        "audio_clk": -0.36,
+        "pixel_clk": 0.163
+      },
+      "internal_margin_pass": false,
+      "setup_hold_pass": false
+    },
+    "pin_count": 73,
+    "pin_mismatches": [],
+    "lcd_clock_passed": true
+  }
+]

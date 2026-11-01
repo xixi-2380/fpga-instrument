@@ -1,7 +1,7 @@
 {
-  "status": "baseline_fully_routed_audio_timing_open",
+  "status": "path_candidate_functional_passed_physical_running",
   "complete": false,
-  "checked_utc": "2026-11-01T04:53:37.505057+00:00",
+  "checked_utc": "2026-11-01T08:03:04.215129+00:00",
   "start_utc": "2026-11-01T03:39:58Z",
   "deadline_utc": null,
   "branch": "codex/performance-fx-enhancement",
@@ -171,10 +171,8 @@
   },
   "bank_candidate": {
     "root": "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\bank_candidate",
-    "pid": 3428,
     "synthesis_session": 80276,
-    "status": "physical_running_after_automatic_resynthesis",
-    "session": 21199,
+    "status": "routing_failed_24826_unrouted",
     "profile": {
       "place": 1,
       "route": 1,
@@ -1292,18 +1290,16 @@
     "src/pll_pair.sv": "29775d84d6b0deb8a8fc6e3bc80e36e0e321f84ddaa418e068622e5ade6d061e"
   },
   "source_sha256": {
-    "src/audio_limiter.sv": "5e8eba96e4cbad3f5dffb08bd36d9473e3d4a8f701d3d8e4819e11e2ff3fafd9",
-    "src/pcb_debug_ui.sv": "adf175ae44b3f989f218957688c82651464c45c6e0a7e8832410876275c73087",
-    "src/envelope_precalc_bank.sv": "f6b393ffd47150e36b0a30e47508ffc91b8533b56fd4e1ab07ea296949f1b485",
-    "scripts/run_limiter_structure_tests.py": "25cf980a1601418db6053e66db5dbb36e447243182f3c2e564d78b524e4102d8",
-    "sim/reference_audio_limiter_c6352fa.sv": "7dbcb20ffaabd34658d61f7f5c3a6dec3c709ccfd32f2ccfbcad51a4e74fba81",
-    "sim/structural/tb_limiter_output_equivalence.sv": "d12019e5cc0d3a12a8aea4df13ae2e99e7242217aa58d932150fd89e98446816",
-    "sim/structural/tb_limiter_stream_equivalence.sv": "47783aa5a8cde8ed02ad81d37da6495aedfd14c495e803286258bf2f53392d9a",
-    "sim/structural/tb_limiter_release_bounds.sv": "c670285d17bca08babceb0ddb66e65fb628b7000543d62e4ccaeabaaca65547d"
+    "src/aip5916_keyboard.sv": "909f7be450f877b5f7b3839d9864f03cf061a1f546b7a881778065702820e82e",
+    "src/audio_limiter.sv": "6eb7f708dbfe6afb44f6f94f1ca14b83606033dc1e8c355411d73465fda8a4bb",
+    "src/dds_sine.sv": "e0e860789c82b36f9fa098cba569ac43259aab94ea0fccd3e7fc016008fc9a57",
+    "src/rgb_display.sv": "66a8b83958fed77dc7abad840a0b71ff3c77210584c63c70b28fdbd8a1e4646f",
+    "src/synth_core.sv": "90879c92f9cb7a93df3ed48c7cfa7446c56fbd21adda102f5b35d4a1f585f758",
+    "src/voice_allocator.sv": "6a027cfa314c65a77c4b632ee91151a8e711edc07e91975f98fcaf29b016dc24"
   },
   "next_dds_candidate": {
-    "applied": false,
-    "status": "core_and_synthesis_passed_physical_running",
+    "applied": true,
+    "status": "fully_routed_128_setup_0_hold_not_qualified",
     "root": "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\dds_candidate",
     "unit": {
       "tests": [
@@ -1705,9 +1701,9 @@
       "synthesis_passed": true,
       "pnr_passed": false
     },
-    "physical_session": 65699,
-    "pid": 52008,
-    "note": "Synthesis audio58.992MHz regressed; actual PNR validation pending, not applied to F"
+    "physical_session": null,
+    "pid": null,
+    "note": "DDS change inherited by current path_candidate. Completed default PNR took28m37s, wall37m16s including automatic synthesis. Actual netlist19178ebf... audited after completion; timing remains open."
   },
   "ram_prototype": {
     "applied": false,
@@ -1918,7 +1914,41 @@
     "hardware_tested": false
   },
   "production_pnr": {
-    "status": "not_started_output_cleanup_denied",
-    "note": "Prior generated F .fs could not be removed; no tool launched. Baseline evidence preserved; DDS default physical runs in independent C root."
-  }
+    "status": "independent_path_candidate_running",
+    "note": "Main F sources now match current independent project; its existing impl files are stale and not qualified."
+  },
+  "current_source": "path_candidate",
+  "current_physical": {
+    "start": {
+      "start_utc": "2026-11-01T07:42:53.092309+00:00",
+      "pid": 34376,
+      "command": [
+        "C:/Gowin/Gowin_V1.9.12.04_x64/IDE/bin/gw_sh.exe",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\path_candidate\\scripts\\build_keyboard.tcl",
+        "pnr"
+      ],
+      "profile": "default",
+      "timeout_seconds": null,
+      "netlist_sha256": "15a828eae9b0b6b0a1880a8a0be86f10b2be507d5489ae4080fdfd39dcdb9a2f"
+    },
+    "actual_netlist_sha256": "227d8a9a709ce500f81f18c6dcbdf34e56fb7da349b064766b18ce402d4a991e",
+    "capture_timing": "during physical run",
+    "finished": false
+  },
+  "latest_routing_evidence": "routing_runs.json",
+  "latest_validation": [
+    "dds_unit.json",
+    "limiter_width.json",
+    "path_core.json",
+    "path_aip.json",
+    "path_performance.json",
+    "path_vendor_compile.json",
+    "path_mute_invariant.json",
+    "path_synthesis.json",
+    "path_physical_inputs.json",
+    "path_physical_start.json",
+    "dds_acceptance.json",
+    "path_merged_runtime.json",
+    "build_reuse_probe.json"
+  ]
 }
