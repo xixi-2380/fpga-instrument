@@ -21,6 +21,11 @@ module envelope_precalc_bank #(
  localparam [RH:0] RM=((64'd1<<RK)+RODD-1)/RODD;
  reg busy;reg [IW-1:0] index,index0,index1,index2;
  reg valid0,valid1,valid2;
+ // Register the voice mux before the attack subtraction / reciprocal input.
+ // The last voice commits at CE+VOICES+4, still before the existing earliest
+ // next CE at VOICES+5; envelope sample boundaries and warm-up masks stay fixed.
+ reg selected_valid;reg [IW-1:0] selected_index;
+ reg [16:0] selected_seed,selected_level;
  reg [1:0] reset_age;
  reg [16:0] an,rn,ad,rd,aq,rq,aq2,rq2;
  reg [CW-1:0] ar,rr;
@@ -37,6 +42,7 @@ module envelope_precalc_bank #(
  always @(posedge clk or posedge rst)begin
   if(rst)begin
    busy<=0;index<=0;index0<=0;index1<=0;index2<=0;valid0<=0;valid1<=0;valid2<=0;
+   selected_valid<=0;selected_index<=0;selected_seed<=0;selected_level<=0;
    an<=0;rn<=0;ad<=0;rd<=0;aq<=0;rq<=0;aq2<=0;rq2<=0;ar<=0;rr<=0;reset_age<=0;
    for(integer v=0;v<VOICES;v=v+1)begin aq_bank[v]<=65536/A_DEN;ar_bank[v]<=65536%A_DEN;rq_bank[v]<=0;rr_bank[v]<=0;end
   end else begin
@@ -44,8 +50,10 @@ module envelope_precalc_bank #(
    // Restart once after reset and once after each atomic sample update.
    if(sample_ce || reset_age==0)begin busy<=1;index<=0;end
    else if(busy)begin if(index==VOICES-1)busy<=0;else index<=index+1'b1;end
-   valid0<=busy && !sample_ce;index0<=index;
-   if(busy && !sample_ce)begin an<=17'd65536-seeds[index*17+:17];rn<=levels[index*17+:17];end
+   selected_valid<=busy && !sample_ce;selected_index<=index;
+   if(busy && !sample_ce)begin selected_seed<=seeds[index*17+:17];selected_level<=levels[index*17+:17];end
+   valid0<=selected_valid && !sample_ce;index0<=selected_index;
+   if(selected_valid && !sample_ce)begin an<=17'd65536-selected_seed;rn<=selected_level;end
    valid1<=valid0;index1<=index0;ad<=an;rd<=rn;aq<=aproduct>>AK;rq<=rproduct>>RK;
    valid2<=valid1;index2<=index1;aq2<=aq;rq2<=rq;ar<=ad-aq*A_DEN;rr<=rd-rq*R_DEN;
    if(valid2)begin aq_bank[index2]<=aq2;rq_bank[index2]<=rq2;ar_bank[index2]<=ar;rr_bank[index2]<=rr;end

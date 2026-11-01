@@ -37,21 +37,26 @@ module audio_limiter #(
  wire [23:0] read_mag=audio_q[23] ? -audio_q : audio_q;
  wire read_initialized=filled==W || scan_address<filled;
  wire [24:0] trial={remainder[23:0],numerator[30]};
- wire [RELEASE_SHIFT+17:0] recovery_total=(17'd65536-released)+release_error;
+ // released remains in 0..65536 and release_error < 2**RELEASE_SHIFT.
+ // RELEASE_SHIFT<=15 therefore bounds this nonnegative sum below 98304.
+ // Seventeen bits preserve every reachable value; wider arithmetic only
+ // extends the release subtract/add/compare path.
+ wire [16:0] recovery_total=(17'd65536-released)+release_error;
  wire [16:0] release_step=recovery_total>>RELEASE_SHIFT;
  wire [17:0] release_candidate={1'b0,released}+release_step;
  wire [16:0] next_release=target<release_candidate ? target : release_candidate[16:0];
  wire [16:0] old_gain=filled<W ? 17'd65536 : gain_q;
  wire [WINDOW_LOG2+17:0] next_sum=added_sum-old_gain;
  wire [16:0] average_gain=updated_sum>>WINDOW_LOG2;
- // Truncate toward zero directly in two's complement. For a negative
- // product, arithmetic shift rounds down; a nonzero discarded fraction
- // therefore needs +1. This removes the wide absolute-value/negation chain.
- // A signed 24-bit sample times unsigned 17-bit gain fits strictly inside
- // +/-2^40, so the old magnitude slice cannot wrap at bit41.
- wire signed [25:0] product_integer=$signed(product[41:16]);
- wire round_toward_zero=product[41] && (|product[15:0]);
- wire signed [25:0] converted=product_integer+$signed({25'd0,round_toward_zero});
+ // Split absolute value at the binary point: carry into the integer limb
+ // occurs exactly when the fractional limb is zero. This is bit-identical
+ // to abs42[40:16], including the original minimum-negative wrap behavior.
+ // Compare the magnitude once, then restore the sign only on the 16-bit result.
+ wire [24:0] magnitude_integer=product[41] ?
+     (~product[40:16] + {24'd0,(product[15:0]==16'd0)}) : product[40:16];
+ wire magnitude_over_ceiling=magnitude_integer>25'(CEILING);
+ wire signed [15:0] emitted_magnitude=magnitude_over_ceiling ? 16'(CEILING) : magnitude_integer[15:0];
+ wire signed [15:0] emitted_sample=product[41] ? -emitted_magnitude : emitted_magnitude;
  assign in_ready=!rst && state==IDLE;
  // Normal-mode RAM: read and write are mutually exclusive. The old gain
  // is fetched BEFORE AVERAGE; writing that address must not request Gowin's
@@ -135,9 +140,8 @@ module audio_limiter #(
     MULTIPLY:begin product<=delayed*$signed({1'b0,average_gain});applied_gain<=average_gain;state<=EMIT;end
     EMIT:begin
      out_valid<=1;out_tag<=delayed_tag;
-     if(converted>CEILING)begin out_sample<=CEILING;clipped<=1;end
-     else if(converted < -CEILING)begin out_sample<=-CEILING;clipped<=1;end
-     else out_sample<=converted[15:0];
+     out_sample<=emitted_sample;
+     clipped<=magnitude_over_ceiling;
      pointer<=pointer+1'b1;if(filled<W)filled<=filled+1'b1;state<=IDLE;
     end
     default:state<=IDLE;
@@ -147,7 +151,7 @@ module audio_limiter #(
  // synthesis translate_off
  initial if(WINDOW_LOG2<2 || WINDOW_LOG2>6 || PRE_GAIN<1 || PRE_GAIN>32 || CEILING<1 || CEILING>32767 || RELEASE_SHIFT<1 || RELEASE_SHIFT>15 || HOLD_SAMPLES<0 || HOLD_SAMPLES>48000)
   $fatal(1,"Invalid limiter parameters");
+ always @(posedge clk)if(!rst && released>17'd65536)$fatal(1,"Limiter release invariant exceeded unity");
  always @(posedge clk)if(!rst && in_valid && !in_ready)$fatal(1,"Limiter input exceeded bounded processing budget");
  // synthesis translate_on
 endmodule
-

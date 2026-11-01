@@ -1,18 +1,19 @@
 """Focused equivalence/regression checks; never launches Gowin or programs hardware."""
-import argparse,hashlib,importlib.util,json,random,re,shutil,subprocess,time
+import os,argparse,hashlib,importlib.util,json,random,re,shutil,subprocess,time
 from pathlib import Path
 p=argparse.ArgumentParser();p.add_argument('--out-dir',type=Path,required=True);p.add_argument('--iverilog',default=shutil.which('iverilog'));p.add_argument('--vvp',default=shutil.which('vvp'));p.add_argument('--ivl-base');a=p.parse_args()
 r=Path(__file__).resolve().parents[1];out=a.out_dir.resolve();out.mkdir(parents=True,exist_ok=True)
 assert a.iverilog and a.vvp,'Install Icarus Verilog or provide --iverilog and --vvp'
+env=os.environ.copy();env['PATH']=str(Path(a.iverilog).resolve().parent)+os.pathsep+env.get('PATH','')
 results=[]
 def run(top,sources,params=None,extra=None):
  name=top+''.join('_'+k+str(v) for k,v in (params or {}).items());start=time.monotonic()
  files=[r/f for f in sources];hashes={str(f.relative_to(r)):hashlib.sha256(f.read_bytes()).hexdigest() for f in files}
- cmd=[a.iverilog]+(['-B',a.ivl_base] if a.ivl_base else [])+['-g2012','-Wall','-grelative-include','-s',top,'-o',str(out/(name+'.vvp'))]
+ cmd=[a.iverilog]+(['-B',a.ivl_base] if a.ivl_base else [])+['-g2012','-Wall','-grelative-include','-I'+(r/'src').as_posix(),'-I'+(r/'sim').as_posix(),'-s',top,'-o',str(out/(name+'.vvp'))]
  for k,v in (params or {}).items():cmd+=['-P',top+'.'+k+'='+str(v)]
- c=subprocess.run(cmd+list(map(str,files)),cwd=r,capture_output=True,text=True)
+ c=subprocess.run(cmd+[f.as_posix() for f in files],cwd=r,env=env,capture_output=True,text=True,encoding='utf-8')
  (out/(name+'_compile.log')).write_text(c.stdout+c.stderr);assert c.returncode==0,c.stderr
- v=subprocess.run([a.vvp,str(out/(name+'.vvp'))]+(extra or []),cwd=r,capture_output=True,text=True,timeout=180)
+ v=subprocess.run([a.vvp,str(out/(name+'.vvp'))]+(extra or []),cwd=r,env=env,capture_output=True,text=True,encoding='utf-8',timeout=180)
  log=v.stdout+v.stderr;(out/(name+'.log')).write_text(log)
  assert v.returncode==0 and 'PASS '+top in log,log
  assert all(hashlib.sha256((r/f).read_bytes()).hexdigest()==h for f,h in hashes.items())

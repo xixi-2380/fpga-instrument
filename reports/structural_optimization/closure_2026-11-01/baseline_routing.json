@@ -1,0 +1,1791 @@
+{
+  "status": "routed_timing_not_closed",
+  "exit_code": 0,
+  "start_utc": "2026-11-01T03:41:02.804450+00:00",
+  "finished_utc": "2026-11-01T04:31:01.999058+00:00",
+  "wall_seconds": 2999.194608,
+  "tool_elapsed": "0h 49m 1s",
+  "netlist_sha256": "f3dcc0d5ef5b27e3c072804bb89bef80647f9da57a8527cad59b88c87950ac0c",
+  "source_netlist_unchanged": true,
+  "constraints_script_unchanged": true,
+  "profile": "default",
+  "unrouted_nets": 0,
+  "errors": [],
+  "resources": {
+    "Logic": {
+      "used": 87855.0,
+      "available": 138240
+    },
+    "Register": {
+      "used": 49071.0,
+      "available": 139140
+    },
+    "CLS": {
+      "used": 60033.0,
+      "available": 69120
+    },
+    "BSRAM": {
+      "used": 174.0,
+      "available": 340
+    },
+    "DSP": {
+      "used": 106.5,
+      "available": 298
+    },
+    "PLL": {
+      "used": 3.0,
+      "available": 12
+    },
+    "PRIMARY": {
+      "used": 7.0,
+      "available": 8
+    },
+    "LW": {
+      "used": 8.0,
+      "available": 8
+    }
+  },
+  "timing": {
+    "counts": {
+      "Setup": 534,
+      "Hold": 0
+    },
+    "fmax": {
+      "ref_clk": {
+        "target": 50.0,
+        "actual": 53.83
+      },
+      "audio_clk": {
+        "target": 61.44,
+        "actual": 57.803
+      },
+      "pixel_clk": {
+        "target": 35.0,
+        "actual": 37.141
+      }
+    },
+    "tns": [
+      {
+        "clock": "ref_clk",
+        "analysis": "setup",
+        "tns": 0.0,
+        "endpoints": 0
+      },
+      {
+        "clock": "ref_clk",
+        "analysis": "hold",
+        "tns": 0.0,
+        "endpoints": 0
+      },
+      {
+        "clock": "mid_clk",
+        "analysis": "setup",
+        "tns": 0.0,
+        "endpoints": 0
+      },
+      {
+        "clock": "mid_clk",
+        "analysis": "hold",
+        "tns": 0.0,
+        "endpoints": 0
+      },
+      {
+        "clock": "audio_clk",
+        "analysis": "setup",
+        "tns": -202.142,
+        "endpoints": 534
+      },
+      {
+        "clock": "audio_clk",
+        "analysis": "hold",
+        "tns": 0.0,
+        "endpoints": 0
+      },
+      {
+        "clock": "pixel_clk",
+        "analysis": "setup",
+        "tns": 0.0,
+        "endpoints": 0
+      },
+      {
+        "clock": "pixel_clk",
+        "analysis": "hold",
+        "tns": 0.0,
+        "endpoints": 0
+      },
+      {
+        "clock": "lcd_pclk",
+        "analysis": "setup",
+        "tns": 0.0,
+        "endpoints": 0
+      },
+      {
+        "clock": "lcd_pclk",
+        "analysis": "hold",
+        "tns": 0.0,
+        "endpoints": 0
+      }
+    ],
+    "path_tables": {
+      "3.1.1.1 Setup Paths Table[1]": [
+        {
+          "number": 1,
+          "slack": 1.423,
+          "source": "touch_keyboards[1].reader/config_index_0_s4/Q",
+          "endpoint": "touch_keyboards[1].reader/history_198_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 2,
+          "slack": 1.425,
+          "source": "touch_keyboards[0].reader/config_index_2_s4/Q",
+          "endpoint": "touch_keyboards[0].reader/history_26_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 3,
+          "slack": 1.425,
+          "source": "touch_keyboards[0].reader/config_index_2_s4/Q",
+          "endpoint": "touch_keyboards[0].reader/history_58_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 4,
+          "slack": 1.618,
+          "source": "touch_keyboards[1].reader/config_index_0_s4/Q",
+          "endpoint": "touch_keyboards[1].reader/history_32_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 5,
+          "slack": 1.618,
+          "source": "touch_keyboards[1].reader/config_index_0_s4/Q",
+          "endpoint": "touch_keyboards[1].reader/history_64_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 6,
+          "slack": 1.631,
+          "source": "touch_keyboards[0].reader/config_index_2_s4/Q",
+          "endpoint": "touch_keyboards[0].reader/history_30_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 7,
+          "slack": 1.808,
+          "source": "touch_keyboards[1].reader/config_index_0_s4/Q",
+          "endpoint": "touch_keyboards[1].reader/history_230_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 8,
+          "slack": 1.84,
+          "source": "touch_keyboards[0].reader/config_index_2_s4/Q",
+          "endpoint": "touch_keyboards[0].reader/history_169_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 9,
+          "slack": 1.846,
+          "source": "touch_keyboards[1].reader/config_index_0_s4/Q",
+          "endpoint": "touch_keyboards[1].reader/history_170_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 10,
+          "slack": 1.855,
+          "source": "touch_keyboards[0].reader/config_index_2_s4/Q",
+          "endpoint": "touch_keyboards[0].reader/history_90_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 11,
+          "slack": 1.855,
+          "source": "touch_keyboards[0].reader/config_index_2_s4/Q",
+          "endpoint": "touch_keyboards[0].reader/history_122_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 12,
+          "slack": 1.855,
+          "source": "touch_keyboards[1].reader/config_index_0_s4/Q",
+          "endpoint": "touch_keyboards[1].reader/history_234_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 13,
+          "slack": 1.862,
+          "source": "touch_keyboards[0].reader/config_index_2_s4/Q",
+          "endpoint": "touch_keyboards[0].reader/history_93_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 14,
+          "slack": 1.862,
+          "source": "touch_keyboards[0].reader/config_index_2_s4/Q",
+          "endpoint": "touch_keyboards[0].reader/history_125_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 15,
+          "slack": 1.868,
+          "source": "touch_keyboards[1].reader/config_index_0_s4/Q",
+          "endpoint": "touch_keyboards[1].reader/history_85_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 16,
+          "slack": 1.868,
+          "source": "touch_keyboards[1].reader/config_index_0_s4/Q",
+          "endpoint": "touch_keyboards[1].reader/history_117_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 17,
+          "slack": 1.876,
+          "source": "touch_keyboards[1].reader/config_index_0_s4/Q",
+          "endpoint": "touch_keyboards[1].reader/history_86_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 18,
+          "slack": 1.876,
+          "source": "touch_keyboards[1].reader/config_index_0_s4/Q",
+          "endpoint": "touch_keyboards[1].reader/history_118_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 19,
+          "slack": 1.876,
+          "source": "touch_keyboards[1].reader/config_index_0_s4/Q",
+          "endpoint": "touch_keyboards[1].reader/history_149_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 20,
+          "slack": 1.985,
+          "source": "touch_keyboards[0].reader/config_index_2_s4/Q",
+          "endpoint": "touch_keyboards[0].reader/history_95_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 21,
+          "slack": 1.985,
+          "source": "touch_keyboards[0].reader/config_index_2_s4/Q",
+          "endpoint": "touch_keyboards[0].reader/history_127_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 22,
+          "slack": 1.989,
+          "source": "touch_keyboards[1].reader/config_index_0_s4/Q",
+          "endpoint": "touch_keyboards[1].reader/history_164_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 23,
+          "slack": 2.025,
+          "source": "touch_keyboards[1].reader/config_index_0_s4/Q",
+          "endpoint": "touch_keyboards[1].reader/history_196_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 24,
+          "slack": 2.052,
+          "source": "touch_keyboards[0].reader/config_index_2_s4/Q",
+          "endpoint": "touch_keyboards[0].reader/history_223_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 25,
+          "slack": 2.069,
+          "source": "touch_keyboards[1].reader/config_index_0_s4/Q",
+          "endpoint": "touch_keyboards[1].reader/history_202_s0/D",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        }
+      ],
+      "3.1.1.2 Setup Paths Table[2]": [
+        {
+          "number": 1,
+          "slack": -1.024,
+          "source": "sound/shared_envelope_preparation.prepare/index_0_s1/Q",
+          "endpoint": "sound/shared_envelope_preparation.prepare/aproduct_0_s/A[11]",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 2,
+          "slack": -1.019,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[0]_27_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 3,
+          "slack": -1.018,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[22]_19_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 4,
+          "slack": -1.016,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[1]_19_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 5,
+          "slack": -1.015,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[9]_17_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 6,
+          "slack": -1.012,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[12]_26_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 7,
+          "slack": -1.003,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[23]_25_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 8,
+          "slack": -1.003,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[20]_23_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 9,
+          "slack": -1.0,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[16]_31_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 10,
+          "slack": -0.992,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[27]_28_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 11,
+          "slack": -0.992,
+          "source": "sound/startup/pa_enable_s0/Q",
+          "endpoint": "sound/allocator/owned_3_s1/CE",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 12,
+          "slack": -0.981,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[17]_21_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 13,
+          "slack": -0.973,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[20]_19_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 14,
+          "slack": -0.966,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[27]_30_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 15,
+          "slack": -0.964,
+          "source": "pcb_controls/row_1_s1/Q",
+          "endpoint": "pcb_controls/word_q_25_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 16,
+          "slack": -0.942,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[3]_23_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 17,
+          "slack": -0.935,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[9]_23_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 18,
+          "slack": -0.935,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[5]_23_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 19,
+          "slack": -0.922,
+          "source": "sound/timing/frame_boundary_s0/Q",
+          "endpoint": "sound/voices[15].envelope/musical_level_11_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 20,
+          "slack": -0.909,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[12]_23_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 21,
+          "slack": -0.909,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[10]_17_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 22,
+          "slack": -0.894,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[18]_21_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 23,
+          "slack": -0.893,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[21]_29_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 24,
+          "slack": -0.881,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[10]_28_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 25,
+          "slack": -0.881,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[30]_20_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        }
+      ],
+      "3.1.1.3 Setup Paths Table[3]": [
+        {
+          "number": 1,
+          "slack": 1.647,
+          "source": "lcd_on.display_driver/render_x_2_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/base_layout_22_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 2,
+          "slack": 2.263,
+          "source": "lcd_on.display_driver/render_x_2_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/base_layout_6_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 3,
+          "slack": 2.401,
+          "source": "lcd_on.display_driver/render_x_2_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/base_layout_15_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 4,
+          "slack": 2.401,
+          "source": "lcd_on.display_driver/render_x_2_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/base_layout_23_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 5,
+          "slack": 2.418,
+          "source": "lcd_on.display_driver/render_x_2_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/base_layout_18_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 6,
+          "slack": 2.47,
+          "source": "lcd_on.display_driver/render_x_2_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/base_layout_3_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 7,
+          "slack": 2.64,
+          "source": "lcd_on.display_driver/render_x_2_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/base_layout_13_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 8,
+          "slack": 2.677,
+          "source": "lcd_on.display_driver/render_x_2_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/base_layout_12_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 9,
+          "slack": 2.869,
+          "source": "lcd_on.display_driver/render_x_2_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/base_layout_20_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 10,
+          "slack": 3.031,
+          "source": "lcd_on.display_driver/render_x_2_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/base_layout_4_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 11,
+          "slack": 3.117,
+          "source": "lcd_on.display_driver/render_x_2_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/base_layout_2_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 12,
+          "slack": 3.132,
+          "source": "lcd_on.display_driver/render_x_2_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/base_layout_21_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 13,
+          "slack": 3.281,
+          "source": "lcd_on.display_driver/render_x_2_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/base_layout_19_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 14,
+          "slack": 3.454,
+          "source": "lcd_on.display_driver/render_x_2_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/base_layout_10_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 15,
+          "slack": 3.483,
+          "source": "lcd_on.display_driver/render_x_8_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/layout_text_30_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 16,
+          "slack": 3.62,
+          "source": "lcd_on.display_driver/render_x_6_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/base_layout_7_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 17,
+          "slack": 3.771,
+          "source": "lcd_on.display_driver/render_x_6_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/base_layout_14_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 18,
+          "slack": 3.781,
+          "source": "lcd_on.display_driver/render_x_6_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/base_layout_5_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 19,
+          "slack": 3.904,
+          "source": "lcd_on.display_driver/render_x_8_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/fg_layout_21_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 20,
+          "slack": 4.158,
+          "source": "lcd_on.display_driver/render_x_8_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/layout_text_8_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 21,
+          "slack": 4.63,
+          "source": "lcd_on.display_driver/render_x_6_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/base_layout_11_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 22,
+          "slack": 4.823,
+          "source": "lcd_on.display_driver/render_x_8_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/fg_layout_10_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 23,
+          "slack": 4.89,
+          "source": "lcd_on.display_driver/render_x_8_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/layout_len_1_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 24,
+          "slack": 4.892,
+          "source": "lcd_on.display_driver/render_x_2_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/fg_layout_2_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 25,
+          "slack": 4.945,
+          "source": "lcd_on.display_driver/render_x_8_s0/Q",
+          "endpoint": "lcd_on.display_driver/renderer/fg_layout_6_s0/D",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        }
+      ],
+      "3.1.1.4 Setup Paths Table[4]": [
+        {
+          "number": 1,
+          "slack": -1.024,
+          "source": "sound/shared_envelope_preparation.prepare/index_0_s1/Q",
+          "endpoint": "sound/shared_envelope_preparation.prepare/aproduct_0_s/A[11]",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 2,
+          "slack": -1.019,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[0]_27_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 3,
+          "slack": -1.018,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[22]_19_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 4,
+          "slack": -1.016,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[1]_19_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 5,
+          "slack": -1.015,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[9]_17_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 6,
+          "slack": -1.012,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[12]_26_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 7,
+          "slack": -1.003,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[23]_25_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 8,
+          "slack": -1.003,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[20]_23_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 9,
+          "slack": -1.0,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[16]_31_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 10,
+          "slack": -0.992,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[27]_28_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 11,
+          "slack": -0.992,
+          "source": "sound/startup/pa_enable_s0/Q",
+          "endpoint": "sound/allocator/owned_3_s1/CE",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 12,
+          "slack": -0.981,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[17]_21_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 13,
+          "slack": -0.973,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[20]_19_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 14,
+          "slack": -0.966,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[27]_30_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 15,
+          "slack": -0.964,
+          "source": "pcb_controls/row_1_s1/Q",
+          "endpoint": "pcb_controls/word_q_25_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 16,
+          "slack": -0.942,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[3]_23_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 17,
+          "slack": -0.935,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[9]_23_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 18,
+          "slack": -0.935,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[5]_23_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 19,
+          "slack": -0.922,
+          "source": "sound/timing/frame_boundary_s0/Q",
+          "endpoint": "sound/voices[15].envelope/musical_level_11_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 20,
+          "slack": -0.909,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[12]_23_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 21,
+          "slack": -0.909,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[10]_17_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 22,
+          "slack": -0.894,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[18]_21_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 23,
+          "slack": -0.893,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[21]_29_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 24,
+          "slack": -0.881,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[10]_28_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 25,
+          "slack": -0.881,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[30]_20_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 26,
+          "slack": -0.881,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[12]_28_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 27,
+          "slack": -0.872,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[6]_28_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 28,
+          "slack": -0.87,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[1]_17_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 29,
+          "slack": -0.863,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[8]_19_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 30,
+          "slack": -0.861,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[8]_17_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 31,
+          "slack": -0.859,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[20]_21_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 32,
+          "slack": -0.855,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[2]_19_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 33,
+          "slack": -0.851,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[6]_23_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 34,
+          "slack": -0.848,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[26]_20_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 35,
+          "slack": -0.841,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[30]_29_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 36,
+          "slack": -0.84,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[22]_21_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 37,
+          "slack": -0.837,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[25]_19_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 38,
+          "slack": -0.837,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[18]_19_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 39,
+          "slack": -0.831,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[24]_21_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 40,
+          "slack": -0.831,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[22]_12_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 41,
+          "slack": -0.83,
+          "source": "sound/timing/frame_boundary_s0/Q",
+          "endpoint": "touch_commands/action_valid_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 42,
+          "slack": -0.828,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[7]_19_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 43,
+          "slack": -0.828,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/waves_waves_3_7_s/AD[9]",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 44,
+          "slack": -0.823,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[1]_23_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 45,
+          "slack": -0.819,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[10]_22_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 46,
+          "slack": -0.819,
+          "source": "sound/timing/frame_boundary_s0/Q",
+          "endpoint": "sound/voices[15].envelope/musical_level_10_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 47,
+          "slack": -0.809,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[20]_31_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 48,
+          "slack": -0.8,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[7]_23_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 49,
+          "slack": -0.8,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[25]_28_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 50,
+          "slack": -0.798,
+          "source": "sound/prepared_voice_0_s0/Q",
+          "endpoint": "sound/dds/phases[28]_24_s0/D",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        }
+      ],
+      "3.1.1.5 Setup Paths Table[5]": [
+        {
+          "number": 1,
+          "slack": 0.478,
+          "source": "lcd_on.display_driver/lcd_b_3_s0/Q",
+          "endpoint": "lcd_b_3_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 2,
+          "slack": 0.486,
+          "source": "lcd_on.display_driver/lcd_b_2_s0/Q",
+          "endpoint": "lcd_b_2_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 3,
+          "slack": 0.495,
+          "source": "lcd_on.display_driver/lcd_b_5_s0/Q",
+          "endpoint": "lcd_b_5_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 4,
+          "slack": 0.495,
+          "source": "lcd_on.display_driver/lcd_vs_s0/Q",
+          "endpoint": "lcd_vs_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 5,
+          "slack": 0.503,
+          "source": "lcd_on.display_driver/lcd_en_s0/Q",
+          "endpoint": "lcd_en_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 6,
+          "slack": 0.503,
+          "source": "lcd_on.display_driver/lcd_b_4_s0/Q",
+          "endpoint": "lcd_b_4_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 7,
+          "slack": 0.53,
+          "source": "lcd_on.display_driver/lcd_g_1_s0/Q",
+          "endpoint": "lcd_g_1_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 8,
+          "slack": 0.53,
+          "source": "lcd_on.display_driver/lcd_hs_s0/Q",
+          "endpoint": "lcd_hs_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 9,
+          "slack": 0.53,
+          "source": "lcd_on.display_driver/lcd_r_0_s0/Q",
+          "endpoint": "lcd_r_0_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 10,
+          "slack": 0.53,
+          "source": "lcd_on.display_driver/lcd_r_1_s0/Q",
+          "endpoint": "lcd_r_1_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 11,
+          "slack": 0.538,
+          "source": "lcd_on.display_driver/lcd_g_5_s0/Q",
+          "endpoint": "lcd_g_5_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 12,
+          "slack": 0.538,
+          "source": "lcd_on.display_driver/lcd_b_0_s0/Q",
+          "endpoint": "lcd_b_0_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 13,
+          "slack": 0.538,
+          "source": "lcd_on.display_driver/lcd_g_2_s0/Q",
+          "endpoint": "lcd_g_2_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 14,
+          "slack": 0.538,
+          "source": "lcd_on.display_driver/lcd_g_0_s0/Q",
+          "endpoint": "lcd_g_0_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 15,
+          "slack": 0.538,
+          "source": "lcd_on.display_driver/lcd_r_4_s0/Q",
+          "endpoint": "lcd_r_4_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 16,
+          "slack": 0.538,
+          "source": "lcd_on.display_driver/lcd_r_2_s0/Q",
+          "endpoint": "lcd_r_2_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 17,
+          "slack": 0.538,
+          "source": "lcd_on.display_driver/lcd_r_3_s0/Q",
+          "endpoint": "lcd_r_3_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 18,
+          "slack": 0.547,
+          "source": "lcd_on.display_driver/lcd_g_4_s0/Q",
+          "endpoint": "lcd_g_4_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 19,
+          "slack": 0.547,
+          "source": "lcd_on.display_driver/lcd_b_1_s0/Q",
+          "endpoint": "lcd_b_1_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 20,
+          "slack": 0.547,
+          "source": "lcd_on.display_driver/lcd_g_3_s0/Q",
+          "endpoint": "lcd_g_3_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        },
+        {
+          "number": 21,
+          "slack": 0.547,
+          "source": "lcd_on.display_driver/lcd_r_5_s0/Q",
+          "endpoint": "lcd_r_5_obuf/O",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "lcd_pclk:[R]"
+        }
+      ],
+      "3.1.1.7 Setup Paths Table[7]": [
+        {
+          "number": 1,
+          "slack": 21.409,
+          "source": "lcd_on.display_driver/pixel_reset_sync/pipe_1_s0/Q",
+          "endpoint": "lcd_on.display_driver/pixel_clock_forward/D1",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        }
+      ],
+      "3.1.2.1 Hold Paths Table[1]": [
+        {
+          "number": 1,
+          "slack": 2.81,
+          "source": "lcd_on.display_driver/pixel_reset_sync/pipe_1_s0/Q",
+          "endpoint": "lcd_on.display_driver/pixel_clock_forward/D1",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        }
+      ],
+      "3.1.3 Recovery Paths Table": [
+        {
+          "number": 1,
+          "slack": 1.796,
+          "source": "reset_control/ref_sync/pipe_1_s0/Q",
+          "endpoint": "lcd_on.display_driver/performance_bridge/pixel_reset_sync/pipe_1_s0/PRESET",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 2,
+          "slack": 1.796,
+          "source": "reset_control/ref_sync/pipe_1_s0/Q",
+          "endpoint": "lcd_on.display_driver/performance_bridge/pixel_reset_sync/pipe_0_s0/PRESET",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 3,
+          "slack": 5.976,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "bluetooth_on.local_actions/s_reset/pipe_1_s0/PRESET",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 4,
+          "slack": 5.976,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "bluetooth_on.local_actions/s_reset/pipe_0_s0/PRESET",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 5,
+          "slack": 6.129,
+          "source": "reset_control/ref_sync/pipe_1_s0/Q",
+          "endpoint": "bluetooth_on.bt_reset/pipe_1_s0/PRESET",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 6,
+          "slack": 6.129,
+          "source": "reset_control/ref_sync/pipe_1_s0/Q",
+          "endpoint": "bluetooth_on.bt_reset/pipe_0_s0/PRESET",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 7,
+          "slack": 6.435,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "sound/stereo_on.right_volume/out_sample_13_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 8,
+          "slack": 6.435,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "sound/stereo_on.right_volume/out_sample_14_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 9,
+          "slack": 6.435,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "sound/volume_control/out_sample_12_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 10,
+          "slack": 6.457,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "sound/stereo_on.right_volume/out_sample_1_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 11,
+          "slack": 6.457,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "sound/stereo_on.right_volume/out_sample_2_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 12,
+          "slack": 6.566,
+          "source": "reset_control/ref_sync/pipe_1_s0/Q",
+          "endpoint": "bluetooth_on.local_actions/a_reset/pipe_1_s0/PRESET",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 13,
+          "slack": 6.566,
+          "source": "reset_control/ref_sync/pipe_1_s0/Q",
+          "endpoint": "bluetooth_on.local_actions/a_reset/pipe_0_s0/PRESET",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 14,
+          "slack": 6.632,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "sound/stereo_on.right_volume/out_sample_11_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 15,
+          "slack": 6.632,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "sound/stereo_on.right_volume/out_sample_12_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 16,
+          "slack": 6.632,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "sound/volume_control/out_sample_8_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 17,
+          "slack": 6.632,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "sound/volume_control/out_sample_10_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 18,
+          "slack": 6.632,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "sound/volume_control/out_sample_11_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 19,
+          "slack": 6.632,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "sound/volume_control/out_sample_13_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 20,
+          "slack": 6.641,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "sound/stereo_on.right_volume/out_sample_4_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 21,
+          "slack": 6.641,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "sound/stereo_on.right_volume/out_sample_6_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 22,
+          "slack": 6.641,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "sound/stereo_on.right_volume/out_sample_7_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 23,
+          "slack": 6.641,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "sound/stereo_on.right_volume/out_sample_8_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 24,
+          "slack": 6.641,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "sound/stereo_on.right_volume/out_sample_9_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 25,
+          "slack": 6.641,
+          "source": "reset_control/audio_sync/pipe_1_s0/Q",
+          "endpoint": "sound/stereo_on.right_volume/out_sample_10_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        }
+      ],
+      "3.1.4 Removal Paths Table": [
+        {
+          "number": 1,
+          "slack": 0.253,
+          "source": "lcd_on.display_driver/status_bridge/pixel_reset_sync/pipe_1_s0/Q",
+          "endpoint": "lcd_on.display_driver/status_bridge/ack_sync_0_s0/CLEAR",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 2,
+          "slack": 0.253,
+          "source": "bluetooth_on.local_actions/s_reset/pipe_1_s0/Q",
+          "endpoint": "bluetooth_on.local_actions/held_3_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 3,
+          "slack": 0.253,
+          "source": "bluetooth_on.local_actions/s_reset/pipe_1_s0/Q",
+          "endpoint": "bluetooth_on.local_actions/held_0_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 4,
+          "slack": 0.261,
+          "source": "lcd_on.display_driver/performance_bridge/source_reset_sync/pipe_1_s0/Q",
+          "endpoint": "lcd_on.display_driver/performance_bridge/held_data_28_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 5,
+          "slack": 0.264,
+          "source": "keypad_bridge/source_reset_sync/pipe_1_s0/Q",
+          "endpoint": "keypad_bridge/held_data_5_s0/CLEAR",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 6,
+          "slack": 0.264,
+          "source": "keypad_bridge/source_reset_sync/pipe_1_s0/Q",
+          "endpoint": "keypad_bridge/held_data_6_s0/CLEAR",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 7,
+          "slack": 0.264,
+          "source": "keypad_bridge/source_reset_sync/pipe_1_s0/Q",
+          "endpoint": "keypad_bridge/held_data_7_s0/CLEAR",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 8,
+          "slack": 0.275,
+          "source": "sound/voices[21].envelope_reset_s1/Q",
+          "endpoint": "sound/voices[21].sustain_on.tail/step_size_4_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 9,
+          "slack": 0.275,
+          "source": "sound/voices[21].envelope_reset_s1/Q",
+          "endpoint": "sound/voices[21].sustain_on.tail/step_size_5_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 10,
+          "slack": 0.279,
+          "source": "sound/voices[21].envelope_reset_s1/Q",
+          "endpoint": "sound/voices[21].sustain_on.tail/remainder_6_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 11,
+          "slack": 0.279,
+          "source": "sound/voices[21].envelope_reset_s1/Q",
+          "endpoint": "sound/voices[21].sustain_on.tail/remainder_7_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 12,
+          "slack": 0.279,
+          "source": "sound/voices[21].envelope_reset_s1/Q",
+          "endpoint": "sound/voices[21].sustain_on.tail/remainder_8_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 13,
+          "slack": 0.279,
+          "source": "sound/voices[21].envelope_reset_s1/Q",
+          "endpoint": "sound/voices[21].sustain_on.tail/remainder_9_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 14,
+          "slack": 0.279,
+          "source": "sound/voices[21].envelope_reset_s1/Q",
+          "endpoint": "sound/voices[21].sustain_on.tail/remainder_10_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 15,
+          "slack": 0.279,
+          "source": "sound/voices[21].envelope_reset_s1/Q",
+          "endpoint": "sound/voices[21].sustain_on.tail/step_size_6_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 16,
+          "slack": 0.279,
+          "source": "sound/voices[21].envelope_reset_s1/Q",
+          "endpoint": "sound/voices[21].sustain_on.tail/step_size_7_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 17,
+          "slack": 0.279,
+          "source": "lcd_on.display_driver/status_bridge/pixel_reset_sync/pipe_1_s0/Q",
+          "endpoint": "lcd_on.display_driver/status_bridge/request_s5/CLEAR",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 18,
+          "slack": 0.279,
+          "source": "lcd_on.display_driver/status_bridge/pixel_reset_sync/pipe_1_s0/Q",
+          "endpoint": "lcd_on.display_driver/status_bridge/pixel_valid_s0/CLEAR",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 19,
+          "slack": 0.279,
+          "source": "lcd_on.display_driver/status_bridge/pixel_reset_sync/pipe_1_s0/Q",
+          "endpoint": "lcd_on.display_driver/status_bridge/ack_sync_1_s0/CLEAR",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 20,
+          "slack": 0.282,
+          "source": "lcd_on.display_driver/more_bridge/pixel_reset_sync/pipe_1_s0/Q",
+          "endpoint": "lcd_on.display_driver/more_bridge/pixel_data_138_s0/CLEAR",
+          "from_clock": "pixel_clk:[R]",
+          "to_clock": "pixel_clk:[R]"
+        },
+        {
+          "number": 21,
+          "slack": 0.286,
+          "source": "ultrasonic_status_bridge/source_reset_sync/pipe_1_s0/Q",
+          "endpoint": "ultrasonic_status_bridge/held_data_24_s0/CLEAR",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 22,
+          "slack": 0.286,
+          "source": "ultrasonic_status_bridge/source_reset_sync/pipe_1_s0/Q",
+          "endpoint": "ultrasonic_status_bridge/held_data_25_s0/CLEAR",
+          "from_clock": "ref_clk:[R]",
+          "to_clock": "ref_clk:[R]"
+        },
+        {
+          "number": 23,
+          "slack": 0.317,
+          "source": "sound/voices[28].envelope_reset_s1/Q",
+          "endpoint": "sound/voices[28].sustain_on.tail/phase_8_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 24,
+          "slack": 0.317,
+          "source": "sound/voices[28].envelope_reset_s1/Q",
+          "endpoint": "sound/voices[28].sustain_on.tail/phase_11_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        },
+        {
+          "number": 25,
+          "slack": 0.317,
+          "source": "sound/voices[28].envelope_reset_s1/Q",
+          "endpoint": "sound/voices[28].sustain_on.tail/phase_12_s0/CLEAR",
+          "from_clock": "audio_clk:[R]",
+          "to_clock": "audio_clk:[R]"
+        }
+      ]
+    },
+    "internal_wns": {
+      "ref_clk": 1.423,
+      "audio_clk": -1.024,
+      "pixel_clk": 1.647
+    },
+    "pulse_width_slacks": [
+      0.478,
+      0.478,
+      0.478,
+      0.478,
+      0.478,
+      0.478,
+      0.478,
+      0.478,
+      0.479,
+      0.479
+    ],
+    "pulse_width_pass": true,
+    "all_reported_paths_nonnegative": false,
+    "internal_margin_pass": false,
+    "setup_hold_pass": false
+  },
+  "timing_error": null,
+  "last_completed_stage": "Power analysis completed",
+  "fully_routed": true,
+  "timing_pass": false,
+  "qualified_bitstream": false,
+  "hardware_programmed": false,
+  "files": {
+    "D2_keyboard_leds.log": {
+      "bytes": 2070,
+      "sha256": "c0860224e2ee9ae725f47764f6ceee52e4e78d0acae3b7c414b4c4160d1350ec"
+    },
+    "D2_keyboard_leds.rpt.txt": {
+      "bytes": 113958,
+      "sha256": "9d5992b264382a34d6609fc6d9ada4627769b5d03bfc56dacc1a215a51a77abd"
+    },
+    "D2_keyboard_leds.rpt.html": {
+      "bytes": 138215,
+      "sha256": "9911a90b77e48d822330ec7bed691b7ac8cd0fe0bcd9164924926964b1bb11e6"
+    },
+    "D2_keyboard_leds.tr": {
+      "bytes": 1036644,
+      "sha256": "508b4f41342674431e080d547786646833c84e0f5c3ae98806248d06022c0003"
+    },
+    "D2_keyboard_leds.tr.html": {
+      "bytes": 367,
+      "sha256": "2e89d3b82fc737b1faee5f985cda369b4e2347a3c735909e941a369cb8ff345b"
+    },
+    "D2_keyboard_leds.fs": {
+      "bytes": 40704907,
+      "sha256": "285870fac34c4d433fa85cb03eaab0602c7d1580e5f5c27f040c38bc58fc5446"
+    },
+    "D2_keyboard_leds.pin.html": {
+      "bytes": 131781,
+      "sha256": "36dd916faec3e0b6031e157dffa0d7b3e1a822bd05f8cc0f9bc357b89188630c"
+    }
+  }
+}
