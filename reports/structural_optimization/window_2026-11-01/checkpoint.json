@@ -3,7 +3,7 @@
   "branch": "codex/performance-fx-enhancement",
   "start_utc": "2026-11-01T02:11:11Z",
   "deadline_utc": "2026-11-01T03:26:11Z",
-  "status": "bounded_synthesis_running",
+  "status": "stopped_at_time_budget",
   "complete": false,
   "hardware_programmed": false,
   "qualified_bitstream": false,
@@ -294,6 +294,38 @@
       "archived_utc": "2026-11-01T02:44:15.111123+00:00",
       "synthesis_passed": true,
       "pnr_passed": false
+    },
+    "bounded_syn": {
+      "resources": {
+        "LUT": 75522,
+        "Register": 49071,
+        "ALU": 10640
+      },
+      "clocks": [
+        {
+          "name": "clk",
+          "constraint": "50.000(MHz)",
+          "actual": "55.355(MHz)",
+          "logic_levels": "22"
+        },
+        {
+          "name": "lcd_on.display_driver/pixel_pll/CLKOUT0.default_gen_clk",
+          "constraint": "35.000(MHz)",
+          "actual": "43.594(MHz)",
+          "logic_levels": "25"
+        },
+        {
+          "name": "clocks/pll2/CLKOUT0.default_gen_clk",
+          "constraint": "61.440(MHz)",
+          "actual": "59.049(MHz)",
+          "logic_levels": "19"
+        }
+      ],
+      "netlist_sha256": "f3dcc0d5ef5b27e3c072804bb89bef80647f9da57a8527cad59b88c87950ac0c",
+      "input_count": 110,
+      "archived_utc": "2026-11-01T02:54:16.090775+00:00",
+      "synthesis_passed": true,
+      "pnr_passed": false
     }
   },
   "build_stage_check": {
@@ -303,5 +335,62 @@
   },
   "length_count_valid_cases": 52,
   "final_alignment_validation": "reports/optimization_window_2026-11-01/final_alignment_dynamic/validation.json",
-  "final_performance_validation": "reports/optimization_window_2026-11-01/performance_top_bounded/validation.json"
+  "final_performance_validation": "reports/optimization_window_2026-11-01/performance_top_bounded/validation.json",
+  "window_finished_utc": "2026-11-01T03:25:21.048032+00:00",
+  "production_commit": "22b94cb851ecbfdd58118e3a5b28cce3828dfa63",
+  "pnr": {
+    "status": "stopped_at_time_budget",
+    "checked_utc": "2026-11-01T03:25:20.734747+00:00",
+    "elapsed": null,
+    "unrouted_nets": null,
+    "resources": {},
+    "netlist_sha256": "f3dcc0d5ef5b27e3c072804bb89bef80647f9da57a8527cad59b88c87950ac0c",
+    "source_unchanged": true,
+    "netlist_unchanged": true,
+    "constraint_scripts_test_inputs_unchanged": true,
+    "timing": null,
+    "offline_build_pass": false,
+    "qualified_bitstream": false,
+    "hardware_programmed": false,
+    "files": [
+      {
+        "name": "D2_keyboard_leds.log",
+        "sha256": "9133448a84f48289e9a24571e014ef42cdc597f6c36307ecba0ba2608b625e61",
+        "bytes": 698
+      }
+    ],
+    "profile": {
+      "place": 3,
+      "route": 2,
+      "maxfan": 23
+    },
+    "observed_wall_seconds": 1863.7,
+    "last_completed_stage": "Routing Phase 1 completed"
+  },
+  "remote_production_check": {
+    "commit": "22b94cb851ecbfdd58118e3a5b28cce3828dfa63",
+    "checked_files": 31,
+    "normalized_git_blob_matches": true,
+    "checked_utc": "2026-11-01T03:18:00Z"
+  },
+  "synthesis_critical_path": {
+    "from_node": "sound/stereo_on.output_conditioning.limiter/n1451_s",
+    "to_node": "sound/stereo_on.right_volume/n102_s",
+    "logic_levels": 19,
+    "slack_ns": -0.659,
+    "note": "Synthesis estimate only; limiter product magnitude/truncation/clipping path, not routed STA"
+  },
+  "performance_top_final_validation": "reports/optimization_window_2026-11-01/performance_top_bounded/validation.json",
+  "next_candidate": {
+    "applied": false,
+    "synthesis": false,
+    "checks": 300096,
+    "location": "chat outputs/next-candidate-not-applied",
+    "description": "resetless private PCB text working rows"
+  },
+  "routability_copy_trial": {
+    "status": "stopped_due_to_implicit_resynthesis",
+    "pnr_started": false,
+    "profile_comparison_available": false
+  }
 }

@@ -1,0 +1,29 @@
+{
+  "status": "stopped_at_time_budget",
+  "checked_utc": "2026-11-01T03:25:20.734747+00:00",
+  "elapsed": null,
+  "unrouted_nets": null,
+  "resources": {},
+  "netlist_sha256": "f3dcc0d5ef5b27e3c072804bb89bef80647f9da57a8527cad59b88c87950ac0c",
+  "source_unchanged": true,
+  "netlist_unchanged": true,
+  "constraint_scripts_test_inputs_unchanged": true,
+  "timing": null,
+  "offline_build_pass": false,
+  "qualified_bitstream": false,
+  "hardware_programmed": false,
+  "files": [
+    {
+      "name": "D2_keyboard_leds.log",
+      "sha256": "9133448a84f48289e9a24571e014ef42cdc597f6c36307ecba0ba2608b625e61",
+      "bytes": 698
+    }
+  ],
+  "profile": {
+    "place": 3,
+    "route": 2,
+    "maxfan": 23
+  },
+  "observed_wall_seconds": 1863.7,
+  "last_completed_stage": "Routing Phase 1 completed"
+}

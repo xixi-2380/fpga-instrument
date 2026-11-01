@@ -1,0 +1,507 @@
+{
+  "previous_window": {
+    "sha256": "9a41619e0d1e58fd8a987ca57aa54a11ccec1eab7a99672a745f08e6ef6e147f",
+    "modules": 213,
+    "primitive_counts": {
+      "IBUF": 21,
+      "IOBUF": 8,
+      "TBUF": 2,
+      "OBUF": 42,
+      "LUT2": 9252,
+      "LUT3": 22924,
+      "LUT4": 46756,
+      "DFFCE": 40830,
+      "ALU": 11082,
+      "INV": 191,
+      "DFFPE": 1451,
+      "VCC": 213,
+      "GND": 213,
+      "MULT12X12": 91,
+      "RAM16SDP4": 144,
+      "MUX2_LUT5": 2299,
+      "MUX2_LUT6": 1029,
+      "MUX2_LUT7": 355,
+      "MUX2_LUT8": 55,
+      "SDPB": 70,
+      "DFFRE": 7117,
+      "pROM": 87,
+      "MULTALU27X18": 152,
+      "PLL": 3,
+      "ODDR": 1,
+      "MULT27X36": 1,
+      "SPX9": 2,
+      "RAM16S4": 10,
+      "RAM16S1": 4,
+      "GSR": 1
+    },
+    "scoped_control_sets": 2567,
+    "scope_counts": {
+      "other": {
+        "IBUF": 21,
+        "IOBUF": 8,
+        "TBUF": 2,
+        "OBUF": 42,
+        "LUT2": 5667,
+        "LUT3": 13990,
+        "LUT4": 26350,
+        "DFFCE": 31005,
+        "ALU": 3443,
+        "INV": 118,
+        "DFFPE": 1355,
+        "VCC": 116,
+        "GND": 116,
+        "MULT12X12": 4,
+        "RAM16SDP4": 144,
+        "MUX2_LUT5": 1759,
+        "MUX2_LUT6": 793,
+        "MUX2_LUT7": 354,
+        "MUX2_LUT8": 55,
+        "SDPB": 70,
+        "DFFRE": 6313,
+        "pROM": 83,
+        "MULTALU27X18": 24,
+        "PLL": 3,
+        "ODDR": 1,
+        "MULT27X36": 1,
+        "SPX9": 2,
+        "RAM16S4": 10,
+        "RAM16S1": 4,
+        "GSR": 1
+      },
+      "renderer": {
+        "LUT3": 2760,
+        "LUT4": 5654,
+        "LUT2": 798,
+        "DFFRE": 804,
+        "DFFCE": 1,
+        "pROM": 4,
+        "MULT12X12": 23,
+        "ALU": 119,
+        "MUX2_LUT5": 540,
+        "MUX2_LUT6": 236,
+        "MUX2_LUT7": 1,
+        "INV": 9,
+        "VCC": 1,
+        "GND": 1
+      },
+      "sustain_tails": {
+        "LUT3": 2948,
+        "LUT4": 4512,
+        "LUT2": 1215,
+        "DFFCE": 4032,
+        "DFFPE": 32,
+        "MULTALU27X18": 64,
+        "ALU": 2624,
+        "VCC": 32,
+        "GND": 32
+      },
+      "instrument_envelopes": {
+        "LUT2": 1572,
+        "LUT4": 10240,
+        "LUT3": 3226,
+        "DFFCE": 5792,
+        "DFFPE": 64,
+        "ALU": 4896,
+        "INV": 64,
+        "MULTALU27X18": 64,
+        "MULT12X12": 64,
+        "VCC": 64,
+        "GND": 64
+      }
+    },
+    "top_scoped_ce_loads": [
+      {
+        "scope": "lcd_on.display_driver/pcb_bridge/",
+        "net": "n17_5",
+        "ff_load": 2033
+      },
+      {
+        "scope": "lcd_on.display_driver/pcb_bridge/",
+        "net": "n5206_5",
+        "ff_load": 2033
+      },
+      {
+        "scope": "pcb_controls/",
+        "net": "n56595_7",
+        "ff_load": 2031
+      },
+      {
+        "scope": "pcb_controls/",
+        "net": "n6593_16",
+        "ff_load": 1398
+      },
+      {
+        "scope": "sound/",
+        "net": "frame_ce",
+        "ff_load": 1154
+      },
+      {
+        "scope": "lcd_on.display_driver/status_bridge/",
+        "net": "n2438_5",
+        "ff_load": 1067
+      },
+      {
+        "scope": "lcd_on.display_driver/status_bridge/",
+        "net": "n17_6",
+        "ff_load": 1056
+      },
+      {
+        "scope": "lcd_on.display_driver/monitor/",
+        "net": "n11507_3",
+        "ff_load": 904
+      },
+      {
+        "scope": "lcd_on.display_driver/monitor/",
+        "net": "n10483_6",
+        "ff_load": 895
+      },
+      {
+        "scope": "pcb_diagnostic_bridge/",
+        "net": "n6192_3",
+        "ff_load": 863
+      },
+      {
+        "scope": "",
+        "net": "n3849_3",
+        "ff_load": 862
+      },
+      {
+        "scope": "pcb_diagnostic_bridge/",
+        "net": "n14_6",
+        "ff_load": 862
+      }
+    ],
+    "top_scoped_reset_loads": [
+      {
+        "scope": "pcb_controls/",
+        "kind": "CLEAR",
+        "net": "audio_reset",
+        "ff_load": 7708
+      },
+      {
+        "scope": "sound/allocator/",
+        "kind": "CLEAR",
+        "net": "engine_reset",
+        "ff_load": 2160
+      },
+      {
+        "scope": "lcd_on.display_driver/monitor/",
+        "kind": "CLEAR",
+        "net": "audio_reset",
+        "ff_load": 1810
+      },
+      {
+        "scope": "sound/dds/",
+        "kind": "CLEAR",
+        "net": "engine_reset",
+        "ff_load": 1462
+      },
+      {
+        "scope": "sound/",
+        "kind": "CLEAR",
+        "net": "engine_reset",
+        "ff_load": 1361
+      },
+      {
+        "scope": "bluetooth_on.services/song_library/",
+        "kind": "CLEAR",
+        "net": "\\bluetooth_on.source_reset",
+        "ff_load": 1146
+      },
+      {
+        "scope": "",
+        "kind": "CLEAR",
+        "net": "ultrasonic_ref_reset",
+        "ff_load": 1073
+      },
+      {
+        "scope": "bluetooth_on.link/core/player/",
+        "kind": "CLEAR",
+        "net": "\\bluetooth_on.source_reset",
+        "ff_load": 1063
+      },
+      {
+        "scope": "touch_keyboards[0].reader/",
+        "kind": "CLEAR",
+        "net": "ultrasonic_ref_reset",
+        "ff_load": 983
+      },
+      {
+        "scope": "touch_keyboards[1].reader/",
+        "kind": "CLEAR",
+        "net": "ultrasonic_ref_reset",
+        "ff_load": 983
+      },
+      {
+        "scope": "touch_keyboards[2].reader/",
+        "kind": "CLEAR",
+        "net": "ultrasonic_ref_reset",
+        "ff_load": 983
+      },
+      {
+        "scope": "bluetooth_on.link/core/",
+        "kind": "CLEAR",
+        "net": "\\bluetooth_on.source_reset",
+        "ff_load": 944
+      }
+    ]
+  },
+  "final": {
+    "sha256": "f3dcc0d5ef5b27e3c072804bb89bef80647f9da57a8527cad59b88c87950ac0c",
+    "modules": 214,
+    "primitive_counts": {
+      "IBUF": 21,
+      "IOBUF": 8,
+      "TBUF": 2,
+      "OBUF": 42,
+      "LUT2": 9702,
+      "LUT4": 43642,
+      "LUT3": 22178,
+      "DFFCE": 40408,
+      "ALU": 10640,
+      "INV": 191,
+      "DFFPE": 1547,
+      "VCC": 214,
+      "GND": 214,
+      "MULT12X12": 29,
+      "RAM16SDP4": 144,
+      "MUX2_LUT5": 2304,
+      "MUX2_LUT6": 1036,
+      "MUX2_LUT7": 355,
+      "MUX2_LUT8": 55,
+      "SDPB": 70,
+      "DFFRE": 7116,
+      "pROM": 87,
+      "MULTALU27X18": 90,
+      "PLL": 3,
+      "ODDR": 1,
+      "MULT27X36": 1,
+      "SPX9": 2,
+      "RAM16S4": 10,
+      "RAM16S1": 4,
+      "GSR": 1
+    },
+    "scoped_control_sets": 2571,
+    "scope_counts": {
+      "other": {
+        "IBUF": 21,
+        "IOBUF": 8,
+        "TBUF": 2,
+        "OBUF": 42,
+        "LUT2": 5416,
+        "LUT4": 24293,
+        "LUT3": 12635,
+        "DFFCE": 31001,
+        "ALU": 3435,
+        "INV": 114,
+        "DFFPE": 1355,
+        "VCC": 116,
+        "GND": 116,
+        "MULT12X12": 4,
+        "RAM16SDP4": 144,
+        "MUX2_LUT5": 1764,
+        "MUX2_LUT6": 794,
+        "MUX2_LUT7": 354,
+        "MUX2_LUT8": 55,
+        "SDPB": 70,
+        "DFFRE": 6312,
+        "pROM": 83,
+        "MULTALU27X18": 24,
+        "PLL": 3,
+        "ODDR": 1,
+        "MULT27X36": 1,
+        "SPX9": 2,
+        "RAM16S4": 10,
+        "RAM16S1": 4,
+        "GSR": 1
+      },
+      "renderer": {
+        "LUT3": 2827,
+        "LUT2": 662,
+        "LUT4": 5412,
+        "DFFRE": 804,
+        "DFFCE": 1,
+        "pROM": 4,
+        "MULT12X12": 23,
+        "ALU": 119,
+        "MUX2_LUT5": 540,
+        "MUX2_LUT6": 242,
+        "MUX2_LUT7": 1,
+        "INV": 13,
+        "VCC": 1,
+        "GND": 1
+      },
+      "shared_preparation": {
+        "LUT3": 99,
+        "LUT2": 57,
+        "LUT4": 721,
+        "DFFCE": 1310,
+        "DFFPE": 96,
+        "MULTALU27X18": 2,
+        "MULT12X12": 2,
+        "ALU": 14,
+        "VCC": 1,
+        "GND": 1
+      },
+      "sustain_tails": {
+        "LUT3": 2581,
+        "LUT4": 4601,
+        "LUT2": 1795,
+        "DFFCE": 4064,
+        "DFFPE": 32,
+        "MULTALU27X18": 64,
+        "ALU": 2592,
+        "VCC": 32,
+        "GND": 32
+      },
+      "instrument_envelopes": {
+        "LUT2": 1772,
+        "LUT4": 8615,
+        "LUT3": 4036,
+        "DFFCE": 4032,
+        "DFFPE": 64,
+        "ALU": 4480,
+        "INV": 64,
+        "VCC": 64,
+        "GND": 64
+      }
+    },
+    "top_scoped_ce_loads": [
+      {
+        "scope": "lcd_on.display_driver/pcb_bridge/",
+        "net": "n17_5",
+        "ff_load": 2033
+      },
+      {
+        "scope": "lcd_on.display_driver/pcb_bridge/",
+        "net": "n5206_5",
+        "ff_load": 2033
+      },
+      {
+        "scope": "pcb_controls/",
+        "net": "n56595_7",
+        "ff_load": 2031
+      },
+      {
+        "scope": "pcb_controls/",
+        "net": "n6593_14",
+        "ff_load": 1398
+      },
+      {
+        "scope": "sound/",
+        "net": "frame_ce",
+        "ff_load": 1154
+      },
+      {
+        "scope": "lcd_on.display_driver/status_bridge/",
+        "net": "n2438_5",
+        "ff_load": 1066
+      },
+      {
+        "scope": "lcd_on.display_driver/status_bridge/",
+        "net": "n17_6",
+        "ff_load": 1056
+      },
+      {
+        "scope": "lcd_on.display_driver/monitor/",
+        "net": "n11507_3",
+        "ff_load": 904
+      },
+      {
+        "scope": "lcd_on.display_driver/monitor/",
+        "net": "n10483_6",
+        "ff_load": 895
+      },
+      {
+        "scope": "pcb_diagnostic_bridge/",
+        "net": "n6192_3",
+        "ff_load": 863
+      },
+      {
+        "scope": "",
+        "net": "n3849_3",
+        "ff_load": 862
+      },
+      {
+        "scope": "pcb_diagnostic_bridge/",
+        "net": "n14_6",
+        "ff_load": 862
+      }
+    ],
+    "top_scoped_reset_loads": [
+      {
+        "scope": "pcb_controls/",
+        "kind": "CLEAR",
+        "net": "audio_reset",
+        "ff_load": 7708
+      },
+      {
+        "scope": "sound/allocator/",
+        "kind": "CLEAR",
+        "net": "engine_reset",
+        "ff_load": 2160
+      },
+      {
+        "scope": "lcd_on.display_driver/monitor/",
+        "kind": "CLEAR",
+        "net": "audio_reset",
+        "ff_load": 1810
+      },
+      {
+        "scope": "sound/dds/",
+        "kind": "CLEAR",
+        "net": "engine_reset",
+        "ff_load": 1462
+      },
+      {
+        "scope": "sound/",
+        "kind": "CLEAR",
+        "net": "engine_reset",
+        "ff_load": 1361
+      },
+      {
+        "scope": "sound/shared_envelope_preparation.prepare/",
+        "kind": "CLEAR",
+        "net": "engine_reset",
+        "ff_load": 1310
+      },
+      {
+        "scope": "bluetooth_on.services/song_library/",
+        "kind": "CLEAR",
+        "net": "\\bluetooth_on.source_reset",
+        "ff_load": 1146
+      },
+      {
+        "scope": "",
+        "kind": "CLEAR",
+        "net": "ultrasonic_ref_reset",
+        "ff_load": 1073
+      },
+      {
+        "scope": "bluetooth_on.link/core/player/",
+        "kind": "CLEAR",
+        "net": "\\bluetooth_on.source_reset",
+        "ff_load": 1063
+      },
+      {
+        "scope": "touch_keyboards[0].reader/",
+        "kind": "CLEAR",
+        "net": "ultrasonic_ref_reset",
+        "ff_load": 983
+      },
+      {
+        "scope": "touch_keyboards[1].reader/",
+        "kind": "CLEAR",
+        "net": "ultrasonic_ref_reset",
+        "ff_load": 983
+      },
+      {
+        "scope": "touch_keyboards[2].reader/",
+        "kind": "CLEAR",
+        "net": "ultrasonic_ref_reset",
+        "ff_load": 983
+      }
+    ]
+  },
+  "limitations": "Weighted reachable primitive counts; scoped CE/reset signatures do not resolve intermodule aliases. Physical CLS/resource report remains authoritative."
+}
