@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 // Four visual themes. Nine registered pixel stages; RGB/DE/HS/VS aligned.
-// Atomic1112-bit UI/wave and513-bit FFT snapshots; passive audio analysis.
+// Atomic1280-bit UI/wave and513-bit FFT snapshots; passive audio analysis.
 module rgb_ui_renderer #(parameter integer FRAME_LOCKED_INPUTS=0)(
  input wire pixel_clk,rst,frame_start,status_valid,input wire [1279:0] status_data,
  input wire [10:0] x,y,input wire de_in,hs_in,vs_in,
@@ -14,7 +14,7 @@ module rgb_ui_renderer #(parameter integer FRAME_LOCKED_INPUTS=0)(
   else begin raster_x<=x;raster_y<=y;raster_de<=de_in;raster_hs<=hs_in;raster_vs<=vs_in;end
  end
  `include "config/ui_layout.svh"
- // Palette changes are visual only; state bits 55:54 carry the theme.
+ // Palette changes are visual only; appended state bits1209:1208 carry the theme.
  reg [1279:0] state_q;reg [145:0] more_q;reg [63:0] performance_q;
  wire [1279:0] state=FRAME_LOCKED_INPUTS!=0 ? status_data : state_q;
  wire [145:0] more_state=FRAME_LOCKED_INPUTS!=0 ? more_data : more_q;
@@ -122,32 +122,1637 @@ module rgb_ui_renderer #(parameter integer FRAME_LOCKED_INPUTS=0)(
  function automatic [325:0] timbre_word(input [3:0] id);
   begin timbre_word=ui_word({3'd0,id},language_zh);end
  endfunction
- function automatic [6:0] action_word(input [6:0] a);
+ function automatic [6:0] action_word(input [6:0] a,input menu_value,input [2:0] effect_flags,input [1:0] effect_id,input sensor_value,input [63:0] performance_value);
   begin case(a)
-   UI_MODE:action_word=menu ? TXT_RETURN : TXT_SETTINGS;
+   UI_MODE:action_word=menu_value ? TXT_RETURN : TXT_SETTINGS;
    UI_MORE_BACK,UI_ULTRA_BACK,UI_SENS_BACK,UI_HARP_BACK:action_word=TXT_RETURN;
    UI_HARP_OPEN:action_word=TXT_HARP;
    UI_THEME:action_word=TXT_THEME;UI_VIEW:action_word=TXT_VIEW;UI_EGG:action_word=TXT_EGG;
    UI_ECHO:action_word=TXT_SUSTAIN;UI_ROOM:action_word=TXT_ROOM;UI_TREMOLO:action_word=TXT_TREMOLO;
-   UI_FX:action_word=effect_bits[fx] ? TXT_ON : TXT_OFF;
+   UI_FX:action_word=effect_flags[effect_id] ? TXT_ON : TXT_OFF;
    UI_DEFAULTS,UI_SENS_DEFAULT:action_word=TXT_DEFAULT;
    UI_TONE_PAGE:action_word=TXT_NEXT_PAGE;
    UI_OPEN_MORE:action_word=TXT_LIBRARY;UI_ULTRA_OPEN:action_word=TXT_ULTRA_PITCH;UI_SENSITIVITY:action_word=TXT_SENSITIVITY;
    UI_SONG_PREV:action_word=TXT_PREV;UI_SONG_NEXT:action_word=TXT_NEXT;UI_SONG_LOAD:action_word=TXT_LOAD;UI_SONG_PLAY:action_word=TXT_PLAY;
    UI_SONG_PAUSE:action_word=TXT_PAUSE;UI_SONG_RESUME:action_word=TXT_RESUME;UI_SONG_STOP:action_word=TXT_STOP;
    UI_SONG_SAVE:action_word=TXT_SAVE;UI_SONG_DELETE:action_word=TXT_DELETE;UI_FLASH_INFO:action_word=TXT_FLASH_INFO;
-   UI_ULTRA_TOGGLE:action_word=sensor_enabled ? TXT_ON : TXT_OFF;
+   UI_ULTRA_TOGGLE:action_word=sensor_value ? TXT_ON : TXT_OFF;
    UI_SENS_APPLY:action_word=TXT_APPLY;
-   UI_CHORUS:action_word=performance_state[1] ? TXT_ON : TXT_OFF;
-   UI_CHORUS_DEPTH:action_word=performance_state[6:5]==0 ? TXT_LOW : performance_state[6:5]==1 ? TXT_MID : TXT_HIGH;
-   UI_CHORUS_RATE:action_word=performance_state[8:7]==0 ? TXT_SLOW : performance_state[8:7]==1 ? TXT_MID : TXT_FAST;
-   UI_HARP_TONE:action_word=performance_state[33] ? TXT_PANEL_TIMBRE : TXT_FIXED_GUITAR;
+   UI_CHORUS:action_word=performance_value[1] ? TXT_ON : TXT_OFF;
+   UI_CHORUS_DEPTH:action_word=performance_value[6:5]==0 ? TXT_LOW : performance_value[6:5]==1 ? TXT_MID : TXT_HIGH;
+   UI_CHORUS_RATE:action_word=performance_value[8:7]==0 ? TXT_SLOW : performance_value[8:7]==1 ? TXT_MID : TXT_FAST;
+   UI_HARP_TONE:action_word=performance_value[33] ? TXT_PANEL_TIMBRE : TXT_FIXED_GUITAR;
    default:action_word=TXT_RETURN;
   endcase end
  endfunction
- reg [6:0] hit_action;
- reg [43:0] hit_rect;
- reg button_selected;
+ // Rectangles are static and disjoint within each selected page. Decode all
+ // hits in parallel; the pixel path never traverses action/word/length/centering.
+ // Labels and centered positions depend only on the frame state, not raster.
+ localparam integer BUTTON_COUNT=61,BUTTON_LEAVES=64,BUTTON_BITS=397;
+ wire button_sens=sensitivity_page;
+ wire button_sensor=!sensitivity_page && sensor_page;
+ wire button_library=!sensitivity_page && !sensor_page && library_page;
+ wire button_harp=!sensitivity_page && !sensor_page && !library_page && performance_page;
+ wire button_main=!sensitivity_page && !sensor_page && !library_page && !performance_page;
+ wire button_menu=button_main && menu;
+ wire [BUTTON_COUNT-1:0] button_hits;
+ wire [BUTTON_BITS-1:0] button_tree[1:2*BUTTON_LEAVES-1];
+ wire [6:0] button_action_tree[1:2*BUTTON_LEAVES-1];
+ wire button_any=|button_hits;
+ if(1)begin: button_0
+  localparam [6:0] ACTION=UI_VIEW;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(1) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[0]=hit;
+  assign button_tree[BUTTON_LEAVES+0]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+0]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_1
+  localparam [6:0] ACTION=UI_LANGUAGE;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(1) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[1]=hit;
+  assign button_tree[BUTTON_LEAVES+1]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+1]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_2
+  localparam [6:0] ACTION=UI_THEME;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(1) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[2]=hit;
+  assign button_tree[BUTTON_LEAVES+2]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+2]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_3
+  localparam [6:0] ACTION=UI_EGG;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(1) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[3]=hit;
+  assign button_tree[BUTTON_LEAVES+3]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+3]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_4
+  localparam [6:0] ACTION=UI_SENS_BACK;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_sens) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[4]=hit;
+  assign button_tree[BUTTON_LEAVES+4]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+4]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_5
+  localparam [6:0] ACTION=UI_ULTRA_BACK;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_sensor) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[5]=hit;
+  assign button_tree[BUTTON_LEAVES+5]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+5]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_6
+  localparam [6:0] ACTION=UI_MORE_BACK;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_library) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[6]=hit;
+  assign button_tree[BUTTON_LEAVES+6]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+6]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_7
+  localparam [6:0] ACTION=UI_HARP_BACK;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_harp) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[7]=hit;
+  assign button_tree[BUTTON_LEAVES+7]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+7]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_8
+  localparam [6:0] ACTION=UI_MODE;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_main) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[8]=hit;
+  assign button_tree[BUTTON_LEAVES+8]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+8]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_9
+  localparam [6:0] ACTION=UI_HARP_OPEN;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_main && !menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[9]=hit;
+  assign button_tree[BUTTON_LEAVES+9]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+9]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_10
+  localparam [6:0] ACTION=64;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[10]=hit;
+  assign button_tree[BUTTON_LEAVES+10]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+10]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_11
+  localparam [6:0] ACTION=65;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[11]=hit;
+  assign button_tree[BUTTON_LEAVES+11]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+11]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_12
+  localparam [6:0] ACTION=66;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[12]=hit;
+  assign button_tree[BUTTON_LEAVES+12]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+12]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_13
+  localparam [6:0] ACTION=67;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[13]=hit;
+  assign button_tree[BUTTON_LEAVES+13]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+13]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_14
+  localparam [6:0] ACTION=68;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[14]=hit;
+  assign button_tree[BUTTON_LEAVES+14]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+14]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_15
+  localparam [6:0] ACTION=69;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[15]=hit;
+  assign button_tree[BUTTON_LEAVES+15]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+15]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_16
+  localparam [6:0] ACTION=70;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[16]=hit;
+  assign button_tree[BUTTON_LEAVES+16]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+16]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_17
+  localparam [6:0] ACTION=71;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[17]=hit;
+  assign button_tree[BUTTON_LEAVES+17]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+17]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_18
+  localparam [6:0] ACTION=UI_TONE_PAGE;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[18]=hit;
+  assign button_tree[BUTTON_LEAVES+18]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+18]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_19
+  localparam [6:0] ACTION=UI_ECHO;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[19]=hit;
+  assign button_tree[BUTTON_LEAVES+19]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+19]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_20
+  localparam [6:0] ACTION=UI_ROOM;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[20]=hit;
+  assign button_tree[BUTTON_LEAVES+20]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+20]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_21
+  localparam [6:0] ACTION=UI_TREMOLO;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[21]=hit;
+  assign button_tree[BUTTON_LEAVES+21]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+21]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_22
+  localparam [6:0] ACTION=UI_FX;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[22]=hit;
+  assign button_tree[BUTTON_LEAVES+22]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+22]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_23
+  localparam [6:0] ACTION=UI_LESS;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[23]=hit;
+  assign button_tree[BUTTON_LEAVES+23]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+23]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_24
+  localparam [6:0] ACTION=UI_MORE;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[24]=hit;
+  assign button_tree[BUTTON_LEAVES+24]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+24]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_25
+  localparam [6:0] ACTION=UI_SLOWER;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu && fx==2 && !ui_action_inside(integer'(raster_x),integer'(raster_y),UI_OPEN_MORE)) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[25]=hit;
+  assign button_tree[BUTTON_LEAVES+25]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+25]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_26
+  localparam [6:0] ACTION=UI_FASTER;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu && fx==2 && !ui_action_inside(integer'(raster_x),integer'(raster_y),UI_SENSITIVITY)) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[26]=hit;
+  assign button_tree[BUTTON_LEAVES+26]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+26]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_27
+  localparam [6:0] ACTION=UI_VOLUME_DOWN;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[27]=hit;
+  assign button_tree[BUTTON_LEAVES+27]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+27]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_28
+  localparam [6:0] ACTION=UI_VOLUME_UP;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[28]=hit;
+  assign button_tree[BUTTON_LEAVES+28]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+28]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_29
+  localparam [6:0] ACTION=UI_OPEN_MORE;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[29]=hit;
+  assign button_tree[BUTTON_LEAVES+29]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+29]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_30
+  localparam [6:0] ACTION=UI_ULTRA_OPEN;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[30]=hit;
+  assign button_tree[BUTTON_LEAVES+30]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+30]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_31
+  localparam [6:0] ACTION=UI_SENSITIVITY;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[31]=hit;
+  assign button_tree[BUTTON_LEAVES+31]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+31]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_32
+  localparam [6:0] ACTION=UI_DEFAULTS;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_menu) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[32]=hit;
+  assign button_tree[BUTTON_LEAVES+32]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+32]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_33
+  localparam [6:0] ACTION=UI_SONG_PREV;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_library) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[33]=hit;
+  assign button_tree[BUTTON_LEAVES+33]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+33]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_34
+  localparam [6:0] ACTION=UI_SONG_NEXT;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_library) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[34]=hit;
+  assign button_tree[BUTTON_LEAVES+34]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+34]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_35
+  localparam [6:0] ACTION=UI_SONG_LOAD;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_library) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[35]=hit;
+  assign button_tree[BUTTON_LEAVES+35]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+35]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_36
+  localparam [6:0] ACTION=UI_SONG_PLAY;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_library) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[36]=hit;
+  assign button_tree[BUTTON_LEAVES+36]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+36]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_37
+  localparam [6:0] ACTION=UI_SONG_PAUSE;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_library) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[37]=hit;
+  assign button_tree[BUTTON_LEAVES+37]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+37]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_38
+  localparam [6:0] ACTION=UI_SONG_RESUME;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_library) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[38]=hit;
+  assign button_tree[BUTTON_LEAVES+38]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+38]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_39
+  localparam [6:0] ACTION=UI_SONG_STOP;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_library) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[39]=hit;
+  assign button_tree[BUTTON_LEAVES+39]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+39]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_40
+  localparam [6:0] ACTION=UI_SONG_SAVE;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_library) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[40]=hit;
+  assign button_tree[BUTTON_LEAVES+40]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+40]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_41
+  localparam [6:0] ACTION=UI_SONG_DELETE;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_library) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[41]=hit;
+  assign button_tree[BUTTON_LEAVES+41]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+41]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_42
+  localparam [6:0] ACTION=UI_FLASH_INFO;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_library) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[42]=hit;
+  assign button_tree[BUTTON_LEAVES+42]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+42]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_43
+  localparam [6:0] ACTION=UI_ULTRA_TOGGLE;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_sensor) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[43]=hit;
+  assign button_tree[BUTTON_LEAVES+43]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+43]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_44
+  localparam [6:0] ACTION=UI_SENS_DOWN;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_sensor) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[44]=hit;
+  assign button_tree[BUTTON_LEAVES+44]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+44]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_45
+  localparam [6:0] ACTION=UI_SENS_UP;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_sensor) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[45]=hit;
+  assign button_tree[BUTTON_LEAVES+45]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+45]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_46
+  localparam [6:0] ACTION=UI_MIN_DOWN;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_sensor) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[46]=hit;
+  assign button_tree[BUTTON_LEAVES+46]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+46]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_47
+  localparam [6:0] ACTION=UI_MIN_UP;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_sensor) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[47]=hit;
+  assign button_tree[BUTTON_LEAVES+47]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+47]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_48
+  localparam [6:0] ACTION=UI_MAX_DOWN;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_sensor) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[48]=hit;
+  assign button_tree[BUTTON_LEAVES+48]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+48]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_49
+  localparam [6:0] ACTION=UI_MAX_UP;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_sensor) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[49]=hit;
+  assign button_tree[BUTTON_LEAVES+49]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+49]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_50
+  localparam [6:0] ACTION=UI_GSR_DOWN;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_sens) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[50]=hit;
+  assign button_tree[BUTTON_LEAVES+50]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+50]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_51
+  localparam [6:0] ACTION=UI_GSR_UP;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_sens) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[51]=hit;
+  assign button_tree[BUTTON_LEAVES+51]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+51]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_52
+  localparam [6:0] ACTION=UI_KOR_DOWN;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_sens) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[52]=hit;
+  assign button_tree[BUTTON_LEAVES+52]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+52]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_53
+  localparam [6:0] ACTION=UI_KOR_UP;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_sens) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[53]=hit;
+  assign button_tree[BUTTON_LEAVES+53]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+53]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_54
+  localparam [6:0] ACTION=UI_SENS_APPLY;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_sens) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[54]=hit;
+  assign button_tree[BUTTON_LEAVES+54]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+54]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_55
+  localparam [6:0] ACTION=UI_SENS_DEFAULT;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_sens) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[55]=hit;
+  assign button_tree[BUTTON_LEAVES+55]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+55]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_56
+  localparam [6:0] ACTION=UI_CHORUS;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_harp) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[56]=hit;
+  assign button_tree[BUTTON_LEAVES+56]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+56]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_57
+  localparam [6:0] ACTION=UI_CHORUS_MIX;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_harp) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[57]=hit;
+  assign button_tree[BUTTON_LEAVES+57]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+57]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_58
+  localparam [6:0] ACTION=UI_CHORUS_DEPTH;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_harp) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[58]=hit;
+  assign button_tree[BUTTON_LEAVES+58]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+58]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_59
+  localparam [6:0] ACTION=UI_CHORUS_RATE;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_harp) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[59]=hit;
+  assign button_tree[BUTTON_LEAVES+59]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+59]={7{hit}} & ACTION;
+ end
+ if(1)begin: button_60
+  localparam [6:0] ACTION=UI_HARP_TONE;
+  localparam [43:0] RECT=ui_rect(ACTION);
+  localparam [10:0] L=RECT[43:33],T=RECT[32:22],W=RECT[21:11],H=RECT[10:0];
+  wire hit=(button_harp) && raster_x>=L && raster_x<L+W && raster_y>=T && raster_y<T+H;
+  wire border=raster_x<L+1 || raster_x>=L+W-1 || raster_y<T+1 || raster_y>=T+H-1;
+  wire selected=(ACTION>=64 && ACTION<72 && timbre[2:0]==ACTION-64) ||
+   (ACTION==UI_ECHO && fx==0)||(ACTION==UI_ROOM && fx==1)||(ACTION==UI_TREMOLO && fx==2)||
+   (ACTION==UI_EGG && theme==3)||(ACTION==UI_CHORUS && performance_state[1]);
+  wire [23:0] fill=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
+  wire [23:0] edge_color=selected ? GOLD : LINE;
+  reg [319:0] label_text;reg [5:0] label_len;reg wide;
+  reg [10:0] label_x;
+  always @*begin
+   wide=language_zh;{label_len,label_text}=ui_word(action_word(ACTION,menu,effect_bits,fx,sensor_enabled,performance_state),language_zh);
+   if(ACTION>=64 && ACTION<72){label_len,label_text}=timbre_word({timbre[3],ACTION[2:0]});
+   if(ACTION==UI_LANGUAGE)begin wide=!language_zh;if(language_zh)begin label_text="ENGLISH";label_len=7;end else {label_len,label_text}=ui_word(TXT_CHINESE,1'b1);end
+   if(ACTION==UI_CHORUS_MIX)begin wide=0;case(performance_state[4:2])1:label_text="13%";2:label_text="25%";3:label_text="38%";default:label_text="50%";endcase label_len=3;end
+   if(ACTION==UI_LESS || ACTION==UI_SLOWER || ACTION==UI_VOLUME_DOWN || ACTION==UI_SENS_DOWN || ACTION==UI_MIN_DOWN || ACTION==UI_MAX_DOWN || ACTION==UI_GSR_DOWN || ACTION==UI_KOR_DOWN)begin wide=0;label_text="-";label_len=1;end
+   if(ACTION==UI_MORE || ACTION==UI_FASTER || ACTION==UI_VOLUME_UP || ACTION==UI_SENS_UP || ACTION==UI_MIN_UP || ACTION==UI_MAX_UP || ACTION==UI_GSR_UP || ACTION==UI_KOR_UP)begin wide=0;label_text="+";label_len=1;end
+   label_x=integer'(L)+(integer'(W)-integer'(label_len)*(wide?16:10))/2;
+  end
+  assign button_hits[60]=hit;
+  assign button_tree[BUTTON_LEAVES+60]={BUTTON_BITS{hit}} & {border ? edge_color : fill,selected ? INK : GOLD,label_text,label_len,label_x,11'(T+(H-16)/2),wide};
+  assign button_action_tree[BUTTON_LEAVES+60]={7{hit}} & ACTION;
+ end
+ for(genvar p=BUTTON_COUNT;p<BUTTON_LEAVES;p=p+1)begin: button_unused
+  assign button_tree[BUTTON_LEAVES+p]=0;assign button_action_tree[BUTTON_LEAVES+p]=0;
+ end
+ for(genvar p=1;p<BUTTON_LEAVES;p=p+1)begin: button_reduce
+  assign button_tree[p]=button_tree[2*p]|button_tree[2*p+1];
+  assign button_action_tree[p]=button_action_tree[2*p]|button_action_tree[2*p+1];
+ end
+ wire [6:0] hit_action=button_any ? button_action_tree[1] : UI_NONE;
  function [23:0] card(input integer xx,yy,l,t,w,h,input selected);
   begin
    card=selected ? (theme==0 ? CREAM : GOLD) : PANEL;
@@ -158,7 +1763,7 @@ module rgb_ui_renderer #(parameter integer FRAME_LOCKED_INPUTS=0)(
   px=integer'(raster_x);py=integer'(raster_y);base=BG;fg=CREAM;text=0;len=0;tx=0;ty=0;
   wide_text=language_zh;dx=0;dy=0;ci=0;i=0;k=0;left=0;top=0;note_index=0;pc=0;
   spectrum_bin=0;spectrum_level=0;bin=0;point_y=234;previous_y=234;minimum_y=234;maximum_y=234;
-  ch=0;font_addr=0;font_bit=0;text_ink=0;alpha_font=0;hit_action=UI_NONE;hit_rect=0;button_selected=0;
+  ch=0;font_addr=0;font_bit=0;text_ink=0;alpha_font=0;
   if((py==78 && px>=20 && px<780)||(py==410 && px>=20 && px<780))base=LINE;
   if(sensitivity_page)begin
    if(py>=100 && py<124)begin {len,text}=ui_word(TXT_GLOBAL_GSR_KOR,language_zh);tx=32;ty=104;fg=GOLD;end
@@ -343,22 +1948,8 @@ module rgb_ui_renderer #(parameter integer FRAME_LOCKED_INPUTS=0)(
    if(py<440)begin text={"LAT ",digit(state[1131:1128]),digit(state[1127:1124]),digit(state[1123:1120]),".",digit(state[1119:1116]),digit(state[1115:1112])};len=10;ty=422;if(!state[1132])begin text="LAT --";len=6;end end
    else begin text={"VOICES ",voice_tens,voice_units,"/32"};len=12;ty=446;end
   end
-  // One geometry and action map drives both buttons and touch acceptance.
-  hit_action=sensitivity_page ? sensitivity_hit(px,py) : sensor_page ? ultrasonic_hit(px,py) : library_page ? more_hit(px,py) : performance_page ? harp_hit(px,py) : ui_hit(px,py,fx,menu);
-  if(hit_action!=UI_NONE)begin
-   hit_rect=ui_rect(hit_action);left=hit_rect[43:33];top=hit_rect[32:22];
-   button_selected=(hit_action>=64 && hit_action<72 && timbre[2:0]==hit_action-64) ||
-    (hit_action==UI_ECHO && fx==0)||(hit_action==UI_ROOM && fx==1)||(hit_action==UI_TREMOLO && fx==2)||
-    (hit_action==UI_EGG && theme==3)||(hit_action==UI_CHORUS && performance_state[1]);
-   base=card(px,py,left,top,hit_rect[21:11],hit_rect[10:0],button_selected);fg=button_selected?INK:GOLD;
-   wide_text=language_zh;{len,text}=ui_word(action_word(hit_action),language_zh);
-   if(hit_action>=64 && hit_action<72){len,text}=timbre_word({timbre[3],hit_action[2:0]});
-   if(hit_action==UI_LANGUAGE)begin wide_text=!language_zh;if(language_zh)begin text="ENGLISH";len=7;end else {len,text}=ui_word(TXT_CHINESE,1'b1);end
-   if(hit_action==UI_CHORUS_MIX)begin wide_text=0;case(performance_state[4:2])1:text="13%";2:text="25%";3:text="38%";default:text="50%";endcase len=3;end
-   if(hit_action==UI_LESS || hit_action==UI_SLOWER || hit_action==UI_VOLUME_DOWN || hit_action==UI_SENS_DOWN || hit_action==UI_MIN_DOWN || hit_action==UI_MAX_DOWN || hit_action==UI_GSR_DOWN || hit_action==UI_KOR_DOWN)begin wide_text=0;text="-";len=1;end
-   if(hit_action==UI_MORE || hit_action==UI_FASTER || hit_action==UI_VOLUME_UP || hit_action==UI_SENS_UP || hit_action==UI_MIN_UP || hit_action==UI_MAX_UP || hit_action==UI_GSR_UP || hit_action==UI_KOR_UP)begin wide_text=0;text="+";len=1;end
-   tx=left+(integer'(hit_rect[21:11])-integer'(len)*(wide_text?16:10))/2;ty=top+(integer'(hit_rect[10:0])-16)/2;
-  end
+  // Preserve original overlay priority with a single parallel button result.
+  if(button_any){base,fg,text,len,tx,ty,wide_text}=button_tree[1];
   // Existing title bitmaps/fonts and artwork are retained for all themes.
   if(ui_inside(px,py,24,4,384,64))begin
    font_addr=(language_zh ? ZH_TITLE_BASE : 4608)+integer'(font_theme)*3072+(py-4)*48+((px-24)>>3);

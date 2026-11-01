@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "layout_checks": 111273,
+  "rgb_checks": 111273,
+  "hit_checks": 111273,
+  "source_sha256": {
+    "src/rgb_ui_renderer.sv": "38c8ac0ab8504874f711cc7c3f92266d388c2562fdd4a3a6c83ac363afad7c3d",
+    "reports/display_timing_candidate/equivalence_boundaries/reference.sv": "7baf7b2f1451be9c3172348e1d6ba0311ab12d1bb981c40c35643c4e391018f1",
+    "src/ui_theme_art.sv": "ba4f3c1d68c70ed252dfd9a2c2999c6702b641d4bf8dd131a371589e2157b230",
+    "src/lissajous_plot.sv": "8fb5035e3c956c5154da790bdba16cd0a4ae820ec0da4d0b925a7476c6a8ddad",
+    "reports/display_timing_candidate/equivalence_boundaries/equivalence.sv": "db20779b50ea24fc4b48ea619255490ec55d8a76fb1dc2acd3c915e01e7c3b0e"
+  },
+  "commands": [
+    [
+      "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+      "-g2012",
+      "-grelative-include",
+      "-IF:/FPGA_Projects/fpga-instrument-main-display-candidate-20261101/src",
+      "-s",
+      "tb_candidate_equivalence",
+      "-o",
+      "F:/FPGA_Projects/fpga-instrument-main-display-candidate-20261101/reports/display_timing_candidate/equivalence_boundaries/test.vvp",
+      "F:/FPGA_Projects/fpga-instrument-main-display-candidate-20261101/src/rgb_ui_renderer.sv",
+      "F:/FPGA_Projects/fpga-instrument-main-display-candidate-20261101/reports/display_timing_candidate/equivalence_boundaries/reference.sv",
+      "F:/FPGA_Projects/fpga-instrument-main-display-candidate-20261101/src/ui_theme_art.sv",
+      "F:/FPGA_Projects/fpga-instrument-main-display-candidate-20261101/src/lissajous_plot.sv",
+      "F:/FPGA_Projects/fpga-instrument-main-display-candidate-20261101/reports/display_timing_candidate/equivalence_boundaries/equivalence.sv"
+    ],
+    [
+      "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\vvp.exe",
+      "F:/FPGA_Projects/fpga-instrument-main-display-candidate-20261101/reports/display_timing_candidate/equivalence_boundaries/test.vvp",
+      "+OUT=F:/FPGA_Projects/fpga-instrument-main-display-candidate-20261101/reports/display_timing_candidate/equivalence_boundaries"
+    ]
+  ],
+  "seconds": 26.978,
+  "sta_passed": false
+}

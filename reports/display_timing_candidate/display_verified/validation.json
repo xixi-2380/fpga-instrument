@@ -1,0 +1,43 @@
+{
+  "tests": [
+    {
+      "name": "touch",
+      "passed": true,
+      "checks": 163,
+      "source_sha256": {
+        "F:\\FPGA_Projects\\fpga-instrument-main-display-candidate-20261101\\src\\ui_touch_actions.sv": "ab42e1098b6aba6052b095b2e69d2dbc22631e2e58a906c4c2dde051e277162a",
+        "F:\\FPGA_Projects\\fpga-instrument-main-display-candidate-20261101\\reports\\display_timing_candidate\\display_verified\\touch.sv": "97492e070424f9a5a21f05082e48d9ce5f2ce024b39d3abda9d5d9da6b1b6480"
+      },
+      "output": "PASS tb_merged_touch checks=163 events=76\nF:/FPGA_Projects/fpga-instrument-main-display-candidate-20261101/reports/display_timing_candidate/display_verified/touch.sv:35: $finish called at 16270000 (1ps)\n"
+    },
+    {
+      "name": "pixels",
+      "passed": true,
+      "checks": 1796592,
+      "source_sha256": {
+        "F:\\FPGA_Projects\\fpga-instrument-main-display-candidate-20261101\\src\\rgb_ui_renderer.sv": "38c8ac0ab8504874f711cc7c3f92266d388c2562fdd4a3a6c83ac363afad7c3d",
+        "F:\\FPGA_Projects\\fpga-instrument-main-display-candidate-20261101\\src\\ui_theme_art.sv": "ba4f3c1d68c70ed252dfd9a2c2999c6702b641d4bf8dd131a371589e2157b230",
+        "F:\\FPGA_Projects\\fpga-instrument-main-display-candidate-20261101\\src\\lissajous_plot.sv": "8fb5035e3c956c5154da790bdba16cd0a4ae820ec0da4d0b925a7476c6a8ddad",
+        "F:\\FPGA_Projects\\fpga-instrument-main-display-candidate-20261101\\reports\\display_timing_candidate\\display_verified\\pixels.sv": "1f159cd27b0192d3d66a00a9643c778c7458a6af42ac932558ab256bd0abf360"
+      },
+      "output": "PASS tb_merged_pixels checks=1796592 images=15 full_resolution=1 half_resolution=14\nF:/FPGA_Projects/fpga-instrument-main-display-candidate-20261101/reports/display_timing_candidate/display_verified/pixels.sv:54: $finish called at 3593186000 (1ps)\n"
+    }
+  ],
+  "total_checks": 1796755,
+  "images": 15,
+  "behavioral_render": true,
+  "sta_passed": false,
+  "hardware_tested": false,
+  "source_sha256": {
+    "src\\rgb_display.sv": "69a72c2cc71d78c8afcce2056699b4beae281b9b43dbdca9b04871bef1405cb4",
+    "src\\rgb_ui_renderer.sv": "38c8ac0ab8504874f711cc7c3f92266d388c2562fdd4a3a6c83ac363afad7c3d",
+    "src\\ui_theme_art.sv": "ba4f3c1d68c70ed252dfd9a2c2999c6702b641d4bf8dd131a371589e2157b230",
+    "src\\audio_spectrum.sv": "b216f21a3a948a4d5b625c38cafd83c51c3799d994ab94852b1dd554863e21ef",
+    "src\\lissajous_plot.sv": "8fb5035e3c956c5154da790bdba16cd0a4ae820ec0da4d0b925a7476c6a8ddad",
+    "src\\ui_touch_actions.sv": "ab42e1098b6aba6052b095b2e69d2dbc22631e2e58a906c4c2dde051e277162a",
+    "src\\config\\ui_language.svh": "63837ba70a24ec358b10e273880979ab84bd6ce991e1242141c3eefd7197ce0e",
+    "src\\config\\ui_layout.svh": "66232650f9c2af775736d8b4fd943e2c461d0953298f90293870531f8fb5a6f9",
+    "src\\config\\theme_storage.svh": "927ceead03ab30e79e4af62ecfe5289acd41e986769eccd3da693fdb245fc581",
+    "src\\rom\\theme_font.hex": "3c62f53e6bdf47512bb8e57d785b6053b93306c435ae4104e28ec5446a9c8113"
+  }
+}
