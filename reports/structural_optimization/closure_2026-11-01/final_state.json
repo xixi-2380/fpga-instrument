@@ -1,0 +1,61 @@
+{
+  "stopped_utc": "2026-11-01T08:34:18.682427+00:00",
+  "task_ended_by_user": true,
+  "optimization_completed": false,
+  "qualified_bitstream_available": false,
+  "latest_rtl_commit": "400d376f46f5637f6dce32fe68758f48f86a9a67",
+  "current_run": {
+    "status": "interrupted_by_user",
+    "wall_seconds": 3015.176776,
+    "last_completed_stage": "Routing Phase 0 completed",
+    "completed_routing_result": false,
+    "source_unchanged": true,
+    "netlist_sha256": "227d8a9a709ce500f81f18c6dcbdf34e56fb7da349b064766b18ce402d4a991e",
+    "stop_record": {
+      "pid": 34376,
+      "requested_utc": "2026-11-01T08:33:08.0451029Z",
+      "command_line": "C:/Gowin/Gowin_V1.9.12.04_x64/IDE/bin/gw_sh.exe C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\path_candidate\\scripts\\build_keyboard.tcl pnr",
+      "classification": "interrupted_by_user_not_a_completed_routing_result",
+      "reason": "User explicitly ended optimization to work on other parts"
+    }
+  },
+  "best_completed_physical_run": {
+    "name": "dds_default",
+    "project": "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\dds_candidate\\keyboard_adsr.gprj",
+    "tool_elapsed": "0h 28m 37s",
+    "wall_seconds": 2236.199058,
+    "fully_routed": true,
+    "unrouted_nets": 0,
+    "qualified_bitstream": false,
+    "netlist_sha256": "19178ebfd58e70e0b736ea8904b1a22931aeb02aff51404ad08e0737b303cb7b",
+    "timing": {
+      "counts": {
+        "Setup": 128,
+        "Hold": 0
+      },
+      "fmax": {
+        "ref_clk": {
+          "target": 50.0,
+          "actual": 49.523
+        },
+        "audio_clk": {
+          "target": 61.44,
+          "actual": 60.11
+        },
+        "pixel_clk": {
+          "target": 35.0,
+          "actual": 35.201
+        }
+      },
+      "internal_wns": {
+        "ref_clk": -0.193,
+        "audio_clk": -0.36,
+        "pixel_clk": 0.163
+      }
+    },
+    "pin_count": 73,
+    "pin_mismatches": [],
+    "lcd_clock_passed": true
+  },
+  "note": "User ended optimization. Latest E run was stopped on request; it is neither a completed routing failure nor a completed success. Raw runner tool_failed and initial-netlist audit assertion reflect termination plus automatic resynthesis, not changed HDL."
+}

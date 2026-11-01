@@ -1,5 +1,5 @@
 {
-  "status": "path_candidate_functional_passed_physical_running",
+  "status": "stopped_by_user",
   "complete": false,
   "checked_utc": "2026-11-01T08:03:04.215129+00:00",
   "start_utc": "2026-11-01T03:39:58Z",
@@ -1933,7 +1933,9 @@
     },
     "actual_netlist_sha256": "227d8a9a709ce500f81f18c6dcbdf34e56fb7da349b064766b18ce402d4a991e",
     "capture_timing": "during physical run",
-    "finished": false
+    "finished": true,
+    "completed_routing_result": false,
+    "status": "interrupted_by_user"
   },
   "latest_routing_evidence": "routing_runs.json",
   "latest_validation": [
@@ -1950,5 +1952,7 @@
     "dds_acceptance.json",
     "path_merged_runtime.json",
     "build_reuse_probe.json"
-  ]
+  ],
+  "task_ended_by_user": true,
+  "final_state_file": "final_state.json"
 }
