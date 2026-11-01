@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "compile_only": true,
+  "sta_passed": false,
+  "command": [
+    "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+    "-g2012",
+    "-grelative-include",
+    "-IF:/FPGA_Projects/fpga-instrument-main-integration-20261101/src",
+    "-s",
+    "rgb_display",
+    "-o",
+    "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/reports/integration_20261101/display_verified/vendor_display.vvp",
+    "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/rgb_display.sv",
+    "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/rgb_ui_renderer.sv",
+    "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/ui_theme_art.sv",
+    "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/lissajous_plot.sv",
+    "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/audio_spectrum.sv",
+    "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/audio_visualizer.sv",
+    "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/rgb_status_cdc.sv",
+    "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/rgb_scan_timing.sv",
+    "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/reset_sync.sv",
+    "C:/Gowin/Gowin_V1.9.12.04_x64/IDE/simlib/gw5a/prim_sim.v"
+  ],
+  "source_sha256": {
+    "F:\\FPGA_Projects\\fpga-instrument-main-integration-20261101\\src\\rgb_display.sv": "69a72c2cc71d78c8afcce2056699b4beae281b9b43dbdca9b04871bef1405cb4",
+    "F:\\FPGA_Projects\\fpga-instrument-main-integration-20261101\\src\\rgb_ui_renderer.sv": "0449d0df6b5e63875465ec1218ef0aa75869b14deb7b022c321389d35f21fc88",
+    "F:\\FPGA_Projects\\fpga-instrument-main-integration-20261101\\src\\ui_theme_art.sv": "ba4f3c1d68c70ed252dfd9a2c2999c6702b641d4bf8dd131a371589e2157b230",
+    "F:\\FPGA_Projects\\fpga-instrument-main-integration-20261101\\src\\lissajous_plot.sv": "8fb5035e3c956c5154da790bdba16cd0a4ae820ec0da4d0b925a7476c6a8ddad",
+    "F:\\FPGA_Projects\\fpga-instrument-main-integration-20261101\\src\\audio_spectrum.sv": "b216f21a3a948a4d5b625c38cafd83c51c3799d994ab94852b1dd554863e21ef",
+    "F:\\FPGA_Projects\\fpga-instrument-main-integration-20261101\\src\\audio_visualizer.sv": "f92b333c0325635388db95fdb57eea40fbf32a76733581b0716c428deb184485",
+    "F:\\FPGA_Projects\\fpga-instrument-main-integration-20261101\\src\\rgb_status_cdc.sv": "8d2702e80ac5536804c6cfc20acbedb9fa5ace1845406f417161e31eab8a9a45",
+    "F:\\FPGA_Projects\\fpga-instrument-main-integration-20261101\\src\\rgb_scan_timing.sv": "4cc871b48f4c61d5eb68ebe403566628a5db890ea3a569d68fafc9186a419950",
+    "F:\\FPGA_Projects\\fpga-instrument-main-integration-20261101\\src\\reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+    "C:\\Gowin\\Gowin_V1.9.12.04_x64\\IDE\\simlib\\gw5a\\prim_sim.v": "7109c2568188627465d218bc099cf72f12e90807c21d4d862d2335b499043544"
+  }
+}

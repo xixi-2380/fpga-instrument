@@ -1,0 +1,8 @@
+{
+  "note": "Current audit only; not captured before the original simulation. Project source paths are preserved verbatim in each commands.json. Golden fixture has an independently checked known CRC inside tb_midi_protocol.",
+  "sha256": {
+    "keyboard_adsr.gprj": "51ebdb7571bc5d0efd17b529f08bdc639a7f069369731359c48788dc600e0522",
+    "sim/check.svh": "e72479555ce83d9f4665986601f62f4f7c360c0f59ce1ae43d09397d7ab77a7c",
+    "sim/data/midi_golden.hex": "d4325f5dd8820f6195ba4cd4b9af5d3d5301213528cc4d8032db0bbc265f73d1"
+  }
+}

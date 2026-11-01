@@ -1,21 +1,42 @@
-function automatic [31:0] key_fcw(input [3:0] key);
-begin case(key)
-4'd0:key_fcw=32'h016534C3; // MIDI 60
-4'd1:key_fcw=32'h017A725A; // MIDI 61
-4'd2:key_fcw=32'h0190F347; // MIDI 62
-4'd3:key_fcw=32'h01A8CAC3; // MIDI 63
-4'd4:key_fcw=32'h01C20D2F; // MIDI 64
-4'd5:key_fcw=32'h01DCD01D; // MIDI 65
-4'd6:key_fcw=32'h01F92A6D; // MIDI 66
-4'd7:key_fcw=32'h02173456; // MIDI 67
-4'd8:key_fcw=32'h02370783; // MIDI 68
-4'd9:key_fcw=32'h0258BF26; // MIDI 69
-4'd10:key_fcw=32'h027C780B; // MIDI 70
-4'd11:key_fcw=32'h02A250BA; // MIDI 71
-4'd12:key_fcw=32'h02CA6987; // MIDI 72
-4'd13:key_fcw=32'h02F4E4B4; // MIDI 73
-4'd14:key_fcw=32'h0321E68D; // MIDI 74
-4'd15:key_fcw=32'h03519586; // MIDI 75
-default:key_fcw=32'h016534C3;
-endcase end
+// C4..B6, rounded phase increments at 48kHz.
+function automatic [31:0] key_fcw(input [5:0] key);
+ begin case(key)
+  6'd0:key_fcw=32'd23409859;
+  6'd1:key_fcw=32'd24801882;
+  6'd2:key_fcw=32'd26276679;
+  6'd3:key_fcw=32'd27839171;
+  6'd4:key_fcw=32'd29494575;
+  6'd5:key_fcw=32'd31248413;
+  6'd6:key_fcw=32'd33106541;
+  6'd7:key_fcw=32'd35075158;
+  6'd8:key_fcw=32'd37160835;
+  6'd9:key_fcw=32'd39370534;
+  6'd10:key_fcw=32'd41711627;
+  6'd11:key_fcw=32'd44191930;
+  6'd12:key_fcw=32'd46819719;
+  6'd13:key_fcw=32'd49603764;
+  6'd14:key_fcw=32'd52553357;
+  6'd15:key_fcw=32'd55678342;
+  6'd16:key_fcw=32'd58989149;
+  6'd17:key_fcw=32'd62496826;
+  6'd18:key_fcw=32'd66213081;
+  6'd19:key_fcw=32'd70150316;
+  6'd20:key_fcw=32'd74321671;
+  6'd21:key_fcw=32'd78741067;
+  6'd22:key_fcw=32'd83423255;
+  6'd23:key_fcw=32'd88383859;
+  6'd24:key_fcw=32'd93639437;
+  6'd25:key_fcw=32'd99207528;
+  6'd26:key_fcw=32'd105106715;
+  6'd27:key_fcw=32'd111356685;
+  6'd28:key_fcw=32'd117978298;
+  6'd29:key_fcw=32'd124993653;
+  6'd30:key_fcw=32'd132426162;
+  6'd31:key_fcw=32'd140300631;
+  6'd32:key_fcw=32'd148643341;
+  6'd33:key_fcw=32'd157482134;
+  6'd34:key_fcw=32'd166846509;
+  6'd35:key_fcw=32'd176767719;
+  default:key_fcw=32'd0;
+ endcase end
 endfunction

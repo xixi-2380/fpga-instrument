@@ -1,0 +1,898 @@
+[
+  {
+    "path": "keyboard_top",
+    "module": "keyboard_top"
+  },
+  {
+    "path": "keyboard_top/audio_id_monitor",
+    "module": "bt_identity_monitor"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/bridge",
+    "module": "bluetooth_audio_bridge"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/bt_reset",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/events",
+    "module": "bt_event_cdc"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/events/a_reset",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/events/s_reset",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/link",
+    "module": "bluetooth_score_link"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/link/core",
+    "module": "bluetooth_score_core"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/link/core/parser",
+    "module": "bt_frame_rx"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/link/core/player",
+    "module": "bt_score_player"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/link/core/responses",
+    "module": "bt_frame_tx"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/link/core/validator",
+    "module": "score_validator"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/link/rx",
+    "module": "uart_rx"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/link/tx",
+    "module": "uart_tx"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/local_actions",
+    "module": "bt_event_cdc"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/local_actions/a_reset",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/local_actions/s_reset",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/services",
+    "module": "score_services"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/services/control",
+    "module": "local_score_control"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/services/flash",
+    "module": "spi_nor_flash"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/services/flash/bytes",
+    "module": "spi_byte_master"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/services/protocol",
+    "module": "score_library_protocol"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/services/song_library",
+    "module": "flash_song_library"
+  },
+  {
+    "path": "keyboard_top/bluetooth_on/source_id_monitor",
+    "module": "bt_identity_monitor"
+  },
+  {
+    "path": "keyboard_top/clocks",
+    "module": "pll_pair"
+  },
+  {
+    "path": "keyboard_top/clocks/pll1",
+    "module": "PLL"
+  },
+  {
+    "path": "keyboard_top/clocks/pll2",
+    "module": "PLL"
+  },
+  {
+    "path": "keyboard_top/encoders[0]/control",
+    "module": "ec11_encoder"
+  },
+  {
+    "path": "keyboard_top/encoders[1]/control",
+    "module": "ec11_encoder"
+  },
+  {
+    "path": "keyboard_top/encoders[2]/control",
+    "module": "ec11_encoder"
+  },
+  {
+    "path": "keyboard_top/key_events",
+    "module": "key_note_events"
+  },
+  {
+    "path": "keyboard_top/keypad_bridge",
+    "module": "rgb_status_cdc"
+  },
+  {
+    "path": "keyboard_top/keypad_bridge/pixel_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/keypad_bridge/source_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver",
+    "module": "rgb_display"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/GSR",
+    "module": "GSR"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/analysis_bridge",
+    "module": "rgb_frame_status_cdc"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/analysis_bridge/pixel_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/analysis_bridge/source_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/analyzer",
+    "module": "audio_spectrum"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/monitor",
+    "module": "audio_visualizer"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/more_bridge",
+    "module": "rgb_frame_status_cdc"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/more_bridge/pixel_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/more_bridge/source_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/performance_bridge",
+    "module": "rgb_frame_status_cdc"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/performance_bridge/pixel_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/performance_bridge/source_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/pixel_clock_forward",
+    "module": "ODDR"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/pixel_pll",
+    "module": "PLL"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/pixel_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/renderer",
+    "module": "rgb_ui_renderer"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/renderer/artwork",
+    "module": "ui_theme_art"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/renderer/phase_plot",
+    "module": "lissajous_plot"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/scan",
+    "module": "rgb_scan_timing"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/status_bridge",
+    "module": "rgb_frame_status_cdc"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/status_bridge/pixel_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/lcd_on/display_driver/status_bridge/source_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/manual_inputs",
+    "module": "manual_event_arbiter"
+  },
+  {
+    "path": "keyboard_top/menu_keys",
+    "module": "touch_keyboard_router"
+  },
+  {
+    "path": "keyboard_top/more_controls",
+    "module": "ui_more_actions"
+  },
+  {
+    "path": "keyboard_top/performance",
+    "module": "performance_control"
+  },
+  {
+    "path": "keyboard_top/pitch_sensor",
+    "module": "ultrasonic_pitch"
+  },
+  {
+    "path": "keyboard_top/range_reader",
+    "module": "ultrasonic_range"
+  },
+  {
+    "path": "keyboard_top/reset_control",
+    "module": "clock_reset"
+  },
+  {
+    "path": "keyboard_top/reset_control/audio_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/reset_control/g1",
+    "module": "lock_guard"
+  },
+  {
+    "path": "keyboard_top/reset_control/g2",
+    "module": "lock_guard"
+  },
+  {
+    "path": "keyboard_top/reset_control/ref_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/score",
+    "module": "score_player"
+  },
+  {
+    "path": "keyboard_top/sensitivity_control",
+    "module": "keyboard_sensitivity"
+  },
+  {
+    "path": "keyboard_top/sensitivity_control/bus_reset",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/sensitivity_control/request_bridge",
+    "module": "bt_event_cdc"
+  },
+  {
+    "path": "keyboard_top/sensitivity_control/request_bridge/a_reset",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/sensitivity_control/request_bridge/s_reset",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/sensitivity_control/result_bridge",
+    "module": "rgb_status_cdc"
+  },
+  {
+    "path": "keyboard_top/sensitivity_control/result_bridge/pixel_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/sensitivity_control/result_bridge/source_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/sensitivity_control/ui_reset",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/service_bridge",
+    "module": "rgb_status_cdc"
+  },
+  {
+    "path": "keyboard_top/service_bridge/pixel_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/service_bridge/source_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/sound",
+    "module": "synth_core"
+  },
+  {
+    "path": "keyboard_top/sound/allocator",
+    "module": "voice_allocator"
+  },
+  {
+    "path": "keyboard_top/sound/buffer",
+    "module": "frame_buffer"
+  },
+  {
+    "path": "keyboard_top/sound/dds",
+    "module": "dds_sine"
+  },
+  {
+    "path": "keyboard_top/sound/effect",
+    "module": "audio_effects"
+  },
+  {
+    "path": "keyboard_top/sound/effect/chorus_on/chorus",
+    "module": "audio_chorus"
+  },
+  {
+    "path": "keyboard_top/sound/effect/room",
+    "module": "audio_reverb"
+  },
+  {
+    "path": "keyboard_top/sound/final_filter_left/filter",
+    "module": "audio_output_filter"
+  },
+  {
+    "path": "keyboard_top/sound/gain",
+    "module": "tone_gain"
+  },
+  {
+    "path": "keyboard_top/sound/latency_meter",
+    "module": "audio_latency_meter"
+  },
+  {
+    "path": "keyboard_top/sound/mixer",
+    "module": "voice_mixer"
+  },
+  {
+    "path": "keyboard_top/sound/output_conditioning/limiter",
+    "module": "audio_limiter"
+  },
+  {
+    "path": "keyboard_top/sound/shared_envelope_preparation/prepare",
+    "module": "envelope_precalc_bank"
+  },
+  {
+    "path": "keyboard_top/sound/startup",
+    "module": "startup_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/stereo_on/final_filter_right/filter",
+    "module": "audio_output_filter"
+  },
+  {
+    "path": "keyboard_top/sound/stereo_on/left_mixer",
+    "module": "voice_mixer"
+  },
+  {
+    "path": "keyboard_top/sound/stereo_on/output_conditioning/limiter",
+    "module": "audio_limiter"
+  },
+  {
+    "path": "keyboard_top/sound/stereo_on/right_effect",
+    "module": "audio_effects"
+  },
+  {
+    "path": "keyboard_top/sound/stereo_on/right_effect/chorus_on/chorus",
+    "module": "audio_chorus"
+  },
+  {
+    "path": "keyboard_top/sound/stereo_on/right_effect/room",
+    "module": "audio_reverb"
+  },
+  {
+    "path": "keyboard_top/sound/stereo_on/right_mixer",
+    "module": "voice_mixer"
+  },
+  {
+    "path": "keyboard_top/sound/stereo_on/right_volume",
+    "module": "master_volume"
+  },
+  {
+    "path": "keyboard_top/sound/timing",
+    "module": "audio_timing"
+  },
+  {
+    "path": "keyboard_top/sound/tx",
+    "module": "i2s_tx"
+  },
+  {
+    "path": "keyboard_top/sound/voices[0]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[0]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[0]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[1]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[1]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[1]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[2]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[2]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[2]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[3]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[3]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[3]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[4]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[4]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[4]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[5]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[5]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[5]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[6]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[6]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[6]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[7]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[7]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[7]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[8]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[8]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[8]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[9]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[9]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[9]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[10]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[10]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[10]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[11]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[11]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[11]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[12]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[12]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[12]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[13]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[13]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[13]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[14]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[14]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[14]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[15]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[15]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[15]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[16]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[16]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[16]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[17]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[17]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[17]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[18]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[18]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[18]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[19]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[19]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[19]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[20]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[20]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[20]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[21]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[21]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[21]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[22]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[22]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[22]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[23]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[23]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[23]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[24]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[24]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[24]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[25]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[25]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[25]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[26]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[26]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[26]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[27]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[27]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[27]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[28]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[28]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[28]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[29]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[29]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[29]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[30]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[30]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[30]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[31]/envelope",
+    "module": "instrument_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[31]/envelope/legacy",
+    "module": "adsr_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/voices[31]/sustain_on/tail",
+    "module": "sustain_envelope"
+  },
+  {
+    "path": "keyboard_top/sound/volume_control",
+    "module": "master_volume"
+  },
+  {
+    "path": "keyboard_top/status_leds",
+    "module": "run_leds"
+  },
+  {
+    "path": "keyboard_top/timbre_buttons",
+    "module": "timbre_control"
+  },
+  {
+    "path": "keyboard_top/touch_commands",
+    "module": "ui_touch_actions"
+  },
+  {
+    "path": "keyboard_top/touch_keyboards[0]/reader",
+    "module": "aip5916_keyboard"
+  },
+  {
+    "path": "keyboard_top/touch_keyboards[0]/reader/bus",
+    "module": "i2c_register_master"
+  },
+  {
+    "path": "keyboard_top/touch_keyboards[1]/reader",
+    "module": "aip5916_keyboard"
+  },
+  {
+    "path": "keyboard_top/touch_keyboards[1]/reader/bus",
+    "module": "i2c_register_master"
+  },
+  {
+    "path": "keyboard_top/touch_keyboards[2]/reader",
+    "module": "aip5916_keyboard"
+  },
+  {
+    "path": "keyboard_top/touch_keyboards[2]/reader/bus",
+    "module": "i2c_register_master"
+  },
+  {
+    "path": "keyboard_top/touch_on/touch_bridge",
+    "module": "rgb_status_cdc"
+  },
+  {
+    "path": "keyboard_top/touch_on/touch_bridge/pixel_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/touch_on/touch_bridge/source_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/touch_on/touch_reader",
+    "module": "gt9110_touch"
+  },
+  {
+    "path": "keyboard_top/touch_on/touch_reader/bus",
+    "module": "i2c_register_master"
+  },
+  {
+    "path": "keyboard_top/ultrasonic_config_bridge",
+    "module": "rgb_status_cdc"
+  },
+  {
+    "path": "keyboard_top/ultrasonic_config_bridge/pixel_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/ultrasonic_config_bridge/source_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/ultrasonic_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/ultrasonic_status_bridge",
+    "module": "rgb_status_cdc"
+  },
+  {
+    "path": "keyboard_top/ultrasonic_status_bridge/pixel_reset_sync",
+    "module": "reset_sync"
+  },
+  {
+    "path": "keyboard_top/ultrasonic_status_bridge/source_reset_sync",
+    "module": "reset_sync"
+  }
+]

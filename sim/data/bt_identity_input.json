@@ -1,0 +1,63 @@
+{
+  "scope": "Exact onset groups from current MIDI; times rebased and durations shortened only for identity regression",
+  "groups": [
+    {
+      "source_ms": 0,
+      "test_ms": 0,
+      "count": 1,
+      "pitches": [
+        60
+      ]
+    },
+    {
+      "source_ms": 26000,
+      "test_ms": 5,
+      "count": 4,
+      "pitches": [
+        60,
+        48,
+        52,
+        55
+      ]
+    },
+    {
+      "source_ms": 52000,
+      "test_ms": 10,
+      "count": 8,
+      "pitches": [
+        60,
+        48,
+        60,
+        64,
+        67,
+        76,
+        79,
+        60
+      ]
+    },
+    {
+      "source_ms": 78000,
+      "test_ms": 15,
+      "count": 16,
+      "pitches": [
+        48,
+        52,
+        55,
+        60,
+        64,
+        67,
+        72,
+        76,
+        79,
+        48,
+        55,
+        60,
+        64,
+        67,
+        72,
+        79
+      ]
+    }
+  ],
+  "records": 29
+}

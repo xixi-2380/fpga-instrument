@@ -1,6 +1,9 @@
 create_clock -name ref_clk -period 20.000 [get_ports {clk}]
 create_generated_clock -name mid_clk -source [get_ports {clk}] -multiply_by 16 -divide_by 25 [get_pins {clocks/pll1/CLKOUT0}]
 create_generated_clock -name audio_clk -source [get_pins {clocks/pll1/CLKOUT0}] -multiply_by 48 -divide_by 25 [get_pins {clocks/pll2/CLKOUT0}]
+# UART TX route budget; RX is asynchronous and synchronized in uart_rx.
+set_max_delay -from [get_clocks {ref_clk}] -to [get_ports {bt_tx}] 100.000
+set_min_delay -from [get_clocks {ref_clk}] -to [get_ports {bt_tx}] 0.000
 # Bound external MAX98357A audio output paths to 0..30 ns, including implementation
 # clock insertion. No generated clock is placed on the BCK DATA net: Gowin
 # otherwise propagates that clock into BCK's counter/CE fanout.
@@ -16,28 +19,32 @@ set_min_delay -from [get_clocks {audio_clk}] -to [get_ports {MAX_BCLK MAX_LRCLK 
 # rst is an asynchronous button, not a synchronous data input. No fake
 # input arrival time is imposed; its reset synchronizer is checked by TB.
 
-# Open-drain column enable paths; row inputs are asynchronous and two-flop synchronized.
-set_max_delay -from [get_clocks {audio_clk}] -to [get_ports {key_col[0] key_col[1] key_col[2] key_col[3]}] 30.000
-set_min_delay -from [get_clocks {audio_clk}] -to [get_ports {key_col[0] key_col[1] key_col[2] key_col[3]}] 0.000
 
 # Human-visible LEDs: deliberate 100ns output-route budget, no audio timing exception.
-set_max_delay -from [get_clocks {ref_clk}] -to [get_ports {led_n[0] led_n[1] led_n[2] led_n[3] led_n[4] led_n[5]}] 100.000
-set_min_delay -from [get_clocks {ref_clk}] -to [get_ports {led_n[0] led_n[1] led_n[2] led_n[3] led_n[4] led_n[5]}] 0.000
+set_max_delay -from [get_clocks {ref_clk}] -to [get_ports {led_n[0] led_n[1] led_n[2] led_n[3] led_n[4]}] 100.000
+set_min_delay -from [get_clocks {ref_clk}] -to [get_ports {led_n[0] led_n[1] led_n[2] led_n[3] led_n[4]}] 0.000
+# U7 SPI is registered ref-clock data with a 500ns half-period at default1MHz.
+# 100ns is a bounded output-route budget; no internal audio/memory path exception.
+set_max_delay -from [get_clocks {ref_clk}] -to [get_ports {flash_cs_n flash_sck flash_mosi flash_wp_n flash_hold_n}] 100.000
+set_min_delay -from [get_clocks {ref_clk}] -to [get_ports {flash_cs_n flash_sck flash_mosi flash_wp_n flash_hold_n}] 0.000
 
-# Default LCD profile: 35 MHz; forwarded PCLK inverted at lcd_clk.
-# Model the REAL sampling clock at the connector, including its routed delay.
-# Old 6 ns clock-to-port max_delay also counted PLL/clock insertion (8.594 ns
-# in the uploaded report), making the intended route budget unattainable.
-# A half-period is 14.286 ns. Reserving 8.286 ns before the sampling edge
-# reproduces a nominal 6 ns data-path budget at zero clock/data skew.
-# The min value checks non-negative hold margin. These are ENGINEERING
-# margins, not certified panel tSU/tH; board skew/panel datasheet still needed.
-# All internal ref/audio/pixel periods stay unchanged; no data-path exceptions.
-# This profile is for LCD_ENABLE=1 and LCD_PCLK_INVERT=1.
+# Independent 35MHz trial LCD PLL; actual production PCLK_INVERT=1.
 create_generated_clock -name pixel_clk -source [get_ports {clk}] -multiply_by 7 -divide_by 10 [get_pins {lcd_on.display_driver/pixel_pll/CLKOUT0}]
-create_generated_clock -name lcd_pclk -source [get_pins {lcd_on.display_driver/pixel_pll/CLKOUT0}] -divide_by 1 -invert [get_ports {lcd_clk}]
-set_output_delay -clock lcd_pclk -max 8.286 [get_ports {lcd_hs lcd_vs lcd_en lcd_r[*] lcd_g[*] lcd_b[*]}]
-set_output_delay -clock lcd_pclk -min 0.000 [get_ports {lcd_hs lcd_vs lcd_en lcd_r[*] lcd_g[*] lcd_b[*]}]
+# Source-synchronous LCD via the global-clock IO DDR cell, inverted phase.
+# The 6ns source reference is checked against independent ODDR D1 timing:
+# Slow insertion >=6ns, Fast insertion <=6ns. Do not accept a build otherwise.
+# Original8.286ns setup reservation remains. Hold reserves1ns plus at most5ns
+# for physical CLK->Q0->OBUF->pin, independently checked in same-build SDF.
+create_generated_clock -name lcd_pclk -source [get_pins {lcd_on.display_driver/pixel_pll/CLKOUT0}] -divide_by 1 -invert [get_pins {lcd_on.display_driver/pixel_clock_forward/Q0}]
+set_clock_latency -source -early 6.000 [get_clocks {lcd_pclk}]
+set_clock_latency -source -late 6.000 [get_clocks {lcd_pclk}]
+set_output_delay -clock lcd_pclk 8.286 -max [get_ports {lcd_hs lcd_vs lcd_en lcd_r[*] lcd_g[*] lcd_b[*]}]
+set_output_delay -clock lcd_pclk -6.000 -min [get_ports {lcd_hs lcd_vs lcd_en lcd_r[*] lcd_g[*] lcd_b[*]}]
+# Preserve the20ns forwarding route bound; no ordinary data path relaxation.
+set_max_delay -from [get_clocks {pixel_clk}] -to [get_ports {lcd_clk}] 20.000
+set_min_delay -from [get_clocks {pixel_clk}] -to [get_ports {lcd_clk}] 0.000
+set_max_delay -from [get_pins {lcd_on.display_driver/pixel_clock_forward/CLK}] -to [get_ports {lcd_clk}] 20.000
+set_min_delay -from [get_pins {lcd_on.display_driver/pixel_clock_forward/CLK}] -to [get_ports {lcd_clk}] 0.000
 
 # Touch controller is entirely in ref_clk; SCL is registered open-drain data,
 # never an internal clock. Inputs pass through two registers inside the master.
@@ -46,18 +53,31 @@ set_output_delay -clock lcd_pclk -min 0.000 [get_ports {lcd_hs lcd_vs lcd_en lcd
 set_max_delay -from [get_clocks {ref_clk}] -to [get_ports {touch_scl touch_sda touch_int touch_rst_n}] 100.000
 set_min_delay -from [get_clocks {ref_clk}] -to [get_ports {touch_scl touch_sda touch_int touch_rst_n}] 0.000
 
-# Genuine asynchronous reset-synchronizer ENTRY pins only (four endpoints).
-# These PRESET inputs may deassert at any phase; reset_sync holds ones while
-# shifting zero over two destination clocks. Its output-to-consumer reset
-# recovery/removal, its D/Q paths, and all ordinary data paths remain timed.
-# Explicit names from the uploaded netlist; verify all FOUR match after synthesis.
-# Do not replace with whole-register/whole-clock false paths.
-set_false_path -to [get_pins {lcd_on.display_driver/pixel_reset_sync/pipe_0_s0/PRESET lcd_on.display_driver/pixel_reset_sync/pipe_1_s0/PRESET lcd_on.display_driver/status_bridge/pixel_reset_sync/pipe_0_s0/PRESET lcd_on.display_driver/status_bridge/pixel_reset_sync/pipe_1_s0/PRESET}]
+# Separate domain reports: global worst paths otherwise hide audio/ref logic
+# behind the LCD output budgets. Report commands do not change constraints.
+report_timing -setup -from_clock [get_clocks {ref_clk}] -to_clock [get_clocks {ref_clk}] -max_paths 25 -max_common_paths 1
+report_timing -setup -from_clock [get_clocks {audio_clk}] -to_clock [get_clocks {audio_clk}] -max_paths 25 -max_common_paths 1
+report_timing -setup -from_clock [get_clocks {pixel_clk}] -to_clock [get_clocks {pixel_clk}] -max_paths 25 -max_common_paths 1
 
-# New spectrum CDC: true asynchronous reset ENTRY pins only; verify both names in the new netlist.
-set_false_path -to [get_pins {lcd_on.display_driver/analysis_bridge/pixel_reset_sync/pipe_0_s0/PRESET lcd_on.display_driver/analysis_bridge/pixel_reset_sync/pipe_1_s0/PRESET}]
+# Include external and inter-domain paths as well as the three per-domain reports.
+report_timing -setup -max_paths 50 -max_common_paths 1
 
-# Keep each internal domain visible even when global worst paths are I/O.
-report_timing -setup -from [get_clocks {ref_clk}] -to [get_clocks {ref_clk}] -max_paths 10
-report_timing -setup -from [get_clocks {audio_clk}] -to [get_clocks {audio_clk}] -max_paths 10
-report_timing -setup -from [get_clocks {pixel_clk}] -to [get_clocks {pixel_clk}] -max_paths 10
+# Asynchronous assertion boundary of five explicit two-stage pixel reset synchronizers.
+# Only these PRESET pins are excepted; D/Q, intermediate stages and data paths remain timed.
+set_false_path -to [get_pins {lcd_on.display_driver/pixel_reset_sync/pipe_0_s0/PRESET lcd_on.display_driver/pixel_reset_sync/pipe_1_s0/PRESET lcd_on.display_driver/status_bridge/pixel_reset_sync/pipe_0_s0/PRESET lcd_on.display_driver/status_bridge/pixel_reset_sync/pipe_1_s0/PRESET lcd_on.display_driver/more_bridge/pixel_reset_sync/pipe_0_s0/PRESET lcd_on.display_driver/more_bridge/pixel_reset_sync/pipe_1_s0/PRESET lcd_on.display_driver/performance_bridge/pixel_reset_sync/pipe_0_s0/PRESET lcd_on.display_driver/performance_bridge/pixel_reset_sync/pipe_1_s0/PRESET lcd_on.display_driver/analysis_bridge/pixel_reset_sync/pipe_0_s0/PRESET lcd_on.display_driver/analysis_bridge/pixel_reset_sync/pipe_1_s0/PRESET}]
+report_timing -setup -to [get_ports {lcd_hs lcd_vs lcd_en lcd_r[*] lcd_g[*] lcd_b[*]}] -max_paths 25 -max_common_paths 1
+
+report_timing -setup -to [get_ports {lcd_clk}] -max_paths 5 -max_common_paths 1
+
+# Ultrasound Trig is registered ref-clock data, not an internal clock.
+set_max_delay -from [get_clocks {ref_clk}] -to [get_ports {ultrasonic_trig}] 100.000
+set_min_delay -from [get_clocks {ref_clk}] -to [get_ports {ultrasonic_trig}] 0.000
+# Three independent open-drain keypad buses; inputs synchronized by each master.
+set_max_delay -from [get_clocks {ref_clk}] -to [get_ports {keypad_sda[*] keypad_scl[*]}] 100.000
+set_min_delay -from [get_clocks {ref_clk}] -to [get_ports {keypad_sda[*] keypad_scl[*]}] 0.000
+
+# Independent, physically checked forward-clock reference.
+report_timing -setup -to [get_pins {lcd_on.display_driver/pixel_clock_forward/D1}] -max_paths 2
+report_timing -hold -to [get_pins {lcd_on.display_driver/pixel_clock_forward/D1}] -max_paths 2
+report_timing -setup -from [get_pins {lcd_on.display_driver/pixel_clock_forward/CLK}] -to [get_ports {lcd_clk}] -max_paths 2
+report_timing -hold -from [get_pins {lcd_on.display_driver/pixel_clock_forward/CLK}] -to [get_ports {lcd_clk}] -max_paths 2

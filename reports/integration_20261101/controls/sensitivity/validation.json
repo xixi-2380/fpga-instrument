@@ -1,0 +1,40 @@
+{
+  "tests": [
+    {
+      "name": "sensitivity",
+      "passed": true,
+      "checks": 1063,
+      "seconds": 0.499,
+      "source_sha256": {
+        "src\\keyboard_sensitivity.sv": "c7d6c24e069c514a41da93318ee6828496d48214cc82e7575a2cbcf682a4197f",
+        "src\\bt_event_cdc.sv": "e4ebe796f6ea4b117c33b47391810a1c42043234925bc11714d475c80689b338",
+        "src\\rgb_status_cdc.sv": "8d2702e80ac5536804c6cfc20acbedb9fa5ace1845406f417161e31eab8a9a45",
+        "src\\reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+        "sim\\integration\\tb_controls_sensitivity.sv": "7054156921bc95a825199b78735acb547a58b70b6a3e26c4827c942b8999c7b5",
+        "src\\config\\ui_layout.svh": "66232650f9c2af775736d8b4fd943e2c461d0953298f90293870531f8fb5a6f9",
+        "src\\config\\synth_config.svh": "e3d2fcb59d6b718a24f2cb56f3974ec92d521d238ba3569c3b7ad0f27c31f434",
+        "src\\config\\keyboard_notes.svh": "f1e976e1b6efd138c1a20cc5d3d56d8376aa9342e19acab01bd3fdb29c6daf5c"
+      },
+      "compile_command": [
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+        "-g2012",
+        "-grelative-include",
+        "-IF:/FPGA_Projects/fpga-instrument-main-integration-20261101/src",
+        "-IF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim",
+        "-s",
+        "tb_controls_sensitivity",
+        "-o",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/reports/integration_20261101/controls/sensitivity/sensitivity.vvp",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/keyboard_sensitivity.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/bt_event_cdc.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/rgb_status_cdc.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/reset_sync.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/integration/tb_controls_sensitivity.sv"
+      ],
+      "output": "PASS tb_controls_sensitivity checks=1063\nF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/integration/tb_controls_sensitivity.sv:80: $finish called at 219390000 (1ps)\n"
+    }
+  ],
+  "total_checks": 1063,
+  "sta_passed": false,
+  "hardware_tested": false
+}

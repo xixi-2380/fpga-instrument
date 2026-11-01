@@ -8,7 +8,7 @@ module score_player #(
     TAIL_FRAMES=(`ADSR_RELEASE_FRAMES+4))(
     input wire clk,rst,input_ready,frame_ce,note_ready,
     output wire note_valid,note_on,output wire [6:0] note_id,
-    output wire [31:0] note_fcw,output wire [2:0] note_timbre,
+    output wire [31:0] note_fcw,output wire [4:0] note_timbre,
     output wire busy,done,output reg error);
     localparam integer AW=SCORE_WORDS>1?$clog2(SCORE_WORDS):1;
     localparam integer TICK_FRAMES=BEAT_FRAMES/4;
@@ -30,7 +30,7 @@ module score_player #(
     assign note_valid=!rst && ENABLE && state==SEND;
     assign note_on=instruction[63:60]==4'h2;
     assign note_id=instruction[40:34];
-    assign note_timbre={instruction[41],instruction[33:32]};
+    assign note_timbre={2'd0,instruction[41],instruction[33:32]};
     assign note_fcw=instruction[31:0];
     always @(posedge clk or posedge rst)begin
         if(rst)begin

@@ -1,0 +1,18 @@
+{
+  "main": {
+    "sha": "d165cdfa8bee8074dd95fbf0a57fcc83fb929274",
+    "tree": "3e5c589babdba11fd26ba9c00fa64d699ddc8df1"
+  },
+  "codex/integrated-instrument": {
+    "sha": "5ef731f6afecf4d09646f5b9a9e8003e1ee616a1",
+    "tree": "0f2f319f5a09ed7895b32b0cd985beb2531a41df"
+  },
+  "codex/best-measured-dds-2026-11-01": {
+    "sha": "9aa48840bb9074d2f61c21e533d207cf35535780",
+    "tree": "bdc7a66a045b4f77720b21265b6a1388d2f34dc4"
+  },
+  "codex/performance-fx-enhancement": {
+    "sha": "0b0d668b5b3f725d7bcfb6c084e12993477242e2",
+    "tree": "2f193feeb7eeda0c223dbd3cd7d3d3c65ad8545e"
+  }
+}

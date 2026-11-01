@@ -1,0 +1,44 @@
+{
+  "tests": [
+    {
+      "voices": 1,
+      "baseline_reproduced": false,
+      "passed": true,
+      "checks": 341072,
+      "seconds": 3.383,
+      "output": "PASS tb_release_drain voices=1 checks=341072 ons=438 offs=438\nF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/integration/tb_release_drain.sv:123: $finish called at 3410710000 (1ps)\n"
+    },
+    {
+      "voices": 4,
+      "baseline_reproduced": false,
+      "passed": true,
+      "checks": 341084,
+      "seconds": 4.158,
+      "output": "PASS tb_release_drain voices=4 checks=341084 ons=415 offs=415\nF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/integration/tb_release_drain.sv:123: $finish called at 3410830000 (1ps)\n"
+    },
+    {
+      "voices": 32,
+      "baseline_reproduced": false,
+      "passed": true,
+      "checks": 341222,
+      "seconds": 12.097,
+      "output": "PASS tb_release_drain voices=32 checks=341222 ons=105 offs=105\nF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/integration/tb_release_drain.sv:123: $finish called at 3412210000 (1ps)\n"
+    }
+  ],
+  "source_sha256": {
+    "src/key_note_events.sv": "2b7a3dd6cfdc28fba31fea7f40f0ef5ad1dfdac66ed4d58856c7c0a3accfb6d8",
+    "src/touch_keyboard_router.sv": "7af55641d0a75f6e6a2e856c94d42ba343cc678edc93102884e1d7e24dca876e",
+    "src/manual_event_arbiter.sv": "e5457506915b56fcf9bd41cfa7767158ab05077c2bbe5758ea7b68b0d4e1b8cb",
+    "src/voice_allocator.sv": "7b63580db46bae31313bd9988c07f8ad4c0961c1700b28e7b3f729f2bf898bb1",
+    "src/adsr_envelope.sv": "a3822b56ada03da3140e69096937e26b7907effe0569fbcfdf7bc807709c6dda",
+    "src/instrument_envelope.sv": "28fe0cc06c9fb31db8c800b6cf30bac71e771962d92c8e323705f31a621c2df5",
+    "src/sustain_envelope.sv": "10567492276dccc45fbd844c949108251c8d4779ee540406439b9d9fb765ab29",
+    "src/config/ui_layout.svh": "66232650f9c2af775736d8b4fd943e2c461d0953298f90293870531f8fb5a6f9",
+    "src/config/keyboard_notes.svh": "f1e976e1b6efd138c1a20cc5d3d56d8376aa9342e19acab01bd3fdb29c6daf5c",
+    "src/config/synth_config.svh": "e3d2fcb59d6b718a24f2cb56f3974ec92d521d238ba3569c3b7ad0f27c31f434",
+    "sim/integration/tb_release_drain.sv": "51e4f639142d8df230f914bbd0190d826af1e2d480d365f8713b9a9bf7dd3c8d"
+  },
+  "baseline_only": false,
+  "sta_passed": false,
+  "hardware_tested": false
+}

@@ -11,24 +11,20 @@ module audio_visualizer(
  reg [7:0] peak_work;
  wire [15:0] magnitude=sample[15] ? (~sample+16'd1) : sample;
  wire [7:0] amplitude=magnitude[15] ? 8'd255 : magnitude[14:7];
- wire [7:0] display_sample=sample>16'sd4095 ? 8'h7f : sample < -16'sd4096 ? 8'h80 : sample[12:5];
+ wire [7:0] display_sample=sample[15:8];
  wire [7:0] max_peak=amplitude>peak_work ? amplitude : peak_work;
- for(genvar point=0;point<128;point=point+1)begin: points
-  always @(posedge clk or posedge rst)
-   if(rst)working[point*8+:8]<=0;
-   else if(sample_valid && decimate==3 && index==point)
-    working[point*8+:8]<=display_sample;
- end
  always @(posedge clk or posedge rst)begin
-  if(rst)begin waveform<=0;peak<=0;window_valid<=0;index<=0;decimate<=0;peak_work<=0;end
+  if(rst)begin waveform<=0;working<=0;peak<=0;window_valid<=0;index<=0;decimate<=0;peak_work<=0;end
   else begin
    window_valid<=0;
    if(sample_valid)begin
     decimate<=decimate+1'b1;
     peak_work<=max_peak;
     if(decimate==3)begin
+     // A common shift enable avoids 128 separately decoded byte enables.
+     working<={display_sample,working[1023:8]};
      if(index==127)begin
-      waveform<={display_sample,working[1015:0]};peak<=max_peak;
+      waveform<={display_sample,working[1023:8]};peak<=max_peak;
       index<=0;peak_work<=0;window_valid<=1;
      end else index<=index+1'b1;
     end

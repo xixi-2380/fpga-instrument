@@ -1,0 +1,141 @@
+{
+  "checked_utc": "2026-11-01T10:32:10.751725+00:00",
+  "passed": true,
+  "tests": [
+    {
+      "name": "timbre",
+      "passed": true,
+      "checks": 8014,
+      "seconds": 1.675,
+      "source_sha256": {
+        "src\\timbre_control.sv": "25b6c4893d3383d18cfdd8677835ce6188bda4999e3e49f63a96a02628b88cd1",
+        "sim\\integration\\tb_controls_timbre.sv": "302397d42834900b9bb4e2fe44b6d4c626861fc69e216829e9f48e01ff4619c9",
+        "src\\config\\ui_layout.svh": "66232650f9c2af775736d8b4fd943e2c461d0953298f90293870531f8fb5a6f9",
+        "src\\config\\synth_config.svh": "e3d2fcb59d6b718a24f2cb56f3974ec92d521d238ba3569c3b7ad0f27c31f434",
+        "src\\config\\keyboard_notes.svh": "f1e976e1b6efd138c1a20cc5d3d56d8376aa9342e19acab01bd3fdb29c6daf5c"
+      },
+      "compile_command": [
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+        "-g2012",
+        "-grelative-include",
+        "-IF:/FPGA_Projects/fpga-instrument-main-integration-20261101/src",
+        "-IF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim",
+        "-s",
+        "tb_controls_timbre",
+        "-o",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/reports/integration_20261101/controls/timbre/timbre.vvp",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/timbre_control.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/integration/tb_controls_timbre.sv"
+      ],
+      "output": "PASS tb_controls_timbre checks=8014\nF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/integration/tb_controls_timbre.sv:90: $finish called at 77150000 (1ps)\n"
+    },
+    {
+      "name": "ultra",
+      "passed": true,
+      "checks": 3236,
+      "seconds": 0.646,
+      "source_sha256": {
+        "src\\ultrasonic_pitch.sv": "9d3576e599ec5652a7b44954290695dcfd83e9946a016a4c033869fb08c733a1",
+        "sim\\integration\\tb_controls_ultra.sv": "422a25773e584f65003c5bae91ff2f23e215326e232d164cd28e7860e993d1ef",
+        "src\\config\\ui_layout.svh": "66232650f9c2af775736d8b4fd943e2c461d0953298f90293870531f8fb5a6f9",
+        "src\\config\\synth_config.svh": "e3d2fcb59d6b718a24f2cb56f3974ec92d521d238ba3569c3b7ad0f27c31f434",
+        "src\\config\\keyboard_notes.svh": "f1e976e1b6efd138c1a20cc5d3d56d8376aa9342e19acab01bd3fdb29c6daf5c"
+      },
+      "compile_command": [
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+        "-g2012",
+        "-grelative-include",
+        "-IF:/FPGA_Projects/fpga-instrument-main-integration-20261101/src",
+        "-IF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim",
+        "-s",
+        "tb_controls_ultra",
+        "-o",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/reports/integration_20261101/controls/ultra/ultra.vvp",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/ultrasonic_pitch.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/integration/tb_controls_ultra.sv"
+      ],
+      "output": "PASS tb_controls_ultra checks=3236\nF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/integration/tb_controls_ultra.sv:59: $finish called at 934750000 (1ps)\n"
+    },
+    {
+      "name": "sensitivity",
+      "passed": true,
+      "checks": 1063,
+      "seconds": 0.499,
+      "source_sha256": {
+        "src\\keyboard_sensitivity.sv": "c7d6c24e069c514a41da93318ee6828496d48214cc82e7575a2cbcf682a4197f",
+        "src\\bt_event_cdc.sv": "e4ebe796f6ea4b117c33b47391810a1c42043234925bc11714d475c80689b338",
+        "src\\rgb_status_cdc.sv": "8d2702e80ac5536804c6cfc20acbedb9fa5ace1845406f417161e31eab8a9a45",
+        "src\\reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+        "sim\\integration\\tb_controls_sensitivity.sv": "7054156921bc95a825199b78735acb547a58b70b6a3e26c4827c942b8999c7b5",
+        "src\\config\\ui_layout.svh": "66232650f9c2af775736d8b4fd943e2c461d0953298f90293870531f8fb5a6f9",
+        "src\\config\\synth_config.svh": "e3d2fcb59d6b718a24f2cb56f3974ec92d521d238ba3569c3b7ad0f27c31f434",
+        "src\\config\\keyboard_notes.svh": "f1e976e1b6efd138c1a20cc5d3d56d8376aa9342e19acab01bd3fdb29c6daf5c"
+      },
+      "compile_command": [
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+        "-g2012",
+        "-grelative-include",
+        "-IF:/FPGA_Projects/fpga-instrument-main-integration-20261101/src",
+        "-IF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim",
+        "-s",
+        "tb_controls_sensitivity",
+        "-o",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/reports/integration_20261101/controls/sensitivity/sensitivity.vvp",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/keyboard_sensitivity.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/bt_event_cdc.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/rgb_status_cdc.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/reset_sync.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/integration/tb_controls_sensitivity.sv"
+      ],
+      "output": "PASS tb_controls_sensitivity checks=1063\nF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/integration/tb_controls_sensitivity.sv:80: $finish called at 219390000 (1ps)\n"
+    },
+    {
+      "name": "performance",
+      "passed": true,
+      "checks": 9979,
+      "seconds": 0.435,
+      "source_sha256": {
+        "src\\performance_control.sv": "c21cef7d6c64c20f7b8ecdc192abb88260091e98a5d341d693394573247338bf",
+        "sim\\integration\\tb_controls_performance.sv": "10a47a88b23811903ca71458fbef47316c84c7f689ce308ce5fa664302fd1fe5",
+        "src\\config\\ui_layout.svh": "66232650f9c2af775736d8b4fd943e2c461d0953298f90293870531f8fb5a6f9",
+        "src\\config\\synth_config.svh": "e3d2fcb59d6b718a24f2cb56f3974ec92d521d238ba3569c3b7ad0f27c31f434",
+        "src\\config\\keyboard_notes.svh": "f1e976e1b6efd138c1a20cc5d3d56d8376aa9342e19acab01bd3fdb29c6daf5c"
+      },
+      "compile_command": [
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+        "-g2012",
+        "-grelative-include",
+        "-IF:/FPGA_Projects/fpga-instrument-main-integration-20261101/src",
+        "-IF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim",
+        "-s",
+        "tb_controls_performance",
+        "-o",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/reports/integration_20261101/controls/performance/performance.vvp",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/performance_control.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/integration/tb_controls_performance.sv"
+      ],
+      "output": "PASS tb_controls_performance checks=9979 ons=13 offs=13\nF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/integration/tb_controls_performance.sv:56: $finish called at 99820000 (1ps)\n"
+    }
+  ],
+  "total_checks": 22292,
+  "source_sha256": {
+    "src\\timbre_control.sv": "25b6c4893d3383d18cfdd8677835ce6188bda4999e3e49f63a96a02628b88cd1",
+    "sim\\integration\\tb_controls_timbre.sv": "302397d42834900b9bb4e2fe44b6d4c626861fc69e216829e9f48e01ff4619c9",
+    "src\\config\\ui_layout.svh": "66232650f9c2af775736d8b4fd943e2c461d0953298f90293870531f8fb5a6f9",
+    "src\\config\\synth_config.svh": "e3d2fcb59d6b718a24f2cb56f3974ec92d521d238ba3569c3b7ad0f27c31f434",
+    "src\\config\\keyboard_notes.svh": "f1e976e1b6efd138c1a20cc5d3d56d8376aa9342e19acab01bd3fdb29c6daf5c",
+    "src\\ultrasonic_pitch.sv": "9d3576e599ec5652a7b44954290695dcfd83e9946a016a4c033869fb08c733a1",
+    "sim\\integration\\tb_controls_ultra.sv": "422a25773e584f65003c5bae91ff2f23e215326e232d164cd28e7860e993d1ef",
+    "src\\keyboard_sensitivity.sv": "c7d6c24e069c514a41da93318ee6828496d48214cc82e7575a2cbcf682a4197f",
+    "src\\bt_event_cdc.sv": "e4ebe796f6ea4b117c33b47391810a1c42043234925bc11714d475c80689b338",
+    "src\\rgb_status_cdc.sv": "8d2702e80ac5536804c6cfc20acbedb9fa5ace1845406f417161e31eab8a9a45",
+    "src\\reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+    "sim\\integration\\tb_controls_sensitivity.sv": "7054156921bc95a825199b78735acb547a58b70b6a3e26c4827c942b8999c7b5",
+    "src\\performance_control.sv": "c21cef7d6c64c20f7b8ecdc192abb88260091e98a5d341d693394573247338bf",
+    "sim\\integration\\tb_controls_performance.sv": "10a47a88b23811903ca71458fbef47316c84c7f689ce308ce5fa664302fd1fe5"
+  },
+  "production_rtl_modified_by_test_agent": false,
+  "scope": "Independent behavioral controls, integer mapping reference and asynchronous-clock CDC/transaction models; no new main top/P&R/hardware qualification",
+  "sta_passed": false,
+  "hardware_tested": false
+}

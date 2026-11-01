@@ -7,7 +7,9 @@ module tb_keyboard_top;
  tri [3:0] columns;
  wire [3:0] selected,rows;
  wire bck,ws,din,pa,db,dw,dd,dp;
- wire [5:0] leds;
+ // Internal diagnostic bits retain the old semantic checks; N21 physical
+ // ready LED was reassigned to U7, and the physical vector now has five pads.
+ wire [5:0] leds=dut.diagnostic_leds;
  wire [3:0] flow_on=~leds[3:0];
  reg [3:0] previous_flow=4'b1110;
  integer flow_moves=0,reset_flow_moves=0,idle_edge_start,diag_heartbeat,stage=0;
@@ -17,12 +19,13 @@ module tb_keyboard_top;
  realtime last_rise=0,period;
  for(genvar k=0;k<4;k=k+1)assign selected[k]=(columns[k]===1'b0);
  passive_matrix_model model(pressed,selected,rows);
- keyboard_top #(.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(4),.BUTTON_LONG_PRESS_CYCLES(128),.SCORE_ENABLE(0),.LED_STEP_CYCLES(4),.LOCK_N(32),.SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
+ // Legacy numerical/headroom and reset fixture; production limiter is tested separately.
+ keyboard_top #(.STEREO_ENABLE(0),.OUTPUT_ENABLE(0),.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(4),.SCORE_ENABLE(0),.LED_STEP_CYCLES(4),.LOCK_N(32),.SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
   .MUTE(4),.FADE(4),.ATTACK(8),.DECAY(8),.SUSTAIN(32768),.RELEASE(16))
   dut(.clk(clk),.rst(rst),.board_buttons_n(buttons_n),.key_row(rows),.key_col(columns),
    .MAX_BCLK(bck),.MAX_LRCLK(ws),.MAX_DIN(din),.MAX_SD_MODE(),
    .HP_BCK(),.HP_WS(),.HP_DIN(),.PA_EN(),
-   .DBG_BCK(db),.DBG_WS(dw),.DBG_DIN(dd),.DBG_PA_EN(dp),.led_n(leds));
+   .DBG_BCK(db),.DBG_WS(dw),.DBG_DIN(dd),.DBG_PA_EN(dp));
  assign pa=dut.input_ready;
  always @(negedge clk)begin
   if(!dut.status_leds.diagnostic_active)begin
@@ -92,15 +95,12 @@ module tb_keyboard_top;
   wait(edges>=idle_edge_start+320);#0.002;
   `CHECK(nonzero==0 && pa,"polyphonic Release returns to zero with original PA policy") stage=7;
   // Physical ordinary two-key attacks in every preset. Selection remains in
-  // matrix menu; selecting a preset must never generate notes.
+  // independent board buttons; selection itself must never generate notes.
   for(integer preset=0;preset<3;preset=preset+1)begin
    stage=10+preset;
    if(preset>0)begin
-    @(negedge dut.audio_clk);force dut.touch_action_valid=1;force dut.touch_action=6'd7;
-    @(negedge dut.audio_clk);release dut.touch_action_valid;release dut.touch_action;repeat(16)@(negedge dut.audio_clk);
-    pressed=16'b1<<preset;repeat(32*8)@(posedge bck);pressed=0;repeat(32*8)@(posedge bck);
-    pressed=16'h8000;repeat(32*8)@(posedge bck);pressed=0;repeat(32*8)@(posedge bck);
-    `CHECK(dut.selected_timbre==preset && !dut.menu_mode,"matrix menu selects requested preset")
+    buttons_n=4'hf ^ (4'b1<<preset);wait(dut.selected_timbre==preset);
+    buttons_n=4'hf;
     `CHECK(!dut.gate && dut.voice_active==0,"preset button does not create notes")
     repeat(64)@(posedge bck);
    end
@@ -145,4 +145,3 @@ module tb_keyboard_top;
   $fatal(1,"keyboard board timeout");
  end
 endmodule
-

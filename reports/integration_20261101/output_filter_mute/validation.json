@@ -1,0 +1,161 @@
+{
+  "passed": true,
+  "checks": 1125558,
+  "accepted_samples": 1100010,
+  "explicit_silence_samples": 1820,
+  "rtl_seconds": 20.211,
+  "latency_edges": 4,
+  "register_stages": 5,
+  "source_sha256": {
+    "src\\audio_output_filter.sv": "5e4e006933091c05bcba39d14e963e0b0050533052bbdd7d8fffdfd78ec5120b",
+    "sim\\tb_audio_output_filter.sv": "6bba3fb364a7b8bc3e1f33c76e65ab4f839ad80ccc6a96c291e0375812d31bcb",
+    "scripts\\run_output_filter_tests.py": "372a3f16722774434784a6ad0775e306f605fc92801f8b1a67506b5b65d36dd2"
+  },
+  "vector_sha256": "c1bb68386775849c51e3d79274be5197bf9a30e57fb01f09be2c1fa7d50e2a8b",
+  "maximum_integer_vs_float_pcm_error": 1,
+  "zero_tail_checks": [
+    {
+      "name": "dc_step_32767",
+      "zero_input_samples": 65000,
+      "terminal_samples": 4096,
+      "terminal_output_exactly_zero": true
+    },
+    {
+      "name": "dc_step_-32768",
+      "zero_input_samples": 65000,
+      "terminal_samples": 4096,
+      "terminal_output_exactly_zero": true
+    },
+    {
+      "name": "dc_step_1",
+      "zero_input_samples": 65000,
+      "terminal_samples": 4096,
+      "terminal_output_exactly_zero": true
+    },
+    {
+      "name": "dc_step_-1",
+      "zero_input_samples": 65000,
+      "terminal_samples": 4096,
+      "terminal_output_exactly_zero": true
+    },
+    {
+      "name": "positive_impulse",
+      "zero_input_samples": 65000,
+      "terminal_samples": 4096,
+      "terminal_output_exactly_zero": true
+    },
+    {
+      "name": "negative_impulse",
+      "zero_input_samples": 65000,
+      "terminal_samples": 4096,
+      "terminal_output_exactly_zero": true
+    },
+    {
+      "name": "random_and_gap_tail",
+      "zero_input_samples": 65000,
+      "terminal_samples": 4096,
+      "terminal_output_exactly_zero": true
+    },
+    {
+      "name": "final_zero_tail",
+      "zero_input_samples": 65000,
+      "terminal_samples": 4096,
+      "terminal_output_exactly_zero": true
+    }
+  ],
+  "frequency_response": [
+    {
+      "frequency_hz": 1,
+      "gain": 0.4715687163616077,
+      "gain_db": -6.529100270104377,
+      "theoretical_gain": 0.4724853230952419,
+      "absolute_gain_error": 0.0009166067336341954
+    },
+    {
+      "frequency_hz": 5,
+      "gain": 0.9370472433522502,
+      "gain_db": -0.564770252469377,
+      "theoretical_gain": 0.9369238711586949,
+      "absolute_gain_error": 0.00012337219355529339
+    },
+    {
+      "frequency_hz": 27.5,
+      "gain": 0.9977084154800171,
+      "gain_db": -0.019927291503691425,
+      "theoretical_gain": 0.997706877285545,
+      "absolute_gain_error": 1.5381944721282181e-06
+    },
+    {
+      "frequency_hz": 100,
+      "gain": 0.9998171448060498,
+      "gain_db": -0.001588405262901089,
+      "theoretical_gain": 0.9998183691234083,
+      "absolute_gain_error": 1.2243173584947087e-06
+    },
+    {
+      "frequency_hz": 1000,
+      "gain": 0.9992094899879763,
+      "gain_db": -0.006868998085950935,
+      "theoretical_gain": 0.9992258921650331,
+      "absolute_gain_error": 1.6402177056784595e-05
+    },
+    {
+      "frequency_hz": 4186.009,
+      "gain": 0.986079220017103,
+      "gain_db": -0.12176386275319293,
+      "theoretical_gain": 0.9860789710953537,
+      "absolute_gain_error": 2.489217493240048e-07
+    },
+    {
+      "frequency_hz": 8000,
+      "gain": 0.944901675268865,
+      "gain_db": -0.49226762049896244,
+      "theoretical_gain": 0.9449111613975008,
+      "absolute_gain_error": 9.486128635716184e-06
+    },
+    {
+      "frequency_hz": 12000,
+      "gain": 0.8574786399995962,
+      "gain_db": -1.3355337906215796,
+      "theoretical_gain": 0.8574929193221641,
+      "absolute_gain_error": 1.4279322567922748e-05
+    },
+    {
+      "frequency_hz": 15743.3,
+      "gain": 0.7070912030837899,
+      "gain_db": -3.0104913155341584,
+      "theoretical_gain": 0.7070909523723081,
+      "absolute_gain_error": 2.507114817973388e-07
+    },
+    {
+      "frequency_hz": 20000,
+      "gain": 0.4077684570571533,
+      "gain_db": -7.7917274424595915,
+      "theoretical_gain": 0.40776764003895777,
+      "absolute_gain_error": 8.170181955424738e-07
+    },
+    {
+      "frequency_hz": 23500,
+      "gain": 0.054481095898626083,
+      "gain_db": -25.275083301663447,
+      "theoretical_gain": 0.05447998675280814,
+      "absolute_gain_error": 1.1091458179401936e-06
+    }
+  ],
+  "lowpass_cutoff_hz": 15742.99825811373,
+  "dc_cutoff_hz": 1.865324699393417,
+  "arithmetic": "Signed Q16 state, truncation toward zero in feedback, symmetric final round-to-nearest and16-bit saturation",
+  "hardware_programmed": false,
+  "gowin_run": false,
+  "command": [
+    "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+    "-g2012",
+    "-Wall",
+    "-s",
+    "tb_audio_output_filter",
+    "-o",
+    "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/reports/integration_20261101/output_filter_mute/filter.vvp",
+    "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/audio_output_filter.sv",
+    "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/tb_audio_output_filter.sv"
+  ]
+}

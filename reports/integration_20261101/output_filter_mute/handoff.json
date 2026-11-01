@@ -1,0 +1,41 @@
+{
+  "completed_utc": "2026-11-01T10:44:19.451931+00:00",
+  "all_passed": true,
+  "rtl_frozen": true,
+  "owned_files": [
+    "src/audio_output_filter.sv",
+    "src/synth_core.sv",
+    "sim/tb_audio_output_filter.sv",
+    "sim/tb_synth_output_filter.sv",
+    "scripts/run_output_filter_tests.py",
+    "scripts/run_filter_core_tests.py",
+    "docs/output_filter_20261101.md"
+  ],
+  "source_sha256": {
+    "src/audio_output_filter.sv": "5e4e006933091c05bcba39d14e963e0b0050533052bbdd7d8fffdfd78ec5120b",
+    "src/synth_core.sv": "f7fa7e7bb8c93ec9d271092414e4c3a17941808d48658e8713e99bb8317cef5d",
+    "sim/tb_audio_output_filter.sv": "6bba3fb364a7b8bc3e1f33c76e65ab4f839ad80ccc6a96c291e0375812d31bcb",
+    "sim/tb_synth_output_filter.sv": "697d694e9e01e6d06651f7daf1ea9102a297bc2a1a1201add153b3f3e6675bc6",
+    "scripts/run_output_filter_tests.py": "372a3f16722774434784a6ad0775e306f605fc92801f8b1a67506b5b65d36dd2",
+    "scripts/run_filter_core_tests.py": "c85593a1a1a05ee47670b1d17bc309d425bb24fcc0cdb6e387a2044474a3c308",
+    "docs/output_filter_20261101.md": "d26828f32d9bbe4974a7698dda80e8c93ed3f7f0d42e5431542ff7363552a0e6"
+  },
+  "explicit_silence": true,
+  "silence_policy": "FILTER=1 only:260 valid volume outputs while effective volume0, then clear histories per accepted sample without dropping valid/tag; nonzero volume oroutput_reset cancels the flag.",
+  "latency_edges": 4,
+  "register_stages": 5,
+  "unit_checks": 1125558,
+  "explicit_silence_unit_samples": 1820,
+  "bypass_checks": 765488,
+  "enabled_checks": 11344079,
+  "mute_checks": 30887261,
+  "reports": [
+    "output_filter_mute/validation.json",
+    "filter_core_bypass_mute/validation.json",
+    "filter_core_enabled_mute/validation.json",
+    "filter_core_mute/validation.json"
+  ],
+  "open_behavior_boundary": null,
+  "gowin_run": false,
+  "hardware_programmed": false
+}

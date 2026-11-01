@@ -1,0 +1,178 @@
+{
+  "assets/fonts/CormorantGaramond-OFL.txt": {
+    "git_blob": "507d70f4565352dbfcf2dfc9b42eb092b57c0be8",
+    "sha256": "60700d351cac4650c51f3f9db318d2a420f8b45052dba2715eb5fec41f0f6956"
+  },
+  "assets/fonts/GreatVibes-OFL.txt": {
+    "git_blob": "70025926f5684ebed9d119424b178faa4e0a5cc6",
+    "sha256": "61093a21f5e63dedf54222b3c09997e54c0fe43e3851d21386e02ddcbc246d49"
+  },
+  "assets/fonts/HighWaterChineseBrush.ttf": {
+    "git_blob": "17311ff7e70bf4a754ba894b13eef7ee9b06968d",
+    "sha256": "ed041ff967780ba90f4a81bc6d5109d8c5941fccca94404560472b4912436363"
+  },
+  "assets/fonts/HighWaterChineseElegant.ttf": {
+    "git_blob": "96f40cbe6079e72ac615b584da48fe9fe3894581",
+    "sha256": "072ed8499a91f6a182593488130c08ca81455eda0f866a381afda40ab26e57f1"
+  },
+  "assets/fonts/HighWaterChinesePlayful.ttf": {
+    "git_blob": "6563752647fe598a3f6562896f7d1d5cf89998c6",
+    "sha256": "b9b606b211551d61194fed576aa50d526a3e2f14dd6bf5f9e1edef46a33fd7e1"
+  },
+  "assets/fonts/HighWaterElegant.ttf": {
+    "git_blob": "41dea67e27d3fe6ef66351bc64a88d859f60ec45",
+    "sha256": "96e15bd2f1d5bae90ac5c5ccee4a00cbfd398ed54b7eacf2d53424ea93723d50"
+  },
+  "assets/fonts/HighWaterRound.ttf": {
+    "git_blob": "f45888c9d9e254cd7df5111cb5ddcd70d0d869a2",
+    "sha256": "8e6533f0f38c04786bc3816301f15f15bd88dd4777f430c8d85198facf398857"
+  },
+  "assets/fonts/HighWaterScript.ttf": {
+    "git_blob": "e29c12e93e550b8e4c40cfeb08f47843e637105a",
+    "sha256": "a5f69c9d4aa8303c2942c2a849d7e07eaef69729152d3575792ab9129cf57e3b"
+  },
+  "assets/fonts/Quicksand-OFL.txt": {
+    "git_blob": "5186b46abb63b664cbc6685b203e5f4c0c2a2ad8",
+    "sha256": "14d28541780d90f6577bb7abcc6f005bf6969614294e75c82abb8758a696ad46"
+  },
+  "assets/fonts/README.md": {
+    "git_blob": "4b0b82da3ee2e1d4a25e4a007269c1a90154568e",
+    "sha256": "c8314f7e7a95deda7a15b0a69a1f3d4b03366b51e062f1d680cfe2af07d60938"
+  },
+  "assets/fonts/mashanzheng-OFL.txt": {
+    "git_blob": "9e252e1997092670936a7f1d38560973d919f6b0",
+    "sha256": "d7bdb1cee215b689e23c2f95672a6084c790542170648267a55114103d756a08"
+  },
+  "assets/fonts/zcoolkuaile-OFL.txt": {
+    "git_blob": "fe1432fe7e56b24842d855a8ddbde0911a844d7f",
+    "sha256": "538078469839b4a2e7ad22bef4ebe41681a4e53749bb2a072144024f1d6d703d"
+  },
+  "assets/fonts/zcoolxiaowei-OFL.txt": {
+    "git_blob": "8e5184b269289a6adda77caa05defe3acc309651",
+    "sha256": "a094514ca57cf8f9c5e8d8d1adab5d8cd3a377297ff016f9df2c05b3ecd77f0a"
+  },
+  "assets/spectrum_config.json": {
+    "git_blob": "ce717ebc42d6509fc1173c8f0369d03b1b15f95c",
+    "sha256": "621c40f8deca29754c12d46854de249626e2fd7410dfbc0f46a76c241a21702c"
+  },
+  "assets/theme_manifest.json": {
+    "git_blob": "2f01da9dff215dc0639248d0ac2d7395867cdbcc",
+    "sha256": "4b3520bcee0fa87f3190b715ff268d408b9766e576cb3bb939af3e75eb2d6fee"
+  },
+  "assets/themes/README.md": {
+    "git_blob": "4d3ec86b847bc70554e5fb2a217a28163c2c8c20",
+    "sha256": "f614be2b965a29a4858736b728fa36fda1d8e02b9f937de6b8c6281e988afbf4"
+  },
+  "assets/themes/egg_cutout.png": {
+    "git_blob": "784f39f45ae48d2e29ce0160d7a8db7db3463e0e",
+    "sha256": "4e9c6e134780214c75cf5f5a2ab2685aeef4728e34622f107b3c5cfe2eb0beaa"
+  },
+  "assets/ui_language.json": {
+    "git_blob": "32b093794c90c6bfb813ac38ca60bc5da01dede5",
+    "sha256": "5228f5373b49e90f5ddd30e0924bd073d76beadd001807e8f244c4dcbc3c3a83"
+  },
+  "assets/ui_language_manifest.json": {
+    "git_blob": "730792d6e61d94603b6c0160744c4018615481e2",
+    "sha256": "cbad74810d97b6ef34dc6af5e3e92a943c68cfd9107fe4c27352029684434b7a"
+  },
+  "scripts/check_bilingual_pixels.py": {
+    "git_blob": "0e3561e29fc556d9322e1ad1e7a00a4f0d47e52f",
+    "sha256": "d2e6dde890c0bb845c154fbed84cd6ab742fae17a542f5ffb7b0fee19598af59"
+  },
+  "scripts/check_spectrum_fft.py": {
+    "git_blob": "9b054f179b44592ae2640a5db36c8e580c7b4c82",
+    "sha256": "7fa34b71fd8b743df08ed53e698766e15c1df1a16fdeed21f13a527073f788f6"
+  },
+  "scripts/gen_british_assets.py": {
+    "git_blob": "6211bd1381c608816a07b9f1360d3fb000efc9cf",
+    "sha256": "164ec3b29bc25c6fd5998127ccd406e49d875dee76bb95cf11b848ed9f589457"
+  },
+  "scripts/gen_spectrum_tables.py": {
+    "git_blob": "96aaf2964afd972ee1655ce8e4038962e6390f24",
+    "sha256": "7262d125c436100aab2b9d29959861285d1116c0d7968ad7bb86dbb65014c6ae"
+  },
+  "scripts/gen_theme_assets.py": {
+    "git_blob": "83e39679e27a6f44bcbed30b2601764abd2148e5",
+    "sha256": "f7df12d4678e262fd7aaa41f9d75581784a498e8868d993548a8b7b885c7f3ee"
+  },
+  "scripts/gen_ui_language.py": {
+    "git_blob": "7f2a279d8c8e981348c38fb4c13c489a0f176d19",
+    "sha256": "7052ebb4434ef6e222fda19fd2f2059ddcaca353dd8307a3402af1f83358433f"
+  },
+  "scripts/reference_audio_analysis.py": {
+    "git_blob": "cd60f577519591f9629b4792285ac943af612e8d",
+    "sha256": "c029622cf171a1ca92b9caf09ff0b0a3778a7d6a7fc1c8339b044227406051dc"
+  },
+  "sim/analysis_spectrum.hex": {
+    "git_blob": "70e4fca741bbd677feac11daa57287c6170e2708",
+    "sha256": "e261b95a11cbeb8b278a4e88733bf75123877a116ad6047814989bf01bce3b37"
+  },
+  "sim/tb_audio_spectrum.sv": {
+    "git_blob": "18ff90df6058589cbfb09d1705f1212964e4bd3e",
+    "sha256": "fb0046426c001cb27e99d63b77d31b945c5a5ed62af5354061313e953adc23d8"
+  },
+  "sim/tb_lissajous_plot.sv": {
+    "git_blob": "fd7b8d1c1de5fd5b198d891ce991b12f6bd067b3",
+    "sha256": "55133bb3bb9b2f7e94b424edca7b386512be97ded45007744553f28b6258eb27"
+  },
+  "sim/tb_theme_art.sv": {
+    "git_blob": "78800f448d8c871b30b81a650df4b2a75b2813a1",
+    "sha256": "393980cb0d981fbee2fca275f2be75ed14b195033d982fdf88b2aa9dd838cdc7"
+  },
+  "sim/tb_theme_controls.sv": {
+    "git_blob": "437abd7708dfdf2ffa3dca7fa0d3040eec9c70c7",
+    "sha256": "669658d0e0775abdffe57be068c7a289164ecca328bbd76bc7ee9b1aed28e5e8"
+  },
+  "sim/tb_theme_pixels.sv": {
+    "git_blob": "c449b8e637820d25f1d0dffdf4c5fb6e2ccfa12d",
+    "sha256": "8266a58ec40b46013bd12f1daf4e9f4c7cab9175fd9cb00b9e56054c3237c899"
+  },
+  "sim/tb_theme_top.sv": {
+    "git_blob": "f07c529d3479f613cf46875980f7202f9ee944bc",
+    "sha256": "c3cd5e13c5d529fa7a1675652bb6d37d7311641bb746cda94147c78cd100aa79"
+  },
+  "src/rom/fft_bands.hex": {
+    "git_blob": "2675739885258f62e0b4d89a1587a7cf120769fe",
+    "sha256": "ee331fd64577d1cfc1e807de1218c1362e81b372dc08d6b403e0e025f9c889f9"
+  },
+  "src/rom/fft_twiddle.hex": {
+    "git_blob": "a0838ab2517d68913aa280faad887a5890838404",
+    "sha256": "c38ee46f298b4b1129f144ff74250ad820f92a815c34ebeae330bea56c7dfe3a"
+  },
+  "src/rom/fft_window.hex": {
+    "git_blob": "893468b8a085d081f119e61d28eeeeaa5716b6af",
+    "sha256": "e0fcaf906a477c5f6cb0abd463938d3683fd147f7290314cfe4d7eec3b635787"
+  },
+  "src/rom/theme_british.hex": {
+    "git_blob": "107a31e242f6972cdc9e03b994fb28a0e83e2ac5",
+    "sha256": "d59978d92c6a001e412059d161cfbaa7c5a0404e9e843f746353a5c00a876a31"
+  },
+  "src/rom/theme_british_palette.hex": {
+    "git_blob": "e8bdeca4a3c237d4496f4291d862c10afda00bec",
+    "sha256": "9ce212232c988a3a3e2dd67c2b10a34a1429837e645ef4bb676b83e8a9e0bf07"
+  },
+  "src/rom/theme_capybara.hex": {
+    "git_blob": "39ef22f0ad3e16dc12db70f3654d3d40e4bff912",
+    "sha256": "f227b71f61272efc3888738cbe12eb7ca3f6378bec5f12c6d5f780af993d3eec"
+  },
+  "src/rom/theme_capybara_palette.hex": {
+    "git_blob": "c13ef09a661215e86ba4345ae8634c8d0d8efa0d",
+    "sha256": "aa43b2e7668f80c68e1edd89e396d75d602367e090e2c1534bea9b55c8ed93aa"
+  },
+  "src/rom/theme_cat.hex": {
+    "git_blob": "9e5f14d399e7f6e39834d8ac3b13970689e06f51",
+    "sha256": "07ab1738e0e1a26706784b98cd57c596d845c7551a938be16ddf789585dd5885"
+  },
+  "src/rom/theme_cat_palette.hex": {
+    "git_blob": "f2c5448afb378640666b0f4d325ef5d949fa8498",
+    "sha256": "7673aed05dfa699b8c35f94bd476111e56aa83dd2d9a743dfc9f72ccf324140e"
+  },
+  "src/rom/theme_egg.hex": {
+    "git_blob": "d1613d8770a9601444085dbd1fcdf1c335c50dcc",
+    "sha256": "914aa843a6533f98b97971b9109742075897bbec6e421536e4c76f72e5209c72"
+  },
+  "src/rom/theme_font.hex": {
+    "git_blob": "de3c6985262c7720751138e464379e886a05ad20",
+    "sha256": "afbcd714b373611df124a1eb8d6b2f89cf4cb35a3ced76a1b8f4ba272b95a791"
+  }
+}

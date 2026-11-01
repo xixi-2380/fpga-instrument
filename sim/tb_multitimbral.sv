@@ -9,7 +9,9 @@ module tb_multitimbral;
  wire bck,ws,din,pa,u,frame_ce,note_ready,input_ready,gate;
  wire [VOICES-1:0] voice_active,voice_held;wire [16:0] level;
  integer checks=0,isolated_nonzero;
- synth_core #(.VOICES(VOICES),.MUTE(4),.FADE(4),.ATTACK(8),.DECAY(8),.SUSTAIN(32768),.RELEASE(16)) sound(
+ // Isolate legacy voice/effect arithmetic; production conditioned output is
+ // covered by tb_output_gain, tb_bluetooth_top and tb_bt_short_audio.
+ synth_core #(.OUTPUT_ENABLE(0),.VOICES(VOICES),.MUTE(4),.FADE(4),.ATTACK(8),.DECAY(8),.SUSTAIN(32768),.RELEASE(16)) sound(
  .clk(clk),.rst(rst),.note_valid(note_valid),.note_on(note_on),.note_id(note_id),.note_fcw(note_fcw),
  .note_ready(note_ready),.input_ready(input_ready),.bck(bck),.ws(ws),.din(din),.pa_enable(pa),
  .underrun(u),.frame_ce(frame_ce),.gate(gate),.voice_active(voice_active),.voice_held(voice_held),
@@ -71,11 +73,11 @@ module tb_multitimbral;
   more_frames(25);
   `CHECK(&voice_active && &voice_held,"all 32 mixed-timbre voices sustain")
   for(integer v=0;v<VOICES;v=v+1)begin
-   `CHECK(sound.voice_timbres[v*3+:3]==v%3,"accepted timbre stays with its voice")
+   `CHECK(sound.voice_timbres[v*5+:5]==v%3,"accepted timbre stays with its voice")
   end
   note_timbre=2;more_frames(10);
   for(integer v=0;v<VOICES;v=v+1)begin
-   `CHECK(sound.voice_timbres[v*3+:3]==v%3,"selection alone does not alter held notes")
+   `CHECK(sound.voice_timbres[v*5+:5]==v%3,"selection alone does not alter held notes")
   end
   event_note(0,32,0);more_frames(3);
   `CHECK(sound.voice_timbres[1:0]==0 && voice_active[0],"release preserves original timbre during tail")

@@ -91,8 +91,8 @@ always @(posedge clk)if(!rst)begin
   for(integer v=0;v<VOICES;v=v+1)begin
    x=$sin(6.283185307179586*ref_addr[v]/4096.0)*32767.0;
 `ifdef TIMBRE_REFERENCE
-   x=waveform(`AUDIO_REF_DUT.frame_timbres[v*3+:3],6.283185307179586*ref_addr[v]/4096.0)
-      /peaks[`AUDIO_REF_DUT.frame_timbres[v*3+:3]]*32767.0;
+   x=waveform(`AUDIO_REF_DUT.frame_timbres[v*5+:5],6.283185307179586*ref_addr[v]/4096.0)
+      /peaks[`AUDIO_REF_DUT.frame_timbres[v*5+:5]]*32767.0;
 `endif
    romcode=x>=0?$rtoi(x+0.5):$rtoi(x-0.5);
    reference_term=`AUDIO_REF_DUT.voice_level[v];

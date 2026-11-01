@@ -1,15 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE gowin-fpga-project>
+<?xml version='1.0' encoding='UTF-8'?>
 <Project>
     <Template>FPGA</Template>
     <Version>5</Version>
     <Device name="GW5AST-138C" pn="GW5AST-LV138FPG676AC1/I0">gw5ast138c-003</Device>
     <FileList>
+        <File path="src/performance_control.sv" type="file.verilog" enable="1" />
+        <File path="src/manual_event_arbiter.sv" type="file.verilog" enable="1" />
+        <File path="src/audio_chorus.sv" type="file.verilog" enable="1" />
+        <File path="src/ultrasonic_range.sv" type="file.verilog" enable="1" />
+        <File path="src/bt_event_cdc.sv" type="file.verilog" enable="1" />
+        <File path="src/bt_identity_monitor.sv" type="file.verilog" enable="1" />
+        <File path="src/master_volume.sv" type="file.verilog" enable="1" />
+        <File path="src/uart_rx.sv" type="file.verilog" enable="1" />
+        <File path="src/uart_tx.sv" type="file.verilog" enable="1" />
+        <File path="src/bt_frame_rx.sv" type="file.verilog" enable="1" />
+        <File path="src/bt_frame_tx.sv" type="file.verilog" enable="1" />
+        <File path="src/bt_score_player.sv" type="file.verilog" enable="1" />
+        <File path="src/bluetooth_score_core.sv" type="file.verilog" enable="1" />
+        <File path="src/bluetooth_score_link.sv" type="file.verilog" enable="1" />
+        <File path="src/bluetooth_audio_bridge.sv" type="file.verilog" enable="1" />
         <File path="src/instrument_envelope.sv" type="file.verilog" enable="1" />
-        <File path="src/audio_spectrum.sv" type="file.verilog" enable="1" />
-        <File path="src/lissajous_plot.sv" type="file.verilog" enable="1" />
         <File path="src/audio_visualizer.sv" type="file.verilog" enable="1" />
-        <File path="src/ui_keypad_router.sv" type="file.verilog" enable="1" />
         <File path="src/ui_touch_actions.sv" type="file.verilog" enable="1" />
         <File path="src/rgb_display.sv" type="file.verilog" enable="1" />
         <File path="src/rgb_status_cdc.sv" type="file.verilog" enable="1" />
@@ -18,7 +29,6 @@
         <File path="src/gt9110_touch.sv" type="file.verilog" enable="1" />
         <File path="src/i2c_register_master.sv" type="file.verilog" enable="1" />
         <File path="src/config/ui_layout.svh" type="file.other" enable="1" />
-
         <File path="src/audio_effects.sv" type="file.verilog" enable="1" />
         <File path="src/audio_reverb.sv" type="file.verilog" enable="1" />
         <File path="src/score_player.sv" type="file.verilog" enable="1" />
@@ -28,6 +38,9 @@
         <File path="src/timbre_control.sv" type="file.verilog" enable="1" />
         <File path="src/rom/flute4096.hex" type="file.other" enable="1" />
         <File path="src/rom/reed4096.hex" type="file.other" enable="1" />
+        <File path="src/ec11_encoder.sv" type="file.verilog" enable="1" />
+        <File path="src/aip5916_keyboard.sv" type="file.verilog" enable="1" />
+        <File path="src/touch_keyboard_router.sv" type="file.verilog" enable="1" />
         <File path="src/keyboard_top.sv" type="file.verilog" enable="1" />
         <File path="src/adsr_envelope.sv" type="file.verilog" enable="1" />
         <File path="src/audio_timing.sv" type="file.verilog" enable="1" />
@@ -35,11 +48,22 @@
         <File path="src/dds_sine.sv" type="file.verilog" enable="1" />
         <File path="src/frame_buffer.sv" type="file.verilog" enable="1" />
         <File path="src/keyboard_core.sv" type="file.verilog" enable="1" />
+        <File path="src/sustain_envelope.sv" type="file.verilog" enable="1" />
+        <File path="src/config/sustain_curve.svh" type="file.other" enable="1" />
         <File path="src/synth_core.sv" type="file.verilog" enable="1" />
+        <File path="src/ui_more_actions.sv" type="file.verilog" enable="1" />
+        <File path="src/score_services.sv" type="file.verilog" enable="1" />
+        <File path="src/score_library_protocol.sv" type="file.verilog" enable="1" />
+        <File path="src/flash_song_library.sv" type="file.verilog" enable="1" />
+        <File path="src/spi_byte_master.sv" type="file.verilog" enable="1" />
+        <File path="src/spi_nor_flash.sv" type="file.verilog" enable="1" />
+        <File path="src/local_score_control.sv" type="file.verilog" enable="1" />
+        <File path="src/score_validator.sv" type="file.verilog" enable="1" />
+        <File path="src/audio_limiter.sv" type="file.verilog" enable="1" />
+        <File path="src/audio_latency_meter.sv" type="file.verilog" enable="1" />
         <File path="src/voice_allocator.sv" type="file.verilog" enable="1" />
         <File path="src/voice_mixer.sv" type="file.verilog" enable="1" />
         <File path="src/lock_guard.sv" type="file.verilog" enable="1" />
-        <File path="src/matrix_keypad.sv" type="file.verilog" enable="1" />
         <File path="src/key_note_events.sv" type="file.verilog" enable="1" />
         <File path="src/pll_pair.sv" type="file.verilog" enable="1" />
         <File path="src/i2s_tx.sv" type="file.verilog" enable="1" />
@@ -48,6 +72,7 @@
         <File path="src/sine_rom.sv" type="file.verilog" enable="1" />
         <File path="src/startup_envelope.sv" type="file.verilog" enable="1" />
         <File path="src/tone_gain.sv" type="file.verilog" enable="1" />
+        <File path="src/config/flash_profile.svh" type="file.other" enable="1" />
         <File path="src/config/keyboard_config.svh" type="file.other" enable="1" />
         <File path="src/config/keyboard_notes.svh" type="file.other" enable="1" />
         <File path="src/config/run_leds_config.svh" type="file.other" enable="1" />
@@ -60,7 +85,44 @@
         <File path="src/rom/guitar4096.hex" type="file.other" enable="1" />
         <File path="src/rom/vibraphone4096.hex" type="file.other" enable="1" />
         <File path="src/rom/british_font.hex" type="file.other" enable="1" />
+        <File path="src/rom/sine_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/flute_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/reed_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/cello_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/piano_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/guitar_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/vibraphone_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/organ4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/organ_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/bass4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/bass_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/violin4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/violin_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/strings4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/strings_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/trumpet4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/trumpet_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/sax4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/sax_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/lead4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/lead_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/pad4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/pad_high1024.hex" type="file.other" enable="1" />
+        <File path="src/rom/accordion4096.hex" type="file.other" enable="1" />
+        <File path="src/rom/accordion_high1024.hex" type="file.other" enable="1" />
+        <File path="src/config/score_record.svh" type="file.other" enable="1" />
+        <File path="src/envelope_precalc_bank.sv" type="file.verilog" enable="1" />
+        <File path="src/audio_output_filter.sv" type="file.verilog" enable="1" />
+        <File path="src/keyboard_sensitivity.sv" type="file.verilog" enable="1" />
+        <File path="src/ultrasonic_pitch.sv" type="file.verilog" enable="1" />
         <File path="src/ui_theme_art.sv" type="file.verilog" enable="1" />
+        <File path="src/audio_spectrum.sv" type="file.verilog" enable="1" />
+        <File path="src/lissajous_plot.sv" type="file.verilog" enable="1" />
+        <File path="src/config/ui_language.svh" type="file.other" enable="1" />
+        <File path="src/config/theme_storage.svh" type="file.other" enable="1" />
+        <File path="src/rom/fft_bands.hex" type="file.other" enable="1" />
+        <File path="src/rom/fft_twiddle.hex" type="file.other" enable="1" />
+        <File path="src/rom/fft_window.hex" type="file.other" enable="1" />
         <File path="src/rom/theme_british.hex" type="file.other" enable="1" />
         <File path="src/rom/theme_british_palette.hex" type="file.other" enable="1" />
         <File path="src/rom/theme_capybara.hex" type="file.other" enable="1" />
@@ -68,14 +130,6 @@
         <File path="src/rom/theme_cat.hex" type="file.other" enable="1" />
         <File path="src/rom/theme_cat_palette.hex" type="file.other" enable="1" />
         <File path="src/rom/theme_egg.hex" type="file.other" enable="1" />
-        <File path="src/rom/fft_window.hex" type="file.other" enable="1" />
-        <File path="src/rom/fft_twiddle.hex" type="file.other" enable="1" />
-        <File path="src/rom/fft_bands.hex" type="file.other" enable="1" />
         <File path="src/rom/theme_font.hex" type="file.other" enable="1" />
-        <File path="src/config/ui_language.svh" type="file.other" enable="1" />
-        <File path="src/config/theme_storage.svh" type="file.other" enable="1" />
     </FileList>
 </Project>
-
-
-

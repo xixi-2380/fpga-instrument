@@ -5,13 +5,13 @@ module allocator_case #(parameter integer N=4)(output reg done=0,output integer 
  reg [6:0] id=0;reg [31:0] fcw=0;reg [N-1:0] active=0;
  always #5 clk=~clk;
  wire ready;wire [N-1:0] start,stop,restart,held;
- reg [2:0] timbre=0;wire [N*3-1:0] voice_timbres;
+ reg [2:0] timbre=0;wire [N*5-1:0] voice_timbres;
  wire [N*32-1:0] words;wire [N*7-1:0] ids;
  integer serial=0,target,oldest;
  reg [2:0] model_timbre[0:N-1];integer age[0:N-1];reg [6:0] owner[0:N-1];reg [31:0] frequency[0:N-1];
  reg [N-1:0] owned=0,model_held=0,pending=0,reset_pending=0,committed=0;
  reg [N-1:0] expected_start,expected_stop,expected_restart;
- voice_allocator #(.VOICES(N)) dut(clk,rst,enabled,ce,valid,on,id,fcw,active,ready,start,stop,restart,held,words,ids,timbre,voice_timbres);
+ voice_allocator #(.VOICES(N)) dut(clk,rst,enabled,ce,valid,on,id,fcw,active,ready,start,stop,restart,held,words,ids,timbre,voice_timbres,1'b0,9'd256,id,,);
  task model_reset;begin
   serial=0;owned=0;model_held=0;pending=0;reset_pending=0;committed=0;
   for(integer i=0;i<N;i=i+1)begin age[i]=0;owner[i]=0;frequency[i]=0;model_timbre[i]=0;end
@@ -21,7 +21,7 @@ module allocator_case #(parameter integer N=4)(output reg done=0,output integer 
   for(integer i=0;i<N;i=i+1)begin
    `CHECK(dut.rank[i]<N,"rank remains bounded")
    if(owned[i])begin
-    `CHECK(voice_timbres[i*3+:3]==model_timbre[i],"timbre stays atomic with ownership across stalls and frames")
+    `CHECK(voice_timbres[i*5+:5]==model_timbre[i],"timbre stays atomic with ownership across stalls and frames")
     `CHECK(ids[i*7+:7]==owner[i] && words[i*32+:32]==frequency[i],"identity and FCW remain associated")
    end
    for(integer j=i+1;j<N;j=j+1)begin
@@ -46,7 +46,7 @@ module allocator_case #(parameter integer N=4)(output reg done=0,output integer 
     target=0;for(integer i=1;i<N;i=i+1)if(age[i]<age[target])target=i;
    end
    if(!owned[target] || owner[target]!=note)reset_pending[target]=1;
-   owned[target]=1;model_held[target]=1;owner[target]=note;frequency[target]=fcw;model_timbre[target]=timbre==7 ? 0 : timbre;
+   owned[target]=1;model_held[target]=1;owner[target]=note;frequency[target]=fcw;model_timbre[target]=timbre;
    age[target]=serial;serial=serial+1;pending[target]=1;
   end else if(target>=0)model_held[target]=0;
   compare;
@@ -74,7 +74,7 @@ module allocator_case #(parameter integer N=4)(output reg done=0,output integer 
   compare;@(negedge clk);ce=0;
  end endtask
  // Ownership and all event fields must remain unchanged before handshake.
- reg [N*43-1:0] previous_metadata;
+ reg [N*45-1:0] previous_metadata;
  always @(posedge clk)if(!rst && !ce && !(valid && ready))begin
   previous_metadata={held,words,ids,voice_timbres};#1;
   if(!rst)begin `CHECK({held,words,ids,voice_timbres}===previous_metadata,

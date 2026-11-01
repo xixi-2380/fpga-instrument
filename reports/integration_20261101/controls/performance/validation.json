@@ -1,0 +1,34 @@
+{
+  "tests": [
+    {
+      "name": "performance",
+      "passed": true,
+      "checks": 9979,
+      "seconds": 0.435,
+      "source_sha256": {
+        "src\\performance_control.sv": "c21cef7d6c64c20f7b8ecdc192abb88260091e98a5d341d693394573247338bf",
+        "sim\\integration\\tb_controls_performance.sv": "10a47a88b23811903ca71458fbef47316c84c7f689ce308ce5fa664302fd1fe5",
+        "src\\config\\ui_layout.svh": "66232650f9c2af775736d8b4fd943e2c461d0953298f90293870531f8fb5a6f9",
+        "src\\config\\synth_config.svh": "e3d2fcb59d6b718a24f2cb56f3974ec92d521d238ba3569c3b7ad0f27c31f434",
+        "src\\config\\keyboard_notes.svh": "f1e976e1b6efd138c1a20cc5d3d56d8376aa9342e19acab01bd3fdb29c6daf5c"
+      },
+      "compile_command": [
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+        "-g2012",
+        "-grelative-include",
+        "-IF:/FPGA_Projects/fpga-instrument-main-integration-20261101/src",
+        "-IF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim",
+        "-s",
+        "tb_controls_performance",
+        "-o",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/reports/integration_20261101/controls/performance/performance.vvp",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/performance_control.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/integration/tb_controls_performance.sv"
+      ],
+      "output": "PASS tb_controls_performance checks=9979 ons=13 offs=13\nF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/integration/tb_controls_performance.sv:56: $finish called at 99820000 (1ps)\n"
+    }
+  ],
+  "total_checks": 9979,
+  "sta_passed": false,
+  "hardware_tested": false
+}

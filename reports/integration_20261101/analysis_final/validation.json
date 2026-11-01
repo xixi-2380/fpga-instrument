@@ -1,0 +1,137 @@
+{
+  "created_at": "2026-11-01T18:48:19.645891+08:00",
+  "passed": true,
+  "tests": [
+    {
+      "name": "fft",
+      "passed": true,
+      "checks": 1295379
+    },
+    {
+      "name": "xy",
+      "passed": true,
+      "checks": 32776
+    }
+  ],
+  "numeric": {
+    "passed": true,
+    "checks": 16936,
+    "frames": 8,
+    "fft_component_max_error_lsb": 8.002360750941934,
+    "resolution_hz": 23.4375,
+    "polyphony_fft_peaks_verified": 32,
+    "limits": "Grouped high-frequency bands can merge peaks; relative L1 magnitude, not calibrated dBFS."
+  },
+  "total_checks": 1345091,
+  "commands": [
+    {
+      "name": "fixtures",
+      "command": [
+        "C:\\Users\\10939\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe",
+        "-X",
+        "utf8",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/scripts/reference_audio_analysis.py",
+        "--out-dir",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/reports/integration_20261101/analysis_final"
+      ],
+      "returncode": 0,
+      "seconds": 0.233
+    },
+    {
+      "name": "fft_compile",
+      "command": [
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+        "-g2012",
+        "-grelative-include",
+        "-IF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim",
+        "-s",
+        "tb_audio_spectrum",
+        "-o",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/reports/integration_20261101/analysis_final/fft.vvp",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/audio_spectrum.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/tb_audio_spectrum.sv"
+      ],
+      "returncode": 0,
+      "seconds": 0.261
+    },
+    {
+      "name": "fft",
+      "command": [
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\vvp.exe",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/reports/integration_20261101/analysis_final/fft.vvp",
+        "+SIM_OUT_DIR=F:/FPGA_Projects/fpga-instrument-main-integration-20261101/reports/integration_20261101/analysis_final"
+      ],
+      "returncode": 0,
+      "seconds": 14.425
+    },
+    {
+      "name": "xy_compile",
+      "command": [
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+        "-g2012",
+        "-grelative-include",
+        "-IF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim",
+        "-s",
+        "tb_lissajous_plot",
+        "-o",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/reports/integration_20261101/analysis_final/xy.vvp",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/src/lissajous_plot.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/tb_lissajous_plot.sv"
+      ],
+      "returncode": 0,
+      "seconds": 0.256
+    },
+    {
+      "name": "xy",
+      "command": [
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\vvp.exe",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/reports/integration_20261101/analysis_final/xy.vvp",
+        "+SIM_OUT_DIR=F:/FPGA_Projects/fpga-instrument-main-integration-20261101/reports/integration_20261101/analysis_final"
+      ],
+      "returncode": 0,
+      "seconds": 0.163
+    },
+    {
+      "name": "fft_numeric",
+      "command": [
+        "C:\\Users\\10939\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe",
+        "-X",
+        "utf8",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/scripts/check_spectrum_fft.py",
+        "F:/FPGA_Projects/fpga-instrument-main-integration-20261101/reports/integration_20261101/analysis_final"
+      ],
+      "returncode": 0,
+      "seconds": 0.209
+    }
+  ],
+  "seconds": 15.549,
+  "source_rom_test_sha256": {
+    "src/audio_spectrum.sv": "b216f21a3a948a4d5b625c38cafd83c51c3799d994ab94852b1dd554863e21ef",
+    "src/lissajous_plot.sv": "8fb5035e3c956c5154da790bdba16cd0a4ae820ec0da4d0b925a7476c6a8ddad",
+    "src/rgb_display.sv": "69a72c2cc71d78c8afcce2056699b4beae281b9b43dbdca9b04871bef1405cb4",
+    "src/rgb_ui_renderer.sv": "0449d0df6b5e63875465ec1218ef0aa75869b14deb7b022c321389d35f21fc88",
+    "src/keyboard_top.sv": "9dc3d1f0168e51fc7714ffbbd959b4e0c13a29cd6e3e20ddacb1ae38e6478c3e",
+    "sim/tb_audio_spectrum.sv": "fb0046426c001cb27e99d63b77d31b945c5a5ed62af5354061313e953adc23d8",
+    "sim/tb_lissajous_plot.sv": "55133bb3bb9b2f7e94b424edca7b386512be97ded45007744553f28b6258eb27",
+    "sim/check.svh": "e72479555ce83d9f4665986601f62f4f7c360c0f59ce1ae43d09397d7ab77a7c",
+    "scripts/reference_audio_analysis.py": "c029622cf171a1ca92b9caf09ff0b0a3778a7d6a7fc1c8339b044227406051dc",
+    "scripts/check_spectrum_fft.py": "7fa34b71fd8b743df08ed53e698766e15c1df1a16fdeed21f13a527073f788f6",
+    "assets/spectrum_config.json": "621c40f8deca29754c12d46854de249626e2fd7410dfbc0f46a76c241a21702c",
+    "src/rom/fft_window.hex": "e0fcaf906a477c5f6cb0abd463938d3683fd147f7290314cfe4d7eec3b635787",
+    "src/rom/fft_twiddle.hex": "c38ee46f298b4b1129f144ff74250ad820f92a815c34ebeae330bea56c7dfe3a",
+    "src/rom/fft_bands.hex": "ee331fd64577d1cfc1e807de1218c1362e81b372dc08d6b403e0e025f9c889f9"
+  },
+  "artifact_sha256": {
+    "pcm.hex": "027140805671b163ba0b3f99d7c3a30a771f864a8d9b9e446f0147ba473782d6",
+    "fft_reference.json": "2b0608b99fbadb465719d55e745c8e0674e99506d5d1e9dd7543cdb078ff40d0",
+    "xy_input.hex": "4b75f6978d72785fe345f70f523d0a1c757a30b31eb3527ecf1ba8e58fefa539",
+    "xy_reference.hex": "f9f5081847032325f8b9871ec861d8f1bda8f53df64ed0272a89482116abb7a8",
+    "fft_actual.txt": "4551277ad5fdb9c7d85021b7c76a6a3abc0e8aa73d89b5f07838aa32ed6cc0c4",
+    "fft_numeric_check.json": "e2d4f7d11349e6aa635c0777fe9e3d20993a1f9adea74b0bb5314480d6696b4f"
+  },
+  "production_modified": false,
+  "behavioral_algorithms": true,
+  "sta_passed": false,
+  "hardware_programmed": false,
+  "limits": "Module regressions and numerical references. Top wiring is audited separately; not physical timing/panel/analog evidence."
+}

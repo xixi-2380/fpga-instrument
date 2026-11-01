@@ -14,3 +14,21 @@
 /reports/keyboard/pinmap_current/
 __pycache__/
 *.pyc
+# Reproducible Java bytecode and raw simulation images; keep logs and PNG evidence
+*.class
+/reports/**/*.ppm
+
+# PCB/Flash debug: preserve evidence, omit simulator images and implementation databases.
+/tmp/
+/reports/pcb_flash_debug_2026-10-28/tested_baseline_impl/
+/reports/pcb_flash_debug_2026-10-28/**/impl/
+/reports/pcb_flash_debug_2026-10-28/attempt*/pnr/
+/reports/pcb_flash_debug_2026-10-28/attempt*/gwsynthesis/
+/reports/pcb_flash_debug_2026-10-28/**/flash_image.bin
+/dist/pcb-flash-debug/*.sdf
+
+# Current sustain/UI build: publish selected evidence and canonical outputs only.
+/reports/sustain_ui_2026-10-29/implementation*/pnr/
+/reports/sustain_ui_2026-10-29/implementation*/gwsynthesis/
+/reports/sustain_ui_2026-10-29/audio_ab*/baseline/
+/dist/sustain-ui-2026-10-29/*.sdf

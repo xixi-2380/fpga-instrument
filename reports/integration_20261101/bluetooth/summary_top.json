@@ -1,0 +1,14 @@
+[
+  {
+    "case": "top_uart",
+    "module": "tb_bluetooth_integration_uart",
+    "parameters": {},
+    "passed": true,
+    "checks": 4280,
+    "seconds": 678.71,
+    "inputs_changed_during_run": [],
+    "source_manifest_sha256": "8cedc153d72f88af8b279a43e138298792918c51adeba3b71413b5751a5c649e",
+    "run_log_sha256": "f81dee37939bd62baa61418c438b2a5c8d9b88335667bedb61b106abac1746ac",
+    "pll": "explicit behavioral substitute; not PLL/STA/hardware validation"
+  }
+]

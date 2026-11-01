@@ -18,7 +18,7 @@ module tb_gt9110_touch;
     realtime previous_fall=0,previous_rise=0,reset_release,int_release,last_sda_change=0;
     gt9110_touch #(.RESET_CYCLES(20),.STRAP_CYCLES(8),.BOOT_CYCLES(12),
         .POLL_CYCLES(20),.I2C_HALF_CYCLES(HALF),.I2C_TIMEOUT_CYCLES(HALF*20))
-        dut(clk,rst,scl,sda,irq,reset_n,ready,error,down,pulse,count,x,y,size,id,product,rx,ry);
+        dut(clk,rst,scl,sda,irq,reset_n,ready,error,down,pulse,count,x,y,size,id,product,rx,ry,);
     always @(posedge clk)begin
         #1;
         if(pulse)reports=reports+1;

@@ -1,0 +1,23 @@
+{
+  "method": "Monotone absolute-value recurrence bound, not a formal RTL proof",
+  "maximum_initial_dc_estimate_q16": 2147483648,
+  "zero_samples_to_estimator_deadband": 56302,
+  "deadband_q16_max": 4095,
+  "conservative_initial_lowpass_q16": 8589934592,
+  "lowpass_bound_after_10_samples_q16": 15016,
+  "rounding_half_lsb_q16": 32768,
+  "conclusion": "After estimator reaches deadband and at most11 additional zero samples, rounded PCM is exactly0 forever; plus4-clock output pipeline. Valid gaps count only accepted samples.",
+  "bound_trace_q16": [
+    8589934592,
+    2147488766,
+    536877310,
+    134224446,
+    33561230,
+    8395426,
+    2103975,
+    531112,
+    137896,
+    39592,
+    15016
+  ]
+}

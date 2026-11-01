@@ -5,7 +5,7 @@ module tb_instrument_envelopes;
  wire [16:0] level;wire active;
  integer checks=0,attack_frames,initial_level,prior,max_release;
  always #5 clk=~clk;
- instrument_envelope #(.ATTACK(4),.DECAY(4),.SUSTAIN(40000),.RELEASE(8)) dut(clk,rst,ce,on,off,restart,timbre,level,active);
+ instrument_envelope #(.ATTACK(4),.DECAY(4),.SUSTAIN(40000),.RELEASE(8)) dut(.clk(clk),.rst(rst),.sample_ce(ce),.note_on(on),.note_off(off),.restart(restart),.timbre(timbre),.level(level),.active(active));
  task tick;begin @(posedge clk);#1;@(negedge clk);end endtask
  initial begin
   #12 rst=0;

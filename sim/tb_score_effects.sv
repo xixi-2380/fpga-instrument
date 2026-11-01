@@ -16,7 +16,9 @@ module tb_score_effects;
  wire bck,ws,din,pa,db,dw,dd,dp;wire [5:0] leds;
  integer checks=0,score_events=0,key_events=0,finished_events=0,prior_nonzero;
  reg melody_seen=0;
- keyboard_top #(.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(4),.SCORE_ENABLE(1),.SCORE_BEAT_FRAMES(16),.LED_STEP_CYCLES(4),.LOCK_N(32),
+ // Isolate legacy voice/effect arithmetic; production conditioned output is
+ // covered by tb_output_gain, tb_bluetooth_top and tb_bt_short_audio.
+ keyboard_top #(.OUTPUT_ENABLE(0),.LCD_ENABLE(0),.TOUCH_ENABLE(0),.TOUCH_UI_ENABLE(0),.BUTTON_DEBOUNCE_CYCLES(4),.SCORE_ENABLE(1),.SCORE_BEAT_FRAMES(16),.LED_STEP_CYCLES(4),.LOCK_N(32),
   .SLOT_CYCLES(32),.SETTLE_CYCLES(4),.DEBOUNCE_SCANS(2),
   .MUTE(4),.FADE(4),.ATTACK(2),.DECAY(2),.SUSTAIN(32768),.RELEASE(2))
   dut(.clk(ref_clk),.rst(ref_rst),.board_buttons_n(buttons_n),.key_row(rows),.key_col(columns),
@@ -104,14 +106,14 @@ module tb_score_effects;
   `CHECK(dut.selected_timbre==0 && !effects_enable && $countones(dut.voice_held)==2,"old effect chord only plays two notes")
   pressed=0;wait(dut.keys==0);more_frames(20);
   prior_nonzero=key_events;buttons_n=4'hd;more_frames(4);
-  `CHECK(dut.selected_timbre==0 && dut.theme_id==2 && key_events==prior_nonzero && !dut.gate,"S1 changes theme without creating a note")
+  `CHECK(dut.selected_timbre==1 && key_events==prior_nonzero && !dut.gate,"S1 selects flute without creating a note")
   buttons_n=4'hf;more_frames(2);pressed=16'h0200;wait(dut.keys==16'h0200);more_frames(20);
-  `CHECK(dut.sound.voice_timbres[1:0]==0 && $countones(dut.voice_held)==1,"new A4 keeps sine after visual-only button")
+  `CHECK(dut.sound.voice_timbres[1:0]==1 && $countones(dut.voice_held)==1,"new A4 captures flute")
   buttons_n=4'hb;more_frames(4);
-  `CHECK(dut.selected_timbre==0 && dut.theme_id==0 && dut.sound.voice_timbres[1:0]==0,"S2 changes theme without rewriting a held voice")
+  `CHECK(dut.selected_timbre==2 && dut.sound.voice_timbres[1:0]==1,"S2 does not rewrite a held voice's timbre")
   buttons_n=4'hf;more_frames(2);pressed=0;wait(dut.keys==0);more_frames(12);
   pressed=16'h0200;wait(dut.keys==16'h0200);more_frames(20);
-  `CHECK(dut.sound.voice_timbres[1:0]==0,"next A4 retains selected audio preset")
+  `CHECK(dut.sound.voice_timbres[1:0]==2,"next A4 captures reed")
   buttons_n=4'h7;more_frames(2);buttons_n=4'hf;more_frames(270);
   `CHECK(effects_enable && dut.sound.effect.fade_level==256 && $countones(dut.voice_held)==1,"S3 enables echo while a key stays held")
   more_frames(5);`CHECK(effects_enable,"held S3 does not toggle repeatedly")
@@ -128,4 +130,3 @@ module tb_score_effects;
  end
  initial begin #80000000;$fatal(1,"score audio timeout");end
 endmodule
-

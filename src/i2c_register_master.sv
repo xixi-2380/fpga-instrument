@@ -1,10 +1,10 @@
 `timescale 1ns/1ps
-// Single-master, open-drain I2C register transactions: 16-bit register address,
+// Single-master, open-drain I2C: 8/16-bit register address (REGISTER_BYTES),
 // one-byte writes or 1..9-byte reads, repeated START, clock stretching, timeout.
 // All state uses clk + counters; SCL is never an internal clock.
 module i2c_register_master #(
     parameter integer HALF_CYCLES=250,TIMEOUT_CYCLES=50000,
-    DATA_HOLD_CYCLES=(HALF_CYCLES+9)/10,
+    DATA_HOLD_CYCLES=(HALF_CYCLES+9)/10,REGISTER_BYTES=2,
     parameter [6:0] DEVICE_ADDR=7'h5d
 )(
     input wire clk,rst,start,read_request,
@@ -13,14 +13,23 @@ module i2c_register_master #(
     input wire [3:0] read_bytes,
     input wire scl_in,sda_in,
     output reg scl_low,sda_low,busy,done,error,
-    output reg [71:0] read_data
+    output reg [71:0] read_data,output wire [63:0] diagnostic,output reg [7:0] error_code
 );
     localparam IDLE=0,FREE=1,START_HOLD=2,TX_LOW=3,TX_RISE=4,TX_HIGH=5,
         ACK_LOW=6,ACK_RISE=7,ACK_HIGH=8,RX_LOW=9,RX_RISE=10,RX_HIGH=11,
         MACK_LOW=12,MACK_RISE=13,MACK_HIGH=14,RE_LOW=15,RE_RISE=16,RE_HIGH=17,
         STOP_LOW=18,STOP_RISE=19,STOP_HIGH=20,STOP_FREE=21;
     reg [4:0] state;
-    reg [31:0] timer,timeout_count;
+    localparam integer TW=HALF_CYCLES>1?$clog2(HALF_CYCLES):1;
+    localparam integer CW=TIMEOUT_CYCLES>1?$clog2(TIMEOUT_CYCLES):1;
+    reg [TW-1:0] timer;reg [CW-1:0] timeout_count;
+    wire [CW-1:0] timeout_next;
+    for(genvar c=0;c<CW;c=c+8)begin: timeout_bytes
+        localparam integer W=CW-c<8?CW-c:8;
+        (* syn_keep=1 *) wire carry;
+        if(c==0)assign carry=1;else assign carry=&timeout_count[c-1:0];
+        assign timeout_next[c+:W]=timeout_count[c+:W]+carry;
+    end
     reg [15:0] address;
     reg [7:0] tx,rx,write_byte;
     reg [3:0] length,byte_index;
@@ -32,6 +41,8 @@ module i2c_register_master #(
         if(rst)begin scl_sync<=3;sda_sync<=3;end
         else begin scl_sync<={scl_sync[0],scl_in};sda_sync<={sda_sync[0],sda_in};end
 
+    assign diagnostic={5'd0,error_code,8'(timeout_count),address[7:0],tx,rx,
+        state,stage,bit_index,reading,repeated,scl_sync[1],sda_sync[1],scl_low,sda_low,busy,error};
     task low_phase(input bit next_low,input [4:0] next_state);
         begin
             // Hold the observed previous data through SCL falling, then change
@@ -50,19 +61,19 @@ module i2c_register_master #(
         begin low_phase(1'b1,STOP_LOW);end
     endtask
     task abort_bus;
-        begin scl_low<=0;sda_low<=0;busy<=0;done<=1;error<=1;state<=IDLE;end
+        begin scl_low<=0;sda_low<=0;busy<=0;done<=1;error<=1;error_code<=8'h02;state<=IDLE;end
     endtask
     always @(posedge clk or posedge rst)begin
         if(rst)begin
             state<=IDLE;timer<=0;timeout_count<=0;address<=0;tx<=0;rx<=0;write_byte<=0;
             length<=0;byte_index<=0;bit_index<=0;stage<=0;reading<=0;repeated<=0;
-            next_sda_low<=0;
-            scl_low<=0;sda_low<=0;busy<=0;done<=0;error<=0;read_data<=0;
+            error_code<=0;next_sda_low<=0;
+            scl_low<=0;sda_low<=0;busy<=0;done<=0;error<=0;error_code<=0;read_data<=0;
         end else begin
             done<=0;
             case(state)
                 IDLE:if(start)begin
-                    error<=0;read_data<=0;address<=register_addr;write_byte<=write_data;
+                    error<=0;error_code<=0;read_data<=0;address<=register_addr;write_byte<=write_data;
                     reading<=read_request;length<=read_bytes;byte_index<=0;repeated<=0;
                     busy<=1;timer<=HALF_CYCLES-1;timeout_count<=0;state<=FREE;
                     if(read_request && (read_bytes<1 || read_bytes>9))abort_bus();
@@ -70,7 +81,7 @@ module i2c_register_master #(
                 FREE:begin
                     if(timeout_count==TIMEOUT_CYCLES-1)abort_bus();
                     else begin
-                        timeout_count<=timeout_count+1'b1;
+                        timeout_count<=timeout_next;
                         if(scl_sync[1] && sda_sync[1])begin
                             if(timer==0)begin sda_low<=1;timer<=HALF_CYCLES-1;state<=START_HOLD;end
                             else timer<=timer-1'b1;
@@ -101,7 +112,7 @@ module i2c_register_master #(
                             RE_RISE:state<=RE_HIGH;STOP_RISE:state<=STOP_HIGH;
                         endcase
                     end else if(timeout_count==TIMEOUT_CYCLES-1)abort_bus();
-                    else timeout_count<=timeout_count+1'b1;
+                    else timeout_count<=timeout_next;
                 end
                 TX_HIGH:if(timer!=0)timer<=timer-1'b1;
                     else begin
@@ -110,9 +121,9 @@ module i2c_register_master #(
                         end else low_phase(1'b0,ACK_LOW);
                     end
                 ACK_HIGH:if(timer!=0)timer<=timer-1'b1;
-                    else if(sda_sync[1]!==1'b0)begin error<=1;stop_bus();end
+                    else if(sda_sync[1]!==1'b0)begin error<=1;error_code<=8'h01;stop_bus();end
                     else case(stage)
-                        0:send_byte(address[15:8],1);
+                        0:if(REGISTER_BYTES==1)send_byte(address[7:0],2);else send_byte(address[15:8],1);
                         1:send_byte(address[7:0],2);
                         2:if(reading)begin
                             low_phase(1'b0,RE_LOW);
@@ -150,7 +161,7 @@ module i2c_register_master #(
         end
     end
 `ifndef SYNTHESIS
-    initial if(HALF_CYCLES<4 || TIMEOUT_CYCLES<HALF_CYCLES*2 ||
+    initial if((REGISTER_BYTES!=1 && REGISTER_BYTES!=2) || HALF_CYCLES<4 || TIMEOUT_CYCLES<HALF_CYCLES*2 ||
         DATA_HOLD_CYCLES<1 || DATA_HOLD_CYCLES>=HALF_CYCLES-1)
         $fatal(1,"I2C half period must cover input synchronization and timeout must allow bus settling");
 `endif

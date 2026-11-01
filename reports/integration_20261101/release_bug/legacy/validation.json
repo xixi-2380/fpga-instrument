@@ -1,0 +1,24 @@
+{
+  "tests": [
+    {
+      "keys": 16,
+      "passed": true,
+      "checks": 149,
+      "source_sha256": {
+        "src\\key_note_events.sv": "2b7a3dd6cfdc28fba31fea7f40f0ef5ad1dfdac66ed4d58856c7c0a3accfb6d8",
+        "sim\\tb_key_note_events.sv": "044a7653b906d92d63bb9cbd2aea79368c136b4572cbb80350c06587b295b821"
+      },
+      "output": "PASS tb_key_note_events checks=149\nF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/tb_key_note_events.sv:55: $finish called at 2060000 (1ps)\n"
+    },
+    {
+      "keys": 36,
+      "passed": true,
+      "checks": 269,
+      "source_sha256": {
+        "src\\key_note_events.sv": "2b7a3dd6cfdc28fba31fea7f40f0ef5ad1dfdac66ed4d58856c7c0a3accfb6d8",
+        "sim\\tb_key_note_events.sv": "044a7653b906d92d63bb9cbd2aea79368c136b4572cbb80350c06587b295b821"
+      },
+      "output": "PASS tb_key_note_events checks=269\nF:/FPGA_Projects/fpga-instrument-main-integration-20261101/sim/tb_key_note_events.sv:55: $finish called at 3660000 (1ps)\n"
+    }
+  ]
+}

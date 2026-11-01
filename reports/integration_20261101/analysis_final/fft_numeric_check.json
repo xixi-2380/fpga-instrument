@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "checks": 16936,
+  "frames": 8,
+  "fft_component_max_error_lsb": 8.002360750941934,
+  "resolution_hz": 23.4375,
+  "polyphony_fft_peaks_verified": 32,
+  "limits": "Grouped high-frequency bands can merge peaks; relative L1 magnitude, not calibrated dBFS."
+}

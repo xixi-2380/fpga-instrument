@@ -12,12 +12,22 @@ module gt9110_touch #(
     output reg [15:0] touch_x,touch_y,touch_size,
     output reg [7:0] track_id,
     output reg [31:0] product_id,
-    output reg [15:0] resolution_x,resolution_y
+    output reg [15:0] resolution_x,resolution_y,output reg health_toggle
 );
     localparam RESET=0,STRAP=1,BOOT=2,ID_START=3,ID_WAIT=4,RES_START=5,RES_WAIT=6,
         POLL_START=7,POLL_WAIT=8,CLEAR_START=9,CLEAR_WAIT=10,DELAY=11;
     reg [3:0] state,retry_state;
-    reg [31:0] counter;
+    localparam integer M0=RESET_CYCLES>STRAP_CYCLES?RESET_CYCLES:STRAP_CYCLES;
+    localparam integer M1=BOOT_CYCLES>POLL_CYCLES?BOOT_CYCLES:POLL_CYCLES;
+    localparam integer MAX_DELAY=M0>M1?M0:M1;
+    localparam integer CW=MAX_DELAY>1?$clog2(MAX_DELAY):1;
+    reg [CW-1:0] counter;wire [CW-1:0] counter_next;
+    for(genvar c=0;c<CW;c=c+8)begin: delay_bytes
+        localparam integer W=CW-c<8?CW-c:8;
+        (* syn_keep=1 *) wire carry;
+        if(c==0)assign carry=1;else assign carry=&counter[c-1:0];
+        assign counter_next[c+:W]=counter[c+:W]+carry;
+    end
     reg start,read_request;
     reg [15:0] address;
     reg [3:0] length;
@@ -35,7 +45,7 @@ module gt9110_touch #(
     assign touch_int=(rst || state==RESET || state==STRAP)?1'b0:1'bz;
     i2c_register_master #(.HALF_CYCLES(I2C_HALF_CYCLES),.TIMEOUT_CYCLES(I2C_TIMEOUT_CYCLES))
         bus(clk,rst,start,read_request,address,8'd0,length,touch_scl,touch_sda,
-            scl_low,sda_low,busy,done,bus_error,data);
+            scl_low,sda_low,busy,done,bus_error,data,,);
     task begin_read(input [15:0] reg_addr,input [3:0] bytes,input [3:0] next_state);
         begin address<=reg_addr;length<=bytes;read_request<=1;start<=1;state<=next_state;end
     endtask
@@ -51,16 +61,16 @@ module gt9110_touch #(
             address<=0;length<=1;ready<=0;error<=0;touch_down<=0;report_pulse<=0;
             touch_count<=0;touch_x<=0;touch_y<=0;touch_size<=0;track_id<=0;
             product_id<=0;resolution_x<=0;resolution_y<=0;
-            pending_count<=0;pending_x<=0;pending_y<=0;pending_size<=0;pending_id<=0;pending_bad<=0;
+            health_toggle<=0;pending_count<=0;pending_x<=0;pending_y<=0;pending_size<=0;pending_id<=0;pending_bad<=0;
         end else begin
             start<=0;report_pulse<=0;
             case(state)
                 RESET:if(counter==RESET_CYCLES-1)begin counter<=0;state<=STRAP;end
-                    else counter<=counter+1'b1;
+                    else counter<=counter_next;
                 STRAP:if(counter==STRAP_CYCLES-1)begin counter<=0;state<=BOOT;end
-                    else counter<=counter+1'b1;
+                    else counter<=counter_next;
                 BOOT:if(counter==BOOT_CYCLES-1)begin counter<=0;state<=ID_START;end
-                    else counter<=counter+1'b1;
+                    else counter<=counter_next;
                 ID_START:if(!busy)begin_read(16'h8140,4,ID_WAIT);
                 ID_WAIT:if(done)begin
                     if(bus_error)failed(ID_START);
@@ -76,6 +86,7 @@ module gt9110_touch #(
                 end
                 POLL_START:if(!busy)begin_read(16'h814e,9,POLL_WAIT);
                 POLL_WAIT:if(done)begin
+                    if(!bus_error)health_toggle<=!health_toggle;
                     if(bus_error)failed(POLL_START);
                     else if(!data[7])begin
                         counter<=0;retry_state<=POLL_START;state<=DELAY;
@@ -100,7 +111,7 @@ module gt9110_touch #(
                     end
                 end
                 DELAY:if(counter==POLL_CYCLES-1)begin counter<=0;state<=retry_state;end
-                    else counter<=counter+1'b1;
+                    else counter<=counter_next;
                 default:begin state<=RESET;counter<=0;ready<=0;touch_down<=0;end
             endcase
         end
