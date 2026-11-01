@@ -1,0 +1,664 @@
+{
+  "status": "physical_runs_in_progress",
+  "complete": false,
+  "checked_utc": "2026-11-01T04:07:50.074007+00:00",
+  "start_utc": "2026-11-01T03:39:58Z",
+  "deadline_utc": null,
+  "branch": "codex/performance-fx-enhancement",
+  "base_commit": "c6352faf09e1e110291e24130079fdd3ae94acdd",
+  "production_rtl_changed": false,
+  "hardware_programmed": false,
+  "qualified_bitstream": false,
+  "baseline": {
+    "root": "F:\\FPGA_Projects\\fpga-instrument-codex-performance-fx-enhancement",
+    "pid": 25772,
+    "session": 2676,
+    "result": "reports/closure_2026-11-01/baseline_full/result.json",
+    "input_netlist": "f3dcc0d5ef5b27e3c072804bb89bef80647f9da57a8527cad59b88c87950ac0c"
+  },
+  "candidate": {
+    "root": "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\candidate",
+    "pid": 54084,
+    "session": 5229,
+    "profile": {
+      "place": 1,
+      "route": 2,
+      "maxfan": 100
+    },
+    "synthesis": {
+      "resources": {
+        "LUT": 75172,
+        "Register": 49070,
+        "ALU": 10668
+      },
+      "clocks": [
+        {
+          "name": "clk",
+          "constraint": "50.000(MHz)",
+          "actual": "54.244(MHz)",
+          "logic_levels": "23"
+        },
+        {
+          "name": "lcd_on.display_driver/pixel_pll/CLKOUT0.default_gen_clk",
+          "constraint": "35.000(MHz)",
+          "actual": "42.786(MHz)",
+          "logic_levels": "28"
+        },
+        {
+          "name": "clocks/pll2/CLKOUT0.default_gen_clk",
+          "constraint": "61.440(MHz)",
+          "actual": "61.036(MHz)",
+          "logic_levels": "19"
+        }
+      ],
+      "netlist_sha256": "0aa8fd26b0194738ba282c3cdd0f1017cf5ecd5fc0f541f59720ba9c4b8bc434",
+      "input_count": 110,
+      "archived_utc": "2026-11-01T04:04:07.163027+00:00",
+      "synthesis_passed": true,
+      "pnr_passed": false
+    },
+    "result": "reports/closure_2026-11-01/private_fast/result.json"
+  },
+  "first_candidate_synthesis": {
+    "resources": {
+      "LUT": 75291,
+      "Register": 49071,
+      "ALU": 10640
+    },
+    "clocks": [
+      {
+        "name": "clk",
+        "constraint": "50.000(MHz)",
+        "actual": "55.355(MHz)",
+        "logic_levels": "22"
+      },
+      {
+        "name": "lcd_on.display_driver/pixel_pll/CLKOUT0.default_gen_clk",
+        "constraint": "35.000(MHz)",
+        "actual": "42.824(MHz)",
+        "logic_levels": "28"
+      },
+      {
+        "name": "clocks/pll2/CLKOUT0.default_gen_clk",
+        "constraint": "61.440(MHz)",
+        "actual": "60.791(MHz)",
+        "logic_levels": "22"
+      }
+    ],
+    "netlist_sha256": "b4fd2f1800ae59fae18759c9c3c089cda768cacec35fe844cac5a20d18a0d329",
+    "input_count": 110,
+    "archived_utc": "2026-11-01T03:54:39.945001+00:00",
+    "synthesis_passed": true,
+    "pnr_passed": false
+  },
+  "bank_candidate": {
+    "root": "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\bank_candidate",
+    "pid": 18752,
+    "synthesis_session": 80276,
+    "status": "synthesis_and_envelope_comparison_running"
+  },
+  "limiter": {
+    "total_checks": 3680212,
+    "tests": [
+      {
+        "name": "tb_limiter_output_equivalence",
+        "parameters": {
+          "CEILING": 1
+        },
+        "checks": 986432,
+        "passed": true,
+        "source_sha256": {
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\candidate\\src\\audio_limiter.sv": "5e8eba96e4cbad3f5dffb08bd36d9473e3d4a8f701d3d8e4819e11e2ff3fafd9",
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_output_equivalence.sv": "d12019e5cc0d3a12a8aea4df13ae2e99e7242217aa58d932150fd89e98446816"
+        }
+      },
+      {
+        "name": "tb_limiter_output_equivalence",
+        "parameters": {
+          "CEILING": 29204
+        },
+        "checks": 986432,
+        "passed": true,
+        "source_sha256": {
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\candidate\\src\\audio_limiter.sv": "5e8eba96e4cbad3f5dffb08bd36d9473e3d4a8f701d3d8e4819e11e2ff3fafd9",
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_output_equivalence.sv": "d12019e5cc0d3a12a8aea4df13ae2e99e7242217aa58d932150fd89e98446816"
+        }
+      },
+      {
+        "name": "tb_limiter_output_equivalence",
+        "parameters": {
+          "CEILING": 32767
+        },
+        "checks": 986432,
+        "passed": true,
+        "source_sha256": {
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\candidate\\src\\audio_limiter.sv": "5e8eba96e4cbad3f5dffb08bd36d9473e3d4a8f701d3d8e4819e11e2ff3fafd9",
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_output_equivalence.sv": "d12019e5cc0d3a12a8aea4df13ae2e99e7242217aa58d932150fd89e98446816"
+        }
+      },
+      {
+        "name": "tb_limiter_stream_equivalence",
+        "parameters": {
+          "FIXED": 0,
+          "HOLD": 0,
+          "PRE_GAIN": 1,
+          "WINDOW_LOG2": 2
+        },
+        "checks": 180229,
+        "passed": true,
+        "source_sha256": {
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\candidate\\src\\audio_limiter.sv": "5e8eba96e4cbad3f5dffb08bd36d9473e3d4a8f701d3d8e4819e11e2ff3fafd9",
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_stream_equivalence.sv": "47783aa5a8cde8ed02ad81d37da6495aedfd14c495e803286258bf2f53392d9a"
+        }
+      },
+      {
+        "name": "tb_limiter_stream_equivalence",
+        "parameters": {
+          "FIXED": 0,
+          "HOLD": 48,
+          "PRE_GAIN": 24,
+          "WINDOW_LOG2": 6
+        },
+        "checks": 180229,
+        "passed": true,
+        "source_sha256": {
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\candidate\\src\\audio_limiter.sv": "5e8eba96e4cbad3f5dffb08bd36d9473e3d4a8f701d3d8e4819e11e2ff3fafd9",
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_stream_equivalence.sv": "47783aa5a8cde8ed02ad81d37da6495aedfd14c495e803286258bf2f53392d9a"
+        }
+      },
+      {
+        "name": "tb_limiter_stream_equivalence",
+        "parameters": {
+          "FIXED": 1,
+          "HOLD": 0,
+          "PRE_GAIN": 32,
+          "WINDOW_LOG2": 6
+        },
+        "checks": 180229,
+        "passed": true,
+        "source_sha256": {
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\candidate\\src\\audio_limiter.sv": "5e8eba96e4cbad3f5dffb08bd36d9473e3d4a8f701d3d8e4819e11e2ff3fafd9",
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_stream_equivalence.sv": "47783aa5a8cde8ed02ad81d37da6495aedfd14c495e803286258bf2f53392d9a"
+        }
+      },
+      {
+        "name": "tb_limiter_stream_equivalence",
+        "parameters": {
+          "FIXED": 1,
+          "HOLD": 48,
+          "PRE_GAIN": 24,
+          "WINDOW_LOG2": 6
+        },
+        "checks": 180229,
+        "passed": true,
+        "source_sha256": {
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\candidate\\src\\audio_limiter.sv": "5e8eba96e4cbad3f5dffb08bd36d9473e3d4a8f701d3d8e4819e11e2ff3fafd9",
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_stream_equivalence.sv": "47783aa5a8cde8ed02ad81d37da6495aedfd14c495e803286258bf2f53392d9a"
+        }
+      }
+    ]
+  },
+  "release_bounds": {
+    "checks": 4915275,
+    "passed": true,
+    "source_sha256": {
+      "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\candidate\\src\\audio_limiter.sv": "5e8eba96e4cbad3f5dffb08bd36d9473e3d4a8f701d3d8e4819e11e2ff3fafd9",
+      "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\candidate\\sim\\reference_audio_limiter_c6352fa.sv": "51ad702081853623f405343adee2dd688b0b661e1aeed9fa3e44358ad173c93b",
+      "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_limiter_release_bounds.sv": "c670285d17bca08babceb0ddb66e65fb628b7000543d62e4ccaeabaaca65547d"
+    }
+  },
+  "core": {
+    "total_checks": 765488,
+    "tests": [
+      {
+        "name": "core_output0",
+        "passed": true,
+        "checks": 382744,
+        "parameters": {
+          "OUTPUT_ENABLE": 0
+        },
+        "source_sha256": {
+          "src\\performance_control.sv": "9014963035a78f499c7c866fb30b8d7367f8b14ca75bb2488cc42825fe325f63",
+          "src\\manual_event_arbiter.sv": "e5457506915b56fcf9bd41cfa7767158ab05077c2bbe5758ea7b68b0d4e1b8cb",
+          "src\\audio_chorus.sv": "2d93392cbfbd1a619d47a56ed5894bb5e129b4cd44804496bbcbcd5ee91627db",
+          "src\\ultrasonic_range.sv": "9cbf22eb8c40ce330b92d224e9cdb431a212322bbc98c2614299c97241f240c4",
+          "src\\ultrasonic_volume.sv": "7eb6ed1c7154b2f2d85a15cb4ca6f50feba2b6cbd67ed8b95a53bd78f0193acf",
+          "src\\bt_event_cdc.sv": "e4ebe796f6ea4b117c33b47391810a1c42043234925bc11714d475c80689b338",
+          "src\\bt_identity_monitor.sv": "4e7c3ff570cf66c84574840eadd76ea9fb9f029197cd7425a3e06a8471e06db2",
+          "src\\master_volume.sv": "f4e423e11bb75f4f560484b866fc01849a21794efb295f17a84f319c59fc3de6",
+          "src\\uart_rx.sv": "d44108f265325fd74ddf63afcaa22483828766634159d96bac86d457e891425f",
+          "src\\uart_tx.sv": "2d4dd9e6e1911024184a663df704b353176c147f20ce4016bf2dd37f816efb50",
+          "src\\bt_frame_rx.sv": "b3d3c09303f3168624cf8c87948f222e208dec515390b8c81272a669e9b478cd",
+          "src\\bt_frame_tx.sv": "e036926622a193fd7ddc34f8241ff07e7ac1c5d219ed4fa901d3801b08c41198",
+          "src\\bt_score_player.sv": "93208341565f95bdb4fac0a6abca70bc522cb0a215ebe85b5523f7297c24e550",
+          "src\\bluetooth_score_core.sv": "24a5805608d2adc8e2ad4a4ce5f44cd6cd1660ef9aa532f084a0c5e98e6122e4",
+          "src\\bluetooth_score_link.sv": "543bb93ca6fac3235c76e587e3b8153814cf9d4525f8f8c50dfc977a23cc912c",
+          "src\\bluetooth_audio_bridge.sv": "521efc740b89a341555920ef086ca107c57ff421ad5e2cec8934b6504f0dbf91",
+          "src\\instrument_envelope.sv": "28fe0cc06c9fb31db8c800b6cf30bac71e771962d92c8e323705f31a621c2df5",
+          "src\\audio_visualizer.sv": "f92b333c0325635388db95fdb57eea40fbf32a76733581b0716c428deb184485",
+          "src\\ui_keypad_router.sv": "7922cca987f8bd330053c099d043377696d4d3c0e52e38e23da62282ba89f14e",
+          "src\\ui_touch_actions.sv": "98eab5311aa7d69957920ab65c0b575d064f43948be9024e0fcb7ae74646d615",
+          "src\\rgb_display.sv": "7935562ad3fcdee5b02cf6f3450832eb62dd3b8505d2f995000e75d86b2f5fdc",
+          "src\\rgb_status_cdc.sv": "8d2702e80ac5536804c6cfc20acbedb9fa5ace1845406f417161e31eab8a9a45",
+          "src\\rgb_scan_timing.sv": "4cc871b48f4c61d5eb68ebe403566628a5db890ea3a569d68fafc9186a419950",
+          "src\\rgb_ui_renderer.sv": "e0685a4fa5a3a3e252c4e35d31ef283bdb4c7fbdc615379314cea22e1fd3c1be",
+          "src\\gt9110_touch.sv": "bca7a73584f1b801b534ed687e8cebcd4106ccf3b346842bdd4d775ee6a34dff",
+          "src\\i2c_register_master.sv": "b0b1b4ba10ad1c45227b2e324771eb828bc5c857f03f82fabea9178319005eba",
+          "src\\audio_effects.sv": "b1c83b85f52a8a29474098b3a310a24984953ebfaf01aa69ee41847dc888e1cf",
+          "src\\audio_reverb.sv": "1adcf71ed5bf3e2110c51acaaac688cdcfa39fcc0da54aa1759057720618412f",
+          "src\\score_player.sv": "fd055f429df222194d0cb767eb218514f8a5aa46708e8ee62bfec1552d0d3383",
+          "src\\audio_delay.sv": "ffaa8545d3eeb079cbbeb6b5c1c118150ff4f2238f79359c29fe68155eca930a",
+          "src\\timbre_control.sv": "7383d5621c078ec9f819d5e11fc0170a0c30834062d8da24f816f22fcad5c253",
+          "src\\ec11_encoder.sv": "d78537d1951fd4c2d84758afe262b1c6d5ed81299752100750ed752212a2aabe",
+          "src\\aip5916_keyboard.sv": "fe7478699154d3b948a4153d25ead50b8e80680c280ddccc9b5dfd6897beac1b",
+          "src\\touch_keyboard_router.sv": "7af55641d0a75f6e6a2e856c94d42ba343cc678edc93102884e1d7e24dca876e",
+          "src\\pcb_debug_ui.sv": "adf175ae44b3f989f218957688c82651464c45c6e0a7e8832410876275c73087",
+          "src\\keyboard_top.sv": "b12b47fe7a1150dffd33be7dbe5929fbb6593cdee8dedb38384ea775c36b686c",
+          "src\\adsr_envelope.sv": "a3822b56ada03da3140e69096937e26b7907effe0569fbcfdf7bc807709c6dda",
+          "src\\audio_timing.sv": "0a25682a60f20823b5741e204aa6b298783410dd70d4842f535ade1f3ea3d8bb",
+          "src\\clock_reset.sv": "6064ed61bbdcec68e2bd04f934c8510ee3b95aabbe0a009e54f21b2c2d10af6b",
+          "src\\dds_sine.sv": "3a13aecc42b9b2e7b8d8ef791d37a84c8f33b194473e26ed9c398855e548e4e6",
+          "src\\frame_buffer.sv": "dbf0d9b5cc9a0ad1ff4b1a32b2e9b4fdb0fc5c7c8d01a8b1fe9a1c7685e844c8",
+          "src\\keyboard_core.sv": "8dc6ee81c7cd7cb150b4298ee2a21cef226932f51c644eb26b17253fdfa26307",
+          "src\\sustain_envelope.sv": "10567492276dccc45fbd844c949108251c8d4779ee540406439b9d9fb765ab29",
+          "src\\synth_core.sv": "2a446500ff9fa95b1e882c3bb568f1a8250dec5ad4be58dd64a3deb57db7f5bf",
+          "src\\ui_more_actions.sv": "889fd01d806d00fe87ca2f62f0371da173f11ca5ac1e8235e57d079d857e70d5",
+          "src\\score_services.sv": "e639a51f43534c98fbb784d6592f150d08d6383679bffa1a911e374d9377c459",
+          "src\\score_library_protocol.sv": "795bc05f1d31937ff643ad68ed674c1512267fed10120609c0c91c84942f2cf3",
+          "src\\flash_song_library.sv": "1b8ef981e44a85653cc9e4874b6128dcf92f5f3d56df156492f855376d4053ad",
+          "src\\spi_byte_master.sv": "a611de9a8355b55a9d89e06cb17d4f1cd0486c45b4f1d4b067ddd8d83f65667c",
+          "src\\spi_nor_flash.sv": "f5ca8b20322a6dac2c9dd421eada1b9b293201a6fd49d5bea904fd80a72d5028",
+          "src\\local_score_control.sv": "d00a74b3d6b40ef28e82513ee50f7a7bdbb0ab1c1bed5c656a47c7f1ae9e523a",
+          "src\\score_validator.sv": "507f5109dd16191862aba71a9c52db53416da13b81b8d7b53e9d65235b1aad46",
+          "src\\audio_limiter.sv": "5e8eba96e4cbad3f5dffb08bd36d9473e3d4a8f701d3d8e4819e11e2ff3fafd9",
+          "src\\audio_latency_meter.sv": "a364b3bb8ad00d27447d2385a52d980ba726b389e4e2ae6e5651f945ee8cfea8",
+          "src\\voice_allocator.sv": "7b63580db46bae31313bd9988c07f8ad4c0961c1700b28e7b3f729f2bf898bb1",
+          "src\\voice_mixer.sv": "51e90e6a63192b7851e9a6635553701b4e528c49b2472e10906a6574171b3a19",
+          "src\\lock_guard.sv": "1ccbb8e306689ea8da65a8889b45aa2c3cceaf90aa3f2a31762e195d5fce6377",
+          "src\\matrix_keypad.sv": "3ce1581874357c6d9b1a7b4d0996f7ac541ec7f201f227dd31127920be318aec",
+          "src\\key_note_events.sv": "862b992134f5f006d2c8bfbb04f1cbf3e81e471f775d98666635b3c05c419941",
+          "src\\pll_pair.sv": "29775d84d6b0deb8a8fc6e3bc80e36e0e321f84ddaa418e068622e5ade6d061e",
+          "src\\i2s_tx.sv": "777d3cba8511a20a723baf97e6e5888e955002a8ace8b6bf70b0a5b0fc0278ec",
+          "src\\reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+          "src\\run_leds.sv": "db725978a1e9e386a848ec1223985eeded526ff2eb64f29b21987f1ac7d10713",
+          "src\\sine_rom.sv": "b43e6cfe2b2fb35d29a09efd503ad9b787961d1ff430b130e788ef13d0a9c081",
+          "src\\startup_envelope.sv": "c5fc6b434759e6f0b85e6315c42baa9d0149332f47d7c58d36cd47bb18587e65",
+          "src\\tone_gain.sv": "b70e31dc56c7025001ca535b1ce3b0597d84b4fa4dc518bddd3de8f18bab2c22",
+          "src\\envelope_precalc_bank.sv": "2a667927d44f149e813817aaa9ead6cf568a59265580ce209bc5293373d8e83f",
+          "sim\\reference_adsr_envelope_57b3db2.sv": "f087698cb892b08be7e03b26dce12633ae4d679f1656078968e7bc8549b1e52b",
+          "sim\\reference_instrument_envelope_57b3db2.sv": "b4b2a15f81d132394f61552367d164118abfe1d0e8823adaba1d116030b49e7f",
+          "sim\\reference_synth_core_57b3db2.sv": "285a041129e78a3e16cc0639b481298f4c4cd4cfea3110ca2c484936ace1cd57",
+          "sim\\structural\\tb_synth_precalc_compare.sv": "7a2582b79750ba4da9fbac68ab9cc3ae0176e6081b2e90f259f45d3d4da4e7a7"
+        }
+      },
+      {
+        "name": "core_output1",
+        "passed": true,
+        "checks": 382744,
+        "parameters": {
+          "OUTPUT_ENABLE": 1
+        },
+        "source_sha256": {
+          "src\\performance_control.sv": "9014963035a78f499c7c866fb30b8d7367f8b14ca75bb2488cc42825fe325f63",
+          "src\\manual_event_arbiter.sv": "e5457506915b56fcf9bd41cfa7767158ab05077c2bbe5758ea7b68b0d4e1b8cb",
+          "src\\audio_chorus.sv": "2d93392cbfbd1a619d47a56ed5894bb5e129b4cd44804496bbcbcd5ee91627db",
+          "src\\ultrasonic_range.sv": "9cbf22eb8c40ce330b92d224e9cdb431a212322bbc98c2614299c97241f240c4",
+          "src\\ultrasonic_volume.sv": "7eb6ed1c7154b2f2d85a15cb4ca6f50feba2b6cbd67ed8b95a53bd78f0193acf",
+          "src\\bt_event_cdc.sv": "e4ebe796f6ea4b117c33b47391810a1c42043234925bc11714d475c80689b338",
+          "src\\bt_identity_monitor.sv": "4e7c3ff570cf66c84574840eadd76ea9fb9f029197cd7425a3e06a8471e06db2",
+          "src\\master_volume.sv": "f4e423e11bb75f4f560484b866fc01849a21794efb295f17a84f319c59fc3de6",
+          "src\\uart_rx.sv": "d44108f265325fd74ddf63afcaa22483828766634159d96bac86d457e891425f",
+          "src\\uart_tx.sv": "2d4dd9e6e1911024184a663df704b353176c147f20ce4016bf2dd37f816efb50",
+          "src\\bt_frame_rx.sv": "b3d3c09303f3168624cf8c87948f222e208dec515390b8c81272a669e9b478cd",
+          "src\\bt_frame_tx.sv": "e036926622a193fd7ddc34f8241ff07e7ac1c5d219ed4fa901d3801b08c41198",
+          "src\\bt_score_player.sv": "93208341565f95bdb4fac0a6abca70bc522cb0a215ebe85b5523f7297c24e550",
+          "src\\bluetooth_score_core.sv": "24a5805608d2adc8e2ad4a4ce5f44cd6cd1660ef9aa532f084a0c5e98e6122e4",
+          "src\\bluetooth_score_link.sv": "543bb93ca6fac3235c76e587e3b8153814cf9d4525f8f8c50dfc977a23cc912c",
+          "src\\bluetooth_audio_bridge.sv": "521efc740b89a341555920ef086ca107c57ff421ad5e2cec8934b6504f0dbf91",
+          "src\\instrument_envelope.sv": "28fe0cc06c9fb31db8c800b6cf30bac71e771962d92c8e323705f31a621c2df5",
+          "src\\audio_visualizer.sv": "f92b333c0325635388db95fdb57eea40fbf32a76733581b0716c428deb184485",
+          "src\\ui_keypad_router.sv": "7922cca987f8bd330053c099d043377696d4d3c0e52e38e23da62282ba89f14e",
+          "src\\ui_touch_actions.sv": "98eab5311aa7d69957920ab65c0b575d064f43948be9024e0fcb7ae74646d615",
+          "src\\rgb_display.sv": "7935562ad3fcdee5b02cf6f3450832eb62dd3b8505d2f995000e75d86b2f5fdc",
+          "src\\rgb_status_cdc.sv": "8d2702e80ac5536804c6cfc20acbedb9fa5ace1845406f417161e31eab8a9a45",
+          "src\\rgb_scan_timing.sv": "4cc871b48f4c61d5eb68ebe403566628a5db890ea3a569d68fafc9186a419950",
+          "src\\rgb_ui_renderer.sv": "e0685a4fa5a3a3e252c4e35d31ef283bdb4c7fbdc615379314cea22e1fd3c1be",
+          "src\\gt9110_touch.sv": "bca7a73584f1b801b534ed687e8cebcd4106ccf3b346842bdd4d775ee6a34dff",
+          "src\\i2c_register_master.sv": "b0b1b4ba10ad1c45227b2e324771eb828bc5c857f03f82fabea9178319005eba",
+          "src\\audio_effects.sv": "b1c83b85f52a8a29474098b3a310a24984953ebfaf01aa69ee41847dc888e1cf",
+          "src\\audio_reverb.sv": "1adcf71ed5bf3e2110c51acaaac688cdcfa39fcc0da54aa1759057720618412f",
+          "src\\score_player.sv": "fd055f429df222194d0cb767eb218514f8a5aa46708e8ee62bfec1552d0d3383",
+          "src\\audio_delay.sv": "ffaa8545d3eeb079cbbeb6b5c1c118150ff4f2238f79359c29fe68155eca930a",
+          "src\\timbre_control.sv": "7383d5621c078ec9f819d5e11fc0170a0c30834062d8da24f816f22fcad5c253",
+          "src\\ec11_encoder.sv": "d78537d1951fd4c2d84758afe262b1c6d5ed81299752100750ed752212a2aabe",
+          "src\\aip5916_keyboard.sv": "fe7478699154d3b948a4153d25ead50b8e80680c280ddccc9b5dfd6897beac1b",
+          "src\\touch_keyboard_router.sv": "7af55641d0a75f6e6a2e856c94d42ba343cc678edc93102884e1d7e24dca876e",
+          "src\\pcb_debug_ui.sv": "adf175ae44b3f989f218957688c82651464c45c6e0a7e8832410876275c73087",
+          "src\\keyboard_top.sv": "b12b47fe7a1150dffd33be7dbe5929fbb6593cdee8dedb38384ea775c36b686c",
+          "src\\adsr_envelope.sv": "a3822b56ada03da3140e69096937e26b7907effe0569fbcfdf7bc807709c6dda",
+          "src\\audio_timing.sv": "0a25682a60f20823b5741e204aa6b298783410dd70d4842f535ade1f3ea3d8bb",
+          "src\\clock_reset.sv": "6064ed61bbdcec68e2bd04f934c8510ee3b95aabbe0a009e54f21b2c2d10af6b",
+          "src\\dds_sine.sv": "3a13aecc42b9b2e7b8d8ef791d37a84c8f33b194473e26ed9c398855e548e4e6",
+          "src\\frame_buffer.sv": "dbf0d9b5cc9a0ad1ff4b1a32b2e9b4fdb0fc5c7c8d01a8b1fe9a1c7685e844c8",
+          "src\\keyboard_core.sv": "8dc6ee81c7cd7cb150b4298ee2a21cef226932f51c644eb26b17253fdfa26307",
+          "src\\sustain_envelope.sv": "10567492276dccc45fbd844c949108251c8d4779ee540406439b9d9fb765ab29",
+          "src\\synth_core.sv": "2a446500ff9fa95b1e882c3bb568f1a8250dec5ad4be58dd64a3deb57db7f5bf",
+          "src\\ui_more_actions.sv": "889fd01d806d00fe87ca2f62f0371da173f11ca5ac1e8235e57d079d857e70d5",
+          "src\\score_services.sv": "e639a51f43534c98fbb784d6592f150d08d6383679bffa1a911e374d9377c459",
+          "src\\score_library_protocol.sv": "795bc05f1d31937ff643ad68ed674c1512267fed10120609c0c91c84942f2cf3",
+          "src\\flash_song_library.sv": "1b8ef981e44a85653cc9e4874b6128dcf92f5f3d56df156492f855376d4053ad",
+          "src\\spi_byte_master.sv": "a611de9a8355b55a9d89e06cb17d4f1cd0486c45b4f1d4b067ddd8d83f65667c",
+          "src\\spi_nor_flash.sv": "f5ca8b20322a6dac2c9dd421eada1b9b293201a6fd49d5bea904fd80a72d5028",
+          "src\\local_score_control.sv": "d00a74b3d6b40ef28e82513ee50f7a7bdbb0ab1c1bed5c656a47c7f1ae9e523a",
+          "src\\score_validator.sv": "507f5109dd16191862aba71a9c52db53416da13b81b8d7b53e9d65235b1aad46",
+          "src\\audio_limiter.sv": "5e8eba96e4cbad3f5dffb08bd36d9473e3d4a8f701d3d8e4819e11e2ff3fafd9",
+          "src\\audio_latency_meter.sv": "a364b3bb8ad00d27447d2385a52d980ba726b389e4e2ae6e5651f945ee8cfea8",
+          "src\\voice_allocator.sv": "7b63580db46bae31313bd9988c07f8ad4c0961c1700b28e7b3f729f2bf898bb1",
+          "src\\voice_mixer.sv": "51e90e6a63192b7851e9a6635553701b4e528c49b2472e10906a6574171b3a19",
+          "src\\lock_guard.sv": "1ccbb8e306689ea8da65a8889b45aa2c3cceaf90aa3f2a31762e195d5fce6377",
+          "src\\matrix_keypad.sv": "3ce1581874357c6d9b1a7b4d0996f7ac541ec7f201f227dd31127920be318aec",
+          "src\\key_note_events.sv": "862b992134f5f006d2c8bfbb04f1cbf3e81e471f775d98666635b3c05c419941",
+          "src\\pll_pair.sv": "29775d84d6b0deb8a8fc6e3bc80e36e0e321f84ddaa418e068622e5ade6d061e",
+          "src\\i2s_tx.sv": "777d3cba8511a20a723baf97e6e5888e955002a8ace8b6bf70b0a5b0fc0278ec",
+          "src\\reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+          "src\\run_leds.sv": "db725978a1e9e386a848ec1223985eeded526ff2eb64f29b21987f1ac7d10713",
+          "src\\sine_rom.sv": "b43e6cfe2b2fb35d29a09efd503ad9b787961d1ff430b130e788ef13d0a9c081",
+          "src\\startup_envelope.sv": "c5fc6b434759e6f0b85e6315c42baa9d0149332f47d7c58d36cd47bb18587e65",
+          "src\\tone_gain.sv": "b70e31dc56c7025001ca535b1ce3b0597d84b4fa4dc518bddd3de8f18bab2c22",
+          "src\\envelope_precalc_bank.sv": "2a667927d44f149e813817aaa9ead6cf568a59265580ce209bc5293373d8e83f",
+          "sim\\reference_adsr_envelope_57b3db2.sv": "f087698cb892b08be7e03b26dce12633ae4d679f1656078968e7bc8549b1e52b",
+          "sim\\reference_instrument_envelope_57b3db2.sv": "b4b2a15f81d132394f61552367d164118abfe1d0e8823adaba1d116030b49e7f",
+          "sim\\reference_synth_core_57b3db2.sv": "285a041129e78a3e16cc0639b481298f4c4cd4cfea3110ca2c484936ace1cd57",
+          "sim\\structural\\tb_synth_precalc_compare.sv": "7a2582b79750ba4da9fbac68ab9cc3ae0176e6081b2e90f259f45d3d4da4e7a7"
+        }
+      }
+    ]
+  },
+  "pcb_payload": {
+    "production_applied": false,
+    "synthesis": false,
+    "tests": [
+      {
+        "name": "tb_pcb_lines_equivalence",
+        "checks": 300063,
+        "source_sha256": {
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\private_payload\\pcb_debug_ui.sv": "adf175ae44b3f989f218957688c82651464c45c6e0a7e8832410876275c73087",
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\private_payload\\pcb_debug_ui.reference.sv": "58e657d0e00d1f1c3c91029f6bfa7ca33e09f4632c4c4823a4bf04d8823d3e25",
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\private_payload\\tb_pcb_lines_equivalence.sv": "643b6da9f8b8b7b8bdc8880705aace8edbd263730222d06bc710ca9c8ebd042e"
+        },
+        "output": "PASS tb_pcb_lines_equivalence checks=300063 publishes=132\nC:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/private_payload/tb_pcb_lines_equivalence.sv:37: $finish called at 3000030000 (1ps)\n"
+      },
+      {
+        "name": "tb_pcb_readable",
+        "checks": 6,
+        "source_sha256": {
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\private_payload\\pcb_debug_ui.sv": "adf175ae44b3f989f218957688c82651464c45c6e0a7e8832410876275c73087",
+          "F:\\FPGA_Projects\\fpga-instrument-codex-performance-fx-enhancement\\sim\\tb_pcb_readable.sv": "61d34cc08dbd62252752c50f437a8d660142e8952d7bef598ccd0f1fd85550e9"
+        },
+        "output": "PASS tb_pcb_readable checks=6\nF:/FPGA_Projects/fpga-instrument-codex-performance-fx-enhancement/sim/tb_pcb_readable.sv:23: $finish called at 63150000 (1ps)\n"
+      },
+      {
+        "name": "tb_pcb_debug_ui",
+        "checks": 27,
+        "source_sha256": {
+          "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\private_payload\\pcb_debug_ui.sv": "adf175ae44b3f989f218957688c82651464c45c6e0a7e8832410876275c73087",
+          "F:\\FPGA_Projects\\fpga-instrument-codex-performance-fx-enhancement\\sim\\tb_pcb_debug_ui.sv": "2cb4362153346e90cef381d48fae8c218b5ab29daffaaf959ac38b318e6a3f24"
+        },
+        "output": "PASS tb_pcb_debug_ui checks=27\nF:/FPGA_Projects/fpga-instrument-codex-performance-fx-enhancement/sim/tb_pcb_debug_ui.sv:53: $finish called at 4840790000 (1ps)\n"
+      }
+    ]
+  },
+  "actual_top_compile": {
+    "total_checks": 0,
+    "tests": [
+      {
+        "name": "actual_top_vendor_compile",
+        "passed": true,
+        "checks": 0,
+        "parameters": {},
+        "source_sha256": {
+          "src\\performance_control.sv": "9014963035a78f499c7c866fb30b8d7367f8b14ca75bb2488cc42825fe325f63",
+          "src\\manual_event_arbiter.sv": "e5457506915b56fcf9bd41cfa7767158ab05077c2bbe5758ea7b68b0d4e1b8cb",
+          "src\\audio_chorus.sv": "2d93392cbfbd1a619d47a56ed5894bb5e129b4cd44804496bbcbcd5ee91627db",
+          "src\\ultrasonic_range.sv": "9cbf22eb8c40ce330b92d224e9cdb431a212322bbc98c2614299c97241f240c4",
+          "src\\ultrasonic_volume.sv": "7eb6ed1c7154b2f2d85a15cb4ca6f50feba2b6cbd67ed8b95a53bd78f0193acf",
+          "src\\bt_event_cdc.sv": "e4ebe796f6ea4b117c33b47391810a1c42043234925bc11714d475c80689b338",
+          "src\\bt_identity_monitor.sv": "4e7c3ff570cf66c84574840eadd76ea9fb9f029197cd7425a3e06a8471e06db2",
+          "src\\master_volume.sv": "f4e423e11bb75f4f560484b866fc01849a21794efb295f17a84f319c59fc3de6",
+          "src\\uart_rx.sv": "d44108f265325fd74ddf63afcaa22483828766634159d96bac86d457e891425f",
+          "src\\uart_tx.sv": "2d4dd9e6e1911024184a663df704b353176c147f20ce4016bf2dd37f816efb50",
+          "src\\bt_frame_rx.sv": "b3d3c09303f3168624cf8c87948f222e208dec515390b8c81272a669e9b478cd",
+          "src\\bt_frame_tx.sv": "e036926622a193fd7ddc34f8241ff07e7ac1c5d219ed4fa901d3801b08c41198",
+          "src\\bt_score_player.sv": "93208341565f95bdb4fac0a6abca70bc522cb0a215ebe85b5523f7297c24e550",
+          "src\\bluetooth_score_core.sv": "24a5805608d2adc8e2ad4a4ce5f44cd6cd1660ef9aa532f084a0c5e98e6122e4",
+          "src\\bluetooth_score_link.sv": "543bb93ca6fac3235c76e587e3b8153814cf9d4525f8f8c50dfc977a23cc912c",
+          "src\\bluetooth_audio_bridge.sv": "521efc740b89a341555920ef086ca107c57ff421ad5e2cec8934b6504f0dbf91",
+          "src\\instrument_envelope.sv": "28fe0cc06c9fb31db8c800b6cf30bac71e771962d92c8e323705f31a621c2df5",
+          "src\\audio_visualizer.sv": "f92b333c0325635388db95fdb57eea40fbf32a76733581b0716c428deb184485",
+          "src\\ui_keypad_router.sv": "7922cca987f8bd330053c099d043377696d4d3c0e52e38e23da62282ba89f14e",
+          "src\\ui_touch_actions.sv": "98eab5311aa7d69957920ab65c0b575d064f43948be9024e0fcb7ae74646d615",
+          "src\\rgb_display.sv": "7935562ad3fcdee5b02cf6f3450832eb62dd3b8505d2f995000e75d86b2f5fdc",
+          "src\\rgb_status_cdc.sv": "8d2702e80ac5536804c6cfc20acbedb9fa5ace1845406f417161e31eab8a9a45",
+          "src\\rgb_scan_timing.sv": "4cc871b48f4c61d5eb68ebe403566628a5db890ea3a569d68fafc9186a419950",
+          "src\\rgb_ui_renderer.sv": "e0685a4fa5a3a3e252c4e35d31ef283bdb4c7fbdc615379314cea22e1fd3c1be",
+          "src\\gt9110_touch.sv": "bca7a73584f1b801b534ed687e8cebcd4106ccf3b346842bdd4d775ee6a34dff",
+          "src\\i2c_register_master.sv": "b0b1b4ba10ad1c45227b2e324771eb828bc5c857f03f82fabea9178319005eba",
+          "src\\audio_effects.sv": "b1c83b85f52a8a29474098b3a310a24984953ebfaf01aa69ee41847dc888e1cf",
+          "src\\audio_reverb.sv": "1adcf71ed5bf3e2110c51acaaac688cdcfa39fcc0da54aa1759057720618412f",
+          "src\\score_player.sv": "fd055f429df222194d0cb767eb218514f8a5aa46708e8ee62bfec1552d0d3383",
+          "src\\audio_delay.sv": "ffaa8545d3eeb079cbbeb6b5c1c118150ff4f2238f79359c29fe68155eca930a",
+          "src\\timbre_control.sv": "7383d5621c078ec9f819d5e11fc0170a0c30834062d8da24f816f22fcad5c253",
+          "src\\ec11_encoder.sv": "d78537d1951fd4c2d84758afe262b1c6d5ed81299752100750ed752212a2aabe",
+          "src\\aip5916_keyboard.sv": "fe7478699154d3b948a4153d25ead50b8e80680c280ddccc9b5dfd6897beac1b",
+          "src\\touch_keyboard_router.sv": "7af55641d0a75f6e6a2e856c94d42ba343cc678edc93102884e1d7e24dca876e",
+          "src\\pcb_debug_ui.sv": "adf175ae44b3f989f218957688c82651464c45c6e0a7e8832410876275c73087",
+          "src\\keyboard_top.sv": "b12b47fe7a1150dffd33be7dbe5929fbb6593cdee8dedb38384ea775c36b686c",
+          "src\\adsr_envelope.sv": "a3822b56ada03da3140e69096937e26b7907effe0569fbcfdf7bc807709c6dda",
+          "src\\audio_timing.sv": "0a25682a60f20823b5741e204aa6b298783410dd70d4842f535ade1f3ea3d8bb",
+          "src\\clock_reset.sv": "6064ed61bbdcec68e2bd04f934c8510ee3b95aabbe0a009e54f21b2c2d10af6b",
+          "src\\dds_sine.sv": "3a13aecc42b9b2e7b8d8ef791d37a84c8f33b194473e26ed9c398855e548e4e6",
+          "src\\frame_buffer.sv": "dbf0d9b5cc9a0ad1ff4b1a32b2e9b4fdb0fc5c7c8d01a8b1fe9a1c7685e844c8",
+          "src\\keyboard_core.sv": "8dc6ee81c7cd7cb150b4298ee2a21cef226932f51c644eb26b17253fdfa26307",
+          "src\\sustain_envelope.sv": "10567492276dccc45fbd844c949108251c8d4779ee540406439b9d9fb765ab29",
+          "src\\synth_core.sv": "2a446500ff9fa95b1e882c3bb568f1a8250dec5ad4be58dd64a3deb57db7f5bf",
+          "src\\ui_more_actions.sv": "889fd01d806d00fe87ca2f62f0371da173f11ca5ac1e8235e57d079d857e70d5",
+          "src\\score_services.sv": "e639a51f43534c98fbb784d6592f150d08d6383679bffa1a911e374d9377c459",
+          "src\\score_library_protocol.sv": "795bc05f1d31937ff643ad68ed674c1512267fed10120609c0c91c84942f2cf3",
+          "src\\flash_song_library.sv": "1b8ef981e44a85653cc9e4874b6128dcf92f5f3d56df156492f855376d4053ad",
+          "src\\spi_byte_master.sv": "a611de9a8355b55a9d89e06cb17d4f1cd0486c45b4f1d4b067ddd8d83f65667c",
+          "src\\spi_nor_flash.sv": "f5ca8b20322a6dac2c9dd421eada1b9b293201a6fd49d5bea904fd80a72d5028",
+          "src\\local_score_control.sv": "d00a74b3d6b40ef28e82513ee50f7a7bdbb0ab1c1bed5c656a47c7f1ae9e523a",
+          "src\\score_validator.sv": "507f5109dd16191862aba71a9c52db53416da13b81b8d7b53e9d65235b1aad46",
+          "src\\audio_limiter.sv": "5e8eba96e4cbad3f5dffb08bd36d9473e3d4a8f701d3d8e4819e11e2ff3fafd9",
+          "src\\audio_latency_meter.sv": "a364b3bb8ad00d27447d2385a52d980ba726b389e4e2ae6e5651f945ee8cfea8",
+          "src\\voice_allocator.sv": "7b63580db46bae31313bd9988c07f8ad4c0961c1700b28e7b3f729f2bf898bb1",
+          "src\\voice_mixer.sv": "51e90e6a63192b7851e9a6635553701b4e528c49b2472e10906a6574171b3a19",
+          "src\\lock_guard.sv": "1ccbb8e306689ea8da65a8889b45aa2c3cceaf90aa3f2a31762e195d5fce6377",
+          "src\\matrix_keypad.sv": "3ce1581874357c6d9b1a7b4d0996f7ac541ec7f201f227dd31127920be318aec",
+          "src\\key_note_events.sv": "862b992134f5f006d2c8bfbb04f1cbf3e81e471f775d98666635b3c05c419941",
+          "src\\pll_pair.sv": "29775d84d6b0deb8a8fc6e3bc80e36e0e321f84ddaa418e068622e5ade6d061e",
+          "src\\i2s_tx.sv": "777d3cba8511a20a723baf97e6e5888e955002a8ace8b6bf70b0a5b0fc0278ec",
+          "src\\reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+          "src\\run_leds.sv": "db725978a1e9e386a848ec1223985eeded526ff2eb64f29b21987f1ac7d10713",
+          "src\\sine_rom.sv": "b43e6cfe2b2fb35d29a09efd503ad9b787961d1ff430b130e788ef13d0a9c081",
+          "src\\startup_envelope.sv": "c5fc6b434759e6f0b85e6315c42baa9d0149332f47d7c58d36cd47bb18587e65",
+          "src\\tone_gain.sv": "b70e31dc56c7025001ca535b1ce3b0597d84b4fa4dc518bddd3de8f18bab2c22",
+          "src\\envelope_precalc_bank.sv": "2a667927d44f149e813817aaa9ead6cf568a59265580ce209bc5293373d8e83f",
+          "C:\\Gowin\\Gowin_V1.9.12.04_x64\\IDE\\simlib\\gw5a\\prim_sim.v": "7109c2568188627465d218bc099cf72f12e90807c21d4d862d2335b499043544"
+        }
+      }
+    ]
+  },
+  "performance_top": {
+    "passed": true,
+    "seconds": 102.15589090000049,
+    "behavioral_pll": true,
+    "sta_passed": false,
+    "source_sha256": {
+      "src\\performance_control.sv": "9014963035a78f499c7c866fb30b8d7367f8b14ca75bb2488cc42825fe325f63",
+      "src\\manual_event_arbiter.sv": "e5457506915b56fcf9bd41cfa7767158ab05077c2bbe5758ea7b68b0d4e1b8cb",
+      "src\\audio_chorus.sv": "2d93392cbfbd1a619d47a56ed5894bb5e129b4cd44804496bbcbcd5ee91627db",
+      "src\\ultrasonic_range.sv": "9cbf22eb8c40ce330b92d224e9cdb431a212322bbc98c2614299c97241f240c4",
+      "src\\ultrasonic_volume.sv": "7eb6ed1c7154b2f2d85a15cb4ca6f50feba2b6cbd67ed8b95a53bd78f0193acf",
+      "src\\bt_event_cdc.sv": "e4ebe796f6ea4b117c33b47391810a1c42043234925bc11714d475c80689b338",
+      "src\\bt_identity_monitor.sv": "4e7c3ff570cf66c84574840eadd76ea9fb9f029197cd7425a3e06a8471e06db2",
+      "src\\master_volume.sv": "f4e423e11bb75f4f560484b866fc01849a21794efb295f17a84f319c59fc3de6",
+      "src\\uart_rx.sv": "d44108f265325fd74ddf63afcaa22483828766634159d96bac86d457e891425f",
+      "src\\uart_tx.sv": "2d4dd9e6e1911024184a663df704b353176c147f20ce4016bf2dd37f816efb50",
+      "src\\bt_frame_rx.sv": "b3d3c09303f3168624cf8c87948f222e208dec515390b8c81272a669e9b478cd",
+      "src\\bt_frame_tx.sv": "e036926622a193fd7ddc34f8241ff07e7ac1c5d219ed4fa901d3801b08c41198",
+      "src\\bt_score_player.sv": "93208341565f95bdb4fac0a6abca70bc522cb0a215ebe85b5523f7297c24e550",
+      "src\\bluetooth_score_core.sv": "24a5805608d2adc8e2ad4a4ce5f44cd6cd1660ef9aa532f084a0c5e98e6122e4",
+      "src\\bluetooth_score_link.sv": "543bb93ca6fac3235c76e587e3b8153814cf9d4525f8f8c50dfc977a23cc912c",
+      "src\\bluetooth_audio_bridge.sv": "521efc740b89a341555920ef086ca107c57ff421ad5e2cec8934b6504f0dbf91",
+      "src\\instrument_envelope.sv": "28fe0cc06c9fb31db8c800b6cf30bac71e771962d92c8e323705f31a621c2df5",
+      "src\\audio_visualizer.sv": "f92b333c0325635388db95fdb57eea40fbf32a76733581b0716c428deb184485",
+      "src\\ui_keypad_router.sv": "7922cca987f8bd330053c099d043377696d4d3c0e52e38e23da62282ba89f14e",
+      "src\\ui_touch_actions.sv": "98eab5311aa7d69957920ab65c0b575d064f43948be9024e0fcb7ae74646d615",
+      "src\\rgb_display.sv": "7935562ad3fcdee5b02cf6f3450832eb62dd3b8505d2f995000e75d86b2f5fdc",
+      "src\\rgb_status_cdc.sv": "8d2702e80ac5536804c6cfc20acbedb9fa5ace1845406f417161e31eab8a9a45",
+      "src\\rgb_scan_timing.sv": "4cc871b48f4c61d5eb68ebe403566628a5db890ea3a569d68fafc9186a419950",
+      "src\\rgb_ui_renderer.sv": "e0685a4fa5a3a3e252c4e35d31ef283bdb4c7fbdc615379314cea22e1fd3c1be",
+      "src\\gt9110_touch.sv": "bca7a73584f1b801b534ed687e8cebcd4106ccf3b346842bdd4d775ee6a34dff",
+      "src\\i2c_register_master.sv": "b0b1b4ba10ad1c45227b2e324771eb828bc5c857f03f82fabea9178319005eba",
+      "src\\audio_effects.sv": "b1c83b85f52a8a29474098b3a310a24984953ebfaf01aa69ee41847dc888e1cf",
+      "src\\audio_reverb.sv": "1adcf71ed5bf3e2110c51acaaac688cdcfa39fcc0da54aa1759057720618412f",
+      "src\\score_player.sv": "fd055f429df222194d0cb767eb218514f8a5aa46708e8ee62bfec1552d0d3383",
+      "src\\audio_delay.sv": "ffaa8545d3eeb079cbbeb6b5c1c118150ff4f2238f79359c29fe68155eca930a",
+      "src\\timbre_control.sv": "7383d5621c078ec9f819d5e11fc0170a0c30834062d8da24f816f22fcad5c253",
+      "src\\ec11_encoder.sv": "d78537d1951fd4c2d84758afe262b1c6d5ed81299752100750ed752212a2aabe",
+      "src\\aip5916_keyboard.sv": "fe7478699154d3b948a4153d25ead50b8e80680c280ddccc9b5dfd6897beac1b",
+      "src\\touch_keyboard_router.sv": "7af55641d0a75f6e6a2e856c94d42ba343cc678edc93102884e1d7e24dca876e",
+      "src\\pcb_debug_ui.sv": "adf175ae44b3f989f218957688c82651464c45c6e0a7e8832410876275c73087",
+      "src\\keyboard_top.sv": "b12b47fe7a1150dffd33be7dbe5929fbb6593cdee8dedb38384ea775c36b686c",
+      "src\\adsr_envelope.sv": "a3822b56ada03da3140e69096937e26b7907effe0569fbcfdf7bc807709c6dda",
+      "src\\audio_timing.sv": "0a25682a60f20823b5741e204aa6b298783410dd70d4842f535ade1f3ea3d8bb",
+      "src\\clock_reset.sv": "6064ed61bbdcec68e2bd04f934c8510ee3b95aabbe0a009e54f21b2c2d10af6b",
+      "src\\dds_sine.sv": "3a13aecc42b9b2e7b8d8ef791d37a84c8f33b194473e26ed9c398855e548e4e6",
+      "src\\frame_buffer.sv": "dbf0d9b5cc9a0ad1ff4b1a32b2e9b4fdb0fc5c7c8d01a8b1fe9a1c7685e844c8",
+      "src\\keyboard_core.sv": "8dc6ee81c7cd7cb150b4298ee2a21cef226932f51c644eb26b17253fdfa26307",
+      "src\\sustain_envelope.sv": "10567492276dccc45fbd844c949108251c8d4779ee540406439b9d9fb765ab29",
+      "src\\synth_core.sv": "2a446500ff9fa95b1e882c3bb568f1a8250dec5ad4be58dd64a3deb57db7f5bf",
+      "src\\ui_more_actions.sv": "889fd01d806d00fe87ca2f62f0371da173f11ca5ac1e8235e57d079d857e70d5",
+      "src\\score_services.sv": "e639a51f43534c98fbb784d6592f150d08d6383679bffa1a911e374d9377c459",
+      "src\\score_library_protocol.sv": "795bc05f1d31937ff643ad68ed674c1512267fed10120609c0c91c84942f2cf3",
+      "src\\flash_song_library.sv": "1b8ef981e44a85653cc9e4874b6128dcf92f5f3d56df156492f855376d4053ad",
+      "src\\spi_byte_master.sv": "a611de9a8355b55a9d89e06cb17d4f1cd0486c45b4f1d4b067ddd8d83f65667c",
+      "src\\spi_nor_flash.sv": "f5ca8b20322a6dac2c9dd421eada1b9b293201a6fd49d5bea904fd80a72d5028",
+      "src\\local_score_control.sv": "d00a74b3d6b40ef28e82513ee50f7a7bdbb0ab1c1bed5c656a47c7f1ae9e523a",
+      "src\\score_validator.sv": "507f5109dd16191862aba71a9c52db53416da13b81b8d7b53e9d65235b1aad46",
+      "src\\audio_limiter.sv": "5e8eba96e4cbad3f5dffb08bd36d9473e3d4a8f701d3d8e4819e11e2ff3fafd9",
+      "src\\audio_latency_meter.sv": "a364b3bb8ad00d27447d2385a52d980ba726b389e4e2ae6e5651f945ee8cfea8",
+      "src\\voice_allocator.sv": "7b63580db46bae31313bd9988c07f8ad4c0961c1700b28e7b3f729f2bf898bb1",
+      "src\\voice_mixer.sv": "51e90e6a63192b7851e9a6635553701b4e528c49b2472e10906a6574171b3a19",
+      "src\\lock_guard.sv": "1ccbb8e306689ea8da65a8889b45aa2c3cceaf90aa3f2a31762e195d5fce6377",
+      "src\\matrix_keypad.sv": "3ce1581874357c6d9b1a7b4d0996f7ac541ec7f201f227dd31127920be318aec",
+      "src\\key_note_events.sv": "862b992134f5f006d2c8bfbb04f1cbf3e81e471f775d98666635b3c05c419941",
+      "src\\i2s_tx.sv": "777d3cba8511a20a723baf97e6e5888e955002a8ace8b6bf70b0a5b0fc0278ec",
+      "src\\reset_sync.sv": "072615236bb3ae93d043a89c99dc316c03b878466ccdfef601faeb61801ba013",
+      "src\\run_leds.sv": "db725978a1e9e386a848ec1223985eeded526ff2eb64f29b21987f1ac7d10713",
+      "src\\sine_rom.sv": "b43e6cfe2b2fb35d29a09efd503ad9b787961d1ff430b130e788ef13d0a9c081",
+      "src\\startup_envelope.sv": "c5fc6b434759e6f0b85e6315c42baa9d0149332f47d7c58d36cd47bb18587e65",
+      "src\\tone_gain.sv": "b70e31dc56c7025001ca535b1ce3b0597d84b4fa4dc518bddd3de8f18bab2c22",
+      "src\\envelope_precalc_bank.sv": "2a667927d44f149e813817aaa9ead6cf568a59265580ce209bc5293373d8e83f",
+      "sim\\pll_pair_behavioral.sv": "26111dfe62a653fc6b7553145d80408e22665fbb44acaf2349361ed5b4a818b9",
+      "sim\\pixel_pll_behavioral.sv": "d79f0c0fd3233fe961f544fb6578fd75fe5a57cd5e6771684442a4d7a4f32e82",
+      "sim\\io_behavioral.sv": "32df000dd6434fcbffc5d043d8000de0a2eed536d1ee85099d527f621bcd0bba",
+      "sim\\tb_performance_top.sv": "9788622de989df12c97fd7fc7f7e99ff95247a4419be9b1bd09b2521d9c07c8a"
+    },
+    "command": [
+      "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+      "-g2012",
+      "-Wall",
+      "-grelative-include",
+      "-IC:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/sim",
+      "-s",
+      "tb_performance_top",
+      "-o",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/reports/closure_performance/test.vvp",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/performance_control.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/manual_event_arbiter.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/audio_chorus.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/ultrasonic_range.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/ultrasonic_volume.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/bt_event_cdc.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/bt_identity_monitor.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/master_volume.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/uart_rx.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/uart_tx.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/bt_frame_rx.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/bt_frame_tx.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/bt_score_player.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/bluetooth_score_core.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/bluetooth_score_link.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/bluetooth_audio_bridge.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/instrument_envelope.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/audio_visualizer.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/ui_keypad_router.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/ui_touch_actions.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/rgb_display.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/rgb_status_cdc.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/rgb_scan_timing.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/rgb_ui_renderer.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/gt9110_touch.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/i2c_register_master.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/audio_effects.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/audio_reverb.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/score_player.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/audio_delay.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/timbre_control.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/ec11_encoder.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/aip5916_keyboard.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/touch_keyboard_router.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/pcb_debug_ui.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/keyboard_top.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/adsr_envelope.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/audio_timing.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/clock_reset.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/dds_sine.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/frame_buffer.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/keyboard_core.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/sustain_envelope.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/synth_core.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/ui_more_actions.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/score_services.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/score_library_protocol.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/flash_song_library.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/spi_byte_master.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/spi_nor_flash.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/local_score_control.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/score_validator.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/audio_limiter.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/audio_latency_meter.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/voice_allocator.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/voice_mixer.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/lock_guard.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/matrix_keypad.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/key_note_events.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/i2s_tx.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/reset_sync.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/run_leds.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/sine_rom.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/startup_envelope.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/tone_gain.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/src/envelope_precalc_bank.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/sim/pll_pair_behavioral.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/sim/pixel_pll_behavioral.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/sim/io_behavioral.sv",
+      "C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/sim/tb_performance_top.sv"
+    ],
+    "output": "PASS tb_performance_top checks=65 plucks=13 releases=12 physical=1\nC:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/candidate/sim/tb_performance_top.sv:41: $finish called at 11980877532 (1ps)\n"
+  },
+  "constraints_sha256": {
+    "src/keyboard.cst": "2aac1c6489e08fed7c3432da13cd7d0d77ae680026c8bfb9c789098bfdcf885a",
+    "src/keyboard.sdc": "3452efcd242ba8196f5b59cd273d62a52e962e33b3634c70c3b436698ad0b373",
+    "src/pll_pair.sv": "29775d84d6b0deb8a8fc6e3bc80e36e0e321f84ddaa418e068622e5ade6d061e"
+  }
+}

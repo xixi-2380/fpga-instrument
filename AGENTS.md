@@ -1,3 +1,10 @@
+# 2026-11-01 无时限布局布线收敛任务
+
+- 用户要求继续自主优化并直接推送codex/performance-fx-enhancement，本轮取消75分钟时间限制；以完整布局布线通过为前提，再减少实际耗时。保留功能、73球位及50/61.44/35MHz，不更新main、不烧录。
+- 每轮物理实现须跑到工具给出最终结果，不因旧窗口时限主动中断。运行时冻结源码/网表/约束，候选在独立目录验证；日志与输入哈希及最终STA对应。
+- 上轮c6352fa的物理运行按时限停止于Routing Phase1，未得到最终布通/STA；不能当作失败、成功或完成耗时基线。
+- 本轮证据目录reports/closure_2026-11-01；独立候选在聊天work/closure_candidates。用户没有要求多代理，本轮不委派代理。
+
 # 2026-11-01 当前优化窗口
 
 - 用户要求按上一轮继续约75分钟，直接推送codex/performance-fx-enhancement，可操作电脑；不更新main、不烧录、不降低时钟或放宽普通时序预算。当前工程F:/FPGA_Projects/fpga-instrument-codex-performance-fx-enhancement。
