@@ -1,0 +1,2 @@
+PASS tb_pnr_limiter_equivalence checks=320153 outputs=3047 fixed=0 hold=0
+/workspace/scratch/33f2000fda6f/fpga-pnr-review/sim/tb_pnr_limiter_equivalence.sv:36: $finish called at 3201530000 (1ps)

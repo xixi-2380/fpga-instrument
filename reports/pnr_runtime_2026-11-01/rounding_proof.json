@@ -1,0 +1,1 @@
+{"proof": "UNSAT: old != new", "product_interval": [-1099511627776, 1099511627776], "seconds": 0.0336, "note": "All signed24*unsigned17 products; output saturation and registers unchanged"}

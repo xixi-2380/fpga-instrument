@@ -1,0 +1,114 @@
+{
+  "baseline_commit": "c6352faf09e1e110291e24130079fdd3ae94acdd",
+  "tests": [
+    {
+      "name": "tb_pnr_limiter_equivalence_FIXED0_HOLD0",
+      "passed": true,
+      "checks": 320153,
+      "seconds": 6.797,
+      "source_sha256": {
+        "src/audio_limiter.sv": "65ed8e09ec7eb338a39266b2f151d3bba1d74e666d373ce3df3b7cb6f144e06a",
+        "sim/reference_audio_limiter_c6352fa.sv": "d7455180f3c63fd07f90c8261bb1ab10e7e7a9a3e8b338d410840d8b9943d5b6",
+        "sim/tb_pnr_limiter_equivalence.sv": "05075715a21fa0ec2a199112f83624b622c51eaae270b50193edc1162ba93bbd"
+      },
+      "output": "PASS tb_pnr_limiter_equivalence checks=320153 outputs=3047 fixed=0 hold=0\n/workspace/scratch/33f2000fda6f/fpga-pnr-review/sim/tb_pnr_limiter_equivalence.sv:36: $finish called at 3201530000 (1ps)\n"
+    },
+    {
+      "name": "tb_pnr_limiter_equivalence_FIXED1_HOLD0",
+      "passed": true,
+      "checks": 320153,
+      "seconds": 5.96,
+      "source_sha256": {
+        "src/audio_limiter.sv": "65ed8e09ec7eb338a39266b2f151d3bba1d74e666d373ce3df3b7cb6f144e06a",
+        "sim/reference_audio_limiter_c6352fa.sv": "d7455180f3c63fd07f90c8261bb1ab10e7e7a9a3e8b338d410840d8b9943d5b6",
+        "sim/tb_pnr_limiter_equivalence.sv": "05075715a21fa0ec2a199112f83624b622c51eaae270b50193edc1162ba93bbd"
+      },
+      "output": "PASS tb_pnr_limiter_equivalence checks=320153 outputs=3047 fixed=1 hold=0\n/workspace/scratch/33f2000fda6f/fpga-pnr-review/sim/tb_pnr_limiter_equivalence.sv:36: $finish called at 3201530000 (1ps)\n"
+    },
+    {
+      "name": "tb_pnr_limiter_equivalence_FIXED1_HOLD240",
+      "passed": true,
+      "checks": 320153,
+      "seconds": 7.044,
+      "source_sha256": {
+        "src/audio_limiter.sv": "65ed8e09ec7eb338a39266b2f151d3bba1d74e666d373ce3df3b7cb6f144e06a",
+        "sim/reference_audio_limiter_c6352fa.sv": "d7455180f3c63fd07f90c8261bb1ab10e7e7a9a3e8b338d410840d8b9943d5b6",
+        "sim/tb_pnr_limiter_equivalence.sv": "05075715a21fa0ec2a199112f83624b622c51eaae270b50193edc1162ba93bbd"
+      },
+      "output": "PASS tb_pnr_limiter_equivalence checks=320153 outputs=3047 fixed=1 hold=240\n/workspace/scratch/33f2000fda6f/fpga-pnr-review/sim/tb_pnr_limiter_equivalence.sv:36: $finish called at 3201530000 (1ps)\n"
+    },
+    {
+      "name": "tb_pnr_pcb_equivalence",
+      "passed": true,
+      "checks": 180013,
+      "seconds": 11.808,
+      "source_sha256": {
+        "src/pcb_debug_ui.sv": "7e333abb9b0a94164b7b2a3812e2935da0b835d4611ce8d7e5cc9a7668dbfa2c",
+        "sim/reference_pcb_debug_ui_c6352fa.sv": "4e5e4567b58f3dd130f74851325b9b91f1951eccb7dafad7e8725f4812164a1d",
+        "sim/tb_pnr_pcb_equivalence.sv": "1e890d464c6cc9d27d173dde30c5c3134f40ce57081e5d153fa37cd35ef913bf"
+      },
+      "output": "PASS tb_pnr_pcb_equivalence checks=180013 publications=92 reset_rows=ff\n/workspace/scratch/33f2000fda6f/fpga-pnr-review/sim/tb_pnr_pcb_equivalence.sv:46: $finish called at 1800130000 (1ps)\n"
+    },
+    {
+      "name": "tb_pcb_debug_ui",
+      "passed": true,
+      "checks": 27,
+      "seconds": 7.232,
+      "source_sha256": {
+        "src/pcb_debug_ui.sv": "7e333abb9b0a94164b7b2a3812e2935da0b835d4611ce8d7e5cc9a7668dbfa2c",
+        "sim/tb_pcb_debug_ui.sv": "2feee22b59a43f60c016a61066de6780a0173fa90d437b8ce31a8a460fb03c0a"
+      },
+      "output": "PASS tb_pcb_debug_ui checks=27\n/workspace/scratch/33f2000fda6f/fpga-pnr-review/sim/tb_pcb_debug_ui.sv:53: $finish called at 4840790000 (1ps)\n"
+    },
+    {
+      "name": "tb_pcb_readable",
+      "passed": true,
+      "checks": 6,
+      "seconds": 0.132,
+      "source_sha256": {
+        "src/pcb_debug_ui.sv": "7e333abb9b0a94164b7b2a3812e2935da0b835d4611ce8d7e5cc9a7668dbfa2c",
+        "sim/tb_pcb_readable.sv": "d69bdea665346d8dca2aee71ca8e361e7c5432f46a810af020b2ce27147e5e25"
+      },
+      "output": "PASS tb_pcb_readable checks=6\n/workspace/scratch/33f2000fda6f/fpga-pnr-review/sim/tb_pcb_readable.sv:23: $finish called at 63150000 (1ps)\n"
+    },
+    {
+      "name": "tb_audio_limiter_FIXED0_HOLD0",
+      "passed": true,
+      "checks": 280176,
+      "seconds": 1.344,
+      "source_sha256": {
+        "src/audio_limiter.sv": "65ed8e09ec7eb338a39266b2f151d3bba1d74e666d373ce3df3b7cb6f144e06a",
+        "sim/tb_audio_limiter.sv": "ae404b99b119220abcca31bb067a19d51b1b54d368408e56dfeaf56a374b2efe"
+      },
+      "output": "PASS tb_audio_limiter checks=280176 vectors=2830 max_cycles=104\n/workspace/scratch/33f2000fda6f/fpga-pnr-review/sim/tb_audio_limiter.sv:35: $finish called at 2858840000 (1ps)\n"
+    },
+    {
+      "name": "tb_audio_limiter_FIXED1_HOLD0",
+      "passed": true,
+      "checks": 299984,
+      "seconds": 1.631,
+      "source_sha256": {
+        "src/audio_limiter.sv": "65ed8e09ec7eb338a39266b2f151d3bba1d74e666d373ce3df3b7cb6f144e06a",
+        "sim/tb_audio_limiter.sv": "ae404b99b119220abcca31bb067a19d51b1b54d368408e56dfeaf56a374b2efe"
+      },
+      "output": "PASS tb_audio_limiter checks=299984 vectors=2830 max_cycles=104\n/workspace/scratch/33f2000fda6f/fpga-pnr-review/sim/tb_audio_limiter.sv:35: $finish called at 3056920000 (1ps)\n"
+    },
+    {
+      "name": "tb_audio_limiter_FIXED1_HOLD240",
+      "passed": true,
+      "checks": 299984,
+      "seconds": 1.582,
+      "source_sha256": {
+        "src/audio_limiter.sv": "65ed8e09ec7eb338a39266b2f151d3bba1d74e666d373ce3df3b7cb6f144e06a",
+        "sim/tb_audio_limiter.sv": "ae404b99b119220abcca31bb067a19d51b1b54d368408e56dfeaf56a374b2efe"
+      },
+      "output": "PASS tb_audio_limiter checks=299984 vectors=2830 max_cycles=104\n/workspace/scratch/33f2000fda6f/fpga-pnr-review/sim/tb_audio_limiter.sv:35: $finish called at 3056920000 (1ps)\n"
+    }
+  ],
+  "all_tests_completed": true,
+  "checks": 2020649,
+  "config_sha256": "ad8ff0d5dc834eb8e5a1afb92bf2d1a9a3f7565263d7bc79061846fa7a0b1cce",
+  "gowin_synthesis_run": false,
+  "pnr_run": false,
+  "hardware_tested": false
+}

@@ -1,0 +1,6 @@
+{
+  "status": "initial independent-vector stage did not compile",
+  "reason": "Frozen upstream tb_audio_limiter used 9 positional ports for the current 11-port module",
+  "action": "Changed fixture to named ports, explicit in_tag=0, retained all assertions; reran all 9 configurations",
+  "counted_as_pass": false
+}

@@ -1,0 +1,2 @@
+PASS tb_audio_limiter checks=280176 vectors=2830 max_cycles=104
+/workspace/scratch/33f2000fda6f/fpga-pnr-review/sim/tb_audio_limiter.sv:35: $finish called at 2858840000 (1ps)

@@ -44,8 +44,14 @@ module audio_limiter #(
  wire [16:0] old_gain=filled<W ? 17'd65536 : gain_q;
  wire [WINDOW_LOG2+17:0] next_sum=added_sum-old_gain;
  wire [16:0] average_gain=updated_sum>>WINDOW_LOG2;
- wire [41:0] magnitude_product=product[41] ? -product : product;
- wire signed [25:0] converted=product[41] ? -$signed({1'b0,magnitude_product[40:16]}) : $signed({1'b0,magnitude_product[40:16]});
+ // Truncate toward zero directly in two's complement. For a negative
+ // product, arithmetic shift rounds down; a nonzero discarded fraction
+ // therefore needs +1. This removes the wide absolute-value/negation chain.
+ // A signed 24-bit sample times unsigned 17-bit gain fits strictly inside
+ // +/-2^40, so the old magnitude slice cannot wrap at bit41.
+ wire signed [25:0] product_integer=$signed(product[41:16]);
+ wire round_toward_zero=product[41] && (|product[15:0]);
+ wire signed [25:0] converted=product_integer+$signed({25'd0,round_toward_zero});
  assign in_ready=!rst && state==IDLE;
  // Normal-mode RAM: read and write are mutually exclusive. The old gain
  // is fetched BEFORE AVERAGE; writing that address must not request Gowin's
@@ -144,3 +150,4 @@ module audio_limiter #(
  always @(posedge clk)if(!rst && in_valid && !in_ready)$fatal(1,"Limiter input exceeded bounded processing budget");
  // synthesis translate_on
 endmodule
+

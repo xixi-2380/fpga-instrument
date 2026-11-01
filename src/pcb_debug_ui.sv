@@ -266,12 +266,30 @@ module pcb_debug_ui(
    default:begin end
   endcase
  end
+ // Private row scratchpad: every row consumed by display is overwritten
+ // before the row7 atomic publish. Reset only the formatter control and the
+ // public display; clearing this payload adds thousands of reset loads.
+ // Match the controller's write enable exactly, including command aborts.
+ always @(posedge clk)begin
+  if(!rst && !command_valid && building && !decimal_busy && format_phase==2)begin
+   case(row)
+    0:lines[0+:320]<=text_q;
+    1:lines[320+:320]<=text_q;
+    2:lines[640+:320]<=text_q;
+    3:lines[960+:320]<=text_q;
+    4:lines[1280+:320]<=text_q;
+    5:lines[1600+:320]<=text_q;
+    6:lines[1920+:320]<=text_q;
+    7:lines[2240+:320]<=text_q;
+   endcase
+  end
+ end
  always @(posedge clk or posedge rst)begin
   if(rst)begin
    captured_meta<=0;opened<=0;closing<=0;frozen<=0;edit_gsr<=1;pending<=0;tab<=0;board<=0;detail<=0;target<=0;clear_target<=0;
    channel<=0;sequence_id<=0;clear_sequence<=0;request_data<=DEFAULT_CONFIG;refresh_ms<=0;
    refresh<=1;building<=0;row<=0;format_phase<=0;label_q<=0;word_q<=0;text_q<=0;friendly_q<=0;plain_q<=0;captured<=0;captured_encoder<=0;captured_audio<=0;captured_history<=0;
-   lines<=0;display<=0;encoder_clear<=0;timestamp<=0;previous_online<=0;note_count<=0;pcm_count<=0;cfg_accept_count<=0;cfg_apply_count<=0;
+   display<=0;encoder_clear<=0;timestamp<=0;previous_online<=0;note_count<=0;pcm_count<=0;cfg_accept_count<=0;cfg_apply_count<=0;
    for(integer b=0;b<3;b++)begin draft[b]<=DEFAULT_CONFIG;last_result[b]<=0;history[b]<=0;end
   end else begin
    encoder_clear<=0;
@@ -335,16 +353,7 @@ module pcb_debug_ui(
      0:begin label_q<=label;word_q<=word;friendly_q<=friendly;plain_q<=detail==0;format_phase<=1;end
      1:begin text_q<=plain_q ? friendly_q : {label_q," : ",hex32(word_q),"             "};format_phase<=2;end
      2:begin
-      case(row)
-       0:lines[0+:320]<=text_q;
-       1:lines[320+:320]<=text_q;
-       2:lines[640+:320]<=text_q;
-       3:lines[960+:320]<=text_q;
-       4:lines[1280+:320]<=text_q;
-       5:lines[1600+:320]<=text_q;
-       6:lines[1920+:320]<=text_q;
-       7:lines[2240+:320]<=text_q;
-      endcase
+
       format_phase<=0;
       if(row==7)begin building<=0;refresh<=0;display<={captured_meta,text_q,lines[2239:0]};end
       else row<=row+1'b1;
@@ -356,4 +365,5 @@ module pcb_debug_ui(
   end
  end
 endmodule
+
 

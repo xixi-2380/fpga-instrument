@@ -1,0 +1,131 @@
+{
+  "limiter_before": {
+    "cell_types": {
+      "$add": 8,
+      "$adffe": 25,
+      "$dffe": 2,
+      "$ne": 10,
+      "$reduce_bool": 7,
+      "$reduce_and": 12,
+      "$reduce_or": 2,
+      "$eq": 14,
+      "$logic_not": 3,
+      "$eqx": 1,
+      "$ge": 2,
+      "$gt": 3,
+      "$le": 1,
+      "$logic_and": 5,
+      "$logic_or": 2,
+      "$lt": 4,
+      "$mul": 2,
+      "$neg": 4,
+      "$adff": 2,
+      "$mux": 43,
+      "$pmux": 13,
+      "$sub": 4,
+      "$mem_v2": 2
+    },
+    "flipflop_bits_by_type": {
+      "$adffe": 412,
+      "$dffe": 58,
+      "$adff": 2
+    },
+    "async_reset_ff_bits": 414
+  },
+  "limiter_after": {
+    "cell_types": {
+      "$add": 9,
+      "$adffe": 25,
+      "$dffe": 2,
+      "$ne": 10,
+      "$reduce_bool": 7,
+      "$reduce_and": 12,
+      "$reduce_or": 3,
+      "$eq": 14,
+      "$logic_not": 3,
+      "$eqx": 1,
+      "$ge": 2,
+      "$gt": 3,
+      "$le": 1,
+      "$logic_and": 6,
+      "$logic_or": 2,
+      "$lt": 4,
+      "$mul": 2,
+      "$neg": 2,
+      "$adff": 2,
+      "$mux": 41,
+      "$pmux": 13,
+      "$sub": 4,
+      "$mem_v2": 2
+    },
+    "flipflop_bits_by_type": {
+      "$adffe": 412,
+      "$dffe": 58,
+      "$adff": 2
+    },
+    "async_reset_ff_bits": 414
+  },
+  "pcb_before": {
+    "cell_types": {
+      "$add": 403,
+      "$adffe": 117,
+      "$adff": 17,
+      "$reduce_bool": 10,
+      "$ne": 142,
+      "$not": 9,
+      "$reduce_and": 100,
+      "$reduce_or": 6,
+      "$logic_not": 122,
+      "$eq": 124,
+      "$ge": 21,
+      "$gt": 52,
+      "$le": 2,
+      "$logic_and": 138,
+      "$logic_or": 3,
+      "$lt": 210,
+      "$nex": 1,
+      "$pmux": 81,
+      "$mux": 930,
+      "$shiftx": 20,
+      "$sub": 230
+    },
+    "flipflop_bits_by_type": {
+      "$adffe": 8560,
+      "$adff": 812
+    },
+    "async_reset_ff_bits": 9372
+  },
+  "pcb_after": {
+    "cell_types": {
+      "$add": 403,
+      "$adffe": 110,
+      "$dffe": 7,
+      "$adff": 17,
+      "$reduce_bool": 10,
+      "$ne": 142,
+      "$not": 9,
+      "$reduce_and": 100,
+      "$reduce_or": 6,
+      "$logic_not": 123,
+      "$eq": 124,
+      "$ge": 21,
+      "$gt": 52,
+      "$le": 2,
+      "$logic_and": 142,
+      "$logic_or": 3,
+      "$lt": 210,
+      "$nex": 1,
+      "$pmux": 81,
+      "$mux": 930,
+      "$shiftx": 20,
+      "$sub": 230
+    },
+    "flipflop_bits_by_type": {
+      "$adffe": 6320,
+      "$dffe": 2240,
+      "$adff": 812
+    },
+    "async_reset_ff_bits": 7132
+  },
+  "limitations": "Yosys generic proc/opt netlist only. Not Gowin LUT/CLS mapping, STA, routing congestion or runtime measurement."
+}

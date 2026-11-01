@@ -1,0 +1,2 @@
+PASS tb_pnr_pcb_equivalence checks=180013 publications=92 reset_rows=ff
+/workspace/scratch/33f2000fda6f/fpga-pnr-review/sim/tb_pnr_pcb_equivalence.sv:46: $finish called at 1800130000 (1ps)

@@ -5,7 +5,10 @@ module tb_audio_limiter;
  reg signed [15:0] sample=0;
  wire ready,ov,clipped;wire signed [15:0] result;wire [16:0] gain;
  integer checks=0,elapsed=0,max_cycles=0,fd,scanned;reg [63:0] vectors[0:9999];reg [4095:0] file;
- audio_limiter #(.FIXED_LATENCY(FIXED),.HOLD_SAMPLES(HOLD)) dut(clk,rst,valid,sample,ready,ov,result,gain,clipped);
+ audio_limiter #(.FIXED_LATENCY(FIXED),.HOLD_SAMPLES(HOLD)) dut(
+  .clk(clk),.rst(rst),.in_valid(valid),.in_sample(sample),.in_ready(ready),
+  .out_valid(ov),.out_sample(result),.applied_gain(gain),.clipped(clipped),
+  .in_tag(17'd0),.out_tag());
  task check(input bit yes,input string why);begin checks++;if(!yes)$fatal(1,"%s",why);end endtask
  initial begin
   if(!$value$plusargs("LIMITER_VECTORS=%s",file))$fatal(1,"Missing limiter vectors");
@@ -33,3 +36,4 @@ module tb_audio_limiter;
  end
  initial begin #10000000;$fatal(1,"limiter timeout");end
 endmodule
+

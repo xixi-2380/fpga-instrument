@@ -1,0 +1,21 @@
+{
+  "integration_parent": "55b5bb2269cbdb3403f3779cc4f96846ee104846",
+  "validated_baseline": "c6352faf09e1e110291e24130079fdd3ae94acdd",
+  "upstream_changed_paths": [
+    "AGENTS.md",
+    "docs/closure_2026-11-01.md",
+    "reports/structural_optimization/closure_2026-11-01/checkpoint.json"
+  ],
+  "rtl_and_test_dependencies_changed_upstream": false,
+  "source_hashes_match_existing_validation": true,
+  "validation_reused_without_unnecessary_rerun": true,
+  "checks": 2020649,
+  "gowin_synthesis_run": false,
+  "pnr_run": false,
+  "hardware_programmed": false,
+  "source_sha256": {
+    "src/audio_limiter.sv": "65ed8e09ec7eb338a39266b2f151d3bba1d74e666d373ce3df3b7cb6f144e06a",
+    "src/pcb_debug_ui.sv": "7e333abb9b0a94164b7b2a3812e2935da0b835d4611ce8d7e5cc9a7668dbfa2c",
+    "sim/tb_audio_limiter.sv": "ae404b99b119220abcca31bb067a19d51b1b54d368408e56dfeaf56a374b2efe"
+  }
+}

@@ -1,0 +1,2 @@
+PASS tb_pcb_debug_ui checks=27
+/workspace/scratch/33f2000fda6f/fpga-pnr-review/sim/tb_pcb_debug_ui.sv:53: $finish called at 4840790000 (1ps)
