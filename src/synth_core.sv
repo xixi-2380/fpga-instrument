@@ -149,18 +149,15 @@ module synth_core #(
     end endgenerate
     // Urgent clears cancel PCM/valid only; the user's gain/ramp survives.
     wire [6:0] effective_volume=debug_mute===1'b1 ? 7'd0 : volume_percent;
-    reg [8:0] mute_samples;reg mute_count_ready;
+    reg [8:0] mute_samples;
     always @(posedge clk or posedge rst)begin
-        if(rst)begin mute_samples<=0;mute_count_ready<=0;end
-        else if(debug_mute!==1'b1)begin mute_samples<=0;mute_count_ready<=0;end
-        else if(output_valid && mute_samples<260)begin
-            mute_samples<=mute_samples+1'b1;
-            if(mute_samples==259)mute_count_ready<=1;
-        end
+        if(rst)mute_samples<=0;
+        else if(debug_mute!==1'b1)mute_samples<=0;
+        else if(output_valid && mute_samples<260)mute_samples<=mute_samples+1'b1;
     end
     // Four frames beyond the maximum 256-sample ramp cover the frame buffer
     // and the complete left/right serial words; no audio clocks are stopped.
-    assign debug_muted=debug_mute===1'b1 && mute_count_ready && frame_l==0 && frame_r==0;
+    assign debug_muted=debug_mute===1'b1 && mute_samples==260 && frame_l==0 && frame_r==0;
     master_volume volume_control(clk,rst,limited_valid,limited_sample,effective_volume,output_valid,output_sample,output_reset);
     // Mirror valid/PCM timing through volume, pending frame and serializer.
     always @(posedge clk or posedge output_reset)begin
@@ -180,7 +177,7 @@ module synth_core #(
     assign pa_enable=input_ready;
     assign gate=|voice_held;
     // Freeze ownership while rendering; external producers retain valid/data.
-    voice_allocator #(.VOICES(VOICES),.AUTOMATIC_IDS(16),.PRESERVE_MANUAL_TAILS(1),.GATE_FRAME_COMMANDS(0)) allocator(
+    voice_allocator #(.VOICES(VOICES),.AUTOMATIC_IDS(16),.PRESERVE_MANUAL_TAILS(1)) allocator(
         .clk(clk),.rst(engine_reset),.enabled(input_ready && !render_busy),.frame_ce(frame_ce),
         .note_valid(note_valid),.note_on(note_on),.note_id(note_id),.note_fcw(note_fcw),
         .voice_active(voice_active),.note_ready(note_ready),.voice_start(voice_start),
@@ -288,14 +285,7 @@ module synth_core #(
             if(in_slots && render_cycle[3:0]==1)velocity_scale<=voice_gains[selected_voice*9+:9];
         end
     end
-    // DDS output is stable from slot0 through slot15. Capture at slot2,
-    // ahead of the unchanged slot5 gain handshake, to separate waveform /
-    // percussion selection from multiplication without changing sample timing.
-    reg signed [15:0] prepared_gain_sample;
-    always @(posedge clk or posedge engine_reset)
-        if(engine_reset)prepared_gain_sample<=0;
-        else if(in_slots && render_cycle[3:0]==2)prepared_gain_sample<=raw_sample;
-    tone_gain #(.OUTPUT_W(`VOICE_W)) gain(clk,engine_reset,gain_request,prepared_gain_sample,combined_level,gain_valid,gain_sample);
+    tone_gain #(.OUTPUT_W(`VOICE_W)) gain(clk,engine_reset,gain_request,raw_sample,combined_level,gain_valid,gain_sample);
     voice_mixer mixer(clk,engine_reset,gain_valid,gain_sample,first_sample,last_sample,mix_valid,mix_sample);
     // Explicit balanced peak tree, rather than a 32-comparator serial chain.
     localparam integer PEAK_LEAVES=1<<INDEX_W;
@@ -365,10 +355,6 @@ module synth_core #(
     frame_buffer buffer(clk,OUTPUT_ENABLE?output_reset:engine_reset,frame_ce,output_valid,ready,output_sample,output_sample_r,frame_l,frame_r,underrun);
     i2s_tx tx(clk,rst,fall_ce,bit_index,frame_l,frame_r,ws,din);
     // synthesis translate_off
-    always @(posedge clk)begin
-        if(!rst && mute_count_ready!==(mute_samples==260))$fatal(1,"Mute completion predictor changed boundary");
-        if(!engine_reset && gain_request && prepared_gain_sample!==raw_sample)$fatal(1,"Prepared gain sample differs at original handshake");
-    end
     initial if(VOICES<1 || VOICES>32 || RENDER_BUDGET>=`FRAME_CYCLES)$fatal(1,"Invalid render budget");
     always @(posedge clk)if(!rst)begin
         if(envelope_enables!=={VOICES{frame_ce}})$fatal(1,"Distributed envelope CE changed sample boundary");

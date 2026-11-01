@@ -14,31 +14,27 @@ module audio_limiter #(
  localparam [3:0] IDLE=0,WAIT_RAM=1,SCAN=2,DIV_INIT=3,DIVIDE=4,
   RELEASE_GAIN=5,AVERAGE=6,MULTIPLY=7,EMIT=8,GAIN_READY=9,SCAN_DRAIN=10,SUM_ADD=11;
  reg [3:0] state;
- // Signed input16 times legal PRE_GAIN1..32 fits exactly in this width.
- // The minimum negative product is representable; unsigned magnitude needs
- // the same width. Keep tags separate from the narrowed sample payload.
- localparam integer SAMPLE_W=16+$clog2(PRE_GAIN);
- reg [SAMPLE_W+16:0] audio_ram[0:W-1];reg [16:0] gain_ram[0:W-1];
- reg [SAMPLE_W+16:0] audio_word;wire signed [SAMPLE_W-1:0] audio_q=audio_word[SAMPLE_W-1:0];
- reg signed [SAMPLE_W-1:0] delayed;reg [16:0] delayed_tag;
+ reg [40:0] audio_ram[0:W-1];reg [16:0] gain_ram[0:W-1];
+ reg [40:0] audio_word;wire signed [23:0] audio_q=audio_word[23:0];
+ reg signed [23:0] delayed;reg [16:0] delayed_tag;
  reg [16:0] gain_q,released,new_gain,target;
  reg [RELEASE_SHIFT-1:0] release_error;
  reg [WINDOW_LOG2-1:0] pointer,read_address,scan_address;
  reg [WINDOW_LOG2:0] filled,scan_count;
  reg [WINDOW_LOG2+17:0] gain_sum,updated_sum,added_sum;
- reg [SAMPLE_W-1:0] peak,magnitude_q;reg magnitude_valid;
+ reg [23:0] peak,magnitude_q;reg magnitude_valid;
  localparam integer HW=HOLD_SAMPLES>0?$clog2(HOLD_SAMPLES+1):1;
  reg [HW-1:0] hold_count;
  reg [30:0] numerator;reg [24:0] remainder;
  reg [16:0] quotient;reg [5:0] bits_left;
  reg signed [41:0] product;
- wire signed [SAMPLE_W-1:0] input_extended={{(SAMPLE_W-16){in_sample[15]}},in_sample};
- wire signed [SAMPLE_W-1:0] amplified=input_extended*PRE_GAIN;
+ wire signed [23:0] input_extended={{8{in_sample[15]}},in_sample};
+ wire signed [23:0] amplified=input_extended*PRE_GAIN;
  // Reuse WAIT_RAM to separate pre-gain from absolute value. No state
  // or RAM access is added: peak is ready before the first SCAN comparison.
- reg signed [SAMPLE_W-1:0] accepted_amplified;
- wire [SAMPLE_W-1:0] input_mag=accepted_amplified[SAMPLE_W-1] ? -accepted_amplified : accepted_amplified;
- wire [SAMPLE_W-1:0] read_mag=audio_q[SAMPLE_W-1] ? -audio_q : audio_q;
+ reg signed [23:0] accepted_amplified;
+ wire [23:0] input_mag=accepted_amplified[23] ? -accepted_amplified : accepted_amplified;
+ wire [23:0] read_mag=audio_q[23] ? -audio_q : audio_q;
  wire read_initialized=filled==W || scan_address<filled;
  wire [24:0] trial={remainder[23:0],numerator[30]};
  // released remains in 0..65536 and release_error < 2**RELEASE_SHIFT.
@@ -101,7 +97,7 @@ module audio_limiter #(
     SCAN:begin
      if(scan_count==0)begin
       delayed<=filled>=W-1 ? audio_q : 24'sd0;
-      delayed_tag<=filled>=W-1 ? audio_word[SAMPLE_W+16:SAMPLE_W] : 17'd0;
+      delayed_tag<=filled>=W-1 ? audio_word[40:24] : 17'd0;
      end
      magnitude_q<=read_mag;magnitude_valid<=read_initialized;
      if(magnitude_valid && magnitude_q>peak)peak<=magnitude_q;

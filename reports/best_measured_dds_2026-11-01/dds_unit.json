@@ -1,0 +1,25 @@
+{
+  "tests": [
+    {
+      "voices": 1,
+      "checks": 341049,
+      "passed": true,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\dds_candidate\\src\\dds_sine.sv": "e0e860789c82b36f9fa098cba569ac43259aab94ea0fccd3e7fc016008fc9a57",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\dds_candidate\\sim\\reference_dds_sine_c6352fa.sv": "cdb2e44aa78e27fdad7014f054e94b3fedc8b41ef3bd0eb8e440f7c9b66c814d",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_dds_context_equivalence.sv": "e801d21927dc98601ed1064c3f56622df8fcf73b8c8d6d6e9a0ef5decd44c45e"
+      }
+    },
+    {
+      "voices": 32,
+      "checks": 341049,
+      "passed": true,
+      "source_sha256": {
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\dds_candidate\\src\\dds_sine.sv": "e0e860789c82b36f9fa098cba569ac43259aab94ea0fccd3e7fc016008fc9a57",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\dds_candidate\\sim\\reference_dds_sine_c6352fa.sv": "cdb2e44aa78e27fdad7014f054e94b3fedc8b41ef3bd0eb8e440f7c9b66c814d",
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\closure_candidates\\tb_dds_context_equivalence.sv": "e801d21927dc98601ed1064c3f56622df8fcf73b8c8d6d6e9a0ef5decd44c45e"
+      }
+    }
+  ],
+  "total_checks": 682098
+}

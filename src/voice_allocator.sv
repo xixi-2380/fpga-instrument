@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 // Keyboard-independent ownership and pending frame commands. Rank is a
 // bounded permutation, avoiding the wraparound of timestamp-based stealing.
-module voice_allocator #(parameter integer VOICES=4,AUTOMATIC_IDS=0,PRESERVE_MANUAL_TAILS=0,GATE_FRAME_COMMANDS=1)(
+module voice_allocator #(parameter integer VOICES=4,AUTOMATIC_IDS=0,PRESERVE_MANUAL_TAILS=0)(
     input wire clk,rst,enabled,frame_ce,note_valid,note_on,
     input wire [6:0] note_id,input wire [31:0] note_fcw,
     input wire [VOICES-1:0] voice_active,
@@ -105,9 +105,9 @@ module voice_allocator #(parameter integer VOICES=4,AUTOMATIC_IDS=0,PRESERVE_MAN
         assign voice_ids[v*7+:7]=ids[v];
         assign voice_timbres[v*5+:5]=timbres[v];
         assign voice_gains[v*9+:9]=gains[v];assign voice_pitches[v*7+:7]=pitches[v];
-        assign voice_start[v]=!rst && (GATE_FRAME_COMMANDS==0 || frame_ce) && pending_start[v];
+        assign voice_start[v]=!rst && frame_ce && pending_start[v];
         assign voice_restart[v]=voice_start[v] && pending_restart[v];
-        assign voice_stop[v]=!rst && (GATE_FRAME_COMMANDS==0 || frame_ce) && !pending_start[v] && committed_gate[v] && !voice_held[v];
+        assign voice_stop[v]=!rst && frame_ce && !pending_start[v] && committed_gate[v] && !voice_held[v];
     end
     always @(posedge clk or posedge rst)begin
         if(rst)begin

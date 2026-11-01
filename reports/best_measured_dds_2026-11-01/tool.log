@@ -1,0 +1,368 @@
+*** GOWIN Tcl Command Line Console  *** 
+Open project C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/closure_candidates/dds_candidate/keyboard_adsr.gprj finished
+current device: GW5AST-138C  GW5AST-LV138FPG676AC1/I0
+PNR_PROFILE=default PLACE=3 ROUTE=2 ROUTE_MAXFAN=23
+GowinSynthesis start
+Running parser ...
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\performance_control.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\synth_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\performance_control.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\performance_control.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\performance_control.sv":2)
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\keyboard_notes.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\performance_control.sv":15)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\performance_control.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\performance_control.sv":15)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\manual_event_arbiter.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_chorus.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ultrasonic_range.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ultrasonic_volume.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bt_event_cdc.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bt_identity_monitor.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\master_volume.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\uart_rx.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\uart_tx.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bt_frame_rx.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bt_frame_tx.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bt_score_player.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bluetooth_score_core.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\score_record.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bluetooth_score_core.sv":29)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bluetooth_score_core.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bluetooth_score_core.sv":29)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bluetooth_score_link.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bluetooth_audio_bridge.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\instrument_envelope.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\synth_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\instrument_envelope.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\instrument_envelope.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\instrument_envelope.sv":2)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_visualizer.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ui_keypad_router.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\ui_layout.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ui_keypad_router.sv":7)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ui_keypad_router.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ui_keypad_router.sv":7)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ui_touch_actions.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\synth_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ui_touch_actions.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ui_touch_actions.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ui_touch_actions.sv":2)
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\ui_layout.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ui_touch_actions.sv":9)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ui_touch_actions.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ui_touch_actions.sv":9)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_display.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_status_cdc.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_scan_timing.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\ui_layout.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv":8)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv":8)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\gt9110_touch.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\i2c_register_master.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_effects.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_reverb.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_player.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\synth_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_player.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_player.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_player.sv":2)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_delay.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\timbre_control.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\synth_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\timbre_control.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\timbre_control.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\timbre_control.sv":2)
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\ui_layout.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\timbre_control.sv":40)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\timbre_control.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\timbre_control.sv":40)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ec11_encoder.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\aip5916_keyboard.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\touch_keyboard_router.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\ui_layout.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\touch_keyboard_router.sv":9)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\touch_keyboard_router.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\touch_keyboard_router.sv":9)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\pcb_debug_ui.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\ui_layout.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\pcb_debug_ui.sv":10)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\pcb_debug_ui.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\pcb_debug_ui.sv":10)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\keyboard_top.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\keyboard_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\keyboard_top.sv":2)
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\synth_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\keyboard_config.svh":3)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\keyboard_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\keyboard_config.svh":3)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\keyboard_top.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\keyboard_top.sv":2)
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\run_leds_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\keyboard_top.sv":3)
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\synth_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\run_leds_config.svh":3)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\run_leds_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\run_leds_config.svh":3)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\keyboard_top.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\keyboard_top.sv":3)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\adsr_envelope.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\synth_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\adsr_envelope.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\adsr_envelope.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\adsr_envelope.sv":2)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_timing.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\synth_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_timing.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_timing.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_timing.sv":2)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\clock_reset.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\synth_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\clock_reset.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\clock_reset.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\clock_reset.sv":2)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\dds_sine.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\synth_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\dds_sine.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\dds_sine.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\dds_sine.sv":2)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\frame_buffer.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\keyboard_core.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\keyboard_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\keyboard_core.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\keyboard_core.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\keyboard_core.sv":2)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\sustain_envelope.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\synth_core.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\synth_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\synth_core.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\synth_core.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\synth_core.sv":2)
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\sustain_curve.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\synth_core.sv":189)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\synth_core.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\synth_core.sv":189)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ui_more_actions.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\ui_layout.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ui_more_actions.sv":6)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ui_more_actions.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ui_more_actions.sv":6)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_services.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\flash_profile.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_services.sv":16)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_services.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_services.sv":16)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_library_protocol.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\flash_song_library.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\spi_byte_master.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\spi_nor_flash.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\flash_profile.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\spi_nor_flash.sv":14)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\spi_nor_flash.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\spi_nor_flash.sv":14)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\local_score_control.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_validator.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\score_record.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_validator.sv":12)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_validator.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_validator.sv":12)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_limiter.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_latency_meter.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\voice_allocator.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\voice_mixer.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\synth_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\voice_mixer.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\voice_mixer.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\voice_mixer.sv":2)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\lock_guard.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\synth_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\lock_guard.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\lock_guard.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\lock_guard.sv":2)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\matrix_keypad.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\keyboard_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\matrix_keypad.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\matrix_keypad.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\matrix_keypad.sv":2)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\key_note_events.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\keyboard_notes.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\key_note_events.sv":9)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\key_note_events.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\key_note_events.sv":9)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\pll_pair.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\synth_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\pll_pair.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\pll_pair.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\pll_pair.sv":2)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\i2s_tx.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\reset_sync.sv'
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\run_leds.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\run_leds_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\run_leds.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\run_leds.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\run_leds.sv":2)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\sine_rom.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\synth_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\sine_rom.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\sine_rom.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\sine_rom.sv":2)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\startup_envelope.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\synth_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\startup_envelope.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\startup_envelope.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\startup_envelope.sv":2)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\tone_gain.sv'
+Analyzing included file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\config\synth_config.svh'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\tone_gain.sv":2)
+Back to file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\tone_gain.sv'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\tone_gain.sv":2)
+Analyzing Verilog file 'C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\envelope_precalc_bank.sv'
+Compiling module 'keyboard_top'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\keyboard_top.sv":4)
+Compiling module 'reset_sync'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\reset_sync.sv":2)
+Compiling module 'rgb_status_cdc(WIDTH=33)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_status_cdc.sv":6)
+Compiling module 'ultrasonic_range'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ultrasonic_range.sv":4)
+Compiling module 'ultrasonic_volume'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ultrasonic_volume.sv":5)
+Compiling module 'rgb_status_cdc(WIDTH=30)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_status_cdc.sv":6)
+Compiling module 'ec11_encoder(REVERSE=32'b00000000000000000000000000000000)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ec11_encoder.sv":4)
+Compiling module 'ui_more_actions'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ui_more_actions.sv":3)
+WARN  (EX3791) : Expression size 7 truncated to fit in target size 4("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ui_more_actions.sv":16)
+Compiling module 'bluetooth_score_link(MAX_NOTES=4096,MAX_VOICES=16,LIBRARY_EXTENSION=1,NOTE_MIN=21,NOTE_MAX=108)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bluetooth_score_link.sv":3)
+Extracting RAM for identifier 'fifo'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bluetooth_score_link.sv":23)
+Compiling module 'uart_rx'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\uart_rx.sv":3)
+Compiling module 'uart_tx'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\uart_tx.sv":3)
+Compiling module 'bluetooth_score_core(MAX_NOTES=4096,MAX_VOICES=16,LIBRARY_EXTENSION=1,NOTE_MIN=21,NOTE_MAX=108)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bluetooth_score_core.sv":5)
+Extracting RAM for identifier 'score_ram'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bluetooth_score_core.sv":83)
+WARN  (EX3791) : Expression size 16 truncated to fit in target size 9("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bluetooth_score_core.sv":88)
+Compiling module 'bt_frame_rx'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bt_frame_rx.sv":3)
+Extracting RAM for identifier 'bank0'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bt_frame_rx.sv":12)
+Extracting RAM for identifier 'bank1'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bt_frame_rx.sv":12)
+Compiling module 'bt_frame_tx'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bt_frame_tx.sv":3)
+Compiling module 'bt_score_player(MAX_NOTES=4096,VOICES=16)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bt_score_player.sv":5)
+Compiling module 'score_validator(NOTE_MIN=21,NOTE_MAX=108)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_validator.sv":4)
+Compiling module 'bt_event_cdc(WIDTH=4)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bt_event_cdc.sv":4)
+Compiling module 'score_services'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_services.sv":4)
+Compiling module 'local_score_control'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\local_score_control.sv":4)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 2("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\local_score_control.sv":27)
+Compiling module 'score_library_protocol'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_library_protocol.sv":3)
+Compiling module 'flash_song_library'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\flash_song_library.sv":4)
+Extracting RAM for identifier 'catalog'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\flash_song_library.sv":33)
+Extracting RAM for identifier 'candidates'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\flash_song_library.sv":33)
+Extracting RAM for identifier 'directory'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\flash_song_library.sv":34)
+WARN  (EX3791) : Expression size 16 truncated to fit in target size 9("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\flash_song_library.sv":149)
+Compiling module 'spi_nor_flash'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\spi_nor_flash.sv":4)
+Extracting RAM for identifier 'buffer'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\spi_nor_flash.sv":34)
+Compiling module 'spi_byte_master'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\spi_byte_master.sv":3)
+Compiling module 'bt_event_cdc(WIDTH=29)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bt_event_cdc.sv":4)
+Compiling module 'bt_identity_monitor'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bt_identity_monitor.sv":4)
+Compiling module 'bluetooth_audio_bridge'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\bluetooth_audio_bridge.sv":4)
+Compiling module 'rgb_status_cdc(WIDTH=96)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_status_cdc.sv":6)
+Compiling module 'gt9110_touch(POLL_CYCLES=50000)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\gt9110_touch.sv":4)
+Compiling module 'i2c_register_master'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\i2c_register_master.sv":5)
+Compiling module 'rgb_status_cdc(WIDTH=73)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_status_cdc.sv":6)
+Compiling module 'ui_touch_actions'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\ui_touch_actions.sv":5)
+Compiling module 'performance_control'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\performance_control.sv":5)
+WARN  (EX3791) : Expression size 4 truncated to fit in target size 3("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\performance_control.sv":99)
+WARN  (EX3791) : Expression size 3 truncated to fit in target size 2("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\performance_control.sv":100)
+WARN  (EX3791) : Expression size 3 truncated to fit in target size 2("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\performance_control.sv":101)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 4("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\performance_control.sv":130)
+Compiling module 'manual_event_arbiter'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\manual_event_arbiter.sv":4)
+Compiling module 'touch_keyboard_router(AUX_ENABLE=0)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\touch_keyboard_router.sv":4)
+Compiling module 'rgb_display(FRAME_LOCKED_SNAPSHOTS=1)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_display.sv":5)
+Compiling module 'audio_visualizer'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_visualizer.sv":5)
+WARN  (EX3045) : Case equality operator always evaluates to false due to comparison with 'x' or 'z'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_display.sv":103)
+WARN  (EX3045) : Case equality operator always evaluates to false due to comparison with 'x' or 'z'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_display.sv":104)
+Compiling module 'rgb_frame_status_cdc(WIDTH=1208,RESET_PAYLOAD=0,FRAME_LOCKED=1)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_status_cdc.sv":74)
+Compiling module 'rgb_scan_timing(H_BACK=182,H_FRONT=210,V_BACK=8,V_FRONT=45,DE_ONLY=1)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_scan_timing.sv":4)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 11("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_scan_timing.sv":20)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 11("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_scan_timing.sv":21)
+Compiling module 'rgb_frame_status_cdc(WIDTH=146,FRAME_LOCKED=1)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_status_cdc.sv":74)
+Compiling module 'rgb_frame_status_cdc(WIDTH=2592,RESET_PAYLOAD=0,FRAME_LOCKED=1)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_status_cdc.sv":74)
+Compiling module 'rgb_status_cdc(WIDTH=1)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_status_cdc.sv":6)
+Compiling module 'rgb_frame_status_cdc(WIDTH=64,FRAME_LOCKED=1)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_status_cdc.sv":74)
+Compiling module 'rgb_ui_renderer(FRAME_LOCKED_INPUTS=1)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv":4)
+Extracting RAM for identifier 'font_rom'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv":94)
+WARN  (EX3791) : Expression size 9 truncated to fit in target size 4("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv":84)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 11("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv":191)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 11("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv":205)
+WARN  (EX3791) : Expression size 31 truncated to fit in target size 7("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv":262)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 10("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv":263)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 10("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv":264)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 8("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv":97)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 11("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv":346)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 11("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv":349)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 11("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv":352)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 11("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv":401)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 12("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv":518)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 4("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_ui_renderer.sv":518)
+Compiling module 'score_player(ENABLE=0,BEAT_FRAMES=24000,TAIL_FRAMES=9604)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_player.sv":5)
+Extracting RAM for identifier 'rom'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_player.sv":19)
+WARN  (EX1998) : Net 'instruction[63]' does not have a driver("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\score_player.sv":20)
+Compiling module 'timbre_control(DEBOUNCE_CYCLES=614400,LONG_PRESS_CYCLES=49152000,ULTRA_SLEW_CYCLES=122880)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\timbre_control.sv":4)
+WARN  (EX3791) : Expression size 3 truncated to fit in target size 2("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\timbre_control.sv":492)
+Compiling module 'run_leds(STEP_CYCLES=12500000)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\run_leds.sv":3)
+Compiling module 'pll_pair'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\pll_pair.sv":5)
+Compiling module 'clock_reset(LOCK_N=100000)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\clock_reset.sv":3)
+Compiling module 'lock_guard(STABLE_CYCLES=100000)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\lock_guard.sv":3)
+Compiling module 'rgb_status_cdc(WIDTH=160)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_status_cdc.sv":6)
+Compiling module 'rgb_status_cdc(WIDTH=1024)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_status_cdc.sv":6)
+Compiling module 'aip5916_keyboard(STALE_CYCLES=2500000)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\aip5916_keyboard.sv":3)
+Compiling module 'i2c_register_master(REGISTER_BYTES=1,DEVICE_ADDR=7'h56)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\i2c_register_master.sv":5)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 8("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\aip5916_keyboard.sv":50)
+Compiling module 'rgb_status_cdc(WIDTH=54)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\rgb_status_cdc.sv":6)
+Compiling module 'key_note_events(KEYS=36)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\key_note_events.sv":4)
+Compiling module 'synth_core(SHARED_ENVELOPE_PRECALC=1,PERFORMANCE_ENABLE=1,STEREO_ENABLE=1,SUSTAIN_ENABLE=1,VISUAL_KEYS=36,ATTACK=480,DECAY=4800,SUSTAIN=45875,RELEASE=9600)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\synth_core.sv":4)
+WARN  (EX3791) : Expression size 10 truncated to fit in target size 5("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\synth_core.sv":74)
+Compiling module 'audio_latency_meter'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_latency_meter.sv":5)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 12("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_latency_meter.sv":31)
+Compiling module 'audio_limiter(FIXED_LATENCY=1,HOLD_SAMPLES=240)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_limiter.sv":7)
+Extracting RAM for identifier 'audio_ram'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_limiter.sv":17)
+Extracting RAM for identifier 'gain_ram'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_limiter.sv":17)
+WARN  (EX3791) : Expression size 30 truncated to fit in target size 24("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_limiter.sv":32)
+WARN  (EX3791) : Expression size 18 truncated to fit in target size 17("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_limiter.sv":50)
+Compiling module 'master_volume'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\master_volume.sv":4)
+WARN  (EX3791) : Expression size 18 truncated to fit in target size 16("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\master_volume.sv":133)
+Compiling module 'audio_timing'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_timing.sv":3)
+Compiling module 'startup_envelope'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\startup_envelope.sv":3)
+Compiling module 'voice_allocator(VOICES=32,AUTOMATIC_IDS=16,PRESERVE_MANUAL_TAILS=1)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\voice_allocator.sv":4)
+Compiling module 'envelope_precalc_bank'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\envelope_precalc_bank.sv":4)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 14("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\envelope_precalc_bank.sv":58)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 14("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\envelope_precalc_bank.sv":58)
+Compiling module 'sustain_envelope(PRECALC=1)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\sustain_envelope.sv":4)
+WARN  (EX3791) : Expression size 18 truncated to fit in target size 17("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\sustain_envelope.sv":60)
+Compiling module 'instrument_envelope(ATTACK=480,DECAY=4800,SUSTAIN=45875,RELEASE=9600,PRECALC=1,EXTERNAL_PRECALC=1)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\instrument_envelope.sv":5)
+Compiling module 'adsr_envelope(ATTACK=480,DECAY=4800,SUSTAIN=45875,RELEASE=9600,PRECALC=1,EXTERNAL_PRECALC=1)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\adsr_envelope.sv":3)
+WARN  (EX3791) : Expression size 15 truncated to fit in target size 14("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\adsr_envelope.sv":110)
+WARN  (EX3791) : Expression size 18 truncated to fit in target size 17("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\adsr_envelope.sv":111)
+WARN  (EX3791) : Expression size 18 truncated to fit in target size 17("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\adsr_envelope.sv":111)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 17("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\instrument_envelope.sv":55)
+Compiling module 'dds_sine(VOICES=32,PREPARE_CONTEXT=1)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\dds_sine.sv":4)
+Extracting RAM for identifier 'waves'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\dds_sine.sv":9)
+Extracting RAM for identifier 'high_waves'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\dds_sine.sv":9)
+WARN  (EX3045) : Case equality operator always evaluates to false due to comparison with 'x' or 'z'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\dds_sine.sv":28)
+WARN  (EX3791) : Expression size 34 truncated to fit in target size 32("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\synth_core.sv":257)
+WARN  (EX3791) : Expression size 6 truncated to fit in target size 5("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\synth_core.sv":263)
+Compiling module 'tone_gain(OUTPUT_W=24)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\tone_gain.sv":3)
+Compiling module 'voice_mixer'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\voice_mixer.sv":5)
+Compiling module 'audio_effects(CHORUS_ENABLE=1,CHORUS_PHASE=32'h40000000,ECHO_ENABLE=32'b00000000000000000000000000000000)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_effects.sv":4)
+Compiling module 'audio_chorus(PHASE_OFFSET=32'b01000000000000000000000000000000)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_chorus.sv":5)
+Extracting RAM for identifier 'memory'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_chorus.sv":9)
+WARN  (EX3791) : Expression size 34 truncated to fit in target size 26("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_chorus.sv":24)
+WARN  (EX3045) : Case inequality operator always evaluates to true due to comparison with 'x' or 'z'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_chorus.sv":26)
+WARN  (EX3791) : Expression size 27 truncated to fit in target size 16("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_chorus.sv":56)
+WARN  (EX3791) : Expression size 27 truncated to fit in target size 16("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_chorus.sv":59)
+WARN  (EX3791) : Expression size 19 truncated to fit in target size 16("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_effects.sv":33)
+WARN  (EX3045) : Case equality operator always evaluates to false due to comparison with 'x' or 'z'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_effects.sv":73)
+WARN  (EX3045) : Case inequality operator always evaluates to true due to comparison with 'x' or 'z'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_effects.sv":83)
+Compiling module 'audio_reverb'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_reverb.sv":5)
+Extracting RAM for identifier 'memory'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_reverb.sv":20)
+Extracting RAM for identifier 'memory'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_reverb.sv":20)
+Extracting RAM for identifier 'memory'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_reverb.sv":20)
+Extracting RAM for identifier 'memory'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_reverb.sv":20)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 16("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_reverb.sv":15)
+WARN  (EX3791) : Expression size 12 truncated to fit in target size 11("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_reverb.sv":37)
+WARN  (EX3791) : Expression size 30 truncated to fit in target size 16("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_reverb.sv":53)
+WARN  (EX3791) : Expression size 20 truncated to fit in target size 16("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_effects.sv":126)
+WARN  (EX3791) : Expression size 20 truncated to fit in target size 16("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_effects.sv":128)
+Compiling module 'audio_effects(CHORUS_ENABLE=1,CHORUS_PHASE=32'h00000000,ECHO_ENABLE=32'b00000000000000000000000000000000)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_effects.sv":4)
+Compiling module 'audio_chorus(PHASE_OFFSET=32'b00000000000000000000000000000000)'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_chorus.sv":5)
+Extracting RAM for identifier 'memory'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_chorus.sv":9)
+WARN  (EX3791) : Expression size 34 truncated to fit in target size 26("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_chorus.sv":24)
+WARN  (EX3045) : Case inequality operator always evaluates to true due to comparison with 'x' or 'z'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_chorus.sv":26)
+WARN  (EX3791) : Expression size 27 truncated to fit in target size 16("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_chorus.sv":56)
+WARN  (EX3791) : Expression size 27 truncated to fit in target size 16("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_chorus.sv":59)
+WARN  (EX3791) : Expression size 19 truncated to fit in target size 16("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_effects.sv":33)
+WARN  (EX3045) : Case equality operator always evaluates to false due to comparison with 'x' or 'z'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_effects.sv":73)
+WARN  (EX3045) : Case inequality operator always evaluates to true due to comparison with 'x' or 'z'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_effects.sv":83)
+WARN  (EX3791) : Expression size 20 truncated to fit in target size 16("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_effects.sv":126)
+WARN  (EX3791) : Expression size 20 truncated to fit in target size 16("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\audio_effects.sv":128)
+Compiling module 'frame_buffer'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\frame_buffer.sv":2)
+Compiling module 'i2s_tx'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\i2s_tx.sv":5)
+Compiling module 'pcb_debug_ui'("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\pcb_debug_ui.sv":3)
+WARN  (EX3791) : Expression size 5 truncated to fit in target size 4("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\pcb_debug_ui.sv":44)
+WARN  (EX3791) : Expression size 5 truncated to fit in target size 4("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\pcb_debug_ui.sv":42)
+WARN  (EX3791) : Expression size 5 truncated to fit in target size 4("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\pcb_debug_ui.sv":43)
+NOTE  (EX0101) : Current top module is "keyboard_top"
+[5%] Running netlist conversion ...
+Running device independent optimization ...
+[10%] Optimizing Phase 0 completed
+[15%] Optimizing Phase 1 completed
+[25%] Optimizing Phase 2 completed
+Running inference ...
+[30%] Inferring Phase 0 completed
+[40%] Inferring Phase 1 completed
+[50%] Inferring Phase 2 completed
+[55%] Inferring Phase 3 completed
+Running technical mapping ...
+[60%] Tech-Mapping Phase 0 completed
+[65%] Tech-Mapping Phase 1 completed
+[75%] Tech-Mapping Phase 2 completed
+[80%] Tech-Mapping Phase 3 completed
+[90%] Tech-Mapping Phase 4 completed
+WARN  (NL0002) : The module "voice_mixer" instantiated to "mixer" is swept in optimizing("C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\synth_core.sv":289)
+[95%] Generate netlist file "C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\impl\gwsynthesis\D2_keyboard_leds.vg" completed
+WARN  (CK3000) : Can't calculate clocks' relationship between: "clk" and "clocks/pll2/CLKOUT0.default_gen_clk"
+WARN  (CK3000) : Can't calculate clocks' relationship between: "clocks/pll2/CLKOUT0.default_gen_clk" and "clk"
+WARN  (CK3000) : Can't calculate clocks' relationship between: "clocks/pll2/CLKOUT0.default_gen_clk" and "lcd_on.display_driver/pixel_pll/CLKOUT0.default_gen_clk"
+WARN  (CK3000) : Can't calculate clocks' relationship between: "lcd_on.display_driver/pixel_pll/CLKOUT0.default_gen_clk" and "clocks/pll2/CLKOUT0.default_gen_clk"
+[100%] Generate report file "C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\impl\gwsynthesis\D2_keyboard_leds_syn.rpt.html" completed
+GowinSynthesis finish
+Reading netlist file: "C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\impl\gwsynthesis\D2_keyboard_leds.vg"
+Parsing netlist file "C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\impl\gwsynthesis\D2_keyboard_leds.vg" completed
+Processing netlist completed
+Reading constraint file: "C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\src\keyboard.cst"
+Physical Constraint parsed completed
+Running placement......
+[10%] Placement Phase 0 completed
+[20%] Placement Phase 1 completed
+[30%] Placement Phase 2 completed
+[50%] Placement Phase 3 completed
+Running routing......
+[60%] Routing Phase 0 completed
+[70%] Routing Phase 1 completed
+[80%] Routing Phase 2 completed
+WARN  (PR1014) : Generic routing resource will be used to clock signal 'clk_d' by the specified constraint. And then it may lead to the excessive delay or skew
+[90%] Routing Phase 3 completed
+Running timing analysis......
+[95%] Timing analysis completed
+Placement and routing completed
+Bitstream generation in progress......
+Bitstream generation completed
+Running power analysis......
+[100%] Power analysis completed
+Generate file "C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\impl\pnr\D2_keyboard_leds.power.html" completed
+Generate file "C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\impl\pnr\D2_keyboard_leds.pin.html" completed
+Generate file "C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\impl\pnr\D2_keyboard_leds.rpt.html" completed
+Generate file "C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\impl\pnr\D2_keyboard_leds.rpt.txt" completed
+Generate file "C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\impl\pnr\D2_keyboard_leds.sdf" completed
+Generate file "C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\impl\pnr\D2_keyboard_leds.tr.html" completed
+Generate file "C:\Users\10939\Documents\Codex\2026-10-30\qin-2\work\closure_candidates\dds_candidate\impl\pnr\D2_keyboard_leds.tr" completed
+Sun Nov  1 13:27:36 2026
+

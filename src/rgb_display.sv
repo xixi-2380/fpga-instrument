@@ -132,10 +132,7 @@ module rgb_display #(
     rgb_frame_status_cdc #(.WIDTH(64),.FRAME_LOCKED(FRAME_LOCKED_SNAPSHOTS)) performance_bridge(audio_clk,pixel_clk,common_reset,render_frame_start,
         performance_status,pixel_performance,performance_valid,);
     wire rendered_de,rendered_hs,rendered_vs;
-    // SUG550 syn_maxfan applies to data drivers. Coordinate bits previously
-    // drove almost500 LUT inputs; allow local replicas at the same clock edge.
-    reg [10:0] render_x /* synthesis syn_maxfan=64 */;
-    reg [10:0] render_y /* synthesis syn_maxfan=64 */;
+    reg [10:0] render_x,render_y;
     reg render_de,render_hs,render_vs;
     always @(posedge pixel_clk)begin
         if(pixel_reset)begin render_x<=0;render_y<=0;render_de<=0;render_hs<=!HS_ACTIVE[0];render_vs<=!VS_ACTIVE[0];render_frame_start<=0;end
