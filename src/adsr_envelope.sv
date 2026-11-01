@@ -2,10 +2,15 @@
 `include "config/synth_config.svh"
 module adsr_envelope #(
     parameter integer ATTACK=`ADSR_ATTACK_FRAMES,DECAY=`ADSR_DECAY_FRAMES,
-    SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES,PRECALC=0)(
+    SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES,PRECALC=0,EXTERNAL_PRECALC=0,
+    PREP_MAX_AD=ATTACK>DECAY?ATTACK:DECAY,PREP_MAX_N=PREP_MAX_AD>RELEASE?PREP_MAX_AD:RELEASE,
+    PREP_CW=PREP_MAX_N>0?$clog2(PREP_MAX_N+1):1)(
     input wire clk,rst,sample_ce,note_on,note_off,
     output reg [16:0] level,output wire active,input wire restart,
-    input wire seed_valid,input wire [16:0] seed_level);
+    input wire seed_valid,input wire [16:0] seed_level,
+    input wire [16:0] prepared_attack_q,prepared_release_q,
+    input wire [PREP_CW-1:0] prepared_attack_r,prepared_release_r,
+    output wire [16:0] prepare_seed,prepare_release);
     localparam integer MAX_AD=ATTACK>DECAY?ATTACK:DECAY;
     localparam integer MAX_N=MAX_AD>RELEASE?MAX_AD:RELEASE;
     localparam integer CW=MAX_N>0?$clog2(MAX_N+1):1;
@@ -37,7 +42,12 @@ module adsr_envelope #(
     wire [16:0] seed=seed_valid===1'b1 ? seed_level : level;
     wire [16:0] attack_q,release_q;
     wire [CW-1:0] attack_r,release_r;
-    generate if(PRECALC!=0)begin: preparation
+    assign prepare_seed=seed;assign prepare_release=level;
+    generate if(EXTERNAL_PRECALC!=0)begin: shared_preparation
+        assign attack_q=restart ? (65536/A_DEN) : prepared_attack_q;
+        assign attack_r=restart ? (65536%A_DEN) : prepared_attack_r;
+        assign release_q=prepared_release_q;assign release_r=prepared_release_r;
+    end else if(PRECALC!=0)begin: preparation
         reg [16:0] an,rn,ad,rd,aq,rq;
         reg [CW-1:0] arem,rrem;
         wire [AH-1:0] ahigh=an>>ASH;

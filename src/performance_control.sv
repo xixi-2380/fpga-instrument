@@ -30,6 +30,12 @@ module performance_control #(parameter integer GATE_FRAMES=1680,STALE_CYCLES=(`A
  reg selected_sound;reg [9:0] slider_position;
  reg [2:0] wet_step;reg [11:0] hits;reg [11:0] glowing;
  integer pick,xx;
+ // The unclamped slider interval bounds each distance to 0..255.
+ // 400 modulo256 is144; unsigned8 subtraction preserves those distances.
+ wire [7:0] bend_up_distance=x[7:0]-8'd144;
+ wire [7:0] bend_down_distance=8'd144-x[7:0];
+ wire [20:0] bend_up_product=bend_up_distance*13'd8026;
+ wire [20:0] bend_down_product=bend_down_distance*13'd7150;
  wire good=snapshot_valid && ready && !error && resolution_x==800 && resolution_y==480 && stale<STALE_CYCLES;
  wire point=count==1 && x<800 && y<480;
  wire playable=active && good && !menu_mode && !blocked && input_ready;
@@ -101,8 +107,8 @@ module performance_control #(parameter integer GATE_FRAMES=1680,STALE_CYCLES=(`A
        slider_position<=x<=144?10'd0:x>=656?10'd512:10'(x-16'd144);
        if(x<=144)target_ratio<=58386;
        else if(x>=656)target_ratio<=73562;
-       else if(x>=400)target_ratio<=18'd65536+18'(((x-16'd400)*32'd8026)>>8);
-       else target_ratio<=18'd65536-18'(((16'd400-x)*32'd7150)>>8);
+       else if(x>=400)target_ratio<=18'd65536+{5'd0,bend_up_product[20:8]};
+       else target_ratio<=18'd65536-{5'd0,bend_down_product[20:8]};
       end
       contact<=on_strings || slider || sliding;
       if(contact && x!=previous_x)reverse<=x<previous_x;

@@ -2,7 +2,7 @@
 `include "config/synth_config.svh"
 // Generic note-event synthesis; physical keyboard logic stays in its adapter.
 module synth_core #(
-    parameter integer PERFORMANCE_ENABLE=0,STEREO_ENABLE=0,SUSTAIN_ENABLE=0,VISUAL_KEYS=16,LIMITER_HOLD_SAMPLES=240,OUTPUT_ENABLE=1,OUTPUT_GAIN=24,LIMITER_LOG2=6,
+    parameter integer SHARED_ENVELOPE_PRECALC=0,PERFORMANCE_ENABLE=0,STEREO_ENABLE=0,SUSTAIN_ENABLE=0,VISUAL_KEYS=16,LIMITER_HOLD_SAMPLES=240,OUTPUT_ENABLE=1,OUTPUT_GAIN=24,LIMITER_LOG2=6,
     VOICES=`VOICE_COUNT,MUTE=`MUTE_FRAMES,FADE=`FADE_FRAMES,
     ATTACK=`ADSR_ATTACK_FRAMES,DECAY=`ADSR_DECAY_FRAMES,
     SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES,
@@ -191,6 +191,18 @@ module synth_core #(
     always @(posedge clk or posedge engine_reset)
         if(engine_reset)begin release_curve<=sustain_curve(17'd7200);release_strength<=64;end
         else if(effect_cfg_valid)begin release_curve<=sustain_curve(effect_echo_samples);release_strength<=effect_echo_wet>256?9'd256:effect_echo_wet;end
+    localparam integer ENV_MAX_AD=ATTACK>DECAY?ATTACK:DECAY;
+    localparam integer ENV_MAX_N=ENV_MAX_AD>RELEASE?ENV_MAX_AD:RELEASE;
+    localparam integer ENV_CW=ENV_MAX_N>0?$clog2(ENV_MAX_N+1):1;
+    wire [17*VOICES-1:0] prepare_seeds,prepare_releases,prepared_attack_q,prepared_release_q;
+    wire [ENV_CW*VOICES-1:0] prepared_attack_r,prepared_release_r;
+    if(SHARED_ENVELOPE_PRECALC!=0)begin: shared_envelope_preparation
+        envelope_precalc_bank #(.VOICES(VOICES),.ATTACK(ATTACK),.DECAY(DECAY),.RELEASE(RELEASE)) prepare(
+            .clk(clk),.rst(engine_reset),.sample_ce(frame_ce),.seeds(prepare_seeds),.levels(prepare_releases),
+            .attack_q(prepared_attack_q),.attack_r(prepared_attack_r),.release_q(prepared_release_q),.release_r(prepared_release_r));
+    end else begin: individual_envelope_preparation
+        assign prepared_attack_q=0;assign prepared_attack_r=0;assign prepared_release_q=0;assign prepared_release_r=0;
+    end
     for(genvar v=0;v<VOICES;v=v+1)begin: voices
         // Same predictor and reset as the main boundary FF: no added cycle.
         // Preserve local copies so each envelope has a nearby, bounded CE net.
@@ -209,7 +221,7 @@ module synth_core #(
         assign envelope_enables[v]=`BCK_HALF_CYCLES==1 ? (!rst && envelope_ce) : envelope_ce;
         wire [16:0] native_level;wire native_active;
         if(SUSTAIN_ENABLE)begin: sustain_on
-            sustain_envelope tail(.clk(clk),.rst(envelope_reset),.sample_ce(envelope_enables[v]),
+            sustain_envelope #(.PRECALC(1)) tail(.clk(clk),.rst(envelope_reset),.sample_ce(envelope_enables[v]),
                 .note_on(voice_start[v]),.note_off(voice_stop[v]),.enabled(effect_mask[0]===1'b1 && voice_timbres[v*5+:5]<16),
                 .base_level(native_level),.base_active(native_active),.duration(release_curve[50:34]),
                 .phase_step(release_curve[33:17]),.phase_remainder(release_curve[16:0]),.strength(release_strength),
@@ -217,9 +229,12 @@ module synth_core #(
         end else begin: sustain_off
             assign voice_level[v]=native_level;assign voice_active[v]=native_active;
         end
-        instrument_envelope #(.ATTACK(ATTACK),.DECAY(DECAY),.SUSTAIN(SUSTAIN),.RELEASE(RELEASE),.PRECALC(1)) envelope(
+        instrument_envelope #(.ATTACK(ATTACK),.DECAY(DECAY),.SUSTAIN(SUSTAIN),.RELEASE(RELEASE),.PRECALC(1),.EXTERNAL_PRECALC(SHARED_ENVELOPE_PRECALC)) envelope(
             .clk(clk),.rst(envelope_reset),.sample_ce(envelope_enables[v]),.note_on(voice_start[v]),.note_off(voice_stop[v]),
-            .level(native_level),.active(native_active),.restart(voice_restart[v]),.timbre(voice_timbres[v*5+:5]));
+            .level(native_level),.active(native_active),.restart(voice_restart[v]),.timbre(voice_timbres[v*5+:5]),
+            .prepared_attack_q(prepared_attack_q[v*17+:17]),.prepared_attack_r(prepared_attack_r[v*ENV_CW+:ENV_CW]),
+            .prepared_release_q(prepared_release_q[v*17+:17]),.prepared_release_r(prepared_release_r[v*ENV_CW+:ENV_CW]),
+            .prepare_seed(prepare_seeds[v*17+:17]),.prepare_release(prepare_releases[v*17+:17]));
     end
     dds_sine #(.VOICES(VOICES)) dds(.clk(clk),.rst(engine_reset),.sample_ce(dds_ce),
         .fcw(slot_fcw),.sample(raw_sample),.valid(raw_valid),

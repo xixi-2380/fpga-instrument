@@ -27,7 +27,7 @@ module tb_score_articulation;
   clk,rst,subcycle>=32,ce,valid,on,id,fcw,active,ready,start,stop,restart,held,
   frequencies,identities,timbre,timbres);
  for(genvar v=0;v<V;v=v+1)begin: envelopes
-  adsr_envelope envelope(clk,rst,ce,start[v],stop[v],level[v],active[v],restart[v],1'b0,17'd0);
+  adsr_envelope envelope(.clk(clk),.rst(rst),.sample_ce(ce),.note_on(start[v]),.note_off(stop[v]),.level(level[v]),.active(active[v]),.restart(restart[v]),.seed_valid(1'b0),.seed_level(17'd0));
  end
  dds_sine #(.VOICES(V)) dds(clk,rst,dds_ce,frame_fcw[slot*32+:32],raw,raw_valid,
   phases,frame_restart[slot],slot,2'b0);

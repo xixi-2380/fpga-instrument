@@ -4,9 +4,14 @@
 // and bounded linear release, never variable division or generated clocks.
 module instrument_envelope #(
  parameter integer ATTACK=`ADSR_ATTACK_FRAMES,DECAY=`ADSR_DECAY_FRAMES,
- SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES,PRECALC=0)(
+ SUSTAIN=`ADSR_SUSTAIN_LEVEL,RELEASE=`ADSR_RELEASE_FRAMES,PRECALC=0,EXTERNAL_PRECALC=0,
+    PREP_MAX_AD=ATTACK>DECAY?ATTACK:DECAY,PREP_MAX_N=PREP_MAX_AD>RELEASE?PREP_MAX_AD:RELEASE,
+    PREP_CW=PREP_MAX_N>0?$clog2(PREP_MAX_N+1):1)(
  input wire clk,rst,sample_ce,note_on,note_off,restart,input wire [4:0] timbre,
- output wire [16:0] level,output wire active);
+ output wire [16:0] level,output wire active,
+ input wire [16:0] prepared_attack_q,prepared_release_q,
+ input wire [PREP_CW-1:0] prepared_attack_r,prepared_release_r,
+ output wire [16:0] prepare_seed,prepare_release);
  wire [16:0] legacy_level;wire legacy_active;
  reg [4:0] profile;reg [16:0] drum_age;
  function automatic [16:0] drum_frames(input [4:0] t);begin case(t)
@@ -20,10 +25,13 @@ module instrument_envelope #(
  wire [16:0] release_amount=profile==5 ? (musical_level>>9)+17'd1 : profile==4 ? (musical_level>>10)+17'd1 : (musical_level>>11)+17'd1;
  assign level=profile==0 ? legacy_level : musical_level;
  assign active=profile==0 ? legacy_active : state!=0;
- adsr_envelope #(.ATTACK(ATTACK),.DECAY(DECAY),.SUSTAIN(SUSTAIN),.RELEASE(RELEASE),.PRECALC(PRECALC)) legacy(
+ adsr_envelope #(.ATTACK(ATTACK),.DECAY(DECAY),.SUSTAIN(SUSTAIN),.RELEASE(RELEASE),.PRECALC(PRECALC),.EXTERNAL_PRECALC(EXTERNAL_PRECALC)) legacy(
   .clk(clk),.rst(rst),.sample_ce(sample_ce),.note_on(note_on && !new_profile),
   .note_off(note_off && profile==0),.restart(restart && !new_profile),
-  .level(legacy_level),.active(legacy_active),.seed_valid(profile!=0),.seed_level(musical_level));
+  .level(legacy_level),.active(legacy_active),.seed_valid(profile!=0),.seed_level(musical_level),
+  .prepared_attack_q(prepared_attack_q),.prepared_attack_r(prepared_attack_r),
+  .prepared_release_q(prepared_release_q),.prepared_release_r(prepared_release_r),
+  .prepare_seed(prepare_seed),.prepare_release(prepare_release));
  always @(posedge clk or posedge rst)begin
   if(rst)begin profile<=0;drum_age<=0;state<=0;musical_level<=0;release_step<=1;end
   else if(sample_ce)begin

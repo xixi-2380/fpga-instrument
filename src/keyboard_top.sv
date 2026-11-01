@@ -144,6 +144,7 @@ module keyboard_top #(
     wire [7:0] touch_track_id;wire [31:0] touch_product_id;
     wire [38:0] touch_status={touch_ready,touch_error,touch_down,touch_count,touch_x,touch_y};
     wire [72:0] touch_audio;wire touch_health;
+    wire touch_audio_valid,touch_update;
     reg touch_epoch,seen_epoch,seen_health;
     always @(posedge clk or posedge pll1_reset)
         if(pll1_reset)touch_epoch<=0;else if(touch_report)touch_epoch<=!touch_epoch;
@@ -157,7 +158,6 @@ module keyboard_top #(
     wire [31:0] harp_fcw,manual_fcw;wire [4:0] harp_timbre,manual_timbre;
     wire [17:0] manual_pitch_ratio;wire [63:0] performance_status;
     wire chorus_enabled;wire [8:0] chorus_wet;wire [1:0] chorus_depth,chorus_rate;
-    wire touch_audio_valid,touch_update;
     wire bt_inhibit,bt_valid,bt_ready,bt_flush,bt_output_flush,bt_note_on;
     wire [6:0] bt_note_id,bt_velocity,bt_pitch;
     wire [4:0] bt_timbre;
@@ -435,7 +435,7 @@ module keyboard_top #(
         .note_ready(key_ready && !take_bt && !local_score_busy),
         .note_valid(key_valid),.note_on(key_on),.note_id(key_id),.note_fcw(key_fcw),
         .gate(key_gate),.last_key(last_key),.selected_timbre(selected_timbre),.note_timbre(key_timbre));
-    synth_core #(.PERFORMANCE_ENABLE(1),.SUSTAIN_ENABLE(1),.STEREO_ENABLE(STEREO_ENABLE),.VISUAL_KEYS(36),.OUTPUT_ENABLE(OUTPUT_ENABLE),.OUTPUT_GAIN(OUTPUT_GAIN),.LIMITER_LOG2(LIMITER_LOG2),.LIMITER_HOLD_SAMPLES(LIMITER_HOLD_SAMPLES),
+    synth_core #(.SHARED_ENVELOPE_PRECALC(1),.PERFORMANCE_ENABLE(1),.SUSTAIN_ENABLE(1),.STEREO_ENABLE(STEREO_ENABLE),.VISUAL_KEYS(36),.OUTPUT_ENABLE(OUTPUT_ENABLE),.OUTPUT_GAIN(OUTPUT_GAIN),.LIMITER_LOG2(LIMITER_LOG2),.LIMITER_HOLD_SAMPLES(LIMITER_HOLD_SAMPLES),
         .MUTE(MUTE),.FADE(FADE),.ATTACK(ATTACK),.DECAY(DECAY),
         .SUSTAIN(SUSTAIN),.RELEASE(RELEASE)) sound(
         .clk(audio_clk),.rst(audio_reset),.note_valid(note_valid),.note_on(note_on),

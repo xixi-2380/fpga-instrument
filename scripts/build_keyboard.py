@@ -87,7 +87,7 @@ if lcd_enabled:
 with base.with_suffix('.fs').open(encoding='ascii',errors='replace') as f:header=f.read(3000)
 assert '//SecurityBit: OFF' in header
 assert usage.get('BSRAM',{}).get('used',0)>0 and usage.get('DSP',{}).get('used',0)>0
-if a.stage=='build':print('OFFLINE_BUILD_PASS',counts,usage);raise SystemExit(0)
+if a.stage in ['build','pnr']:print('OFFLINE_BUILD_PASS',counts,usage);raise SystemExit(0)
 def copy(src,dst):
     if dst.exists():dst.chmod(stat.S_IWRITE|stat.S_IREAD)
     shutil.copyfile(src,dst)

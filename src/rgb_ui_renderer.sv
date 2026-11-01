@@ -11,7 +11,8 @@ module rgb_ui_renderer #(parameter integer FRAME_LOCKED_INPUTS=0)(
   WINE=24'h67333e,GREEN=24'h8bc79b,RED=24'hef8f85;
  wire [16:0] harp_neck_y=y*6'd48;wire [16:0] harp_neck_x=x*3'd7;
  reg [1207:0] state_q;reg [63:0] performance_state_q;
- wire [1207:0] state=FRAME_LOCKED_INPUTS!=0 ? (status_valid ? status_data : 1208'd0) : state_q;
+ // Frame-locked callers suppress de_in until status_valid; payload may be uninitialized.
+ wire [1207:0] state=FRAME_LOCKED_INPUTS!=0 ? status_data : state_q;
  wire [63:0] performance_state=FRAME_LOCKED_INPUTS!=0 ? performance_data : performance_state_q;
  wire performance_page=performance_state[0]===1'b1 && !state[20];
  wire [2:0] effect_bits=state[1169:1167];

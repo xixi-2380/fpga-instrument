@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 // Per-physical-voice release. No delayed PCM or shared note identity.
 // phase_step/remainder describe exactly 2^24 / duration sample clocks.
-module sustain_envelope(
+module sustain_envelope #(parameter integer PRECALC=0)(
  input wire clk,rst,sample_ce,note_on,note_off,enabled,
  input wire [16:0] base_level,input wire base_active,
  input wire [16:0] duration,phase_step,phase_remainder,
@@ -10,7 +10,27 @@ module sustain_envelope(
  reg owned,running;reg [8:0] held_age;reg [16:0] remaining,total,step_size,remainder,error;
  reg [24:0] phase;reg [16:0] peak,current;
  wire [17:0] error_sum={1'b0,error}+{1'b0,remainder};
- wire carry=error_sum>={1'b0,total};
+ wire carry_direct=error_sum>={1'b0,total};
+ wire carry;
+ generate if(PRECALC!=0)begin: carry_preparation
+  reg prepared_carry;
+  // State changes only at sample_ce; the following idle clock prepares carry.
+  // This separates remainder comparison from phase subtraction/multiply.
+  always @(posedge clk or posedge rst)
+   if(rst)prepared_carry<=0;else prepared_carry<=carry_direct;
+  assign carry=prepared_carry;
+  // synthesis translate_off
+  reg previous_ce;
+  always @(posedge clk or posedge rst)
+   if(rst)previous_ce<=0;
+   else begin
+    if(previous_ce && sample_ce)$fatal(1,"Prepared sustain carry needs a clock between sample updates");
+    previous_ce<=sample_ce;
+   end
+  // synthesis translate_on
+ end else begin: direct_carry
+  assign carry=carry_direct;
+ end endgenerate
  wire [17:0] phase_delta={1'b0,step_size}+carry;
  wire [33:0] product=peak*phase[24:8];
  wire [16:0] target=enabled ? product[32:16] : 17'd0;

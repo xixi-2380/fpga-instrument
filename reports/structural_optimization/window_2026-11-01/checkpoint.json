@@ -1,0 +1,272 @@
+{
+  "base_commit": "57b3db2ff3854b4aef6e3b2acb2fdd1e0233aefd",
+  "branch": "codex/performance-fx-enhancement",
+  "start_utc": "2026-11-01T02:11:11Z",
+  "deadline_utc": "2026-11-01T03:26:11Z",
+  "status": "combined_synthesis_running",
+  "complete": false,
+  "hardware_programmed": false,
+  "qualified_bitstream": false,
+  "clock_constraints_unchanged": true,
+  "dynamic_groups": {
+    "bend_display": {
+      "checks": 5967633,
+      "tests": [
+        {
+          "name": "bend_exhaustive",
+          "checks": 65536,
+          "passed": true
+        },
+        {
+          "name": "bend_equivalence",
+          "checks": 315550,
+          "passed": true
+        },
+        {
+          "name": "performance_legacy",
+          "checks": 166,
+          "passed": true
+        },
+        {
+          "name": "invalid_payload_mask",
+          "checks": 48,
+          "passed": true
+        },
+        {
+          "name": "display_legacy",
+          "checks": 2793166,
+          "passed": true
+        },
+        {
+          "name": "display_locked",
+          "checks": 2793167,
+          "passed": true
+        },
+        {
+          "name": "actual_top_vendor_compile",
+          "checks": 0,
+          "passed": true
+        }
+      ]
+    },
+    "shared_precalc": {
+      "checks": 26754745,
+      "tests": [
+        {
+          "name": "bank_arithmetic",
+          "checks": 131072,
+          "passed": true
+        },
+        {
+          "name": "default",
+          "checks": 6469696,
+          "passed": true
+        },
+        {
+          "name": "small",
+          "checks": 6469696,
+          "passed": true
+        },
+        {
+          "name": "single",
+          "checks": 18336,
+          "passed": true
+        },
+        {
+          "name": "production_interval",
+          "checks": 8643488,
+          "passed": true
+        },
+        {
+          "name": "core_output0",
+          "checks": 382744,
+          "passed": true
+        },
+        {
+          "name": "core_output1",
+          "checks": 382744,
+          "passed": true
+        },
+        {
+          "name": "tb_adsr_envelope",
+          "checks": 69,
+          "passed": true
+        },
+        {
+          "name": "tb_adsr_production",
+          "checks": 14881,
+          "passed": true
+        },
+        {
+          "name": "tb_instrument_envelopes",
+          "checks": 7932,
+          "passed": true
+        },
+        {
+          "name": "tb_score_articulation",
+          "checks": 4234087,
+          "passed": true
+        },
+        {
+          "name": "actual_top_vendor_compile",
+          "checks": 0,
+          "passed": true
+        }
+      ]
+    },
+    "final_core": {
+      "checks": 765488,
+      "tests": [
+        {
+          "name": "core_output0",
+          "checks": 382744,
+          "passed": true
+        },
+        {
+          "name": "core_output1",
+          "checks": 382744,
+          "passed": true
+        }
+      ]
+    },
+    "sustain_carry": {
+      "checks": 442018,
+      "tests": [
+        {
+          "name": "sustain_carry",
+          "checks": 442018,
+          "passed": true
+        }
+      ]
+    },
+    "length_alignment": {
+      "checks": 134785,
+      "tests": [
+        {
+          "name": "tb_score_length_alignment",
+          "checks": 131072,
+          "passed": true
+        },
+        {
+          "name": "tb_bluetooth_score_core",
+          "checks": 3569,
+          "passed": true
+        },
+        {
+          "name": "tb_midi_protocol",
+          "checks": 144,
+          "passed": true
+        }
+      ]
+    },
+    "performance_top_final": {
+      "passed": true,
+      "checks": 65,
+      "behavioral_pll": true
+    }
+  },
+  "source_sha256": {
+    "src/adsr_envelope.sv": "a3822b56ada03da3140e69096937e26b7907effe0569fbcfdf7bc807709c6dda",
+    "src/bluetooth_score_core.sv": "534e044d66598063381554d10ee01c0ec4904fbd60e0d37b31417c786a4e0173",
+    "src/instrument_envelope.sv": "28fe0cc06c9fb31db8c800b6cf30bac71e771962d92c8e323705f31a621c2df5",
+    "src/keyboard_top.sv": "b12b47fe7a1150dffd33be7dbe5929fbb6593cdee8dedb38384ea775c36b686c",
+    "src/performance_control.sv": "9014963035a78f499c7c866fb30b8d7367f8b14ca75bb2488cc42825fe325f63",
+    "src/rgb_ui_renderer.sv": "e0685a4fa5a3a3e252c4e35d31ef283bdb4c7fbdc615379314cea22e1fd3c1be",
+    "src/sustain_envelope.sv": "10567492276dccc45fbd844c949108251c8d4779ee540406439b9d9fb765ab29",
+    "src/synth_core.sv": "2a446500ff9fa95b1e882c3bb568f1a8250dec5ad4be58dd64a3deb57db7f5bf",
+    "scripts/build_keyboard.py": "a50beeabb01daa5349f1cadf05bc9eb4b16f2e949f2c2d214af303890a65601b",
+    "sim/tb_adsr_envelope.sv": "3eeb8f42397af7f898e1a1cab14cbc7cff78e92ca74e0e3e3c15541099e89965",
+    "sim/tb_adsr_production.sv": "4c9aa2bf6b847a0b30913a8ce5cd38ef9b3c3b3c8cda9e07ecb85ebe4e47fc52",
+    "sim/tb_instrument_envelopes.sv": "1a75806cc2299d298bc2d07c15f45c29f6e05621965c36cdd2351af8071b44ad",
+    "sim/tb_score_articulation.sv": "715ef396e677dacbdb3a772fe10e541b96fd2865abcc2622184f58bbb872ffa5",
+    "keyboard_adsr.gprj": "f2c6c9bcf43da1830737f2d824f06e6dec663b85c7e9d75753c1a1b0fa5c2639",
+    "src/envelope_precalc_bank.sv": "2a667927d44f149e813817aaa9ead6cf568a59265580ce209bc5293373d8e83f",
+    "scripts/run_bend_display_tests.py": "dec09312b020fb9db76ae36e1fe10b41e2211577525f69ae212fc2b7101a2a3b",
+    "scripts/run_envelope_precalc_tests.py": "08f8801b304997817076577c96ea366e958aa68821b5d3cc1fc95f7e6f7cb6ea",
+    "scripts/run_score_alignment_tests.py": "46761c8061fab3b7e0f007314cdfd474e231eee2de8871e850af66c538cefb21",
+    "sim/reference_adsr_envelope_57b3db2.sv": "f087698cb892b08be7e03b26dce12633ae4d679f1656078968e7bc8549b1e52b",
+    "sim/reference_instrument_envelope_57b3db2.sv": "b4b2a15f81d132394f61552367d164118abfe1d0e8823adaba1d116030b49e7f",
+    "sim/reference_performance_control_57b3db2.sv": "7e0cd22911caba0ff84c38ae003f7e27e13cfa0ab1b566eb97413b1e67a9a61d",
+    "sim/reference_sustain_envelope_57b3db2.sv": "83f67d4235eb7949a0d926752e2e609fa368e4d9b334c16fa943d4a7372551a3",
+    "sim/reference_synth_core_57b3db2.sv": "285a041129e78a3e16cc0639b481298f4c4cd4cfea3110ca2c484936ace1cd57",
+    "sim/structural/tb_bend_width_equivalence.sv": "7c54900fff40f59b4ac800165b0c3435c3930b936a4e985b03bd1cde91de1697",
+    "sim/structural/tb_bend_width_exhaustive.sv": "c3610d1beef94daf18e5fd17c188690e92521e2aaf4da6acee76c7c6b1d735c9",
+    "sim/structural/tb_precalc_bank_arithmetic.sv": "71217249da7867edc5900f6d4d517acc7d4a129c2c9e2d65ba6f405cd74e39cf",
+    "sim/structural/tb_rgb_display_frame_mask.sv": "501235bc222df34f59503ab56163fe25d8b017a5237407dcfabede6a3bfec34d",
+    "sim/structural/tb_score_length_alignment.sv": "b8e1302a1abe1c2972818d24d11be7f3ff8c3236912f9971b950dae1226e9198",
+    "sim/structural/tb_shared_envelope_precalc.sv": "5c8c4af75de947c2897d88486a35fb31ed23bfd4af2845ffa54928a15d30bcd9",
+    "sim/structural/tb_sustain_carry_equivalence.sv": "3ee1e6254f62c5584f234d467ed0eeec61eec63648174147ea79f9afc6462fd2",
+    "sim/structural/tb_synth_precalc_compare.sv": "7a2582b79750ba4da9fbac68ab9cc3ae0176e6081b2e90f259f45d3d4da4e7a7"
+  },
+  "synthesis": {
+    "candidate_syn": {
+      "resources": {
+        "LUT": 78968,
+        "Register": 49394,
+        "ALU": 11063
+      },
+      "clocks": [
+        {
+          "name": "clk",
+          "constraint": "50.000(MHz)",
+          "actual": "50.254(MHz)",
+          "logic_levels": "24"
+        },
+        {
+          "name": "lcd_on.display_driver/pixel_pll/CLKOUT0.default_gen_clk",
+          "constraint": "35.000(MHz)",
+          "actual": "43.764(MHz)",
+          "logic_levels": "28"
+        },
+        {
+          "name": "clocks/pll2/CLKOUT0.default_gen_clk",
+          "constraint": "61.440(MHz)",
+          "actual": "59.573(MHz)",
+          "logic_levels": "22"
+        }
+      ],
+      "netlist_sha256": "4fa9777e22e722b47e2734d6271e30cfba5c3890ab3a905647c50721ec9b451c",
+      "input_count": 109,
+      "archived_utc": "2026-11-01T02:30:29.038620+00:00",
+      "synthesis_passed": true,
+      "pnr_passed": false
+    },
+    "shared_syn": {
+      "resources": {
+        "LUT": 75288,
+        "Register": 49040,
+        "ALU": 10662
+      },
+      "clocks": [
+        {
+          "name": "clk",
+          "constraint": "50.000(MHz)",
+          "actual": "45.902(MHz)",
+          "logic_levels": "26"
+        },
+        {
+          "name": "lcd_on.display_driver/pixel_pll/CLKOUT0.default_gen_clk",
+          "constraint": "35.000(MHz)",
+          "actual": "43.783(MHz)",
+          "logic_levels": "28"
+        },
+        {
+          "name": "clocks/pll2/CLKOUT0.default_gen_clk",
+          "constraint": "61.440(MHz)",
+          "actual": "59.573(MHz)",
+          "logic_levels": "22"
+        }
+      ],
+      "netlist_sha256": "89acda0857c6bc2a1171ef00d539d2408b81d27ac5d913eae470197911471d6d",
+      "input_count": 110,
+      "archived_utc": "2026-11-01T02:33:00.499787+00:00",
+      "synthesis_passed": true,
+      "pnr_passed": false
+    }
+  },
+  "build_stage_check": {
+    "python_ast": true,
+    "pnr_does_not_package": true,
+    "explicit_package_still_requires_simulation_logs": true
+  }
+}

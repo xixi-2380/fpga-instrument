@@ -117,6 +117,7 @@
         <File path="src/rom/accordion4096.hex" type="file.other" enable="1" />
         <File path="src/rom/accordion_high1024.hex" type="file.other" enable="1" />
         <File path="src/config/score_record.svh" type="file.other" enable="1" />
+        <File path="src/envelope_precalc_bank.sv" type="file.verilog" enable="1" />
     </FileList>
 </Project>
 

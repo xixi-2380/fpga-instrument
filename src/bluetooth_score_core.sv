@@ -45,6 +45,22 @@ module bluetooth_score_core #(
  reg [8:0] byte_cursor;reg [3:0] field_index;reg duplicate_mismatch,write_phase;
  reg [63:0] small_payload;
  reg [7:0] cmd;reg [15:0] seq,len;reg [7:0] ver;
+ // DATA records are exactly8 or12 bytes. Avoid a general variable divider.
+ // For12-byte records length=4*n+2 and n is a multiple of3. Base4 digits
+ // have weight1 modulo3, so seven two-bit digits reduce to a five-bit sum.
+ function automatic data_length_aligned(input [15:0] length_value,input extended_format);
+  reg [2:0] a,b,c;reg [3:0] ab,cd;reg [4:0] digit_sum;
+  begin
+   a={1'b0,length_value[15:14]}+{1'b0,length_value[13:12]};
+   b={1'b0,length_value[11:10]}+{1'b0,length_value[9:8]};
+   c={1'b0,length_value[7:6]}+{1'b0,length_value[5:4]};
+   ab={1'b0,a}+{1'b0,b};cd={1'b0,c}+{2'd0,length_value[3:2]};
+   digit_sum={1'b0,ab}+{1'b0,cd};
+   data_length_aligned=extended_format ?
+    (length_value[1:0]==2'b10 && (digit_sum==0 || digit_sum==3 || digit_sum==6 || digit_sum==9 ||
+     digit_sum==12 || digit_sum==15 || digit_sum==18 || digit_sum==21)) : length_value[2:0]==3'd2;
+  end
+ endfunction
  assign incoming_count=extended?(len-2)/12:(len-2)/8;
  reg session,cache_valid,consume_seq;reg [16:0] expected_seq;
  reg [7:0] cached_cmd;reg [15:0] cached_seq,cached_len;
@@ -173,7 +189,7 @@ module bluetooth_score_core #(
      else if({1'b0,seq}!=expected_seq || (cache_valid&&seq==cached_seq))respond(8'h0b);
      else begin consume_seq<=1;state<=EXECUTE;end
     EXECUTE:if(cmd!=8'h14&&cmd!=8'h46&&cmd!=8'h10&&cmd!=8'h11&&cmd!=8'h12&&cmd!=8'h13&&cmd!=8'h20&&cmd!=8'h21&&cmd!=8'h22&&cmd!=8'h23&&cmd!=8'h30&&!(LIBRARY_EXTENSION!=0&&cmd>=8'h40&&cmd<=8'h45))respond(1);
-     else if((cmd==8'h10&&len!=6)||(cmd==8'h14&&len!=7)||(cmd==8'h11&&(len<record_bytes+2||len>254||(len-2)%record_bytes!=0))||(cmd!=8'h14&&cmd!=8'h10&&cmd!=8'h11&&len!=0&&!(cmd>=8'h40&&cmd<=8'h45)))respond(3);
+     else if((cmd==8'h10&&len!=6)||(cmd==8'h14&&len!=7)||(cmd==8'h11&&(len<record_bytes+2||len>254||!data_length_aligned(len,extended)))||(cmd!=8'h14&&cmd!=8'h10&&cmd!=8'h11&&len!=0&&!(cmd>=8'h40&&cmd<=8'h45)))respond(3);
      else if(!session)respond(5);
      else if(storage_lock===1'b1 && ((cmd==8'h10 || cmd==8'h14) || (cmd>=8'h20 && cmd<=8'h23)))respond(5);
      else if(upload_active&&(cmd==8'h10||cmd==8'h14||cmd==8'h20||cmd==8'h21||cmd==8'h22))respond(5);
