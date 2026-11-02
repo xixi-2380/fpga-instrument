@@ -1,10 +1,10 @@
 `timescale 1ns/1ps
 // RCWL-9610A trigger/echo acquisition. No generated clock or combinational
-// divider: a 1us CE measures echo and a bounded subtract FSM converts to mm.
+// divider: a 1us CE measures echo and a bounded subtract FSM converts to cm.
 module ultrasonic_range #(
  parameter integer CLOCK_HZ=50000000,PERIOD_US=60000,TRIG_US=12,TIMEOUT_US=30000
 )(input wire clk,rst,enabled,echo,
- output reg trig,report,valid,output reg [12:0] distance_mm);
+ output reg trig,report,valid,output reg [12:0] distance_cm);
  localparam integer US_DIV=CLOCK_HZ/1000000,UW=US_DIV>1?$clog2(US_DIV):1;
  localparam integer PW=$clog2(PERIOD_US+1),TW=$clog2(TIMEOUT_US+1);
  localparam [2:0] IDLE=0,TRIGGER=1,WAIT_ECHO=2,HIGH_ECHO=3,CONVERT=4;
@@ -14,7 +14,7 @@ module ultrasonic_range #(
  reg [PW-1:0] period;
  reg [TW-1:0] elapsed;
  reg [2:0] state;
- reg [17:0] numerator;
+ reg [14:0] numerator;
  reg [12:0] quotient;
  always @(posedge clk or posedge rst)
   if(rst)begin echo_meta<=0;echo_sync<=0;end
@@ -22,7 +22,7 @@ module ultrasonic_range #(
  always @(posedge clk or posedge rst)begin
   if(rst)begin
    us_div<=0;period<=PERIOD_US;elapsed<=0;state<=IDLE;trig<=0;
-   report<=0;valid<=0;distance_mm<=0;numerator<=0;quotient<=0;
+   report<=0;valid<=0;distance_cm<=0;numerator<=0;quotient<=0;
   end else begin
    report<=0;
    if(!enabled)begin
@@ -43,7 +43,10 @@ module ultrasonic_range #(
       else elapsed<=elapsed+1'b1;
      end
      WAIT_ECHO:begin
-      if(echo_sync)begin elapsed<=0;state<=HIGH_ECHO;end
+      // Include a measurement tick coincident with the first synchronized
+      // HIGH. Exclude the falling tick below: integral-us pulses then retain
+      // their full width instead of being shortened by one us at 1MHz.
+      if(echo_sync)begin elapsed<=us_ce?1:0;state<=HIGH_ECHO;end
       else if(us_ce)begin
        if(elapsed==TIMEOUT_US-1)begin report<=1;valid<=0;state<=IDLE;end
        else elapsed<=elapsed+1'b1;
@@ -51,16 +54,17 @@ module ultrasonic_range #(
      end
      HIGH_ECHO:begin
       if(!echo_sync)begin
-       // round(us * 10 / 58) = floor((us * 5 + 14) / 29).
-       numerator<=({2'b0,16'(elapsed)}<<2)+16'(elapsed)+18'd14;
+       // Nearest whole centimetre: floor((echo_us + 29) / 58).
+       // The 30ms timeout bounds this to 518 subtract cycles, without DSPs.
+       numerator<=15'(elapsed)+15'd29;
        quotient<=0;state<=CONVERT;
       end else if(us_ce)begin
        if(elapsed==TIMEOUT_US-1)begin report<=1;valid<=0;state<=IDLE;end
        else elapsed<=elapsed+1'b1;
       end
      end
-     CONVERT:if(numerator>=29)begin numerator<=numerator-18'd29;quotient<=quotient+1'b1;end
-      else begin distance_mm<=quotient;valid<=quotient>=20 && quotient<=4000;report<=1;state<=IDLE;end
+     CONVERT:if(numerator>=58)begin numerator<=numerator-15'd58;quotient<=quotient+1'b1;end
+      else begin distance_cm<=quotient;valid<=quotient>=2 && quotient<=400;report<=1;state<=IDLE;end
      default:begin trig<=0;state<=IDLE;end
     endcase
    end

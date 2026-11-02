@@ -2,9 +2,9 @@
 `include "check.svh"
 module tb_ultrasonic_range;
  reg clk=0,rst=1,enabled=0,echo=0;always #500 clk=~clk;
- wire trig,report,valid;wire [12:0] mm;
+ wire trig,report,valid;wire [12:0] cm;
  integer checks=0,cycles_count=0,last_trigger=-60000,started=0,pulse_start;
- ultrasonic_range #(.CLOCK_HZ(1000000)) dut(clk,rst,enabled,echo,trig,report,valid,mm);
+ ultrasonic_range #(.CLOCK_HZ(1000000)) dut(clk,rst,enabled,echo,trig,report,valid,cm);
  always @(posedge clk)cycles_count=cycles_count+1;
  always @(posedge trig)begin
   `CHECK(cycles_count-last_trigger>=60000,"triggers separated by at least 60ms")
@@ -12,16 +12,16 @@ module tb_ultrasonic_range;
  end
  always @(negedge trig)if(!rst && enabled && started>0)
   `CHECK(cycles_count-pulse_start==12,"12us trigger pulse")
- task measure(input integer width_us,expected_mm);begin
+ task measure(input integer width_us,expected_cm);begin
   @(posedge trig);@(negedge trig);#17000;echo=1;
   #(width_us*1000);echo=0;
   @(posedge report);#1;
-  `CHECK(valid && mm>=expected_mm-1 && mm<=expected_mm+1,"echo width converts to rounded millimetres")
+  `CHECK(valid && cm==expected_cm,"echo width converts to rounded centimetres")
  end endtask
  initial begin
   #2200;rst=0;repeat(80)@(negedge clk);`CHECK(!trig && started==0,"disabled sensor never triggers")
   enabled=1;
-  measure(290,50);measure(580,100);measure(1160,200);measure(2320,400);measure(5800,1000);
+  measure(116,2);measure(290,5);measure(580,10);measure(1160,20);measure(2320,40);measure(5800,100);measure(23200,400);
   @(posedge trig);@(negedge trig);@(posedge report);#1;`CHECK(!valid,"missing echo times out")
   @(posedge trig);@(negedge trig);#17000;echo=1;
   @(posedge report);#1;`CHECK(!valid,"stuck-high echo times out")

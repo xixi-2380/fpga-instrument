@@ -7,16 +7,31 @@ module tb_main_top;
  reg [72:0] touch=0;reg upd=0,takeover=0,clear=0;
  reg [40:0] sensor=0;reg sensor_valid=0;
  integer checks=0,ons=0,offs=0,harp_ons=0,harp_offs=0;
+ wire probe;
+ reg [35:0] probe_seen=0,probe_qualified;
+ integer ref_tick=0,probe_last=-100000,probe_events=0;
  keyboard_top #(.BT_ENABLE(0),.LCD_ENABLE(0),.TOUCH_ENABLE(1),.LOCK_N(16),.MUTE(1),.FADE(1),
   .ATTACK(2),.DECAY(2),.RELEASE(4),.KEYPAD_BOOT_CYCLES(20),.KEYPAD_POLL_CYCLES(1600),
   .KEYPAD_I2C_HALF(4),.KEYPAD_TIMEOUT_CYCLES(100),.KEYPAD_RETRY_CYCLES(32),.KEYPAD_STALE_CYCLES(80000),
   .PCB_COMMAND_TIMEOUT_CYCLES(200000),.EC11_MS_CYCLES(8),.EC11_FILTER_CYCLES(2),.EC11_DEBOUNCE_MS(2),
   .EC11_DOUBLE_MS(12),.EC11_LONG_MS(30)) dut(
    .clk(clk),.rst(rst),.bt_rx(1'b1),.ultrasonic_echo(1'b0),.keypad_scl(scl),.keypad_sda(sda),.keypad_int_n(intr),
-   .ec11_a(a),.ec11_b(b),.ec11_sw_n(sw));
+   .ec11_a(a),.ec11_b(b),.ec11_sw_n(sw),.KEY_INPUT_PROBE(probe));
  defparam dut.performance.GATE_FRAMES=16;
  touch_keyboard_fixture keyboard(rst,pressed,12'd0,present,scl,sda,intr);
  task check(input bit ok,input string why);begin checks++;if(!ok)$fatal(1,"%s",why);end endtask
+ // Observe the real I2C scan path, before the audio CDC and voice admission.
+ always @(posedge clk)begin
+  ref_tick++;
+  if(dut.ultrasonic_ref_reset)begin probe_seen=0;probe_last=-100000;end
+  else begin
+   for(integer k=0;k<36;k++)probe_qualified[k]=dut.keypad_ref_keys[(k/12)*16+k%12] && dut.keypad_ref_online[k/12] && dut.keypad_ref_valid[k/12];
+   if((probe_qualified&~probe_seen)!=0)begin probe_last=ref_tick;probe_events++;end
+   probe_seen=probe_qualified;
+  end
+  #1;
+  if(probe!==(!dut.ultrasonic_ref_reset && ref_tick-probe_last<50000))$fatal(1,"W25 differs from qualified keyboard detection/pulse duration");
+ end
  task frames(input integer n);repeat(n)begin @(posedge dut.audio_clk);while(!dut.frame_ce)@(posedge dut.audio_clk);@(negedge dut.audio_clk);end endtask
  task held_count(input integer n);integer j;begin
   j=0;while($countones(dut.voice_held)!=n && j<120)begin frames(1);j++;end
@@ -76,7 +91,8 @@ module tb_main_top;
   clear=1;frames(3);check(dut.voice_held==0 && !dut.key_events.reported_keys[0],"engine flush and adapter clear agree");
   takeover=0;clear=0;pressed=0;report(0,0,0);frames(5);pressed[0]=1;held_count(1);pressed[0]=0;held_count(0);frames(8);
   check(dut.voice_active==0 && dut.MAX_SD_MODE,"released voices terminate; audio clocks keep running");
-  $display("PASS tb_main_top checks=%0d ons=%0d offs=%0d harp_on=%0d harp_off=%0d",checks,ons,offs,harp_ons,harp_offs);$finish;
+  check(probe_events>=8,"W25 observes physical presses across all three boards and menu/admission changes");
+  $display("PASS tb_main_top checks=%0d ons=%0d offs=%0d harp_on=%0d harp_off=%0d probe_events=%0d",checks,ons,offs,harp_ons,harp_offs,probe_events);$finish;
  end
  initial begin #150000000;$fatal(1,"main top timeout");end
 endmodule

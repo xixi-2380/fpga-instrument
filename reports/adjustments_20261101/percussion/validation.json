@@ -1,0 +1,113 @@
+{
+  "all_passed": true,
+  "total_checks": 468711,
+  "tests": [
+    {
+      "name": "java_core",
+      "passed": true,
+      "checks": 36259,
+      "seconds": 8.269
+    },
+    {
+      "name": "percussion_java",
+      "passed": true,
+      "checks": 259,
+      "seconds": 1.713
+    },
+    {
+      "name": "tb_percussion_compat",
+      "passed": true,
+      "checks": 163,
+      "seconds": 11.672
+    },
+    {
+      "name": "tb_percussion_audio",
+      "passed": true,
+      "checks": 432030,
+      "seconds": 3.032
+    }
+  ],
+  "hdl_compile_commands": {
+    "tb_percussion_compat": [
+      "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+      "-g2012",
+      "-grelative-include",
+      "-I",
+      "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/src",
+      "-s",
+      "tb_percussion_compat",
+      "-o",
+      "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/reports/adjustments_20261101/percussion/tb_percussion_compat.vvp",
+      "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/src/score_validator.sv",
+      "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/src/bt_score_player.sv",
+      "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/sim/integration/tb_percussion_compat.sv"
+    ],
+    "tb_percussion_audio": [
+      "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+      "-g2012",
+      "-grelative-include",
+      "-I",
+      "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/src",
+      "-s",
+      "tb_percussion_audio",
+      "-o",
+      "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/reports/adjustments_20261101/percussion/tb_percussion_audio.vvp",
+      "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/src/dds_sine.sv",
+      "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/src/instrument_envelope.sv",
+      "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/src/adsr_envelope.sv",
+      "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/src/envelope_precalc_bank.sv",
+      "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/sim/integration/tb_percussion_audio.sv"
+    ]
+  },
+  "changed_during_run": [],
+  "unchanged_production_percussion_fpga": {
+    "src/dds_sine.sv": {
+      "current_sha256": "e0e860789c82b36f9fa098cba569ac43259aab94ea0fccd3e7fc016008fc9a57",
+      "baseline_sha256": "e0e860789c82b36f9fa098cba569ac43259aab94ea0fccd3e7fc016008fc9a57"
+    },
+    "src/instrument_envelope.sv": {
+      "current_sha256": "28fe0cc06c9fb31db8c800b6cf30bac71e771962d92c8e323705f31a621c2df5",
+      "baseline_sha256": "28fe0cc06c9fb31db8c800b6cf30bac71e771962d92c8e323705f31a621c2df5"
+    },
+    "src/config/score_record.svh": {
+      "current_sha256": "97f795e3843c46ba9a2bd41acdf6faeb62ac2897404dcc3fe3a88a22af6067a9",
+      "baseline_sha256": "97f795e3843c46ba9a2bd41acdf6faeb62ac2897404dcc3fe3a88a22af6067a9"
+    },
+    "src/config/synth_config.svh": {
+      "current_sha256": "e3d2fcb59d6b718a24f2cb56f3974ec92d521d238ba3569c3b7ad0f27c31f434",
+      "baseline_sha256": "e3d2fcb59d6b718a24f2cb56f3974ec92d521d238ba3569c3b7ad0f27c31f434"
+    },
+    "src/score_validator.sv": {
+      "current_sha256": "507f5109dd16191862aba71a9c52db53416da13b81b8d7b53e9d65235b1aad46",
+      "baseline_sha256": "507f5109dd16191862aba71a9c52db53416da13b81b8d7b53e9d65235b1aad46"
+    },
+    "src/bt_score_player.sv": {
+      "current_sha256": "93208341565f95bdb4fac0a6abca70bc522cb0a215ebe85b5523f7297c24e550",
+      "baseline_sha256": "93208341565f95bdb4fac0a6abca70bc522cb0a215ebe85b5523f7297c24e550"
+    },
+    "src/bluetooth_score_core.sv": {
+      "current_sha256": "24a5805608d2adc8e2ad4a4ce5f44cd6cd1660ef9aa532f084a0c5e98e6122e4",
+      "baseline_sha256": "24a5805608d2adc8e2ad4a4ce5f44cd6cd1660ef9aa532f084a0c5e98e6122e4"
+    },
+    "src/bluetooth_audio_bridge.sv": {
+      "current_sha256": "521efc740b89a341555920ef086ca107c57ff421ad5e2cec8934b6504f0dbf91",
+      "baseline_sha256": "521efc740b89a341555920ef086ca107c57ff421ad5e2cec8934b6504f0dbf91"
+    },
+    "src/voice_allocator.sv": {
+      "current_sha256": "7b63580db46bae31313bd9988c07f8ad4c0961c1700b28e7b3f729f2bf898bb1",
+      "baseline_sha256": "7b63580db46bae31313bd9988c07f8ad4c0961c1700b28e7b3f729f2bf898bb1"
+    },
+    "src/pll_pair.sv": {
+      "current_sha256": "29775d84d6b0deb8a8fc6e3bc80e36e0e321f84ddaa418e068622e5ade6d061e",
+      "baseline_sha256": "29775d84d6b0deb8a8fc6e3bc80e36e0e321f84ddaa418e068622e5ade6d061e"
+    }
+  },
+  "example_sha256": {
+    "android/examples/drums_gong_records.hex": "d64c3edf621c1d32c9f42248b3e7f75e8258544e1d6a545ed3e131f4a5315b6f",
+    "android/examples/drums_gong_records96.hex": "ba7140395bd1b2d37ec0fdeb150af50fa21ffe785eeabc8ae9356593de618588",
+    "android/examples/gm1_drums_china52.mid": "903a42e0ea0f5d2def72eb579dfc7018fff8e67ae43eafea609b1161f7dcd6ad",
+    "android/examples/gm1_percussion_47.mid": "03c6c99188c730cc6dfd8516d8324d75be2de40f23a3adff511c9c2d1a51f616"
+  },
+  "radio_or_hardware_tested": false,
+  "eda_started": false
+}

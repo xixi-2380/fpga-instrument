@@ -1,0 +1,54 @@
+{
+  "created_at": "2026-11-01T21:43:09.449854+08:00",
+  "passed": true,
+  "source_sha256": {
+    "src\\lissajous_plot.sv": "8fb5035e3c956c5154da790bdba16cd0a4ae820ec0da4d0b925a7476c6a8ddad",
+    "scripts\\check_xy_adjustment.py": "fbd09fa0f9cc884a0da988278c30ed4ade239a5b4eb1c844fc8c7107a514d5d8"
+  },
+  "total_checks": 7467237,
+  "results": [
+    {
+      "name": "geometry",
+      "passed": true,
+      "checks": 2971369,
+      "compile_command": [
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+        "-g2012",
+        "-s",
+        "tb_xy_geometry",
+        "-o",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/reports/adjustments_20261101/xy/geometry.vvp",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/src/lissajous_plot.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/reports/adjustments_20261101/xy/geometry.sv"
+      ],
+      "output": "PASS tb_xy_geometry checks=2971369 segments=24576 draw_pixels=960419 maximum_abs_error=93 signed_pairs=65536\nF:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/reports/adjustments_20261101/xy/geometry.sv:37: $finish called at 11406460000 (1ps)\n",
+      "test_sha256": "2bdc8298d567bfe03209f03917189479f26bfdb3d7e725f928e5f12ac475a7ea"
+    },
+    {
+      "name": "frames",
+      "passed": true,
+      "checks": 4495868,
+      "compile_command": [
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+        "-g2012",
+        "-s",
+        "tb_xy_frames",
+        "-o",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/reports/adjustments_20261101/xy/frames.vvp",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/src/lissajous_plot.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/reports/adjustments_20261101/xy/frames.sv"
+      ],
+      "output": "PASS tb_xy_frames checks=4495868 builds=70 random_frames=56 delay_snapshot_points=4\nF:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/reports/adjustments_20261101/xy/frames.sv:64: $finish called at 11239520000 (1ps)\n",
+      "test_sha256": "fb2bf2c344c9eff5076c2f8943c8d11275faed0d9dd4a71203e4334ec9a043d0"
+    }
+  ],
+  "oracle": "Independent exact integer rational major-axis positions, half away from start; waveform x=32+floor(signedbyte/4), y=31-floor(lag4/4)",
+  "fixture_sha256": {
+    "waves.hex": "6e34a40e57fc2a22d0e01e8ef64c8e94311a2e35a95931d7f30c25fe253f4ed4",
+    "maps.hex": "7b33354107d7eddca5619aac0901e785ba6f2b835a20752803a82fb92b24c673"
+  },
+  "frames": 64,
+  "seconds": 11.355,
+  "sta_passed": false,
+  "hardware_tested": false
+}

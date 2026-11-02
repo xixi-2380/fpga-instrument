@@ -1,6 +1,6 @@
 from pathlib import Path
 import os,subprocess,xml.etree.ElementTree as ET,json,hashlib,re,time
-r=Path(__file__).resolve().parents[1];o=r/'reports/integration_20261101/main_top';o.mkdir(parents=True,exist_ok=True)
+r=Path(__file__).resolve().parents[1];o=r/'reports/adjustments_20261101/main_top';o.mkdir(parents=True,exist_ok=True)
 b=Path('C:/Users/10939/Documents/Codex/2026-10-30/qin-2/work/sim-tools/mingw64/bin');env=os.environ.copy();env['PATH']=str(b)+os.pathsep+env['PATH']
 files=[r/f.get('path') for f in ET.parse(r/'keyboard_adsr.gprj').getroot().findall('./FileList/File') if f.get('type')=='file.verilog' and f.get('enable')=='1' and f.get('path')!='src/pll_pair.sv']
 files += [r/'sim'/n for n in ['pll_pair_behavioral.sv','pixel_pll_behavioral.sv','io_behavioral.sv','integration/tb_main_top.sv']]

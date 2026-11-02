@@ -66,7 +66,11 @@ module tb_controls_timbre;
   tap(UI_THEME);if(theme!=0)$fatal(1,"Theme cycle failed");tap(UI_LANGUAGE);if(!zh)$fatal(1,"Language failed");
   tap(UI_VIEW);if(view!=1)$fatal(1,"View1 failed");tap(UI_VIEW);tap(UI_VIEW);if(view!=0)$fatal(1,"View cycle failed");
   tap(UI_MODE);if(!menu)$fatal(1,"Menu failed");tap(UI_ULTRA_OPEN);tap(UI_ULTRA_TOGGLE);
-  if(!ultra_page || !ultra_enabled || umin!=5 || umax!=40)$fatal(1,"Sensor pitch settings defaults failed");
+  if(!ultra_page || !ultra_enabled || umin!=5 || umax!=40 || sens!=1)$fatal(1,"Sensor cm/deadband settings defaults failed");
+  // The same controls now directly select a 1..5cm neutral half-width.
+  // This change never owns master volume, endpoint range or effect settings.
+  repeat(8)tap(UI_SENS_UP);if(sens!=5 || umin!=5 || umax!=40 || volume!=expected_volume)$fatal(1,"Neutral band upper cm bound or unrelated settings failed");
+  repeat(8)tap(UI_SENS_DOWN);if(sens!=1 || umin!=5 || umax!=40 || volume!=expected_volume)$fatal(1,"Neutral band lower cm bound or unrelated settings failed");
   // Boundaries and published snapshots under random downstream stalls.
   for(integer n=0;n<500;n++)begin cr=$unsigned($random(seed))%3!=0;enc(1,n%2);end
   cr=1;
@@ -86,7 +90,7 @@ module tb_controls_timbre;
   enc(2,2);repeat(150)enc(2,1);if(dp!=0)$fatal(1,"Tremolo depth lower bound failed");
   repeat(150)enc(2,0);if(dp!=100)$fatal(1,"Tremolo depth upper bound failed");
   tap(UI_DEFAULTS);check_config;
-  if(volume!=100 || mask!=0 || ms!=150 || ultra_enabled || theme!=0 || !zh)$fatal(1,"Defaults changed retained UI state or control defaults");
+  if(volume!=100 || mask!=0 || ms!=150 || ultra_enabled || sens!=1 || theme!=0 || !zh)$fatal(1,"Defaults changed retained UI state or control defaults");
   $display("PASS tb_controls_timbre checks=%0d",checks);$finish;
  end
  initial begin #1000000;$fatal(1,"Timbre control timeout");end

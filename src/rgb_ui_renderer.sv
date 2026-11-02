@@ -174,16 +174,16 @@ module rgb_ui_renderer #(parameter integer FRAME_LOCKED_INPUTS=0)(
   end else if(sensor_page)begin
    if(py>=100 && py<124 && px<440)begin {len,text}=ui_word(TXT_ULTRA_PITCH,language_zh);tx=32;ty=108;fg=GOLD;end
    if(py>=188 && py<212)begin
-    if(px<440)begin {len,text}=ui_word(TXT_RESPONSE,language_zh);tx=64;ty=196;end
-    else begin wide_text=0;text={digit(sensor_sensitivity)};len=1;tx=616;ty=196;end
+    if(px<440)begin {len,text}=ui_word(TXT_DEADBAND,language_zh);tx=64;ty=196;end
+    else begin wide_text=0;text={digit(sensor_sensitivity)," CM"};len=4;tx=604;ty=196;end
    end
    if(py>=260 && py<284)begin
     if(px<440)begin {len,text}=ui_word(TXT_MIN_CM,language_zh);tx=64;ty=268;end
-    else begin wide_text=0;text={digit(sensor_min/100),digit((sensor_min/10)%10),digit(sensor_min%10)};len=3;tx=604;ty=268;end
+    else begin wide_text=0;text={digit(sensor_min/100),digit((sensor_min/10)%10),digit(sensor_min%10)," CM"};len=6;tx=564;ty=268;end
    end
    if(py>=332 && py<356)begin
     if(px<440)begin {len,text}=ui_word(TXT_MAX_CM,language_zh);tx=64;ty=340;end
-    else begin wide_text=0;text={digit(sensor_max/100),digit((sensor_max/10)%10),digit(sensor_max%10)};len=3;tx=604;ty=340;end
+    else begin wide_text=0;text={digit(sensor_max/100),digit((sensor_max/10)%10),digit(sensor_max%10)," CM"};len=6;tx=564;ty=340;end
    end
    if(py>=376 && py<400)begin
     if(px<400)begin {len,text}=ui_word(TXT_DISTANCE,language_zh);tx=64;ty=380;end

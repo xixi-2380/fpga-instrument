@@ -1,0 +1,14 @@
+{
+  "apk": "GaoshanScore-0.5-percussion-20261102.apk",
+  "sha256": "14bab9b7701fe0feeb641fc54edbfbcdd6ea00a04e1380ef6b3b62e870ab3332",
+  "size": 57747,
+  "build": "javac + D8 + aapt2 + zipalign + apksigner",
+  "min_sdk": 26,
+  "target_sdk": 35,
+  "java_sources": 10,
+  "version_code": 8,
+  "version_name": "0.5-percussion-20261102",
+  "explicit_existing_keystore": false,
+  "apk_device_run": "not performed",
+  "radio_fpga_test": "not performed"
+}

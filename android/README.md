@@ -117,3 +117,11 @@ python run_core_tests.py --out-dir ../reports/bluetooth/local_android_core
 ## 无网与隐私
 
 App不声明INTERNET权限，没有广告、分析、云上传或在线曲库。用户通过系统文件选择器选定MIDI；不申请全盘存储权限。本版不持久化用户文件、蓝牙地址或上传进度。
+# 2026-11-02 鼓键与锣声近似
+
+新增 `android/dist/GaoshanScore-0.5-percussion-20261102.apk`：默认保留第10通道，接受GM1的47个鼓键并规范化到琴端原有10种鼓音；可选52中国镲+41低鼓的双层锣声近似，默认关闭。旧固件无需新增音色ID或资源。它不是47种独立采样，GM1也没有专用锣键；完整映射、示例、复音限制及签名安装限制见 [GM鼓与锣声近似](../docs/bluetooth_score/GM鼓与锣声近似.md)。
+
+本机使用 `D:/PyCharm 2025.2.4/jbr/bin` 的JDK，以及本工程 `android/build-local/sdk` 的官方Android35平台和35.0.0构建工具。生成命令为 `python android/build_apk.py --sdk-root android/build-local/sdk --out-dir android/build-local/percussion-20261102 --version-code 8 --version-name 0.5-percussion-20261102`；先给PATH加入该JDK。可用 `--keystore <原有开发私钥>` 保留升级签名。本次旧私钥未找到，新APK使用独立开发证书，不能直接覆盖安装旧0.4。没有执行安装或卸载。
+
+核心与FPGA兼容回归入口为 `python scripts/run_power_guard.py -- python scripts/run_percussion_adjustment_tests.py`。生成的示例MIDI在 `android/examples`；证据在 `reports/adjustments_20261101/percussion`。以下保留此前版本说明。
+

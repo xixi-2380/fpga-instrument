@@ -1,0 +1,34 @@
+{
+  "command": [
+    "python",
+    "-X",
+    "utf8",
+    "android/build_apk.py",
+    "--sdk-root",
+    "android/build-local/sdk",
+    "--out-dir",
+    "android/build-local/percussion-20261102",
+    "--version-code",
+    "8",
+    "--version-name",
+    "0.5-percussion-20261102"
+  ],
+  "minimum": 25,
+  "pid": 49604,
+  "status": "finished",
+  "samples": [
+    {
+      "ac": 0,
+      "percent": 59,
+      "seconds": 3844,
+      "utc": "2026-11-02T00:06:03.056459+00:00"
+    },
+    {
+      "ac": 0,
+      "percent": 59,
+      "seconds": 3844,
+      "utc": "2026-11-02T00:06:03.086633+00:00"
+    }
+  ],
+  "exit_code": 0
+}

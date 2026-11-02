@@ -1,0 +1,84 @@
+{
+  "tests": [
+    {
+      "name": "old_unit_bug",
+      "passed": true,
+      "checks": 2,
+      "seconds": 0.2665301000015461,
+      "source_sha256": {
+        "F:\\FPGA_Projects\\fpga-instrument-main-adjustments-20261101\\reports\\ultrasonic_cm_20261101\\chain\\baseline_ultrasonic_range.sv": "84f747deac07a94348b7e05e536560f15e911b7799621ed43d9025e7ea1b7e44",
+        "F:\\FPGA_Projects\\fpga-instrument-main-adjustments-20261101\\reports\\ultrasonic_cm_20261101\\chain\\baseline_ultrasonic_pitch.sv": "a72cded14d1da0c5c26874c6c3876c30d3533acc43865ad680fd82e5aa973e86",
+        "F:\\FPGA_Projects\\fpga-instrument-main-adjustments-20261101\\sim\\integration\\tb_ultrasonic_mm_bug.sv": "c4e285cfbd916b6b366b02c70692747e2c3a60a41d4f26611041a453db4281ff"
+      },
+      "command": [
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+        "-g2012",
+        "-grelative-include",
+        "-IF:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/src",
+        "-IF:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/sim",
+        "-s",
+        "tb_ultrasonic_mm_bug",
+        "-o",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/reports/ultrasonic_cm_20261101/chain/old_unit_bug.vvp",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/reports/ultrasonic_cm_20261101/chain/baseline_ultrasonic_range.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/reports/ultrasonic_cm_20261101/chain/baseline_ultrasonic_pitch.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/sim/integration/tb_ultrasonic_mm_bug.sv"
+      ],
+      "output": "PASS tb_ultrasonic_mm_bug checks=2 physical_cm=10 legacy_distance_mm=100 legacy_bcd=100 renderer_suffix=CM incorrect_screen=100_CM\nF:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/sim/integration/tb_ultrasonic_mm_bug.sv:13: $finish called at 747000000 (1ps)\n"
+    },
+    {
+      "name": "range_regression",
+      "passed": true,
+      "checks": 32,
+      "seconds": 0.979035099997418,
+      "source_sha256": {
+        "F:\\FPGA_Projects\\fpga-instrument-main-adjustments-20261101\\src\\ultrasonic_range.sv": "d13bef5e132c4e107de8cdf9f0ae67a1fd806d6218899a705ed5bc0726c225f0",
+        "F:\\FPGA_Projects\\fpga-instrument-main-adjustments-20261101\\sim\\tb_ultrasonic_range.sv": "4fa6eb581e5cfa92954eedf15c376215e219b8c9576a161bf7c2b4e69795431c"
+      },
+      "command": [
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+        "-g2012",
+        "-grelative-include",
+        "-IF:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/src",
+        "-IF:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/sim",
+        "-s",
+        "tb_ultrasonic_range",
+        "-o",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/reports/ultrasonic_cm_20261101/chain/range_regression.vvp",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/src/ultrasonic_range.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/sim/tb_ultrasonic_range.sv"
+      ],
+      "output": "PASS tb_ultrasonic_range checks=32 triggers=10\nF:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/sim/tb_ultrasonic_range.sv:33: $finish called at 571133001000 (1ps)\n"
+    },
+    {
+      "name": "physical_echo_chain",
+      "passed": true,
+      "checks": 17,
+      "seconds": 3.348598499993386,
+      "source_sha256": {
+        "F:\\FPGA_Projects\\fpga-instrument-main-adjustments-20261101\\src\\ultrasonic_range.sv": "d13bef5e132c4e107de8cdf9f0ae67a1fd806d6218899a705ed5bc0726c225f0",
+        "F:\\FPGA_Projects\\fpga-instrument-main-adjustments-20261101\\src\\ultrasonic_pitch.sv": "84074833629524651beddfce4a879fb0950e33efe75e43e3817b347a6725bae6",
+        "F:\\FPGA_Projects\\fpga-instrument-main-adjustments-20261101\\sim\\integration\\tb_ultrasonic_cm_echo.sv": "11d1c077dc256b9901833857f9e9fdf2fc3bbf13bd47015f501683adc84b4dd3"
+      },
+      "command": [
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+        "-g2012",
+        "-grelative-include",
+        "-IF:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/src",
+        "-IF:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/sim",
+        "-s",
+        "tb_ultrasonic_cm_echo",
+        "-o",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/reports/ultrasonic_cm_20261101/chain/physical_echo_chain.vvp",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/src/ultrasonic_range.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/src/ultrasonic_pitch.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/sim/integration/tb_ultrasonic_cm_echo.sv"
+      ],
+      "output": "PASS tb_ultrasonic_cm_echo checks=17 reports=20\nF:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/sim/integration/tb_ultrasonic_cm_echo.sv:59: $finish called at 1183034000000 (1ps)\n"
+    }
+  ],
+  "total_checks": 51,
+  "all_passed": true,
+  "sta_passed": false,
+  "hardware_tested": false
+}

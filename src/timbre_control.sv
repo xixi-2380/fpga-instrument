@@ -9,6 +9,7 @@ module timbre_control #(parameter integer DEBOUNCE_CYCLES=1,LONG_PRESS_CYCLES=1,
  output reg [8:0] echo_wet,room_wet,tremolo_depth,output reg [4:0] cfg_tremolo_rate_hz,
  output reg [6:0] echo_percent,room_percent,depth_percent,output reg [4:0] tremolo_rate_hz,
  output reg [6:0] volume_percent,output reg ultrasonic_page,ultrasonic_enabled,
+ // Public name retained: ultrasonic_sensitivity is neutral half-width, 1..5cm.
  output reg [2:0] ultrasonic_sensitivity,output reg [6:0] ultrasonic_min,ultrasonic_max,
  output reg [7:0] ultrasonic_version,
  input wire auto_valid,input wire [7:0] auto_version,input wire [6:0] auto_target,

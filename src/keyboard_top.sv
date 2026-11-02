@@ -25,7 +25,7 @@ module keyboard_top #(
     input wire [2:0] ec11_a,ec11_b,ec11_sw_n,
     output wire HP_BCK,HP_WS,HP_DIN,PA_EN,
     output wire MAX_BCLK,MAX_LRCLK,MAX_DIN,MAX_SD_MODE,
-    output wire [4:0] led_n,
+    output wire [4:0] led_n,output wire KEY_INPUT_PROBE,
     output wire lcd_clk,lcd_hs,lcd_vs,lcd_en,output wire [5:0] lcd_r,lcd_g,lcd_b,
     inout wire touch_scl,touch_sda,touch_int,touch_rst_n,
     output wire flash_cs_n,flash_sck,flash_mosi,input wire flash_miso,output wire flash_wp_n,flash_hold_n);
@@ -64,16 +64,16 @@ module keyboard_top #(
     reset_sync ultrasonic_reset_sync(clk,ultrasonic_reset,ultrasonic_ref_reset);
     rgb_status_cdc #(.WIDTH(26)) ultrasonic_config_bridge(audio_clk,clk,ultrasonic_reset,
         {ultrasonic_version,ultrasonic_enabled,ultrasonic_sensitivity,ultrasonic_min,ultrasonic_max},ultrasonic_cfg,ultrasonic_cfg_valid,);
-    wire range_report,range_valid;wire [12:0] range_mm;
+    wire range_report,range_valid;wire [12:0] range_cm;
     wire [17:0] ultrasonic_target_ratio;wire [2:0] ultrasonic_state;
     wire [11:0] ultrasonic_distance_bcd;wire [7:0] ultrasonic_applied_version;
     ultrasonic_range #(.CLOCK_HZ(`REF_HZ),.PERIOD_US(ULTRA_PERIOD_US),.TIMEOUT_US(ULTRA_TIMEOUT_US)) range_reader(
         .clk(clk),.rst(ultrasonic_ref_reset),.enabled(ultrasonic_cfg_valid && ultrasonic_cfg[17]),
-        .echo(ultrasonic_echo),.trig(ultrasonic_trig),.report(range_report),.valid(range_valid),.distance_mm(range_mm));
+        .echo(ultrasonic_echo),.trig(ultrasonic_trig),.report(range_report),.valid(range_valid),.distance_cm(range_cm));
     ultrasonic_pitch #(.CLOCK_HZ(`REF_HZ),.LOST_MS(ULTRA_LOST_MS)) pitch_sensor(
         .clk(clk),.rst(ultrasonic_ref_reset),.cfg_valid(ultrasonic_cfg_valid),.enabled(ultrasonic_cfg[17]),
         .sensitivity(ultrasonic_cfg[16:14]),.minimum(ultrasonic_cfg[13:7]),.maximum(ultrasonic_cfg[6:0]),
-        .version(ultrasonic_cfg[25:18]),.report(range_report),.valid(range_valid),.distance_mm(range_mm),
+        .version(ultrasonic_cfg[25:18]),.report(range_report),.valid(range_valid),.distance_cm(range_cm),
         .target_ratio(ultrasonic_target_ratio),.status(ultrasonic_state),.distance_bcd(ultrasonic_distance_bcd),.applied_version(ultrasonic_applied_version));
     rgb_status_cdc #(.WIDTH(41)) ultrasonic_status_bridge(clk,audio_clk,ultrasonic_reset,
         {ultrasonic_applied_version,ultrasonic_target_ratio,ultrasonic_state,ultrasonic_distance_bcd},ultrasonic_result,ultrasonic_result_valid,);
@@ -353,6 +353,10 @@ module keyboard_top #(
         pll1_reset,pll2_reset,audio_reset);
     wire [47:0] keypad_ref_keys;
     wire [2:0] keypad_ref_online,keypad_ref_valid,keypad_fault,keypad_report;
+    key_input_probe #(.PULSE_CYCLES(`REF_HZ/1000)) input_probe(
+        .clk(clk),.rst(ultrasonic_ref_reset),
+        .keys({keypad_ref_keys[43:32],keypad_ref_keys[27:16],keypad_ref_keys[11:0]}),
+        .valid(keypad_ref_online & keypad_ref_valid),.pulse(KEY_INPUT_PROBE));
     wire [53:0] keypad_snapshot;
     wire [2:0] keypad_cfg_ready,keypad_cfg_done,keypad_cfg_valid;wire [23:0] keypad_cfg_error;
     wire [131:0] sensitivity_config;

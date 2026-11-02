@@ -1,0 +1,26 @@
+{
+  "command": [
+    "python",
+    "-X",
+    "utf8",
+    "scripts/run_percussion_adjustment_tests.py"
+  ],
+  "minimum": 25,
+  "pid": 11796,
+  "status": "finished",
+  "samples": [
+    {
+      "ac": 0,
+      "percent": 57,
+      "seconds": 3580,
+      "utc": "2026-11-02T00:08:05.739705+00:00"
+    },
+    {
+      "ac": 0,
+      "percent": 57,
+      "seconds": 3580,
+      "utc": "2026-11-02T00:08:05.770800+00:00"
+    }
+  ],
+  "exit_code": 0
+}

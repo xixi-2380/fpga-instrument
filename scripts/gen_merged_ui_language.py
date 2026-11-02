@@ -84,7 +84,7 @@ ERROR|错误
 DELETE AGAIN|再次点击确认删除
 READ ONLY|只读
 ULTRA PITCH|超声波滑音
-RESPONSE|响应
+DEADBAND|回中范围
 MIN CM|距离下限
 MAX CM|距离上限
 DISTANCE|距离

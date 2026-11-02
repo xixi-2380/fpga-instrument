@@ -2,9 +2,11 @@
 Requires JDK17 with jdk.compiler, SDK Platform35 and Build-tools35.0.0.
 Never builds FPGA or touches hardware. Generated signing key is development-only.
 """
-import argparse,hashlib,json,os,pathlib,shutil,subprocess,xml.etree.ElementTree as ET,zipfile
+import argparse,hashlib,json,os,pathlib,re,shutil,subprocess,xml.etree.ElementTree as ET,zipfile
 p=argparse.ArgumentParser();p.add_argument('--sdk-root',required=True);p.add_argument('--out-dir',required=True)
+p.add_argument('--version-code',type=int,default=7);p.add_argument('--version-name',default='0.4-midi-timbres');p.add_argument('--keystore',help='Reuse an existing development signing key when available')
 a=p.parse_args();root=pathlib.Path(__file__).resolve().parent;sdk=pathlib.Path(a.sdk_root).resolve();out=pathlib.Path(a.out_dir).resolve();out.mkdir(parents=True,exist_ok=True)
+if a.version_code<1 or not re.fullmatch(r'[A-Za-z0-9._-]+',a.version_name):raise ValueError('Invalid APK version')
 tools=sdk/'build-tools/35.0.0';platform=sdk/'platforms/android-35/android.jar';classes=out/'classes';dex=out/'dex'
 for folder in (classes,dex):
  if not folder.resolve().is_relative_to(out):raise ValueError('Output escaped build directory')
@@ -27,16 +29,17 @@ tree=ET.parse(root/'app/src/main/AndroidManifest.xml');tree.getroot().set('packa
 tree.find('application').set('{http://schemas.android.com/apk/res/android}debuggable','true')
 manifest=out/'AndroidManifest.xml';tree.write(manifest,encoding='utf-8',xml_declaration=True)
 unsigned=out/'unsigned.apk'
-run('aapt2',[tools/('aapt2'+suffix),'link','-o',unsigned,'-I',platform,'--manifest',manifest,'--min-sdk-version','26','--target-sdk-version','35','--version-code','7','--version-name','0.4-midi-timbres'])
+run('aapt2',[tools/('aapt2'+suffix),'link','-o',unsigned,'-I',platform,'--manifest',manifest,'--min-sdk-version','26','--target-sdk-version','35','--version-code',str(a.version_code),'--version-name',a.version_name])
 with zipfile.ZipFile(unsigned,'a',zipfile.ZIP_DEFLATED) as z:
  for d in sorted(dex.glob('*.dex')):z.write(d,d.name)
 aligned=out/'aligned.apk';run('zipalign',[tools/('zipalign'+suffix),'-f','-p','4',unsigned,aligned])
-key=out/'debug.keystore'
+key=pathlib.Path(a.keystore).resolve() if a.keystore else out/'debug.keystore'
+if a.keystore and not key.is_file():raise ValueError('Requested existing keystore is missing')
 if not key.exists():run('keygen',[str(pathlib.Path(javac).parent/'keytool.exe') if javac else 'keytool','-genkeypair','-keystore',key,'-storepass','android','-keypass','android','-alias','androiddebugkey','-keyalg','RSA','-keysize','2048','-validity','3650','-dname','CN=Gaoshan Development, OU=FPGA, O=Student Project, C=CN'])
-apk=out/'GaoshanScore-0.4-midi-timbres.apk';signer=['java','-jar',tools/'lib/apksigner.jar']
+apk=out/('GaoshanScore-'+a.version_name+'.apk');signer=['java','-jar',tools/'lib/apksigner.jar']
 run('sign',signer+['sign','--ks',key,'--ks-key-alias','androiddebugkey','--ks-pass','pass:android','--key-pass','pass:android','--out',apk,aligned])
 run('verify',signer+['verify','--verbose','--print-certs',apk])
 run('manifest',[tools/('aapt2'+suffix),'dump','badging',apk])
-metadata={'apk':apk.name,'sha256':hashlib.sha256(apk.read_bytes()).hexdigest(),'size':apk.stat().st_size,'build':'javac + D8 + aapt2 + zipalign + apksigner','min_sdk':26,'target_sdk':35,'java_sources':len(sources),'apk_device_run':'not performed','radio_fpga_test':'not performed'}
+metadata={'apk':apk.name,'sha256':hashlib.sha256(apk.read_bytes()).hexdigest(),'size':apk.stat().st_size,'build':'javac + D8 + aapt2 + zipalign + apksigner','min_sdk':26,'target_sdk':35,'java_sources':len(sources),'version_code':a.version_code,'version_name':a.version_name,'explicit_existing_keystore':bool(a.keystore),'apk_device_run':'not performed','radio_fpga_test':'not performed'}
 (out/'build_summary.json').write_text(json.dumps(metadata,ensure_ascii=False,indent=2),encoding='utf-8')
 print(apk)

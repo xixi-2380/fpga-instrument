@@ -1,30 +1,37 @@
 `timescale 1ns/1ps
-// Reference-domain distance conditioning and a narrow serial ratio divider.
+// Whole-cm median conditioning and a narrow serial ratio divider.
 // The sensor changes pitch only; it has no connection to master volume.
+// sensitivity retains its public control name but is a direct 1..5cm neutral
+// half-width. Endpoints always win over the neutral band on narrow ranges.
 module ultrasonic_pitch #(parameter integer CLOCK_HZ=50000000,LOST_MS=250)(
  input wire clk,rst,cfg_valid,enabled,input wire [2:0] sensitivity,
  input wire [6:0] minimum,maximum,input wire [7:0] version,
- input wire report,valid,input wire [12:0] distance_mm,
+ input wire report,valid,input wire [12:0] distance_cm,
  output reg [17:0] target_ratio,output reg [2:0] status,
  output reg [11:0] distance_bcd,output reg [7:0] applied_version);
  localparam [2:0] OFF=0,WAITING=1,TRACKING=2,HOLDING=3,LOST=4;
  localparam MD=CLOCK_HZ/1000,MW=MD>1?$clog2(MD):1,AW=LOST_MS>1?$clog2(LOST_MS+1):1;
  reg [MW-1:0] millisecond;reg [AW-1:0] age;
- reg active,have_sample;reg [12:0] recent,older;
- wire [12:0] d=distance_mm;
- wire [12:0] median=d<recent ? (recent<older?recent:(d<older?older:d)) : (d<older?d:(recent<older?older:recent));
- wire [12:0] filtered=have_sample?median:d;
- wire [12:0] near_mm={6'd0,minimum}*13'd10,far_mm={6'd0,maximum}*13'd10;
- wire [12:0] midpoint=(near_mm+far_mm)>>1;
- wire [3:0] deadband=sensitivity>=1 && sensitivity<=5?4'd6-{1'b0,sensitivity}:4'd5;
- wire usable=valid && d>=20 && d<=4000;
+ reg active,have_sample;reg [8:0] recent,older;
+ wire [8:0] d=distance_cm[8:0];
+ wire [8:0] median=d<recent ? (recent<older?recent:(d<older?older:d)) : (d<older?d:(recent<older?older:recent));
+ wire [8:0] filtered=have_sample?median:d;
+ // Doubled cm preserves half-cm midpoints for odd endpoint spans. Thus a
+ // setting of 1 is exactly +/-1cm, not a reversed millimetre sensitivity.
+ wire [7:0] midpoint2={1'b0,minimum}+{1'b0,maximum};
+ wire [9:0] filtered2={filtered,1'b0};
+ wire [9:0] offset2=filtered2>{2'd0,midpoint2}?filtered2-{2'd0,midpoint2}:{2'd0,midpoint2}-filtered2;
+ wire [2:0] deadband_cm=sensitivity>=1 && sensitivity<=5?sensitivity:3'd1;
+ wire [3:0] deadband2={deadband_cm,1'b0};
+ wire [7:0] span={1'b0,maximum}-{1'b0,minimum};
+ wire usable=valid && distance_cm>=2 && distance_cm<=400;
  wire configuration_changed=active!=enabled || applied_version!=version;
  reg [1:0] map_stage;reg negative;
- reg [12:0] delta;reg [13:0] scale;reg [10:0] divisor;
- reg [23:0] numerator;reg [10:0] remainder;reg [13:0] quotient;reg [4:0] bits_left;
- wire [11:0] trial={remainder,numerator[23]};
+ reg [7:0] delta;reg [13:0] scale;reg [7:0] divisor;
+ reg [23:0] numerator;reg [7:0] remainder;reg [13:0] quotient;reg [4:0] bits_left;
+ wire [8:0] trial={remainder,numerator[23]};
  wire subtract=trial>={1'b0,divisor};
- wire [10:0] next_remainder=subtract?trial-{1'b0,divisor}:trial;
+ wire [7:0] next_remainder=subtract?trial-{1'b0,divisor}:trial;
  wire [13:0] next_quotient={quotient[12:0],subtract};
  reg [9:0] binary_bcd;reg [11:0] bcd_work,bcd_adjusted;reg [3:0] bcd_left;
  always @*begin
@@ -52,15 +59,17 @@ module ultrasonic_pitch #(parameter integer CLOCK_HZ=50000000,LOST_MS=250)(
     if(age==LOST_MS)begin target_ratio<=65536;status<=LOST;map_stage<=0;end
     if(report && usable)begin
      recent<=d;older<=have_sample?recent:d;have_sample<=1;age<=0;status<=TRACKING;
-     binary_bcd<=d>999?10'd999:d[9:0];bcd_work<=0;bcd_left<=10;
-     if(filtered<=near_mm)begin target_ratio<=73562;map_stage<=0;end
-     else if(filtered>=far_mm)begin target_ratio<=58386;map_stage<=0;end
-     else if(filtered+deadband>=midpoint && filtered<=midpoint+deadband)begin target_ratio<=65536;map_stage<=0;end
+     binary_bcd<={1'b0,d};bcd_work<=0;bcd_left<=10;
+     if(filtered<=minimum)begin target_ratio<=73562;map_stage<=0;end
+     else if(filtered>=maximum)begin target_ratio<=58386;map_stage<=0;end
+     // Endpoints above keep full bend even when the requested band covers
+     // every strict interior point. This branch also prevents zero division.
+     else if(span<={4'd0,deadband2} || offset2<={6'd0,deadband2})begin target_ratio<=65536;map_stage<=0;end
      else begin
-      negative<=filtered>midpoint;
-      delta<=filtered>midpoint?filtered-midpoint:midpoint-filtered;
-      divisor<=filtered>midpoint?far_mm-midpoint:midpoint-near_mm;
-      scale<=filtered>midpoint?14'd7150:14'd8026;map_stage<=1;
+      negative<=filtered2>{2'd0,midpoint2};
+      delta<=offset2-{6'd0,deadband2};
+      divisor<=span-{4'd0,deadband2};
+      scale<=filtered2>{2'd0,midpoint2}?14'd7150:14'd8026;map_stage<=1;
      end
     end else if(report && !usable)begin
      if(have_sample && age<LOST_MS)status<=HOLDING;

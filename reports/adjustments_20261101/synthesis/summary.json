@@ -1,0 +1,32 @@
+{
+  "resources": {
+    "LUT": 65163,
+    "Register": 35653,
+    "ALU": 11248
+  },
+  "clocks": [
+    {
+      "name": "clk",
+      "constraint": "50.000(MHz)",
+      "actual": "56.319(MHz)",
+      "logic_levels": "23"
+    },
+    {
+      "name": "lcd_on.display_driver/pixel_pll/CLKOUT0.default_gen_clk",
+      "constraint": "35.000(MHz)",
+      "actual": "32.567(MHz)",
+      "logic_levels": "35"
+    },
+    {
+      "name": "clocks/pll2/CLKOUT0.default_gen_clk",
+      "constraint": "61.440(MHz)",
+      "actual": "58.992(MHz)",
+      "logic_levels": "18"
+    }
+  ],
+  "netlist_sha256": "6a74a888d9538924b76707050f9eff792aebd550898566a5ff7e32a6fb4db31c",
+  "input_count": 126,
+  "archived_utc": "2026-11-02T00:01:55.314049+00:00",
+  "synthesis_passed": true,
+  "pnr_passed": false
+}

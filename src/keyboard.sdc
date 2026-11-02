@@ -1,4 +1,7 @@
 create_clock -name ref_clk -period 20.000 [get_ports {clk}]
+# Measurement marker: bound the output route; no change to audio data timing.
+set_max_delay -from [get_clocks {ref_clk}] -to [get_ports {KEY_INPUT_PROBE}] 20.000
+set_min_delay -from [get_clocks {ref_clk}] -to [get_ports {KEY_INPUT_PROBE}] 0.000
 create_generated_clock -name mid_clk -source [get_ports {clk}] -multiply_by 16 -divide_by 25 [get_pins {clocks/pll1/CLKOUT0}]
 create_generated_clock -name audio_clk -source [get_pins {clocks/pll1/CLKOUT0}] -multiply_by 48 -divide_by 25 [get_pins {clocks/pll2/CLKOUT0}]
 # UART TX route budget; RX is asynchronous and synchronized in uart_rx.

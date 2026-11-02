@@ -1,0 +1,25 @@
+{
+  "command": [
+    "python",
+    "-c",
+    "print('guard smoke test')"
+  ],
+  "minimum": 25,
+  "pid": 40952,
+  "status": "finished",
+  "samples": [
+    {
+      "ac": 0,
+      "percent": 62,
+      "seconds": 3425,
+      "utc": "2026-11-02T00:03:43.543321+00:00"
+    },
+    {
+      "ac": 0,
+      "percent": 62,
+      "seconds": 3460,
+      "utc": "2026-11-02T00:03:43.693666+00:00"
+    }
+  ],
+  "exit_code": 0
+}

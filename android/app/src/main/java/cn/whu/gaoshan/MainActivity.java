@@ -27,7 +27,7 @@ public final class MainActivity extends Activity {
     private ProtocolClient.Capabilities caps;private boolean busy=false,demo=false,dead=false;
     private final AtomicBoolean cancel=new AtomicBoolean();
     private MidiFile midi;private Score score;private String songName="未导入";
-    private TextView status,capacity,summary,log,position,progressText,libraryInfo;private Spinner tracks,channels,librarySlots,timbreMode;private CheckBox excludeDrums;
+    private TextView status,capacity,summary,log,position,progressText,libraryInfo;private Spinner tracks,channels,librarySlots,timbreMode;private CheckBox excludeDrums,gongApproximation;
     private ProtocolClient.LibraryCapabilities libraryCaps;
     private EditText transpose;private ProgressBar progress;private LinearLayout page;
     private Spinner connectionMode;private Button verifyButton;private String deviceLabel="";private boolean askedScanPermission;
@@ -52,6 +52,9 @@ public final class MainActivity extends Activity {
         tracks=new Spinner(this);channels=new Spinner(this);setItems(tracks,new String[]{"全部轨道"});setItems(channels,new String[]{"全部通道"});
         label("轨道",13,muted);page.addView(tracks);label("MIDI 通道",13,muted);page.addView(channels);
         timbreMode=new Spinner(this);String[] modes=new String[18];modes[0]="按原谱音色（默认）";for(int i=0;i<16;i++)modes[i+1]="统一旋律："+Timbres.NAMES[i];modes[17]="旧协议：琴端统一音色（须排除鼓轨）";setItems(timbreMode,modes);page.addView(timbreMode);excludeDrums=new CheckBox(this);excludeDrums.setText("排除第10通道鼓轨");excludeDrums.setTextColor(ink);page.addView(excludeDrums);
+        gongApproximation=new CheckBox(this);gongApproximation.setText("52中国镲叠加低鼓，模拟锣声（每击占2声部）");gongApproximation.setTextColor(ink);gongApproximation.setChecked(false);page.addView(gongApproximation);
+        label("第10通道鼓轨默认保留：GM1的47种鼓键用琴端10种鼓音近似。GM1没有专用锣键，52标准名称为中国镲；勾选上项才叠加低鼓。",13,muted);
+        page.addView(button("鼓镲／锣声近似示例",this::percussionExample,false));
         transpose=new EditText(this);transpose.setSingleLine(true);transpose.setText("0");transpose.setTextColor(ink);transpose.setHintTextColor(muted);transpose.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_SIGNED);transpose.setHint("移调半音：-48 ～ +48");page.addView(transpose);
         page.addView(button("应用筛选与移调",this::convert,false));summary=label("尚无曲谱。导入后检查轨道、音域和声部数。",14,ink);
         label("传送到琴",20,ink);progress=new ProgressBar(this,null,android.R.attr.progressBarStyleHorizontal);progress.setMax(1000);page.addView(progress);progressText=label("尚未上传",13,muted);
@@ -69,14 +72,14 @@ public final class MainActivity extends Activity {
         row(button("保存当前RAM",()->libraryAction(0),true),button("加载选中曲谱",()->libraryAction(1),true));
         page.addView(button("删除选中曲谱",()->{int index=librarySlots.getSelectedItemPosition();new AlertDialog.Builder(this).setMessage(String.format(Locale.ROOT,"删除琴端 S%03d？",index+1)).setNegativeButton("取消",null).setPositiveButton("确认删除",(d,w)->runLibraryAction(2,index)).show();},true));
         label("连接记录",20,ink);log=label("等待操作。离线演示不使用蓝牙，也不驱动扬声器。",12,muted);
-        Button copy=button("复制诊断记录",()->{android.content.ClipboardManager clipboard=(android.content.ClipboardManager)getSystemService(CLIPBOARD_SERVICE);clipboard.setPrimaryClip(ClipData.newPlainText("蓝牙诊断","高山流水 0.4-midi-timbres\n设备："+deviceLabel+"\n状态："+module.state()+"\n"+log.getText()));Toast.makeText(this,"诊断记录已复制",Toast.LENGTH_SHORT).show();},false);lockedButtons.remove(copy);page.addView(copy);render();
+        Button copy=button("复制诊断记录",()->{android.content.ClipboardManager clipboard=(android.content.ClipboardManager)getSystemService(CLIPBOARD_SERVICE);clipboard.setPrimaryClip(ClipData.newPlainText("蓝牙诊断","高山流水 0.5-percussion-20261102\n设备："+deviceLabel+"\n状态："+module.state()+"\n"+log.getText()));Toast.makeText(this,"诊断记录已复制",Toast.LENGTH_SHORT).show();},false);lockedButtons.remove(copy);page.addView(copy);render();
     }
     private int dp(int n){return (int)(getResources().getDisplayMetrics().density*n+.5f);}
     private TextView label(String text,int size,int color){TextView v=new TextView(this);v.setText(text);v.setTextSize(size);v.setTextColor(color);v.setPadding(0,dp(10),0,dp(6));page.addView(v);return v;}
     private Button button(String text,Runnable action,boolean needsConnection){Button b=new Button(this);b.setText(text);b.setAllCaps(false);b.setMinHeight(dp(52));b.setOnClickListener(v->action.run());lockedButtons.add(b);if(needsConnection)connectedButtons.add(b);return b;}
     private void row(Button a,Button b){LinearLayout l=new LinearLayout(this);l.setOrientation(LinearLayout.HORIZONTAL);l.addView(a,new LinearLayout.LayoutParams(0,-2,1));l.addView(b,new LinearLayout.LayoutParams(0,-2,1));page.addView(l);}
     private void setItems(Spinner s,String[] items){ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,items){@Override public View getView(int position,View convertView,ViewGroup parent){TextView text=(TextView)super.getView(position,convertView,parent);text.setTextColor(ink);text.setPadding(dp(8),dp(12),dp(8),dp(12));return text;}};adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);s.setAdapter(adapter);}
-    private void render(){for(Button b:lockedButtons)b.setEnabled(!busy&&(!connectedButtons.contains(b)||client!=null&&caps!=null));tracks.setEnabled(!busy&&midi!=null);channels.setEnabled(!busy&&midi!=null);transpose.setEnabled(!busy&&midi!=null);timbreMode.setEnabled(!busy);excludeDrums.setEnabled(!busy);if(librarySlots!=null)librarySlots.setEnabled(!busy);
+    private void render(){for(Button b:lockedButtons)b.setEnabled(!busy&&(!connectedButtons.contains(b)||client!=null&&caps!=null));tracks.setEnabled(!busy&&midi!=null);channels.setEnabled(!busy&&midi!=null);transpose.setEnabled(!busy&&midi!=null);timbreMode.setEnabled(!busy);excludeDrums.setEnabled(!busy);gongApproximation.setEnabled(!busy);if(librarySlots!=null)librarySlots.setEnabled(!busy);
         ModuleConnection.State state=module.state();verifyButton.setEnabled(!busy&&!demo&&(state==ModuleConnection.State.MODULE_CONNECTED||state==ModuleConnection.State.READY));connectionMode.setEnabled(!busy);}
     private void renderConnection(){
         if(status==null||demo)return;
@@ -130,9 +133,11 @@ public final class MainActivity extends Activity {
         });
     }
     private void golden(){midi=null;score=Score.golden();songName="三音符示例（C4 D4 E4）";showScore();render();}
+    private void percussionExample(){midi=null;boolean layered=gongApproximation.isChecked();score=Score.percussionExample(layered);songName=layered?"鼓镲／锣声近似示例（52+41）":"GM鼓镲示例（36/38/42/49/52）";showScore();render();}
     private void convert(){if(midi==null){message("先导入MIDI；三音符示例可直接下载。");return;}int shift;try{shift=Integer.parseInt(transpose.getText().toString().trim());}catch(Exception e){message("移调请输入-48到48的整数");return;}
         MidiFile file=midi;int tr=tracks.getSelectedItemPosition()-1,ch=channels.getSelectedItemPosition()-1;int semitones=shift;int tone=timbreMode.getSelectedItemPosition()==17?-2:timbreMode.getSelectedItemPosition()-1;boolean omitDrums=excludeDrums.isChecked();if(tone==-2&&!omitDrums){message("旧协议不支持鼓组，请勾选排除鼓轨。");return;}
-        task("转换曲谱",()->{Score converted=file.convert(tr,ch,semitones,tone,omitDrums);ui(()->{score=converted;showScore();});});
+        boolean gong=gongApproximation.isChecked()&&!omitDrums;if(tone==-2&&gong){message("锣声近似需要多音色协议，请选择按原谱或统一旋律音色。");return;}
+        task("转换曲谱",()->{Score converted=file.convert(tr,ch,semitones,tone,omitDrums,gong);ui(()->{score=converted;showScore();});});
     }
     private void showScore(){Score s=score;summary.setText(songName+"\n"+s.notes.size()+" 条音符 · "+String.format(Locale.ROOT,"%.3f",s.duration/1000.0)+" 秒 · 最大同时 "+s.polyphony+" 音\nMIDI音域 "+s.minPitch+"～"+s.maxPitch+" · 数据 "+s.bytes().length+" 字节\nCRC32 "+String.format(Locale.ROOT,"%08X",Wire.crc32(s.bytes()))+(s.warnings.isEmpty()?"":"\n⚠ 简化演奏："+String.join("；",s.warnings)));}
     private void confirmUpload(){Score s=score;ProtocolClient.Capabilities cap=caps;if(s==null||cap==null){message("请先生成曲谱预览，并连接设备或进入离线演示");return;}try{s.validate(cap);}catch(Exception e){message(e.getMessage());return;}

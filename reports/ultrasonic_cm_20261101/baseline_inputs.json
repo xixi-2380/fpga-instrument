@@ -1,0 +1,15 @@
+{
+  "created_utc": "2026-11-01T13:40:13.414895+00:00",
+  "root": "F:\\FPGA_Projects\\fpga-instrument-main-adjustments-20261101",
+  "source_sha256": {
+    "src/ultrasonic_range.sv": "9cbf22eb8c40ce330b92d224e9cdb431a212322bbc98c2614299c97241f240c4",
+    "src/ultrasonic_pitch.sv": "9d3576e599ec5652a7b44954290695dcfd83e9946a016a4c033869fb08c733a1",
+    "src/rgb_ui_renderer.sv": "0449d0df6b5e63875465ec1218ef0aa75869b14deb7b022c321389d35f21fc88",
+    "src/timbre_control.sv": "25b6c4893d3383d18cfdd8677835ce6188bda4999e3e49f63a96a02628b88cd1",
+    "scripts/gen_merged_ui_language.py": "bc8120c56f23e2521d5cf05ef204a833c55667b02867966d832840c1ba43d108",
+    "src/config/ui_language.svh": "63837ba70a24ec358b10e273880979ab84bd6ce991e1242141c3eefd7197ce0e",
+    "src/rom/theme_font.hex": "3c62f53e6bdf47512bb8e57d785b6053b93306c435ae4104e28ec5446a9c8113",
+    "assets/merged_ui_language.json": "0b2b7d93cabb708ccc328e4cd73a2de59f74bf8808bc21d5d07acaf0f36fcd19",
+    "assets/merged_ui_language_manifest.json": "8cc6a952c5bb95d928f7d7070bcf35133b7cab9243ebabddd76b50d5f74b9149"
+  }
+}

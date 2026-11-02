@@ -1,0 +1,31 @@
+{
+  "reviewed_at": "2026-11-01T21:45:02.958639+08:00",
+  "baseline_commit": "7d84ac318653fcee17a0d8ece5e9e518ec7e24e2",
+  "baseline_local_path": "F:\\FPGA_Projects\\main-board-tested-7d84ac3-20261101",
+  "production_modified": false,
+  "core_sha256": "8fb5035e3c956c5154da790bdba16cd0a4ae820ec0da4d0b925a7476c6a8ddad",
+  "core_byte_identical_to_board_baseline": true,
+  "bug_reproduced": false,
+  "result": "No proven XY core defect; preserve board-tested RTL",
+  "total_checks": 7467237,
+  "line_segments": 24576,
+  "signed_byte_pairs": 65536,
+  "mathematical_frames": 64,
+  "random_frames": 56,
+  "maximum_abs_bresenham_error": 93,
+  "source_samples_delay": 16,
+  "snapshot_points_delay": 4,
+  "decimation": 4,
+  "renderer_modified_by_xy_task": false,
+  "read_only_wiring_checks": [
+    "snapshot field1111:88 matches128x8 bits",
+    "signed x/y map within0..63",
+    "ordinary theme 2x enlargement maps64x64 to128x128",
+    "hidden theme1x mapping64x64",
+    "synchronous pixel read aligns with next background stage",
+    "frame status handoff can retain one previous complete snapshot, preserving baseline behavior"
+  ],
+  "synthesis_started": false,
+  "hardware_tested_by_task": false,
+  "limitations": "No image/trigger supplied for reported user symptom. Geometry/buffering covered; no claim that all real LCD faults are excluded."
+}

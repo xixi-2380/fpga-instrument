@@ -4,6 +4,22 @@ public final class Timbres {
  private Timbres(){}
  public static final String[] NAMES={"正弦","笛管","簧管","大提琴","钢琴","木吉他","颤音琴","管风琴","电贝斯","小提琴","弦乐合奏","小号","萨克斯","合成主音","铺底","手风琴"};
  public static final int[] DRUM_MS={250,180,140,80,450,350,300,250,1500,1000};
+ /** GM1 keys accepted by the importer. Targets are the stable existing wire
+  * keys, so old26-timbre FPGA firmware needs no new sound IDs or sample ROM. */
+ public static int drumKey(int key){
+  if(key<35||key>81)throw new IllegalArgumentException("不支持的GM1打击乐键："+key+"（标准范围35～81）");
+  switch(key){
+   case 54:case 69:case 70:case 73:return 42;
+   case 56:case 67:case 71:case 80:return 53;
+   case 58:return 39;
+   case 60:case 65:case 75:case 76:return 50;
+   case 61:case 66:case 77:return 45;
+   case 62:case 78:return 48;
+   case 63:return 47;case 64:return 41;
+   case 68:case 72:return 51;case 74:return 46;case 79:return 43;case 81:return 59;
+   default:return key;
+  }
+ }
  public static int program(int p){
   if(p<0||p>127)throw new IllegalArgumentException("GM音色编号非法");
   if(p<8)return 4;if(p<16)return 6;if(p<21)return 7;if(p<24)return 15;

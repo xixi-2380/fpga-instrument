@@ -22,7 +22,7 @@ import time
 import traceback
 
 BASE = "D2_keyboard_leds"
-DEFAULT_MANIFEST = "reports/integration_20261101/synthesis_initial/netlist_manifest.json"
+DEFAULT_MANIFEST = "reports/adjustments_20261101/synthesis/netlist_manifest.json"
 DEFAULT_TOOL = "C:/Gowin/Gowin_V1.9.12.04_x64/IDE/bin/gw_sh.exe"
 SUFFIXES = (".fs", ".tr", ".tr.html", ".rpt.txt", ".rpt.html", ".sdf",
             ".pin.html", ".pin", ".log", ".power.html")
@@ -187,8 +187,10 @@ def parse_pins(cst_path, rpt_path):
     entries = re.findall(r'\bIO_LOC\s+"([^"\n]+)"\s+([A-Z]+\d+)\s*;', text)
     pins = dict(entries)
     issues = []
-    if len(entries) != 69 or len(pins) != 69 or len(set(pins.values())) != 69:
-        issues.append("Expected exactly 69 distinct ports and 69 distinct balls")
+    if len(entries) != 70 or len(pins) != 70 or len(set(pins.values())) != 70:
+        issues.append("Expected exactly 70 distinct ports and 70 distinct balls")
+    if pins.get("KEY_INPUT_PROBE") != "W25":
+        issues.append("Keyboard timing probe must be locked to W25")
     banned = re.compile(r"(?:^S[0-3]$|^key(?:\[|$)|DBG|matrix|row|col)", re.I)
     forbidden = sorted(port for port in pins if banned.search(port))
     if forbidden:
@@ -203,8 +205,8 @@ def parse_pins(cst_path, rpt_path):
         if port in actual:
             duplicates.append(port)
         actual[port] = dict(ball=m[2], locked=m[3])
-    if len(actual) != 69 or len({v["ball"] for v in actual.values()}) != 69 or duplicates:
-        issues.append("Actual pin report must have exactly 69 unique ports/balls without duplicate rows")
+    if len(actual) != 70 or len({v["ball"] for v in actual.values()}) != 70 or duplicates:
+        issues.append("Actual pin report must have exactly 70 unique ports/balls without duplicate rows")
     mismatches = []
     for port, ball in pins.items():
         if actual.get(port) != dict(ball=ball, locked="Y"):
@@ -216,9 +218,9 @@ def parse_pins(cst_path, rpt_path):
     if report_forbidden:
         issues.append("Removed interface remains in actual report: " + ", ".join(report_forbidden))
     usage = re.search(r"^\s*I/O Port\s*\|\s*(\d+)/", rpt, re.M)
-    if not usage or int(usage[1]) != 69:
-        issues.append("PnR I/O Port usage is missing or differs from 69")
-    return dict(passed=not issues, expected_count=69, cst_count=len(entries), report_count=len(actual),
+    if not usage or int(usage[1]) != 70:
+        issues.append("PnR I/O Port usage is missing or differs from 70")
+    return dict(passed=not issues, expected_count=70, cst_count=len(entries), report_count=len(actual),
                 issues=issues, mismatches=mismatches, unexpected_ports=unexpected,
                 duplicate_report_ports=duplicates, pins={k: dict(expected_ball=v, actual=actual.get(k)) for k, v in pins.items()})
 
@@ -353,7 +355,7 @@ def verify(root, artifact_dir, metadata, start, exit_code, expected_files=None):
     checks["security_off"] = bool(re.search(r"//SecurityBit:\s+OFF\b", header))
     rpt = artifact_dir / (BASE + ".rpt.txt")
     result["pins"] = parse_pins(root / "src/keyboard.cst", rpt)
-    checks["all_69_pins_correct_locked_unique"] = result["pins"]["passed"]
+    checks["all_70_pins_correct_locked_unique"] = result["pins"]["passed"]
     try:
         result["timing"], result["lcd_clock"] = timing_review(root, artifact_dir)
     except Exception as e:
@@ -412,8 +414,8 @@ def run(root, output, args, result):
         raise ValueError("Launch netlist differs from synthesis manifest")
     cst = re.sub(r"/\*.*?\*/|//[^\n]*", "", read_text(root / "src/keyboard.cst"), flags=re.S)
     pin_entries = re.findall(r'\bIO_LOC\s+"([^"\n]+)"\s+([A-Z]+\d+)\s*;', cst)
-    if len(pin_entries) != 69 or len(dict(pin_entries)) != 69 or len({ball for _, ball in pin_entries}) != 69:
-        raise ValueError("Launch CST must contain exactly 69 unique ports and balls")
+    if len(pin_entries) != 70 or len(dict(pin_entries)) != 70 or len({ball for _, ball in pin_entries}) != 70:
+        raise ValueError("Launch CST must contain exactly 70 unique ports and balls")
     extra = {name: digest(root / name) for name in EXTRA}
     metadata = dict(manifest=manifest, inventory=inventory, extra=extra)
     write_json(output / "netlist_manifest.json", manifest)
@@ -534,7 +536,7 @@ def main():
     if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,100}", args.name) or ".." in args.name:
         parser.error("--name must be a simple new directory name without '..'")
     root = args.root.resolve()
-    output = root / "reports/integration_20261101/physical" / args.name
+    output = root / "reports/adjustments_20261101/physical" / args.name
     if output.exists():
         parser.error("Report directory exists; choose a new --name")
     output.mkdir(parents=True)

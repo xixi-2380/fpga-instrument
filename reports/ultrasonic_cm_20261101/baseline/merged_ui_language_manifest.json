@@ -1,0 +1,24 @@
+{
+  "glyphs": 167,
+  "glyph_order": "一三上下中主乐他低体保信值停储克关再准出击删制前加动单只号合吉启响唱回固图声处备大失奏如存完定实小就屏山峰常平库应底度延开异弦强当形彩待快息慢成手拨控提摸播放效敏整文斯时暂曲有木李板果样次止正水波流深混滑演灵点理琴用电白盘确离空笛等箜管篌簧统继绪续置自色萨蛋视触认设误读谱贝败超距载输返迟速道部采量钢铺错键长闭间限除音页频题颤风首高默",
+  "used_words": 31056,
+  "rom_words": 32768,
+  "latin_title_prefix_words": 13824,
+  "latin_title_prefix_sha256": "a11524de1dddb961d98d72f8d531d5421ea7b1cd1fb91d6bc269649e7eda536e",
+  "title_base": 21840,
+  "fonts": [
+    {
+      "file": "assets\\fonts\\HighWaterChineseBrush.ttf",
+      "fallback_chars": "一三上下乐低体保信停储克再击删制前加只号合响唱固处失存完定库应底当彩快息慢成手拨控播敏整斯暂曲有板次止混滑灵点理用白确离空箜篌统继续蛋认误读贝败超距载量铺错限除页风首默"
+    },
+    {
+      "file": "assets\\fonts\\HighWaterChineseElegant.ttf",
+      "fallback_chars": "一三上下乐低体保信停储克再击删制前加只号合响唱固处失存完定库应底当彩快息慢成手拨控播敏整斯暂曲有板次止混滑灵点理用白确离空箜篌统继续蛋认误读贝败超距载量铺错限除页风首默"
+    },
+    {
+      "file": "assets\\fonts\\HighWaterChinesePlayful.ttf",
+      "fallback_chars": "一三上下乐低体保信停储克再击删制前加只号合响唱固处失存完定库应底当彩快息慢成手拨控播敏整斯暂曲有板次止混滑灵点理用白确离空箜篌统继续蛋认误读贝败超距载量铺错限除页风首默"
+    }
+  ],
+  "fallback_font": "C:\\Windows\\Fonts\\msyh.ttc"
+}

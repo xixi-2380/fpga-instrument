@@ -1,0 +1,73 @@
+{
+  "frozen_utc": "2026-11-02T00:11:25.579348+00:00",
+  "passed": true,
+  "total_checks": 468711,
+  "tests": [
+    {
+      "name": "java_core",
+      "passed": true,
+      "checks": 36259,
+      "seconds": 8.269
+    },
+    {
+      "name": "percussion_java",
+      "passed": true,
+      "checks": 259,
+      "seconds": 1.713
+    },
+    {
+      "name": "tb_percussion_compat",
+      "passed": true,
+      "checks": 163,
+      "seconds": 11.672
+    },
+    {
+      "name": "tb_percussion_audio",
+      "passed": true,
+      "checks": 432030,
+      "seconds": 3.032
+    }
+  ],
+  "apk": {
+    "apk": "GaoshanScore-0.5-percussion-20261102.apk",
+    "sha256": "14bab9b7701fe0feeb641fc54edbfbcdd6ea00a04e1380ef6b3b62e870ab3332",
+    "size": 57747,
+    "build": "javac + D8 + aapt2 + zipalign + apksigner",
+    "min_sdk": 26,
+    "target_sdk": 35,
+    "java_sources": 10,
+    "version_code": 8,
+    "version_name": "0.5-percussion-20261102",
+    "explicit_existing_keystore": false,
+    "apk_device_run": "not performed",
+    "radio_fpga_test": "not performed"
+  },
+  "apk_signed_for_prior_update": false,
+  "original_keys_preserved": 22,
+  "gm1_input_keys": 47,
+  "unchanged_fpga_drum_groups": 10,
+  "gong_layer_default": false,
+  "hardware_tested": false,
+  "eda_run_by_task": false,
+  "source_hashes": {
+    "android/app/src/main/java/cn/whu/gaoshan/MainActivity.java": "9f25105a4a185a19205cef7df04f5b7d969c47461abff9047c41176d0be4b69c",
+    "android/app/src/main/java/cn/whu/gaoshan/core/Timbres.java": "d77d7092eae5c40a779b62533e47efac21e2fb7d3597678215b7c289a66b536c",
+    "android/app/src/main/java/cn/whu/gaoshan/core/MidiFile.java": "a9c5fb5be02f2a0c0fb5caf2c28a2aa92efd3c8b0a1f1d032050671becdf8ae3",
+    "android/app/src/main/java/cn/whu/gaoshan/core/Score.java": "aaf3f9027f72537280cdcffb74b72a54c81bae4ea5d13fb61d5395fd728f8f6d",
+    "android/tests/cn/whu/gaoshan/core/MidiTimbreTests.java": "fee9852f20b08281f43a383460168b6774caee151ec356341065c4c28b31d40f",
+    "android/tests/cn/whu/gaoshan/core/PercussionTests.java": "94297c5135f39bdb9e82b399a1a0e9eefb42f78a2a1cf198e88f25764d8151bb",
+    "android/build_apk.py": "c8c0343d2c31b68b22081697f70e83644572a64e2afe5b5ab074bfaacead7b05",
+    "android/README.md": "4fa7d2ddb9f2f2fdae3a145f98bc56e4eb45f80974316cc215331288a4c40dde",
+    "android/examples/README.md": "7dd2ecc9211d6fc9c99827b8bda71ec397104c5064307a21c11cc85f6774e694",
+    "docs/bluetooth_score/GM鼓与锣声近似.md": "662f56b3cae5343b439c6a9f46e4755134310c4c158c53231ca29860b327e702",
+    "scripts/run_percussion_adjustment_tests.py": "2f6af28663d6087f6bb80dd1d0e1bcbd600e18431933f1a32543540f0669254e",
+    "sim/integration/tb_percussion_compat.sv": "d8a481a00ede504dad67242e87346ec64718cfe7cad569fccbfdddc4e88f6bb9",
+    "sim/integration/tb_percussion_audio.sv": "b98fd828db8a8da9bd7fb55d8b0b06165036533c9419f977b100f09b73932c53",
+    "android/examples/drums_gong_records.hex": "d64c3edf621c1d32c9f42248b3e7f75e8258544e1d6a545ed3e131f4a5315b6f",
+    "android/examples/drums_gong_records96.hex": "ba7140395bd1b2d37ec0fdeb150af50fa21ffe785eeabc8ae9356593de618588",
+    "android/examples/gm1_drums_china52.mid": "903a42e0ea0f5d2def72eb579dfc7018fff8e67ae43eafea609b1161f7dcd6ad",
+    "android/examples/gm1_percussion_47.mid": "03c6c99188c730cc6dfd8516d8324d75be2de40f23a3adff511c9c2d1a51f616",
+    "android/dist/GaoshanScore-0.5-percussion-20261102.apk": "14bab9b7701fe0feeb641fc54edbfbcdd6ea00a04e1380ef6b3b62e870ab3332"
+  },
+  "baseline_percussion_rtl_identical": true
+}

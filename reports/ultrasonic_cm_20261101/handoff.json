@@ -1,0 +1,68 @@
+{
+  "completed_utc": "2026-11-01T13:54:22.172207+00:00",
+  "all_passed": true,
+  "production_frozen": true,
+  "checks": {
+    "cm_oracle_passed": true,
+    "control_timbre_passed": true,
+    "physical_chain_and_ui_passed": true,
+    "fonts_reproducible": true,
+    "top_new_cm_connections": true,
+    "no_owned_mm_port": true,
+    "font_depth_32768": true
+  },
+  "scope": "cm acquisition, median/pitch/BCD, neutral half-width and labels only; no previous optimization candidate changes",
+  "production_and_generator_sha256": {
+    "src/ultrasonic_range.sv": "d13bef5e132c4e107de8cdf9f0ae67a1fd806d6218899a705ed5bc0726c225f0",
+    "src/ultrasonic_pitch.sv": "84074833629524651beddfce4a879fb0950e33efe75e43e3817b347a6725bae6",
+    "src/rgb_ui_renderer.sv": "b231976426b71058c2dfdcc43b8f96ed5a4fba4b6090c84560b814eb2fd38dc3",
+    "src/timbre_control.sv": "f7a63262a7fc7382c8d7b2782651be4d39966df173489235c70f31187bb641e3",
+    "scripts/gen_merged_ui_language.py": "c287c3ac7702ca02c839f3c70704a07048de6382dbf39eede3a93fbb289bb0e9",
+    "src/config/ui_language.svh": "12ea89238066e7693859b57ada4907c70a030d7fdaedbadcbaf7926b1e8d5f94",
+    "src/rom/theme_font.hex": "e7c15c987186fcdc1edd76960a6b3346ae1516d3f5be25db029b324a908932c4",
+    "assets/merged_ui_language.json": "436e67697db687f267241b3f831d3b4b73ac5a593f6170e5d4d603932dc9d5f7",
+    "assets/merged_ui_language_manifest.json": "134800030edd861c92450b8889b71cd4300c06224644a76dc78fb21707895e01"
+  },
+  "tests_sha256": {
+    "sim/integration/tb_controls_ultra.sv": "b4e3ffb6a166ca6297e0bb494be33f44a7578647a0a827afed30b2ff2c1ce64a",
+    "sim/integration/tb_controls_timbre.sv": "397ad0b4a03829be661ba8e719f85dfc4fa3e41062eff31cee6fa1c44809b237",
+    "sim/tb_ultrasonic_range.sv": "4fa6eb581e5cfa92954eedf15c376215e219b8c9576a161bf7c2b4e69795431c",
+    "sim/integration/tb_ultrasonic_cm_echo.sv": "11d1c077dc256b9901833857f9e9fdf2fc3bbf13bd47015f501683adc84b4dd3",
+    "sim/integration/tb_ultrasonic_cm_clock.sv": "22531a8f1344da046a45af5e3a36d1d5e8088e76bc60cd2af0285764d16f9aef",
+    "sim/integration/tb_ultrasonic_mm_bug.sv": "c4e285cfbd916b6b366b02c70692747e2c3a60a41d4f26611041a453db4281ff",
+    "sim/integration/tb_ultrasonic_cm_ui.sv": "6adcfd4c7eebe8dc52cfc38b1c0abae807d1b480d119de0cfd26531a737f4395",
+    "scripts/run_ultrasonic_cm_tests.py": "4ca5daa608f843fd010b7eac2d43d95c6dd60e9faf17a0ec6279870170bc54c0"
+  },
+  "baseline_sha256": {
+    "src/ultrasonic_range.sv": "9cbf22eb8c40ce330b92d224e9cdb431a212322bbc98c2614299c97241f240c4",
+    "src/ultrasonic_pitch.sv": "9d3576e599ec5652a7b44954290695dcfd83e9946a016a4c033869fb08c733a1",
+    "src/rgb_ui_renderer.sv": "0449d0df6b5e63875465ec1218ef0aa75869b14deb7b022c321389d35f21fc88",
+    "src/timbre_control.sv": "25b6c4893d3383d18cfdd8677835ce6188bda4999e3e49f63a96a02628b88cd1",
+    "scripts/gen_merged_ui_language.py": "bc8120c56f23e2521d5cf05ef204a833c55667b02867966d832840c1ba43d108",
+    "src/config/ui_language.svh": "63837ba70a24ec358b10e273880979ab84bd6ce991e1242141c3eefd7197ce0e",
+    "src/rom/theme_font.hex": "3c62f53e6bdf47512bb8e57d785b6053b93306c435ae4104e28ec5446a9c8113",
+    "assets/merged_ui_language.json": "0b2b7d93cabb708ccc328e4cd73a2de59f74bf8808bc21d5d07acaf0f36fcd19",
+    "assets/merged_ui_language_manifest.json": "8cc6a952c5bb95d928f7d7070bcf35133b7cab9243ebabddd76b50d5f74b9149"
+  },
+  "reports": {
+    "control_ultra": "control_ultra_verified/validation.json",
+    "control_timbre": "control_timbre_final/validation.json",
+    "physical_and_ui": "chain_final/validation.json",
+    "font_generation": "font_reproduction/validation.json"
+  },
+  "total_hdl_checks": 12592,
+  "ratio_constants_unchanged": {
+    "neutral": 65536,
+    "near_positive_2semitones": 73562,
+    "far_negative_2semitones": 58386
+  },
+  "interface_change": {
+    "range": "distance_mm renamed distance_cm, 13-bit width preserved",
+    "pitch": "distance_mm renamed distance_cm, 13-bit width preserved",
+    "sensitivity": "public name retained, direct neutral half-width 1..5 cm default1",
+    "top_connections": "parent updated range_cm and two .distance_cm(range_cm) connections"
+  },
+  "eda_started_by_this_subtask": false,
+  "hardware_programmed": false,
+  "physical_qualified": false
+}

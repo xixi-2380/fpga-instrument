@@ -61,7 +61,12 @@ public final class MidiFile {
     /** Legacy API keeps the 8-byte record contract. New import UI calls the overload. */
     public Score convert(int track,int channel,int transpose){return convert(track,channel,transpose,-2,false);}
     public Score convert(int track,int channel,int transpose,int unified,boolean excludeDrums){
+        return convert(track,channel,transpose,unified,excludeDrums,false);
+    }
+    /** Optional layered approximation, not a GM1 Gong program or extra FPGA timbre. */
+    public Score convert(int track,int channel,int transpose,int unified,boolean excludeDrums,boolean gongApproximation){
         if(track<-1||track>=tracks.size()||channel<-1||channel>15||transpose<-48||transpose>48||unified < -2||unified>15)throw bad("筛选、音色或移调范围错误");
+        if(gongApproximation && unified==-2)throw bad("锣声近似需要多音色协议，不能使用旧协议模式");
         int[] programs=new int[16],volume=new int[16],expression=new int[16];Arrays.fill(volume,127);Arrays.fill(expression,127);
         boolean[] pedal=new boolean[16];Map<Integer,ArrayDeque<Event>> pending=new HashMap<>();
         List<Event> sustained=new ArrayList<>();ArrayList<Score.Note> notes=new ArrayList<>();Map<Score.Note,Integer> order=new IdentityHashMap<>();
@@ -74,6 +79,22 @@ public final class MidiFile {
                 else if((e.pitch==0||e.pitch==32)&&e.velocity!=0)messages.add("非默认音色库按GM基础乐器映射");
                 else if(e.pitch!=0&&e.pitch!=32)messages.add("存在未支持的MIDI控制事件");continue;}
             if(e.kind>1||(track>=0&&track!=e.track)||(channel>=0&&channel!=e.channel)||(excludeDrums&&e.channel==9))continue;
+            // Percussion is one-shot on this device. A missing/short Note Off
+            // must not discard a valid drum track; melody pairing stays strict.
+            if(e.channel==9 && unified!=-2){
+                if(e.kind==1){
+                    Event on=new Event();on.ms=e.ms;on.pitch=Timbres.drumKey(e.pitch);on.channel=9;on.index=e.index;
+                    on.program=Timbres.drum(on.pitch);on.gain=(e.velocity*volume[9]*expression[9]+8064)/16129;
+                    if(on.pitch!=e.pitch)messages.add("GM1打击乐键35～81已保留；部分键由琴端现有10种鼓音近似（非47种独立采样）");
+                    finish(on,e.ms,transpose,unified,notes,order);
+                    if(gongApproximation && e.pitch==52 && on.gain>0){
+                        Event low=new Event();low.ms=on.ms;low.pitch=41;low.channel=9;low.index=on.index;low.program=21;low.gain=Math.max(1,on.gain/2);
+                        finish(low,e.ms,transpose,unified,notes,order);
+                        messages.add("锣声近似：第10通道52中国镲叠加低鼓，每击占2个自动声部；GM1无专用锣键");
+                    }
+                }
+                continue;
+            }
             int key=e.channel*128+e.pitch;ArrayDeque<Event> q=pending.computeIfAbsent(key,k->new ArrayDeque<>());
             if(e.kind==1){Event on=new Event();on.ms=e.ms;on.pitch=e.pitch;on.velocity=e.velocity;on.channel=e.channel;on.index=e.index;
                 on.program=e.channel==9?Timbres.drum(e.pitch):unified>=0?unified:Timbres.program(programs[e.channel]);

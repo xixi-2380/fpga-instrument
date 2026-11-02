@@ -13,7 +13,8 @@ public final class MidiTimbreTests {
   check(f.convert(1,0,0,11,false).notes.get(0).timbre==11,"uniform melody override");
   MidiFile drums=new MidiFile(smf(0,480,track(event(0,0x99,36,100),event(1,0x89,36,0),event(0,0x90,21,100),event(480,0x80,21,0),end())));
   Score d=drums.convert(-1,-1,12,-1,false);check(d.notes.get(0).pitch==36&&d.notes.get(0).timbre==16&&d.notes.get(0).duration==250,"drum ignores transpose and short Note Off");check(d.notes.get(1).pitch==33,"melody transposes");
-  rejects(()->new MidiFile(smf(0,480,track(event(0,0x99,54,100),event(1,0x89,54,0),end()))).convert(-1,-1,0,-1,false),"unsupported percussion explicit");
+  check(new MidiFile(smf(0,480,track(event(0,0x99,54,100),event(1,0x89,54,0),end()))).convert(-1,-1,0,-1,false).notes.get(0).pitch==42,"GM tambourine uses compatible noise approximation");
+  rejects(()->new MidiFile(smf(0,480,track(event(0,0x99,34,100),end()))).convert(-1,-1,0,-1,false),"nonGM1 percussion remains explicit");
   MidiFile mute=new MidiFile(smf(0,480,track(event(0,0xb0,7,0),event(0,0x90,60,127),event(480,0x80,60,0),event(0,0xb0,7,127),event(0,0x90,61,127),event(480,0x80,61,0),end())));
   check(mute.convert(-1,-1,0,-1,false).notes.size()==1,"zero volume removes only silent records");
   MidiFile endPedal=new MidiFile(smf(0,480,track(event(0,0xb0,64,127),event(0,0x90,60,100),event(240,0x80,60,0),event(240,255,47,0))));

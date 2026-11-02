@@ -1,0 +1,34 @@
+{
+  "tests": [
+    {
+      "name": "timbre",
+      "passed": true,
+      "checks": 8046,
+      "seconds": 0.436,
+      "source_sha256": {
+        "src\\timbre_control.sv": "f7a63262a7fc7382c8d7b2782651be4d39966df173489235c70f31187bb641e3",
+        "sim\\integration\\tb_controls_timbre.sv": "397ad0b4a03829be661ba8e719f85dfc4fa3e41062eff31cee6fa1c44809b237",
+        "src\\config\\ui_layout.svh": "66232650f9c2af775736d8b4fd943e2c461d0953298f90293870531f8fb5a6f9",
+        "src\\config\\synth_config.svh": "e3d2fcb59d6b718a24f2cb56f3974ec92d521d238ba3569c3b7ad0f27c31f434",
+        "src\\config\\keyboard_notes.svh": "f1e976e1b6efd138c1a20cc5d3d56d8376aa9342e19acab01bd3fdb29c6daf5c"
+      },
+      "compile_command": [
+        "C:\\Users\\10939\\Documents\\Codex\\2026-10-30\\qin-2\\work\\sim-tools\\mingw64\\bin\\iverilog.exe",
+        "-g2012",
+        "-grelative-include",
+        "-IF:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/src",
+        "-IF:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/sim",
+        "-s",
+        "tb_controls_timbre",
+        "-o",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/reports/ultrasonic_cm_20261101/control_timbre_final/timbre.vvp",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/src/timbre_control.sv",
+        "F:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/sim/integration/tb_controls_timbre.sv"
+      ],
+      "output": "PASS tb_controls_timbre checks=8046\nF:/FPGA_Projects/fpga-instrument-main-adjustments-20261101/sim/integration/tb_controls_timbre.sv:94: $finish called at 77470000 (1ps)\n"
+    }
+  ],
+  "total_checks": 8046,
+  "sta_passed": false,
+  "hardware_tested": false
+}

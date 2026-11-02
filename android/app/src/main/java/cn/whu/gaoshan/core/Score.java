@@ -37,4 +37,10 @@ public final class Score {
         if(duration>c.maxSongMs)throw new IllegalArgumentException("曲谱总时长超过设备上限");
     }
     public static Score golden(){return new Score(Arrays.asList(new Note(0,60,100,450),new Note(500,62,100,450),new Note(1000,64,100,900)),Collections.emptyList());}
+    public static Score percussionExample(boolean gongApproximation){
+        List<Note> notes=new ArrayList<>();int[] keys={36,38,42,49,52};long[] times={0,500,1000,1500,3500};
+        for(int i=0;i<keys.length;i++){int t=Timbres.drum(keys[i]);notes.add(new Note(times[i],keys[i],100,Timbres.DRUM_MS[t-16],t,9));}
+        if(gongApproximation)notes.add(new Note(3500,41,50,Timbres.DRUM_MS[21-16],21,9));
+        return new Score(notes,gongApproximation?Arrays.asList("锣声近似：52中国镲+41低鼓，每击占2声部；GM1没有专用锣键"):Collections.emptyList());
+    }
 }
