@@ -1,0 +1,13 @@
+{
+  "source_commit": "256214a5fb864ea6e1601e01c2e1ef7ecd19d314",
+  "accepted_by_user": true,
+  "acceptance_date": "2026-11-02",
+  "bitstream": "F:\\FPGA_Projects\\D2_最终完整版_实板通过_20261102.fs",
+  "bitstream_sha256": "3ff2909921e6b15e5e8cf20aad9d758cdcbe6f3d5fd0f816f033bc5703b2f44a",
+  "pnr_seconds": 2866,
+  "wall_seconds": 3381.734689,
+  "unrouted_nets": 0,
+  "setup_violations": 57,
+  "hold_violations": 0,
+  "sta_passed": false
+}
